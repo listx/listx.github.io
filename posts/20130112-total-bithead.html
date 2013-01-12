@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></meta>
+        <title>listx's Blog - Using the Total Bithead with ALSA on Arch Linux</title>
+        <link rel="stylesheet" type="text/css" href="../css/base.css"></link>
+        <link rel="stylesheet" type="text/css" href="../css/syntax.css"></link>
+    </head>
+    <body>
+        <div id="header">
+			<a href="../about.html">About</a>
+			•
+			<a href="../">Home</a>
+			•
+			<a href="../archive.html">Archive</a>
+        </div>
+
+        <div id="content">
+            <h1>Using the Total Bithead with ALSA on Arch Linux</h1>
+
+            <div class="info">Posted on January 12, 2013</div>
+
+<p>So I got HeadRoom’s “Total Bithead” USB DAC (digital-to-analog converter) and micro amplifier. The problem is, when I plug it into my Linux desktop, mplayer/firefox still recognizes the onboard sound on my motherboard as the default device. After some searching, I found some resources to (1) use it as the default sound device and (2) enable mixing on it (different applications can simultaneously use the Total Bithead).</p>
+<h2 id="the-setup">The Setup</h2>
+<p>We need to manually call a script every time the Total Bithead is connected. The script, called <code>switch_audio.sh</code>, looks like this:</p>
+<pre class="sourceCode bash"><code class="sourceCode bash"><span class="co">#!/bin/zsh</span>
+
+<span class="kw">if [[</span> <span class="ot">-e</span> /proc/asound/card1<span class="kw"> ]]</span>; <span class="kw">then</span>
+	<span class="kw">ln</span> -sf ~/syscfg/alsa/cfg-total-bithead ~/.asoundrc
+<span class="kw">else</span>
+	<span class="kw">case</span> <span class="ot">$HOST</span><span class="kw"> in</span>
+	k0<span class="kw">)</span> <span class="kw">ln</span> -sf ~/syscfg/alsa/cfg-k0 ~/.asoundrc <span class="kw">;;</span>
+	k1<span class="kw">)</span> <span class="kw">ln</span> -sf ~/syscfg/alsa/cfg-k1 ~/.asoundrc <span class="kw">;;</span>
+	*<span class="kw">)</span> <span class="kw">echo</span> <span class="st">&quot;Unknown host </span><span class="dt">\`</span><span class="ot">$HOST</span><span class="st">'&quot;</span> <span class="kw">;;</span>
+	<span class="kw">esac</span>
+<span class="kw">fi</span></code></pre>
+<pre class="sourceCode haskell"><code class="sourceCode haskell">load <span class="st">&quot;posts/foo.markdown&quot;</span><span class="ot"> ::</span> <span class="dt">Compiler</span> (<span class="dt">Item</span> <span class="dt">String</span>)</code></pre>
+<p>where k0 is my desktop and k1 is my laptop. <code>cfg-k0</code> looks like this:</p>
+<pre><code># use `aplay -l | awk '/^card/{print$3}' | sort | uniq' for card names
+defaults.pcm.!card NVidia
+defaults.ctl.!card NVidia
+defaults.pcm.!device 0
+defaults.ctl.!device 0</code></pre>
+<p>and <code>cfg-total-bithead</code> looks like this (yes, the Linux kernel recognizes the Total Bithead as CODEC):</p>
+<pre><code>defaults.pcm.!card CODEC
+defaults.ctl.!card CODEC
+defaults.pcm.!device 0
+defaults.ctl.!device 0</code></pre>
+<p>That’s all there is to it. Now every time you plug in/out the Total Bithead, just run this script. You could do some fiddling with udev or some other low-level mechanism to automatically run the script when it detects the Total Bithead plugged into a USB port, but I’d rather just call it from a keyboard shortcut manually each time for explicit control. The <code>~/.asoundrc</code> configurations are taken from <a href="http://ptspts.blogspot.com/2009/03/how-to-select-alsa-sound-card-and-have.html">this helpful blog post</a>. It’s pretty sad that the 4-liner <code>~/.asoundrc</code> solution offered from that blog remains unknown to all the mplayer/alsa/linux wikis out there on the web. The setup here takes care of multiple applications playing sound simultaneously.</p>
+<h2 id="other-thoughts">Other Thoughts</h2>
+<p>I got the Total Bithead used for around $50. From what I can tell, it first appeared in the market in 2004 (there’s a <a href="http://www.6moons.com/audioreviews/bithead/bithead.html">review</a> of it dating back to that time). I do recommend it at this price point when comparing it against the newer Realtek HD audio chips found in most modern motherboards. Don’t buy a new one for over $100; it’s probably much better to just get a better pair of headphones with that amount of money.</p>
+
+        </div>
+        <div id="footer">
+            Site generated with
+            <a href="http://jaspervdj.be/hakyll">Hakyll</a>
+        </div>
+    </body>
+</html>
