@@ -34,8 +34,8 @@
 <span class="kw">else</span>
 	<span class="kw">case</span> <span class="ot">$HOST</span><span class="kw"> in</span>
 	k0<span class="kw">)</span> <span class="kw">ln</span> -sf ~/syscfg/alsa/cfg-k0 ~/.asoundrc <span class="kw">;;</span>
-	k1<span class="kw">)</span> <span class="kw">ln</span> -sf ~/syscfg/alsa/cfg-k1 ~/.asoundrc <span class="kw">;;</span>
-	*<span class="kw">)</span> <span class="kw">echo</span> <span class="st">&quot;Unknown host </span><span class="dt">\`</span><span class="ot">$HOST</span><span class="st">'&quot;</span> <span class="kw">;;</span>
+	<span class="kw">k1</span>) <span class="kw">ln</span> -sf ~/syscfg/alsa/cfg-k1 ~/.asoundrc <span class="kw">;;</span>
+	<span class="kw">*</span>) <span class="kw">echo</span> <span class="st">&quot;Unknown host </span><span class="dt">\`</span><span class="ot">$HOST</span><span class="st">'&quot;</span> <span class="kw">;;</span>
 	<span class="kw">esac</span>
 <span class="kw">fi</span></code></pre>
 <p>where k0 is my desktop and k1 is my laptop. <code>cfg-k0</code> looks like this:</p>
