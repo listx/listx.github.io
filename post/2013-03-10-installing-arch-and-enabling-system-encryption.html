@@ -73,19 +73,22 @@ mkfs.ext4 /dev/mapper/vg0-root
 mkfs.ext4 /dev/mapper/vg0-home
 mkswap /dev/mapper/vg0-swap
 
-# Mount /dev/sda1 to the /boot partition. This will ensure proper installation
-# of the bootloader.
+# Mount the logical volumes. Why? Because we need to install Arch Linux onto
+# it! You probably don't need to mount the &quot;home&quot; volume but it couldn't
+# hurt. Besides, it's nice to test that all volumes can be mounted OK anyway.
+#
+# NOTE: Mount order is important! YOU MUST FIRST MOUNT THE ROOT PARTITION into
+# /mnt before creating more directories such as /mnt/boot, /mnt/home, etc. to
+# mount the /boot, /home, and any other partitions.
+
+mount /dev/mapper/vg0-root /mnt # /mnt is our system's &quot;/&quot; root   directory
 
 mkdir /mnt/boot
 mount /dev/sda1 /mnt/boot
 
-# Mount the logical volumes. Why? Because we need to install Arch Linux onto
-# it! You probably don't need to mount the &quot;home&quot; volume but it couldn't
-# hurt. Besides, it's nice to test that all volumes can be mounted OK anyway.
-
-mount /dev/mapper/vg0-root /mnt # /mnt is our system's &quot;/&quot; root   directory
 mkdir /mnt/home
 mount /dev/mapper/vg0-home /mnt/home
+
 swapon /dev/mapper/vg0-swap
 
 # Set up package download mirrors. The kernel mirror is generally a good one
@@ -143,14 +146,16 @@ hwclock --systohc --utc
 
 echo MYHOSTNAME &gt; /etc/hostname
 
-# Enable DHCPCD... aka &quot;acquire dynamic ip address from your router/switch&quot;.
-# Be sure to choose the right eth0 or eth1 (eth2, if you have 3 ethernet
-# ports) port. If you choose the wrong &quot;eth&quot; number, just go to
-# /etc/systemd/system/multi-user.target.wants/ and rename the symlink; e.g.,
-# rename /etc/systemd/system/multi-user.target.wants/dhcpcd@eth0.service to
+# Enable DHCPCD... aka &quot;acquire dynamic ip address from your router/switch&quot;.  Be
+# sure to choose the right device name (typically eth0 or eth1 (eth2, if you
+# have 3 ethernet ports)); you can find out the correct device name with `ip
+# link` (look for the device under the first entry, `lo`.). If you choose the
+# wrong &quot;eth&quot; number, just go to /etc/systemd/system/multi-user.target.wants/
+# and rename the symlink; e.g., rename
+# /etc/systemd/system/multi-user.target.wants/dhcpcd@eth0.service to
 # /etc/systemd/system/multi-user.target.wants/dhcpcd@eth1.service.
 
-systemctl enable dhcpcd@eth0.service
+systemctl enable dhcpcd@DEVICENAME.service
 
 # Disable unused package repos. You will want to disable the [testing] repo
 # unless you want to test unstable packages and engage in the package
@@ -197,9 +202,10 @@ vi /etc/mkinitcpio.conf
 
 mkinitcpio -p linux
 
-# Install boot loader. I like SYSLINUX because of the saner/easier-looking
-# boot configuration file, compared to GRUB 2. Be sure to add in
-#     &quot;APPEND cryptdevice=/dev/disk/by-uuid/xxxxxxxxxx:luks root=/dev/mapper/vg0-root resume=/dev/mapper/vg0-swap ro&quot;
+# Install boot loader. I like SYSLINUX because of the saner/easier-looking boot
+# configuration file, compared to GRUB 2. Be sure to add in (as a single line)
+#     &quot;APPEND cryptdevice=/dev/disk/by-uuid/xxxxxxxxxx:luks
+#           root=/dev/mapper/vg0-root resume=/dev/mapper/vg0-swap ro&quot;
 # under the &quot;LABEL arch&quot; entries, so that SYSLINUX tells the kernel to look for
 # the encrypted LVM partition. Otherwise, your system won't boot! Don't forget
 # to actually look up the UUID of your LVM partition (/dev/sda2 in this
