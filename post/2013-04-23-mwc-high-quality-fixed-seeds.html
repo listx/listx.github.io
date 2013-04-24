@@ -48,7 +48,7 @@
 <span class="kw">import</span> System.Random.MWC
 
 	<span class="fu">...</span>
-	gen <span class="ot">&lt;-</span> initialize' <span class="fu">$</span> year' <span class="fu">*</span> month' <span class="fu">*</span> day'
+	gen <span class="ot">&lt;-</span> initialize' <span class="fu">$</span> year' <span class="fu">+</span> month' <span class="fu">+</span> day'
 	<span class="fu">...</span>
 
 <span class="co">-- | Given a Word32 'num' generate a growing ByteString 'x' by repeatedly</span>
