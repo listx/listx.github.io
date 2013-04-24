@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>listx's Blog - Haskell: System.Random.MWC: High Quality Fixed Seeds</title>
+        <link rel="stylesheet" type="text/css" href="../css/base.css" />
+        <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
+        <link rel="shortcut icon" type="image/png" href="../favicon.png" />
+    </head>
+    <body>
+        <div id="header">
+			<a href="../about.html">About</a>
+			•
+			<a href="../">Home</a>
+			•
+			<a href="../code.html">Code</a>
+			•
+			<a href="../archive.html">Archive</a>
+        </div>
+
+        <div id="content">
+            <h1>Haskell: System.Random.MWC: High Quality Fixed Seeds</h1>
+
+            <div class="info">Posted on April 23, 2013</div>
+
+<p>I use Bryan O’Sullivan’s <a href="http://hackage.haskell.org/package/mwc-random"><code>mwc-random</code></a> package for my PRNG (pseudorandom number generator) needs in my Haskell projects. <code>mwc-random</code> is very fast and generates high quality random numbers. It has a pretty simple API, and gives you several options of initializing the RNG state. One way is to use the <code>initialize</code> function, which simply takes a list of <code>Word32</code> elements and takes the first 256 of them to seed the generator (if less than 256, it fills the rest from a hard-coded list). I’ve discovered that using a simple list of 3 small numbers representing the year, month, and day (e.g., <code>[2013, 4, 11]</code>) is not very good as an argument to <code>initialize</code>, as the generator behaves somewhat similarly to, say, one with slightly different date (e.g., <code>[2013, 4, 12]</code>).</p>
+<h3 id="the-problem">The Problem</h3>
+<p>I have a program that needs to be seeded on a day-by-day basis, and it must use the current date (year, month, and day only) as the seed; however, I need the seed to be random enough to make the MWC state spit out substantially different random numbers on different, yet similar days. In essence, I need to change</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">import</span> <span class="kw">qualified</span> Data.Vector <span class="kw">as</span> V
+<span class="kw">import</span> System.Random.MWC
+
+	<span class="fu">...</span>
+	gen <span class="ot">&lt;-</span> initialize <span class="fu">$</span> V.fromList [year, month, day]
+	<span class="fu">...</span></code></pre>
+<p>to something that has a much higher quality in terms of randomness.</p>
+<h2 id="enter-the-sha-1-hash-function">Enter the SHA-1 Hash Function</h2>
+<p>Ah, the venerable <a href="http://en.wikipedia.org/wiki/Sha1">SHA-1</a> function. It’s a real gem because you can use it to generate an extremely high-quality 160-bit (20-byte) random number from a given set of bytes; and, even if you change the input by a single byte, it will generate a <strong>totally different</strong> number. <em>You can think of the SHA-1 hash function as a function that takes a seed and generates a random number — where the seed can be 0 bytes or 123 bytes or whatever size.</em> Thankfully, there is a SHA-1 <a href="http://hackage.haskell.org/package/SHA">package</a> available, so I don’t need to write my own correct implementation of SHA-1 (not to mention that only a handful of programmers can even write such code).</p>
+<h3 id="the-solution">The Solution</h3>
+<p>To solve my problem, I just take the current date, then feed it to the SHA-1 function to get <code>sha1Hash</code>; I then then repeatedly call SHA-1 against <code>sha1Hash</code> recursively. Meanwhile, each time I get a SHA-1 hash of 20 bytes, I append it to an empty string of bytes, <code>acc</code>. When <code>acc</code> is large enough to be split up into 256 <code>Word32</code> elements and then feed it to <code>initialize</code>. The result is that I get much better seed-vs-similar-seed randomness with MWC.</p>
+<p>Here is the code:</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">import</span> Data.Bits
+<span class="kw">import</span> <span class="kw">qualified</span> Data.ByteString.Lazy <span class="kw">as</span> B
+<span class="kw">import</span> Data.Digest.Pure.SHA
+<span class="kw">import</span> Data.List (foldl')
+<span class="kw">import</span> <span class="kw">qualified</span> Data.Vector <span class="kw">as</span> V
+<span class="kw">import</span> Data.Word
+<span class="kw">import</span> System.Random.MWC
+
+	<span class="fu">...</span>
+	gen <span class="ot">&lt;-</span> initialize' <span class="fu">$</span> year' <span class="fu">*</span> month' <span class="fu">*</span> day'
+	<span class="fu">...</span>
+
+<span class="co">-- | Given a Word32 'num' generate a growing ByteString 'x' by repeatedly</span>
+<span class="co">-- generating a SHA1 digest, as a ByteString 'y', and appending it back to</span>
+<span class="co">-- 'x'. When 'x' is sufficiently large (at least 256 * 4 elements, as each</span>
+<span class="co">-- element is Word8 and we need 4 of these to get 1 Word32, and ultimately we</span>
+<span class="co">-- need 256 Word32s), convert it back down to [Word32] and call</span>
+<span class="co">-- System.Random.MWC's 'initialize' function on it.</span>
+<span class="ot">initialize' ::</span> <span class="dt">PrimMonad</span> m <span class="ot">=&gt;</span> <span class="dt">Word32</span> <span class="ot">-&gt;</span> m (<span class="dt">Gen</span> (<span class="dt">PrimState</span> m))
+initialize' num <span class="fu">=</span> initialize <span class="fu">.</span> V.fromList <span class="fu">.</span> loop B.empty <span class="fu">.</span> B.pack <span class="fu">$</span> octetsLE num
+	<span class="kw">where</span>
+<span class="ot">	loop ::</span> <span class="dt">B.ByteString</span> <span class="ot">-&gt;</span> <span class="dt">B.ByteString</span> <span class="ot">-&gt;</span> [<span class="dt">Word32</span>]
+	loop acc bs
+		<span class="fu">|</span> B.length acc <span class="fu">&gt;=</span> (<span class="dv">256</span> <span class="fu">*</span> <span class="dv">4</span>) <span class="fu">=</span> toW32s acc
+		<span class="fu">|</span> <span class="fu">otherwise</span> <span class="fu">=</span> loop (B.append acc <span class="fu">$</span> sha1Bytes bs) (sha1Bytes bs)
+<span class="ot">	sha1Bytes ::</span> <span class="dt">B.ByteString</span> <span class="ot">-&gt;</span> <span class="dt">B.ByteString</span>
+	sha1Bytes <span class="fu">=</span> bytestringDigest <span class="fu">.</span> sha1
+<span class="ot">	toW32s ::</span> <span class="dt">B.ByteString</span> <span class="ot">-&gt;</span> [<span class="dt">Word32</span>]
+	toW32s <span class="fu">=</span> <span class="fu">map</span> fromOctetsLE <span class="fu">.</span> chop <span class="dv">4</span> <span class="fu">.</span> B.unpack
+<span class="ot">	chop ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> [a] <span class="ot">-&gt;</span> [[a]]
+	chop _ [] <span class="fu">=</span> []
+	chop n xs <span class="fu">=</span> <span class="fu">take</span> n xs <span class="fu">:</span> chop n (<span class="fu">drop</span> n xs)
+
+<span class="co">-- For little-endian conversion.</span>
+<span class="ot">octetsLE ::</span> <span class="dt">Word32</span> <span class="ot">-&gt;</span> [<span class="dt">Word8</span>]
+octetsLE w <span class="fu">=</span>
+	[ <span class="fu">fromIntegral</span> w
+	, <span class="fu">fromIntegral</span> (w <span class="ot">`shiftR`</span> <span class="dv">8</span>)
+	, <span class="fu">fromIntegral</span> (w <span class="ot">`shiftR`</span> <span class="dv">16</span>)
+	, <span class="fu">fromIntegral</span> (w <span class="ot">`shiftR`</span> <span class="dv">24</span>)
+	]
+
+<span class="co">-- For big-endian conversion.</span>
+<span class="ot">octetsBE ::</span> <span class="dt">Word32</span> <span class="ot">-&gt;</span> [<span class="dt">Word8</span>]
+octetsBE <span class="fu">=</span> <span class="fu">reverse</span> <span class="fu">.</span> octetsLE
+
+<span class="ot">fromOctetsBE ::</span> [<span class="dt">Word8</span>] <span class="ot">-&gt;</span> <span class="dt">Word32</span>
+fromOctetsBE <span class="fu">=</span> foldl' accum <span class="dv">0</span>
+	<span class="kw">where</span>
+	accum a o <span class="fu">=</span> (a <span class="ot">`shiftL`</span> <span class="dv">8</span>) <span class="fu">.|.</span> <span class="fu">fromIntegral</span> o
+
+<span class="ot">fromOctetsLE ::</span> [<span class="dt">Word8</span>] <span class="ot">-&gt;</span> <span class="dt">Word32</span>
+fromOctetsLE <span class="fu">=</span> fromOctetsBE <span class="fu">.</span> <span class="fu">reverse</span></code></pre>
+<p>The neat <code>chop</code> function is by <a href="http://stackoverflow.com/a/5188922/437583">Dan Burton</a>. The octet conversion functions between <code>Word8</code> and <code>Word32</code> types are from <a href="http://www.haskell.org/pipermail/beginners/2010-October/005571.html">this message</a>.<sup><a href="#fn1" class="footnoteRef" id="fnref1">1</a></sup></p>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>The distinction between big-endianness and little-endianness does not matter at all for purposes of my solution, but I still distinguished them anyway as a reference.<a href="#fnref1">↩</a></p></li>
+</ol>
+</div>
+
+        </div>
+        <div id="footer">
+            <a href="https://github.com/listx/listx.github.com">Site</a>
+            <a href="https://github.com/listx/listx_blog">generated</a>
+            with
+            <a href="http://jaspervdj.be/hakyll">Hakyll</a>
+            and
+            <a href="http://sebastiaanvisser.github.com/clay">Clay</a>.
+        </div>
+    </body>
+</html>
