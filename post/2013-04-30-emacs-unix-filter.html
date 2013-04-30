@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>listx's Blog - Emacs: Using a Unix Filter</title>
+        <link rel="stylesheet" type="text/css" href="../css/base.css" />
+        <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
+        <link rel="shortcut icon" type="image/png" href="../favicon.png" />
+    </head>
+    <body>
+        <div id="header">
+			<a href="../about.html">About</a>
+			•
+			<a href="../">Home</a>
+			•
+			<a href="../code.html">Code</a>
+			•
+			<a href="../archive.html">Archive</a>
+        </div>
+
+        <div id="content">
+            <h1>Emacs: Using a Unix Filter</h1>
+
+            <div class="info">Posted on April 30, 2013</div>
+
+<p>In Vim, you can easily call an external text utility on a region of text, then replace that selected region with the output of the text utility. This is very useful for doing bulk transformations quickly.</p>
+<p>I coded up a very stupid commenting program called <a href="https://github.com/listx/nox"><code>nox</code></a> that comments/uncomments text. Here is how you’d use it straight from the terminal:</p>
+<pre><code>$ echo &quot;hi&quot; | nox -l c
+//hi
+</code></pre>
+<p>By default nox comments text, and the <code>-l c</code> option sets it to C-styled comments, <code>//</code>.</p>
+<h2 id="emacs">Emacs</h2>
+<p>I use <a href="http://gitorious.org/evil/pages/Home">evil-mode</a> with Emacs. Here is my relevant <code>.emacs</code> to set up <code>nox</code> correctly:</p>
+<pre class="sourceCode commonlisp"><code class="sourceCode commonlisp">(<span class="kw">defun</span><span class="fu"> my-addrem-comment-region </span>(b e f)
+  <span class="st">&quot;Use the `nox' command to comment the current region.&quot;</span>
+  (interactive)
+  (shell-command-on-region
+   <span class="co">; beginning and end of buffer</span>
+   b e
+   <span class="co">; command and parameters</span>
+   (concat
+     (<span class="kw">if</span> f
+         <span class="st">&quot;~/prog/nox/src/nox -l &quot;</span>
+         <span class="st">&quot;~/prog/nox/src/nox -u -l &quot;</span>)
+         (<span class="kw">case</span> (with-current-buffer (current-buffer) major-mode)
+           ('c-mode <span class="st">&quot;c&quot;</span>)
+           ('emacs-lisp-mode <span class="st">&quot;emacslisp&quot;</span>)
+           ('haskell-mode <span class="st">&quot;haskell&quot;</span>)
+           ('LilyPond-mode <span class="st">&quot;tex&quot;</span>)
+           ('plain-tex-mode <span class="st">&quot;tex&quot;</span>)
+           (<span class="kw">t</span> <span class="st">&quot;shell&quot;</span>))<span class="co">; default to shell</span>
+     )
+   <span class="co">; output buffer</span>
+   (current-buffer)
+   <span class="co">; replace?</span>
+   <span class="kw">t</span>
+   <span class="co">; name of the error buffer</span>
+   <span class="st">&quot;*nox Error Buffer*&quot;</span>
+   <span class="co">; show error buffer?</span>
+   <span class="kw">t</span>
+   )
+  )
+(<span class="kw">defun</span><span class="fu"> my-addrem-comment </span>(f)
+  (<span class="kw">if</span> (use-region-p)
+    (<span class="kw">progn</span>
+      (my-addrem-comment-region (region-beginning) (region-end) f)
+      (evil-visual-char)
+      (evil-exit-visual-state)
+      )
+    (my-addrem-comment-region (line-beginning-position) (line-beginning-position <span class="dv">2</span>) f)
+  ))
+(define-key evil-visual-state-map <span class="st">&quot;,c&quot;</span> (<span class="kw">lambda</span> () (interactive) (my-addrem-comment <span class="kw">t</span>))) <span class="co">; add comment</span>
+(define-key evil-visual-state-map <span class="st">&quot;,C&quot;</span> (<span class="kw">lambda</span> () (interactive) (my-addrem-comment <span class="kw">nil</span>))) <span class="co">; remove comment</span>
+(define-key evil-normal-state-map <span class="st">&quot;,c&quot;</span> (<span class="kw">lambda</span> () (interactive) (my-addrem-comment <span class="kw">t</span>))) <span class="co">; add comment</span>
+(define-key evil-normal-state-map <span class="st">&quot;,C&quot;</span> (<span class="kw">lambda</span> () (interactive) (my-addrem-comment <span class="kw">nil</span>))) <span class="co">; remove comment</span></code></pre>
+<p>This is certainly not the most beautiful code, but it works.</p>
+<h3 id="references">References</h3>
+<ul>
+<li><a href="http://stackoverflow.com/questions/206806/filtering-text-through-a-shell-command-in-emacs">http://stackoverflow.com/questions/206806/filtering-text-through-a-shell-command-in-emacs</a></li>
+<li><a href="http://stackoverflow.com/questions/1548605/emacs-lisp-shell-command-on-region">http://stackoverflow.com/questions/1548605/emacs-lisp-shell-command-on-region</a></li>
+</ul>
+
+        </div>
+        <div id="footer">
+            <a href="https://github.com/listx/listx.github.com">Site</a>
+            <a href="https://github.com/listx/listx_blog">generated</a>
+            with
+            <a href="http://jaspervdj.be/hakyll">Hakyll</a>
+            and
+            <a href="http://sebastiaanvisser.github.com/clay">Clay</a>.
+        </div>
+    </body>
+</html>
