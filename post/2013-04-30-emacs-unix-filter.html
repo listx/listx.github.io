@@ -26,13 +26,56 @@
 
 <p>In Vim, you can easily call an external text utility on a region of text, then replace that selected region with the output of the text utility. This is very useful for doing bulk transformations quickly.</p>
 <p>I coded up a very stupid commenting program called <a href="https://github.com/listx/nox"><code>nox</code></a> that comments/uncomments text. Here is how you’d use it straight from the terminal:</p>
-<pre><code>$ echo &quot;hi&quot; | nox -l c
-//hi
-</code></pre>
+<table class="sourceCode bash numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+2
+</pre></td><td class="sourceCode"><pre><code class="sourceCode bash">$ <span class="kw">echo</span> <span class="st">&quot;hi&quot;</span> <span class="kw">|</span> <span class="kw">nox</span> -l c
+<span class="kw">//hi</span></code></pre></td></tr></table>
 <p>By default nox comments text, and the <code>-l c</code> option sets it to C-styled comments, <code>//</code>.</p>
 <h2 id="emacs">Emacs</h2>
 <p>I use <a href="http://gitorious.org/evil/pages/Home">evil-mode</a> with Emacs. Here is my relevant <code>.emacs</code> to set up <code>nox</code> correctly:</p>
-<pre class="sourceCode commonlisp"><code class="sourceCode commonlisp">(<span class="kw">defun</span><span class="fu"> my-addrem-comment-region </span>(b e f)
+<table class="sourceCode commonlisp numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+</pre></td><td class="sourceCode"><pre><code class="sourceCode commonlisp">(<span class="kw">defun</span><span class="fu"> my-addrem-comment-region </span>(b e f)
   <span class="st">&quot;Use the `nox' command to comment the current region.&quot;</span>
   (interactive)
   (shell-command-on-region
@@ -73,7 +116,7 @@
 (define-key evil-visual-state-map <span class="st">&quot;,c&quot;</span> (<span class="kw">lambda</span> () (interactive) (my-addrem-comment <span class="kw">t</span>))) <span class="co">; add comment</span>
 (define-key evil-visual-state-map <span class="st">&quot;,C&quot;</span> (<span class="kw">lambda</span> () (interactive) (my-addrem-comment <span class="kw">nil</span>))) <span class="co">; remove comment</span>
 (define-key evil-normal-state-map <span class="st">&quot;,c&quot;</span> (<span class="kw">lambda</span> () (interactive) (my-addrem-comment <span class="kw">t</span>))) <span class="co">; add comment</span>
-(define-key evil-normal-state-map <span class="st">&quot;,C&quot;</span> (<span class="kw">lambda</span> () (interactive) (my-addrem-comment <span class="kw">nil</span>))) <span class="co">; remove comment</span></code></pre>
+(define-key evil-normal-state-map <span class="st">&quot;,C&quot;</span> (<span class="kw">lambda</span> () (interactive) (my-addrem-comment <span class="kw">nil</span>))) <span class="co">; remove comment</span></code></pre></td></tr></table>
 <p>This is certainly not the most beautiful code, but it works.</p>
 <h3 id="references">References</h3>
 <ul>
