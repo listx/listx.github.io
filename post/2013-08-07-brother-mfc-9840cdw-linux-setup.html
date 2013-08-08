@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+	<head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>listx's Blog - Brother MFC-9840CDW: Setup on Arch Linux</title>
+        <link rel="stylesheet" type="text/css" href="../css/base.css" />
+        <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
+        <link rel="shortcut icon" type="image/png" href="../favicon.png" />
+		<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+	</head>
+    <body>
+        <div id="header">
+			<a href="../">Home</a>
+			•
+			<a href="../about.html">About</a>
+			•
+			<a href="../code.html">Code</a>
+			•
+			<a href="../archive.html">Archive</a>
+        </div>
+
+        <div id="content">
+            <center><h1>Brother MFC-9840CDW: Setup on Arch Linux</h1></center>
+
+            <center>
+	<div class="info">2013-08-07</div>
+	<div class="info"><a href="../tag/arch.html">arch</a>, <a href="../tag/linux.html">linux</a>, <a href="../tag/printer.html">printer</a></div>
+</center>
+
+<p>After more than a year of struggling with my Brother printer, I finally got it to print flawlessly. I will kindly refrain from getting into the drama, and just write a short tutorial to set it up with CUPS in Arch Linux.</p>
+<p>First, install the <code>cups</code> package, as well as the Brother driver packages in the AUR:</p>
+<pre><code>- brother-cups-wrapper-ac
+- brother-cups-wrapper-common
+- brother-lpr-drivers-ac
+- brother-lpr-drivers-common</code></pre>
+<p>Then, enable the <code>cups</code> daemon with <code>systemd</code>, and then start it:</p>
+<pre class="numberLines"><code>sudo systemctl enable cups.service
+sudo systemctl start cups.service</code></pre>
+<p>Now go into your favorite web browser, and go to <code>http://localhost:631</code>, to find the CUPS web admin interface. From here, just add a new printer using the web form buttons. When adding the printer, use the LPR/LPD protocol, as follows:</p>
+<pre class="numberLines"><code>lpd://IP_ADDRESS_OF_PRINTER/BINARY_P1</code></pre>
+<p>and use the appropriate IP address that your printer has on the network. For the driver, select the CUPS driver for the MFC-9840CDW model (the various Brother drivers will only appear after installing the Brother driver packages from the AUR).</p>
+<p>Done!</p>
+
+        </div>
+        <div id="footer">
+            <a href="https://github.com/listx/listx.github.io">Site</a>
+            <a href="https://github.com/listx/listx_blog">generated</a>
+            with
+            <a href="http://jaspervdj.be/hakyll">Hakyll</a>
+            and
+            <a href="http://sebastiaanvisser.github.com/clay">Clay</a>.
+        </div>
+    </body>
+</html>
