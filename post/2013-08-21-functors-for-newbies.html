@@ -30,7 +30,7 @@
 
 <p>This is a tutorial on functors. It is inspired by the already-excellently written article <a href="http://adit.io/posts/2013-04-17-functors,_applicatives,_and_monads_in_pictures.html">here</a>.</p>
 <h2 id="what-is-a-functor">What is a Functor?</h2>
-<p>In Haskell, there is a <strong>Functor</strong> type class. If a type is an instance of the <strong>Functor</strong> class, it is essentially a container type that add <em>context</em> to any value.</p>
+<p>In Haskell, there is a <strong>Functor</strong> type class. If a type is an instance of the <strong>Functor</strong> class, it is essentially a container type that adds <em>context</em> to any value.</p>
 <p>The <strong>Functor</strong> class is defined as follows:</p>
 <table class="sourceCode numberLines haskell"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
@@ -68,7 +68,7 @@ myFunc <span class="fu">=</span> map makeStatement</code></pre></td></tr></table
 </pre></td><td class="sourceCode"><pre><code class="sourceCode haskell">map makeStatement [] <span class="co">-- same as []</span></code></pre></td></tr></table>
 <h3 id="the-maybe-functor">The Maybe Functor</h3>
 <p>Let’s look at the <strong>Maybe</strong> type just to prove that they are also functors.</p>
-<p><strong>Maybe</strong> is a container, except that it can only contain just 1 element (unlike <strong>List</strong> which can hold more than 1 element). <strong>Maybe</strong> has two constructors: <code>Just</code> and <code>Nothing</code>; you can use <code>Just</code> to put a value into the <strong>Maybe</strong> type, like how you can use the <code>(:[])</code> function to put a single item into a list. Alternatively, you can use <code>Nothing</code> to denote the empty <strong>Maybe</strong> container (like <code>[]</code> for lists).</p>
+<p><strong>Maybe</strong> is a container, except that it can only contain just 1 element (unlike <strong>List</strong> which can hold multiple elements). <strong>Maybe</strong> has two constructors: <code>Just</code> and <code>Nothing</code>; you can use <code>Just</code> to put a value into the <strong>Maybe</strong> type, like how you can use the <code>(:[])</code> function to put a single item into a list. Alternatively, you can use <code>Nothing</code> to denote the empty <strong>Maybe</strong> container (like <code>[]</code> for lists).</p>
 <table class="sourceCode numberLines haskell"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
@@ -88,7 +88,7 @@ bigX <span class="fu">=</span> fmap (<span class="fu">*</span><span class="dv">2
 2
 </pre></td><td class="sourceCode"><pre><code class="sourceCode haskell"><span class="kw">class</span> <span class="dt">Functor</span> box <span class="kw">where</span>
 <span class="ot">	fmap ::</span> (apples <span class="ot">-&gt;</span> oranges) <span class="ot">-&gt;</span> box apples <span class="ot">-&gt;</span> box oranges</code></pre></td></tr></table>
-<p>. Notice that the container must contain a single type <code>apples</code> — tuples by their nature have arbitrary numbers of <em>different</em> types (they have apples <em>and</em> oranges in them already). This is the reason why we don’t (and can’t) have a <code>map</code> function for tuples.</p>
+<p>. Notice that the container must contain a single type <code>apples</code> — tuples by their nature have arbitrary numbers of <em>different</em> types (they have apples <em>and</em> oranges in them already). This is the reason why we don’t (and can’t) have an <code>fmap</code> function for tuples.</p>
 <h2 id="conclusion">Conclusion</h2>
 <p>Functors are awesome. If you ever define your own custom container type, be sure to make an instance for <strong>Functor</strong> to make life easy for everyone.</p>
 <div class="footnotes">
