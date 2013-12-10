@@ -37,8 +37,8 @@
 4
 5
 6
-</pre></td><td class="sourceCode"><pre><code class="sourceCode haskell"><span class="kw">import</span> <span class="kw">qualified</span> Data.Vector <span class="kw">as</span> V
-<span class="kw">import</span> System.Random.MWC
+</pre></td><td class="sourceCode"><pre><code class="sourceCode haskell"><span class="kw">import qualified</span> <span class="dt">Data.Vector</span> <span class="kw">as</span> <span class="dt">V</span>
+<span class="kw">import </span><span class="dt">System.Random.MWC</span>
 
 	<span class="fu">...</span>
 	gen <span class="ot">&lt;-</span> initialize <span class="fu">$</span> V.fromList [year, month, day]
@@ -102,13 +102,13 @@
 51
 52
 53
-</pre></td><td class="sourceCode"><pre><code class="sourceCode haskell"><span class="kw">import</span> Data.Bits
-<span class="kw">import</span> <span class="kw">qualified</span> Data.ByteString.Lazy <span class="kw">as</span> B
-<span class="kw">import</span> Data.Digest.Pure.SHA
-<span class="kw">import</span> Data.List (foldl')
-<span class="kw">import</span> <span class="kw">qualified</span> Data.Vector <span class="kw">as</span> V
-<span class="kw">import</span> Data.Word
-<span class="kw">import</span> System.Random.MWC
+</pre></td><td class="sourceCode"><pre><code class="sourceCode haskell"><span class="kw">import </span><span class="dt">Data.Bits</span>
+<span class="kw">import qualified</span> <span class="dt">Data.ByteString.Lazy</span> <span class="kw">as</span> <span class="dt">B</span>
+<span class="kw">import </span><span class="dt">Data.Digest.Pure.SHA</span>
+<span class="kw">import </span><span class="dt">Data.List</span> (foldl')
+<span class="kw">import qualified</span> <span class="dt">Data.Vector</span> <span class="kw">as</span> <span class="dt">V</span>
+<span class="kw">import </span><span class="dt">Data.Word</span>
+<span class="kw">import </span><span class="dt">System.Random.MWC</span>
 
 	<span class="fu">...</span>
 	gen <span class="ot">&lt;-</span> initialize' <span class="fu">$</span> year' <span class="fu">+</span> month' <span class="fu">+</span> day'
@@ -155,7 +155,7 @@ fromOctetsBE <span class="fu">=</span> foldl' accum <span class="dv">0</span>
 
 <span class="ot">fromOctetsLE ::</span> [<span class="dt">Word8</span>] <span class="ot">-&gt;</span> <span class="dt">Word32</span>
 fromOctetsLE <span class="fu">=</span> fromOctetsBE <span class="fu">.</span> reverse</code></pre></td></tr></table>
-<p>The neat <code>chop</code> function is by <a href="http://stackoverflow.com/a/5188922/437583">Dan Burton</a>. The octet conversion functions between <code>Word8</code> and <code>Word32</code> types are from <a href="http://www.haskell.org/pipermail/beginners/2010-October/005571.html">this message</a>.<sup><a href="#fn1" class="footnoteRef" id="fnref1">1</a></sup></p>
+<p>The neat <code>chop</code> function is by <a href="http://stackoverflow.com/a/5188922/437583">Dan Burton</a>. The octet conversion functions between <code>Word8</code> and <code>Word32</code> types are from <a href="http://www.haskell.org/pipermail/beginners/2010-October/005571.html">this message</a>.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a></p>
 <div class="footnotes">
 <hr />
 <ol>

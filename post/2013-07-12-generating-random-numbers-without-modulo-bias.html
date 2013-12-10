@@ -40,7 +40,7 @@ n = <span class="dv">3</span>;
 x = rand() % n;
 <span class="kw">return</span> x;</code></pre></td></tr></table>
 <p>your code is broken, thanks to modulo bias. You will always get modulo bias (however slight, or great, it may be) whenever <code>RAND_MAX + 1</code> of your <code>rand()</code> function is not evenly divisible by your modulus <code>n</code>.</p>
-<p>Continuing with our example, let’s say <code>rand()</code>’s <code>RAND_MAX</code> is 4, so there are 5 different possible values that <code>rand()</code> can generate (0, 1, 2, 3, or 4). Now rand() will return each value 20% of the time, assuming that <code>rand()</code> has very good distribution from 0 to <code>RAND_MAX</code>.<sup><a href="#fn1" class="footnoteRef" id="fnref1">1</a></sup> But since we take the modulo by 3, <strong>we get 0 40% of the time (0 and 3)!</strong> This fact alone should make you worried. Visually it is as follows:</p>
+<p>Continuing with our example, let’s say <code>rand()</code>’s <code>RAND_MAX</code> is 4, so there are 5 different possible values that <code>rand()</code> can generate (0, 1, 2, 3, or 4). Now rand() will return each value 20% of the time, assuming that <code>rand()</code> has very good distribution from 0 to <code>RAND_MAX</code>.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> But since we take the modulo by 3, <strong>we get 0 40% of the time (0 and 3)!</strong> This fact alone should make you worried. Visually it is as follows:</p>
 <div class="figure">
 <img src="../img/mbias.png" title="Modulo bias" />
 </div>
@@ -91,7 +91,7 @@ rand_excess = ((RAND_MAX % n) + <span class="dv">1</span>) % n;
 = (2 + 1) \mbox{ mod 3}\\
 = 3 \mbox{ mod 3}\\
 = 0
-\]</span> and <code>rand_limit</code> would not be reduced by any amount.<sup><a href="#fn2" class="footnoteRef" id="fnref2">2</a></sup></p>
+\]</span> and <code>rand_limit</code> would not be reduced by any amount.<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a></p>
 <p>If you actually know beforehand the exact size of <code>RAND_MAX</code> (usually it is <code>INT_MAX</code> or some such, determined by the type of the variable returned by <code>rand()</code>), you should instead just define <code>rand_limit</code> as a constant to save some CPU cycles (write out the mathematical expressions involved by hand to find the number and just hardcode it).</p>
 <div class="footnotes">
 <hr />

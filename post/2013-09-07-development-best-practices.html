@@ -39,7 +39,7 @@
 	...calculation...</code></pre>
 <p>. You should make function arguments less dependent on argument order, or remove argument ordering requirements completely.</p>
 <h4 id="names-should-be-consistent-distinctive-and-meaningful.">Names should be consistent, distinctive, and meaningful.</h4>
-<p>On a similar note, do not name variables “data” or “foo”. I think this also depends on static vs. dynamic typing.<sup><a href="#fn1" class="footnoteRef" id="fnref1">1</a></sup></p>
+<p>On a similar note, do not name variables “data” or “foo”. I think this also depends on static vs. dynamic typing.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a></p>
 <h4 id="code-style-and-formatting-should-be-consistent.">Code style and formatting should be consistent.</h4>
 <p>Be like the Linux Kernel project — use a single coding style.</p>
 <h4 id="all-aspects-of-software-development-should-be-broken-down-into-tasks-roughly-an-hour-long.">All aspects of software development should be broken down into tasks roughly an hour long.</h4>
@@ -53,7 +53,7 @@
 <p>You can use <em>GNU Make</em> not only to compile code, but to describe a dependency graph of your workflow (do X before Y).</p>
 <h2 id="use-the-computer-to-record-history">Use the Computer to Record History</h2>
 <h4 id="software-tools-should-be-used-to-track-computational-work-automatically-to-achieve-provenance.">Software tools should be used to track computational work automatically, to achieve provenance.</h4>
-<p>The ability to reproduce your results, you should record everything needed to re-create the output<sup><a href="#fn2" class="footnoteRef" id="fnref2">2</a></sup>, and such record-keeping should be done automatically. In a software development context, the most immediate example is version control, which keeps all of the code necessary to recreate the desired program behavior. However, there are several other things which you should also keep track of in your development notebook:</p>
+<p>The ability to reproduce your results, you should record everything needed to re-create the output<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a>, and such record-keeping should be done automatically. In a software development context, the most immediate example is version control, which keeps all of the code necessary to recreate the desired program behavior. However, there are several other things which you should also keep track of in your development notebook:</p>
 <ul>
 <li>UUIDs and version numbers for raw data records (e.g., sample parameters/input for your program);</li>
 <li>UUIDs and version numbers for programs and libraries;</li>
@@ -82,7 +82,7 @@
 <p>Assertions are great because they simplify debugging by making your program halt as soon as one of them gets triggered. Even better, they serve as <em>executable documentation</em>, which by their nature <em>never become obsolete</em>.</p>
 <h4 id="use-automated-testing.">Use automated testing.</h4>
 <p>At small scales (single functions, components) unit tests are handy. At larger scales, employ <em>integration testing</em>: tests that check multiple components working together. I personally recommend randomized stress testing, a la QuickCheck. <em>Regression testing</em> is the practice of running pre-existing tests after changes to the code in order to make sure that nothing has broken.</p>
-<p>Do not practice test-driven development (TDD), where you write tests before writing any new code, because a meta-study of its effectiveness done in 2010 did not find any significant impact on programmer productivity.<sup><a href="#fn3" class="footnoteRef" id="fnref3">3</a></sup></p>
+<p>Do not practice test-driven development (TDD), where you write tests before writing any new code, because a meta-study of its effectiveness done in 2010 did not find any significant impact on programmer productivity.<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a></p>
 <h4 id="use-an-off-the-shelf-testing-library.">Use an off-the-shelf testing library.</h4>
 <p>Use of a testing library encourages us to write testable code, which generally means cleaner functions and less spaghetti code. If you’re working with a legacy code base without tests, a great way to refactor it is to make parts of it testable.</p>
 <h3 id="use-a-variety-of-oracles">Use a Variety of Oracles</h3>
@@ -95,7 +95,7 @@
 <h4 id="use-a-profiler-to-identify-bottlenecks-accurately.">Use a profiler to identify bottlenecks accurately.</h4>
 <p>You should only care about performance <em>after</em> you get working code.</p>
 <h4 id="write-code-in-the-highest-level-language-possible.">Write code in the highest-level language possible.</h4>
-<p>Research has confirmed that most programmers write roughly the same number of lines of code per unit time regardless of the language they use.<sup><a href="#fn4" class="footnoteRef" id="fnref4">4</a></sup> Thus, you should try to write code in a high level language to save development time and increase productivity, and then fall back to a low level language to a speed boost where necessary.</p>
+<p>Research has confirmed that most programmers write roughly the same number of lines of code per unit time regardless of the language they use.<a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a> Thus, you should try to write code in a high level language to save development time and increase productivity, and then fall back to a low level language to a speed boost where necessary.</p>
 <h2 id="document-design-and-purpose-not-mechanics">Document Design and Purpose, Not Mechanics</h2>
 <h4 id="document-interfaces-and-resons-not-implementations.">Document interfaces and resons, not implementations.</h4>
 <p>It is more useful to explain why code is written a certain way, instead of explaining the mechanics behind the implementation, for the code will speak for itself in the case of the latter. If the code cannot speak for itself, then see the point below.</p>
