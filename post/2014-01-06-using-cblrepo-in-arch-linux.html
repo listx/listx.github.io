@@ -154,6 +154,14 @@
 111
 112
 113
+114
+115
+116
+117
+118
+119
+120
+121
 </pre></td><td class="sourceCode"><pre><code class="sourceCode bash"><span class="co">#!/usr/bin/env zsh</span>
 <span class="co"># LICENSE: PUBLIC DOMAIN</span>
 <span class="co"># Usage: ./maintain_cblrepo.sh &lt;HACKAGE_PACKAGES_FILE&gt; &lt;MODE&gt;</span>
@@ -208,8 +216,16 @@
 
 	<span class="co"># Add packages installed by the user from [haskell-core] or some other Arch Linux repository</span>
 	<span class="ot">installed=($(</span><span class="kw">pacman</span> -Qq <span class="kw">|</span> <span class="kw">grep</span> <span class="st">&quot;^haskell-&quot;</span> <span class="kw">|</span> <span class="kw">sed</span> <span class="st">'s/^haskell-//'</span><span class="ot">))</span>
+	<span class="co"># Filter out those packages that were installed from Hackage using this very</span>
+	<span class="co"># same script (in Arch Linux, the hackage packages, once installed, are in</span>
+	<span class="co"># the format `haskell-&lt;lowercased_package_name&gt;'). This way, we avoid</span>
+	<span class="co"># duplicate definitions and the packages added with --distro-pkg will really</span>
+	<span class="co"># be those packages available from the distribution's official haskell</span>
+	<span class="co"># repository.</span>
+	<span class="ot">hackage_lowercased=($hackage_packages_file</span>:l<span class="ot">)</span>
+	<span class="ot">installed_filtered=(${installed:</span><span class="er">|</span><span class="ot">hackage_lowercased})</span>
 
-	<span class="kw">for</span> <span class="kw">p</span> in <span class="ot">$installed</span><span class="kw">;</span> <span class="kw">do</span>
+	<span class="kw">for</span> <span class="kw">p</span> in <span class="ot">$installed_filtered</span><span class="kw">;</span> <span class="kw">do</span>
 		<span class="ot">version=$(</span><span class="kw">pacman</span> -Q haskell-<span class="ot">$p</span> <span class="kw">|</span> <span class="kw">cut</span> -d <span class="st">&quot; &quot;</span> -f2 <span class="kw">|</span> <span class="kw">sed</span> <span class="st">'s/-/,/'</span><span class="ot">)</span>
 		<span class="ot">command=</span><span class="st">&quot;cblrepo add --distro-pkg </span><span class="ot">$p</span><span class="st">,</span><span class="ot">$version</span><span class="st">&quot;</span>
 		<span class="kw">echo</span> <span class="ot">$command</span>
@@ -224,7 +240,7 @@
 	<span class="kw">fi</span>
 
 	<span class="co"># Add packages from Hackage</span>
-	<span class="kw">for</span> <span class="kw">hp</span> in <span class="ot">${hackage_packages_file}</span><span class="kw">;</span> <span class="kw">do</span>
+	<span class="kw">for</span> <span class="kw">hp</span> in <span class="ot">$hackage_packages_file</span><span class="kw">;</span> <span class="kw">do</span>
 		<span class="co"># Grab latest version of package</span>
 		<span class="ot">cabal_file=$(</span><span class="kw">curl</span> -s <span class="ot">$hackage_url</span>/package/<span class="ot">$hp</span> <span class="kw">|</span> <span class="kw">grep</span> -ioE <span class="st">&quot;Cabal source package[)&lt;&gt;/lia href=</span><span class="dt">\&quot;</span><span class="st">]+\/package\/.+\.cabal&quot;</span> <span class="kw">|</span> <span class="kw">grep</span> -ioE <span class="st">&quot;\/package.+&quot;</span><span class="ot">)</span>
 		<span class="ot">command=</span><span class="st">&quot;cblrepo add --cbl-url </span><span class="ot">$hackage_url$cabal_file</span><span class="st">&quot;</span>
@@ -270,7 +286,8 @@
 <p>A simple <code>HACKAGE_PACKAGES_FILE</code> (perhaps named <code>hackage_pkgs</code>) might look something like this:</p>
 <pre class="numberLines"><code>bindings-DSL
 bindings-GLFW
-GLFW-b</code></pre>
+GLFW-b
+rosezipper</code></pre>
 <p>Here is sample output from the command <code>./maintain_cblrepo.sh hackage_pkgs initdb</code>:</p>
 <pre class="numberLines"><code>cblrepo add --ghc-pkg array,0.4.0.1
 cblrepo add --ghc-pkg base,4.6.0.1
@@ -302,8 +319,6 @@ cblrepo add --distro-pkg attoparsec,0.10.4.0,4
 cblrepo add --distro-pkg base-unicode-symbols,0.2.2.4,27
 cblrepo add --distro-pkg base64-bytestring,1.0.0.1,2
 cblrepo add --distro-pkg binary,0.7.1.0,1
-cblrepo add --distro-pkg bindings-dsl,1.0.20,1
-cblrepo add --distro-pkg bindings-glfw,3.0.3.2,1
 cblrepo add --distro-pkg blaze-builder,0.3.3.2,1
 cblrepo add --distro-pkg blaze-html,0.6.1.2,2
 cblrepo add --distro-pkg blaze-markup,0.5.1.6,2
@@ -327,7 +342,6 @@ cblrepo add --distro-pkg dlist,0.6.0.1,1
 cblrepo add --distro-pkg entropy,0.2.2.4,1
 cblrepo add --distro-pkg extensible-exceptions,0.1.1.4,27
 cblrepo add --distro-pkg fgl,5.4.2.4,27
-cblrepo add --distro-pkg glfw-b,1.4.6,1
 cblrepo add --distro-pkg glib,0.12.5.0,1
 cblrepo add --distro-pkg gluraw,1.4.0.0,2
 cblrepo add --distro-pkg glut,2.5.0.2,1
@@ -338,6 +352,7 @@ cblrepo add --distro-pkg haskell-src-exts,1.14.0,1
 cblrepo add --distro-pkg highlighting-kate,0.5.5.1,3
 cblrepo add --distro-pkg hinotify,0.3.6,1
 cblrepo add --distro-pkg hlint,1.8.55,1
+cblrepo add --distro-pkg hostname,1.0,27
 cblrepo add --distro-pkg hs-bibutils,5.0,3
 cblrepo add --distro-pkg hscolour,1.20.3,27
 cblrepo add --distro-pkg hslua,0.3.10,1
@@ -387,6 +402,8 @@ cblrepo add --distro-pkg system-filepath,0.4.8,1
 cblrepo add --distro-pkg tagged,0.7,1
 cblrepo add --distro-pkg tagsoup,0.13,1
 cblrepo add --distro-pkg temporary,1.1.2.4,3
+cblrepo add --distro-pkg test-framework,0.8.0.3,3
+cblrepo add --distro-pkg test-framework-quickcheck2,0.3.0.2,3
 cblrepo add --distro-pkg texmath,0.6.5.2,3
 cblrepo add --distro-pkg text,0.11.3.1,1
 cblrepo add --distro-pkg transformers,0.3.0.0,27
@@ -409,7 +426,8 @@ cblrepo add --distro-pkg zip-archive,0.1.4,1
 cblrepo add --distro-pkg zlib,0.5.4.1,2
 cblrepo add --cbl-url http://hackage.haskell.org/package/bindings-DSL-1.0.20/bindings-DSL.cabal
 cblrepo add --cbl-url http://hackage.haskell.org/package/bindings-GLFW-3.0.3.2/bindings-GLFW.cabal
-cblrepo add --cbl-url http://hackage.haskell.org/package/GLFW-b-1.4.6/GLFW-b.cabal</code></pre>
+cblrepo add --cbl-url http://hackage.haskell.org/package/GLFW-b-1.4.6/GLFW-b.cabal
+cblrepo add --cbl-url http://hackage.haskell.org/package/rosezipper-0.2/rosezipper.cabal</code></pre>
 <p>This is infinitely faster than adding each package by hand. Feel free to copy/paste/modify/redistribute the code in <code>maintain_cblrepo.sh</code> to suit your needs.</p>
 <div class="footnotes">
 <hr />
