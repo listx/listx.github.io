@@ -28,7 +28,7 @@
 	<div class="info"><a href="../tag/arch.html">arch</a>, <a href="../tag/linux.html">linux</a>, <a href="../tag/haskell.html">haskell</a>, <a href="../tag/cblrepo.html">cblrepo</a></div>
 </center>
 
-<p>UPDATE 2014-01-24: See <a href="2014-01-24-cblrepo2pkgbuild.html">this post</a>.</p>
+<p>UPDATE 2014-01-24: See <a href="2014-01-24-cabal2pkgbuild.html">this post</a>.</p>
 <p>The <a href="https://github.com/magthe/cblrepo">cblrepo</a> command line utility helps to maintain a set of Haskell packages, and is used as the de facto Hackage package manager in Arch Linux.</p>
 <p>At least in Arch Linux, the idea is to first install the base set of available Haskell packages from the <a href="https://wiki.archlinux.org/index.php/Haskell_Package_Guidelines">[haskell-core]</a> repo. If you now want to install a package from http://hackage.haskell.org <em>and</em> want to track it with Arch Linux’s own package manager <code>pacman</code>, you have to somehow generate a PKGBUILD from the Hackage package and feed it into <code>makepkg</code>, and then call <code>sudo pacman -U &lt;generated_package&gt;</code> on it. You can do this with <code>cblrepo</code>, but it takes a number of steps that could get very tedious, very fast:</p>
 <ol style="list-style-type: decimal">
