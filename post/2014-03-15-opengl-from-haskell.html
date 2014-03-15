@@ -28,8 +28,9 @@
 	<div class="info"><a href="../tag/haskell.html">haskell</a>, <a href="../tag/opengl.html">opengl</a></div>
 </center>
 
-<p>The following is my translation/adaptation of <a href="http://www.opengl-tutorial.org/beginners-tutorials/tutorial-2-the-first-triangle/">tutorial #2</a> at http://www.opengl-tutorial.org. It draws a single red triangle on the screen with a dark blue background. It takes quite a bit of boilerplate code just to get something on the screen!</p>
-<p>My version uses the code from (https://github.com/YPares/Haskell-OpenGL3.1-Tutos), but does not use <code>Control.Applicative</code> and also does not put the shaders containing GLSL in a separate text file. Everything is self-contained in one file, and it only really uses the <code>PackageImports</code> and <code>RecordWildCards</code> GHC extensions. The <code>PackageImports</code> is only necessary if you have both <code>GLFW</code> and <code>GLFW-b</code> Hackage packages installed in your system (as they have a name clash of <code>Graphics.UI.GLFW</code>, you need to disambiguate this import by specifying the package name). The <code>RecordWildCards</code> extension is pretty standard and exists purely for syntactic sugar (no type-level hoops and such) — if you don’t know about it you should google it.</p>
+<p>The following is my translation/adaptation of <a href="http://www.opengl-tutorial.org/beginners-tutorials/tutorial-2-the-first-triangle/">tutorial #2</a> at <a href="http://www.opengl-tutorial.org">http://www.opengl-tutorial.org</a>. It draws a single red triangle on the screen with a dark blue background. It takes quite a bit of boilerplate code just to get something on the screen!</p>
+<p>My version uses the code from <a href="https://github.com/YPares/Haskell-OpenGL3.1-Tutos">https://github.com/YPares/Haskell-OpenGL3.1-Tutos</a>, but does not use <code>Control.Applicative</code> and also does not put the shaders containing GLSL in a separate text file. Everything is self-contained in one file, and it only uses the <code>PackageImports</code> and <code>RecordWildCards</code> GHC extensions. The <code>PackageImports</code> is only necessary if you have both <a href="http://hackage.haskell.org/package/GLFW">GLFW</a> and <a href="http://hackage.haskell.org/package/GLFW-b">GLFW-b</a> Hackage packages installed in your system (as they have a name clash of <code>Graphics.UI.GLFW</code>, you need to disambiguate this import by specifying the package name). The <code>RecordWildCards</code> extension is pretty standard and exists purely for syntactic sugar (no type-level hoops and such) — if you don’t know about it you should google it.</p>
+<p>I went ahead and added type signatures for all top-level functions — something that many Haskell tutorial writers hate doing for some strange, unknown reason.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> Also, I ran the code through <code>ghc --make -Wall</code> and silenced all warnings.</p>
 <p>I hereby release it into the Public Domain. From what I can tell, YPares’s code doesn’t have a license… I think this should be OK.</p>
 <table class="sourceCode haskell numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
@@ -227,6 +228,9 @@
 194
 195
 196
+197
+198
+199
 </pre></td><td class="sourceCode"><pre><code class="sourceCode haskell"><span class="ot">{-# LANGUAGE PackageImports #-}</span>
 <span class="ot">{-# LANGUAGE RecordWildCards #-}</span>
 <span class="kw">module</span> <span class="dt">Main</span> <span class="kw">where</span>
@@ -253,7 +257,7 @@ withNewPtr f <span class="fu">=</span> alloca (\p <span class="ot">-&gt;</span> 
 initialize <span class="fu">=</span> <span class="kw">do</span>
 	ok <span class="ot">&lt;-</span> GLFW.init
 	when (not ok) <span class="fu">$</span> <span class="kw">do</span>
-		fail <span class="st">&quot;Failed to initialize GLFW&quot;</span>
+		_ <span class="ot">&lt;-</span> fail <span class="st">&quot;Failed to initialize GLFW&quot;</span>
 		exitFailure
 	mapM_ GLFW.windowHint
 		[ <span class="dt">GLFW.WindowHint'Samples</span> <span class="dv">4</span> <span class="co">-- 4x antialiasing</span>
@@ -265,7 +269,7 @@ initialize <span class="fu">=</span> <span class="kw">do</span>
 
 	win <span class="ot">&lt;-</span> GLFW.createWindow <span class="dv">800</span> <span class="dv">600</span> <span class="st">&quot;Window Title&quot;</span> <span class="dt">Nothing</span> <span class="dt">Nothing</span>
 	when (isNothing win) <span class="fu">$</span> <span class="kw">do</span>
-		fail <span class="st">&quot;Failed to create OpenGL window&quot;</span>
+		_ <span class="ot">&lt;-</span> fail <span class="st">&quot;Failed to create OpenGL window&quot;</span>
 		GLFW.terminate
 		exitFailure
 	<span class="kw">let</span>
@@ -295,9 +299,9 @@ freeResources <span class="dt">GLIDs</span>{<span class="fu">..</span>} <span cl
 
 <span class="ot">newVAO ::</span> <span class="dt">IO</span> <span class="dt">GLuint</span>
 newVAO <span class="fu">=</span> <span class="kw">do</span>
-	id <span class="ot">&lt;-</span> withNewPtr (glGenVertexArrays <span class="dv">1</span>)
-	glBindVertexArray id
-	return id
+	vaId <span class="ot">&lt;-</span> withNewPtr (glGenVertexArrays <span class="dv">1</span>)
+	glBindVertexArray vaId
+	return vaId
 
 <span class="ot">fillNewBuffer ::</span> [<span class="dt">GLfloat</span>] <span class="ot">-&gt;</span> <span class="dt">IO</span> <span class="dt">GLuint</span>
 fillNewBuffer xs <span class="fu">=</span> <span class="kw">do</span>
@@ -306,9 +310,9 @@ fillNewBuffer xs <span class="fu">=</span> <span class="kw">do</span>
 	withArrayLen xs func <span class="co">-- give given vertices to OpenGL</span>
 	return bufId
 	<span class="kw">where</span>
-	func length ptr <span class="fu">=</span> glBufferData
+	func len ptr <span class="fu">=</span> glBufferData
 		gl_ARRAY_BUFFER
-		(fromIntegral (length <span class="fu">*</span> sizeOf (undefined<span class="ot"> ::</span> <span class="dt">GLfloat</span>)))
+		(fromIntegral (len <span class="fu">*</span> sizeOf (undefined<span class="ot"> ::</span> <span class="dt">GLfloat</span>)))
 		(<span class="ot">ptr ::</span> <span class="dt">Ptr</span> <span class="dt">GLfloat</span>)
 		gl_STATIC_DRAW
 
@@ -334,20 +338,22 @@ loadProgram vertShader fragShader <span class="fu">=</span> <span class="kw">do<
 	putStrLn <span class="st">&quot;Linking program&quot;</span>
 	mapM_ (glAttachShader progId) shaderIds
 	glLinkProgram progId
-	checkStatus gl_LINK_STATUS glGetProgramiv glGetProgramInfoLog progId
+	_ <span class="ot">&lt;-</span> checkStatus
+		gl_LINK_STATUS glGetProgramiv glGetProgramInfoLog progId
 	mapM_ glDeleteShader shaderIds
 	return progId
 
 <span class="ot">loadShader ::</span> <span class="dt">GLenum</span> <span class="ot">-&gt;</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">IO</span> <span class="dt">GLuint</span>
 loadShader shaderTypeFlag code <span class="fu">=</span> <span class="kw">do</span>
-	id <span class="ot">&lt;-</span> glCreateShader shaderTypeFlag
+	shaderId <span class="ot">&lt;-</span> glCreateShader shaderTypeFlag
 	withCString code <span class="fu">$</span> \codePtr <span class="ot">-&gt;</span>
 		with codePtr <span class="fu">$</span> \codePtrPtr <span class="ot">-&gt;</span>
-			glShaderSource id <span class="dv">1</span> codePtrPtr nullPtr
+			glShaderSource shaderId <span class="dv">1</span> codePtrPtr nullPtr
 	putStrLn <span class="st">&quot;Compiling shader...&quot;</span>
-	glCompileShader id
-	checkStatus gl_COMPILE_STATUS glGetShaderiv glGetShaderInfoLog id
-	return id
+	glCompileShader shaderId
+	_ <span class="ot">&lt;-</span> checkStatus
+		gl_COMPILE_STATUS glGetShaderiv glGetShaderInfoLog shaderId
+	return shaderId
 
 <span class="ot">checkStatus ::</span> (<span class="dt">Integral</span> a1, <span class="dt">Storable</span> a1)
 	<span class="ot">=&gt;</span> <span class="dt">GLenum</span>
@@ -355,14 +361,14 @@ loadShader shaderTypeFlag code <span class="fu">=</span> <span class="kw">do</sp
 	<span class="ot">-&gt;</span> (t <span class="ot">-&gt;</span> a1 <span class="ot">-&gt;</span> <span class="dt">Ptr</span> a3 <span class="ot">-&gt;</span> <span class="dt">Ptr</span> <span class="dt">Foreign.C.Types.CChar</span> <span class="ot">-&gt;</span> <span class="dt">IO</span> a2)
 	<span class="ot">-&gt;</span> t
 	<span class="ot">-&gt;</span> <span class="dt">IO</span> <span class="dt">Bool</span>
-checkStatus statusFlag glGetFn glInfoLogFn id <span class="fu">=</span> <span class="kw">do</span>
+checkStatus statusFlag glGetFn glInfoLogFn componentId <span class="fu">=</span> <span class="kw">do</span>
 	<span class="kw">let</span>
-		fetch info <span class="fu">=</span> withNewPtr (glGetFn id info)
+		fetch info <span class="fu">=</span> withNewPtr (glGetFn componentId info)
 	status <span class="ot">&lt;-</span> liftM toBool <span class="fu">$</span> fetch statusFlag
 	logLength <span class="ot">&lt;-</span> fetch gl_INFO_LOG_LENGTH
 	when (logLength <span class="fu">&gt;</span> <span class="dv">0</span>) <span class="fu">$</span>
 		allocaArray0 (fromIntegral logLength) <span class="fu">$</span> \msgPtr <span class="ot">-&gt;</span> <span class="kw">do</span>
-			glInfoLogFn id logLength nullPtr msgPtr
+			_ <span class="ot">&lt;-</span> glInfoLogFn componentId logLength nullPtr msgPtr
 			msg <span class="ot">&lt;-</span> peekCString msgPtr
 			(<span class="kw">if</span> status <span class="kw">then</span> putStrLn <span class="kw">else</span> fail) msg
 	return status
@@ -387,6 +393,7 @@ vertexShader1 <span class="fu">=</span> unlines
 		, <span class="st">&quot;gl_Position.w = 1.0;&quot;</span>
 	, <span class="st">&quot;}&quot;</span>
 	]
+
 
 <span class="ot">vertexBufferData ::</span> [<span class="dt">GLfloat</span>]
 vertexBufferData <span class="fu">=</span>
@@ -423,6 +430,12 @@ drawStuff <span class="dt">GLIDs</span>{<span class="fu">..</span>} <span class=
 	bindBufferToAttrib vertexBufferId <span class="dv">0</span>
 	glDrawArrays gl_TRIANGLES <span class="dv">0</span> <span class="dv">3</span> <span class="co">-- for attrib array 0, draw 3 vertices</span>
 	glDisableVertexAttribArray <span class="dv">0</span> <span class="co">-- disable attrib array 0</span></code></pre></td></tr></table>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>Seriously, why do so many Haskell tutorials omit function type signatures?<a href="#fnref1">↩</a></p></li>
+</ol>
+</div>
 
         </div>
         <div id="footer">
