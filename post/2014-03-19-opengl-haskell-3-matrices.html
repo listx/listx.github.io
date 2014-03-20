@@ -1,0 +1,558 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+	<head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>listx's Blog - OpenGL from Haskell (#3: Matrices)</title>
+        <link rel="stylesheet" type="text/css" href="../css/base.css" />
+        <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
+        <link rel="shortcut icon" type="image/png" href="../favicon.png" />
+		<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+	</head>
+    <body>
+        <div id="header">
+			<a href="../">Home</a>
+			•
+			<a href="../about.html">About</a>
+			•
+			<a href="../code.html">Code</a>
+			•
+			<a href="../archive.html">Archive</a>
+        </div>
+
+        <div id="content">
+            <center><h1>OpenGL from Haskell (#3: Matrices)</h1></center>
+
+            <center>
+	<div class="info">2014-03-19</div>
+	<div class="info"><a href="../tag/haskell.html">haskell</a>, <a href="../tag/opengl.html">opengl</a></div>
+</center>
+
+<p>The following is my translation/adaptation of <a href="http://www.opengl-tutorial.org/beginners-tutorials/tutorial-3-matrices/">tutorial #2</a> at <a href="http://www.opengl-tutorial.org">http://www.opengl-tutorial.org</a>. My <a href="2014-03-15-opengl-from-haskell.html">last post</a> was a translation of tutorial #2, which dealt with triangles — this is the reason why this post’s title is called “#3: Matrices”. The end result of this tutorial is a 3D triangle with 3 different colored vertices that are interpolated smoothly by OpenGL.</p>
+<p>My version again uses the code from <a href="https://github.com/YPares/Haskell-OpenGL3.1-Tutos">https://github.com/YPares/Haskell-OpenGL3.1-Tutos</a>. Like my last post, my code here does does not use <code>Control.Applicative</code> puts everything, including the GLSL shaders directly into the code. The <code>RankNTypes</code> and <code>TypeOperators</code> GHC extensions are only there to suppress warnings from using <code>ghc --make -Wall</code>; if you don’t want to use these extensions, just remove the type signature for the <code>vec3</code> function near the bottom.</p>
+<p>I have also removed the use of backticks for Haskell’s infix notation (<code>`...`</code>). It’s not because I like using parentheses — I just don’t like using infix notation because it runs against the argument handling order of normal functions found everywhere else.</p>
+<p>The code here is released into the Public Domain.</p>
+<table class="sourceCode haskell numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+256
+</pre></td><td class="sourceCode"><pre><code class="sourceCode haskell"><span class="ot">{-# LANGUAGE PackageImports #-}</span>
+<span class="ot">{-# LANGUAGE RecordWildCards #-}</span>
+<span class="ot">{-# LANGUAGE RankNTypes #-}</span>
+<span class="ot">{-# LANGUAGE TypeOperators #-}</span>
+<span class="kw">module</span> <span class="dt">Main</span> <span class="kw">where</span>
+
+<span class="kw">import </span><span class="dt">Control.Monad</span>
+<span class="kw">import </span><span class="dt">Data.Maybe</span>
+<span class="kw">import </span><span class="dt">Data.Vec</span>
+<span class="kw">import </span><span class="dt">Foreign</span>
+<span class="kw">import </span><span class="dt">Foreign.C.String</span>
+<span class="kw">import </span><span class="dt">Foreign.C.Types</span>
+<span class="kw">import qualified</span> &quot;<span class="dt">GLFW</span>-b&quot; <span class="dt">Graphics.UI.GLFW</span> <span class="kw">as</span> <span class="dt">GLFW</span>
+<span class="kw">import </span><span class="dt">Graphics.Rendering.OpenGL.Raw</span>
+<span class="kw">import </span><span class="dt">System.Exit</span>
+
+<span class="kw">data</span> <span class="dt">GLIDs</span> <span class="fu">=</span> <span class="dt">GLIDs</span>
+	{<span class="ot"> progId ::</span> <span class="fu">!</span><span class="dt">GLuint</span>
+	,<span class="ot"> vertexArrayId ::</span> <span class="fu">!</span><span class="dt">GLuint</span>
+	,<span class="ot"> vertexAttrib ::</span> <span class="fu">!</span><span class="dt">GLuint</span>
+	,<span class="ot"> vertexBufferId ::</span> <span class="fu">!</span><span class="dt">GLuint</span>
+	,<span class="ot"> colorAttrib ::</span> <span class="fu">!</span><span class="dt">GLuint</span>
+	,<span class="ot"> colorBufferId ::</span> <span class="fu">!</span><span class="dt">GLuint</span>
+	,<span class="ot"> mvpMatrixUniform ::</span> <span class="fu">!</span><span class="dt">GLint</span>
+	}
+
+<span class="ot">withNewPtr ::</span> <span class="dt">Storable</span> b <span class="ot">=&gt;</span> (<span class="dt">Ptr</span> b <span class="ot">-&gt;</span> <span class="dt">IO</span> a) <span class="ot">-&gt;</span> <span class="dt">IO</span> b
+withNewPtr f <span class="fu">=</span> alloca (\p <span class="ot">-&gt;</span> f p <span class="fu">&gt;&gt;</span> peek p)
+
+<span class="ot">initialize ::</span> <span class="dt">IO</span> <span class="dt">GLFW.Window</span>
+initialize <span class="fu">=</span> <span class="kw">do</span>
+	ok <span class="ot">&lt;-</span> GLFW.init
+	when (not ok) <span class="fu">$</span> <span class="kw">do</span>
+		_ <span class="ot">&lt;-</span> fail <span class="st">&quot;Failed to initialize GLFW&quot;</span>
+		exitFailure
+	mapM_ GLFW.windowHint
+		[ <span class="dt">GLFW.WindowHint'Samples</span> <span class="dv">4</span> <span class="co">-- 4x antialiasing</span>
+		, <span class="dt">GLFW.WindowHint'ContextVersionMajor</span> <span class="dv">3</span> <span class="co">-- OpenGL 3.3</span>
+		, <span class="dt">GLFW.WindowHint'ContextVersionMinor</span> <span class="dv">3</span>
+		, <span class="dt">GLFW.WindowHint'OpenGLProfile</span> <span class="dt">GLFW.OpenGLProfile'Core</span>
+		]
+
+	win <span class="ot">&lt;-</span> GLFW.createWindow <span class="dv">800</span> <span class="dv">600</span> <span class="st">&quot;Window Title&quot;</span> <span class="dt">Nothing</span> <span class="dt">Nothing</span>
+	when (isNothing win) <span class="fu">$</span> <span class="kw">do</span>
+		_ <span class="ot">&lt;-</span> fail <span class="st">&quot;Failed to create OpenGL window&quot;</span>
+		GLFW.terminate
+		exitFailure
+	<span class="kw">let</span>
+		win' <span class="fu">=</span> fromJust win
+	GLFW.makeContextCurrent win
+	GLFW.setStickyKeysInputMode win' <span class="dt">GLFW.StickyKeysInputMode'Enabled</span>
+	return win'
+
+<span class="ot">initializeGL ::</span> <span class="dt">IO</span> <span class="dt">GLIDs</span>
+initializeGL <span class="fu">=</span> <span class="kw">do</span>
+	glClearColor <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span><span class="fu">.</span><span class="dv">4</span> <span class="dv">0</span>
+	progId <span class="ot">&lt;-</span> loadProgram
+		(<span class="st">&quot;vertexShader2&quot;</span>, vertexShader2)
+		(<span class="st">&quot;fragmentShader2&quot;</span>, fragmentShader2)
+	v <span class="ot">&lt;-</span> withCString <span class="st">&quot;vertexPosition_modelspace&quot;</span>
+		<span class="fu">$</span> glGetAttribLocation progId
+	c <span class="ot">&lt;-</span> withCString <span class="st">&quot;vertexColor&quot;</span> <span class="fu">$</span> glGetAttribLocation progId
+	m <span class="ot">&lt;-</span> withCString <span class="st">&quot;MVP&quot;</span> <span class="fu">$</span> glGetUniformLocation progId
+	vertexAttrib <span class="ot">&lt;-</span> findAttribUniform v <span class="st">&quot;vertexPosition_modelspace&quot;</span>
+	colorAttrib <span class="ot">&lt;-</span> findAttribUniform c <span class="st">&quot;vertexColor&quot;</span>
+	mvpMatrixUniform <span class="ot">&lt;-</span> findAttribUniform m <span class="st">&quot;MVP&quot;</span>
+	vertexArrayId <span class="ot">&lt;-</span> newVAO
+	vertexBufferId <span class="ot">&lt;-</span> fillNewBuffer vertexBufferData
+	colorBufferId <span class="ot">&lt;-</span> fillNewBuffer colorBufferData
+	return <span class="dt">GLIDs</span>{<span class="fu">..</span>}
+	<span class="kw">where</span>
+<span class="ot">	vertexBufferData ::</span> [<span class="dt">GLfloat</span>]
+	vertexBufferData <span class="fu">=</span>
+		<span class="co">-- x, y, z</span>
+		[ <span class="fu">-</span><span class="dv">1</span>, <span class="fu">-</span><span class="dv">1</span>, <span class="dv">0</span>
+		,  <span class="dv">1</span>, <span class="fu">-</span><span class="dv">1</span>, <span class="dv">0</span>
+		,  <span class="dv">0</span>,  <span class="dv">1</span>, <span class="dv">0</span>
+		]
+<span class="ot">	colorBufferData ::</span> [<span class="dt">GLfloat</span>]
+	colorBufferData <span class="fu">=</span>
+		[ <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>
+		, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>
+		, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>
+		]
+	findAttribUniform x name <span class="fu">=</span> <span class="kw">if</span> x <span class="fu">&lt;</span> <span class="dv">0</span>
+		<span class="kw">then</span> error <span class="fu">$</span> <span class="st">&quot;`&quot;</span> <span class="fu">++</span> name <span class="fu">++</span> <span class="st">&quot;' cannot be found!&quot;</span>
+		<span class="kw">else</span> return <span class="fu">$</span> fromIntegral x
+
+<span class="ot">freeResources ::</span> <span class="dt">GLIDs</span> <span class="ot">-&gt;</span> <span class="dt">IO</span> ()
+freeResources <span class="dt">GLIDs</span>{<span class="fu">..</span>} <span class="fu">=</span> <span class="kw">do</span>
+	with vertexBufferId <span class="fu">$</span> glDeleteBuffers <span class="dv">1</span>
+	with colorBufferId <span class="fu">$</span> glDeleteBuffers <span class="dv">1</span>
+	with vertexArrayId <span class="fu">$</span> glDeleteVertexArrays <span class="dv">1</span>
+
+<span class="ot">newVAO ::</span> <span class="dt">IO</span> <span class="dt">GLuint</span>
+newVAO <span class="fu">=</span> <span class="kw">do</span>
+	vaId <span class="ot">&lt;-</span> withNewPtr (glGenVertexArrays <span class="dv">1</span>)
+	glBindVertexArray vaId
+	return vaId
+
+<span class="ot">fillNewBuffer ::</span> [<span class="dt">GLfloat</span>] <span class="ot">-&gt;</span> <span class="dt">IO</span> <span class="dt">GLuint</span>
+fillNewBuffer xs <span class="fu">=</span> <span class="kw">do</span>
+	bufId <span class="ot">&lt;-</span> withNewPtr (glGenBuffers <span class="dv">1</span>)
+	glBindBuffer gl_ARRAY_BUFFER bufId
+	withArrayLen xs func <span class="co">-- give given vertices to OpenGL</span>
+	return bufId
+	<span class="kw">where</span>
+	func len ptr <span class="fu">=</span> glBufferData
+		gl_ARRAY_BUFFER
+		(fromIntegral (len <span class="fu">*</span> sizeOf (undefined<span class="ot"> ::</span> <span class="dt">GLfloat</span>)))
+		(<span class="ot">ptr ::</span> <span class="dt">Ptr</span> <span class="dt">GLfloat</span>)
+		gl_STATIC_DRAW
+
+<span class="ot">bindBufferToAttrib ::</span> <span class="dt">GLuint</span> <span class="ot">-&gt;</span> <span class="dt">GLuint</span> <span class="ot">-&gt;</span> <span class="dt">IO</span> ()
+bindBufferToAttrib bufId attribLoc <span class="fu">=</span> <span class="kw">do</span>
+	glEnableVertexAttribArray attribLoc
+	glBindBuffer gl_ARRAY_BUFFER bufId
+	glVertexAttribPointer
+		attribLoc <span class="co">-- attribute location in the shader</span>
+		<span class="dv">3</span> <span class="co">-- 3 components per vertex</span>
+		gl_FLOAT <span class="co">-- coord type</span>
+		(fromBool <span class="dt">False</span>) <span class="co">-- normalize?</span>
+		<span class="dv">0</span> <span class="co">-- stride</span>
+		nullPtr <span class="co">-- vertex buffer offset</span>
+
+<span class="ot">loadProgram ::</span> (<span class="dt">String</span>, <span class="dt">String</span>) <span class="ot">-&gt;</span> (<span class="dt">String</span>, <span class="dt">String</span>) <span class="ot">-&gt;</span> <span class="dt">IO</span> <span class="dt">GLuint</span>
+loadProgram vertShader fragShader <span class="fu">=</span> <span class="kw">do</span>
+	shaderIds <span class="ot">&lt;-</span> mapM (uncurry loadShader)
+		[ (gl_VERTEX_SHADER, vertShader)
+		, (gl_FRAGMENT_SHADER, fragShader)
+		]
+	progId <span class="ot">&lt;-</span> glCreateProgram
+	putStrLn <span class="st">&quot;Linking program&quot;</span>
+	mapM_ (glAttachShader progId) shaderIds
+	glLinkProgram progId
+	_ <span class="ot">&lt;-</span> checkStatus
+		gl_LINK_STATUS glGetProgramiv glGetProgramInfoLog progId
+	mapM_ glDeleteShader shaderIds
+	return progId
+
+<span class="ot">loadShader ::</span> <span class="dt">GLenum</span> <span class="ot">-&gt;</span> (<span class="dt">String</span>, <span class="dt">String</span>) <span class="ot">-&gt;</span> <span class="dt">IO</span> <span class="dt">GLuint</span>
+loadShader shaderTypeFlag (name, code) <span class="fu">=</span> <span class="kw">do</span>
+	shaderId <span class="ot">&lt;-</span> glCreateShader shaderTypeFlag
+	withCString code <span class="fu">$</span> \codePtr <span class="ot">-&gt;</span>
+		with codePtr <span class="fu">$</span> \codePtrPtr <span class="ot">-&gt;</span>
+			glShaderSource shaderId <span class="dv">1</span> codePtrPtr nullPtr
+	putStrLn <span class="fu">$</span> <span class="st">&quot;Compiling shader `&quot;</span> <span class="fu">++</span> name <span class="fu">++</span> <span class="st">&quot;'&quot;</span>
+	glCompileShader shaderId
+	_ <span class="ot">&lt;-</span> checkStatus
+		gl_COMPILE_STATUS glGetShaderiv glGetShaderInfoLog shaderId
+	return shaderId
+
+<span class="ot">checkStatus ::</span> (<span class="dt">Integral</span> a1, <span class="dt">Storable</span> a1)
+	<span class="ot">=&gt;</span> <span class="dt">GLenum</span>
+	<span class="ot">-&gt;</span> (t <span class="ot">-&gt;</span> <span class="dt">GLenum</span> <span class="ot">-&gt;</span> <span class="dt">Ptr</span> a1 <span class="ot">-&gt;</span> <span class="dt">IO</span> a)
+	<span class="ot">-&gt;</span> (t <span class="ot">-&gt;</span> a1 <span class="ot">-&gt;</span> <span class="dt">Ptr</span> a3 <span class="ot">-&gt;</span> <span class="dt">Ptr</span> <span class="dt">Foreign.C.Types.CChar</span> <span class="ot">-&gt;</span> <span class="dt">IO</span> a2)
+	<span class="ot">-&gt;</span> t
+	<span class="ot">-&gt;</span> <span class="dt">IO</span> <span class="dt">Bool</span>
+checkStatus statusFlag glGetFn glInfoLogFn componentId <span class="fu">=</span> <span class="kw">do</span>
+	<span class="kw">let</span>
+		fetch info <span class="fu">=</span> withNewPtr (glGetFn componentId info)
+	status <span class="ot">&lt;-</span> liftM toBool <span class="fu">$</span> fetch statusFlag
+	logLength <span class="ot">&lt;-</span> fetch gl_INFO_LOG_LENGTH
+	when (logLength <span class="fu">&gt;</span> <span class="dv">0</span>) <span class="fu">$</span>
+		allocaArray0 (fromIntegral logLength) <span class="fu">$</span> \msgPtr <span class="ot">-&gt;</span> <span class="kw">do</span>
+			_ <span class="ot">&lt;-</span> glInfoLogFn componentId logLength nullPtr msgPtr
+			msg <span class="ot">&lt;-</span> peekCString msgPtr
+			(<span class="kw">if</span> status <span class="kw">then</span> putStrLn <span class="kw">else</span> fail) msg
+	return status
+
+<span class="ot">fragmentShader2 ::</span> <span class="dt">String</span>
+fragmentShader2 <span class="fu">=</span> unlines
+	[ <span class="st">&quot;#version 330 core&quot;</span>
+	, <span class="st">&quot;in vec3 fragmentColor;&quot;</span>
+	, <span class="st">&quot;out vec3 finalColor;&quot;</span>
+	, <span class="st">&quot;void main()&quot;</span>
+	, <span class="st">&quot;{&quot;</span>
+		, <span class="st">&quot;finalColor= fragmentColor;&quot;</span>
+	, <span class="st">&quot;}&quot;</span>
+	]
+
+<span class="ot">vertexShader2 ::</span> <span class="dt">String</span>
+vertexShader2 <span class="fu">=</span> unlines
+	[ <span class="st">&quot;#version 330 core&quot;</span>
+	<span class="co">-- Input vertex data, different for all executions of this shader.</span>
+	, <span class="st">&quot;in vec3 vertexPosition_modelspace;&quot;</span>
+	, <span class="st">&quot;in vec3 vertexColor;&quot;</span>
+	<span class="co">-- Values that stay constant for the whole mesh</span>
+	, <span class="st">&quot;uniform mat4 MVP;&quot;</span>
+	, <span class="st">&quot;out vec3 fragmentColor;&quot;</span>
+	, <span class="st">&quot;void main()&quot;</span>
+	, <span class="st">&quot;{&quot;</span>
+		, <span class="st">&quot;fragmentColor = vertexColor;&quot;</span>
+		, <span class="st">&quot;vec4 v = vec4(vertexPosition_modelspace, 1);&quot;</span>
+		, <span class="st">&quot;gl_Position = MVP * v;&quot;</span>
+	, <span class="st">&quot;}&quot;</span>
+	]
+
+<span class="ot">main ::</span> <span class="dt">IO</span> ()
+main <span class="fu">=</span> <span class="kw">do</span>
+	win <span class="ot">&lt;-</span> initialize
+	glids <span class="ot">&lt;-</span> initializeGL
+	inputLoop win glids
+	freeResources glids
+	GLFW.terminate
+	return ()
+
+<span class="ot">inputLoop ::</span> <span class="dt">GLFW.Window</span> <span class="ot">-&gt;</span> <span class="dt">GLIDs</span> <span class="ot">-&gt;</span> <span class="dt">IO</span> ()
+inputLoop win glids <span class="fu">=</span> <span class="kw">do</span>
+	drawStuff glids
+	GLFW.swapBuffers win
+	GLFW.pollEvents
+	keyState <span class="ot">&lt;-</span> GLFW.getKey win <span class="dt">GLFW.Key'Escape</span>
+	closeWindow <span class="ot">&lt;-</span> GLFW.windowShouldClose win
+	when (keyState <span class="fu">/=</span> <span class="dt">GLFW.KeyState'Pressed</span> <span class="fu">&amp;&amp;</span> closeWindow <span class="fu">==</span> <span class="dt">False</span>) <span class="fu">$</span>
+		inputLoop win glids
+
+<span class="ot">drawStuff ::</span> <span class="dt">GLIDs</span> <span class="ot">-&gt;</span> <span class="dt">IO</span> ()
+drawStuff <span class="dt">GLIDs</span>{<span class="fu">..</span>} <span class="fu">=</span> <span class="kw">do</span>
+	glClear gl_COLOR_BUFFER_BIT
+	glClear gl_DEPTH_BUFFER_BIT
+	glUseProgram progId
+	<span class="co">-- the (fromBool True) is because we are ROW-first (Data.Vec)</span>
+	with mvpMatrix
+		<span class="fu">$</span> glUniformMatrix4fv mvpMatrixUniform <span class="dv">1</span> (fromBool <span class="dt">True</span>)
+		<span class="fu">.</span> castPtr
+	bindBufferToAttrib vertexBufferId vertexAttrib
+	bindBufferToAttrib colorBufferId colorAttrib
+	glDrawArrays gl_TRIANGLES <span class="dv">0</span> <span class="dv">3</span>
+	glDisableVertexAttribArray colorAttrib
+	glDisableVertexAttribArray vertexAttrib
+
+<span class="co">-- Some higher-order math helper functions. Depending on what math</span>
+<span class="co">-- library you use, you'd use the functions that comes with that</span>
+<span class="co">-- library. The functions here are from the Data.Vec package.</span>
+<span class="ot">vec3 ::</span> forall a a1 a2<span class="fu">.</span> a <span class="ot">-&gt;</span> a1 <span class="ot">-&gt;</span> a2 <span class="ot">-&gt;</span> a <span class="fu">:.</span> (a1 <span class="fu">:.</span> (a2 <span class="fu">:.</span> ()))
+vec3 x y z <span class="fu">=</span> x <span class="fu">:.</span> y <span class="fu">:.</span> z<span class="fu">:.</span> ()
+
+<span class="ot">mvpMatrix ::</span> <span class="dt">Mat44</span> <span class="dt">GLfloat</span>
+mvpMatrix <span class="fu">=</span> multmm (multmm projection view) model
+	<span class="kw">where</span>
+	projection <span class="fu">=</span> perspective <span class="dv">0</span><span class="fu">.</span><span class="dv">1</span> <span class="dv">100</span> (pi<span class="fu">/</span><span class="dv">4</span>) (<span class="dv">4</span><span class="fu">/</span><span class="dv">3</span>)
+	view <span class="fu">=</span> lookAt (vec3 <span class="dv">0</span> <span class="dv">1</span> <span class="dv">0</span>) (vec3 <span class="dv">4</span> <span class="dv">3</span> <span class="dv">3</span>) (vec3 <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span>)
+	model <span class="fu">=</span> identity
+
+<span class="co">-- The closest relative to this function is Data.Vec's `rotationLookAt`.</span>
+<span class="ot">lookAt ::</span> <span class="dt">Floating</span> a <span class="ot">=&gt;</span> <span class="dt">Vec3</span> a <span class="ot">-&gt;</span> <span class="dt">Vec3</span> a <span class="ot">-&gt;</span> <span class="dt">Vec3</span> a <span class="ot">-&gt;</span> <span class="dt">Mat44</span> a
+lookAt up eye target <span class="fu">=</span> x <span class="fu">:.</span> y <span class="fu">:.</span> (<span class="fu">-</span>z) <span class="fu">:.</span> h <span class="fu">:.</span> ()
+	<span class="kw">where</span>
+	f <span class="fu">=</span> normalize <span class="fu">$</span> target <span class="fu">-</span> eye
+	s <span class="fu">=</span> normalize <span class="fu">.</span> cross f <span class="fu">$</span> normalize up
+	u <span class="fu">=</span> cross s f
+	x <span class="fu">=</span> homVec s
+	y <span class="fu">=</span> homVec u
+	z <span class="fu">=</span> snoc s (<span class="fu">-</span>(dot f eye))
+	h <span class="fu">=</span> snoc (vec3 (<span class="fu">-</span>(dot s eye)) (<span class="fu">-</span>(dot u eye)) <span class="dv">0</span>) <span class="dv">1</span></code></pre></td></tr></table>
+
+        </div>
+        <div id="footer">
+            <a href="https://github.com/listx/listx.github.io">Site</a>
+            <a href="https://github.com/listx/listx_blog">generated</a>
+            with
+            <a href="http://jaspervdj.be/hakyll">Hakyll</a>
+            and
+            <a href="http://sebastiaanvisser.github.com/clay">Clay</a>.
+        </div>
+    </body>
+</html>
