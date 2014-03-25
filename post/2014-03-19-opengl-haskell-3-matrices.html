@@ -542,7 +542,7 @@ lookAt up eye target <span class="fu">=</span> x <span class="fu">:.</span> y <s
 	u <span class="fu">=</span> cross s f
 	x <span class="fu">=</span> homVec s
 	y <span class="fu">=</span> homVec u
-	z <span class="fu">=</span> snoc s (<span class="fu">-</span>(dot f eye))
+	z <span class="fu">=</span> snoc f (<span class="fu">-</span>(dot f eye))
 	h <span class="fu">=</span> snoc (vec3 (<span class="fu">-</span>(dot s eye)) (<span class="fu">-</span>(dot u eye)) <span class="dv">0</span>) <span class="dv">1</span></code></pre></td></tr></table>
 
         </div>
