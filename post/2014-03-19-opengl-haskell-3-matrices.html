@@ -288,6 +288,9 @@
 254
 255
 256
+257
+258
+259
 </pre></td><td class="sourceCode"><pre><code class="sourceCode haskell"><span class="ot">{-# LANGUAGE PackageImports #-}</span>
 <span class="ot">{-# LANGUAGE RecordWildCards #-}</span>
 <span class="ot">{-# LANGUAGE RankNTypes #-}</span>
@@ -530,20 +533,23 @@ vec3 x y z <span class="fu">=</span> x <span class="fu">:.</span> y <span class=
 mvpMatrix <span class="fu">=</span> multmm (multmm projection view) model
 	<span class="kw">where</span>
 	projection <span class="fu">=</span> perspective <span class="dv">0</span><span class="fu">.</span><span class="dv">1</span> <span class="dv">100</span> (pi<span class="fu">/</span><span class="dv">4</span>) (<span class="dv">4</span><span class="fu">/</span><span class="dv">3</span>)
-	view <span class="fu">=</span> lookAt (vec3 <span class="dv">0</span> <span class="dv">1</span> <span class="dv">0</span>) (vec3 <span class="dv">4</span> <span class="dv">3</span> <span class="dv">3</span>) (vec3 <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span>)
+	view <span class="fu">=</span> lookAt (vec3 <span class="dv">4</span> <span class="dv">3</span> <span class="dv">3</span>) (vec3 <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span>) (vec3 <span class="dv">0</span> <span class="dv">1</span> <span class="dv">0</span>)
 	model <span class="fu">=</span> identity
 
-<span class="co">-- The closest relative to this function is Data.Vec's `rotationLookAt`.</span>
+<span class="co">-- The closest relative to this function is Data.Vec's `rotationLookAt`. We just</span>
+<span class="co">-- mirror the code found in the GLM library (glm.g-truc.net). An additional</span>
+<span class="co">-- resource is Jeremiah van Oosten's &quot;Understanding the View Matrix&quot;, found at</span>
+<span class="co">-- http://3dgep.com/?p=1700.</span>
 <span class="ot">lookAt ::</span> <span class="dt">Floating</span> a <span class="ot">=&gt;</span> <span class="dt">Vec3</span> a <span class="ot">-&gt;</span> <span class="dt">Vec3</span> a <span class="ot">-&gt;</span> <span class="dt">Vec3</span> a <span class="ot">-&gt;</span> <span class="dt">Mat44</span> a
-lookAt up eye target <span class="fu">=</span> x <span class="fu">:.</span> y <span class="fu">:.</span> (<span class="fu">-</span>z) <span class="fu">:.</span> h <span class="fu">:.</span> ()
+lookAt eye target up <span class="fu">=</span> x <span class="fu">:.</span> y <span class="fu">:.</span> z <span class="fu">:.</span> h <span class="fu">:.</span> ()
 	<span class="kw">where</span>
-	f <span class="fu">=</span> normalize <span class="fu">$</span> target <span class="fu">-</span> eye
-	s <span class="fu">=</span> normalize <span class="fu">.</span> cross f <span class="fu">$</span> normalize up
-	u <span class="fu">=</span> cross s f
-	x <span class="fu">=</span> homVec s
-	y <span class="fu">=</span> homVec u
-	z <span class="fu">=</span> snoc f (<span class="fu">-</span>(dot f eye))
-	h <span class="fu">=</span> snoc (vec3 (<span class="fu">-</span>(dot s eye)) (<span class="fu">-</span>(dot u eye)) <span class="dv">0</span>) <span class="dv">1</span></code></pre></td></tr></table>
+	forward <span class="fu">=</span> normalize <span class="fu">$</span> target <span class="fu">-</span> eye
+	right <span class="fu">=</span> normalize <span class="fu">$</span> cross forward up
+	up' <span class="fu">=</span> cross right forward
+	x <span class="fu">=</span> snoc right (<span class="fu">-</span>(dot right eye))
+	y <span class="fu">=</span> snoc up' (<span class="fu">-</span>(dot up' eye))
+	z <span class="fu">=</span> snoc (<span class="fu">-</span>forward) (dot forward eye)
+	h <span class="fu">=</span> <span class="dv">0</span> <span class="fu">:.</span> <span class="dv">0</span> <span class="fu">:.</span> <span class="dv">0</span> <span class="fu">:.</span> <span class="dv">1</span> <span class="fu">:.</span> ()</code></pre></td></tr></table>
 
         </div>
         <div id="footer">
