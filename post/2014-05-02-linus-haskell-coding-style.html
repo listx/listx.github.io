@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+	<head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>listx's Blog - Linus's Haskell Coding Style (LHCS)</title>
+        <link rel="stylesheet" type="text/css" href="../css/base.css" />
+        <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
+        <link rel="shortcut icon" type="image/png" href="../favicon.png" />
+		<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+	</head>
+    <body>
+        <div id="header">
+			<a href="../">Home</a>
+			•
+			<a href="../about.html">About</a>
+			•
+			<a href="../code.html">Code</a>
+			•
+			<a href="../archive.html">Archive</a>
+        </div>
+
+        <div id="content">
+            <center><h1>Linus's Haskell Coding Style (LHCS)</h1></center>
+
+            <center>
+	<div class="info">2014-05-02</div>
+	<div class="info"><a href="../tag/haskell.html">haskell</a>, <a href="../tag/programming.html">programming</a></div>
+</center>
+
+<p>Haskell is my favorite programming language. However, unlike mainstream languages (C, Java, Ruby, etc.), there are no known “coding styles” for it. C has the venerable Linux Kernel Coding Style <a href="LKCS">https://www.kernel.org/doc/Documentation/CodingStyle</a>, among many others. I really like LKCS because it is designed to be as readable as possible, and is actually pretty simple (no fancy indentation/brace rules). I just wish there was something like LKCS for Haskell, mainly because every time I open up Haskell code somebody else wrote, it is plagued with gargantuan amounts of indentation. It really has gotten out of hand. So, I hereby propose some rules to reduce the level of indentation, whether you use tabs or spaces.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a></p>
+<p>NOTE: I use 4-character-wide tabs for Haskell, but because HTML renders tabs as 8 characters wide, I’ve used 4 spaces for a single tab in this post.</p>
+<h2 id="chapter-1-indentation">Chapter 1: Indentation</h2>
+<h3 id="wherever-possible-use-minimal-hanging-indentation">Wherever possible, use minimal hanging indentation</h3>
+<p>That is, indent as little as possible.</p>
+<h4 id="where-clause"><code>where</code> clause</h4>
+<p>Whenever you use a <code>where</code> clause, use it like this:</p>
+<pre><code>    ...
+    f x y
+    where
+    f = ...
+    x = ...
+    y = ...
+    ...</code></pre>
+<p>That is, put <code>where</code> on its own line, and then avoid any additional indentation for all definitions that follow.</p>
+<h4 id="guards">Guards</h4>
+<p>Use guards like this:</p>
+<pre><code>someArbitraryFunctionName x y z
+    | x == 0 = ...
+    | y == 0 = ...
+    | z == 0 = ...
+    | otherwise = ...</code></pre>
+<p>not like this:</p>
+<pre><code>someArbitraryFunctionName x y z | x == 0 = ...
+                                | y == 0 = ...
+                                | z == 0 = ...
+                                | otherwise = ...</code></pre>
+<p>I.e., put guards on their own line with a single indent.</p>
+<h4 id="case-expressions"><code>case</code> expressions</h4>
+<p>Do not vertically-align the different cases.</p>
+<p>Do</p>
+<pre><code>foo x = case x of
+    Abcdef y -&gt; ...
+    Foo y -&gt; ...
+    Abracadabra y -&gt; ...</code></pre>
+<p>instead of</p>
+<pre><code>foo x = case x of
+    Abcdef y      -&gt; ...
+    Foo y         -&gt; ...
+    Abracadabra y -&gt; ...</code></pre>
+<p>. The only time you should vertically align <em>anything</em> is for lists, or perhaps long tuples.</p>
+<h4 id="lists">Lists</h4>
+<p>Align lists as follows:</p>
+<pre><code>someLongList =
+    [ abcd
+    , efghi
+    , jkl
+    , m
+    , nopqrstu
+    , vwxyz
+    ]</code></pre>
+<p>. You may align long tuples in a similar manner.</p>
+<h4 id="do-notation"><code>do</code> notation</h4>
+<p>Use ``hanging’’ do-notation:</p>
+<pre><code>main = do
+    x &lt;- foo
+    y z</code></pre>
+<p>instead of</p>
+<pre><code>main = do x &lt;- foo
+          y z</code></pre>
+<p>(which tries to align the <code>x</code> and <code>y</code> together)</p>
+<p>or</p>
+<pre><code>main = do
+          x &lt;- foo
+          y z</code></pre>
+<p>. When writing <code>let</code> statements inside <code>do</code> notation, write the keyword <code>let</code> on its own line, and indent any subsequent <code>let</code>-bindings.</p>
+<h2 id="chapter-2-misc-guidelines">Chapter 2: Misc Guidelines</h2>
+<h3 id="always-use-explicit-type-signatures">Always use explicit type signatures</h3>
+<p>Everyone reading your code will appreciate it. Don’t force me to load up your code in GHCi to figure out how to use it with (:t) — <strong>stop wasting everyone’s time</strong>.</p>
+<h3 id="refrain-from-infix-notation">Refrain from infix notation</h3>
+<p>Sometimes infix notation makes code shorter, but it gets confusing when you use the same function with and without it. Also, in many cases prefix notation is simply shorter because you don’t have to use the two backtick characters around the function name. Use infix notation as often as you’d use GOTO in C.</p>
+<h3 id="prefer-where-over-let">Prefer <code>where</code> over <code>let</code></h3>
+<p>This is because if you use <code>where</code> clauses, the high-level code comes first, followed by <code>where</code> and the various smaller components that make up the preceding code. Macro-to-micro reading/understanding is almost always superior. Using <code>where</code> clauses also has the benefit of allowing you to more easily move out helper functions defined as part of a <code>where</code> block into their own standalone functions if they grow too big. If you use <code>let</code> expressions, you run the risk of including variables in the parent function block’s scope, which makes “detaching” them harder later on.</p>
+<h3 id="do-not-use-multiline-----comment-blocks">Do not use multiline {- -} comment blocks</h3>
+<p>Haddock prefers single-line comments, anyway.</p>
+<h3 id="use-two-groups-of-imports-system-wide-and-package-wide-and-have-each-group-alphabetically-ordered">Use two groups of imports: system-wide and package-wide (and have each group alphabetically ordered)</h3>
+<p>Import all external library modules in their own ``paragraph’’, followed by those modules of your own library; e.g., do</p>
+<pre><code>    import Control.Monad
+    import Data.Maybe
+    import Data.Text
+
+    import MyModule.One
+    import MyModule.Two</code></pre>
+<p>.</p>
+<h3 id="place-one-pragma-per-line-in-alphabetical-order">Place one pragma per line, in alphabetical order</h3>
+<p>Do it like this:</p>
+<pre><code>    {-# LANGUAGE SomeBadExtension #-}
+    {-# LANGUAGE SomeCoolExtension #-}
+    {-# LANGUAGE SomeScaryExtension #-}
+    {-# LANGUAGE SomeUglyExtension #-}
+    {-# LANGUAGE StrangeExtensionNobodyUnderstands #-}</code></pre>
+<h3 id="try-to-use-as-few-pragmas-as-possible">Try to use as few pragmas as possible</h3>
+<p>Do not use 20 language extensions when you don’t have to. Saving a handful of keystrokes is not a good reason to use a multitude of extensions.</p>
+<h3 id="when-writing-documentation-prefer-high-level-documentation-over-line-by-line-documentation">When writing documentation, prefer high-level documentation over line-by-line documentation</h3>
+<p>If you have a 20-line function, write how it works with a high-level overview. Haskell is a pure language so it’s very easy to tell how the small pieces work. So, explain the bigger pieces, and <em>why</em> they are necessary as written.</p>
+<h3 id="breaking-long-lines-and-strings">Breaking long lines and strings</h3>
+<p>We follow LKCS’s 80-character column limit.</p>
+<p>If you must, break long lines into sensible chunks. If a function has numerous arguments, you may put each argument on its own line. If you want to break up a long chain of functions, break them up like this:</p>
+<pre><code>foo x y z = head
+    . init
+    . blahblah y
+    . funcMX x
+    $ abcd z</code></pre>
+<p>, with each function on its own line, with the function composition operator <code>.</code> as the leading character, similar to how the comma <code>,</code> is the leading character for breaking up long lists.</p>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>I prefer tabs for indentation, and spaces for alignment (which does happen once in a blue moon).<a href="#fnref1">↩</a></p></li>
+</ol>
+</div>
+
+        </div>
+        <div id="footer">
+            <a href="https://github.com/listx/listx.github.io">Site</a>
+            <a href="https://github.com/listx/listx_blog">generated</a>
+            with
+            <a href="http://jaspervdj.be/hakyll">Hakyll</a>
+            and
+            <a href="http://sebastiaanvisser.github.com/clay">Clay</a>.
+        </div>
+    </body>
+</html>
