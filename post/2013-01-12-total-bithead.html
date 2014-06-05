@@ -1,16 +1,15 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!DOCTYPE html>
+<html lang="en">
 	<head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title>listx's Blog - Using the Total Bithead with ALSA on Arch Linux</title>
-        <link rel="stylesheet" type="text/css" href="../css/base.css" />
-        <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
-        <link rel="shortcut icon" type="image/png" href="../favicon.png" />
-	
+		<meta charset="utf-8">
+		<title>listx's Blog - Using the Total Bithead with ALSA on Arch Linux</title>
+		<link rel="stylesheet" href="../css/base.css">
+		<link rel="stylesheet" href="../css/syntax.css">
+		<link rel="shortcut icon" type="image/png" href="../favicon.png">
+		
 	</head>
-    <body>
-        <div id="header">
+	<body>
+		<div id="header">
 			<a href="../">Home</a>
 			•
 			<a href="../about.html">About</a>
@@ -18,15 +17,13 @@
 			<a href="../code.html">Code</a>
 			•
 			<a href="../archive.html">Archive</a>
-        </div>
+		</div>
 
-        <div id="content">
-            <center><h1>Using the Total Bithead with ALSA on Arch Linux</h1></center>
+		<div id="content">
+			<h1 class="center">Using the Total Bithead with ALSA on Arch Linux</h1>
 
-            <center>
-	<div class="info">2013-01-12</div>
-	<div class="info"><a href="../tag/linux.html">linux</a>, <a href="../tag/sound.html">sound</a>, <a href="../tag/alsa.html">alsa</a>, <a href="../tag/arch.html">arch</a>, <a href="../tag/hardware.html">hardware</a></div>
-</center>
+			<div class="info center">2013-01-12</div>
+<div class="info center"><a href="../tag/linux.html">linux</a>, <a href="../tag/sound.html">sound</a>, <a href="../tag/alsa.html">alsa</a>, <a href="../tag/arch.html">arch</a>, <a href="../tag/hardware.html">hardware</a></div>
 
 <p>So I got HeadRoom’s “Total Bithead” USB DAC (digital-to-analog converter) and micro amplifier. The problem is, when I plug it into my Linux desktop, mplayer/firefox still recognizes the onboard sound on my motherboard as the default device. After some searching, I found some resources to (1) use it as the default sound device and (2) enable mixing on it (different applications can simultaneously use the Total Bithead).</p>
 <h2 id="the-setup">The Setup</h2>
@@ -68,14 +65,14 @@ defaults.ctl.!device 0</code></pre>
 <h2 id="other-thoughts">Other Thoughts</h2>
 <p>I got the Total Bithead used for around $50. From what I can tell, it first appeared in the market in 2004 (there’s a <a href="http://www.6moons.com/audioreviews/bithead/bithead.html">review</a> of it dating back to that time). I do recommend it at this price point when comparing it against the newer Realtek HD audio chips found in most modern motherboards. Don’t buy a new one for over $100; it’s probably much better to just get a better pair of headphones with that amount of money.</p>
 
-        </div>
-        <div id="footer">
-            <a href="https://github.com/listx/listx.github.io">Site</a>
-            <a href="https://github.com/listx/listx_blog">generated</a>
-            with
-            <a href="http://jaspervdj.be/hakyll">Hakyll</a>
-            and
-            <a href="http://sebastiaanvisser.github.com/clay">Clay</a>.
-        </div>
-    </body>
+		</div>
+		<div id="footer">
+			<a href="https://github.com/listx/listx.github.io">Site</a>
+			<a href="https://github.com/listx/listx_blog">generated</a>
+			with
+			<a href="http://jaspervdj.be/hakyll">Hakyll</a>
+			and
+			<a href="http://sebastiaanvisser.github.com/clay">Clay</a>.
+		</div>
+	</body>
 </html>

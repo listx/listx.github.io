@@ -1,16 +1,15 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!DOCTYPE html>
+<html lang="en">
 	<head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title>listx's Blog - OpenGL from Haskell (#3: Matrices)</title>
-        <link rel="stylesheet" type="text/css" href="../css/base.css" />
-        <link rel="stylesheet" type="text/css" href="../css/syntax.css" />
-        <link rel="shortcut icon" type="image/png" href="../favicon.png" />
-	
+		<meta charset="utf-8">
+		<title>listx's Blog - OpenGL from Haskell (#3: Matrices)</title>
+		<link rel="stylesheet" href="../css/base.css">
+		<link rel="stylesheet" href="../css/syntax.css">
+		<link rel="shortcut icon" type="image/png" href="../favicon.png">
+		
 	</head>
-    <body>
-        <div id="header">
+	<body>
+		<div id="header">
 			<a href="../">Home</a>
 			•
 			<a href="../about.html">About</a>
@@ -18,15 +17,13 @@
 			<a href="../code.html">Code</a>
 			•
 			<a href="../archive.html">Archive</a>
-        </div>
+		</div>
 
-        <div id="content">
-            <center><h1>OpenGL from Haskell (#3: Matrices)</h1></center>
+		<div id="content">
+			<h1 class="center">OpenGL from Haskell (#3: Matrices)</h1>
 
-            <center>
-	<div class="info">2014-03-19</div>
-	<div class="info"><a href="../tag/haskell.html">haskell</a>, <a href="../tag/opengl.html">opengl</a></div>
-</center>
+			<div class="info center">2014-03-19</div>
+<div class="info center"><a href="../tag/haskell.html">haskell</a>, <a href="../tag/opengl.html">opengl</a></div>
 
 <p>The following is my translation/adaptation of <a href="http://www.opengl-tutorial.org/beginners-tutorials/tutorial-3-matrices/">tutorial #2</a> at <a href="http://www.opengl-tutorial.org">http://www.opengl-tutorial.org</a>. My <a href="2014-03-15-opengl-from-haskell.html">last post</a> was a translation of tutorial #2, which dealt with triangles — this is the reason why this post’s title is called “#3: Matrices”. The end result of this tutorial is a 3D triangle with 3 different colored vertices that are interpolated smoothly by OpenGL.</p>
 <p>My version again uses the code from <a href="https://github.com/YPares/Haskell-OpenGL3.1-Tutos">https://github.com/YPares/Haskell-OpenGL3.1-Tutos</a>. The <code>Data.Vec</code> import is for the <a href="http://hackage.haskell.org/package/Vec">Vec</a> package. Like my last post, my code here does does not use <code>Control.Applicative</code> puts everything, including the GLSL shaders directly into the code. The <code>RankNTypes</code> and <code>TypeOperators</code> GHC extensions are only there to suppress warnings from using <code>ghc --make -Wall</code>; if you don’t want to use these extensions, just remove the type signature for the <code>vec3</code> function near the bottom.</p>
@@ -552,14 +549,14 @@ lookAt eye target up <span class="fu">=</span> x <span class="fu">:.</span> y <s
 	z <span class="fu">=</span> snoc (<span class="fu">-</span>forward) (dot forward eye)
 	h <span class="fu">=</span> <span class="dv">0</span> <span class="fu">:.</span> <span class="dv">0</span> <span class="fu">:.</span> <span class="dv">0</span> <span class="fu">:.</span> <span class="dv">1</span> <span class="fu">:.</span> ()</code></pre></td></tr></table>
 
-        </div>
-        <div id="footer">
-            <a href="https://github.com/listx/listx.github.io">Site</a>
-            <a href="https://github.com/listx/listx_blog">generated</a>
-            with
-            <a href="http://jaspervdj.be/hakyll">Hakyll</a>
-            and
-            <a href="http://sebastiaanvisser.github.com/clay">Clay</a>.
-        </div>
-    </body>
+		</div>
+		<div id="footer">
+			<a href="https://github.com/listx/listx.github.io">Site</a>
+			<a href="https://github.com/listx/listx_blog">generated</a>
+			with
+			<a href="http://jaspervdj.be/hakyll">Hakyll</a>
+			and
+			<a href="http://sebastiaanvisser.github.com/clay">Clay</a>.
+		</div>
+	</body>
 </html>
