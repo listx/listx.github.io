@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>listx's Blog - Find Lines with 80+ Columns in Multiple Files</title>
+		<link rel="stylesheet" href="../css/base.css">
+		<link rel="stylesheet" href="../css/syntax.css">
+		<link rel="shortcut icon" type="image/png" href="../favicon.png">
+		
+	</head>
+	<body>
+		<div id="header">
+			<a href="../">Home</a>
+			•
+			<a href="../about.html">About</a>
+			•
+			<a href="../code.html">Code</a>
+			•
+			<a href="../archive.html">Archive</a>
+		</div>
+
+		<div id="content">
+			<h1 class="center">Find Lines with 80+ Columns in Multiple Files</h1>
+
+			<div class="info center">2014-08-11</div>
+<div class="info center"><a href="../tag/linux.html">linux</a></div>
+
+<p>It’s nice to follow the 80-columns-per-line rule<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a>, but what if you have some lingering project that has yet to conform?</p>
+<p>Just go to that project’s sources directory and do</p>
+<pre class="numberLines"><code>find . -type f -exec sh -c &quot;expand -t 8 {} | grep -n \&quot;.\{81\}\&quot;&quot; \; -print</code></pre>
+<p>.</p>
+<p>The call to <code>expand</code> is necessary because different people use different widths for tabs. That is, we are trying to find files with 80+ <em>columns</em> (as they appear to humans), not 80+ <em>characters</em> (as they appear to the computer).</p>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>See the <a href="https://www.kernel.org/doc/Documentation/CodingStyle">Linux Kernel Coding Style</a>, “Chapter 2: Breaking long lines and strings”.<a href="#fnref1">↩</a></p></li>
+</ol>
+</div>
+
+		</div>
+		<div id="footer">
+			<a href="https://github.com/listx/listx.github.io">Site</a>
+			<a href="https://github.com/listx/listx_blog">generated</a>
+			with
+			<a href="http://jaspervdj.be/hakyll">Hakyll</a>
+			and
+			<a href="http://sebastiaanvisser.github.com/clay">Clay</a>.
+		</div>
+	</body>
+</html>
