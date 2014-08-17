@@ -2,9 +2,10 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title>listx's Blog - Installing Arch Linux and Enabling System Encryption</title>
+		<title>Linus's Blog - Installing Arch Linux and Enabling System Encryption</title>
 		<link rel="stylesheet" href="../css/base.css">
 		<link rel="stylesheet" href="../css/syntax.css">
+		<link href="http://fonts.googleapis.com/css?family=Merriweather:400,400italic,700italic,700" rel="stylesheet" type="text/css">
 		<link rel="shortcut icon" type="image/png" href="../favicon.png">
 		
 	</head>
@@ -22,7 +23,7 @@
 		<div id="content">
 			<h1 class="center">Installing Arch Linux and Enabling System Encryption</h1>
 
-			<div class="info center">2013-03-10</div>
+			<div class="info center"><code>2013-03-10</code></div>
 <div class="info center"><a href="../tag/linux.html">linux</a>, <a href="../tag/arch.html">arch</a></div>
 
 <p>The follow list of commands is what you need to execute in order to set up Arch Linux with system-level encryption. The setup is 1 hard drive with 1 100MiB <code>/boot</code> partition, with the rest as a single LVM partition that will contain the <code>/</code> root, <code>/home</code>, and <code>swap</code> partitions. This LVM partition will be encrypted so that when the system boots, it will require a password to unlock the <code>/</code>, <code>/home</code>, and <code>swap</code> partitions to boot up the system. The <code>/boot</code> partition will remain unencrypted for the sake of simplicity.</p>
