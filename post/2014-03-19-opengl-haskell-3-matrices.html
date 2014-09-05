@@ -12,11 +12,11 @@
 	<body>
 		<div id="header">
 			<a href="../">Home</a>
-			•
+			&bull;
 			<a href="../about.html">About</a>
-			•
+			&bull;
 			<a href="../code.html">Code</a>
-			•
+			&bull;
 			<a href="../archive.html">Archive</a>
 		</div>
 
@@ -26,10 +26,10 @@
 			<div class="info center"><code>2014-03-19</code></div>
 <div class="info center"><a href="../tag/haskell.html">haskell</a>, <a href="../tag/opengl.html">opengl</a></div>
 
-<p>The following is my translation/adaptation of <a href="http://www.opengl-tutorial.org/beginners-tutorials/tutorial-3-matrices/">tutorial #2</a> at <a href="http://www.opengl-tutorial.org">http://www.opengl-tutorial.org</a>. My <a href="2014-03-15-opengl-from-haskell.html">last post</a> was a translation of tutorial #2, which dealt with triangles — this is the reason why this post’s title is called “#3: Matrices”. The end result of this tutorial is a 3D triangle with 3 different colored vertices that are interpolated smoothly by OpenGL.</p>
-<p>My version again uses the code from <a href="https://github.com/YPares/Haskell-OpenGL3.1-Tutos">https://github.com/YPares/Haskell-OpenGL3.1-Tutos</a>. The <code>Data.Vec</code> import is for the <a href="http://hackage.haskell.org/package/Vec">Vec</a> package. Like my last post, my code here does does not use <code>Control.Applicative</code> puts everything, including the GLSL shaders directly into the code. The <code>RankNTypes</code> and <code>TypeOperators</code> GHC extensions are only there to suppress warnings from using <code>ghc --make -Wall</code>; if you don’t want to use these extensions, just remove the type signature for the <code>vec3</code> function near the bottom.</p>
+<p>The following is my translation/adaptation of <a href="http://www.opengl-tutorial.org/beginners-tutorials/tutorial-3-matrices/">tutorial #2</a> at <a href="http://www.opengl-tutorial.org" class="uri">http://www.opengl-tutorial.org</a>. My <a href="2014-03-15-opengl-from-haskell.html">last post</a> was a translation of tutorial #2, which dealt with triangles — this is the reason why this post’s title is called “#3: Matrices”. The end result of this tutorial is a 3D triangle with 3 different colored vertices that are interpolated smoothly by OpenGL.</p>
+<p>My version again uses the code from <a href="https://github.com/YPares/Haskell-OpenGL3.1-Tutos" class="uri">https://github.com/YPares/Haskell-OpenGL3.1-Tutos</a>. The <code>Data.Vec</code> import is for the <a href="http://hackage.haskell.org/package/Vec">Vec</a> package. Like my last post, my code here does does not use <code>Control.Applicative</code> puts everything, including the GLSL shaders directly into the code. The <code>RankNTypes</code> and <code>TypeOperators</code> GHC extensions are only there to suppress warnings from using <code>ghc --make -Wall</code>; if you don’t want to use these extensions, just remove the type signature for the <code>vec3</code> function near the bottom.</p>
 <p>I have also removed the use of backticks for Haskell’s infix notation (<code>`...`</code>). It’s not because I like using parentheses — I just don’t like using infix notation because it runs against the argument handling order of normal functions found everywhere else.</p>
-<p>Also, I have fixed YPares’s original <code>lookAt</code> function which is actually <a href="https://github.com/YPares/Haskell-OpenGL3.1-Tutos/commit/7a027b927d061fbd26138cb7357c40c4cacbc927">broken as of commit 7a027b927d061fbd26138cb7357c40c4cacbc927</a>; you will need my version if you wish to pursue the later tutorials that actually test the validity of this function, such as the keyboard/mouse input tutorial #6 from <a href="http://www.opengl-tutorial.org">http://www.opengl-tutorial.org</a>.</p>
+<p>Also, I have fixed YPares’s original <code>lookAt</code> function which is actually <a href="https://github.com/YPares/Haskell-OpenGL3.1-Tutos/commit/7a027b927d061fbd26138cb7357c40c4cacbc927">broken as of commit 7a027b927d061fbd26138cb7357c40c4cacbc927</a>; you will need my version if you wish to pursue the later tutorials that actually test the validity of this function, such as the keyboard/mouse input tutorial #6 from <a href="http://www.opengl-tutorial.org" class="uri">http://www.opengl-tutorial.org</a>.</p>
 <p>The code here is released into the Public Domain.</p>
 <table class="sourceCode haskell numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
@@ -345,7 +345,7 @@ initialize <span class="fu">=</span> <span class="kw">do</span>
 
 <span class="ot">initializeGL ::</span> <span class="dt">IO</span> <span class="dt">GLIDs</span>
 initializeGL <span class="fu">=</span> <span class="kw">do</span>
-	glClearColor <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span><span class="fu">.</span><span class="dv">4</span> <span class="dv">0</span>
+	glClearColor <span class="dv">0</span> <span class="dv">0</span> <span class="fl">0.4</span> <span class="dv">0</span>
 	progId <span class="ot">&lt;-</span> loadProgram
 		(<span class="st">&quot;vertexShader2&quot;</span>, vertexShader2)
 		(<span class="st">&quot;fragmentShader2&quot;</span>, fragmentShader2)
@@ -531,7 +531,7 @@ vec3 x y z <span class="fu">=</span> x <span class="fu">:.</span> y <span class=
 <span class="ot">mvpMatrix ::</span> <span class="dt">Mat44</span> <span class="dt">GLfloat</span>
 mvpMatrix <span class="fu">=</span> multmm (multmm projection view) model
 	<span class="kw">where</span>
-	projection <span class="fu">=</span> perspective <span class="dv">0</span><span class="fu">.</span><span class="dv">1</span> <span class="dv">100</span> (pi<span class="fu">/</span><span class="dv">4</span>) (<span class="dv">4</span><span class="fu">/</span><span class="dv">3</span>)
+	projection <span class="fu">=</span> perspective <span class="fl">0.1</span> <span class="dv">100</span> (pi<span class="fu">/</span><span class="dv">4</span>) (<span class="dv">4</span><span class="fu">/</span><span class="dv">3</span>)
 	view <span class="fu">=</span> lookAt (vec3 <span class="dv">4</span> <span class="dv">3</span> <span class="dv">3</span>) (vec3 <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span>) (vec3 <span class="dv">0</span> <span class="dv">1</span> <span class="dv">0</span>)
 	model <span class="fu">=</span> identity
 

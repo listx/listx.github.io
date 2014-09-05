@@ -12,11 +12,11 @@
 	<body>
 		<div id="header">
 			<a href="../">Home</a>
-			•
+			&bull;
 			<a href="../about.html">About</a>
-			•
+			&bull;
 			<a href="../code.html">Code</a>
-			•
+			&bull;
 			<a href="../archive.html">Archive</a>
 		</div>
 
@@ -28,7 +28,8 @@
 
 <p>It’s nice to follow the 80-columns-per-line rule<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a>, but what if you have some lingering project that has yet to conform?</p>
 <p>Just go to that project’s sources directory and do</p>
-<pre class="numberLines"><code>find . -type f -exec sh -c &quot;expand -t 8 {} | grep -n \&quot;.\{81\}\&quot;&quot; \; -print</code></pre>
+<table class="sourceCode numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+</pre></td><td class="sourceCode"><pre><code class="sourceCode">find . -type f -exec sh -c &quot;expand -t 8 {} | grep -n \&quot;.\{81\}\&quot;&quot; \; -print</code></pre></td></tr></table>
 <p>.</p>
 <p>The call to <code>expand</code> is necessary because different people use different widths for tabs. That is, we are trying to find files with 80+ <em>columns</em> (as they appear to humans), not 80+ <em>characters</em> (as they appear to the computer).</p>
 <div class="footnotes">

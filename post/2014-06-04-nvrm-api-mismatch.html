@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title>Linus's Blog - Solving the &quot;NVRM: API mismatch&quot; Problem on Arch Linux</title>
+		<title>Linus's Blog - Solving the "NVRM: API mismatch" Problem on Arch Linux</title>
 		<link rel="stylesheet" href="../css/base.css">
 		<link rel="stylesheet" href="../css/syntax.css">
 		<link href="http://fonts.googleapis.com/css?family=Merriweather:400,400italic,700italic,700" rel="stylesheet" type="text/css">
@@ -12,25 +12,29 @@
 	<body>
 		<div id="header">
 			<a href="../">Home</a>
-			•
+			&bull;
 			<a href="../about.html">About</a>
-			•
+			&bull;
 			<a href="../code.html">Code</a>
-			•
+			&bull;
 			<a href="../archive.html">Archive</a>
 		</div>
 
 		<div id="content">
-			<h1 class="center">Solving the &quot;NVRM: API mismatch&quot; Problem on Arch Linux</h1>
+			<h1 class="center">Solving the "NVRM: API mismatch" Problem on Arch Linux</h1>
 
 			<div class="info center"><code>2014-06-04</code></div>
 <div class="info center"><a href="../tag/arch.html">arch</a>, <a href="../tag/linux.html">linux</a>, <a href="../tag/nvidia.html">nvidia</a></div>
 
 <p>Sometimes when you do a system upgrade on Arch, Xorg will die on a reboot and you’ll get this kernel error (available with <code>dmesg</code>):</p>
-<pre class="numberLines"><code>NVRM: API mismatch: the client has the version XXX.XX, but
+<table class="sourceCode numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+2
+3
+4
+</pre></td><td class="sourceCode"><pre><code class="sourceCode">NVRM: API mismatch: the client has the version XXX.XX, but
 NVRM: this kernel module has the version YYY.YY.  Please
 NVRM: make sure that this kernel module and all NVIDIA driver
-NVRM: components have the same version.</code></pre>
+NVRM: components have the same version.</code></pre></td></tr></table>
 <p>. This is usually the case when you upgrade your <code>linux</code> package, followed by upgrading your <code>nvidia</code> package. The problem is that the new kernel image references your older <code>nvidia</code> package (when it executed <code>mkinitcpio -p linux</code> before <code>nvidia</code> got upgraded). There are two possible solutions:</p>
 <ol style="list-style-type: decimal">
 <li>Simply remake your kernel image against your newly upgraded <code>nvidia</code> package. Run <code>mkinitcpio -p linux</code> again, and reboot.</li>

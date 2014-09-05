@@ -12,11 +12,11 @@
 	<body>
 		<div id="header">
 			<a href="../">Home</a>
-			•
+			&bull;
 			<a href="../about.html">About</a>
-			•
+			&bull;
 			<a href="../code.html">Code</a>
-			•
+			&bull;
 			<a href="../archive.html">Archive</a>
 		</div>
 
@@ -26,8 +26,8 @@
 			<div class="info center"><code>2014-03-15</code></div>
 <div class="info center"><a href="../tag/haskell.html">haskell</a>, <a href="../tag/opengl.html">opengl</a></div>
 
-<p>The following is my translation/adaptation of <a href="http://www.opengl-tutorial.org/beginners-tutorials/tutorial-2-the-first-triangle/">tutorial #2</a> at <a href="http://www.opengl-tutorial.org">http://www.opengl-tutorial.org</a>. It draws a single red triangle on the screen with a dark blue background. It takes quite a bit of boilerplate code just to get something on the screen!</p>
-<p>My version uses the code from <a href="https://github.com/YPares/Haskell-OpenGL3.1-Tutos">https://github.com/YPares/Haskell-OpenGL3.1-Tutos</a>, but does not use <code>Control.Applicative</code> and also does not put the shaders containing GLSL in a separate text file. Everything is self-contained in one file, and it only uses the <code>PackageImports</code> and <code>RecordWildCards</code> GHC extensions. The <code>PackageImports</code> is only necessary if you have both <a href="http://hackage.haskell.org/package/GLFW">GLFW</a> and <a href="http://hackage.haskell.org/package/GLFW-b">GLFW-b</a> Hackage packages installed in your system (as they have a name clash of <code>Graphics.UI.GLFW</code>, you need to disambiguate this import by specifying the package name). The <code>RecordWildCards</code> extension is pretty standard and exists purely for syntactic sugar (no type-level hoops and such) — if you don’t know about it you should google it.</p>
+<p>The following is my translation/adaptation of <a href="http://www.opengl-tutorial.org/beginners-tutorials/tutorial-2-the-first-triangle/">tutorial #2</a> at <a href="http://www.opengl-tutorial.org" class="uri">http://www.opengl-tutorial.org</a>. It draws a single red triangle on the screen with a dark blue background. It takes quite a bit of boilerplate code just to get something on the screen!</p>
+<p>My version uses the code from <a href="https://github.com/YPares/Haskell-OpenGL3.1-Tutos" class="uri">https://github.com/YPares/Haskell-OpenGL3.1-Tutos</a>, but does not use <code>Control.Applicative</code> and also does not put the shaders containing GLSL in a separate text file. Everything is self-contained in one file, and it only uses the <code>PackageImports</code> and <code>RecordWildCards</code> GHC extensions. The <code>PackageImports</code> is only necessary if you have both <a href="http://hackage.haskell.org/package/GLFW">GLFW</a> and <a href="http://hackage.haskell.org/package/GLFW-b">GLFW-b</a> Hackage packages installed in your system (as they have a name clash of <code>Graphics.UI.GLFW</code>, you need to disambiguate this import by specifying the package name). The <code>RecordWildCards</code> extension is pretty standard and exists purely for syntactic sugar (no type-level hoops and such) — if you don’t know about it you should google it.</p>
 <p>I went ahead and added type signatures for all top-level functions — something that many Haskell tutorial writers hate doing for some strange, unknown reason.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> Also, I ran the code through <code>ghc --make -Wall</code> and silenced all warnings.</p>
 <p>I hereby release it into the Public Domain. From what I can tell, YPares’s code doesn’t have a license… I think this should be OK.</p>
 <table class="sourceCode haskell numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
@@ -280,7 +280,7 @@ initialize <span class="fu">=</span> <span class="kw">do</span>
 
 <span class="ot">initializeGL ::</span> <span class="dt">IO</span> <span class="dt">GLIDs</span>
 initializeGL <span class="fu">=</span> <span class="kw">do</span>
-	glClearColor <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span><span class="fu">.</span><span class="dv">4</span> <span class="dv">0</span>
+	glClearColor <span class="dv">0</span> <span class="dv">0</span> <span class="fl">0.4</span> <span class="dv">0</span>
 	progId <span class="ot">&lt;-</span> loadProgram vertexShader1 fragmentShader1
 	vaId <span class="ot">&lt;-</span> newVAO
 	bufId <span class="ot">&lt;-</span> fillNewBuffer vertexBufferData

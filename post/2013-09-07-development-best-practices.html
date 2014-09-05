@@ -12,11 +12,11 @@
 	<body>
 		<div id="header">
 			<a href="../">Home</a>
-			•
+			&bull;
 			<a href="../about.html">About</a>
-			•
+			&bull;
 			<a href="../code.html">Code</a>
-			•
+			&bull;
 			<a href="../archive.html">Archive</a>
 		</div>
 
@@ -30,11 +30,15 @@
 <h2 id="write-programs-for-people-not-computers">Write Programs for People, Not Computers</h2>
 <h4 id="a-program-should-not-require-its-readers-to-hold-more-than-a-handful-of-facts-in-memory-at-once.">A program should not require its readers to hold more than a handful of facts in memory at once.</h4>
 <p>Instead of</p>
-<pre class="numberLines"><code>def rect_area(x1, y1, x2, y2):
-	...calculation...</code></pre>
+<table class="sourceCode numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+2
+</pre></td><td class="sourceCode"><pre><code class="sourceCode">def rect_area(x1, y1, x2, y2):
+	...calculation...</code></pre></td></tr></table>
 <p>write</p>
-<pre class="numberLines"><code>def rect_area(point1, point2):
-	...calculation...</code></pre>
+<table class="sourceCode numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+2
+</pre></td><td class="sourceCode"><pre><code class="sourceCode">def rect_area(point1, point2):
+	...calculation...</code></pre></td></tr></table>
 <p>. You should make function arguments less dependent on argument order, or remove argument ordering requirements completely.</p>
 <h4 id="names-should-be-consistent-distinctive-and-meaningful.">Names should be consistent, distinctive, and meaningful.</h4>
 <p>On a similar note, do not name variables “data” or “foo”. I think this also depends on static vs. dynamic typing.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a></p>
