@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Linus's Blog - Reverse Polish Notation (RPN) Calculator in Ruby and Haskell</title>
+		<link rel="stylesheet" href="../css/base.css">
+		<link rel="stylesheet" href="../css/syntax.css">
+		<link href="http://fonts.googleapis.com/css?family=Merriweather:400,400italic,700italic,700" rel="stylesheet" type="text/css">
+		<link rel="shortcut icon" type="image/png" href="../favicon.png">
+		
+	</head>
+	<body>
+		<div id="header">
+			<a href="../">Home</a>
+			&bull;
+			<a href="../about.html">About</a>
+			&bull;
+			<a href="../code.html">Code</a>
+			&bull;
+			<a href="../archive.html">Archive</a>
+		</div>
+
+		<div id="content">
+			<h1 class="center">Reverse Polish Notation (RPN) Calculator in Ruby and Haskell</h1>
+
+			<div class="info center"><code>2014-09-05</code></div>
+<div class="info center"><a href="../tag/programming.html">programming</a>, <a href="../tag/ruby.html">ruby</a>, <a href="../tag/haskell.html">haskell</a></div>
+
+<p>A friend of mine is in DevBootCamp, an intensive coding school program designed to get students ready for real world job placement. Anyway, he was telling me how he was given an extra credit assignment: implement a RPN calculator which supports 3 functions — add, subtract, and multiply — on integer numbers. I.e., write a function <code>evaluate()</code> that when given a string such as <code>&quot;3 4 + 8 *&quot;</code> gives the result <code>56</code>. He gave me his Ruby solution; in response, I wrote my own Ruby version and decided soon thereafter to write an equivalent Haskell version, because, why not?</p>
+<h2 id="ruby">Ruby</h2>
+<p>First, the Ruby version:</p>
+<table class="sourceCode ruby numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+</pre></td><td class="sourceCode"><pre><code class="sourceCode ruby"><span class="kw">def</span> evaluate(equation_str)
+	terms = equation_str.split(<span class="st">' '</span>)
+	stack = []
+	<span class="kw">while</span> terms.size &gt; <span class="dv">0</span>
+		term = terms.shift
+		<span class="kw">case</span> term
+		<span class="kw">when</span> <span class="ot">/^\d+?$/</span>
+			stack.push(term.to_i)
+		<span class="kw">when</span> <span class="st">'+'</span>, <span class="st">'-'</span>, <span class="st">'*'</span>
+			<span class="kw">if</span> stack.size &lt; <span class="dv">2</span>
+				raise <span class="st">&quot;stack too small for operator application&quot;</span>
+			<span class="kw">else</span>
+				b = stack.pop
+				a = stack.pop
+				op = term.to_sym
+				c = b.send(op, a)
+				stack.push(c)
+			<span class="kw">end</span>
+		<span class="kw">else</span>
+			raise <span class="st">&quot;invalid input `</span><span class="ot">#{</span>term<span class="ot">}</span><span class="st">'&quot;</span>
+		<span class="kw">end</span>
+	<span class="kw">end</span>
+	stack
+<span class="kw">end</span></code></pre></td></tr></table>
+<p>Pretty straightforward, yes? The <code>terms</code> variable holds an array of numbers and operators. We use a calculator stack (aptly named, <code>stack</code>) to untangle the RPN in a stack-based way.</p>
+<p>In the <code>while</code> loop, the actions depend on what <code>term</code> looks like. If <code>term</code> is a number in string form, we convert it into a real number with <code>String#to_i</code>, and push it into <code>stack</code>. If <code>term</code> is one of the 3 recognized operators, we remove 2 terms <code>a</code> and <code>b</code> from <code>stack</code> and apply the necessary operation on it with Ruby’s magic <code>Object#send</code> method, and push the new term <code>c</code> back into <code>stack</code> for further operations (if any, in later iterations of the <code>while</code> loop). Otherwise, we reject the input as an invalid term.</p>
+<h2 id="haskell">Haskell</h2>
+<p>Here is the Haskell version:</p>
+<table class="sourceCode haskell numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+</pre></td><td class="sourceCode"><pre><code class="sourceCode haskell"><span class="kw">import </span><span class="dt">Data.Char</span> (isDigit)
+
+<span class="kw">data</span> <span class="dt">Term</span>
+	<span class="fu">=</span> <span class="dt">TermInt</span> <span class="dt">Integer</span>
+	<span class="fu">|</span> <span class="dt">TermOp</span> (<span class="dt">Integer</span> <span class="ot">-&gt;</span> <span class="dt">Integer</span> <span class="ot">-&gt;</span> <span class="dt">Integer</span>)
+
+<span class="ot">evaluate ::</span> <span class="dt">String</span> <span class="ot">-&gt;</span> [<span class="dt">Integer</span>]
+evaluate <span class="fu">=</span> reduce <span class="fu">.</span> map mkTerm <span class="fu">.</span> words
+
+<span class="ot">mkTerm ::</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">Term</span>
+mkTerm termStr <span class="fu">=</span> <span class="kw">case</span> termStr <span class="kw">of</span>
+	<span class="st">&quot;+&quot;</span> <span class="ot">-&gt;</span> <span class="dt">TermOp</span> (<span class="fu">+</span>)
+	<span class="st">&quot;-&quot;</span> <span class="ot">-&gt;</span> <span class="dt">TermOp</span> (<span class="fu">-</span>)
+	<span class="st">&quot;*&quot;</span> <span class="ot">-&gt;</span> <span class="dt">TermOp</span> (<span class="fu">*</span>)
+	_
+		<span class="fu">|</span> and <span class="fu">$</span> map isDigit termStr <span class="ot">-&gt;</span> <span class="dt">TermInt</span> <span class="fu">$</span> read termStr
+		<span class="fu">|</span> otherwise <span class="ot">-&gt;</span> error <span class="fu">$</span> <span class="st">&quot;invalid input `&quot;</span> <span class="fu">++</span> termStr <span class="fu">++</span> <span class="st">&quot;'&quot;</span>
+
+<span class="ot">reduce ::</span> [<span class="dt">Term</span>] <span class="ot">-&gt;</span> [<span class="dt">Integer</span>]
+reduce <span class="fu">=</span> foldl f []
+	<span class="kw">where</span>
+	f stack term <span class="fu">=</span> <span class="kw">case</span> term <span class="kw">of</span>
+		<span class="dt">TermInt</span> n <span class="ot">-&gt;</span> n <span class="fu">:</span> stack
+		<span class="dt">TermOp</span> op
+			<span class="fu">|</span> length stack <span class="fu">&lt;</span> <span class="dv">2</span>
+				<span class="ot">-&gt;</span> error <span class="st">&quot;stack too small for operator application&quot;</span>
+			<span class="fu">|</span> otherwise <span class="ot">-&gt;</span> <span class="kw">let</span>
+				a <span class="fu">=</span> stack<span class="fu">!!</span><span class="dv">0</span>
+				b <span class="fu">=</span> stack<span class="fu">!!</span><span class="dv">1</span>
+				c <span class="fu">=</span> op a b
+				<span class="kw">in</span> c <span class="fu">:</span> drop <span class="dv">2</span> stack</code></pre></td></tr></table>
+<p>Probably the first thing to note is that we define a robust data type, <code>Term</code>, to encapsulate the values held in a given RPN string. We take advantage of Haskell’s functions-as-first-class-values ability, and define the <code>TermOp</code> constructor with it (i.e., it needs an arithmetic function <code>(Integer -&gt; Integer -&gt; Integer)</code> as an argument).</p>
+<p>The next thing to notice is that the <code>evaluate</code> function is composed of smaller helper functions, <code>mkTerm</code> and <code>reduce</code>. <code>mkTerm</code> simply converts a <code>String</code> type into an appropriate <code>Term</code> type. <code>reduce</code> takes a list of <code>Term</code> values, and reduces it as much as possible by applying the <code>stackManip</code> function over it with <code>foldl</code> (Haskell’s version of a single-pass loop).</p>
+<p>When <code>stackManip</code> encounters a <code>TermInt</code>, it pushes the number into the stack. When it encounters a <code>TermOp</code>, it applies that operator to the first 2 items in <code>stack</code>, and pushes this result back into <code>stack</code>. The <code>drop 2 stack</code> is necessary because Haskell’s types by default are immutable.</p>
+<h2 id="thoughts">Thoughts</h2>
+<p>I much prefer the Haskell version.</p>
+<p>The separation of concerns is a big win — we can easily create helper functions like <code>mkTerm</code> and <code>reduce</code> because of Haskell’s purity<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a>. Haskell embraces the use of algebraic data types (i.e., <code>Term</code> here), and perhaps this preference lends itself to the use of helper functions that convert things from one type to another. Ruby does not have types, at least in the sense of Haskell types, so to artificially create such concepts and to implement them would be difficult.<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> I mean, I really want to write equivalent <code>mkTerm</code> and <code>reduce</code> methods in Ruby, but my beginner skills prevent me from doing it in a simple, straightforward way. I know enough about coding to abandon “solutions” that require circuitous, complex design.</p>
+<p>I also like how all the functions are pure and thus easy to reason about with the type signatures. Refactoring code like this is a dream.</p>
+<p>In short, algebraic data types, the clean delegation of subtasks to helper functions, and purity make the Haskell version easier to reason about and maintain in the long run.</p>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>Haskell’s <em>purity</em> is a term of art. Look it up!<a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p>The closest thing to Haskell types in Ruby, in my mind, are Ruby objects. Certainly, Ruby knows the difference between two objects belonging to different classes, but to do that here would make the code much longer and offer little benefit.<a href="#fnref2">↩</a></p></li>
+</ol>
+</div>
+
+		</div>
+		<div id="footer">
+			<a href="https://github.com/listx/listx.github.io">Site</a>
+			<a href="https://github.com/listx/listx_blog">generated</a>
+			with
+			<a href="http://jaspervdj.be/hakyll">Hakyll</a>
+			and
+			<a href="http://sebastiaanvisser.github.com/clay">Clay</a>.
+		</div>
+	</body>
+</html>
