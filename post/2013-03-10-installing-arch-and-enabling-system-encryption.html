@@ -33,7 +33,7 @@
 <p>If you want to look up the manpages for these commands, use <code>ALT+F2</code>, <code>ALT+F3</code>, etc. to log into and switch between independent TTY screens.</p>
 <p>Be sure to wipe the drive with</p>
 <pre><code>dd if=/dev/urandom of=/dev/sdX</code></pre>
-<p>before doing anything. This way, your new Linux install will blend into the random noise data resulting from the command above, making it virtually impossible to detect which portions of the drive contain actual data. If the disk you want to wipe is a secondary device to an existing Linux installation, you can try using <a href="../../code.html#floop"><code>floop</code></a> to generate a faster stream of pseudorandom bytes. With <code>floop</code>, you can just do</p>
+<p>before doing anything. This way, your new Linux install will blend into the random noise data resulting from the command above, making it virtually impossible to detect which portions of the drive contain actual data. If the disk you want to wipe is a secondary device to an existing Linux installation, you can try using <a href="../code.html#floop"><code>floop</code></a> to generate a faster stream of pseudorandom bytes. With <code>floop</code>, you can just do</p>
 <pre><code>floop --threads 4 --thread-buf 0x200000 --count 0 | dd of=/dev/sdX</code></pre>
 <p>and it will be significantly faster than using <code>/dev/urandom</code>.</p>
 <table class="sourceCode bash numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
@@ -454,7 +454,7 @@
 			and
 			<a href="http://sebastiaanvisser.github.com/clay">Clay</a>.
 			<br>
-			<a href="atom.xml">Atom feed</a>
+			<a href="../atom.xml">Atom feed</a>
 		</div>
 	</body>
 </html>
