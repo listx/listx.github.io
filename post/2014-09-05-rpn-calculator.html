@@ -7,7 +7,7 @@
 		<link rel="stylesheet" href="../css/syntax.css">
 		<link href="http://fonts.googleapis.com/css?family=Merriweather:400,400italic,700italic,700" rel="stylesheet" type="text/css">
 		<link rel="shortcut icon" type="image/png" href="../favicon.png">
-		
+		<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 	</head>
 	<body>
 		<div id="header">
@@ -109,11 +109,6 @@
 24
 25
 26
-27
-28
-29
-30
-31
 </pre></td><td class="sourceCode"><pre><code class="sourceCode haskell"><span class="kw">import </span><span class="dt">Data.Char</span> (isDigit)
 
 <span class="kw">data</span> <span class="dt">Term</span>
@@ -121,7 +116,7 @@
 	<span class="fu">|</span> <span class="dt">TermOp</span> (<span class="dt">Integer</span> <span class="ot">-&gt;</span> <span class="dt">Integer</span> <span class="ot">-&gt;</span> <span class="dt">Integer</span>)
 
 <span class="ot">evaluate ::</span> <span class="dt">String</span> <span class="ot">-&gt;</span> [<span class="dt">Integer</span>]
-evaluate <span class="fu">=</span> reduce <span class="fu">.</span> map mkTerm <span class="fu">.</span> words
+evaluate <span class="fu">=</span> evalTerms <span class="fu">.</span> map mkTerm <span class="fu">.</span> words
 
 <span class="ot">mkTerm ::</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">Term</span>
 mkTerm termStr <span class="fu">=</span> <span class="kw">case</span> termStr <span class="kw">of</span>
@@ -132,25 +127,20 @@ mkTerm termStr <span class="fu">=</span> <span class="kw">case</span> termStr <s
 		<span class="fu">|</span> and <span class="fu">$</span> map isDigit termStr <span class="ot">-&gt;</span> <span class="dt">TermInt</span> <span class="fu">$</span> read termStr
 		<span class="fu">|</span> otherwise <span class="ot">-&gt;</span> error <span class="fu">$</span> <span class="st">&quot;invalid input `&quot;</span> <span class="fu">++</span> termStr <span class="fu">++</span> <span class="st">&quot;'&quot;</span>
 
-<span class="ot">reduce ::</span> [<span class="dt">Term</span>] <span class="ot">-&gt;</span> [<span class="dt">Integer</span>]
-reduce <span class="fu">=</span> foldl f []
+<span class="ot">evalTerms ::</span> [<span class="dt">Term</span>] <span class="ot">-&gt;</span> [<span class="dt">Integer</span>]
+evalTerms <span class="fu">=</span> foldl modifyStack []
 	<span class="kw">where</span>
-	f stack term <span class="fu">=</span> <span class="kw">case</span> term <span class="kw">of</span>
+	modifyStack stack term <span class="fu">=</span> <span class="kw">case</span> term <span class="kw">of</span>
 		<span class="dt">TermInt</span> n <span class="ot">-&gt;</span> n <span class="fu">:</span> stack
-		<span class="dt">TermOp</span> op
-			<span class="fu">|</span> length stack <span class="fu">&lt;</span> <span class="dv">2</span>
-				<span class="ot">-&gt;</span> error <span class="st">&quot;stack too small for operator application&quot;</span>
-			<span class="fu">|</span> otherwise <span class="ot">-&gt;</span> <span class="kw">let</span>
-				a <span class="fu">=</span> stack<span class="fu">!!</span><span class="dv">0</span>
-				b <span class="fu">=</span> stack<span class="fu">!!</span><span class="dv">1</span>
-				c <span class="fu">=</span> op a b
-				<span class="kw">in</span> c <span class="fu">:</span> drop <span class="dv">2</span> stack</code></pre></td></tr></table>
+		<span class="dt">TermOp</span> op <span class="ot">-&gt;</span> <span class="kw">case</span> stack <span class="kw">of</span>
+			(a<span class="fu">:</span>b<span class="fu">:</span>_) <span class="ot">-&gt;</span> op a b <span class="fu">:</span> drop <span class="dv">2</span> stack
+			_ <span class="ot">-&gt;</span> error <span class="st">&quot;stack too small for operator application&quot;</span></code></pre></td></tr></table>
 <p>Probably the first thing to note is that we define a robust data type, <code>Term</code>, to encapsulate the values held in a given RPN string. We take advantage of Haskell’s functions-as-first-class-values ability, and define the <code>TermOp</code> constructor with it (i.e., it needs an arithmetic function <code>(Integer -&gt; Integer -&gt; Integer)</code> as an argument).</p>
-<p>The next thing to notice is that the <code>evaluate</code> function is composed of smaller helper functions, <code>mkTerm</code> and <code>reduce</code>. <code>mkTerm</code> simply converts a <code>String</code> type into an appropriate <code>Term</code> type. <code>reduce</code> takes a list of <code>Term</code> values, and reduces it as much as possible by applying the <code>stackManip</code> function over it with <code>foldl</code> (Haskell’s version of a single-pass loop).</p>
-<p>When <code>stackManip</code> encounters a <code>TermInt</code>, it pushes the number into the stack. When it encounters a <code>TermOp</code>, it applies that operator to the first 2 items in <code>stack</code>, and pushes this result back into <code>stack</code>. The <code>drop 2 stack</code> is necessary because Haskell’s types by default are immutable.</p>
+<p>The next thing to notice is that the <code>evaluate</code> function is composed of smaller helper functions, <code>mkTerm</code> and <code>evalTerms</code>. <code>mkTerm</code> simply converts a <code>String</code> type into an appropriate <code>Term</code> type. <code>evalTerms</code> takes a list of <code>Term</code> values, and reduces it as much as possible by applying the <code>modifyStack</code> function over it with <code>foldl</code> (Haskell’s version of a single-pass loop).</p>
+<p>When <code>modifyStack</code> encounters a <code>TermInt</code>, it pushes the number into the stack. When it encounters a <code>TermOp</code>, it applies that operator to the first 2 items in <code>stack</code>, and pushes this result back into <code>stack</code>. We use pattern matching with <code>(a:b:_)</code> to pull out the <code>a</code> and <code>b</code> values from the stack — the expression <code>(a:b:_)</code> means a value that matches either <span class="math">\([x_1, x_2]\)</span>, or <span class="math">\([x_1, x_2, ... , x_n]\)</span>, because the <code>_</code> operator matches anything, including the empty list <code>[]</code> used to finalize list creation. The <code>drop 2 stack</code> is necessary because Haskell’s types by default are immutable.</p>
 <h2 id="thoughts">Thoughts</h2>
 <p>I much prefer the Haskell version.</p>
-<p>The separation of concerns is a big win — we can easily create helper functions like <code>mkTerm</code> and <code>reduce</code> because of Haskell’s purity<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a>. Haskell embraces the use of algebraic data types (i.e., <code>Term</code> here), and perhaps this preference lends itself to the use of helper functions that convert things from one type to another. Ruby does not have types, at least in the sense of Haskell types, so to artificially create such concepts and to implement them would be difficult.<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> I mean, I really want to write equivalent <code>mkTerm</code> and <code>reduce</code> methods in Ruby, but my beginner skills prevent me from doing it in a simple, straightforward way. I know enough about coding to abandon “solutions” that require circuitous, complex design.</p>
+<p>The separation of concerns is a big win — we can easily create helper functions like <code>mkTerm</code> and <code>evalTerms</code> because of Haskell’s purity<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a>. Haskell embraces the use of algebraic data types (i.e., <code>Term</code> here), and perhaps this preference lends itself to the use of helper functions that convert things from one type to another. Ruby does not have types, at least in the sense of Haskell types, so to artificially create such concepts and to implement them would be difficult.<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> I mean, I really want to write equivalent <code>mkTerm</code> and <code>evalTerms</code> methods in Ruby, but my beginner skills prevent me from doing it in a simple, straightforward way. I know enough about coding to abandon “solutions” that require circuitous, complex design.</p>
 <p>I also like how all the functions are pure and thus easy to reason about with the type signatures. Refactoring code like this is a dream.</p>
 <p>In short, algebraic data types, the clean delegation of subtasks to helper functions, and purity make the Haskell version easier to reason about and maintain in the long run.</p>
 <div class="footnotes">
