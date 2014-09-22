@@ -25,8 +25,11 @@
 		<div id="content">
 			<h1 class="center">Generating Random Numbers without Modulo Bias</h1>
 
-			<div class="info center"><code>2013-07-12</code></div>
-<div class="info center"><a href="../tag/c.html">c</a>, <a href="../tag/rng.html">rng</a>, <a href="../tag/programming.html">programming</a></div>
+			<div class="info center">
+	<code class="date">2013-07-12</code>
+	<br>
+	<a href="../tag/c.html">c</a>, <a href="../tag/rng.html">rng</a>, <a href="../tag/programming.html">programming</a>
+</div>
 
 <p>Let’s say you need a random number from 0 to 2 (0, 1, or 2). If you do this:</p>
 <table class="sourceCode c numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
@@ -41,7 +44,7 @@ x = rand() % n;
 <span class="kw">return</span> x;</code></pre></td></tr></table>
 <p>your code is broken, thanks to modulo bias. You will always get modulo bias (however slight, or great, it may be) whenever <code>RAND_MAX + 1</code> of your <code>rand()</code> function is not evenly divisible by your modulus <code>n</code>.</p>
 <p>Continuing with our example, let’s say <code>rand()</code>’s <code>RAND_MAX</code> is 4, so there are 5 different possible values that <code>rand()</code> can generate (0, 1, 2, 3, or 4). Now rand() will return each value 20% of the time, assuming that <code>rand()</code> has very good distribution from 0 to <code>RAND_MAX</code>.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> But since we take the modulo by 3, <strong>we get 0 40% of the time (0 and 3)!</strong> This fact alone should make you worried. Visually it is as follows:</p>
-<p><img src="../img/mbias.png" alt="Modulo bias" title="Modulo bias"></p>
+<p><img src="../img/mbias.png" alt="Modulo bias" title="Modulo bias" width="100%"></p>
 <p>The following code is correct:</p>
 <table class="sourceCode c numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2

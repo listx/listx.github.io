@@ -15,8 +15,11 @@
     <id>http://listx.github.io/post/2014-09-09-my-first-contribution-to-git.html</id>
     <published>2014-09-09T00:00:00Z</published>
     <updated>2014-09-09T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="info center"><code>2014-09-09</code></div>
-<div class="info center"><a href="/tag/programming.html">programming</a>, <a href="/tag/git.html">git</a></div>
+    <summary type="html"><![CDATA[<div class="info center">
+	<code class="date">2014-09-09</code>
+	<br>
+	<a href="/tag/programming.html">programming</a>, <a href="/tag/git.html">git</a>
+</div>
 
 <p>I am happy to say that my <a href="http://thread.gmane.org/gmane.comp.version-control.git/254705">first</a> <a href="http://thread.gmane.org/gmane.comp.version-control.git/255050">patches</a> were <a href="https://github.com/git/git/commit/4645b014c5c82a3b75337">recently merged</a> into the master Git branch! Now, I am by no means a C or Git expert, so the patches only dealt with changes to the documentation. I did not know anyone involved with Git in real life; nor did I have any experience submitting patches to a big project like Git. So, how did I do it?</p>
 <h2 id="dead-simple-fix">Dead Simple Fix</h2>
@@ -51,8 +54,11 @@
     <id>http://listx.github.io/post/2014-09-05-rpn-calculator.html</id>
     <published>2014-09-05T00:00:00Z</published>
     <updated>2014-09-05T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="info center"><code>2014-09-05</code></div>
-<div class="info center"><a href="/tag/programming.html">programming</a>, <a href="/tag/ruby.html">ruby</a>, <a href="/tag/haskell.html">haskell</a></div>
+    <summary type="html"><![CDATA[<div class="info center">
+	<code class="date">2014-09-05</code>
+	<br>
+	<a href="/tag/programming.html">programming</a>, <a href="/tag/ruby.html">ruby</a>, <a href="/tag/haskell.html">haskell</a>
+</div>
 
 <p>A friend of mine is in DevBootCamp, an intensive coding school program designed to get students ready for real world job placement. Anyway, he was telling me how he was given an extra credit assignment: implement a RPN calculator which supports 3 functions — add, subtract, and multiply — on integer numbers. I.e., write a function <code>evaluate()</code> that when given a string such as <code>&quot;3 4 + 8 *&quot;</code> gives the result <code>56</code>. He gave me his Ruby solution; in response, I wrote my own Ruby version and decided soon thereafter to write an equivalent Haskell version, because, why not?</p>
 <h2 id="ruby">Ruby</h2>
@@ -184,8 +190,11 @@ evalTerms <span class="fu">=</span> foldl modifyStack []
     <id>http://listx.github.io/post/2014-08-11-find-files-with-80%2B-columns.html</id>
     <published>2014-08-11T00:00:00Z</published>
     <updated>2014-08-11T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="info center"><code>2014-08-11</code></div>
-<div class="info center"><a href="/tag/linux.html">linux</a>, <a href="/tag/programming.html">programming</a></div>
+    <summary type="html"><![CDATA[<div class="info center">
+	<code class="date">2014-08-11</code>
+	<br>
+	<a href="/tag/linux.html">linux</a>, <a href="/tag/programming.html">programming</a>
+</div>
 
 <p>It’s nice to follow the 80-columns-per-line rule<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a>, but what if you have some lingering project that has yet to conform?</p>
 <p>Just go to that project’s sources directory and do</p>
@@ -207,8 +216,11 @@ evalTerms <span class="fu">=</span> foldl modifyStack []
     <id>http://listx.github.io/post/2014-06-04-nvrm-api-mismatch.html</id>
     <published>2014-06-04T00:00:00Z</published>
     <updated>2014-06-04T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="info center"><code>2014-06-04</code></div>
-<div class="info center"><a href="/tag/arch.html">arch</a>, <a href="/tag/linux.html">linux</a>, <a href="/tag/nvidia.html">nvidia</a></div>
+    <summary type="html"><![CDATA[<div class="info center">
+	<code class="date">2014-06-04</code>
+	<br>
+	<a href="/tag/arch.html">arch</a>, <a href="/tag/linux.html">linux</a>, <a href="/tag/nvidia.html">nvidia</a>
+</div>
 
 <p>Sometimes when you do a system upgrade on Arch, Xorg will die on a reboot and you’ll get this kernel error (available with <code>dmesg</code>):</p>
 <table class="sourceCode numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
@@ -233,12 +245,15 @@ NVRM: components have the same version.</code></pre></td></tr></table>
     <id>http://listx.github.io/post/2014-05-20-quad-monitor-setup.html</id>
     <published>2014-05-20T00:00:00Z</published>
     <updated>2014-05-20T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="info center"><code>2014-05-20</code></div>
-<div class="info center"><a href="/tag/linux.html">linux</a>, <a href="/tag/hardware.html">hardware</a>, <a href="/tag/nvidia.html">nvidia</a>, <a href="/tag/xmonad.html">xmonad</a></div>
+    <summary type="html"><![CDATA[<div class="info center">
+	<code class="date">2014-05-20</code>
+	<br>
+	<a href="/tag/linux.html">linux</a>, <a href="/tag/hardware.html">hardware</a>, <a href="/tag/nvidia.html">nvidia</a>, <a href="/tag/xmonad.html">xmonad</a>
+</div>
 
 <p>I got my two QNIX QX2710 LED Evolution II SE Matte 27&quot; 2560x1440 Samsung PLS WQHD monitors and incorporated them into my existing dual Acer X222W 22&quot; 1680x1050 setup. I put the two QNIXes in the middle, and put the Acers on the left and right edges. All four are in “portrait” orientation, because I primarily code on my computer. A single Gigabyte GeForce GTX 750 Ti OC 2GB GDDR5 2DVI/2HDMI card powers all four monitors; the QNIXes use the DVI ports, while the Acers use the HDMI ports via two HDMI-to-DVI(female) adapters. I bought this card because of the simplicity of the four ports — just DVI and HDMI.</p>
 <p>As for the stands, I just bought another dual monitor stand and put it next to my existing dual monitor stand; each stand holds a QNIX and an Acer on each arm. The fact that the stands are subject to differently weighted monitors (27&quot; monitor on one arm and a 22&quot; on another) does not really affect them negatively. The desk in the image below is 140mm wide, in case you want to have a sense of how tight two dual-monitor stands would fit on your own desk.</p>
-<p><img src="../img/quad-monitor.jpg" alt="Quad monitor setup" title="Quad monitor setup" width="674"></p>
+<p><img src="../img/quad-monitor.jpg" alt="Quad monitor setup" title="Quad monitor setup" width="100%"></p>
 <p>Using four monitors sounds difficult, but it’s a breeze with Xinerama and Xmonad. The hardest part was figuring out the correct <code>xorg.conf</code> configuration file. It was difficult because the QNIX monitors, being cheap, do not work out of the box, because the latest Nvidia driver (version 337.12) does not detect the correct resolution. What’s worse, the QNIXes do not support anything other than their native 2560x1440 resolution, so you’ll get blank screens if you try to just use these monitors without tweaking some <code>xorg.conf</code> settings. I actually ended up googling to find the correct <code>Modeline</code> value for <code>xorg.conf</code> for my QNIX, at 96hz refresh rate.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> You could try using the <code>cvt</code> program included with <code>xorg-server</code>, but when I tried it out on my own it generated different numbers and my QNIXes couldn’t handle those numbers.</p>
 <p>Here is my <code>xorg.conf</code>:</p>
 <table class="sourceCode xorg numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
@@ -613,31 +628,34 @@ NVRM: components have the same version.</code></pre></td></tr></table>
     <id>http://listx.github.io/post/2014-05-02-linus-haskell-coding-style.html</id>
     <published>2014-05-02T00:00:00Z</published>
     <updated>2014-05-02T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="info center"><code>2014-05-02</code></div>
-<div class="info center"><a href="/tag/haskell.html">haskell</a>, <a href="/tag/programming.html">programming</a></div>
+    <summary type="html"><![CDATA[<div class="info center">
+	<code class="date">2014-05-02</code>
+	<br>
+	<a href="/tag/haskell.html">haskell</a>, <a href="/tag/programming.html">programming</a>
+</div>
 
 <p>Haskell is my favorite programming language. However, unlike mainstream languages (C, Java, Ruby, etc.), there are no known “coding styles” for it. C has the venerable Linux Kernel Coding Style <a href="https://www.kernel.org/doc/Documentation/CodingStyle">LKCS</a>, among many others. I really like LKCS because it is designed to be as readable as possible, and is actually pretty simple (no fancy indentation/brace rules). I just wish there was something like LKCS for Haskell, mainly because every time I open up Haskell code somebody else wrote, it is plagued with gargantuan amounts of indentation. It really has gotten out of hand. So, I hereby propose some rules to reduce the level of indentation, whether you use tabs or spaces.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a></p>
-<p>NOTE: I use 4-character-wide tabs for Haskell, but because HTML renders tabs as 8 characters wide, I’ve used 4 spaces for a single tab in this post.</p>
+<p>NOTE: I use 4-character-wide tabs for Haskell; your browser may not render this correctly, but bear with me.</p>
 <h2 id="chapter-1-indentation">Chapter 1: Indentation</h2>
 <h3 id="wherever-possible-use-minimal-hanging-indentation">Wherever possible, use minimal hanging indentation</h3>
 <p>That is, indent as little as possible.</p>
 <h4 id="where-clause"><code>where</code> clause</h4>
 <p>Whenever you use a <code>where</code> clause, use it like this:</p>
-<pre><code>    ...
-    f x y
-    where
-    f = ...
-    x = ...
-    y = ...
+<pre><code>	...
+	f x y
+	where
+	f = ...
+	x = ...
+	y = ...
     ...</code></pre>
 <p>That is, put <code>where</code> on its own line, and then avoid any additional indentation for all definitions that follow.</p>
 <h4 id="guards">Guards</h4>
 <p>Use guards like this:</p>
 <pre><code>someArbitraryFunctionName x y z
-    | x == 0 = ...
-    | y == 0 = ...
-    | z == 0 = ...
-    | otherwise = ...</code></pre>
+	| x == 0 = ...
+	| y == 0 = ...
+	| z == 0 = ...
+	| otherwise = ...</code></pre>
 <p>not like this:</p>
 <pre><code>someArbitraryFunctionName x y z | x == 0 = ...
                                 | y == 0 = ...
@@ -648,31 +666,31 @@ NVRM: components have the same version.</code></pre></td></tr></table>
 <p>Do not vertically-align the different cases.</p>
 <p>Do</p>
 <pre><code>foo x = case x of
-    Abcdef y -&gt; ...
-    Foo y -&gt; ...
-    Abracadabra y -&gt; ...</code></pre>
+	Abcdef y -&gt; ...
+	Foo y -&gt; ...
+	Abracadabra y -&gt; ...</code></pre>
 <p>instead of</p>
 <pre><code>foo x = case x of
-    Abcdef y      -&gt; ...
-    Foo y         -&gt; ...
-    Abracadabra y -&gt; ...</code></pre>
+	Abcdef y      -&gt; ...
+	Foo y         -&gt; ...
+	Abracadabra y -&gt; ...</code></pre>
 <p>. The only time you should vertically align <em>anything</em> is for lists, or perhaps long tuples.</p>
 <h4 id="lists">Lists</h4>
 <p>Align lists as follows:</p>
 <pre><code>someLongList =
-    [ abcd
-    , efghi
-    , jkl
-    , m
-    , nopqrstu
-    , vwxyz
-    ]</code></pre>
+	[ abcd
+	, efghi
+	, jkl
+	, m
+	, nopqrstu
+	, vwxyz
+	]</code></pre>
 <p>. You may align long tuples in a similar manner.</p>
 <h4 id="do-notation"><code>do</code> notation</h4>
 <p>Use ``hanging’’ do-notation:</p>
 <pre><code>main = do
-    x &lt;- foo
-    y z</code></pre>
+	x &lt;- foo
+	y z</code></pre>
 <p>instead of</p>
 <pre><code>main = do x &lt;- foo
           y z</code></pre>
@@ -693,20 +711,20 @@ NVRM: components have the same version.</code></pre></td></tr></table>
 <p>Haddock prefers single-line comments, anyway.</p>
 <h3 id="use-two-groups-of-imports-system-wide-and-package-wide-and-have-each-group-alphabetically-ordered">Use two groups of imports: system-wide and package-wide (and have each group alphabetically ordered)</h3>
 <p>Import all external library modules in their own ``paragraph’’, followed by those modules of your own library; e.g., do</p>
-<pre><code>    import Control.Monad
-    import Data.Maybe
-    import Data.Text
+<pre><code>	import Control.Monad
+	import Data.Maybe
+	import Data.Text
 
-    import MyModule.One
-    import MyModule.Two</code></pre>
+	import MyModule.One
+	import MyModule.Two</code></pre>
 <p>.</p>
 <h3 id="place-one-pragma-per-line-in-alphabetical-order">Place one pragma per line, in alphabetical order</h3>
 <p>Do it like this:</p>
-<pre><code>    {-# LANGUAGE SomeBadExtension #-}
-    {-# LANGUAGE SomeCoolExtension #-}
-    {-# LANGUAGE SomeScaryExtension #-}
-    {-# LANGUAGE SomeUglyExtension #-}
-    {-# LANGUAGE StrangeExtensionNobodyUnderstands #-}</code></pre>
+<pre><code>	{-# LANGUAGE SomeBadExtension #-}
+	{-# LANGUAGE SomeCoolExtension #-}
+	{-# LANGUAGE SomeScaryExtension #-}
+	{-# LANGUAGE SomeUglyExtension #-}
+	{-# LANGUAGE StrangeExtensionNobodyUnderstands #-}</code></pre>
 <h3 id="try-to-use-as-few-pragmas-as-possible">Try to use as few pragmas as possible</h3>
 <p>Do not use 20 language extensions when you don’t have to. Saving a handful of keystrokes is not a good reason to use a multitude of extensions.</p>
 <h3 id="when-writing-documentation-prefer-high-level-documentation-over-line-by-line-documentation">When writing documentation, prefer high-level documentation over line-by-line documentation</h3>
@@ -715,10 +733,10 @@ NVRM: components have the same version.</code></pre></td></tr></table>
 <p>We follow LKCS’s 80-character column limit.</p>
 <p>If you must, break long lines into sensible chunks. If a function has numerous arguments, you may put each argument on its own line. If you want to break up a long chain of functions, break them up like this:</p>
 <pre><code>foo x y z = head
-    . init
-    . blahblah y
-    . funcMX x
-    $ abcd z</code></pre>
+	. init
+	. blahblah y
+	. funcMX x
+	$ abcd z</code></pre>
 <p>, with each function on its own line, with the function composition operator <code>.</code> as the leading character, similar to how the comma <code>,</code> is the leading character for breaking up long lists.</p>
 <div class="footnotes">
 <hr />
@@ -734,8 +752,11 @@ NVRM: components have the same version.</code></pre></td></tr></table>
     <id>http://listx.github.io/post/2014-03-19-opengl-haskell-3-matrices.html</id>
     <published>2014-03-19T00:00:00Z</published>
     <updated>2014-03-19T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="info center"><code>2014-03-19</code></div>
-<div class="info center"><a href="/tag/haskell.html">haskell</a>, <a href="/tag/opengl.html">opengl</a></div>
+    <summary type="html"><![CDATA[<div class="info center">
+	<code class="date">2014-03-19</code>
+	<br>
+	<a href="/tag/haskell.html">haskell</a>, <a href="/tag/opengl.html">opengl</a>
+</div>
 
 <p>The following is my translation/adaptation of <a href="http://www.opengl-tutorial.org/beginners-tutorials/tutorial-3-matrices/">tutorial #2</a> at <a href="http://www.opengl-tutorial.org" class="uri">http://www.opengl-tutorial.org</a>. My <a href="2014-03-15-opengl-from-haskell.html">last post</a> was a translation of tutorial #2, which dealt with triangles — this is the reason why this post’s title is called “#3: Matrices”. The end result of this tutorial is a 3D triangle with 3 different colored vertices that are interpolated smoothly by OpenGL.</p>
 <p>My version again uses the code from <a href="https://github.com/YPares/Haskell-OpenGL3.1-Tutos" class="uri">https://github.com/YPares/Haskell-OpenGL3.1-Tutos</a>. The <code>Data.Vec</code> import is for the <a href="http://hackage.haskell.org/package/Vec">Vec</a> package. Like my last post, my code here does does not use <code>Control.Applicative</code> puts everything, including the GLSL shaders directly into the code. The <code>RankNTypes</code> and <code>TypeOperators</code> GHC extensions are only there to suppress warnings from using <code>ghc --make -Wall</code>; if you don’t want to use these extensions, just remove the type signature for the <code>vec3</code> function near the bottom.</p>
@@ -1268,8 +1289,11 @@ lookAt eye target up <span class="fu">=</span> x <span class="fu">:.</span> y <s
     <id>http://listx.github.io/post/2014-03-15-opengl-from-haskell.html</id>
     <published>2014-03-15T00:00:00Z</published>
     <updated>2014-03-15T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="info center"><code>2014-03-15</code></div>
-<div class="info center"><a href="/tag/haskell.html">haskell</a>, <a href="/tag/opengl.html">opengl</a></div>
+    <summary type="html"><![CDATA[<div class="info center">
+	<code class="date">2014-03-15</code>
+	<br>
+	<a href="/tag/haskell.html">haskell</a>, <a href="/tag/opengl.html">opengl</a>
+</div>
 
 <p>The following is my translation/adaptation of <a href="http://www.opengl-tutorial.org/beginners-tutorials/tutorial-2-the-first-triangle/">tutorial #2</a> at <a href="http://www.opengl-tutorial.org" class="uri">http://www.opengl-tutorial.org</a>. It draws a single red triangle on the screen with a dark blue background. It takes quite a bit of boilerplate code just to get something on the screen!</p>
 <p>My version uses the code from <a href="https://github.com/YPares/Haskell-OpenGL3.1-Tutos" class="uri">https://github.com/YPares/Haskell-OpenGL3.1-Tutos</a>, but does not use <code>Control.Applicative</code> and also does not put the shaders containing GLSL in a separate text file. Everything is self-contained in one file, and it only uses the <code>PackageImports</code> and <code>RecordWildCards</code> GHC extensions. The <code>PackageImports</code> is only necessary if you have both <a href="http://hackage.haskell.org/package/GLFW">GLFW</a> and <a href="http://hackage.haskell.org/package/GLFW-b">GLFW-b</a> Hackage packages installed in your system (as they have a name clash of <code>Graphics.UI.GLFW</code>, you need to disambiguate this import by specifying the package name). The <code>RecordWildCards</code> extension is pretty standard and exists purely for syntactic sugar (no type-level hoops and such) — if you don’t know about it you should google it.</p>
@@ -1687,8 +1711,11 @@ drawStuff <span class="dt">GLIDs</span>{<span class="fu">..</span>} <span class=
     <id>http://listx.github.io/post/2014-01-24-cabal2pkgbuild.html</id>
     <published>2014-01-24T00:00:00Z</published>
     <updated>2014-01-24T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="info center"><code>2014-01-24</code></div>
-<div class="info center"><a href="/tag/arch.html">arch</a>, <a href="/tag/linux.html">linux</a>, <a href="/tag/haskell.html">haskell</a>, <a href="/tag/cblrepo.html">cblrepo</a></div>
+    <summary type="html"><![CDATA[<div class="info center">
+	<code class="date">2014-01-24</code>
+	<br>
+	<a href="/tag/arch.html">arch</a>, <a href="/tag/linux.html">linux</a>, <a href="/tag/haskell.html">haskell</a>, <a href="/tag/cblrepo.html">cblrepo</a>
+</div>
 
 <p>I have open-sourced the <code>maintain_cblrepo.sh</code> script I originally published <a href="2014-01-06-using-cblrepo-in-arch-linux.html">in this post</a>. You can find the repository <a href="https://github.com/listx/cabal2pkgbuild">here</a>.</p>
 <p>The script is under the BSD 2-clause license. I was thinking of putting it in the public domain, but I think it’s much easier to just use the BSD license.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a></p>
@@ -1706,8 +1733,11 @@ drawStuff <span class="dt">GLIDs</span>{<span class="fu">..</span>} <span class=
     <id>http://listx.github.io/post/2014-01-06-using-cblrepo-in-arch-linux.html</id>
     <published>2014-01-06T00:00:00Z</published>
     <updated>2014-01-06T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="info center"><code>2014-01-06</code></div>
-<div class="info center"><a href="/tag/arch.html">arch</a>, <a href="/tag/linux.html">linux</a>, <a href="/tag/haskell.html">haskell</a>, <a href="/tag/cblrepo.html">cblrepo</a></div>
+    <summary type="html"><![CDATA[<div class="info center">
+	<code class="date">2014-01-06</code>
+	<br>
+	<a href="/tag/arch.html">arch</a>, <a href="/tag/linux.html">linux</a>, <a href="/tag/haskell.html">haskell</a>, <a href="/tag/cblrepo.html">cblrepo</a>
+</div>
 
 <p>UPDATE 2014-01-24: See <a href="2014-01-24-cabal2pkgbuild.html">this post</a>.</p>
 <p>The <a href="https://github.com/magthe/cblrepo">cblrepo</a> command line utility helps to maintain a set of Haskell packages, and is used as the de facto Hackage package manager in Arch Linux.</p>
