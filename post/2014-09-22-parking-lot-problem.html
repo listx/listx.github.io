@@ -35,9 +35,9 @@
 <p>I’ve provided “Expected Output” sections for you to try out your own solutions against, so don’t be too aggressive with the scrollbar if you want to quiz yourself!</p>
 <h2 id="problem-statement">Problem Statement</h2>
 <p>Imagine an infinite parking lot, where each parking space is given a natural number, starting with 0, 1, 2, 3, … to infinity. The entire lot is a single row of spaces — so that space <code>0</code> is the one closest to the entrance. There are a finite number of cars parked in the lot in it at random, as people come and go as they wish. A new car has just arrived outside the lot, and the driver asks you, <em>“Where is the closest open parking space?”</em></p>
-<p>The only information you have is the <em>taken</em> spaces list (<code>T</code>), which lists all the occupied parking spaces.</p>
+<p>The only information you have is the <em>taken</em> spaces list (<code>T</code>), which lists all the occupied parking spaces. This list is sometimes sorted — sometimes, it is not!</p>
 <h2 id="expected-output">Expected Output</h2>
-<p>Here is a set of expected answers from our solution function, <code>get_parking_space</code>:</p>
+<p>Here is a set of expected inputs and outputs for our problem:</p>
 <pre><code>Input -&gt; Output
 [] -&gt; 0
 [0] -&gt; 1
@@ -46,7 +46,7 @@
 [1,2,3] -&gt; 0
 [0,1,2,3] -&gt; 4
 [0,1,2,3,1000] -&gt; 4</code></pre>
-<p>. Try your own solution out against these expected outputs!</p>
+<p>. You may notice that the input list is sorted (for readability), but recall that <code>T</code> <em>may or may not</em> be sorted! Try your own solution against these expected outputs!</p>
 <h2 id="some-preliminary-observations">Some Preliminary Observations</h2>
 <p>The most important thing here is <code>T</code>. If <code>T</code> is empty, then our parking lot is empty, so the answer is obviously <code>0</code>. In all other cases, we have to figure out the lowest number that is <em>absent</em> from <code>T</code>. Essentially, we can reduce the problem as follows:</p>
 <ul>
