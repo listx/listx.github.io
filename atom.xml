@@ -22,9 +22,21 @@
 </div>
 
 <p>In one of my side projects, I encountered a pair of interesting problems, the first of which which I call the <em>Parking Lot</em> problem, and the sister problem the <em>Parking Load</em> problem. They are but toy problems, but to anyone outside of the programming field, they sound quite complicated!</p>
+<p>I’ve provided “Expected Output” sections for you to try out your own solutions against, so don’t be too aggressive with the scrollbar if you want to quiz yourself!</p>
 <h2 id="problem-statement">Problem Statement</h2>
 <p>Imagine an infinite parking lot, where each parking space is given a natural number, starting with 0, 1, 2, 3, … to infinity. The entire lot is a single row of spaces — so that space <code>0</code> is the one closest to the entrance. There are a finite number of cars parked in the lot in it at random, as people come and go as they wish. A new car has just arrived outside the lot, and the driver asks you, <em>“Where is the closest open parking space?”</em></p>
 <p>The only information you have is the <em>taken</em> spaces list (<code>T</code>), which lists all the occupied parking spaces.</p>
+<h2 id="expected-output">Expected Output</h2>
+<p>Here is a set of expected answers from our solution function, <code>get_parking_space</code>:</p>
+<pre><code>Input -&gt; Output
+[] -&gt; 0
+[0] -&gt; 1
+[0, 1] -&gt; 2
+[1] -&gt; 0
+[1,2,3] -&gt; 0
+[0,1,2,3] -&gt; 4
+[0,1,2,3,1000] -&gt; 4</code></pre>
+<p>. Try your own solution out against these expected outputs!</p>
 <h2 id="some-preliminary-observations">Some Preliminary Observations</h2>
 <p>The most important thing here is <code>T</code>. If <code>T</code> is empty, then our parking lot is empty, so the answer is obviously <code>0</code>. In all other cases, we have to figure out the lowest number that is <em>absent</em> from <code>T</code>. Essentially, we can reduce the problem as follows:</p>
 <ul>
@@ -96,6 +108,15 @@ getParkingSpace ts
 <p>An interesting related problem is what I call the <em>Parking Load</em> problem. The scenario is the same as in the <em>Parking Lot</em> problem, but with the following twist: if the last (most far away) parked car determines the bounds of the parking lot (i.e., it is no longer considered infinitely large), then how many parking spaces are available?</p>
 <p>Interestingly, this problem is easier to solve than the first problem. This seems paradoxical — surely, finding the first available parking space is easier than counting every single available space! But it is true — this problem is indeed easier — because we can solve the problem <em>without sorting</em>.</p>
 <p>If we talk in terms of our “Low-Level Interlude,” this is the same as saying, “Count the number of <code>1</code> bits.” There are very clever ways of counting bits, but that is not our concern, and so I will present a naive solution in Ruby.</p>
+<h2 id="expected-output-1">Expected Output</h2>
+<p>Like in the previous problem, below are some expected outputs for you to test your own version against.</p>
+<pre><code>Input -&gt; Output
+[] -&gt; &quot;Infinity&quot;
+[0] -&gt; 0
+[0,1] -&gt; 0
+[0,1,3] -&gt; 1
+[999] -&gt; 999
+[1,5,999] -&gt; 997</code></pre>
 <h2 id="ruby-1">Ruby</h2>
 <table class="sourceCode ruby numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
@@ -104,7 +125,7 @@ getParkingSpace ts
 5
 6
 7
-</pre></td><td class="sourceCode"><pre><code class="sourceCode ruby"><span class="kw">def</span> get_parking_load(t)
+</pre></td><td class="sourceCode"><pre><code class="sourceCode ruby"><span class="kw">def</span> get_parking_spaces(t)
 	<span class="kw">if</span> t.empty?
 		<span class="kw">return</span> <span class="st">&quot;Infinity&quot;</span>
 	<span class="kw">else</span>
@@ -117,8 +138,8 @@ getParkingSpace ts
 2
 3
 4
-</pre></td><td class="sourceCode"><pre><code class="sourceCode haskell"><span class="ot">getParkingLoad ::</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> <span class="dt">Either</span> <span class="dt">String</span> <span class="dt">Int</span>
-getParkingLoad t
+</pre></td><td class="sourceCode"><pre><code class="sourceCode haskell"><span class="ot">getParkingSpaces ::</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> <span class="dt">Either</span> <span class="dt">String</span> <span class="dt">Int</span>
+getParkingSpaces t
 	<span class="fu">|</span> null t <span class="fu">=</span> <span class="dt">Left</span> <span class="st">&quot;Infinity&quot;</span>
 	<span class="fu">|</span> otherwise <span class="fu">=</span> <span class="dt">Right</span> <span class="fu">$</span> (maximum t) <span class="fu">-</span> (length t) <span class="fu">+</span> <span class="dv">1</span></code></pre></td></tr></table>
 <h2 id="a-successor-to-fizzbuzz">A Successor to FizzBuzz?</h2>
