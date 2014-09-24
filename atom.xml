@@ -8,8 +8,134 @@
         <name>Linus Arver</name>
         <email></email>
     </author>
-    <updated>2014-09-09T00:00:00Z</updated>
+    <updated>2014-09-22T00:00:00Z</updated>
     <entry>
+    <title>The Parking Lot Problem: A Successor to FizzBuzz?</title>
+    <link href="http://listx.github.io/post/2014-09-22-parking-lot-problem.html" />
+    <id>http://listx.github.io/post/2014-09-22-parking-lot-problem.html</id>
+    <published>2014-09-22T00:00:00Z</published>
+    <updated>2014-09-22T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="info center">
+	<code class="date">2014-09-22</code>
+	<br>
+	<a href="/tag/programming.html">programming</a>, <a href="/tag/ruby.html">ruby</a>, <a href="/tag/haskell.html">haskell</a>
+</div>
+
+<p>In one of my side projects, I encountered a pair of interesting problems, the first of which which I call the <em>Parking Lot</em> problem, and the sister problem the <em>Parking Load</em> problem. They are but toy problems, but to anyone outside of the programming field, they sound quite complicated!</p>
+<h2 id="problem-statement">Problem Statement</h2>
+<p>Imagine an infinite parking lot, where each parking space is given a natural number, starting with 0, 1, 2, 3, … to infinity. The entire lot is a single row of spaces — so that space <code>0</code> is the one closest to the entrance. There are a finite number of cars parked in the lot in it at random, as people come and go as they wish. A new car has just arrived outside the lot, and the driver asks you, <em>“Where is the closest open parking space?”</em></p>
+<p>The only information you have is the <em>taken</em> spaces list (<code>T</code>), which lists all the occupied parking spaces.</p>
+<h2 id="some-preliminary-observations">Some Preliminary Observations</h2>
+<p>The most important thing here is <code>T</code>. If <code>T</code> is empty, then our parking lot is empty, so the answer is obviously <code>0</code>. In all other cases, we have to figure out the lowest number that is <em>absent</em> from <code>T</code>. Essentially, we can reduce the problem as follows:</p>
+<ul>
+<li>Find the lowest number not present in the set of integers <code>T</code>, where the lowest possible number is <code>0</code>.</li>
+</ul>
+<p>I used the metaphor of the parking spaces because it is more memorable, and more importantly, more familiar to the general public.</p>
+<h2 id="mathematical-approach">Mathematical Approach</h2>
+<p>Conceptually, the problem is very simple. Consider the infinite set <code>N</code>, which includes all natural numbers, starting from <code>0</code>. Then obviously, we can start with <code>N</code> itself, and remove every number in <code>N</code> that is also present in <code>T</code>. Then, when we are done (<code>T</code> is empty), we can look at <code>N</code> and retrieve the lowest number.</p>
+<h3 id="sorting">Sorting</h3>
+<p>Intuitively, we are really only interested in first consecutive group of cars parked next to each other. Essentially, what you do is walk along from the very first parking space, <code>0</code>, and see if it is occupied. If it is occupied, you move on to the next space — if it is not occupied, you can stop because you found your answer!</p>
+<p>There is no way to solve the problem without first sorting <code>T</code>.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> You can solve the problem without sorting only in the edge case where <code>T</code>’s lowest number is greater than <code>0</code> — i.e., if the car most closely parked to the entrance is not on <code>0</code>, then you do not need to bother sorting <code>T</code>, because the answer is simply <code>0</code>. And, finding the lowest number in a given set is always a <span class="math">\(O(n)\)</span> operation because you just need to loop through the entire set one time, keeping track of the lowest number found.</p>
+<p>In the more common case (as seen in real life), the parking space closest to the driver (the most desirable parking space) is already taken; and what’s more, the group of spaces closest to the driver is already taken. In this case, we have to proceed from space <code>0</code>, and incrementally observe every subsequent space, until we arrive at an empty parking space. The insight here is that we are treating the multitude of consecutively parked cars as one giant car parked across multiple spaces, and are just trying to find the total number of spaces this car occupies.</p>
+<h2 id="ruby">Ruby</h2>
+<p>I think it is time for some actual code. While I could explain how the Ruby version works, I feel that I have already expounded upon the problem at length above, so the code here should make intuitive sense.</p>
+<table class="sourceCode ruby numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+</pre></td><td class="sourceCode"><pre><code class="sourceCode ruby"><span class="kw">def</span> get_parking_space(t)
+	t_sorted = t.sort
+
+	i = <span class="dv">0</span>
+	<span class="kw">while</span> i &lt; t_sorted.size
+		<span class="kw">if</span> i &lt; t_sorted[i]
+			<span class="kw">break</span>
+		<span class="kw">end</span>
+		i += <span class="dv">1</span>
+	<span class="kw">end</span>
+
+	<span class="kw">return</span> i
+<span class="kw">end</span></code></pre></td></tr></table>
+<h2 id="haskell">Haskell</h2>
+<p>The Haskell version is a direct translation of the Ruby version, as an iterative approach works just fine. The only drawback is that we use <code>Int</code> instead of the arbitrarily large <code>Integer</code> type for succinctness (we can use <code>Integer</code>, but some built-in functions like <code>sort</code> only work on <code>Int</code>).</p>
+<table class="sourceCode haskell numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="sourceCode"><pre><code class="sourceCode haskell"><span class="kw">import </span><span class="dt">Data.List</span>
+
+<span class="ot">getParkingSpace ::</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> <span class="dt">Int</span>
+getParkingSpace ts
+    <span class="fu">|</span> null ts <span class="fu">=</span> <span class="dv">0</span>
+    <span class="fu">|</span> otherwise <span class="fu">=</span> loop <span class="dv">0</span> <span class="fu">$</span> sort ts
+    <span class="kw">where</span>
+    loop i ts&#39;
+        <span class="fu">|</span> i <span class="fu">==</span> length ts&#39; <span class="fu">=</span> i
+        <span class="fu">|</span> i <span class="fu">&lt;</span> ts&#39; <span class="fu">!!</span> i <span class="fu">=</span> i
+        <span class="fu">|</span> otherwise <span class="fu">=</span> loop (i <span class="fu">+</span> <span class="dv">1</span>) ts&#39;</code></pre></td></tr></table>
+<h2 id="low-level-interlude">Low-Level Interlude</h2>
+<p>Did you realize that the basic concept here is the same as finding the least significant bit (LSB)? I.e., if the parking lot is one giant computer word, and a <code>1</code> bit represents an available parking space, then we are simply trying to find the LSB (the index of the bit being the same thing as the parking space number). This is such a common scenario, that there are native hardware instructions for this on most all CPUs. The canonical name for this operation is <a href="http://en.wikipedia.org/wiki/Find_first_set"><em>find first set</em></a> or <em>find first one</em>.<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> In Linux, you can do <code>man ffs</code> to learn about how to use it in your C program.</p>
+<p>Of course, the parking lot in our problem is of infinite size, which makes the size of <code>T</code> arbitrarily large, and thus we cannot use <code>ffs</code> here.</p>
+<h1 id="the-parking-load-problem">The Parking Load Problem</h1>
+<p>An interesting related problem is what I call the <em>Parking Load</em> problem. The scenario is the same as in the <em>Parking Lot</em> problem, but with the following twist: if the last (most far away) parked car determines the bounds of the parking lot (i.e., it is no longer considered infinitely large), then how many parking spaces are available?</p>
+<p>Interestingly, this problem is easier to solve than the first problem. This seems paradoxical — surely, finding the first available parking space is easier than counting every single available space! But it is true — this problem is indeed easier — because we can solve the problem <em>without sorting</em>.</p>
+<p>If we talk in terms of our “Low-Level Interlude,” this is the same as saying, “Count the number of <code>1</code> bits.” There are very clever ways of counting bits, but that is not our concern, and so I will present a naive solution in Ruby.</p>
+<h2 id="ruby-1">Ruby</h2>
+<table class="sourceCode ruby numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="sourceCode"><pre><code class="sourceCode ruby"><span class="kw">def</span> get_parking_load(t)
+	<span class="kw">if</span> t.empty?
+		<span class="kw">return</span> <span class="st">&quot;Infinity&quot;</span>
+	<span class="kw">else</span>
+		<span class="kw">return</span> (t.max - t.size) + <span class="dv">1</span>
+	<span class="kw">end</span>
+<span class="kw">end</span></code></pre></td></tr></table>
+<h2 id="haskell-1">Haskell</h2>
+<p>The Haskell version is not much different.</p>
+<table class="sourceCode haskell numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+2
+3
+4
+</pre></td><td class="sourceCode"><pre><code class="sourceCode haskell"><span class="ot">getParkingLoad ::</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> <span class="dt">Either</span> <span class="dt">String</span> <span class="dt">Int</span>
+getParkingLoad t
+	<span class="fu">|</span> null t <span class="fu">=</span> <span class="dt">Left</span> <span class="st">&quot;Infinity&quot;</span>
+	<span class="fu">|</span> otherwise <span class="fu">=</span> <span class="dt">Right</span> <span class="fu">$</span> (maximum t) <span class="fu">-</span> (length t) <span class="fu">+</span> <span class="dv">1</span></code></pre></td></tr></table>
+<h2 id="a-successor-to-fizzbuzz">A Successor to FizzBuzz?</h2>
+<p>For some reason, I get a strong feeling that these problems are much more interesting than <a href="http://en.wikipedia.org/wiki/Fizz_buzz">FizzBuzz</a>. The fact that we talk about an <em>infinitely large</em> parking lot will probably throw a lot of newbies and naive thinkers off the right track. You have to be especially careful about edge cases, such as the empty list in the second Haskell version. I believe that good coders have a keen sense of edge cases, because good algorithms must withstand them without blowing up. Just review the Haskell solutions and notice all of the edge cases that we have to look out for!</p>
+<p>You might even get some crazy answers that talk at length about related nonessential tangents and Big-O notation, but fail to realize just how simple, at least conceptually, the problem becomes once you sort <code>T</code>. And, I like these problems more than FizzBuzz because there are so many interesting points about it. For example, you can ask a simple related question: if you were the keeper of this parking lot, what kind of data structure would you use to keep track of the taken parking spaces? And of course, there are very conspicuous low-level analogues that more experienced coders can relate to.</p>
+<p>I hope you enjoyed reading about these problems. Maybe you can quiz your friend about it, and see how they respond!</p>
+<p>Happy hacking!</p>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>You can, for example, loop from <code>0</code> to infinity and then see if this number exists in <code>T</code> — but this is probably the worst way to solve the problem, at least from a computational perspective.<a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p>A closely related operation is <a href="http://en.wikipedia.org/wiki/Two&#39;s_complement">two’s complement</a> arithmetic. You can read about it from the <a href="http://en.wikipedia.org/wiki/Find_first_set">“Find first set”</a> article on Wikipedia.<a href="#fnref2">↩</a></p></li>
+</ol>
+</div>
+]]></summary>
+</entry>
+<entry>
     <title>My First Contribution to Git</title>
     <link href="http://listx.github.io/post/2014-09-09-my-first-contribution-to-git.html" />
     <id>http://listx.github.io/post/2014-09-09-my-first-contribution-to-git.html</id>
@@ -641,13 +767,13 @@ NVRM: components have the same version.</code></pre></td></tr></table>
 <p>That is, indent as little as possible.</p>
 <h4 id="where-clause"><code>where</code> clause</h4>
 <p>Whenever you use a <code>where</code> clause, use it like this:</p>
-<pre><code>	...
-	f x y
+<pre><code>...
+f x y
 	where
 	f = ...
 	x = ...
 	y = ...
-    ...</code></pre>
+	...</code></pre>
 <p>That is, put <code>where</code> on its own line, and then avoid any additional indentation for all definitions that follow.</p>
 <h4 id="guards">Guards</h4>
 <p>Use guards like this:</p>
@@ -711,20 +837,20 @@ NVRM: components have the same version.</code></pre></td></tr></table>
 <p>Haddock prefers single-line comments, anyway.</p>
 <h3 id="use-two-groups-of-imports-system-wide-and-package-wide-and-have-each-group-alphabetically-ordered">Use two groups of imports: system-wide and package-wide (and have each group alphabetically ordered)</h3>
 <p>Import all external library modules in their own ``paragraph’’, followed by those modules of your own library; e.g., do</p>
-<pre><code>	import Control.Monad
-	import Data.Maybe
-	import Data.Text
+<pre><code>import Control.Monad
+import Data.Maybe
+import Data.Text
 
-	import MyModule.One
-	import MyModule.Two</code></pre>
+import MyModule.One
+import MyModule.Two</code></pre>
 <p>.</p>
 <h3 id="place-one-pragma-per-line-in-alphabetical-order">Place one pragma per line, in alphabetical order</h3>
 <p>Do it like this:</p>
-<pre><code>	{-# LANGUAGE SomeBadExtension #-}
-	{-# LANGUAGE SomeCoolExtension #-}
-	{-# LANGUAGE SomeScaryExtension #-}
-	{-# LANGUAGE SomeUglyExtension #-}
-	{-# LANGUAGE StrangeExtensionNobodyUnderstands #-}</code></pre>
+<pre><code>{-# LANGUAGE SomeBadExtension #-}
+{-# LANGUAGE SomeCoolExtension #-}
+{-# LANGUAGE SomeScaryExtension #-}
+{-# LANGUAGE SomeUglyExtension #-}
+{-# LANGUAGE StrangeExtensionNobodyUnderstands #-}</code></pre>
 <h3 id="try-to-use-as-few-pragmas-as-possible">Try to use as few pragmas as possible</h3>
 <p>Do not use 20 language extensions when you don’t have to. Saving a handful of keystrokes is not a good reason to use a multitude of extensions.</p>
 <h3 id="when-writing-documentation-prefer-high-level-documentation-over-line-by-line-documentation">When writing documentation, prefer high-level documentation over line-by-line documentation</h3>
@@ -1723,572 +1849,6 @@ drawStuff <span class="dt">GLIDs</span>{<span class="fu">..</span>} <span class=
 <hr />
 <ol>
 <li id="fn1"><p>SQLite, perhaps the most influential public domain project, has a practice of requiring all contributors to write a statement explicitly declaring that they knowingly submit their patches/improvements into the public domain. I am too lazy to do the same, so BSD license it is.<a href="#fnref1">↩</a></p></li>
-</ol>
-</div>
-]]></summary>
-</entry>
-<entry>
-    <title>Using cblrepo in Arch Linux</title>
-    <link href="http://listx.github.io/post/2014-01-06-using-cblrepo-in-arch-linux.html" />
-    <id>http://listx.github.io/post/2014-01-06-using-cblrepo-in-arch-linux.html</id>
-    <published>2014-01-06T00:00:00Z</published>
-    <updated>2014-01-06T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="info center">
-	<code class="date">2014-01-06</code>
-	<br>
-	<a href="/tag/arch.html">arch</a>, <a href="/tag/linux.html">linux</a>, <a href="/tag/haskell.html">haskell</a>, <a href="/tag/cblrepo.html">cblrepo</a>
-</div>
-
-<p>UPDATE 2014-01-24: See <a href="2014-01-24-cabal2pkgbuild.html">this post</a>.</p>
-<p>The <a href="https://github.com/magthe/cblrepo">cblrepo</a> command line utility helps to maintain a set of Haskell packages, and is used as the de facto Hackage package manager in Arch Linux.</p>
-<p>At least in Arch Linux, the idea is to first install the base set of available Haskell packages from the <a href="https://wiki.archlinux.org/index.php/Haskell_Package_Guidelines">[haskell-core]</a> repo. If you now want to install a package from http://hackage.haskell.org <em>and</em> want to track it with Arch Linux’s own package manager <code>pacman</code>, you have to somehow generate a PKGBUILD from the Hackage package and feed it into <code>makepkg</code>, and then call <code>sudo pacman -U &lt;generated_package&gt;</code> on it. You can do this with <code>cblrepo</code>, but it takes a number of steps that could get very tedious, very fast:</p>
-<ol style="list-style-type: decimal">
-<li>Sync all the packages on Hackage with <code>cblrepo</code>, via <code>cblrepo sync</code>.</li>
-<li>Initialize the <code>cblrepo.db</code> file, which is generated automatically each time you execute a <code>cblrepo add ...</code> command.</li>
-<li>Add all of the standard packages that comes with installing GHC (<code>ghc</code> in Arch Linux) with <code>cblrepo add --ghc-pkg ...</code>.</li>
-<li>Add all the packages installed by yourself from the [haskell-core] repository with <code>cblrepo add --distro-pkg ...</code></li>
-<li>Add the <code>&lt;package_name&gt;.cabal</code> URL from the Hackage package’s page, which is in the format <code>http://hackage.haskell.org/package/&lt;package_name&gt;</code>.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a></li>
-<li>Run <code>cblrepo pkgbuild &lt;package_name&gt;</code>.</li>
-<li>Go into the generated <code>haskell-&lt;package_name_lowercased&gt;</code> directory which contains the <code>PKGBUILD</code> we are after, and run <code>makepkg -s</code>.</li>
-<li>Finally run <code>sudo pacman -U &lt;package_arch_linux_format&gt;</code> on it to track it with <code>pacman</code>.</li>
-</ol>
-<p>The problem is that steps 3 and 4 take forever to do by hand because you have to add every single package individually, writing out the version numbers (and, it is something of a mystery unless you know where to look for the crucial information).<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> Plus, you have to redo all steps 1 through 7 each time you upgrade <code>ghc</code>. So, naturally, I wrote a script (called <code>maintain_cblrepo.sh</code>) to automate things a bit.</p>
-<table class="sourceCode numberLines bash"><tr class="sourceCode"><td class="lineNumbers"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-34
-35
-36
-37
-38
-39
-40
-41
-42
-43
-44
-45
-46
-47
-48
-49
-50
-51
-52
-53
-54
-55
-56
-57
-58
-59
-60
-61
-62
-63
-64
-65
-66
-67
-68
-69
-70
-71
-72
-73
-74
-75
-76
-77
-78
-79
-80
-81
-82
-83
-84
-85
-86
-87
-88
-89
-90
-91
-92
-93
-94
-95
-96
-97
-98
-99
-100
-101
-102
-103
-104
-105
-106
-107
-108
-109
-110
-111
-112
-113
-114
-115
-116
-117
-118
-119
-120
-121
-</pre></td><td class="sourceCode"><pre><code class="sourceCode bash"><span class="co">#!/usr/bin/env zsh</span>
-<span class="co"># LICENSE: PUBLIC DOMAIN</span>
-<span class="co"># Usage: ./maintain_cblrepo.sh &lt;HACKAGE_PACKAGES_FILE&gt; &lt;MODE&gt;</span>
-<span class="ot">usage=</span><span class="st">&quot;Usage: ./maintain_cblrepo.sh &lt;HACKAGE_PACKAGES_FILE&gt; &lt;MODE&gt;&quot;</span>
-
-<span class="co"># Exit immediately if any errors are found</span>
-<span class="kw">setopt</span> errexit
-<span class="co"># Avoid &quot;no matches found&quot; error if a file does not exist; see</span>
-<span class="co"># http://www.zsh.org/mla/users/2008/msg01139.html</span>
-<span class="kw">setopt</span> local_options no_nomatch
-
-<span class="kw">if [[</span> <span class="ot">-z</span> <span class="ot">$1</span><span class="kw"> ]]</span>; <span class="kw">then</span>
-	<span class="kw">echo</span> <span class="ot">$usage</span>
-	<span class="kw">exit</span> 1
-<span class="kw">fi</span>
-<span class="kw">if [[</span> <span class="ot">!</span> <span class="ot">-f</span> <span class="ot">$1</span><span class="kw"> ]]</span>; <span class="kw">then</span>
-	<span class="kw">echo</span> <span class="st">&quot;</span><span class="dt">\`</span><span class="ot">$1</span><span class="st">&#39; does not exist or is not a regular file&quot;</span>
-	<span class="kw">exit</span> 1
-<span class="kw">fi</span>
-<span class="kw">if [[</span> <span class="ot">-z</span> <span class="ot">$2</span><span class="kw"> ]]</span>; <span class="kw">then</span>
-	<span class="kw">echo</span> <span class="ot">$usage</span>
-	<span class="kw">exit</span> 1
-<span class="kw">fi</span>
-
-<span class="ot">hackage_url=</span><span class="st">&quot;http://hackage.haskell.org&quot;</span>
-<span class="ot">hackage_packages_file=(</span><span class="kw">$(&lt;</span><span class="ot">$1</span><span class="kw">)</span><span class="ot">)</span>
-
-<span class="ot">mode=$2</span>
-
-<span class="kw">case</span> <span class="ot">$mode</span><span class="kw"> in</span>
-	<span class="co">### Remove any old cblrepo.db file. ###</span>
-	<span class="kw">(</span>initdb<span class="kw">|</span>initdb-sync<span class="kw">)</span>
-	<span class="kw">rm</span> -f cblrepo.db
-
-	<span class="co"># Add packages provided by GHC</span>
-
-	<span class="co"># Pacman provides information about which modules are exposed by installing the</span>
-	<span class="co"># &#39;ghc&#39; package. We put each package into an array.</span>
-	<span class="ot">provided=($(</span><span class="kw">pacman</span> -Qi ghc <span class="kw">|</span> <span class="kw">grep</span> Provides <span class="kw">|</span> <span class="kw">cut</span> -d <span class="st">&quot;:&quot;</span> -f2<span class="ot">))</span>
-
-	<span class="kw">for</span> <span class="kw">p</span> in <span class="ot">$provided</span><span class="kw">;</span> <span class="kw">do</span>
-		<span class="co"># Change the syntax to be compatible with cblrepo. The `cut` command here</span>
-		<span class="co"># removes the &#39;haskell-&#39; prefix for each package, and `sed` here replaces</span>
-		<span class="co"># each &#39;=&#39; sign with a &#39;,&#39;, as per cblrepo&#39;s requirements.</span>
-		<span class="ot">package=$(</span><span class="kw">echo</span> <span class="ot">$p</span> <span class="kw">|</span> <span class="kw">cut</span> -c9- <span class="kw">|</span> <span class="kw">sed</span> <span class="st">&#39;s/=/,/&#39;</span><span class="ot">)</span>
-		<span class="ot">command=</span><span class="st">&quot;cblrepo add --ghc-pkg </span><span class="ot">$package</span><span class="st">&quot;</span>
-		<span class="co"># Tell user what we are going to do.</span>
-		<span class="kw">echo</span> <span class="ot">$command</span>
-		<span class="co"># Actually execute the command.</span>
-		<span class="kw">eval</span> <span class="ot">$command</span>
-	<span class="kw">done</span>
-
-	<span class="co"># Add packages installed by the user from [haskell-core] or some other Arch Linux repository</span>
-	<span class="ot">installed=($(</span><span class="kw">pacman</span> -Qq <span class="kw">|</span> <span class="kw">grep</span> <span class="st">&quot;^haskell-&quot;</span> <span class="kw">|</span> <span class="kw">sed</span> <span class="st">&#39;s/^haskell-//&#39;</span><span class="ot">))</span>
-	<span class="co"># Filter out those packages that were installed from Hackage using this very</span>
-	<span class="co"># same script (in Arch Linux, the hackage packages, once installed, are in</span>
-	<span class="co"># the format `haskell-&lt;lowercased_package_name&gt;&#39;). This way, we avoid</span>
-	<span class="co"># duplicate definitions and the packages added with --distro-pkg will really</span>
-	<span class="co"># be those packages available from the distribution&#39;s official haskell</span>
-	<span class="co"># repository.</span>
-	<span class="ot">hackage_lowercased=($hackage_packages_file</span>:l<span class="ot">)</span>
-	<span class="ot">installed_filtered=(${installed:</span><span class="er">|</span><span class="ot">hackage_lowercased})</span>
-
-	<span class="kw">for</span> <span class="kw">p</span> in <span class="ot">$installed_filtered</span><span class="kw">;</span> <span class="kw">do</span>
-		<span class="ot">version=$(</span><span class="kw">pacman</span> -Q haskell-<span class="ot">$p</span> <span class="kw">|</span> <span class="kw">cut</span> -d <span class="st">&quot; &quot;</span> -f2 <span class="kw">|</span> <span class="kw">sed</span> <span class="st">&#39;s/-/,/&#39;</span><span class="ot">)</span>
-		<span class="ot">command=</span><span class="st">&quot;cblrepo add --distro-pkg </span><span class="ot">$p</span><span class="st">,</span><span class="ot">$version</span><span class="st">&quot;</span>
-		<span class="kw">echo</span> <span class="ot">$command</span>
-		<span class="kw">eval</span> <span class="ot">$command</span>
-	<span class="kw">done</span>
-
-	<span class="kw">if [[</span> <span class="ot">$mode</span> <span class="ot">==</span> initdb-sync<span class="kw"> ]]</span>; <span class="kw">then</span>
-		<span class="co"># Sync cblrepo with Hackage</span>
-		<span class="kw">echo</span> -n <span class="st">&quot;Syncing cblrepo with Hackage...&quot;</span>
-		<span class="kw">cblrepo</span> sync
-		<span class="kw">echo</span> <span class="st">&quot;done&quot;</span>
-	<span class="kw">fi</span>
-
-	<span class="co"># Add packages from Hackage</span>
-	<span class="kw">for</span> <span class="kw">hp</span> in <span class="ot">$hackage_packages_file</span><span class="kw">;</span> <span class="kw">do</span>
-		<span class="co"># Grab latest version of package</span>
-		<span class="ot">cabal_file=$(</span><span class="kw">curl</span> -s <span class="ot">$hackage_url</span>/package/<span class="ot">$hp</span> <span class="kw">|</span> <span class="kw">grep</span> -ioE <span class="st">&quot;Cabal source package[)&lt;&gt;/lia href=</span><span class="dt">\&quot;</span><span class="st">]+\/package\/.+\.cabal&quot;</span> <span class="kw">|</span> <span class="kw">grep</span> -ioE <span class="st">&quot;\/package.+&quot;</span><span class="ot">)</span>
-		<span class="ot">command=</span><span class="st">&quot;cblrepo add --cbl-url </span><span class="ot">$hackage_url$cabal_file</span><span class="st">&quot;</span>
-		<span class="kw">echo</span> <span class="ot">$command</span>
-		<span class="kw">eval</span> <span class="ot">$command</span>
-	<span class="kw">done</span>
-
-	<span class="co"># Link the generated cblrepo.db file into ~/.cblrepo</span>
-	<span class="kw">ln</span> -sf <span class="ot">$PWD</span>/cblrepo.db ~/.cblrepo/cblrepo.db
-	<span class="kw">;;</span>
-	<span class="co">### Generate PKGBUILD files for Hackage packages ###</span>
-	<span class="kw">(</span>pkgbuild<span class="kw">)</span>
-
-	<span class="co"># Remove any old packages.</span>
-	<span class="kw">echo</span> <span class="st">&quot;Deleting old PKGBUILD directories...&quot;</span>
-	<span class="kw">rm</span> -rfv haskell-*
-
-	<span class="ot">i=</span>1
-	<span class="kw">for</span> <span class="kw">hp</span> in <span class="ot">${hackage_packages_file}</span><span class="kw">;</span> <span class="kw">do</span>
-		<span class="ot">command=</span><span class="st">&quot;cblrepo pkgbuild --patchdir patch </span><span class="ot">$hp</span><span class="st">&quot;</span>
-		<span class="kw">echo</span> <span class="st">&quot;(</span><span class="ot">$i</span><span class="st">/</span><span class="ot">${#hackage_packages_file}</span><span class="st">) </span><span class="ot">$command</span><span class="st">&quot;</span>
-		<span class="kw">eval</span> <span class="ot">$command</span>
-		<span class="kw">((</span> i+=1 <span class="kw">))</span>
-	<span class="kw">done</span>
-	<span class="kw">;;</span>
-	<span class="co">### Create Arch Linux packages for the Hackage packages ###</span>
-	<span class="kw">(</span>makepkg<span class="kw">)</span>
-	<span class="kw">for</span> <span class="kw">pdir</span> in haskell-*<span class="kw">;</span> <span class="kw">do</span>
-		<span class="kw">cd</span> <span class="ot">$pdir</span>
-		<span class="kw">echo</span> <span class="ot">$(</span><span class="kw">basename</span> <span class="ot">$PWD)</span>
-		<span class="kw">makepkg</span> -sf
-		<span class="kw">sudo</span> pacman -U <span class="ot">$(</span><span class="kw">basename</span> <span class="ot">$PWD)</span>-*.pkg.tar.xz
-		<span class="kw">cd</span> ..
-		<span class="kw">echo</span>
-		<span class="kw">echo</span> <span class="st">&quot;  Finished making/installing package for </span><span class="ot">$pdir</span><span class="st">&quot;</span>
-		<span class="kw">echo</span>
-	<span class="kw">done</span>
-	<span class="kw">;;</span>
-	*<span class="kw">)</span>
-	<span class="kw">echo</span> <span class="st">&quot;Unrecognized &lt;MODE&gt;; valid ones are: initdb initdb-sync pkgbuild makepkg&quot;</span>
-	<span class="kw">;;</span>
-<span class="kw">esac</span></code></pre></td></tr></table>
-<p>A simple <code>HACKAGE_PACKAGES_FILE</code> (perhaps named <code>hackage_pkgs</code>) might look something like this:</p>
-<table class="sourceCode numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
-2
-3
-4
-</pre></td><td class="sourceCode"><pre><code class="sourceCode">bindings-DSL
-bindings-GLFW
-GLFW-b
-rosezipper</code></pre></td></tr></table>
-<p>Here is sample output from the command <code>./maintain_cblrepo.sh hackage_pkgs initdb</code>:</p>
-<table class="sourceCode numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-34
-35
-36
-37
-38
-39
-40
-41
-42
-43
-44
-45
-46
-47
-48
-49
-50
-51
-52
-53
-54
-55
-56
-57
-58
-59
-60
-61
-62
-63
-64
-65
-66
-67
-68
-69
-70
-71
-72
-73
-74
-75
-76
-77
-78
-79
-80
-81
-82
-83
-84
-85
-86
-87
-88
-89
-90
-91
-92
-93
-94
-95
-96
-97
-98
-99
-100
-101
-102
-103
-104
-105
-106
-107
-108
-109
-110
-111
-112
-113
-114
-115
-116
-117
-118
-119
-120
-121
-122
-123
-124
-125
-126
-127
-128
-129
-130
-131
-132
-133
-134
-135
-136
-137
-138
-139
-</pre></td><td class="sourceCode"><pre><code class="sourceCode">cblrepo add --ghc-pkg array,0.4.0.1
-cblrepo add --ghc-pkg base,4.6.0.1
-cblrepo add --ghc-pkg binary,0.5.1.1
-cblrepo add --ghc-pkg bin-package-db,0.0.0.0
-cblrepo add --ghc-pkg bytestring,0.10.0.2
-cblrepo add --ghc-pkg containers,0.5.0.0
-cblrepo add --ghc-pkg deepseq,1.3.0.1
-cblrepo add --ghc-pkg directory,1.2.0.1
-cblrepo add --ghc-pkg filepath,1.3.0.1
-cblrepo add --ghc-pkg ghc-prim,0.3.0.0
-cblrepo add --ghc-pkg haskell2010,1.1.1.0
-cblrepo add --ghc-pkg haskell98,2.0.0.2
-cblrepo add --ghc-pkg hoopl,3.9.0.0
-cblrepo add --ghc-pkg hpc,0.6.0.0
-cblrepo add --ghc-pkg integer-gmp,0.5.0.0
-cblrepo add --ghc-pkg old-locale,1.0.0.5
-cblrepo add --ghc-pkg old-time,1.1.0.1
-cblrepo add --ghc-pkg pretty,1.1.1.0
-cblrepo add --ghc-pkg process,1.1.0.2
-cblrepo add --ghc-pkg template-haskell,2.8.0.0
-cblrepo add --ghc-pkg time,1.4.0.1
-cblrepo add --ghc-pkg unix,2.6.0.1
-cblrepo add --ghc-pkg cabal,1.16.0
-cblrepo add --distro-pkg aeson,0.6.2.1,5
-cblrepo add --distro-pkg ansi-terminal,0.6.1,1
-cblrepo add --distro-pkg ansi-wl-pprint,0.6.7.1,1
-cblrepo add --distro-pkg attoparsec,0.10.4.0,4
-cblrepo add --distro-pkg base-unicode-symbols,0.2.2.4,27
-cblrepo add --distro-pkg base64-bytestring,1.0.0.1,2
-cblrepo add --distro-pkg binary,0.7.1.0,1
-cblrepo add --distro-pkg blaze-builder,0.3.3.2,1
-cblrepo add --distro-pkg blaze-html,0.6.1.2,2
-cblrepo add --distro-pkg blaze-markup,0.5.1.6,2
-cblrepo add --distro-pkg byteable,0.1.1,1
-cblrepo add --distro-pkg cairo,0.12.5.0,1
-cblrepo add --distro-pkg case-insensitive,1.1.0.2,1
-cblrepo add --distro-pkg cereal,0.4.0.1,1
-cblrepo add --distro-pkg cmdargs,0.10.7,1
-cblrepo add --distro-pkg colour,2.3.3,3
-cblrepo add --distro-pkg conduit,1.0.9.3,3
-cblrepo add --distro-pkg cpphs,1.17.1,2
-cblrepo add --distro-pkg cryptohash,0.11.1,1
-cblrepo add --distro-pkg data-default,0.5.3,3
-cblrepo add --distro-pkg data-default-class,0.0.1,2
-cblrepo add --distro-pkg data-default-instances-base,0.0.1,2
-cblrepo add --distro-pkg data-default-instances-containers,0.0.1,2
-cblrepo add --distro-pkg data-default-instances-dlist,0.0.1,3
-cblrepo add --distro-pkg data-default-instances-old-locale,0.0.1,2
-cblrepo add --distro-pkg digest,0.0.1.2,3
-cblrepo add --distro-pkg dlist,0.6.0.1,1
-cblrepo add --distro-pkg entropy,0.2.2.4,1
-cblrepo add --distro-pkg extensible-exceptions,0.1.1.4,27
-cblrepo add --distro-pkg fgl,5.4.2.4,27
-cblrepo add --distro-pkg glib,0.12.5.0,1
-cblrepo add --distro-pkg gluraw,1.4.0.0,2
-cblrepo add --distro-pkg glut,2.5.0.2,1
-cblrepo add --distro-pkg graphviz,2999.16.0.0,8
-cblrepo add --distro-pkg gtk,0.12.5.0,1
-cblrepo add --distro-pkg hashable,1.2.1.0,1
-cblrepo add --distro-pkg haskell-src-exts,1.14.0,1
-cblrepo add --distro-pkg highlighting-kate,0.5.5.1,3
-cblrepo add --distro-pkg hinotify,0.3.6,1
-cblrepo add --distro-pkg hlint,1.8.55,1
-cblrepo add --distro-pkg hostname,1.0,27
-cblrepo add --distro-pkg hs-bibutils,5.0,3
-cblrepo add --distro-pkg hscolour,1.20.3,27
-cblrepo add --distro-pkg hslua,0.3.10,1
-cblrepo add --distro-pkg http,4000.2.10,2
-cblrepo add --distro-pkg http-types,0.8.3,2
-cblrepo add --distro-pkg hunit,1.2.5.2,2
-cblrepo add --distro-pkg json,0.7,9
-cblrepo add --distro-pkg lifted-base,0.2.1.1,1
-cblrepo add --distro-pkg mmorph,1.0.1,1
-cblrepo add --distro-pkg monad-control,0.3.2.2,1
-cblrepo add --distro-pkg monadcatchio-mtl,0.3.1.0,1
-cblrepo add --distro-pkg monadcatchio-transformers,0.3.1.0,1
-cblrepo add --distro-pkg monads-tf,0.1.0.1,27
-cblrepo add --distro-pkg mtl,2.1.2,27
-cblrepo add --distro-pkg mwc-random,0.13.1.0,1
-cblrepo add --distro-pkg nats,0.1.2,1
-cblrepo add --distro-pkg network,2.4.2.2,1
-cblrepo add --distro-pkg opengl,2.9.1.0,1
-cblrepo add --distro-pkg openglraw,1.4.0.0,2
-cblrepo add --distro-pkg pandoc,1.12.2.1,4
-cblrepo add --distro-pkg pandoc-types,1.12.3,5
-cblrepo add --distro-pkg pango,0.12.5.0,1
-cblrepo add --distro-pkg parsec,3.1.4,1
-cblrepo add --distro-pkg pcre-light,0.4,27
-cblrepo add --distro-pkg polyparse,1.9,1
-cblrepo add --distro-pkg pqueue,1.2.1,1
-cblrepo add --distro-pkg primitive,0.5.1.0,1
-cblrepo add --distro-pkg quickcheck,2.6,2
-cblrepo add --distro-pkg random,1.0.1.1,27
-cblrepo add --distro-pkg regex-base,0.93.2,27
-cblrepo add --distro-pkg regex-compat,0.95.1,27
-cblrepo add --distro-pkg regex-pcre,0.94.4,1
-cblrepo add --distro-pkg regex-posix,0.95.2,27
-cblrepo add --distro-pkg regex-tdfa,1.1.8,30
-cblrepo add --distro-pkg resourcet,0.4.10,2
-cblrepo add --distro-pkg safe,0.3.3,3
-cblrepo add --distro-pkg sdl,0.6.5,1
-cblrepo add --distro-pkg sdl-image,0.6.1,28
-cblrepo add --distro-pkg sdl-ttf,0.6.2,3
-cblrepo add --distro-pkg semigroups,0.12.1,1
-cblrepo add --distro-pkg sha,1.6.3,1
-cblrepo add --distro-pkg split,0.2.2,2
-cblrepo add --distro-pkg stm,2.4.2,3
-cblrepo add --distro-pkg syb,0.4.1,2
-cblrepo add --distro-pkg system-fileio,0.3.11,6
-cblrepo add --distro-pkg system-filepath,0.4.8,1
-cblrepo add --distro-pkg tagged,0.7,1
-cblrepo add --distro-pkg tagsoup,0.13,1
-cblrepo add --distro-pkg temporary,1.1.2.4,3
-cblrepo add --distro-pkg test-framework,0.8.0.3,3
-cblrepo add --distro-pkg test-framework-quickcheck2,0.3.0.2,3
-cblrepo add --distro-pkg texmath,0.6.5.2,3
-cblrepo add --distro-pkg text,0.11.3.1,1
-cblrepo add --distro-pkg transformers,0.3.0.0,27
-cblrepo add --distro-pkg transformers-base,0.4.1,27
-cblrepo add --distro-pkg uniplate,1.6.12,1
-cblrepo add --distro-pkg unix-compat,0.4.1.1,2
-cblrepo add --distro-pkg unordered-containers,0.2.3.3,1
-cblrepo add --distro-pkg utf8-string,0.3.7,27
-cblrepo add --distro-pkg utility-ht,0.0.9,1
-cblrepo add --distro-pkg vector,0.10.9.1,1
-cblrepo add --distro-pkg void,0.6.1,6
-cblrepo add --distro-pkg wl-pprint-text,1.1.0.1,1
-cblrepo add --distro-pkg x11,1.6.1.1,5
-cblrepo add --distro-pkg x11-xft,0.3.1,31
-cblrepo add --distro-pkg xml,1.3.13,4
-cblrepo add --distro-pkg xmonad,0.11,7
-cblrepo add --distro-pkg xmonad-contrib,0.11.2,2
-cblrepo add --distro-pkg yaml,0.8.5.2,4
-cblrepo add --distro-pkg zip-archive,0.1.4,1
-cblrepo add --distro-pkg zlib,0.5.4.1,2
-cblrepo add --cbl-url http://hackage.haskell.org/package/bindings-DSL-1.0.20/bindings-DSL.cabal
-cblrepo add --cbl-url http://hackage.haskell.org/package/bindings-GLFW-3.0.3.2/bindings-GLFW.cabal
-cblrepo add --cbl-url http://hackage.haskell.org/package/GLFW-b-1.4.6/GLFW-b.cabal
-cblrepo add --cbl-url http://hackage.haskell.org/package/rosezipper-0.2/rosezipper.cabal</code></pre></td></tr></table>
-<p>This is infinitely faster than adding each package by hand. Feel free to copy/paste/modify/redistribute the code in <code>maintain_cblrepo.sh</code> to suit your needs.</p>
-<div class="footnotes">
-<hr />
-<ol>
-<li id="fn1"><p>I use a <a href="http://mycroftproject.com/search-engines.html?name=hackage">Hackage-tailored search engine for Firefox</a> to make package searching on Hackage easier.<a href="#fnref1">↩</a></p></li>
-<li id="fn2"><p>The command for finding out which packages are provided by GHC is <code>pacman -Qi ghc</code>, and you have to look for the <code>Provides</code> field. As for the packages from [haskell-core], you have to do some manual grepping for packages that start with <code>haskell-</code> from the command <code>pacman -Q</code>.<a href="#fnref2">↩</a></p></li>
 </ol>
 </div>
 ]]></summary>

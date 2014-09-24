@@ -38,13 +38,13 @@
 <p>That is, indent as little as possible.</p>
 <h4 id="where-clause"><code>where</code> clause</h4>
 <p>Whenever you use a <code>where</code> clause, use it like this:</p>
-<pre><code>	...
-	f x y
+<pre><code>...
+f x y
 	where
 	f = ...
 	x = ...
 	y = ...
-    ...</code></pre>
+	...</code></pre>
 <p>That is, put <code>where</code> on its own line, and then avoid any additional indentation for all definitions that follow.</p>
 <h4 id="guards">Guards</h4>
 <p>Use guards like this:</p>
@@ -108,20 +108,20 @@
 <p>Haddock prefers single-line comments, anyway.</p>
 <h3 id="use-two-groups-of-imports-system-wide-and-package-wide-and-have-each-group-alphabetically-ordered">Use two groups of imports: system-wide and package-wide (and have each group alphabetically ordered)</h3>
 <p>Import all external library modules in their own ``paragraph’’, followed by those modules of your own library; e.g., do</p>
-<pre><code>	import Control.Monad
-	import Data.Maybe
-	import Data.Text
+<pre><code>import Control.Monad
+import Data.Maybe
+import Data.Text
 
-	import MyModule.One
-	import MyModule.Two</code></pre>
+import MyModule.One
+import MyModule.Two</code></pre>
 <p>.</p>
 <h3 id="place-one-pragma-per-line-in-alphabetical-order">Place one pragma per line, in alphabetical order</h3>
 <p>Do it like this:</p>
-<pre><code>	{-# LANGUAGE SomeBadExtension #-}
-	{-# LANGUAGE SomeCoolExtension #-}
-	{-# LANGUAGE SomeScaryExtension #-}
-	{-# LANGUAGE SomeUglyExtension #-}
-	{-# LANGUAGE StrangeExtensionNobodyUnderstands #-}</code></pre>
+<pre><code>{-# LANGUAGE SomeBadExtension #-}
+{-# LANGUAGE SomeCoolExtension #-}
+{-# LANGUAGE SomeScaryExtension #-}
+{-# LANGUAGE SomeUglyExtension #-}
+{-# LANGUAGE StrangeExtensionNobodyUnderstands #-}</code></pre>
 <h3 id="try-to-use-as-few-pragmas-as-possible">Try to use as few pragmas as possible</h3>
 <p>Do not use 20 language extensions when you don’t have to. Saving a handful of keystrokes is not a good reason to use a multitude of extensions.</p>
 <h3 id="when-writing-documentation-prefer-high-level-documentation-over-line-by-line-documentation">When writing documentation, prefer high-level documentation over line-by-line documentation</h3>

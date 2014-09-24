@@ -82,48 +82,60 @@
 40
 41
 42
+43
+44
+45
+46
+47
+48
 </pre></td><td class="sourceCode"><pre><code class="sourceCode commonlisp">(<span class="kw">defun</span><span class="fu"> my-addrem-comment-region </span>(b e f)
-  <span class="st">&quot;Use the `nox' command to comment the current region.&quot;</span>
-  (interactive)
-  (shell-command-on-region
-   <span class="co">; beginning and end of buffer</span>
-   b e
-   <span class="co">; command and parameters</span>
-   (concat
-     (<span class="kw">if</span> f
-         <span class="st">&quot;~/prog/nox/src/nox -l &quot;</span>
-         <span class="st">&quot;~/prog/nox/src/nox -u -l &quot;</span>)
-         (<span class="kw">case</span> (with-current-buffer (current-buffer) major-mode)
-           ('c-mode <span class="st">&quot;c&quot;</span>)
-           ('emacs-lisp-mode <span class="st">&quot;emacslisp&quot;</span>)
-           ('haskell-mode <span class="st">&quot;haskell&quot;</span>)
-           ('LilyPond-mode <span class="st">&quot;tex&quot;</span>)
-           ('plain-tex-mode <span class="st">&quot;tex&quot;</span>)
-           (<span class="kw">t</span> <span class="st">&quot;shell&quot;</span>))<span class="co">; default to shell</span>
-     )
-   <span class="co">; output buffer</span>
-   (current-buffer)
-   <span class="co">; replace?</span>
-   <span class="kw">t</span>
-   <span class="co">; name of the error buffer</span>
-   <span class="st">&quot;*nox Error Buffer*&quot;</span>
-   <span class="co">; show error buffer?</span>
-   <span class="kw">t</span>
-   )
-  )
+	<span class="st">&quot;Use the `nox' command to comment the current region.&quot;</span>
+	(interactive)
+	(shell-command-on-region
+	<span class="co">; beginning and end of buffer</span>
+	b e
+	<span class="co">; command and parameters</span>
+	(concat
+		(<span class="kw">if</span> f
+			<span class="st">&quot;~/prog/nox/src/nox -l &quot;</span>
+			<span class="st">&quot;~/prog/nox/src/nox -u -l &quot;</span>)
+			(<span class="kw">case</span> (with-current-buffer (current-buffer) major-mode)
+				('c-mode <span class="st">&quot;c&quot;</span>)
+				('emacs-lisp-mode <span class="st">&quot;emacslisp&quot;</span>)
+				('haskell-mode <span class="st">&quot;haskell&quot;</span>)
+				('LilyPond-mode <span class="st">&quot;tex&quot;</span>)
+				('plain-tex-mode <span class="st">&quot;tex&quot;</span>)
+				(<span class="kw">t</span> <span class="st">&quot;shell&quot;</span>))<span class="co">; default to shell</span>
+		)
+	<span class="co">; output buffer</span>
+	(current-buffer)
+	<span class="co">; replace?</span>
+	<span class="kw">t</span>
+	<span class="co">; name of the error buffer</span>
+	<span class="st">&quot;*nox Error Buffer*&quot;</span>
+	<span class="co">; show error buffer?</span>
+	<span class="kw">t</span>
+	)
+)
 (<span class="kw">defun</span><span class="fu"> my-addrem-comment </span>(f)
-  (<span class="kw">if</span> (use-region-p)
-    (<span class="kw">progn</span>
-      (my-addrem-comment-region (region-beginning) (region-end) f)
-      (evil-visual-char)
-      (evil-exit-visual-state)
-      )
-    (my-addrem-comment-region (line-beginning-position) (line-beginning-position <span class="dv">2</span>) f)
-  ))
-(define-key evil-visual-state-map <span class="st">&quot;,c&quot;</span> (<span class="kw">lambda</span> () (interactive) (my-addrem-comment <span class="kw">t</span>))) <span class="co">; add comment</span>
-(define-key evil-visual-state-map <span class="st">&quot;,C&quot;</span> (<span class="kw">lambda</span> () (interactive) (my-addrem-comment <span class="kw">nil</span>))) <span class="co">; remove comment</span>
-(define-key evil-normal-state-map <span class="st">&quot;,c&quot;</span> (<span class="kw">lambda</span> () (interactive) (my-addrem-comment <span class="kw">t</span>))) <span class="co">; add comment</span>
-(define-key evil-normal-state-map <span class="st">&quot;,C&quot;</span> (<span class="kw">lambda</span> () (interactive) (my-addrem-comment <span class="kw">nil</span>))) <span class="co">; remove comment</span></code></pre></td></tr></table>
+	(<span class="kw">if</span> (use-region-p)
+		(<span class="kw">progn</span>
+			(my-addrem-comment-region (region-beginning) (region-end) f)
+			(evil-visual-char)
+			(evil-exit-visual-state)
+		)
+		(my-addrem-comment-region
+			(line-beginning-position) (line-beginning-position <span class="dv">2</span>) f)
+	)
+)
+(define-key evil-visual-state-map <span class="st">&quot;,c&quot;</span>
+	(<span class="kw">lambda</span> () (interactive) (my-addrem-comment <span class="kw">t</span>))) <span class="co">; add comment</span>
+(define-key evil-visual-state-map <span class="st">&quot;,C&quot;</span> (<span class="kw">lambda</span> () (interactive)
+	(my-addrem-comment <span class="kw">nil</span>))) <span class="co">; remove comment</span>
+(define-key evil-normal-state-map <span class="st">&quot;,c&quot;</span>
+	(<span class="kw">lambda</span> () (interactive) (my-addrem-comment <span class="kw">t</span>))) <span class="co">; add comment</span>
+(define-key evil-normal-state-map <span class="st">&quot;,C&quot;</span>
+	(<span class="kw">lambda</span> () (interactive) (my-addrem-comment <span class="kw">nil</span>))) <span class="co">; remove comment</span></code></pre></td></tr></table>
 <p>This is certainly not the most beautiful code, but it works.</p>
 <h3 id="references">References</h3>
 <ul>
