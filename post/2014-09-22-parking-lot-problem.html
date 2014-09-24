@@ -88,7 +88,7 @@
 	<span class="kw">return</span> i
 <span class="kw">end</span></code></pre></td></tr></table>
 <h2 id="haskell">Haskell</h2>
-<p>The Haskell version is a direct translation of the Ruby version, as an iterative approach works just fine. The only drawback is that we use <code>Int</code> instead of the arbitrarily large <code>Integer</code> type for succinctness (we can use <code>Integer</code>, but some built-in functions like <code>sort</code> only work on <code>Int</code>).</p>
+<p>The Haskell version is a direct translation of the Ruby version, as an iterative approach works just fine. The only drawback is that we use <code>Int</code> instead of the arbitrarily large <code>Integer</code> type for succinctness (we can use <code>Integer</code>, but some built-in functions like <code>sort</code> only work on <code>Int</code>). However, it is interesting if only for the fact that the edge cases are made explicit — there seems to be no way to avoid “lying” to Haskell about the complexity of our problem!</p>
 <table class="sourceCode haskell numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
