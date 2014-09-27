@@ -26,15 +26,20 @@
 			<h1 class="center">Find Lines with 80+ Columns in Multiple Files</h1>
 
 			<div class="info center">
-	<code class="date">2014-08-11</code>
+	<code class="date">2014-08-11</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2014-08-11-find-files-with-80+-columns.md" title="History">*</a>
 	<br>
 	<a href="../tag/linux.html">linux</a>, <a href="../tag/programming.html">programming</a>
 </div>
 
 <p>It’s nice to follow the 80-columns-per-line rule<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a>, but what if you have some lingering project that has yet to conform?</p>
 <p>Just go to that project’s sources directory and do</p>
-<table class="sourceCode numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
-</pre></td><td class="sourceCode"><pre><code class="sourceCode">find . -type f -exec sh -c &quot;expand -t 8 {} | grep -n \&quot;.\{81\}\&quot;&quot; \; -print</code></pre></td></tr></table>
+<div class="code-and-raw">
+<table class="sourceCode numberLines bash" input="code/find-80-cols.sh"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+</pre></td><td class="sourceCode"><pre><code class="sourceCode bash"><span class="kw">find</span> . -type f -exec sh -c <span class="st">&quot;expand -t 8 {} | grep -n </span><span class="dt">\&quot;</span><span class="st">.\{81\}</span><span class="dt">\&quot;</span><span class="st">&quot;</span> <span class="dt">\;</span> -print</code></pre></td></tr></table>
+<div class="raw-link">
+<a class="raw" href="../code/find-80-cols.sh" mimetype="text/plain"> find-80-cols.sh </a>
+</div>
+</div>
 <p>.</p>
 <p>The call to <code>expand</code> is necessary because different people use different widths for tabs. That is, we are trying to find files with 80+ <em>columns</em> (as they appear to humans), not 80+ <em>characters</em> (as they appear to the computer).</p>
 <div class="footnotes">

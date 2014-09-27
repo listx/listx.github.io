@@ -26,7 +26,7 @@
 			<h1 class="center">Installing Arch Linux and Enabling System Encryption</h1>
 
 			<div class="info center">
-	<code class="date">2013-03-10</code>
+	<code class="date">2013-03-10</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2013-03-10-installing-arch-and-enabling-system-encryption.md" title="History">*</a>
 	<br>
 	<a href="../tag/linux.html">linux</a>, <a href="../tag/arch.html">arch</a>
 </div>
@@ -39,7 +39,8 @@
 <p>before doing anything. This way, your new Linux install will blend into the random noise data resulting from the command above, making it virtually impossible to detect which portions of the drive contain actual data. If the disk you want to wipe is a secondary device to an existing Linux installation, you can try using <a href="../code.html#floop"><code>floop</code></a> to generate a faster stream of pseudorandom bytes. With <code>floop</code>, you can just do</p>
 <pre><code>floop --threads 4 --thread-buf 0x200000 --count 0 | dd of=/dev/sdX</code></pre>
 <p>and it will be significantly faster than using <code>/dev/urandom</code>.</p>
-<table class="sourceCode bash numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+<div class="code-and-raw">
+<table class="sourceCode numberLines bash" input="code/arch-setup.sh"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
 4
@@ -447,6 +448,10 @@
 <span class="kw">umount</span> /mnt
 <span class="kw">swapoff</span>
 <span class="kw">reboot</span></code></pre></td></tr></table>
+<div class="raw-link">
+<a class="raw" href="../code/arch-setup.sh" mimetype="text/plain"> arch-setup.sh </a>
+</div>
+</div>
 
 		</div>
 		<div id="footer">

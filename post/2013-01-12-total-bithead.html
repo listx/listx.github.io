@@ -26,7 +26,7 @@
 			<h1 class="center">Using the Total Bithead with ALSA on Arch Linux</h1>
 
 			<div class="info center">
-	<code class="date">2013-01-12</code>
+	<code class="date">2013-01-12</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2013-01-12-total-bithead.md" title="History">*</a>
 	<br>
 	<a href="../tag/linux.html">linux</a>, <a href="../tag/sound.html">sound</a>, <a href="../tag/alsa.html">alsa</a>, <a href="../tag/arch.html">arch</a>, <a href="../tag/hardware.html">hardware</a>
 </div>
@@ -34,7 +34,8 @@
 <p>So I got HeadRoom’s “Total Bithead” USB DAC (digital-to-analog converter) and micro amplifier. The problem is, when I plug it into my Linux desktop, mplayer/firefox still recognizes the onboard sound on my motherboard as the default device. After some searching, I found some resources to (1) use it as the default sound device and (2) enable mixing on it (different applications can simultaneously use the Total Bithead).</p>
 <h2 id="the-setup">The Setup</h2>
 <p>We need to manually call a script every time the Total Bithead is connected. The script, called <code>switch_audio.sh</code>, looks like this:</p>
-<table class="sourceCode bash numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+<div class="code-and-raw">
+<table class="sourceCode numberLines bash" input="code/switch_audio.sh"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
 4
@@ -56,6 +57,10 @@
 	<span class="kw">*</span>) <span class="kw">echo</span> <span class="st">&quot;Unknown host </span><span class="dt">\`</span><span class="ot">$HOST</span><span class="st">'&quot;</span> <span class="kw">;;</span>
 	<span class="kw">esac</span>
 <span class="kw">fi</span></code></pre></td></tr></table>
+<div class="raw-link">
+<a class="raw" href="../code/switch_audio.sh" mimetype="text/plain"> switch_audio.sh </a>
+</div>
+</div>
 <p>where k0 is my desktop and k1 is my laptop. <code>cfg-k0</code> looks like this:</p>
 <pre><code># use `aplay -l | awk '/^card/{print$3}' | sort | uniq' for card names
 defaults.pcm.!card NVidia

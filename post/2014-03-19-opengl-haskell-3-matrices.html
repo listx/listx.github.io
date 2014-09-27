@@ -26,7 +26,7 @@
 			<h1 class="center">OpenGL from Haskell (#3: Matrices)</h1>
 
 			<div class="info center">
-	<code class="date">2014-03-19</code>
+	<code class="date">2014-03-19</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2014-03-19-opengl-haskell-3-matrices.md" title="History">*</a>
 	<br>
 	<a href="../tag/haskell.html">haskell</a>, <a href="../tag/opengl.html">opengl</a>
 </div>
@@ -36,7 +36,8 @@
 <p>I have also removed the use of backticks for Haskell’s infix notation (<code>`...`</code>). It’s not because I like using parentheses — I just don’t like using infix notation because it runs against the argument handling order of normal functions found everywhere else.</p>
 <p>Also, I have fixed YPares’s original <code>lookAt</code> function which is actually <a href="https://github.com/YPares/Haskell-OpenGL3.1-Tutos/commit/7a027b927d061fbd26138cb7357c40c4cacbc927">broken as of commit 7a027b927d061fbd26138cb7357c40c4cacbc927</a>; you will need my version if you wish to pursue the later tutorials that actually test the validity of this function, such as the keyboard/mouse input tutorial #6 from <a href="http://www.opengl-tutorial.org" class="uri">http://www.opengl-tutorial.org</a>.</p>
 <p>The code here is released into the Public Domain.</p>
-<table class="sourceCode haskell numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+<div class="code-and-raw">
+<table class="sourceCode numberLines haskell" input="code/opengl/matrices.hs"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
 4
@@ -554,6 +555,10 @@ lookAt eye target up <span class="fu">=</span> x <span class="fu">:.</span> y <s
 	y <span class="fu">=</span> snoc up' (<span class="fu">-</span>(dot up' eye))
 	z <span class="fu">=</span> snoc (<span class="fu">-</span>forward) (dot forward eye)
 	h <span class="fu">=</span> <span class="dv">0</span> <span class="fu">:.</span> <span class="dv">0</span> <span class="fu">:.</span> <span class="dv">0</span> <span class="fu">:.</span> <span class="dv">1</span> <span class="fu">:.</span> ()</code></pre></td></tr></table>
+<div class="raw-link">
+<a class="raw" href="../code/opengl/matrices.hs" mimetype="text/plain"> matrices.hs </a>
+</div>
+</div>
 
 		</div>
 		<div id="footer">

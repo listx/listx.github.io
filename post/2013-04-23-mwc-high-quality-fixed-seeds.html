@@ -26,7 +26,7 @@
 			<h1 class="center">Haskell: System.Random.MWC: High Quality Fixed Seeds</h1>
 
 			<div class="info center">
-	<code class="date">2013-04-23</code>
+	<code class="date">2013-04-23</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2013-04-23-mwc-high-quality-fixed-seeds.md" title="History">*</a>
 	<br>
 	<a href="../tag/haskell.html">haskell</a>, <a href="../tag/rng.html">rng</a>
 </div>
@@ -52,7 +52,8 @@
 <h3 id="the-solution">The Solution</h3>
 <p>To solve my problem, I just take the current date, then feed it to the SHA-1 function to get <code>sha1Hash</code>; I then then repeatedly call SHA-1 against <code>sha1Hash</code> recursively. Meanwhile, each time I get a SHA-1 hash of 20 bytes, I append it to an empty string of bytes, <code>acc</code>. When <code>acc</code> is large enough to be split up into 256 <code>Word32</code> elements, I feed it to <code>initialize</code>. The result is that I get much better seed-vs-similar-seed randomness with MWC.</p>
 <p>Here is the code:</p>
-<table class="sourceCode haskell numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+<div class="code-and-raw">
+<table class="sourceCode numberLines haskell" input="code/rng/mwc-seed.hs"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
 4
@@ -113,9 +114,9 @@
 <span class="kw">import </span><span class="dt">Data.Word</span>
 <span class="kw">import </span><span class="dt">System.Random.MWC</span>
 
-	<span class="fu">...</span>
-	gen <span class="ot">&lt;-</span> initialize' <span class="fu">$</span> year' <span class="fu">+</span> month' <span class="fu">+</span> day'
-	<span class="fu">...</span>
+<span class="co">--	...</span>
+<span class="co">--	gen &lt;- initialize' $ year' + month' + day'</span>
+<span class="co">--	...</span>
 
 <span class="co">-- | Given a Word32 'num' generate a growing ByteString 'x' by repeatedly</span>
 <span class="co">-- generating a SHA1 digest, as a ByteString 'y', and appending it back to</span>
@@ -158,6 +159,10 @@ fromOctetsBE <span class="fu">=</span> foldl' accum <span class="dv">0</span>
 
 <span class="ot">fromOctetsLE ::</span> [<span class="dt">Word8</span>] <span class="ot">-&gt;</span> <span class="dt">Word32</span>
 fromOctetsLE <span class="fu">=</span> fromOctetsBE <span class="fu">.</span> reverse</code></pre></td></tr></table>
+<div class="raw-link">
+<a class="raw" href="../code/rng/mwc-seed.hs" mimetype="text/plain"> mwc-seed.hs </a>
+</div>
+</div>
 <p>The neat <code>chop</code> function is by <a href="http://stackoverflow.com/a/5188922/437583">Dan Burton</a>. The octet conversion functions between <code>Word8</code> and <code>Word32</code> types are from <a href="http://www.haskell.org/pipermail/beginners/2010-October/005571.html">this message</a>.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a></p>
 <div class="footnotes">
 <hr />

@@ -26,7 +26,7 @@
 			<h1 class="center">Quad Monitor Setup</h1>
 
 			<div class="info center">
-	<code class="date">2014-05-20</code>
+	<code class="date">2014-05-20</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2014-05-20-quad-monitor-setup.md" title="History">*</a>
 	<br>
 	<a href="../tag/linux.html">linux</a>, <a href="../tag/hardware.html">hardware</a>, <a href="../tag/nvidia.html">nvidia</a>, <a href="../tag/xmonad.html">xmonad</a>
 </div>
@@ -36,7 +36,8 @@
 <p><img src="../img/quad-monitor.jpg" alt="Quad monitor setup" title="Quad monitor setup" width="100%"></p>
 <p>Using four monitors sounds difficult, but it’s a breeze with Xinerama and Xmonad. The hardest part was figuring out the correct <code>xorg.conf</code> configuration file. It was difficult because the QNIX monitors, being cheap, do not work out of the box, because the latest Nvidia driver (version 337.12) does not detect the correct resolution. What’s worse, the QNIXes do not support anything other than their native 2560x1440 resolution, so you’ll get blank screens if you try to just use these monitors without tweaking some <code>xorg.conf</code> settings. I actually ended up googling to find the correct <code>Modeline</code> value for <code>xorg.conf</code> for my QNIX, at 96hz refresh rate.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> You could try using the <code>cvt</code> program included with <code>xorg-server</code>, but when I tried it out on my own it generated different numbers and my QNIXes couldn’t handle those numbers.</p>
 <p>Here is my <code>xorg.conf</code>:</p>
-<table class="sourceCode xorg numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+<div class="code-and-raw">
+<table class="sourceCode numberLines xorg" input="code/quad-monitor-portrait.xorg.conf"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
 4
@@ -394,6 +395,10 @@
         Depth<span class="kw">       </span><span class="dv">24</span>
     <span class="fu">EndSubSection</span>
 <span class="fu">EndSection</span></code></pre></td></tr></table>
+<div class="raw-link">
+<a class="raw" href="../code/quad-monitor-portrait.xorg.conf" mimetype="text/plain"> quad-monitor-portrait.xorg.conf </a>
+</div>
+</div>
 <div class="footnotes">
 <hr />
 <ol>

@@ -26,13 +26,14 @@
 			<h1 class="center">Generating Random Numbers without Modulo Bias</h1>
 
 			<div class="info center">
-	<code class="date">2013-07-12</code>
+	<code class="date">2013-07-12</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2013-07-12-generating-random-numbers-without-modulo-bias.md" title="History">*</a>
 	<br>
 	<a href="../tag/c.html">c</a>, <a href="../tag/rng.html">rng</a>, <a href="../tag/programming.html">programming</a>
 </div>
 
 <p>Let’s say you need a random number from 0 to 2 (0, 1, or 2). If you do this:</p>
-<table class="sourceCode c numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+<div class="code-and-raw">
+<table class="sourceCode numberLines c" input="code/rng/listing-1.c"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
 4
@@ -42,11 +43,16 @@
 n = <span class="dv">3</span>;
 x = rand() % n;
 <span class="kw">return</span> x;</code></pre></td></tr></table>
+<div class="raw-link">
+<a class="raw" href="../code/rng/listing-1.c" mimetype="text/plain"> listing-1.c </a>
+</div>
+</div>
 <p>your code is broken, thanks to modulo bias. You will always get modulo bias (however slight, or great, it may be) whenever <code>RAND_MAX + 1</code> of your <code>rand()</code> function is not evenly divisible by your modulus <code>n</code>.</p>
 <p>Continuing with our example, let’s say <code>rand()</code>’s <code>RAND_MAX</code> is 4, so there are 5 different possible values that <code>rand()</code> can generate (0, 1, 2, 3, or 4). Now rand() will return each value 20% of the time, assuming that <code>rand()</code> has very good distribution from 0 to <code>RAND_MAX</code>.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> But since we take the modulo by 3, <strong>we get 0 40% of the time (0 and 3)!</strong> This fact alone should make you worried. Visually it is as follows:</p>
 <p><img src="../img/mbias.png" alt="Modulo bias" title="Modulo bias" width="100%"></p>
 <p>The following code is correct:</p>
-<table class="sourceCode c numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+<div class="code-and-raw">
+<table class="sourceCode numberLines c" input="code/rng/listing-2.c"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
 4
@@ -60,33 +66,59 @@ rand_excess = (RAND_MAX + <span class="dv">1</span>) % n;
 rand_limit = RAND_MAX - rand_excess;
 <span class="kw">while</span> (x = rand() &gt; rand_limit) {};
 <span class="kw">return</span> x % n;</code></pre></td></tr></table>
+<div class="raw-link">
+<a class="raw" href="../code/rng/listing-2.c" mimetype="text/plain"> listing-2.c </a>
+</div>
+</div>
 <p>So, if <code>RAND_MAX</code> is 4 as in the previous example, <code>rand_excess</code> is <span class="math">\[
 (4 + 1) \mbox{ mod 3}\\
 = 5 \mbox{ mod 3}\\
 = 2
 \]</span>. Then <code>rand_limit</code> becomes <span class="math">\(4 - 2 = 2\)</span>. The <code>while</code> statement then throws out the values 3 and 4 (i.e., x is only allowed to be 0, 1, or 2). Then, we return the modulo expression <code>x % n</code> (which is redundant here onlyu because <code>RAND_MAX</code> is very low for the sake of our example).</p>
-<p>A problem might exist if <code>RAND_MAX</code> is already the maximum value allowed by the type that <code>rand()</code> returns. E.g., if <code>rand()</code> returns a 64-bit unsigned integer (in C99, this is the <code>uint64_t</code> type) , and <code>RAND_MAX</code> is already set to <span class="math">\(2^{64} - 1\)</span>, then <code>RAND_MAX - 1</code> would wrap back around to 0, and <code>rand_excess</code> would likewise be 0. To avoid this, you can use the alternate expression for setting <code>rand_excess</code>:</p>
-<table class="sourceCode c numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+<p>A problem might exist if <code>RAND_MAX</code> is already the maximum value allowed by the type that <code>rand()</code> returns. E.g., if <code>rand()</code> returns a 64-bit unsigned integer (in C99, this is the <code>uint64_t</code> type) , and <code>RAND_MAX</code> is already set to <span class="math">\(2^{64} - 1\)</span>, then <code>RAND_MAX - 1</code> would wrap back around to 0, and <code>rand_excess</code> would likewise be 0. To avoid this, you can use the alternate expression <code>rand_excess = (RAND_MAX % n) + 1;</code> for setting <code>rand_excess</code>:</p>
+<div class="code-and-raw">
+<table class="sourceCode numberLines c" input="code/rng/listing-3.c"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
 4
+5
+6
+7
 </pre></td><td class="sourceCode"><pre><code class="sourceCode c"><span class="co">/* Listing 3 */</span>
-...
-rand_excess = (RAND_MAX % n) + <span class="dv">1</span>;
-...</code></pre></td></tr></table>
+<span class="dt">int</span> n, x, rand_limit, rand_excess;
+n = <span class="dv">3</span>;
+rand_excess = (RAND_MAX % n) + <span class="dv">1</span>; <span class="co">/* only difference vs listing-2.c */</span>
+rand_limit = RAND_MAX - rand_excess;
+<span class="kw">while</span> (x = rand() &gt; rand_limit) {};
+<span class="kw">return</span> x % n;</code></pre></td></tr></table>
+<div class="raw-link">
+<a class="raw" href="../code/rng/listing-3.c" mimetype="text/plain"> listing-3.c </a>
+</div>
+</div>
 <p>This way, you ensure that you shrink the value of <code>RAND_MAX</code> to something smaller first, before adding 1 to it as in Listing 2. Unfortunately, there still remains a problem with this workaround: there is a remote chance that <code>rand_excess</code> will be equal to <code>n</code>, needlessly reducing the size of <code>rand_limit</code> (and thus throwing away perfectly bias-free numbers generated by <code>rand()</code>). For example, say <code>RAND_MAX</code> is 8 and <code>n</code> is 3. Then <code>rand_excess</code> is <span class="math">\[
 (8 \mbox{ mod 3}) + 1\\
 = 2 + 1\\
 = 3
-\]</span>. Now <code>rand_limit</code> is <span class="math">\(8 - 3 = 5\)</span>. But <code>RAND_MAX</code> of 8 is already valid because there are 9 possible values 0 through 8, and there is no modulo bias to begin with (since <span class="math">\(9 \mbox{ mod 3} = 0\)</span>)! To get around this, we can do one more modulo operation to avoid the case where <code>rand_excess</code> could equal <code>n</code>:</p>
-<table class="sourceCode c numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+\]</span>. Now <code>rand_limit</code> is <span class="math">\(8 - 3 = 5\)</span>. But <code>RAND_MAX</code> of 8 is already valid because there are 9 possible values 0 through 8, and there is no modulo bias to begin with (since <span class="math">\(9 \mbox{ mod 3} = 0\)</span>)! To get around this, we can do one more modulo operation <code>rand_excess = ((RAND_MAX % n) + 1) % n;</code> to avoid the case where <code>rand_excess</code> could equal <code>n</code>:</p>
+<div class="code-and-raw">
+<table class="sourceCode numberLines c" input="code/rng/listing-4.c"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
 4
+5
+6
+7
 </pre></td><td class="sourceCode"><pre><code class="sourceCode c"><span class="co">/* Listing 4 */</span>
-...
-rand_excess = ((RAND_MAX % n) + <span class="dv">1</span>) % n;
-...</code></pre></td></tr></table>
+<span class="dt">int</span> n, x, rand_limit, rand_excess;
+n = <span class="dv">3</span>;
+rand_excess = ((RAND_MAX % n) + <span class="dv">1</span>) % n; <span class="co">/* only difference vs listing-3.c */</span>
+rand_limit = RAND_MAX - rand_excess;
+<span class="kw">while</span> (x = rand() &gt; rand_limit) {};
+<span class="kw">return</span> x % n;</code></pre></td></tr></table>
+<div class="raw-link">
+<a class="raw" href="../code/rng/listing-4.c" mimetype="text/plain"> listing-4.c </a>
+</div>
+</div>
 <p>So if <code>RAND_MAX</code> is 8 and <code>n</code> is 3, then <code>rand_excess</code> is <span class="math">\[
 ((8 \mbox{ mod 3}) + 1) \mbox{ mod 3}\\
 = (2 + 1) \mbox{ mod 3}\\

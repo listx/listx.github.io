@@ -26,7 +26,7 @@
 			<h1 class="center">The Parking Lot Problem: A Successor to FizzBuzz?</h1>
 
 			<div class="info center">
-	<code class="date">2014-09-22</code>
+	<code class="date">2014-09-22</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2014-09-22-parking-lot-problem.md" title="History">*</a>
 	<br>
 	<a href="../tag/programming.html">programming</a>, <a href="../tag/ruby.html">ruby</a>, <a href="../tag/haskell.html">haskell</a>
 </div>
@@ -61,7 +61,8 @@
 <p>In the more common case (as seen in real life), the parking space closest to the driver (the most desirable parking space) is already taken; and what’s more, the group of spaces closest to the driver is already taken. In this case, we have to proceed from space <code>0</code>, and incrementally observe every subsequent space, until we arrive at an empty parking space. The insight here is that we are treating the multitude of consecutively parked cars as one giant car parked across multiple spaces, and are just trying to find the total number of spaces this car occupies.</p>
 <h2 id="ruby">Ruby</h2>
 <p>I think it is time for some actual code. While I could explain how the Ruby version works, I feel that I have already expounded upon the problem enough above, so that the code here should make intuitive sense.</p>
-<table class="sourceCode ruby numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+<div class="code-and-raw">
+<table class="sourceCode numberLines ruby" input="code/toy/parking-lot.rb"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
 4
@@ -87,9 +88,14 @@
 
 	<span class="kw">return</span> i
 <span class="kw">end</span></code></pre></td></tr></table>
+<div class="raw-link">
+<a class="raw" href="../code/toy/parking-lot.rb" mimetype="text/plain"> parking-lot.rb </a>
+</div>
+</div>
 <h2 id="haskell">Haskell</h2>
 <p>The Haskell version is a direct translation of the Ruby version, as an iterative approach works just fine. The only drawback is that we use <code>Int</code> instead of the arbitrarily large <code>Integer</code> type for succinctness (we can use <code>Integer</code>, but some built-in functions like <code>sort</code> only work on <code>Int</code>). However, it is interesting if only for the fact that the edge cases are made explicit — there seems to be no way to avoid “lying” to Haskell about the complexity of our problem!</p>
-<table class="sourceCode haskell numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+<div class="code-and-raw">
+<table class="sourceCode numberLines haskell" input="code/toy/parking-lot.hs"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
 4
@@ -104,13 +110,17 @@
 
 <span class="ot">getParkingSpace ::</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> <span class="dt">Int</span>
 getParkingSpace ts
-    <span class="fu">|</span> null ts <span class="fu">=</span> <span class="dv">0</span>
-    <span class="fu">|</span> otherwise <span class="fu">=</span> loop <span class="dv">0</span> <span class="fu">$</span> sort ts
-    <span class="kw">where</span>
-    loop i xs
-        <span class="fu">|</span> i <span class="fu">==</span> length xs <span class="fu">=</span> i
-        <span class="fu">|</span> i <span class="fu">&lt;</span> xs <span class="fu">!!</span> i <span class="fu">=</span> i
-        <span class="fu">|</span> otherwise <span class="fu">=</span> loop (i <span class="fu">+</span> <span class="dv">1</span>) xs</code></pre></td></tr></table>
+	<span class="fu">|</span> null ts <span class="fu">=</span> <span class="dv">0</span>
+	<span class="fu">|</span> otherwise <span class="fu">=</span> loop <span class="dv">0</span> <span class="fu">$</span> sort ts
+	<span class="kw">where</span>
+	loop i xs
+		<span class="fu">|</span> i <span class="fu">==</span> length xs <span class="fu">=</span> i
+		<span class="fu">|</span> i <span class="fu">&lt;</span> xs <span class="fu">!!</span> i <span class="fu">=</span> i
+		<span class="fu">|</span> otherwise <span class="fu">=</span> loop (i <span class="fu">+</span> <span class="dv">1</span>) xs</code></pre></td></tr></table>
+<div class="raw-link">
+<a class="raw" href="../code/toy/parking-lot.hs" mimetype="text/plain"> parking-lot.hs </a>
+</div>
+</div>
 <h2 id="low-level-interlude">Low-Level Interlude</h2>
 <p>Did you realize that the basic concept here is the same as finding the least significant bit (LSB)? I.e., if the parking lot is one giant computer word, and a <code>1</code> bit represents an available parking space, then we are simply trying to find the LSB (the index of the bit being the same thing as the parking space number). This is such a common scenario, that there are native hardware instructions for this on most all CPUs. The canonical name for this operation is <a href="http://en.wikipedia.org/wiki/Find_first_set"><em>find first set</em></a> or <em>find first one</em>.<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> In Linux, you can do <code>man ffs</code> to learn about how to use it in your C program.</p>
 <p>Of course, the parking lot in our problem is of infinite size, which makes the size of <code>T</code> arbitrarily large; alas, we cannot use <code>ffs</code> here.</p>
@@ -130,7 +140,8 @@ getParkingSpace ts
 <p>We return “N/A” for the empty case because this condition does not make sense under the terms of the problem, which defines the bounds of the parking lot based on the car farthest away; if there are no cars to begin with, the problem cannot be posed.</p>
 <h2 id="ruby-1">Ruby</h2>
 <p>Without further ado, here is the Ruby solution.</p>
-<table class="sourceCode ruby numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+<div class="code-and-raw">
+<table class="sourceCode numberLines ruby" input="code/toy/parking-spaces.rb"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
 4
@@ -144,9 +155,14 @@ getParkingSpace ts
 		<span class="kw">return</span> (t.max - t.size) + <span class="dv">1</span>
 	<span class="kw">end</span>
 <span class="kw">end</span></code></pre></td></tr></table>
+<div class="raw-link">
+<a class="raw" href="../code/toy/parking-spaces.rb" mimetype="text/plain"> parking-spaces.rb </a>
+</div>
+</div>
 <h2 id="haskell-1">Haskell</h2>
 <p>The Haskell version is not much different.</p>
-<table class="sourceCode haskell numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+<div class="code-and-raw">
+<table class="sourceCode numberLines haskell" input="code/toy/parking-spaces.hs"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
 4
@@ -154,6 +170,10 @@ getParkingSpace ts
 getParkingSpaces t
 	<span class="fu">|</span> null t <span class="fu">=</span> <span class="dt">Left</span> <span class="st">&quot;N/A&quot;</span>
 	<span class="fu">|</span> otherwise <span class="fu">=</span> <span class="dt">Right</span> <span class="fu">$</span> (maximum t) <span class="fu">-</span> (length t) <span class="fu">+</span> <span class="dv">1</span></code></pre></td></tr></table>
+<div class="raw-link">
+<a class="raw" href="../code/toy/parking-spaces.hs" mimetype="text/plain"> parking-spaces.hs </a>
+</div>
+</div>
 <h2 id="a-successor-to-fizzbuzz">A Successor to FizzBuzz?</h2>
 <p>For some reason, I get a strong feeling that these problems are much more interesting than <a href="http://en.wikipedia.org/wiki/Fizz_buzz">FizzBuzz</a>. The fact that we talk about an <em>infinitely large</em> parking lot will probably throw a lot of newbies and naive thinkers off the right track. You have to be especially careful about edge cases, such as the empty list in the second Haskell version. I believe that good coders have a keen sense of edge cases, because correct algorithms must withstand them without blowing up. Just review the Haskell solutions and notice all of the edge cases that we have to look out for!</p>
 <p>You might even get some crazy answers that consider at length related nonessential tangents and Big-O notation, but fail to realize just how simple, at least conceptually, the problem becomes once you sort <code>T</code>. And, I like these problems more than FizzBuzz because there are so many interesting points about it. For example, you can ask a simple related question: if you were the keeper of this parking lot, what kind of data structure would you use to keep track of the taken parking spaces? And of course, there are very conspicuous low-level analogues that more experienced coders can relate to.</p>

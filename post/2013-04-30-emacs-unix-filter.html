@@ -26,7 +26,7 @@
 			<h1 class="center">Emacs: Using a Unix Filter</h1>
 
 			<div class="info center">
-	<code class="date">2013-04-30</code>
+	<code class="date">2013-04-30</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2013-04-30-emacs-unix-filter.md" title="History">*</a>
 	<br>
 	<a href="../tag/emacs.html">emacs</a>
 </div>
@@ -40,7 +40,8 @@
 <p>By default nox comments text, and the <code>-l c</code> option sets it to C-styled comments, <code>//</code>.</p>
 <h2 id="emacs">Emacs</h2>
 <p>I use <a href="http://gitorious.org/evil/pages/Home">evil-mode</a> with Emacs. Here is my relevant <code>.emacs</code> to set up <code>nox</code> correctly:</p>
-<table class="sourceCode commonlisp numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+<div class="code-and-raw">
+<table class="sourceCode numberLines commonlisp" input="code/emacs-unix-filter.el"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
 4
@@ -136,6 +137,10 @@
 	(<span class="kw">lambda</span> () (interactive) (my-addrem-comment <span class="kw">t</span>))) <span class="co">; add comment</span>
 (define-key evil-normal-state-map <span class="st">&quot;,C&quot;</span>
 	(<span class="kw">lambda</span> () (interactive) (my-addrem-comment <span class="kw">nil</span>))) <span class="co">; remove comment</span></code></pre></td></tr></table>
+<div class="raw-link">
+<a class="raw" href="../code/emacs-unix-filter.el" mimetype="text/plain"> emacs-unix-filter.el </a>
+</div>
+</div>
 <p>This is certainly not the most beautiful code, but it works.</p>
 <h3 id="references">References</h3>
 <ul>

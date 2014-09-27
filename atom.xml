@@ -16,7 +16,7 @@
     <published>2014-09-22T00:00:00Z</published>
     <updated>2014-09-22T00:00:00Z</updated>
     <summary type="html"><![CDATA[<div class="info center">
-	<code class="date">2014-09-22</code>
+	<code class="date">2014-09-22</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2014-09-22-parking-lot-problem.md" title="History">*</a>
 	<br>
 	<a href="/tag/programming.html">programming</a>, <a href="/tag/ruby.html">ruby</a>, <a href="/tag/haskell.html">haskell</a>
 </div>
@@ -51,7 +51,8 @@
 <p>In the more common case (as seen in real life), the parking space closest to the driver (the most desirable parking space) is already taken; and what’s more, the group of spaces closest to the driver is already taken. In this case, we have to proceed from space <code>0</code>, and incrementally observe every subsequent space, until we arrive at an empty parking space. The insight here is that we are treating the multitude of consecutively parked cars as one giant car parked across multiple spaces, and are just trying to find the total number of spaces this car occupies.</p>
 <h2 id="ruby">Ruby</h2>
 <p>I think it is time for some actual code. While I could explain how the Ruby version works, I feel that I have already expounded upon the problem enough above, so that the code here should make intuitive sense.</p>
-<table class="sourceCode ruby numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+<div class="code-and-raw">
+<table class="sourceCode numberLines ruby" input="code/toy/parking-lot.rb"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
 4
@@ -77,9 +78,14 @@
 
 	<span class="kw">return</span> i
 <span class="kw">end</span></code></pre></td></tr></table>
+<div class="raw-link">
+<a  class="raw"  href= "/code/toy/parking-lot.rb"  mimetype=text/plain > parking-lot.rb </a>
+</div>
+</div>
 <h2 id="haskell">Haskell</h2>
 <p>The Haskell version is a direct translation of the Ruby version, as an iterative approach works just fine. The only drawback is that we use <code>Int</code> instead of the arbitrarily large <code>Integer</code> type for succinctness (we can use <code>Integer</code>, but some built-in functions like <code>sort</code> only work on <code>Int</code>). However, it is interesting if only for the fact that the edge cases are made explicit — there seems to be no way to avoid “lying” to Haskell about the complexity of our problem!</p>
-<table class="sourceCode haskell numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+<div class="code-and-raw">
+<table class="sourceCode numberLines haskell" input="code/toy/parking-lot.hs"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
 4
@@ -94,13 +100,17 @@
 
 <span class="ot">getParkingSpace ::</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> <span class="dt">Int</span>
 getParkingSpace ts
-    <span class="fu">|</span> null ts <span class="fu">=</span> <span class="dv">0</span>
-    <span class="fu">|</span> otherwise <span class="fu">=</span> loop <span class="dv">0</span> <span class="fu">$</span> sort ts
-    <span class="kw">where</span>
-    loop i xs
-        <span class="fu">|</span> i <span class="fu">==</span> length xs <span class="fu">=</span> i
-        <span class="fu">|</span> i <span class="fu">&lt;</span> xs <span class="fu">!!</span> i <span class="fu">=</span> i
-        <span class="fu">|</span> otherwise <span class="fu">=</span> loop (i <span class="fu">+</span> <span class="dv">1</span>) xs</code></pre></td></tr></table>
+	<span class="fu">|</span> null ts <span class="fu">=</span> <span class="dv">0</span>
+	<span class="fu">|</span> otherwise <span class="fu">=</span> loop <span class="dv">0</span> <span class="fu">$</span> sort ts
+	<span class="kw">where</span>
+	loop i xs
+		<span class="fu">|</span> i <span class="fu">==</span> length xs <span class="fu">=</span> i
+		<span class="fu">|</span> i <span class="fu">&lt;</span> xs <span class="fu">!!</span> i <span class="fu">=</span> i
+		<span class="fu">|</span> otherwise <span class="fu">=</span> loop (i <span class="fu">+</span> <span class="dv">1</span>) xs</code></pre></td></tr></table>
+<div class="raw-link">
+<a  class="raw"  href= "/code/toy/parking-lot.hs"  mimetype=text/plain > parking-lot.hs </a>
+</div>
+</div>
 <h2 id="low-level-interlude">Low-Level Interlude</h2>
 <p>Did you realize that the basic concept here is the same as finding the least significant bit (LSB)? I.e., if the parking lot is one giant computer word, and a <code>1</code> bit represents an available parking space, then we are simply trying to find the LSB (the index of the bit being the same thing as the parking space number). This is such a common scenario, that there are native hardware instructions for this on most all CPUs. The canonical name for this operation is <a href="http://en.wikipedia.org/wiki/Find_first_set"><em>find first set</em></a> or <em>find first one</em>.<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> In Linux, you can do <code>man ffs</code> to learn about how to use it in your C program.</p>
 <p>Of course, the parking lot in our problem is of infinite size, which makes the size of <code>T</code> arbitrarily large; alas, we cannot use <code>ffs</code> here.</p>
@@ -120,7 +130,8 @@ getParkingSpace ts
 <p>We return “N/A” for the empty case because this condition does not make sense under the terms of the problem, which defines the bounds of the parking lot based on the car farthest away; if there are no cars to begin with, the problem cannot be posed.</p>
 <h2 id="ruby-1">Ruby</h2>
 <p>Without further ado, here is the Ruby solution.</p>
-<table class="sourceCode ruby numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+<div class="code-and-raw">
+<table class="sourceCode numberLines ruby" input="code/toy/parking-spaces.rb"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
 4
@@ -134,9 +145,14 @@ getParkingSpace ts
 		<span class="kw">return</span> (t.max - t.size) + <span class="dv">1</span>
 	<span class="kw">end</span>
 <span class="kw">end</span></code></pre></td></tr></table>
+<div class="raw-link">
+<a  class="raw"  href= "/code/toy/parking-spaces.rb"  mimetype=text/plain > parking-spaces.rb </a>
+</div>
+</div>
 <h2 id="haskell-1">Haskell</h2>
 <p>The Haskell version is not much different.</p>
-<table class="sourceCode haskell numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+<div class="code-and-raw">
+<table class="sourceCode numberLines haskell" input="code/toy/parking-spaces.hs"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
 4
@@ -144,6 +160,10 @@ getParkingSpace ts
 getParkingSpaces t
 	<span class="fu">|</span> null t <span class="fu">=</span> <span class="dt">Left</span> <span class="st">&quot;N/A&quot;</span>
 	<span class="fu">|</span> otherwise <span class="fu">=</span> <span class="dt">Right</span> <span class="fu">$</span> (maximum t) <span class="fu">-</span> (length t) <span class="fu">+</span> <span class="dv">1</span></code></pre></td></tr></table>
+<div class="raw-link">
+<a  class="raw"  href= "/code/toy/parking-spaces.hs"  mimetype=text/plain > parking-spaces.hs </a>
+</div>
+</div>
 <h2 id="a-successor-to-fizzbuzz">A Successor to FizzBuzz?</h2>
 <p>For some reason, I get a strong feeling that these problems are much more interesting than <a href="http://en.wikipedia.org/wiki/Fizz_buzz">FizzBuzz</a>. The fact that we talk about an <em>infinitely large</em> parking lot will probably throw a lot of newbies and naive thinkers off the right track. You have to be especially careful about edge cases, such as the empty list in the second Haskell version. I believe that good coders have a keen sense of edge cases, because correct algorithms must withstand them without blowing up. Just review the Haskell solutions and notice all of the edge cases that we have to look out for!</p>
 <p>You might even get some crazy answers that consider at length related nonessential tangents and Big-O notation, but fail to realize just how simple, at least conceptually, the problem becomes once you sort <code>T</code>. And, I like these problems more than FizzBuzz because there are so many interesting points about it. For example, you can ask a simple related question: if you were the keeper of this parking lot, what kind of data structure would you use to keep track of the taken parking spaces? And of course, there are very conspicuous low-level analogues that more experienced coders can relate to.</p>
@@ -165,7 +185,7 @@ getParkingSpaces t
     <published>2014-09-09T00:00:00Z</published>
     <updated>2014-09-09T00:00:00Z</updated>
     <summary type="html"><![CDATA[<div class="info center">
-	<code class="date">2014-09-09</code>
+	<code class="date">2014-09-09</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2014-09-09-my-first-contribution-to-git.md" title="History">*</a>
 	<br>
 	<a href="/tag/programming.html">programming</a>, <a href="/tag/git.html">git</a>
 </div>
@@ -204,7 +224,7 @@ getParkingSpaces t
     <published>2014-09-05T00:00:00Z</published>
     <updated>2014-09-05T00:00:00Z</updated>
     <summary type="html"><![CDATA[<div class="info center">
-	<code class="date">2014-09-05</code>
+	<code class="date">2014-09-05</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2014-09-05-rpn-calculator.md" title="History">*</a>
 	<br>
 	<a href="/tag/programming.html">programming</a>, <a href="/tag/ruby.html">ruby</a>, <a href="/tag/haskell.html">haskell</a>
 </div>
@@ -212,7 +232,8 @@ getParkingSpaces t
 <p>A friend of mine is in DevBootCamp, an intensive coding school program designed to get students ready for real world job placement. Anyway, he was telling me how he was given an extra credit assignment: implement a RPN calculator which supports 3 functions — add, subtract, and multiply — on integer numbers. I.e., write a function <code>evaluate()</code> that when given a string such as <code>&quot;3 4 + 8 *&quot;</code> gives the result <code>56</code>. He gave me his Ruby solution; in response, I wrote my own Ruby version and decided soon thereafter to write an equivalent Haskell version, because, why not?</p>
 <h2 id="ruby">Ruby</h2>
 <p>First, the Ruby version:</p>
-<table class="sourceCode ruby numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+<div class="code-and-raw">
+<table class="sourceCode numberLines ruby" input="code/toy/rpn.rb"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
 4
@@ -260,11 +281,16 @@ getParkingSpaces t
 	<span class="kw">end</span>
 	stack
 <span class="kw">end</span></code></pre></td></tr></table>
+<div class="raw-link">
+<a  class="raw"  href= "/code/toy/rpn.rb"  mimetype=text/plain > rpn.rb </a>
+</div>
+</div>
 <p>Pretty straightforward, yes? The <code>terms</code> variable holds an array of numbers and operators. We use a calculator stack (aptly named, <code>stack</code>) to untangle the RPN in a stack-based way.</p>
 <p>In the <code>while</code> loop, the actions depend on what <code>term</code> looks like. If <code>term</code> is a number in string form, we convert it into a real number with <code>String#to_i</code>, and push it into <code>stack</code>. If <code>term</code> is one of the 3 recognized operators, we remove 2 terms <code>a</code> and <code>b</code> from <code>stack</code> and apply the necessary operation on it with Ruby’s magic <code>Object#send</code> method, and push the new term <code>c</code> back into <code>stack</code> for further operations (if any, in later iterations of the <code>while</code> loop). Otherwise, we reject the input as an invalid term.</p>
 <h2 id="haskell">Haskell</h2>
 <p>Here is the Haskell version:</p>
-<table class="sourceCode haskell numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+<div class="code-and-raw">
+<table class="sourceCode numberLines haskell" input="code/toy/rpn.hs"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
 4
@@ -316,6 +342,10 @@ evalTerms <span class="fu">=</span> foldl modifyStack []
 		<span class="dt">TermOp</span> op <span class="ot">-&gt;</span> <span class="kw">case</span> stack <span class="kw">of</span>
 			(a<span class="fu">:</span>b<span class="fu">:</span>_) <span class="ot">-&gt;</span> op a b <span class="fu">:</span> drop <span class="dv">2</span> stack
 			_ <span class="ot">-&gt;</span> error <span class="st">&quot;stack too small for operator application&quot;</span></code></pre></td></tr></table>
+<div class="raw-link">
+<a  class="raw"  href= "/code/toy/rpn.hs"  mimetype=text/plain > rpn.hs </a>
+</div>
+</div>
 <p>Probably the first thing to note is that we define a robust data type, <code>Term</code>, to encapsulate the values held in a given RPN string. We take advantage of Haskell’s functions-as-first-class-values ability, and define the <code>TermOp</code> constructor with it (i.e., it needs an arithmetic function <code>(Integer -&gt; Integer -&gt; Integer)</code> as an argument).</p>
 <p>The next thing to notice is that the <code>evaluate</code> function is composed of smaller helper functions, <code>mkTerm</code> and <code>evalTerms</code>. <code>mkTerm</code> simply converts a <code>String</code> type into an appropriate <code>Term</code> type. <code>evalTerms</code> takes a list of <code>Term</code> values, and reduces it as much as possible by applying the <code>modifyStack</code> function over it with <code>foldl</code> (Haskell’s version of a single-pass loop).</p>
 <p>When <code>modifyStack</code> encounters a <code>TermInt</code>, it pushes the number into the stack. When it encounters a <code>TermOp</code>, it applies that operator to the first 2 items in <code>stack</code>, and pushes this result back into <code>stack</code>. We use pattern matching with <code>(a:b:_)</code> to pull out the <code>a</code> and <code>b</code> values from the stack — the expression <code>(a:b:_)</code> means a value that matches either <span class="math">\([x_1, x_2]\)</span>, or <span class="math">\([x_1, x_2, ... , x_n]\)</span>, because the <code>_</code> operator matches anything, including the empty list <code>[]</code> used to finalize list creation. The <code>drop 2 stack</code> is necessary because Haskell’s types by default are immutable.</p>
@@ -340,15 +370,20 @@ evalTerms <span class="fu">=</span> foldl modifyStack []
     <published>2014-08-11T00:00:00Z</published>
     <updated>2014-08-11T00:00:00Z</updated>
     <summary type="html"><![CDATA[<div class="info center">
-	<code class="date">2014-08-11</code>
+	<code class="date">2014-08-11</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2014-08-11-find-files-with-80+-columns.md" title="History">*</a>
 	<br>
 	<a href="/tag/linux.html">linux</a>, <a href="/tag/programming.html">programming</a>
 </div>
 
 <p>It’s nice to follow the 80-columns-per-line rule<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a>, but what if you have some lingering project that has yet to conform?</p>
 <p>Just go to that project’s sources directory and do</p>
-<table class="sourceCode numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
-</pre></td><td class="sourceCode"><pre><code class="sourceCode">find . -type f -exec sh -c &quot;expand -t 8 {} | grep -n \&quot;.\{81\}\&quot;&quot; \; -print</code></pre></td></tr></table>
+<div class="code-and-raw">
+<table class="sourceCode numberLines bash" input="code/find-80-cols.sh"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+</pre></td><td class="sourceCode"><pre><code class="sourceCode bash"><span class="kw">find</span> . -type f -exec sh -c <span class="st">&quot;expand -t 8 {} | grep -n </span><span class="dt">\&quot;</span><span class="st">.\{81\}</span><span class="dt">\&quot;</span><span class="st">&quot;</span> <span class="dt">\;</span> -print</code></pre></td></tr></table>
+<div class="raw-link">
+<a  class="raw"  href= "/code/find-80-cols.sh"  mimetype=text/plain > find-80-cols.sh </a>
+</div>
+</div>
 <p>.</p>
 <p>The call to <code>expand</code> is necessary because different people use different widths for tabs. That is, we are trying to find files with 80+ <em>columns</em> (as they appear to humans), not 80+ <em>characters</em> (as they appear to the computer).</p>
 <div class="footnotes">
@@ -366,7 +401,7 @@ evalTerms <span class="fu">=</span> foldl modifyStack []
     <published>2014-06-04T00:00:00Z</published>
     <updated>2014-06-04T00:00:00Z</updated>
     <summary type="html"><![CDATA[<div class="info center">
-	<code class="date">2014-06-04</code>
+	<code class="date">2014-06-04</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2014-06-04-nvrm-api-mismatch.md" title="History">*</a>
 	<br>
 	<a href="/tag/arch.html">arch</a>, <a href="/tag/linux.html">linux</a>, <a href="/tag/nvidia.html">nvidia</a>
 </div>
@@ -395,7 +430,7 @@ NVRM: components have the same version.</code></pre></td></tr></table>
     <published>2014-05-20T00:00:00Z</published>
     <updated>2014-05-20T00:00:00Z</updated>
     <summary type="html"><![CDATA[<div class="info center">
-	<code class="date">2014-05-20</code>
+	<code class="date">2014-05-20</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2014-05-20-quad-monitor-setup.md" title="History">*</a>
 	<br>
 	<a href="/tag/linux.html">linux</a>, <a href="/tag/hardware.html">hardware</a>, <a href="/tag/nvidia.html">nvidia</a>, <a href="/tag/xmonad.html">xmonad</a>
 </div>
@@ -405,7 +440,8 @@ NVRM: components have the same version.</code></pre></td></tr></table>
 <p><img src="../img/quad-monitor.jpg" alt="Quad monitor setup" title="Quad monitor setup" width="100%"></p>
 <p>Using four monitors sounds difficult, but it’s a breeze with Xinerama and Xmonad. The hardest part was figuring out the correct <code>xorg.conf</code> configuration file. It was difficult because the QNIX monitors, being cheap, do not work out of the box, because the latest Nvidia driver (version 337.12) does not detect the correct resolution. What’s worse, the QNIXes do not support anything other than their native 2560x1440 resolution, so you’ll get blank screens if you try to just use these monitors without tweaking some <code>xorg.conf</code> settings. I actually ended up googling to find the correct <code>Modeline</code> value for <code>xorg.conf</code> for my QNIX, at 96hz refresh rate.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> You could try using the <code>cvt</code> program included with <code>xorg-server</code>, but when I tried it out on my own it generated different numbers and my QNIXes couldn’t handle those numbers.</p>
 <p>Here is my <code>xorg.conf</code>:</p>
-<table class="sourceCode xorg numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+<div class="code-and-raw">
+<table class="sourceCode numberLines xorg" input="code/quad-monitor-portrait.xorg.conf"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
 4
@@ -763,6 +799,10 @@ NVRM: components have the same version.</code></pre></td></tr></table>
         Depth<span class="kw">       </span><span class="dv">24</span>
     <span class="fu">EndSubSection</span>
 <span class="fu">EndSection</span></code></pre></td></tr></table>
+<div class="raw-link">
+<a  class="raw"  href= "/code/quad-monitor-portrait.xorg.conf"  mimetype=text/plain > quad-monitor-portrait.xorg.conf </a>
+</div>
+</div>
 <div class="footnotes">
 <hr />
 <ol>
@@ -778,7 +818,7 @@ NVRM: components have the same version.</code></pre></td></tr></table>
     <published>2014-05-02T00:00:00Z</published>
     <updated>2014-05-02T00:00:00Z</updated>
     <summary type="html"><![CDATA[<div class="info center">
-	<code class="date">2014-05-02</code>
+	<code class="date">2014-05-02</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2014-05-02-linus-haskell-coding-style.md" title="History">*</a>
 	<br>
 	<a href="/tag/haskell.html">haskell</a>, <a href="/tag/programming.html">programming</a>
 </div>
@@ -902,7 +942,7 @@ import MyModule.Two</code></pre>
     <published>2014-03-19T00:00:00Z</published>
     <updated>2014-03-19T00:00:00Z</updated>
     <summary type="html"><![CDATA[<div class="info center">
-	<code class="date">2014-03-19</code>
+	<code class="date">2014-03-19</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2014-03-19-opengl-haskell-3-matrices.md" title="History">*</a>
 	<br>
 	<a href="/tag/haskell.html">haskell</a>, <a href="/tag/opengl.html">opengl</a>
 </div>
@@ -912,7 +952,8 @@ import MyModule.Two</code></pre>
 <p>I have also removed the use of backticks for Haskell’s infix notation (<code>`...`</code>). It’s not because I like using parentheses — I just don’t like using infix notation because it runs against the argument handling order of normal functions found everywhere else.</p>
 <p>Also, I have fixed YPares’s original <code>lookAt</code> function which is actually <a href="https://github.com/YPares/Haskell-OpenGL3.1-Tutos/commit/7a027b927d061fbd26138cb7357c40c4cacbc927">broken as of commit 7a027b927d061fbd26138cb7357c40c4cacbc927</a>; you will need my version if you wish to pursue the later tutorials that actually test the validity of this function, such as the keyboard/mouse input tutorial #6 from <a href="http://www.opengl-tutorial.org" class="uri">http://www.opengl-tutorial.org</a>.</p>
 <p>The code here is released into the Public Domain.</p>
-<table class="sourceCode haskell numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+<div class="code-and-raw">
+<table class="sourceCode numberLines haskell" input="code/opengl/matrices.hs"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
 4
@@ -1430,6 +1471,10 @@ lookAt eye target up <span class="fu">=</span> x <span class="fu">:.</span> y <s
 	y <span class="fu">=</span> snoc up&#39; (<span class="fu">-</span>(dot up&#39; eye))
 	z <span class="fu">=</span> snoc (<span class="fu">-</span>forward) (dot forward eye)
 	h <span class="fu">=</span> <span class="dv">0</span> <span class="fu">:.</span> <span class="dv">0</span> <span class="fu">:.</span> <span class="dv">0</span> <span class="fu">:.</span> <span class="dv">1</span> <span class="fu">:.</span> ()</code></pre></td></tr></table>
+<div class="raw-link">
+<a  class="raw"  href= "/code/opengl/matrices.hs"  mimetype=text/plain > matrices.hs </a>
+</div>
+</div>
 ]]></summary>
 </entry>
 <entry>
@@ -1439,7 +1484,7 @@ lookAt eye target up <span class="fu">=</span> x <span class="fu">:.</span> y <s
     <published>2014-03-15T00:00:00Z</published>
     <updated>2014-03-15T00:00:00Z</updated>
     <summary type="html"><![CDATA[<div class="info center">
-	<code class="date">2014-03-15</code>
+	<code class="date">2014-03-15</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2014-03-15-opengl-from-haskell.md" title="History">*</a>
 	<br>
 	<a href="/tag/haskell.html">haskell</a>, <a href="/tag/opengl.html">opengl</a>
 </div>
@@ -1448,7 +1493,8 @@ lookAt eye target up <span class="fu">=</span> x <span class="fu">:.</span> y <s
 <p>My version uses the code from <a href="https://github.com/YPares/Haskell-OpenGL3.1-Tutos" class="uri">https://github.com/YPares/Haskell-OpenGL3.1-Tutos</a>, but does not use <code>Control.Applicative</code> and also does not put the shaders containing GLSL in a separate text file. Everything is self-contained in one file, and it only uses the <code>PackageImports</code> and <code>RecordWildCards</code> GHC extensions. The <code>PackageImports</code> is only necessary if you have both <a href="http://hackage.haskell.org/package/GLFW">GLFW</a> and <a href="http://hackage.haskell.org/package/GLFW-b">GLFW-b</a> Hackage packages installed in your system (as they have a name clash of <code>Graphics.UI.GLFW</code>, you need to disambiguate this import by specifying the package name). The <code>RecordWildCards</code> extension is pretty standard and exists purely for syntactic sugar (no type-level hoops and such) — if you don’t know about it you should google it.</p>
 <p>I went ahead and added type signatures for all top-level functions — something that many Haskell tutorial writers hate doing for some strange, unknown reason.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> Also, I ran the code through <code>ghc --make -Wall</code> and silenced all warnings.</p>
 <p>I hereby release it into the Public Domain. From what I can tell, YPares’s code doesn’t have a license… I think this should be OK.</p>
-<table class="sourceCode haskell numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+<div class="code-and-raw">
+<table class="sourceCode numberLines haskell" input="code/opengl/triangle.hs"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
 4
@@ -1846,6 +1892,10 @@ drawStuff <span class="dt">GLIDs</span>{<span class="fu">..</span>} <span class=
 	bindBufferToAttrib vertexBufferId <span class="dv">0</span>
 	glDrawArrays gl_TRIANGLES <span class="dv">0</span> <span class="dv">3</span> <span class="co">-- for attrib array 0, draw 3 vertices</span>
 	glDisableVertexAttribArray <span class="dv">0</span> <span class="co">-- disable attrib array 0</span></code></pre></td></tr></table>
+<div class="raw-link">
+<a  class="raw"  href= "/code/opengl/triangle.hs"  mimetype=text/plain > triangle.hs </a>
+</div>
+</div>
 <div class="footnotes">
 <hr />
 <ol>
@@ -1861,7 +1911,7 @@ drawStuff <span class="dt">GLIDs</span>{<span class="fu">..</span>} <span class=
     <published>2014-01-24T00:00:00Z</published>
     <updated>2014-01-24T00:00:00Z</updated>
     <summary type="html"><![CDATA[<div class="info center">
-	<code class="date">2014-01-24</code>
+	<code class="date">2014-01-24</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2014-01-24-cabal2pkgbuild.md" title="History">*</a>
 	<br>
 	<a href="/tag/arch.html">arch</a>, <a href="/tag/linux.html">linux</a>, <a href="/tag/haskell.html">haskell</a>, <a href="/tag/cblrepo.html">cblrepo</a>
 </div>
