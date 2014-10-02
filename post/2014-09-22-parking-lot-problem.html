@@ -62,7 +62,7 @@
 <h2 id="ruby">Ruby</h2>
 <p>I think it is time for some actual code. While I could explain how the Ruby version works, I feel that I have already expounded upon the problem enough above, so that the code here should make intuitive sense.</p>
 <div class="code-and-raw">
-<table class="sourceCode numberLines ruby" input="code/toy/parking-lot.rb"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+<table class="sourceCode numberLines ruby" input="code/toy/parking-space.rb"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
 4
@@ -89,13 +89,13 @@
 	<span class="kw">return</span> i
 <span class="kw">end</span></code></pre></td></tr></table>
 <div class="raw-link">
-<a class="raw" href="../code/toy/parking-lot.rb" mimetype="text/plain"> parking-lot.rb </a>
+<a class="raw" href="../code/toy/parking-space.rb" mimetype="text/plain"> parking-space.rb </a>
 </div>
 </div>
 <h2 id="haskell">Haskell</h2>
 <p>The Haskell version is a direct translation of the Ruby version, as an iterative approach works just fine. The only drawback is that we use <code>Int</code> instead of the arbitrarily large <code>Integer</code> type for succinctness (we can use <code>Integer</code>, but some built-in functions like <code>sort</code> only work on <code>Int</code>). However, it is interesting if only for the fact that the edge cases are made explicit — there seems to be no way to avoid “lying” to Haskell about the complexity of our problem!</p>
 <div class="code-and-raw">
-<table class="sourceCode numberLines haskell" input="code/toy/parking-lot.hs"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+<table class="sourceCode numberLines haskell" input="code/toy/parking-space.hs"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
 4
@@ -118,7 +118,7 @@ getParkingSpace ts
 		<span class="fu">|</span> i <span class="fu">&lt;</span> xs <span class="fu">!!</span> i <span class="fu">=</span> i
 		<span class="fu">|</span> otherwise <span class="fu">=</span> loop (i <span class="fu">+</span> <span class="dv">1</span>) xs</code></pre></td></tr></table>
 <div class="raw-link">
-<a class="raw" href="../code/toy/parking-lot.hs" mimetype="text/plain"> parking-lot.hs </a>
+<a class="raw" href="../code/toy/parking-space.hs" mimetype="text/plain"> parking-space.hs </a>
 </div>
 </div>
 <h2 id="low-level-interlude">Low-Level Interlude</h2>
