@@ -255,17 +255,13 @@ getParkingSpaces t
 20
 21
 22
-23
-24
 </pre></td><td class="sourceCode"><pre><code class="sourceCode ruby"><span class="kw">def</span> evaluate(equation_str)
-	terms = equation_str.split(<span class="st">&#39; &#39;</span>)
 	stack = []
-	<span class="kw">while</span> terms.size &gt; <span class="dv">0</span>
-		term = terms.shift
+	equation_str.split.each <span class="kw">do</span> |term|
 		<span class="kw">case</span> term
 		<span class="kw">when</span> <span class="ot">/^\d+?$/</span>
 			stack.push(term.to_i)
-		<span class="kw">when</span> <span class="st">&#39;+&#39;</span>, <span class="st">&#39;-&#39;</span>, <span class="st">&#39;*&#39;</span>
+		<span class="kw">when</span> <span class="st">&quot;+&quot;</span>, <span class="st">&quot;-&quot;</span>, <span class="st">&quot;*&quot;</span>
 			<span class="kw">if</span> stack.size &lt; <span class="dv">2</span>
 				raise <span class="st">&quot;stack too small for operator application&quot;</span>
 			<span class="kw">else</span>
@@ -286,7 +282,7 @@ getParkingSpaces t
 </div>
 </div>
 <p>Pretty straightforward, yes? The <code>terms</code> variable holds an array of numbers and operators. We use a calculator stack (aptly named, <code>stack</code>) to untangle the RPN in a stack-based way.</p>
-<p>In the <code>while</code> loop, the actions depend on what <code>term</code> looks like. If <code>term</code> is a number in string form, we convert it into a real number with <code>String#to_i</code>, and push it into <code>stack</code>. If <code>term</code> is one of the 3 recognized operators, we remove 2 terms <code>a</code> and <code>b</code> from <code>stack</code> and apply the necessary operation on it with Ruby’s magic <code>Object#send</code> method, and push the new term <code>c</code> back into <code>stack</code> for further operations (if any, in later iterations of the <code>while</code> loop). Otherwise, we reject the input as an invalid term.</p>
+<p>In the <code>each</code> loop, the actions depend on what <code>term</code> looks like. If <code>term</code> is a number in string form, we convert it into a real number with <code>String#to_i</code>, and push it into <code>stack</code>. If <code>term</code> is one of the 3 recognized operators, we remove 2 terms <code>a</code> and <code>b</code> from <code>stack</code> and apply the necessary operation on it with Ruby’s magic <code>Object#send</code> method, and push the new term <code>c</code> back into <code>stack</code> for further operations (if any, in later iterations of the <code>while</code> loop). Otherwise, we reject the input as an invalid term.</p>
 <h2 id="haskell">Haskell</h2>
 <p>Here is the Haskell version:</p>
 <div class="code-and-raw">
