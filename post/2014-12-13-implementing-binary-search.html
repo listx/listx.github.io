@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Linus's Blog - Implementing Binary Search</title>
+		<link rel="stylesheet" href="../css/base.css">
+		<link rel="stylesheet" href="../css/syntax.css">
+		<link href="http://fonts.googleapis.com/css?family=Merriweather:400,400italic,700italic,700" rel="stylesheet" type="text/css">
+		<link rel="shortcut icon" type="image/png" href="../favicon.png">
+		<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+	</head>
+	<body>
+		<div id="header">
+			<a href="../">Home</a>
+			&bull;
+			<a href="../about.html">About</a>
+			&bull;
+			<a href="../art.html">Art</a>
+			&bull;
+			<a href="../code.html">Code</a>
+			&bull;
+			<a href="../archive.html">Archive</a>
+		</div>
+
+		<div id="content">
+			<h1 class="center">Implementing Binary Search</h1>
+
+			<div class="info center">
+	<code class="date">2014-12-13</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2014-12-13-implementing-binary-search.md" title="History">*</a>
+	<br>
+	<a href="../tag/programming.html">programming</a>, <a href="../tag/c.html">c</a>, <a href="../tag/ruby.html">ruby</a>, <a href="../tag/haskell.html">haskell</a>
+</div>
+
+<p>If you are a programmer, I’m sure you’ve encountered the term <em>binary search</em> at some point in time. I know what binary search is, but I’m writing this post to solidify my understanding of it. I also want to compare how it might be naively implemented across my 3 favorite languages C, Ruby, and Haskell — because naive code is the best code (to learn from)!</p>
+<h2 id="binary-subdivision">Binary Subdivision</h2>
+<p>You can skip this section if you want — I merely want to write how I first met and fell in love with the concept of <em>binary subdivision</em>. I first discovered binary division when I was in high school. It was a very pleasant realization, and at the time I did not fully realize what I had accidentally encountered.</p>
+<p>The situation was so: my Biology teacher, Mr. Kennedy, told everyone to draw an even 4x4 square grid on the palms of our hands. Everyone was supposed to draw their own 4x4 grid — but this was when I asked myself, “how can I draw the most even-looking grid without using a ruler?” You see, I could not use a ruler because I was using my right hand to draw onto my left hand — and to hold a ruler properly I would need a third hand! So there was the problem.</p>
+<p>On the one hand, I could not simply draw the four horizontal and four vertical lines one after the other, left to right, top to bottom, because I knew that I would introduce a great deal of additive error.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> I did not want to draw an ugly, lopsided square.</p>
+<p>It took me a few seconds, but I came up with a plan. I first drew a single large square. Then knowing that I could easily eyeball with good accuracy where the <em>middle point of that square</em> was horizontally, I drew a vertical line down the <em>middle</em>. I then did the same thing in the other axis vertically. I repeated this procedure a few more times, <em>recursively subdividing</em> each smaller rectangular shape into halves, finally ending up with a nice-looking grid. I glanced around the room, and later looked at other students’ palms to see if they had discovered this “divide by <span class="math">\(\frac{1}{2}\)</span>” trick, but to my dismay no one had done it; I knew this was the case because everybody else’s square was sloppy.</p>
+<p>I cannot honestly say if this was the very first time I realized the underlying geometric concepts at play here, but I can affirmatively say that it really was the first time I systematically applied such an elegant solution to a given problem. I wonder if most people who draw grids even bother to think of it as a problem.</p>
+<p>To me, binary subdivision is the underpinning principle behind binary search. Continued subdvision by halves is like exponentiation in reverse; pretty soon, you end up with extremely tiny numbers. This is where the power of binary search comes from! Simply put, binary search is like binary subdivision, but you get to subdivide <em>toward</em> the location of whatever you’re looking for. Isn’t that cool?</p>
+<h2 id="the-problem">The Problem</h2>
+<p>The problem is simple — given a <strong>sorted</strong> list <code>KEYS</code> of items (for simplicity’s sake, positive integers), determine if <code>key</code> is in it, and also, the position of <code>key</code> in the list if it is indeed in the list. The catch is that you have no idea as to the contents of <code>KEYS</code> — only that it is sorted from smallest to largest.</p>
+<h2 id="naive-approach-linear-search">Naive Approach — Linear Search</h2>
+<p>The simplest way of doing this is by linear search. It is probably the novice programmer’s first reaction. You just start from the first item in <code>KEYS</code>, and run a <strong>for</strong>-loop all the way across the list, looking at every single item. There are now two possibilities — either (1) you indeed discover <code>key</code>, and report back your position (aka the “index”, usually in the form of the familiar <code>i</code> variable in C/C++/Java code), or (2) you find nothing. If you are clever, you can optimize the search in the second situation by breaking out of the <strong>for</strong>-loop if the items you are comparing are larger than <code>key</code>; after all, <code>KEYS</code> is sorted, so we know for a fact that the later numbers are only going to get bigger, so there is no point in trying to find <code>key</code> in that crowd of numbers.</p>
+<p>But think of the consequences — what’s the worst case scenario? Imagine you have 1 trillion items, and that <code>key</code> is not in it, because let’s say <code>key</code> is a much bigger number than the biggest number in <code>KEYS</code> — but of course you haven’t run the linear search yet, so you don’t know that. Given this situation, you would have to search the <em>entire</em> list of all numbers in <code>KEYS</code> before reaching condition (2) described above.</p>
+<p>If you wanted to get a little more clever to avoid this problem of searching all 1 trillion items, you could tell the algorithm to refuse to enter the <strong>for</strong>-loop if <code>key</code> lies outside the <em>bounds</em> of <code>KEYS</code>. Checking the bounds is easy and takes constant time, as you merely check for the first and last item’s size (again, as <code>KEYS</code> is sorted), and those are your bounds. This way, if <code>key</code> lies outside the bounds, you can <em>guarantee</em> that it is not in <code>KEYS</code>, no matter how many items <code>KEYS</code> has.</p>
+<p>And, this is it. There is nothing more to optimize using this method (let’s not get into parallelization). What else can you do, really, when searching linearly, looping through every item from the beginning to the next?</p>
+<h2 id="inverted-bounds-checking-aka-binary-search">Inverted Bounds-Checking, aka Binary Search</h2>
+<p>The heading of this subsection might have already given you a hint as to what binary search entails. (Although, if you’ve read the <em>Binary Subdivision</em> section, you should have had a good idea anyhow.) Binary search takes the concept of bounds-checking, and applies it repeatedly, recursively, against <code>KEYS</code>. The only difference when I say “bounds-checking” in the context of binary search is that we do <em>not</em> care about the values of those bounds, but merely that they <em>are</em> the bounds. This is because we only concern ourselves with dividing the list of sorted numbers by <span class="math">\(\frac{1}{2}\)</span> every time and take the <em>middle</em> index <code>middle_index</code>, which is located as close as possible to the middle element (halfway between the two bounds). Indeed, the only way to get a valid <code>middle_index</code> value is if we know the bounds (the size of the list). We keep doing this recursively until <code>KEYS[mid] == key</code>.</p>
+<p>The following is the pseudocode.</p>
+<div class="code-and-raw">
+<table class="sourceCode numberLines" input="code/toy/binary-search-pseudo-0.txt"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+</pre></td><td class="sourceCode"><pre><code class="sourceCode">KEYS = some random list of numbers
+key = the number we're looking for in KEYS
+
+binary_search(KEYS, key):
+	middle_index = get_middle_index_index(length of KEYS)
+	lower_KEYS = get_below(middle_index, KEYS)
+	upper_KEYS = get_above(middle_index, KEYS)
+	if key &lt; KEYS[middle_index]
+		binary_search(lower_KEYS, key)
+	else if key &gt; KEYS[middle_index]
+		binary_search(upper_KEYS, key)
+	else
+		return middle_index
+	end</code></pre></td></tr></table>
+<div class="raw-link">
+<a class="raw" href="../code/toy/binary-search-pseudo-0.txt" mimetype="text/plain"> binary-search-pseudo-0.txt </a>
+</div>
+</div>
+<p>There are some obvious holes in the code above.</p>
+<p>First, we always assume that <code>KEYS</code> is made up of multiple elements, and that its halves <code>lower_keys</code> and <code>upper_keys</code> also have multiple elements in them. In the extreme case, <code>KEYS</code> might be an empty list, which would make the whole thing explode.</p>
+<p>Second, the <code>get_middle_index()</code>, <code>get_below_mid()</code>, and <code>get_above_mid()</code> functions remain undefined.</p>
+<p>Aside: You might be wondering about lines 12-14. We could write</p>
+<pre><code>else if key == KEYS[mid]</code></pre>
+<p>instead of just <code>else</code> on line 12, but that is redundant. This is because we already test for the two other conditions of <code>key</code> being <em>lesser</em> or <em>greater</em> than <code>middle_index</code>. Therefore, we’ve excluded the two other conditions and are already only left with the third condition of <code>key == KEYS[mid]</code> evaluating to TRUE — hence we write just <code>else</code> on line 12.</p>
+<p>Addressing the holes above, we get the next version.<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a></p>
+<div class="code-and-raw">
+<table class="sourceCode numberLines" input="code/toy/binary-search-pseudo-1.txt"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+</pre></td><td class="sourceCode"><pre><code class="sourceCode">KEYS = some random list of numbers
+first_index = 0
+last_index = 999 (our KEYS is 1000 elements big)
+key = the number we're looking for in KEYS
+
+binary_search(KEYS, key, first_index, last_index):
+	list_size = (last_index - first_index) + 1
+	if list_size == 0
+		return KEY_NOT_FOUND
+	end
+
+	middle_index = list_size / 2 + first_index
+
+	if key &lt; KEYS[middle_index]
+		binary_search(KEYS, key, first_index, middle_index - 1)
+	else if key &gt; KEYS[middle_index]
+		binary_search(KEYS, key, middle_index + 1, last_index)
+	else
+		return middle_index
+	end</code></pre></td></tr></table>
+<div class="raw-link">
+<a class="raw" href="../code/toy/binary-search-pseudo-1.txt" mimetype="text/plain"> binary-search-pseudo-1.txt </a>
+</div>
+</div>
+<p>There are some obvious differences — mainly the fact that we concern ourselves primarily with the first and last index numbers of the list, and work with these indices instead of working with the entire list <code>KEYS</code> itself. The <code>get_below()</code> and <code>get_above()</code> functions are gone and have been replaced with the index bounds <code>first_index, middle_index</code> and <code>middle_index + 1, last_index</code>, respectively. As you can see, working with these index numbers directly avoids a lot of abstraction. Actually, the <code>list_size</code> abstraction can be further reduced in terms of indices, so that <code>list_size == 0</code> can be rewritten as <code>first_index &gt; last_index</code>.<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a></p>
+<h2 id="theoretical-performance">Theoretical Performance</h2>
+<p>You can probably see why binary search is so powerful. It repeatedly divides the search region into <span class="math">\(\frac{1}{2}\)</span> of its original size. It’s sort of like <a href="http://en.wikipedia.org/wiki/Zeno%27s_paradoxes">Zeno’s Dichotomy Paradox</a>, except that it uses the “absurdity” of Zeno’s argument, and uses that to its advantage. To me, these somewhat related, even tangential, connections make binary search that much more elegant.</p>
+<p>Consider this: a list that has 100,000 elements will only take, in the worst case, around 16 calls. Compare that to linear search, which will take at most 100,000 calls or iterations (if our item happens to be at the very last index).<a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a> The time complexity of binary search for a list of <span class="math">\(\mathit{KEYS\_TOTAL}\)</span> elements is defined to be <span class="math">\(\lfloor\log_2\mathit{KEYS\_TOTAL}\rfloor\)</span>. Because this defines an exponential relationship, we can rest assured that we can <em>cut down</em> a very large list quickly.<a href="#fn5" class="footnoteRef" id="fnref5"><sup>5</sup></a></p>
+<h2 id="naive-implementations">Naive Implementations</h2>
+<h3 id="preliminary-details">Preliminary Details</h3>
+<p>I said at the beginning of the post that I would show a naive implementation in C, Ruby, and Haskell. I could have simply written a <code>binary_search()</code> function (and only that function) for all three languages — but instead I chose to write full standalone programs for all three that print out the same results. Because they are all standalone programs, you can easily tweak some settings (namely, the <code>KEYS_TOTAL</code> value), and see how it scales.<a href="#fn6" class="footnoteRef" id="fnref6"><sup>6</sup></a> All versions use the new <a href="http://www.pcg-random.org">PCG family</a> of pseudorandom number generators (RNGs), which have been created by Prof. Melissa E. O’Neill, author of the great paper <em>The Genuine Sieve of Eratosthenes</em>.<a href="#fn7" class="footnoteRef" id="fnref7"><sup>7</sup></a></p>
+<h3 id="c-version-linux">C Version (Linux)</h3>
+<div class="code-and-raw">
+<table class="sourceCode numberLines c" input="code/toy/binary-search.c"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+</pre></td><td class="sourceCode"><pre><code class="sourceCode c"><span class="co">/*</span>
+<span class="co"> * LICENSE: PUBLIC DOMAIN</span>
+<span class="co"> *</span>
+<span class="co"> * Compile with `gcc -o binary-search-c -Wall -Wextra -Wpedantic --std=gnu11 -O2</span>
+<span class="co"> * binary-search.c'. Check via valgrind with `valgrind --leak-check=full</span>
+<span class="co"> * --show-leak-kinds=all -v path/to/binary'.</span>
+<span class="co"> *</span>
+<span class="co"> * Usage: just execute the binary as-is without any arguments. To test the RNG,</span>
+<span class="co"> * call with the argument &quot;rng&quot;.</span>
+<span class="co"> */</span>
+
+<span class="ot">#include &lt;stdbool.h&gt; </span><span class="co">/* bool */</span>
+<span class="ot">#include &lt;stdio.h&gt;</span>
+<span class="ot">#include &lt;stdint.h&gt; </span><span class="co">/* UINT32_MAX */</span>
+<span class="ot">#include &lt;stdlib.h&gt; </span><span class="co">/* malloc() */</span>
+<span class="ot">#include &lt;string.h&gt; </span><span class="co">/* strcmp() */</span>
+<span class="ot">#include &lt;inttypes.h&gt; </span><span class="co">/* uint32_t */</span>
+
+<span class="kw">typedef</span> <span class="dt">uint32_t</span> u32;
+<span class="kw">typedef</span> <span class="dt">uint64_t</span> u64;
+
+<span class="co">/*</span>
+<span class="co"> * &quot;-1&quot; is an invalid value to be used as an index for an array (the index</span>
+<span class="co"> * number is what binary_search() looks for.)</span>
+<span class="co"> */</span>
+<span class="kw">enum</span> {KEY_NOT_FOUND = -<span class="dv">1</span>};
+<span class="dt">const</span> <span class="dt">int</span> KEYS_TOTAL = <span class="dv">1000000</span>;
+
+<span class="co">// *Really* minimal PCG32 code / (c) 2014 M.E. O'Neill / pcg-random.org</span>
+<span class="co">// Licensed under Apache License 2.0 (NO WARRANTY, etc. see website)</span>
+
+<span class="kw">typedef</span> <span class="kw">struct</span> { u64 state;  <span class="dt">uint64_t</span> inc; } pcg32_random_t;
+
+u32 pcg32_random_r(pcg32_random_t *rng)
+{
+	u64 oldstate = rng-&gt;state;
+	rng-&gt;state = oldstate * 6364136223846793005ULL + (rng-&gt;inc|<span class="dv">1</span>);
+	u32 xorshifted = ((oldstate &gt;&gt; 18u) ^ oldstate) &gt;&gt; 27u;
+	u32 rot = oldstate &gt;&gt; 59u;
+	<span class="kw">return</span> (xorshifted &gt;&gt; rot) | (xorshifted &lt;&lt; ((-rot) &amp; <span class="dv">31</span>));
+}
+
+u32 uniform32(<span class="dt">int</span> range, pcg32_random_t *rng)
+{
+	<span class="dt">unsigned</span> rand_limit, rand_excess;
+	u32 x;
+	rand_excess = ((UINT32_MAX % range) + <span class="dv">1</span>) % range;
+	rand_limit = UINT32_MAX - rand_excess;
+	<span class="kw">while</span> ((x = pcg32_random_r(rng)) &gt; rand_limit) {};
+	<span class="kw">return</span> x % range;
+}
+
+<span class="co">/* Populate an array with increasing numbers; we randomly choose whether to skip</span>
+<span class="co"> * to the next number by an increment of 1 or 2, so as to initialize the array</span>
+<span class="co"> * slightly differently each time this function is called.</span>
+<span class="co"> */</span>
+u32 init_array(u32 *keys, bool has_key, pcg32_random_t *rng)
+{
+	<span class="dt">int</span> i, j;
+	<span class="kw">for</span> (i = <span class="dv">0</span>, j = <span class="dv">0</span>; i &lt; KEYS_TOTAL; i++) {
+		j += uniform32(<span class="dv">2</span>, rng);
+		keys[i] = i + j;
+	}
+
+	<span class="co">/*</span>
+<span class="co">	 * If we want to choose a key, randomly choose one from one of the</span>
+<span class="co">	 * existing elements; otherwise, return an impossible key (where</span>
+<span class="co">	 * &quot;impossible&quot; means a key whose value lies outside the range of values</span>
+<span class="co">	 * that exist in the array).</span>
+<span class="co">	 */</span>
+	<span class="kw">if</span> (has_key)
+		<span class="kw">return</span> keys[uniform32(KEYS_TOTAL, rng)];
+	<span class="kw">else</span>
+		<span class="co">/* Impossible key = biggest key + 1 */</span>
+		<span class="kw">return</span> keys[KEYS_TOTAL - <span class="dv">1</span>] + <span class="dv">1</span>;
+}
+
+<span class="dt">int</span> binary_search(u32 *keys, u32 key, <span class="dt">int</span> min, <span class="dt">int</span> max)
+{
+	<span class="dt">int</span> list_size;
+	<span class="dt">int</span> mid;
+
+	list_size = (max - min) + <span class="dv">1</span>;
+	<span class="kw">if</span> (list_size == <span class="dv">0</span>)
+		<span class="kw">return</span> KEY_NOT_FOUND;
+
+	mid = (list_size / <span class="dv">2</span>) + min;
+
+	<span class="kw">if</span> (key &lt; keys[mid]) {
+		<span class="kw">return</span> binary_search(keys, key, min, mid - <span class="dv">1</span>);
+	} <span class="kw">else</span> <span class="kw">if</span> (key &gt; keys[mid]) {
+		<span class="kw">return</span> binary_search(keys, key, mid + <span class="dv">1</span>, max);
+	} <span class="kw">else</span> {
+		<span class="kw">return</span> mid;
+	}
+}
+
+<span class="dt">int</span> main(<span class="dt">int</span> argc, <span class="dt">char</span> **argv)
+{
+	<span class="dt">int</span> i, min, max;
+	<span class="dt">int</span> mid;
+	bool has_key;
+	u32 *keys;
+	u32 key;
+	pcg32_random_t rng = {0x1234567890abcdefULL, 0x1234567890abcdefULL};
+
+	<span class="co">/* RNG self-test. */</span>
+	<span class="kw">if</span> (argc &gt; <span class="dv">1</span> &amp;&amp; strcmp(argv[<span class="dv">1</span>], <span class="st">&quot;rng&quot;</span>) == <span class="dv">0</span>) {
+		printf(<span class="st">&quot;Running RNG self-test.</span><span class="ch">\n</span><span class="st">&quot;</span>);
+		printf(<span class="st">&quot;%&quot;</span>PRIu32<span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>, pcg32_random_r(&amp;rng));
+		<span class="kw">for</span> (i = <span class="dv">0</span>; i &lt; <span class="dv">1000000</span>; i++) {
+			pcg32_random_r(&amp;rng);
+		}
+		printf(<span class="st">&quot;%&quot;</span>PRIu32<span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>, pcg32_random_r(&amp;rng));
+		<span class="kw">for</span> (i = <span class="dv">0</span>; i &lt; <span class="dv">100</span>; i++) {
+			printf(<span class="st">&quot;%&quot;</span>PRIu32<span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>,
+				uniform32((UINT32_MAX / <span class="dv">2</span>) + (UINT32_MAX / <span class="dv">3</span>),
+				&amp;rng));
+		}
+		keys = malloc(KEYS_TOTAL * <span class="kw">sizeof</span>(u32));
+		<span class="kw">for</span> (i = <span class="dv">0</span>; i &lt; <span class="dv">10</span>; i++) {
+			has_key = (bool)uniform32(<span class="dv">2</span>, &amp;rng);
+			key = init_array(keys, has_key, &amp;rng);
+			printf(<span class="st">&quot;last number in array %d for key %&quot;</span>PRIu32<span class="st">&quot;: &quot;</span>,
+				i, key);
+			printf(<span class="st">&quot;%&quot;</span>PRIu32<span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>, keys[KEYS_TOTAL - <span class="dv">1</span>]);
+		}
+		printf(<span class="st">&quot;Done.</span><span class="ch">\n</span><span class="st">&quot;</span>);
+		printf(<span class="st">&quot;END C VERSION</span><span class="ch">\n</span><span class="st">&quot;</span>);
+		free(keys);
+		<span class="kw">return</span> <span class="dv">0</span>;
+	}
+
+	<span class="co">/*</span>
+<span class="co">	 * Allocate space for our big array of keys, as well as our</span>
+<span class="co">	 * in-place-modified &quot;mid&quot; value.</span>
+<span class="co">	 */</span>
+	keys = malloc(KEYS_TOTAL * <span class="kw">sizeof</span>(u32));
+
+	<span class="co">/* Stress-test binary_search(). */</span>
+	<span class="kw">for</span> (i = <span class="dv">0</span>; i &lt; <span class="dv">20</span>; i++) {
+		has_key = (bool)uniform32(<span class="dv">2</span>, &amp;rng);
+		key = init_array(keys, has_key, &amp;rng);
+		min = <span class="dv">0</span>;
+		max = KEYS_TOTAL - <span class="dv">1</span>;
+		mid = binary_search(keys, key, min, max);
+		printf(<span class="st">&quot;%02d - &quot;</span>, i + <span class="dv">1</span>);
+		<span class="kw">if</span> (mid == KEY_NOT_FOUND) {
+			printf(<span class="st">&quot;key `%&quot;</span>PRIu32<span class="st">&quot;' not found.</span><span class="ch">\n</span><span class="st">&quot;</span>, key);
+		} <span class="kw">else</span> {
+			printf(<span class="st">&quot;key `%&quot;</span>PRIu32<span class="st">&quot;' found at keys[%d].</span><span class="ch">\n</span><span class="st">&quot;</span>,
+				key, mid);
+		}
+	}
+
+	printf(<span class="st">&quot;END C VERSION</span><span class="ch">\n</span><span class="st">&quot;</span>);
+	free(keys);
+	<span class="kw">return</span> <span class="dv">0</span>;
+}</code></pre></td></tr></table>
+<div class="raw-link">
+<a class="raw" href="../code/toy/binary-search.c" mimetype="text/plain"> binary-search.c </a>
+</div>
+</div>
+<p>Overview:</p>
+<ul>
+<li><code>pcg32_random_r()</code> is PCG’s minimal implementation version. This is RNG we depend on to get identical randomly-generated data in the other Ruby and Haskell versions.</li>
+<li><code>uniform32()</code> tames all raw RNG’s like <code>pcg32_random_r()</code>; it <a href="2013-07-12-generating-random-numbers-without-modulo-bias.html">removes any bias</a> that might be introduced if we were to use a simple modulo operation. Hence, we use <code>uniform32()</code> for all our RNG needs.</li>
+<li><code>init_array()</code> takes an empty array of fixed size, and populates it with semi-random numbers. I say <em>semi-random</em> because the number chosen to populate the array, in sequence, is steadily bumped up with the <code>j</code> variable, <strong>eliminating the need for sorting it afterwards</strong> in preparation for passing it to <code>binary_search()</code>.</li>
+<li>Finally, we have <code>binary_search()</code> itself, written in a way to closely match the pseudocode presented above.</li>
+</ul>
+<p>I’ve tried to keep the code simple. You may find it disturbing that we use the same type for <code>KEY_NOT_FOUND</code> as the actual valid key value (<code>mid</code>) itself. This kind of type overloading is common in C, and is what gives C its bare metal speed — at the cost of (probable) disaster, of course.</p>
+<h3 id="ruby-version">Ruby Version</h3>
+<div class="code-and-raw">
+<table class="sourceCode numberLines ruby" input="code/toy/binary-search.rb"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+</pre></td><td class="sourceCode"><pre><code class="sourceCode ruby"><span class="co"># LICENSE: PUBLIC DOMAIN</span>
+
+<span class="co"># Interact with `irb -I . -r path/to/this/file'.</span>
+
+<span class="co"># Usage: just execute the binary as-is without any arguments. To test the RNG,</span>
+<span class="co"># call with the argument &quot;rng&quot;.</span>
+
+<span class="dt">U32_MAX</span> = <span class="bn">0xffffffff</span>
+<span class="dt">U64_MAX</span> = <span class="bn">0xffffffffffffffff</span>
+<span class="dt">U32_MOD</span> = <span class="dt">U32_MAX</span> + <span class="dv">1</span>
+<span class="dt">U64_MOD</span> = <span class="dt">U64_MAX</span> + <span class="dv">1</span>
+
+<span class="dt">KEYS_TOTAL</span> = <span class="dv">1000000</span>
+
+<span class="kw">class</span> <span class="dt">PCG32</span>
+	<span class="ot">@state</span>
+	<span class="ot">@inc</span>
+
+	<span class="kw">def</span> initialize(state, inc)
+		<span class="ot">@state</span> = state
+		<span class="ot">@inc</span> = inc
+	<span class="kw">end</span>
+
+	<span class="kw">def</span> pcg32_random_r
+		oldstate = <span class="ot">@state</span>
+		<span class="ot">@state</span> = (((oldstate * <span class="dv">6364136223846793005</span>) % <span class="dt">U64_MOD</span>) +
+			(<span class="ot">@inc</span> | <span class="dv">1</span>)) % <span class="dt">U64_MOD</span>
+		xorshifted = (((oldstate &gt;&gt; <span class="dv">18</span>) ^ oldstate) &gt;&gt; <span class="dv">27</span>) % <span class="dt">U32_MOD</span>
+		rot = oldstate &gt;&gt; <span class="dv">59</span>
+		(xorshifted &gt;&gt; rot) | ((xorshifted &lt;&lt; ((-rot) &amp; <span class="dv">31</span>)) % <span class="dt">U32_MOD</span>)
+	<span class="kw">end</span>
+
+	<span class="kw">def</span> uniform32(range)
+		rand_excess = ((<span class="dt">U32_MAX</span> % range) + <span class="dv">1</span>) % range
+		rand_limit = <span class="dt">U32_MAX</span> - rand_excess
+		<span class="kw">while</span> ((x = <span class="dv">self</span>.pcg32_random_r) &gt; rand_limit)
+		<span class="kw">end</span>
+		x % range
+	<span class="kw">end</span>
+<span class="kw">end</span>
+
+<span class="kw">def</span> init_array(keys, has_key, rng)
+	j = <span class="dv">0</span>
+	<span class="kw">for</span> i <span class="kw">in</span> <span class="dv">0</span>..(<span class="dt">KEYS_TOTAL</span> - <span class="dv">1</span>)
+		j += rng.uniform32(<span class="dv">2</span>)
+		keys[i] = i + j
+	<span class="kw">end</span>
+
+	<span class="kw">if</span> has_key
+		keys[rng.uniform32(<span class="dt">KEYS_TOTAL</span>)]
+	<span class="kw">else</span>
+		keys[<span class="dt">KEYS_TOTAL</span> - <span class="dv">1</span>] + <span class="dv">1</span>
+	<span class="kw">end</span>
+<span class="kw">end</span>
+
+<span class="kw">def</span> binary_search(keys, key, min, max)
+	list_size = (max - min) + <span class="dv">1</span>
+	<span class="kw">if</span> (list_size == <span class="dv">0</span>)
+		<span class="kw">return</span> <span class="dv">nil</span>
+	<span class="kw">end</span>
+
+	mid = (list_size / <span class="dv">2</span>) + min
+
+	<span class="kw">if</span> (key &lt; keys[mid])
+		binary_search(keys, key, min, mid - <span class="dv">1</span>)
+	<span class="kw">elsif</span> (key &gt; keys[mid])
+		binary_search(keys, key, mid + <span class="dv">1</span>, max)
+	<span class="kw">else</span>
+		mid
+	<span class="kw">end</span>
+<span class="kw">end</span>
+
+<span class="co"># Begin program</span>
+
+rng = <span class="dt">PCG32</span>.new(<span class="bn">0x1234567890abcdef</span>, <span class="bn">0x1234567890abcdef</span>)
+
+<span class="co"># RNG self-test.</span>
+<span class="kw">if</span> (<span class="dt">ARGV</span> == [<span class="st">&quot;rng&quot;</span>])
+	puts <span class="st">&quot;Running RNG self-test.&quot;</span>
+	puts rng.pcg32_random_r
+	<span class="kw">for</span> n <span class="kw">in</span> <span class="dv">0</span>..<span class="dv">999999</span>
+		rng.pcg32_random_r
+	<span class="kw">end</span>
+	puts rng.pcg32_random_r
+	<span class="kw">for</span> n <span class="kw">in</span> <span class="dv">0</span>..<span class="dv">99</span>
+		puts rng.uniform32((<span class="dt">U32_MAX</span> / <span class="dv">2</span>) + (<span class="dt">U32_MAX</span> / <span class="dv">3</span>))
+	<span class="kw">end</span>
+	<span class="kw">for</span> n <span class="kw">in</span> <span class="dv">0</span>..<span class="dv">9</span>
+		has_key = rng.uniform32(<span class="dv">2</span>) == <span class="dv">1</span>
+		keys = []
+		key = init_array(keys, has_key, rng)
+		puts <span class="st">&quot;last number in array </span><span class="ot">#{</span>n<span class="ot">}</span><span class="st"> for key </span><span class="ot">#{</span>key<span class="ot">}</span><span class="st">: </span><span class="ot">#{</span>keys[<span class="dt">KEYS_TOTAL</span> - <span class="dv">1</span>]<span class="ot">}</span><span class="st">&quot;</span>
+	<span class="kw">end</span>
+	puts <span class="st">&quot;Done.&quot;</span>
+	puts <span class="st">&quot;END RUBY VERSION&quot;</span>
+	exit
+<span class="kw">end</span>
+
+keys = []
+
+<span class="co"># Stress-test 'binary_search' method.</span>
+<span class="kw">for</span> i <span class="kw">in</span> <span class="dv">0</span>..<span class="dv">19</span>
+	has_key = rng.uniform32(<span class="dv">2</span>) == <span class="dv">1</span>
+	key = init_array(keys, has_key, rng)
+	min = <span class="dv">0</span>
+	max = <span class="dt">KEYS_TOTAL</span> - <span class="dv">1</span>
+	mid = binary_search(keys, key, min, max)
+	printf(<span class="st">&quot;%02d - &quot;</span>, i + <span class="dv">1</span>)
+	<span class="kw">if</span> mid.nil?
+		puts <span class="st">&quot;key `</span><span class="ot">#{</span>key<span class="ot">}</span><span class="st">' not found.&quot;</span>
+	<span class="kw">else</span>
+		puts <span class="st">&quot;key `</span><span class="ot">#{</span>key<span class="ot">}</span><span class="st">' found at keys[</span><span class="ot">#{</span>mid<span class="ot">}</span><span class="st">].&quot;</span>
+	<span class="kw">end</span>
+<span class="kw">end</span>
+puts <span class="st">&quot;END RUBY VERSION&quot;</span></code></pre></td></tr></table>
+<div class="raw-link">
+<a class="raw" href="../code/toy/binary-search.rb" mimetype="text/plain"> binary-search.rb </a>
+</div>
+</div>
+<p>This version, like the Haskell version, tries to follow the C version as much as possible. One drawback of this version is that because Ruby does not support fixed-width integers, we have to make liberal use of the modulo operator <code>%</code> to emulate integer overflow. We could just do a bitwise AND (<code>&amp;</code>) with a mask, but that would risk increased verbosity.</p>
+<h3 id="haskell-version">Haskell Version</h3>
+<div class="code-and-raw">
+<table class="sourceCode numberLines haskell" input="code/toy/binary-search.hs"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+</pre></td><td class="sourceCode"><pre><code class="sourceCode haskell"><span class="ot">{-# LANGUAGE RecordWildCards #-}</span>
+
+<span class="co">-- LICENSE: PUBLIC DOMAIN</span>
+<span class="fu">--</span>
+<span class="co">-- Compile with `ghc --make -Wall -Werror -O2 -dynamic -o binary-search-hs</span>
+<span class="co">-- binary-search.hs'. For better conformance with the C and Ruby versions, we</span>
+<span class="co">-- use snake_case instead of camelCase wherever there is a direct parallel.</span>
+<span class="fu">--</span>
+<span class="co">-- Interact with `ghci path/to/this/file`.</span>
+<span class="fu">--</span>
+<span class="co">-- Usage: just execute the binary as-is without any arguments. To test the RNG,</span>
+<span class="co">-- call with the argument &quot;rng&quot;.</span>
+
+<span class="kw">module</span> <span class="dt">Main</span> <span class="kw">where</span>
+
+<span class="kw">import </span><span class="dt">Control.Monad</span>
+<span class="kw">import </span><span class="dt">Data.Bits</span>
+<span class="kw">import </span><span class="dt">Data.Word</span>
+<span class="kw">import </span><span class="dt">System.Environment</span>
+<span class="kw">import </span><span class="dt">System.Exit</span>
+<span class="kw">import </span><span class="dt">Text.Printf</span>
+
+<span class="ot">u32_max ::</span> <span class="dt">Word32</span>
+u32_max <span class="fu">=</span> <span class="bn">0xffffffff</span>
+
+<span class="ot">keys_total ::</span> <span class="dt">Int</span>
+keys_total <span class="fu">=</span> <span class="dv">1000000</span>
+
+<span class="kw">data</span> <span class="dt">PCG32</span> <span class="fu">=</span> <span class="dt">PCG32</span>
+	{<span class="ot"> state ::</span> <span class="dt">Word64</span>
+	,<span class="ot"> inc ::</span> <span class="dt">Word64</span>
+	}
+
+<span class="ot">pcg32_random_r ::</span> <span class="dt">PCG32</span> <span class="ot">-&gt;</span> (<span class="dt">Word32</span>, <span class="dt">PCG32</span>)
+pcg32_random_r rng<span class="fu">@</span><span class="dt">PCG32</span>{<span class="fu">..</span>} <span class="fu">=</span> (result, rng {state <span class="fu">=</span> state'})
+	<span class="kw">where</span>
+<span class="ot">	state' ::</span> <span class="dt">Word64</span>
+	state' <span class="fu">=</span> state <span class="fu">*</span> <span class="dv">6364136223846793005</span> <span class="fu">+</span> (inc <span class="fu">.|.</span> <span class="dv">1</span>)
+<span class="ot">	xorshifted ::</span> <span class="dt">Word32</span>
+	xorshifted <span class="fu">=</span> fromIntegral <span class="fu">$</span> shiftR (xor (shiftR state <span class="dv">18</span>) state) <span class="dv">27</span>
+<span class="ot">	rot ::</span> <span class="dt">Word32</span>
+	rot <span class="fu">=</span> fromIntegral <span class="fu">$</span> shiftR state <span class="dv">59</span>
+<span class="ot">	result ::</span> <span class="dt">Word32</span>
+	result <span class="fu">=</span> fromIntegral
+		<span class="fu">$</span> (shiftR xorshifted <span class="fu">$</span> fromIntegral rot)
+			<span class="fu">.|.</span> (shiftL xorshifted <span class="fu">$</span> fromIntegral ((<span class="fu">-</span>rot) <span class="fu">.&amp;.</span> <span class="dv">31</span>))
+
+<span class="ot">uniform32 ::</span> <span class="dt">Word32</span> <span class="ot">-&gt;</span> <span class="dt">PCG32</span> <span class="ot">-&gt;</span> (<span class="dt">Word32</span>, <span class="dt">PCG32</span>)
+uniform32 range rng <span class="fu">=</span> find_within_range rng
+	<span class="kw">where</span>
+<span class="ot">	rand_excess ::</span> <span class="dt">Word32</span>
+	rand_excess <span class="fu">=</span> mod ((mod u32_max range) <span class="fu">+</span> <span class="dv">1</span>) range
+<span class="ot">	rand_limit ::</span> <span class="dt">Word32</span>
+	rand_limit <span class="fu">=</span> u32_max <span class="fu">-</span> rand_excess
+	find_within_range rng' <span class="fu">=</span> <span class="kw">if</span> x <span class="fu">&gt;</span> rand_limit
+		<span class="kw">then</span> find_within_range rng''
+		<span class="kw">else</span> (mod x range, rng'')
+		<span class="kw">where</span>
+		(x, rng'') <span class="fu">=</span> pcg32_random_r rng'
+
+<span class="ot">init_array ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Bool</span> <span class="ot">-&gt;</span> <span class="dt">PCG32</span> <span class="ot">-&gt;</span> ([<span class="dt">Word32</span>], <span class="dt">Word32</span>, <span class="dt">PCG32</span>)
+init_array keys_size has_key rng0 <span class="fu">=</span> (keys, key, rng3)
+	<span class="kw">where</span>
+	(keys', rng1) <span class="fu">=</span> genKeysList [] <span class="dv">0</span> <span class="dv">0</span> rng0
+	<span class="co">-- Need to reverse the list, because Haskell (like all Lispy languages?)</span>
+	<span class="co">-- builds a list backwards when using the cons (:) operator.</span>
+	keys <span class="fu">=</span> reverse keys'
+<span class="ot">	genKeysList ::</span> [<span class="dt">Word32</span>] <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">PCG32</span> <span class="ot">-&gt;</span> ([<span class="dt">Word32</span>], <span class="dt">PCG32</span>)
+	genKeysList arr i j0 rng <span class="fu">=</span> <span class="kw">if</span> i <span class="fu">&lt;</span> keys_size
+		<span class="kw">then</span> genKeysList ((i' <span class="fu">+</span> j2')<span class="fu">:</span>arr) (i <span class="fu">+</span> <span class="dv">1</span>) j2 rng'
+		<span class="kw">else</span> (arr, rng)
+		<span class="kw">where</span>
+		i' <span class="fu">=</span> fromIntegral i
+		j2' <span class="fu">=</span> fromIntegral j2
+		(j1, rng') <span class="fu">=</span> uniform32 <span class="dv">2</span> rng
+		j2 <span class="fu">=</span> j0 <span class="fu">+</span> fromIntegral j1
+	(key, rng3) <span class="fu">=</span> <span class="kw">if</span> has_key
+		<span class="kw">then</span>
+			<span class="kw">let</span>
+				(idx, rng2) <span class="fu">=</span> uniform32 (fromIntegral keys_total) rng1
+			<span class="kw">in</span>
+			(keys<span class="fu">!!</span>(fromIntegral idx), rng2)
+		<span class="kw">else</span> (keys<span class="fu">!!</span>(keys_total <span class="fu">-</span> <span class="dv">1</span>) <span class="fu">+</span> <span class="dv">1</span>, rng1)
+
+<span class="co">-- We use min' and max' because the non-apostrophe versions name-clash with</span>
+<span class="co">-- Prelude's own functions. We could hide Prelude's imports, but that seems too</span>
+<span class="co">-- roundabout.</span>
+<span class="ot">binary_search ::</span> [<span class="dt">Word32</span>] <span class="ot">-&gt;</span> <span class="dt">Word32</span> <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Maybe</span> <span class="dt">Int</span>
+binary_search keys key min' max'
+	<span class="fu">|</span> list_size <span class="fu">==</span> <span class="dv">0</span> <span class="fu">=</span> <span class="dt">Nothing</span>
+	<span class="fu">|</span> key <span class="fu">&lt;</span> keys<span class="fu">!!</span>mid <span class="fu">=</span> binary_search keys key min' (mid <span class="fu">-</span> <span class="dv">1</span>)
+	<span class="fu">|</span> key <span class="fu">&gt;</span> keys<span class="fu">!!</span>mid <span class="fu">=</span> binary_search keys key (mid <span class="fu">+</span> <span class="dv">1</span>) max'
+	<span class="fu">|</span> otherwise <span class="fu">=</span> <span class="dt">Just</span> mid
+	<span class="kw">where</span>
+	list_size <span class="fu">=</span> (max' <span class="fu">-</span> min') <span class="fu">+</span> <span class="dv">1</span>
+	mid <span class="fu">=</span> (div list_size <span class="dv">2</span>) <span class="fu">+</span> min'
+
+<span class="ot">main ::</span> <span class="dt">IO</span> ()
+main <span class="fu">=</span> <span class="kw">do</span>
+	<span class="kw">let</span>
+		rng0 <span class="fu">=</span> <span class="dt">PCG32</span>
+			{ state <span class="fu">=</span> <span class="bn">0x1234567890abcdef</span>
+			, inc <span class="fu">=</span> <span class="bn">0x1234567890abcdef</span>
+			}
+	args <span class="ot">&lt;-</span> getArgs
+	when (args <span class="fu">==</span> [<span class="st">&quot;rng&quot;</span>]) <span class="fu">$</span> <span class="kw">do</span>
+		putStrLn <span class="st">&quot;Running RNG self-test&quot;</span>
+		<span class="kw">let</span>
+			(num0, rng1) <span class="fu">=</span> pcg32_random_r rng0
+		putStrLn <span class="fu">$</span> show num0
+		rng2 <span class="ot">&lt;-</span> foldM warmupRng rng1 [<span class="dv">0</span><span class="fu">..</span><span class="dv">999999</span><span class="ot">::</span><span class="dt">Int</span>]
+		<span class="kw">let</span>
+			(num1, rng3) <span class="fu">=</span> pcg32_random_r rng2
+		putStrLn <span class="fu">$</span> show num1
+		rng4 <span class="ot">&lt;-</span> foldM testUniform32 rng3 [<span class="dv">0</span><span class="fu">..</span><span class="dv">99</span><span class="ot">::</span><span class="dt">Int</span>]
+		_ <span class="ot">&lt;-</span> foldM testArray rng4 [<span class="dv">0</span><span class="fu">..</span><span class="dv">9</span><span class="ot">::</span><span class="dt">Int</span>]
+		putStrLn <span class="st">&quot;Done.&quot;</span>
+		putStrLn <span class="st">&quot;END HASKELL VERSION&quot;</span>
+		exitSuccess
+	_ <span class="ot">&lt;-</span> foldM testBinarySearch rng0 [<span class="dv">0</span><span class="fu">..</span><span class="dv">19</span><span class="ot">::</span><span class="dt">Int</span>]
+	putStrLn <span class="st">&quot;END HASKELL VERSION&quot;</span>
+	<span class="kw">where</span>
+	warmupRng rng _ <span class="fu">=</span> return <span class="fu">.</span> snd <span class="fu">$</span> pcg32_random_r rng
+	testUniform32 rng _ <span class="fu">=</span> <span class="kw">do</span>
+		putStrLn <span class="fu">$</span> show num
+		return rng'
+		<span class="kw">where</span>
+		(num, rng') <span class="fu">=</span> uniform32 (div u32_max <span class="dv">2</span> <span class="fu">+</span> div u32_max <span class="dv">3</span>) rng
+	testArray rng0 i <span class="fu">=</span> <span class="kw">do</span>
+		putStrLn <span class="fu">$</span> <span class="st">&quot;last number in array &quot;</span>
+			<span class="fu">++</span> show i
+			<span class="fu">++</span> <span class="st">&quot; for key &quot;</span>
+			<span class="fu">++</span> show key
+			<span class="fu">++</span> <span class="st">&quot;: &quot;</span>
+			<span class="fu">++</span> show (keys<span class="fu">!!</span>(keys_total <span class="fu">-</span> <span class="dv">1</span>))
+		return rng2
+		<span class="kw">where</span>
+		(res, rng1) <span class="fu">=</span> uniform32 <span class="dv">2</span> rng0
+		has_key <span class="fu">=</span> res <span class="fu">==</span> <span class="dv">1</span>
+		(keys, key, rng2) <span class="fu">=</span> init_array keys_total has_key rng1
+	testBinarySearch rng0 i <span class="fu">=</span> <span class="kw">do</span>
+		printf <span class="st">&quot;%02d - &quot;</span> (i <span class="fu">+</span> <span class="dv">1</span>)
+		<span class="kw">case</span> foundMid <span class="kw">of</span>
+			<span class="dt">Just</span> mid <span class="ot">-&gt;</span> putStrLn <span class="fu">$</span> <span class="st">&quot;key `&quot;</span>
+				<span class="fu">++</span> show key
+				<span class="fu">++</span> <span class="st">&quot;' found at keys[&quot;</span>
+				<span class="fu">++</span> show mid
+				<span class="fu">++</span> <span class="st">&quot;].&quot;</span>
+			<span class="dt">Nothing</span> <span class="ot">-&gt;</span> putStrLn <span class="fu">$</span> <span class="st">&quot;key `&quot;</span>
+				<span class="fu">++</span> show key
+				<span class="fu">++</span> <span class="st">&quot;' not found.&quot;</span>
+		return rng2
+		<span class="kw">where</span>
+		(res, rng1) <span class="fu">=</span> uniform32 <span class="dv">2</span> rng0
+		has_key <span class="fu">=</span> res <span class="fu">==</span> <span class="dv">1</span>
+		(keys, key, rng2) <span class="fu">=</span> init_array keys_total has_key rng1
+		min' <span class="fu">=</span> <span class="dv">0</span>
+		max' <span class="fu">=</span> keys_total <span class="fu">-</span> <span class="dv">1</span>
+		foundMid <span class="fu">=</span> binary_search keys key min' max'</code></pre></td></tr></table>
+<div class="raw-link">
+<a class="raw" href="../code/toy/binary-search.hs" mimetype="text/plain"> binary-search.hs </a>
+</div>
+</div>
+<p>It pained me not to make use of Haskell’s much faster, efficient <code>Array</code> data structure instead of plain lists (that are constructed with the square brackets <code>[]</code>). And, I have to admit that it is written in a strange style; I’ve preserved the names of the variables from C and Ruby where I could, even though mixing snake_case with camelCase results in utter ugliness. I also restrained myself from using the <code>State</code> monad for keeping track of <code>PCG32</code>’s state. For you non-Haskellers, that means that I manually passed around RNG state (as you can see with <code>rng0</code>, <code>rng1</code>, <code>rng2</code>, etc.) as arguments and return values, because I did not want to place another barrier against quickly grasping the code. Do you really want monad transformers in a “naive” implementation?<a href="#fn8" class="footnoteRef" id="fnref8"><sup>8</sup></a></p>
+<p>The most immediate effect to me when writing the Haskell version was just how stateful the <code>uniform32()</code> and <code>init_array()</code> functions were. The C/Ruby brethren perform lots of variable mutation in those parts, and are consequently difficult to understand from a <em>pure</em> (type system) perspective. All of the silent type promotions in C were blatantly exposed by the Glasgow Haskell Compiler (GHC), making it necessary for me to include all of those explicit <code>fromIntegral</code> type promotions myself in <code>pcg32_random_r</code> and <code>init_array</code>.</p>
+<p>But even with all of these explicit conversions and the un-idiomatic Haskell style (excluding coding style), I find the Haskell version much easier to understand. Just compare how clean <code>binary_search</code> looks in Haskell versus the other ones! And the fact that you can basically define nested functions/methods with the <code>where</code> clause makes hole-driven development a piece of cake.</p>
+<h2 id="conclusion-and-hopes">Conclusion and Hopes</h2>
+<p>I hope you’ve enjoyed looking at the various implementations of binary search. Binary search is certainly something you can write on your own, although getting the surrounding technicalities correct can be a chore — but isn’t that always the case when trying to obvserve the behavior of an algorithm in practice? You can look at the cute 10 or 15-line pseudocode on Wikipedia all day, but how can you be sure that it works? This focus on <strong>real world examples</strong> has been a driving principle behind all of my blog posts, and I hope it has helped you understand the algorithm better.</p>
+<p>Binary search is something you can apply in real life, too. For me, I came into contact with it again when I learned about <code>git bisect</code>. I personally try to use binary search myself when I code; for example, if a large block of code does not work, I delete large chunks out, making the deletions ever finer, until I get to the source of the problem. You can think of these examples as binary search, where the key is the (as yet unknown) bad commit or line of code you have to fix. You can be your own algorithm! Isn’t that cool?</p>
+<p>Thanks for reading, and happy hacking!</p>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>It’s like in the children’s <a href="http://en.wikipedia.org/wiki/Chinese_whispers">“Telephone”</a> game, where the error of one person gets magnified at every step, until the end when the message gets so garbled up it becomes comical.<a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p>“Hole-driven-development”, as I like to call it, is a top-down approach to development. You first define the larger pieces, and continuously define the smaller sub-pieces, until you reach atomic pieces (those pieces which cannot be further sub-divided). You might have noticed that this style of writing code has an eerie parallel to the whole (no pun intended!) discussion about binary subdivision, and so forth.</p>
+<p>As an aside, in the Haskell community, <em>hole-driven Haskell</em> takes the same approach, but first you define the behaviors of the functions through its type signatures, and leave the implementation details undefined. This way, you can use the compiler’s type system to help you define what you want as you go; this is certainly a step up from <em>unassisted</em> hole-driven development that we are doing with the pseudocode here.<a href="#fnref2">↩</a></p></li>
+<li id="fn3"><p>The condition <code>first_index &gt; last_index</code> might not make sense. This was the pseudocode on Wikipedia at the time I wrote this, and it didn’t make sense to me at first. But think of it this way: binary search involves division of the list into halves, repeatedly. So <code>first_index</code> and <code>last_index</code> get closer and closer to each other. The point is that the distance between these two markers will close, shrinking the list into smaller and smaller subparts. We can’t simply check if these two points meet, by writing <code>first_index == last_index</code>, because of the base case of a 1-element list. Such a list will have <code>first_index</code> as 0, and the <code>last_index</code> as also 0 — because there is only 1 index! In this case, the condition <code>first_index == last_index</code> to check for an empty list is inadequate.</p>
+<p>If you look at how we call <code>binary_search()</code> again in lines 15 and 17, you will notice that the new definitions of <code>first_index</code> and <code>last_index</code> depend on <code>middle_index</code>, and it’s this interplay with <code>middle_index</code> that forces <code>last_index</code> to eventually become smaller than <code>first_index</code>. If you work out the algorithm through some small cases, you will see this happen eventually.<a href="#fnref3">↩</a></p></li>
+<li id="fn4"><p>Linear search does have the advantage that, on a sorted list, it can take advantage of branch prediction. This is because the <code>if/else</code> test will <em>always go in one direction</em>, until when we get a match or when the element considered is greater than the search key. But in the long run as you increase the search space, binary search will beat linear search hands down.<a href="#fnref4">↩</a></p></li>
+<li id="fn5"><p>However, be mindful to the fact that binary search relies on the input list being sorted. Sorting a list itself is a fundamental problem in computer science, and there are numerous sorting algorithms as well as data structures that make such sorting more amenable. In the real world, I think 90% of your time is going to be spent sorting the list first, by which time the speed benefits of binary search probably won’t hold much influence. If the search space is always small, you could easily get away with linear search — why bother adding complexity where you don’t need it?<a href="#fnref5">↩</a></p></li>
+<li id="fn6"><p>You could trivially add on a proper command-line argument handling mechanism. In particular, <code>KEYS_TOTAL</code> is dying to be decoupled from the program’s internals — but I leave that as an exercise to you. (Hint: use a command-line option parsing library!)<a href="#fnref6">↩</a></p></li>
+<li id="fn7"><p>MELISSA E. O’NEILL (2009). The Genuine Sieve of Eratosthenes. Journal of Functional Programming, 19, pp 95-106. doi:10.1017/S0956796808007004. <a href="http://www.cs.hmc.edu/~oneill/papers/Sieve-JFP.pdf">Online draft version</a>.<a href="#fnref7">↩</a></p></li>
+<li id="fn8"><p>What if I had indeed made use of the <code>State</code> monad, you ask? Well, first I wouldn’t need to pass in, or get back, the RNG state variables. I would just run the RNG-state-changing functions <em>inside</em> the <code>State</code> monad (actually, probably the <code>StateT</code> monad transformer as we’re in the <code>IO</code> monad anyway), to <code>get</code>/<code>put</code> the RNG states to read/write those values.<a href="#fnref8">↩</a></p></li>
+</ol>
+</div>
+
+		</div>
+		<div id="footer">
+			<p>Copyright (C) 2013-2014 Linus Arver. All rights reserved.</p>
+			<a href="https://github.com/listx/listx_blog">Site</a>
+			<a href="https://github.com/listx/listx.github.io">generated</a>
+			with
+			<a href="http://jaspervdj.be/hakyll">Hakyll</a>
+			and
+			<a href="http://sebastiaanvisser.github.com/clay">Clay</a>.
+			<br>
+			<a href="../atom.xml">Atom feed</a>
+		</div>
+	</body>
+</html>
