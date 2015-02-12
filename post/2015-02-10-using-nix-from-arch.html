@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Linus's Blog - Using the Nix Package Manager for Haskell Development from Arch Linux</title>
+		<link rel="stylesheet" href="../css/base.css">
+		<link rel="stylesheet" href="../css/syntax.css">
+		<link href="http://fonts.googleapis.com/css?family=Merriweather:300,300italic,700italic,700" rel="stylesheet" type="text/css">
+		<link rel="shortcut icon" type="image/png" href="../favicon.png">
+		
+	</head>
+	<body>
+		<div id="header">
+			<a href="../">Home</a>
+			&bull;
+			<a href="../about.html">About</a>
+			&bull;
+			<a href="../art.html">Art</a>
+			&bull;
+			<a href="../code.html">Code</a>
+			&bull;
+			<a href="../papers.html">Papers</a>
+			&bull;
+			<a href="../archive.html">Archive</a>
+		</div>
+
+		<div id="content">
+			<h1 class="center">Using the Nix Package Manager for Haskell Development from Arch Linux</h1>
+
+			<div class="info center">
+	<code class="date">2015-02-10</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2015-02-10-using-nix-from-arch.md" title="History">*</a>
+	<br>
+	<a href="../tag/programming.html">programming</a>, <a href="../tag/haskell.html">haskell</a>, <a href="../tag/arch.html">arch</a>, <a href="../tag/linux.html">linux</a>
+</div>
+
+<p>I recently installed and configured NixOS on a laptop and had to learn how to develop Haskell on it. The Nix community uses something called <code>cabal2nix</code> and <code>nix-shell</code> to get the job done. While things work quite smoothly right now in NixOS, I was wondering if I could do the same on my desktop Arch Linux box.</p>
+<p>The answer is yes — you can easily use Nix to create a ‘system sandbox’ of sorts (the Nix store) that is completely isolated from Arch’s own Haskell packages/GHC. To be clear, what we are trying to do is install the Nix package manager (which is composed of many satellite programs like <code>nix-env</code>, <code>nix-shell</code>, etc.) so that we can develop Haskell programs with all the advantages that come with it.</p>
+<p>For myself, I have several different Haskell projects, and I wanted to avoid redownloading and recompiling the same packages for each project’s Cabal sandbox environment. Using Nix, I still have the same Cabal sandboxes (one for each project root), but Nix allows all the different sandboxes to share the same packages if the versions and dependencies are the same. And plus, because the Nix store (where Nix stores everything — <code>/nix/store</code>) is independent of Arch’s <code>pacman</code> tool, there is no fear of conflict or things breaking whenever you upgrade Arch Linux’s own Haskell packages.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a></p>
+<h1 id="use-the-nix-manual-to-install-nix">Use the Nix Manual to install Nix</h1>
+<p>The <a href="http://nixos.org/nix/manual/">Nix manual</a> has up-to-date documentation on how to get Nix. When we say <em>Nix</em>, we are talking about the collection of console programs (with a <code>nix-</code> prefix in their names) that make up to form the Nix package management system — much like how <em>Git</em> is made up of smaller programs that work as a team. There is a <code>nix</code> package on the AUR, but I suggest simply following this guide.</p>
+<p>The first step is to run the install script from the NixOS site (which hosts Nix and other related programs) as a normal user:</p>
+<pre><code>$ bash &lt;(curl https://nixos.org/nix/install)</code></pre>
+<p>. You will now have a directory called <code>/nix</code> in your system. This is where everything related to Nix will be stored. In addition, the script will create some hidden files under your user’s home directory with the <code>.nix-</code> prefix. The most important file for now is <code>~/.nix-profile</code>, because it links to a shell script that initializes the Nix environment (to bring in <code>nix-*</code> utilities into the current shell’s scope). You will get a message from the shell script to source this file, like this:</p>
+<pre><code>$ . /home/l/.nix-profile/etc/profile.d/nix.sh</code></pre>
+<p>. For me, I put the whole thing into an alias for my shell called <code>nix</code>, like this:</p>
+<pre><code># somewhere in my ~/.zshrc
+alias nix='. /home/l/.nix-profile/etc/profile.d/nix.sh'</code></pre>
+<p>.<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> So, whenever I want access to Nix utilities, I just type in <code>nix</code> and go on my merry way.</p>
+<h1 id="install-cabal2nix-and-cabal">Install <code>cabal2nix</code> and <code>cabal</code></h1>
+<p>Now, use your alias to enable Nix.</p>
+<pre><code>$ nix</code></pre>
+<p>You now have access to all the <code>nix-*</code> utilities that make up to provide the Nix package management system. You can list all Nix-packaged packages with <code>nix-env -qaP</code>. For us, we’re interested in the <code>cabal2nix</code> package. As of the time of this writing, it is called <code>nixpkgs.haskellPackages.cabal2nix</code>. However, the <code>haskellPackages</code> prefix refers to the old system that has been more or less deprecated as of <a href="http://article.gmane.org/gmane.linux.distributions.nixos/15513">January 2015</a>. We need to use the <code>haskellngPackages</code> (note the <code>ng</code>) prefix instead. I know that <code>nixpkgs.haskellngPackages.cabal2nix</code> isn’t listed with the <code>nix-env -qaP</code> command, but I believe that’s for legacy reasons. You can still install it! Let’s do that now:</p>
+<pre><code>$ nix-env -iA nixpkgs.haskellngPackages.cabal2nix</code></pre>
+<p>. This will give you the very useful <code>cabal2nix</code> binary which you can use to convert any <code>.cabal</code> file into something that Nix can understand! Let’s also install <code>cabal</code> for Nix:</p>
+<pre><code>$ nix-env -iA nixpkgs.haskellngPackages.cabal-install</code></pre>
+<p>. This will install <code>cabal</code> to <code>~/.nix-profile/bin/cabal</code>. This step is not really necessary if you have <code>cabal-install</code> already installed on the Arch Linux side with <code>pacman</code>. However, I still recommend it because</p>
+<ol style="list-style-type: decimal">
+<li>if you’re using Nix for Haskell development, there is no longer a need to use <code>cabal</code> outside of the Haskell/Nix development process;</li>
+<li>it just makes sense to use the <code>cabal</code> package that comes from the same source tree as <code>cabal2nix</code> (i.e., from the same <code>haskellngPackages</code> set<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a>); and</li>
+<li>as of the time of this writing the <code>cabal-install</code> version from Nix packages set is newer than the Arch version.</li>
+</ol>
+<p>At the end of the day, your <code>cabal</code> binary should be writing to <code>~/.cabal</code> so take care to use one version and stick with it.</p>
+<h1 id="nixify-your-project">Nixify your project</h1>
+<h2 id="create-a-.cabal-file">Create a <code>.cabal</code> file</h2>
+<p>If you haven’t done so already, create a Cabal file <code>your_project.cabal</code> in your project’s root folder to describe the dependencies in the traditional Haskell way. This step is mandatory!</p>
+<h2 id="create-a-shell.nix-file">Create a <code>shell.nix</code> file</h2>
+<p>Go to your project’s root folder that contains <code>your_project.cabal</code>, and do</p>
+<pre><code>$ cabal2nix --shell . &gt; shell.nix</code></pre>
+<p>. The actual syntax is <code>cabal2nix --shell path/to/cabal/file</code>, which prints out the contents of the <code>.nix</code> file to STDOUT. In the case above, we redirect it to a file named <code>shell.nix</code>. The name of this file is important because it is what <code>nix-shell</code> expects.</p>
+<p>Now just invoke</p>
+<pre><code>$ nix-shell</code></pre>
+<p>and you’re set. You will be dropped into a <code>bash</code> instance that has knowledge of the Nix store. The first time you run <code>nix-shell</code>, Nix will identify any missing dependencies and install them for you. Because your project’s <code>shell.nix</code> file describes a Haskell project, <code>nix-shell</code> will install GHC along the way. So when it’s ready, you can start <code>ghci</code>. Because you installed <code>cabal2nix</code> earlier, you have access to <code>cabal</code> (i.e., <code>cabal</code> is a dependency of <code>cabal2nix</code>).</p>
+<p>To build your binary just do <code>cabal build</code>! Personally I like to instantiate a Cabal sandbox with <code>cabal sandbox init</code> first, and then do <code>cabal configure</code>, <code>cabal repl</code>, <code>cabal build</code>, etc.</p>
+<h1 id="local-dependencies">Local dependencies</h1>
+<p>If you’re like me, you might have a Haskell library you wrote for yourself (let’s call it “Private Project X” (PPX)) which is not on Hackage. If you just want to build PPX on its own, you can use the same steps outlined above. But what if your other project depends on PPX?</p>
+<p>The trick is to use <code>cabal2nix</code>, and to set up your <code>~/.nixpkgs</code> folder. You should already have <code>~/.nixpkgs</code> created by now as a result of installing Nix. Make a folder called <code>~/.nixpkgs/my-local-hs</code>. Now do</p>
+<pre><code>$ cabal2nix path/to/ppx &gt; ~/.nixpkgs/my-local-hs/ppx.nix</code></pre>
+<p>. This will create a Nix expression that can be used to build PPX with Nix. It’s like creating a PKGBUILD file. The next step is to create a <code>~/.nixpkgs/config.nix</code> file, as follows:</p>
+<div class="code-and-raw">
+<table class="sourceCode numberLines" input="code/config.nix"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+</pre></td><td class="sourceCode"><pre><code class="sourceCode"># Taken from
+# http://lists.science.uu.nl/pipermail/nix-dev/2015-January/015601.html.
+{
+  packageOverrides = super: let self = super.pkgs; in
+  {
+    haskellngPackages = super.haskellngPackages.override {
+      overrides = self: super: {
+
+        # Enable profiling. Taken from
+        # http://lists.science.uu.nl/pipermail/nix-dev/2015-January/015620.html.
+        # Comment out this line if you do not want to enable profiling!
+        mkDerivation = expr: super.mkDerivation (expr // {
+          enableLibraryProfiling = true; });
+
+        # Private package
+        ztile = self.callPackage ./my-local-hs/ppx.nix {};
+      };
+    };
+  };
+}</code></pre></td></tr></table>
+<div class="raw-link">
+<a class="raw" href="../code/config.nix" mimetype="text/plain"> config.nix </a>
+</div>
+</div>
+<p>. Now, invoke <code>cabal2nix --shell</code> for your other project that depends on PPX. When you invoke <code>nix-shell</code> for this other project, Nix should be able to resolve the dependency, based on the information you gave it in <code>~/.nixpkgs/config.nix</code>. That’s it!</p>
+<h1 id="conclusion">Conclusion</h1>
+<p>I recommend trying Nix out for Haskell development, or just as a secondary package manager in general. Right now, everything “Just Works” and it’s a pleasure to see different Haskell projects re-use the same packages, even when they are Cabal-sandboxed, as long as you are doing everything within <code>nix-shell</code>.</p>
+<p>Even though the title of this post suggests that this is an Arch Linux guide to Nix, there is nothing Arch-specific about it. You should be able to use the steps in this post for any Linux distribution.</p>
+<p>Happy hacking!</p>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>That being said, if you’re using Nix then there is little reason to continue to use the Arch packages. I say this with some reluctance, as I am the author of the <a href="https://github.com/listx/cabal2pkgbuild">cabal2pkgbuild utility</a>.<a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p>There are no Nix utilities with <code>nix</code> as its name, so there’s no concern about name clashing.<a href="#fnref2">↩</a></p></li>
+<li id="fn3"><p>To figure out what Nix packages set, a.k.a. <em>channel</em> you are using, do <code>nix-channel --list</code>.<a href="#fnref3">↩</a></p></li>
+</ol>
+</div>
+
+		</div>
+		<div id="footer">
+			<p>Copyright (C) 2013-2014 Linus Arver. All rights reserved.</p>
+			<a href="https://github.com/listx/listx_blog">Site</a>
+			<a href="https://github.com/listx/listx.github.io">generated</a>
+			with
+			<a href="http://jaspervdj.be/hakyll">Hakyll</a>
+			and
+			<a href="http://sebastiaanvisser.github.com/clay">Clay</a>.
+			<br>
+			<a href="../atom.xml">Atom feed</a>
+		</div>
+	</body>
+</html>

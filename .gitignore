@@ -1,0 +1,13 @@
+*.hi
+*.o
+.cabal-sandbox/
+_cache/
+_site/
+blog
+cabal.sandbox.config
+code/toy/binary-search-c
+code/toy/binary-search-hs
+dist/
+draft
+listx.github.io
+Setup.hs

@@ -8,8 +8,123 @@
         <name>Linus Arver</name>
         <email></email>
     </author>
-    <updated>2014-12-13T00:00:00Z</updated>
+    <updated>2015-02-10T00:00:00Z</updated>
     <entry>
+    <title>Using the Nix Package Manager for Haskell Development from Arch Linux</title>
+    <link href="http://listx.github.io/post/2015-02-10-using-nix-from-arch.html" />
+    <id>http://listx.github.io/post/2015-02-10-using-nix-from-arch.html</id>
+    <published>2015-02-10T00:00:00Z</published>
+    <updated>2015-02-10T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="info center">
+	<code class="date">2015-02-10</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2015-02-10-using-nix-from-arch.md" title="History">*</a>
+	<br>
+	<a href="/tag/programming.html">programming</a>, <a href="/tag/haskell.html">haskell</a>, <a href="/tag/arch.html">arch</a>, <a href="/tag/linux.html">linux</a>
+</div>
+
+<p>I recently installed and configured NixOS on a laptop and had to learn how to develop Haskell on it. The Nix community uses something called <code>cabal2nix</code> and <code>nix-shell</code> to get the job done. While things work quite smoothly right now in NixOS, I was wondering if I could do the same on my desktop Arch Linux box.</p>
+<p>The answer is yes — you can easily use Nix to create a ‘system sandbox’ of sorts (the Nix store) that is completely isolated from Arch’s own Haskell packages/GHC. To be clear, what we are trying to do is install the Nix package manager (which is composed of many satellite programs like <code>nix-env</code>, <code>nix-shell</code>, etc.) so that we can develop Haskell programs with all the advantages that come with it.</p>
+<p>For myself, I have several different Haskell projects, and I wanted to avoid redownloading and recompiling the same packages for each project’s Cabal sandbox environment. Using Nix, I still have the same Cabal sandboxes (one for each project root), but Nix allows all the different sandboxes to share the same packages if the versions and dependencies are the same. And plus, because the Nix store (where Nix stores everything — <code>/nix/store</code>) is independent of Arch’s <code>pacman</code> tool, there is no fear of conflict or things breaking whenever you upgrade Arch Linux’s own Haskell packages.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a></p>
+<h1 id="use-the-nix-manual-to-install-nix">Use the Nix Manual to install Nix</h1>
+<p>The <a href="http://nixos.org/nix/manual/">Nix manual</a> has up-to-date documentation on how to get Nix. When we say <em>Nix</em>, we are talking about the collection of console programs (with a <code>nix-</code> prefix in their names) that make up to form the Nix package management system — much like how <em>Git</em> is made up of smaller programs that work as a team. There is a <code>nix</code> package on the AUR, but I suggest simply following this guide.</p>
+<p>The first step is to run the install script from the NixOS site (which hosts Nix and other related programs) as a normal user:</p>
+<pre><code>$ bash &lt;(curl https://nixos.org/nix/install)</code></pre>
+<p>. You will now have a directory called <code>/nix</code> in your system. This is where everything related to Nix will be stored. In addition, the script will create some hidden files under your user’s home directory with the <code>.nix-</code> prefix. The most important file for now is <code>~/.nix-profile</code>, because it links to a shell script that initializes the Nix environment (to bring in <code>nix-*</code> utilities into the current shell’s scope). You will get a message from the shell script to source this file, like this:</p>
+<pre><code>$ . /home/l/.nix-profile/etc/profile.d/nix.sh</code></pre>
+<p>. For me, I put the whole thing into an alias for my shell called <code>nix</code>, like this:</p>
+<pre><code># somewhere in my ~/.zshrc
+alias nix=&#39;. /home/l/.nix-profile/etc/profile.d/nix.sh&#39;</code></pre>
+<p>.<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> So, whenever I want access to Nix utilities, I just type in <code>nix</code> and go on my merry way.</p>
+<h1 id="install-cabal2nix-and-cabal">Install <code>cabal2nix</code> and <code>cabal</code></h1>
+<p>Now, use your alias to enable Nix.</p>
+<pre><code>$ nix</code></pre>
+<p>You now have access to all the <code>nix-*</code> utilities that make up to provide the Nix package management system. You can list all Nix-packaged packages with <code>nix-env -qaP</code>. For us, we’re interested in the <code>cabal2nix</code> package. As of the time of this writing, it is called <code>nixpkgs.haskellPackages.cabal2nix</code>. However, the <code>haskellPackages</code> prefix refers to the old system that has been more or less deprecated as of <a href="http://article.gmane.org/gmane.linux.distributions.nixos/15513">January 2015</a>. We need to use the <code>haskellngPackages</code> (note the <code>ng</code>) prefix instead. I know that <code>nixpkgs.haskellngPackages.cabal2nix</code> isn’t listed with the <code>nix-env -qaP</code> command, but I believe that’s for legacy reasons. You can still install it! Let’s do that now:</p>
+<pre><code>$ nix-env -iA nixpkgs.haskellngPackages.cabal2nix</code></pre>
+<p>. This will give you the very useful <code>cabal2nix</code> binary which you can use to convert any <code>.cabal</code> file into something that Nix can understand! Let’s also install <code>cabal</code> for Nix:</p>
+<pre><code>$ nix-env -iA nixpkgs.haskellngPackages.cabal-install</code></pre>
+<p>. This will install <code>cabal</code> to <code>~/.nix-profile/bin/cabal</code>. This step is not really necessary if you have <code>cabal-install</code> already installed on the Arch Linux side with <code>pacman</code>. However, I still recommend it because</p>
+<ol style="list-style-type: decimal">
+<li>if you’re using Nix for Haskell development, there is no longer a need to use <code>cabal</code> outside of the Haskell/Nix development process;</li>
+<li>it just makes sense to use the <code>cabal</code> package that comes from the same source tree as <code>cabal2nix</code> (i.e., from the same <code>haskellngPackages</code> set<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a>); and</li>
+<li>as of the time of this writing the <code>cabal-install</code> version from Nix packages set is newer than the Arch version.</li>
+</ol>
+<p>At the end of the day, your <code>cabal</code> binary should be writing to <code>~/.cabal</code> so take care to use one version and stick with it.</p>
+<h1 id="nixify-your-project">Nixify your project</h1>
+<h2 id="create-a-.cabal-file">Create a <code>.cabal</code> file</h2>
+<p>If you haven’t done so already, create a Cabal file <code>your_project.cabal</code> in your project’s root folder to describe the dependencies in the traditional Haskell way. This step is mandatory!</p>
+<h2 id="create-a-shell.nix-file">Create a <code>shell.nix</code> file</h2>
+<p>Go to your project’s root folder that contains <code>your_project.cabal</code>, and do</p>
+<pre><code>$ cabal2nix --shell . &gt; shell.nix</code></pre>
+<p>. The actual syntax is <code>cabal2nix --shell path/to/cabal/file</code>, which prints out the contents of the <code>.nix</code> file to STDOUT. In the case above, we redirect it to a file named <code>shell.nix</code>. The name of this file is important because it is what <code>nix-shell</code> expects.</p>
+<p>Now just invoke</p>
+<pre><code>$ nix-shell</code></pre>
+<p>and you’re set. You will be dropped into a <code>bash</code> instance that has knowledge of the Nix store. The first time you run <code>nix-shell</code>, Nix will identify any missing dependencies and install them for you. Because your project’s <code>shell.nix</code> file describes a Haskell project, <code>nix-shell</code> will install GHC along the way. So when it’s ready, you can start <code>ghci</code>. Because you installed <code>cabal2nix</code> earlier, you have access to <code>cabal</code> (i.e., <code>cabal</code> is a dependency of <code>cabal2nix</code>).</p>
+<p>To build your binary just do <code>cabal build</code>! Personally I like to instantiate a Cabal sandbox with <code>cabal sandbox init</code> first, and then do <code>cabal configure</code>, <code>cabal repl</code>, <code>cabal build</code>, etc.</p>
+<h1 id="local-dependencies">Local dependencies</h1>
+<p>If you’re like me, you might have a Haskell library you wrote for yourself (let’s call it “Private Project X” (PPX)) which is not on Hackage. If you just want to build PPX on its own, you can use the same steps outlined above. But what if your other project depends on PPX?</p>
+<p>The trick is to use <code>cabal2nix</code>, and to set up your <code>~/.nixpkgs</code> folder. You should already have <code>~/.nixpkgs</code> created by now as a result of installing Nix. Make a folder called <code>~/.nixpkgs/my-local-hs</code>. Now do</p>
+<pre><code>$ cabal2nix path/to/ppx &gt; ~/.nixpkgs/my-local-hs/ppx.nix</code></pre>
+<p>. This will create a Nix expression that can be used to build PPX with Nix. It’s like creating a PKGBUILD file. The next step is to create a <code>~/.nixpkgs/config.nix</code> file, as follows:</p>
+<div class="code-and-raw">
+<table class="sourceCode numberLines" input="code/config.nix"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+</pre></td><td class="sourceCode"><pre><code class="sourceCode"># Taken from
+# http://lists.science.uu.nl/pipermail/nix-dev/2015-January/015601.html.
+{
+  packageOverrides = super: let self = super.pkgs; in
+  {
+    haskellngPackages = super.haskellngPackages.override {
+      overrides = self: super: {
+
+        # Enable profiling. Taken from
+        # http://lists.science.uu.nl/pipermail/nix-dev/2015-January/015620.html.
+        # Comment out this line if you do not want to enable profiling!
+        mkDerivation = expr: super.mkDerivation (expr // {
+          enableLibraryProfiling = true; });
+
+        # Private package
+        ztile = self.callPackage ./my-local-hs/ppx.nix {};
+      };
+    };
+  };
+}</code></pre></td></tr></table>
+<div class="raw-link">
+<a  class="raw"  href= "/code/config.nix"  mimetype=text/plain > config.nix </a>
+</div>
+</div>
+<p>. Now, invoke <code>cabal2nix --shell</code> for your other project that depends on PPX. When you invoke <code>nix-shell</code> for this other project, Nix should be able to resolve the dependency, based on the information you gave it in <code>~/.nixpkgs/config.nix</code>. That’s it!</p>
+<h1 id="conclusion">Conclusion</h1>
+<p>I recommend trying Nix out for Haskell development, or just as a secondary package manager in general. Right now, everything “Just Works” and it’s a pleasure to see different Haskell projects re-use the same packages, even when they are Cabal-sandboxed, as long as you are doing everything within <code>nix-shell</code>.</p>
+<p>Even though the title of this post suggests that this is an Arch Linux guide to Nix, there is nothing Arch-specific about it. You should be able to use the steps in this post for any Linux distribution.</p>
+<p>Happy hacking!</p>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>That being said, if you’re using Nix then there is little reason to continue to use the Arch packages. I say this with some reluctance, as I am the author of the <a href="https://github.com/listx/cabal2pkgbuild">cabal2pkgbuild utility</a>.<a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p>There are no Nix utilities with <code>nix</code> as its name, so there’s no concern about name clashing.<a href="#fnref2">↩</a></p></li>
+<li id="fn3"><p>To figure out what Nix packages set, a.k.a. <em>channel</em> you are using, do <code>nix-channel --list</code>.<a href="#fnref3">↩</a></p></li>
+</ol>
+</div>
+]]></summary>
+</entry>
+<entry>
     <title>Implementing Binary Search</title>
     <link href="http://listx.github.io/post/2014-12-13-implementing-binary-search.html" />
     <id>http://listx.github.io/post/2014-12-13-implementing-binary-search.html</id>
@@ -2513,433 +2628,6 @@ lookAt eye target up <span class="fu">=</span> x <span class="fu">:.</span> y <s
 <div class="raw-link">
 <a  class="raw"  href= "/code/opengl/matrices.hs"  mimetype=text/plain > matrices.hs </a>
 </div>
-</div>
-]]></summary>
-</entry>
-<entry>
-    <title>OpenGL from Haskell</title>
-    <link href="http://listx.github.io/post/2014-03-15-opengl-from-haskell.html" />
-    <id>http://listx.github.io/post/2014-03-15-opengl-from-haskell.html</id>
-    <published>2014-03-15T00:00:00Z</published>
-    <updated>2014-03-15T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="info center">
-	<code class="date">2014-03-15</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2014-03-15-opengl-from-haskell.md" title="History">*</a>
-	<br>
-	<a href="/tag/haskell.html">haskell</a>, <a href="/tag/opengl.html">opengl</a>
-</div>
-
-<p>The following is my translation/adaptation of <a href="http://www.opengl-tutorial.org/beginners-tutorials/tutorial-2-the-first-triangle/">tutorial #2</a> at <a href="http://www.opengl-tutorial.org" class="uri">http://www.opengl-tutorial.org</a>. It draws a single red triangle on the screen with a dark blue background. It takes quite a bit of boilerplate code just to get something on the screen!</p>
-<p>My version uses the code from <a href="https://github.com/YPares/Haskell-OpenGL3.1-Tutos" class="uri">https://github.com/YPares/Haskell-OpenGL3.1-Tutos</a>, but does not use <code>Control.Applicative</code> and also does not put the shaders containing GLSL in a separate text file. Everything is self-contained in one file, and it only uses the <code>PackageImports</code> and <code>RecordWildCards</code> GHC extensions. The <code>PackageImports</code> is only necessary if you have both <a href="http://hackage.haskell.org/package/GLFW">GLFW</a> and <a href="http://hackage.haskell.org/package/GLFW-b">GLFW-b</a> Hackage packages installed in your system (as they have a name clash of <code>Graphics.UI.GLFW</code>, you need to disambiguate this import by specifying the package name). The <code>RecordWildCards</code> extension is pretty standard and exists purely for syntactic sugar (no type-level hoops and such) — if you don’t know about it you should google it.</p>
-<p>I went ahead and added type signatures for all top-level functions — something that many Haskell tutorial writers hate doing for some strange, unknown reason.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> Also, I ran the code through <code>ghc --make -Wall</code> and silenced all warnings.</p>
-<p>I hereby release it into the Public Domain. From what I can tell, YPares’s code doesn’t have a license… I think this should be OK.</p>
-<div class="code-and-raw">
-<table class="sourceCode numberLines haskell" input="code/opengl/triangle.hs"><tr class="sourceCode"><td class="lineNumbers"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-34
-35
-36
-37
-38
-39
-40
-41
-42
-43
-44
-45
-46
-47
-48
-49
-50
-51
-52
-53
-54
-55
-56
-57
-58
-59
-60
-61
-62
-63
-64
-65
-66
-67
-68
-69
-70
-71
-72
-73
-74
-75
-76
-77
-78
-79
-80
-81
-82
-83
-84
-85
-86
-87
-88
-89
-90
-91
-92
-93
-94
-95
-96
-97
-98
-99
-100
-101
-102
-103
-104
-105
-106
-107
-108
-109
-110
-111
-112
-113
-114
-115
-116
-117
-118
-119
-120
-121
-122
-123
-124
-125
-126
-127
-128
-129
-130
-131
-132
-133
-134
-135
-136
-137
-138
-139
-140
-141
-142
-143
-144
-145
-146
-147
-148
-149
-150
-151
-152
-153
-154
-155
-156
-157
-158
-159
-160
-161
-162
-163
-164
-165
-166
-167
-168
-169
-170
-171
-172
-173
-174
-175
-176
-177
-178
-179
-180
-181
-182
-183
-184
-185
-186
-187
-188
-189
-190
-191
-192
-193
-194
-195
-196
-197
-198
-199
-</pre></td><td class="sourceCode"><pre><code class="sourceCode haskell"><span class="ot">{-# LANGUAGE PackageImports #-}</span>
-<span class="ot">{-# LANGUAGE RecordWildCards #-}</span>
-<span class="kw">module</span> <span class="dt">Main</span> <span class="kw">where</span>
-
-<span class="kw">import </span><span class="dt">Control.Monad</span>
-<span class="kw">import </span><span class="dt">Data.Maybe</span>
-<span class="kw">import </span><span class="dt">Foreign</span>
-<span class="kw">import </span><span class="dt">Foreign.C.String</span>
-<span class="kw">import </span><span class="dt">Foreign.C.Types</span>
-<span class="kw">import qualified</span> &quot;<span class="dt">GLFW</span>-b&quot; <span class="dt">Graphics.UI.GLFW</span> <span class="kw">as</span> <span class="dt">GLFW</span>
-<span class="kw">import </span><span class="dt">Graphics.Rendering.OpenGL.Raw</span>
-<span class="kw">import </span><span class="dt">System.Exit</span>
-
-<span class="kw">data</span> <span class="dt">GLIDs</span> <span class="fu">=</span> <span class="dt">GLIDs</span>
-	{<span class="ot"> progId ::</span> <span class="fu">!</span><span class="dt">GLuint</span>
-	,<span class="ot"> vertexArrayId ::</span> <span class="fu">!</span><span class="dt">GLuint</span>
-	,<span class="ot"> vertexBufferId ::</span> <span class="fu">!</span><span class="dt">GLuint</span>
-	}
-
-<span class="ot">withNewPtr ::</span> <span class="dt">Storable</span> b <span class="ot">=&gt;</span> (<span class="dt">Ptr</span> b <span class="ot">-&gt;</span> <span class="dt">IO</span> a) <span class="ot">-&gt;</span> <span class="dt">IO</span> b
-withNewPtr f <span class="fu">=</span> alloca (\p <span class="ot">-&gt;</span> f p <span class="fu">&gt;&gt;</span> peek p)
-
-<span class="ot">initialize ::</span> <span class="dt">IO</span> <span class="dt">GLFW.Window</span>
-initialize <span class="fu">=</span> <span class="kw">do</span>
-	ok <span class="ot">&lt;-</span> GLFW.init
-	when (not ok) <span class="fu">$</span> <span class="kw">do</span>
-		_ <span class="ot">&lt;-</span> fail <span class="st">&quot;Failed to initialize GLFW&quot;</span>
-		exitFailure
-	mapM_ GLFW.windowHint
-		[ <span class="dt">GLFW.WindowHint&#39;Samples</span> <span class="dv">4</span> <span class="co">-- 4x antialiasing</span>
-		, <span class="dt">GLFW.WindowHint&#39;ContextVersionMajor</span> <span class="dv">3</span> <span class="co">-- OpenGL 3.3</span>
-		, <span class="dt">GLFW.WindowHint&#39;ContextVersionMinor</span> <span class="dv">3</span>
-		<span class="co">-- we don&#39;t want the old OpenGL</span>
-		, <span class="dt">GLFW.WindowHint&#39;OpenGLProfile</span> <span class="dt">GLFW.OpenGLProfile&#39;Core</span>
-		]
-
-	win <span class="ot">&lt;-</span> GLFW.createWindow <span class="dv">800</span> <span class="dv">600</span> <span class="st">&quot;Window Title&quot;</span> <span class="dt">Nothing</span> <span class="dt">Nothing</span>
-	when (isNothing win) <span class="fu">$</span> <span class="kw">do</span>
-		_ <span class="ot">&lt;-</span> fail <span class="st">&quot;Failed to create OpenGL window&quot;</span>
-		GLFW.terminate
-		exitFailure
-	<span class="kw">let</span>
-		win&#39; <span class="fu">=</span> fromJust win
-	GLFW.makeContextCurrent win
-
-	GLFW.setStickyKeysInputMode win&#39; <span class="dt">GLFW.StickyKeysInputMode&#39;Enabled</span>
-
-	return win&#39;
-
-<span class="ot">initializeGL ::</span> <span class="dt">IO</span> <span class="dt">GLIDs</span>
-initializeGL <span class="fu">=</span> <span class="kw">do</span>
-	glClearColor <span class="dv">0</span> <span class="dv">0</span> <span class="fl">0.4</span> <span class="dv">0</span>
-	progId <span class="ot">&lt;-</span> loadProgram vertexShader1 fragmentShader1
-	vaId <span class="ot">&lt;-</span> newVAO
-	bufId <span class="ot">&lt;-</span> fillNewBuffer vertexBufferData
-	return <span class="fu">$</span> <span class="dt">GLIDs</span>
-		{ progId <span class="fu">=</span> progId
-		, vertexArrayId <span class="fu">=</span> vaId
-		, vertexBufferId <span class="fu">=</span> bufId
-		}
-
-<span class="ot">freeResources ::</span> <span class="dt">GLIDs</span> <span class="ot">-&gt;</span> <span class="dt">IO</span> ()
-freeResources <span class="dt">GLIDs</span>{<span class="fu">..</span>} <span class="fu">=</span> <span class="kw">do</span>
-	with vertexBufferId <span class="fu">$</span> glDeleteBuffers <span class="dv">1</span>
-	with vertexArrayId <span class="fu">$</span> glDeleteVertexArrays <span class="dv">1</span>
-
-<span class="ot">newVAO ::</span> <span class="dt">IO</span> <span class="dt">GLuint</span>
-newVAO <span class="fu">=</span> <span class="kw">do</span>
-	vaId <span class="ot">&lt;-</span> withNewPtr (glGenVertexArrays <span class="dv">1</span>)
-	glBindVertexArray vaId
-	return vaId
-
-<span class="ot">fillNewBuffer ::</span> [<span class="dt">GLfloat</span>] <span class="ot">-&gt;</span> <span class="dt">IO</span> <span class="dt">GLuint</span>
-fillNewBuffer xs <span class="fu">=</span> <span class="kw">do</span>
-	bufId <span class="ot">&lt;-</span> withNewPtr (glGenBuffers <span class="dv">1</span>)
-	glBindBuffer gl_ARRAY_BUFFER bufId
-	withArrayLen xs func <span class="co">-- give given vertices to OpenGL</span>
-	return bufId
-	<span class="kw">where</span>
-	func len ptr <span class="fu">=</span> glBufferData
-		gl_ARRAY_BUFFER
-		(fromIntegral (len <span class="fu">*</span> sizeOf (undefined<span class="ot"> ::</span> <span class="dt">GLfloat</span>)))
-		(<span class="ot">ptr ::</span> <span class="dt">Ptr</span> <span class="dt">GLfloat</span>)
-		gl_STATIC_DRAW
-
-<span class="ot">bindBufferToAttrib ::</span> <span class="dt">GLuint</span> <span class="ot">-&gt;</span> <span class="dt">GLuint</span> <span class="ot">-&gt;</span> <span class="dt">IO</span> ()
-bindBufferToAttrib bufId attribLoc <span class="fu">=</span> <span class="kw">do</span>
-	glEnableVertexAttribArray attribLoc
-	glBindBuffer gl_ARRAY_BUFFER bufId
-	glVertexAttribPointer
-		attribLoc <span class="co">-- attribute location in the shader</span>
-		<span class="dv">3</span> <span class="co">-- 3 components per vertex</span>
-		gl_FLOAT <span class="co">-- coord type</span>
-		(fromBool <span class="dt">False</span>) <span class="co">-- normalize?</span>
-		<span class="dv">0</span> <span class="co">-- stride</span>
-		nullPtr <span class="co">-- vertex buffer offset</span>
-
-<span class="ot">loadProgram ::</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">IO</span> <span class="dt">GLuint</span>
-loadProgram vertShader fragShader <span class="fu">=</span> <span class="kw">do</span>
-	shaderIds <span class="ot">&lt;-</span> mapM (uncurry loadShader)
-		[ (gl_VERTEX_SHADER, vertShader)
-		, (gl_FRAGMENT_SHADER, fragShader)
-		]
-	progId <span class="ot">&lt;-</span> glCreateProgram
-	putStrLn <span class="st">&quot;Linking program&quot;</span>
-	mapM_ (glAttachShader progId) shaderIds
-	glLinkProgram progId
-	_ <span class="ot">&lt;-</span> checkStatus
-		gl_LINK_STATUS glGetProgramiv glGetProgramInfoLog progId
-	mapM_ glDeleteShader shaderIds
-	return progId
-
-<span class="ot">loadShader ::</span> <span class="dt">GLenum</span> <span class="ot">-&gt;</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">IO</span> <span class="dt">GLuint</span>
-loadShader shaderTypeFlag code <span class="fu">=</span> <span class="kw">do</span>
-	shaderId <span class="ot">&lt;-</span> glCreateShader shaderTypeFlag
-	withCString code <span class="fu">$</span> \codePtr <span class="ot">-&gt;</span>
-		with codePtr <span class="fu">$</span> \codePtrPtr <span class="ot">-&gt;</span>
-			glShaderSource shaderId <span class="dv">1</span> codePtrPtr nullPtr
-	putStrLn <span class="st">&quot;Compiling shader...&quot;</span>
-	glCompileShader shaderId
-	_ <span class="ot">&lt;-</span> checkStatus
-		gl_COMPILE_STATUS glGetShaderiv glGetShaderInfoLog shaderId
-	return shaderId
-
-<span class="ot">checkStatus ::</span> (<span class="dt">Integral</span> a1, <span class="dt">Storable</span> a1)
-	<span class="ot">=&gt;</span> <span class="dt">GLenum</span>
-	<span class="ot">-&gt;</span> (t <span class="ot">-&gt;</span> <span class="dt">GLenum</span> <span class="ot">-&gt;</span> <span class="dt">Ptr</span> a1 <span class="ot">-&gt;</span> <span class="dt">IO</span> a)
-	<span class="ot">-&gt;</span> (t <span class="ot">-&gt;</span> a1 <span class="ot">-&gt;</span> <span class="dt">Ptr</span> a3 <span class="ot">-&gt;</span> <span class="dt">Ptr</span> <span class="dt">Foreign.C.Types.CChar</span> <span class="ot">-&gt;</span> <span class="dt">IO</span> a2)
-	<span class="ot">-&gt;</span> t
-	<span class="ot">-&gt;</span> <span class="dt">IO</span> <span class="dt">Bool</span>
-checkStatus statusFlag glGetFn glInfoLogFn componentId <span class="fu">=</span> <span class="kw">do</span>
-	<span class="kw">let</span>
-		fetch info <span class="fu">=</span> withNewPtr (glGetFn componentId info)
-	status <span class="ot">&lt;-</span> liftM toBool <span class="fu">$</span> fetch statusFlag
-	logLength <span class="ot">&lt;-</span> fetch gl_INFO_LOG_LENGTH
-	when (logLength <span class="fu">&gt;</span> <span class="dv">0</span>) <span class="fu">$</span>
-		allocaArray0 (fromIntegral logLength) <span class="fu">$</span> \msgPtr <span class="ot">-&gt;</span> <span class="kw">do</span>
-			_ <span class="ot">&lt;-</span> glInfoLogFn componentId logLength nullPtr msgPtr
-			msg <span class="ot">&lt;-</span> peekCString msgPtr
-			(<span class="kw">if</span> status <span class="kw">then</span> putStrLn <span class="kw">else</span> fail) msg
-	return status
-
-<span class="ot">fragmentShader1 ::</span> <span class="dt">String</span>
-fragmentShader1 <span class="fu">=</span> unlines
-	[ <span class="st">&quot;#version 330 core&quot;</span>
-	, <span class="st">&quot;out vec3 color;&quot;</span>
-	, <span class="st">&quot;void main()&quot;</span>
-	, <span class="st">&quot;{&quot;</span>
-		, <span class="st">&quot;color =  vec3(1,0,0);&quot;</span> <span class="co">-- paint it red!</span>
-	, <span class="st">&quot;}&quot;</span>
-	]
-
-<span class="ot">vertexShader1 ::</span> <span class="dt">String</span>
-vertexShader1 <span class="fu">=</span> unlines
-	[ <span class="st">&quot;#version 330 core&quot;</span>
-	, <span class="st">&quot;layout(location = 0) in vec3 vPosition_modelspace;&quot;</span>
-	, <span class="st">&quot;void main()&quot;</span>
-	, <span class="st">&quot;{&quot;</span>
-		, <span class="st">&quot;gl_Position.xyz = vPosition_modelspace;&quot;</span>
-		, <span class="st">&quot;gl_Position.w = 1.0;&quot;</span>
-	, <span class="st">&quot;}&quot;</span>
-	]
-
-
-<span class="ot">vertexBufferData ::</span> [<span class="dt">GLfloat</span>]
-vertexBufferData <span class="fu">=</span>
-	<span class="co">-- x, y, z</span>
-	[ <span class="fu">-</span><span class="dv">1</span>, <span class="fu">-</span><span class="dv">1</span>, <span class="dv">0</span>
-	,  <span class="dv">1</span>, <span class="fu">-</span><span class="dv">1</span>, <span class="dv">0</span>
-	,  <span class="dv">0</span>,  <span class="dv">1</span>, <span class="dv">0</span>
-	]
-
-<span class="ot">main ::</span> <span class="dt">IO</span> ()
-main <span class="fu">=</span> <span class="kw">do</span>
-	win <span class="ot">&lt;-</span> initialize
-	glids <span class="ot">&lt;-</span> initializeGL
-	inputLoop win glids
-	freeResources glids
-	GLFW.terminate
-	return ()
-
-<span class="ot">inputLoop ::</span> <span class="dt">GLFW.Window</span> <span class="ot">-&gt;</span> <span class="dt">GLIDs</span> <span class="ot">-&gt;</span> <span class="dt">IO</span> ()
-inputLoop win glids <span class="fu">=</span> <span class="kw">do</span>
-	drawStuff glids
-	GLFW.swapBuffers win
-	GLFW.pollEvents
-	keyState <span class="ot">&lt;-</span> GLFW.getKey win <span class="dt">GLFW.Key&#39;Escape</span>
-	closeWindow <span class="ot">&lt;-</span> GLFW.windowShouldClose win
-	when (keyState <span class="fu">/=</span> <span class="dt">GLFW.KeyState&#39;Pressed</span> <span class="fu">&amp;&amp;</span> closeWindow <span class="fu">==</span> <span class="dt">False</span>) <span class="fu">$</span>
-		inputLoop win glids
-
-<span class="ot">drawStuff ::</span> <span class="dt">GLIDs</span> <span class="ot">-&gt;</span> <span class="dt">IO</span> ()
-drawStuff <span class="dt">GLIDs</span>{<span class="fu">..</span>} <span class="fu">=</span> <span class="kw">do</span>
-	glClear gl_COLOR_BUFFER_BIT
-	glClear gl_DEPTH_BUFFER_BIT
-	glUseProgram progId
-	bindBufferToAttrib vertexBufferId <span class="dv">0</span>
-	glDrawArrays gl_TRIANGLES <span class="dv">0</span> <span class="dv">3</span> <span class="co">-- for attrib array 0, draw 3 vertices</span>
-	glDisableVertexAttribArray <span class="dv">0</span> <span class="co">-- disable attrib array 0</span></code></pre></td></tr></table>
-<div class="raw-link">
-<a  class="raw"  href= "/code/opengl/triangle.hs"  mimetype=text/plain > triangle.hs </a>
-</div>
-</div>
-<div class="footnotes">
-<hr />
-<ol>
-<li id="fn1"><p>Seriously, why do so many Haskell tutorials omit function type signatures?<a href="#fnref1">↩</a></p></li>
-</ol>
 </div>
 ]]></summary>
 </entry>
