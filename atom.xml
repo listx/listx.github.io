@@ -134,12 +134,12 @@ Ok, modules loaded: Main.
 <p>.</p>
 <p>Anyway, I will explain the behavior of the code. The first thing to notice is that we feed into <code>step</code> the <em>reversed</em> list of <code>buttonHist</code>, so that we examine the button press history, from newest to oldest. So we look at the just-pressed-button, then the one before that, and the one before, etc, backwards up the history.</p>
 <p>As we look at each <code>button</code>, we use it to filter out all known sequences. This filtering is done in <code>remaining</code>, where we check the last button of every known sequence, and see if that matches the current button. That’s what the line <code>filter ((==button) . last . fst)</code> does; the sister line <code>filter (not . null . fst) dbRem</code> is just there to prevent calling <code>last</code> on an empty list.</p>
-<p>After we’re done checking, we modify the entire sequence database <code>db</code>, such that we only care about the first <span class="math">\(N - 1\)</span> buttons in the sequence. This way, on the next iteration, we can rest assured that checking against the “last” button in a sequence is not always the same button. In subsequent runs of <code>step</code>, we have <code>dbRem</code>’s sequences slowly get reduced down to nothing as we keep chopping off all sequences’s last button. Keep in mind that we feed the filtered, matching entries of <code>db</code> back into subsequent runs of <code>step</code>, so that effectively we’re only working with matching sequences. Once we reach down to no buttons, we label these named sequences as <code>entriesComplete</code>, and append it into <code>foundSoFar</code>.</p>
+<p>After we’re done checking, we modify the entire sequence database <code>db</code>, such that we only care about the first <span class="math">\(N - 1\)</span> buttons in the sequence. This way, on the next iteration, we can rest assured that checking against the “last” button in a sequence is not always the same button. In subsequent runs of <code>step</code>, we have <code>dbRem</code>‘s sequences slowly get reduced down to nothing as we keep chopping off all sequences’ last button. Keep in mind that we feed the filtered, matching entries of <code>db</code> back into subsequent runs of <code>step</code>, so that effectively we’re only working with matching sequences. Once we reach down to no buttons, we label these named sequences as <code>entriesComplete</code>, and append it into <code>foundSoFar</code>.</p>
 <h3 id="analysis">Analysis</h3>
 <p>Obviously, this code has many problems. First, it is virtually unreadable. Readability is important, and the code feels very counter-intuitive — it is marvelously complex when the problem statement sounds so simple.</p>
 <p>Second, the fact that we have to bring in and mutate <code>dbRem</code>, which is a copy of the original given <code>ButtonSeqDB</code> type, seems wasteful. We’re wasting a lot of CPU cycles here.</p>
 <h2 id="ruby-solution-using-hashes">Ruby Solution Using Hashes</h2>
-<p>So on the day after (that is, <em>today</em> as of the time of this writing), I thought about the problem again and realized we can use hashes. It is a very simple approach, with far less lines of code. I even wrote a small test for it. Here is the implementation below.</p>
+<p>So on the day after (that is, <em>today</em> as of the time of this writing), I thought about the problem again and realized we can use hashes. It is a very simple approach, with far less lines of code. I even wrote some tests for it. Here is the implementation below.</p>
 <div class="code-and-raw">
 <table class="sourceCode numberLines ruby" input="code/toy/game-button-seq/hash_ver.rb"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
@@ -229,7 +229,7 @@ Ok, modules loaded: Main.
 <a  class="raw"  href= "/code/toy/game-button-seq/hash_ver.rb"  mimetype=text/plain > hash_ver.rb </a>
 </div>
 </div>
-<p>And here is the test case for it. You can run it with <code>ruby test_hash_ver.rb</code>.</p>
+<p>And here is the test suite for it. You can run it with <code>ruby test_hash_ver.rb</code>.</p>
 <div class="code-and-raw">
 <table class="sourceCode numberLines ruby" input="code/toy/game-button-seq/test_hash_ver.rb"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
