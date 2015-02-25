@@ -198,8 +198,8 @@ Ok, modules loaded: Main.
 </pre></td><td class="sourceCode"><pre><code class="sourceCode ruby"><span class="kw">module</span> <span class="dt">GameButtonSeq</span>
   <span class="co"># button_seq = [&quot;down&quot;, &quot;forward&quot;, &quot;punch&quot;]</span>
   <span class="co"># name = &quot;hadoken&quot;</span>
-  <span class="co"># seq_db = a hash of {sequence =&gt; name}, but a sequence can have multiple</span>
-  <span class="co"># names if that sequence already exists.</span>
+  <span class="co"># button_seq_db = a hash of {sequence =&gt; name}, but a sequence can have</span>
+  <span class="co"># multiple names if that sequence already exists.</span>
   <span class="kw">def</span> <span class="dt">GameButtonSeq</span>.register(button_seq, name, button_seq_db)
     <span class="co"># If the sequence already exists, simply add the new name to the old name, and</span>
     <span class="co"># store it as a list of names.</span>
@@ -214,12 +214,12 @@ Ok, modules loaded: Main.
 
   <span class="kw">def</span> <span class="dt">GameButtonSeq</span>.on_buttons(button_seq, button_seq_db)
     found = []
-    <span class="co"># We search the entire seq_db hash for the full length of N buttons first,</span>
-    <span class="co"># then N - 1 buttons, then N - 2 buttons, until the search input becomes 0.</span>
-    <span class="co"># Meanwhile, we collect any and all matches that come our way. The point is</span>
-    <span class="co"># to search based on the *last* input button, as this is the &quot;current&quot;</span>
-    <span class="co"># button that should &quot;finish&quot; whatever combination/move we were trying to</span>
-    <span class="co"># do.</span>
+    <span class="co"># We search the entire button_seq_db hash for the full length of N buttons</span>
+    <span class="co"># first, then N - 1 buttons, then N - 2 buttons, until the search input</span>
+    <span class="co"># becomes 0. Meanwhile, we collect any and all matches that come our way.</span>
+    <span class="co"># The point is to search based on the *last* input button, as this is the</span>
+    <span class="co"># &quot;current&quot; button that should &quot;finish&quot; whatever combination/move we were</span>
+    <span class="co"># trying to do.</span>
     <span class="kw">while</span> button_seq.size &gt; <span class="dv">0</span>
       <span class="kw">if</span> button_seq_db.key?(button_seq)
         found &lt;&lt; button_seq_db[button_seq]
