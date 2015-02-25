@@ -189,8 +189,8 @@ Ok, modules loaded: Main.
   <span class="co"># button_seq_db = a hash of {sequence =&gt; name}, but a sequence can have</span>
   <span class="co"># multiple names if that sequence already exists.</span>
   <span class="kw">def</span> <span class="dt">GameButtonSeq</span>.register(button_seq, name, button_seq_db)
-    <span class="co"># If the sequence already exists, simply add the new name to the old name, and</span>
-    <span class="co"># store it as a list of names.</span>
+    <span class="co"># If the sequence already exists, simply add the new name to the old name,</span>
+    <span class="co"># and store it as a list of names.</span>
     <span class="kw">if</span> button_seq_db.key?(button_seq)
       button_seq_db[button_seq] = [name] + button_seq_db[button_seq]
     <span class="kw">else</span>
