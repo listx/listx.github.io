@@ -134,12 +134,12 @@ onButtons buttonHist db <span class="fu">=</span> map snd
 </div>
 </div>
 <p>. I have to admit, the <code>step</code> function in <code>onButtons</code> is essentially unreadable. But it does work:</p>
-<pre><code>$ ghci game-button-seq-interview.hs
+<pre><code>$ ghci code/toy/game-button-seq/interview_ver.hs
 GHCi, version 7.8.4: http://www.haskell.org/ghc/  :? for help
 Loading package ghc-prim ... linking ... done.
 Loading package integer-gmp ... linking ... done.
 Loading package base ... linking ... done.
-[1 of 1] Compiling Main             ( code/toy/game-button-seq-interview.hs, interpreted )
+[1 of 1] Compiling Main             ( code/toy/game-button-seq/interview_ver.hs, interpreted )
 Ok, modules loaded: Main.
 *Main&gt; onButtons [&quot;down&quot;, &quot;down&quot;, &quot;forward&quot;, &quot;punch&quot;] buttonSeqDB
 [&quot;charger&quot;,&quot;hadoken&quot;]</code></pre>
