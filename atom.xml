@@ -8,8 +8,187 @@
         <name>Linus Arver</name>
         <email></email>
     </author>
-    <updated>2015-02-24T00:00:00Z</updated>
+    <updated>2015-02-27T00:00:00Z</updated>
     <entry>
+    <title>Generating Random Numbers without Modulo Bias, Redux</title>
+    <link href="http://listx.github.io/post/2015-02-27-removing-modulo-bias-redux.html" />
+    <id>http://listx.github.io/post/2015-02-27-removing-modulo-bias-redux.html</id>
+    <published>2015-02-27T00:00:00Z</published>
+    <updated>2015-02-27T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="info center">
+	<code class="date">2015-02-27</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2015-02-27-removing-modulo-bias-redux.md" title="History">*</a>
+	<br>
+	<a href="/tag/programming.html">programming</a>, <a href="/tag/rng.html">rng</a>, <a href="/tag/c.html">c</a>
+</div>
+
+<p>In an earlier post, I discussed <a href="2013-07-12-generating-random-numbers-without-modulo-bias.html">how to remove modulo bias from your C code</a>. I would like to add a different version of removing modulo bias, inspired by the code from the <a href="http://www.pcg-random.org/">PCG family</a> of random number generators.</p>
+<h2 id="the-pcg-version">The PCG Version</h2>
+<p>In the <a href="http://www.pcg-random.org/download.html">official minimal C implementation</a> of PCG, there is a function called <code>pcg32_boundedrand_r</code>, which takes a <code>bound</code> variable. The code for that function is as follows:</p>
+<table class="sourceCode numberLines c"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="sourceCode"><pre><code class="sourceCode c"><span class="dt">uint32_t</span> pcg32_boundedrand_r(pcg32_random_t* rng, <span class="dt">uint32_t</span> bound)
+{
+	<span class="dt">uint32_t</span> threshold = -bound % bound;
+	<span class="kw">for</span> (;;) {
+		<span class="dt">uint32_t</span> r = pcg32_random_r(rng);
+		<span class="kw">if</span> (r &gt;= threshold)
+			<span class="kw">return</span> r % bound;
+	}
+}</code></pre></td></tr></table>
+<p>. If <code>bound</code> is 5, then the function will return a uniform range from 0 to 4. I.e., the return value <code>r</code> is such that <span class="math">\(0 \leq r &lt; bound\)</span>.</p>
+<h2 id="explanation-of-the-pcg-version">Explanation of the PCG Version</h2>
+<p>Although I generally prefer to explain code in the order they appear, top to bottom, for this case I would like to explain the <code>pcg32_boundedrand_r()</code> function by talking about the usual broken version found in the wild.</p>
+<h3 id="broken-version">Broken Version</h3>
+<p>The broken version is like this:</p>
+<pre><code>r = some_rng();
+return r % bound;</code></pre>
+<p>. Unless <code>r</code> is a multiple of <code>bound</code>, we will incur the wrath of modulo bias in the above code. Why is this? Well, consider what the modulo operator does. All it does is chop off any excess range of values that is not a multiple of <code>bound</code>. Consider the following ASCII diagram, where the maximum value returned by our <code>some_rng()</code> function is just 11:</p>
+<pre><code>0 1 2 3 4 5 6 7 8 9 10 11</code></pre>
+<p>. So, <code>some_rng()</code> has 8 possible unique values, 0 through 11. If our bound was <code>4</code>, then doing <code>r % bound</code> is perfectly fine, because we can chop the RNG range into two equal parts of length 4 each, like this:</p>
+<pre><code>0 1 2 3 | 4 5 6 7 | 8 9 10 11</code></pre>
+<p>. If each of the 12 values 0 through 11 occurs uniformly<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a>, then we can assume that each of the values occurs <span class="math">\(\frac{1}{12}\)</span> times. If we apply <code>% 4</code> to the values, then our output range looks like this:</p>
+<pre><code>0 1 2 3 | 0 1 2 3 | 0 1 2 3</code></pre>
+<p>. Can you see how the two halves are the same? What’s more, 0 will occur <span class="math">\(\frac{3}{12} = \frac{1}{4}\)</span> times. The same goes for <code>1</code>, <code>2</code>, and <code>3</code>. Because all 4 possible values, 0 through 4, occur an equal <span class="math">\(\frac{1}{4}\)</span> times, there is <em>no modulo bias here</em>!</p>
+<h4 id="what-if-the-modulus-is-not-a-nice-number-with-respect-to-rand_max">What if the modulus is not a nice number with respect to RAND_MAX?</h4>
+<p>This is where the problem occurs. <code>RAND_MAX</code> is the highest value returned by our RNG, and thus defines the range of the possible values output by the RNG.<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> Continuing with our example above, if instead of <code>bound = 4</code>, we used another value like 5, we will get this instead:</p>
+<pre><code>0 1 2 3 4 | 5 6 7 8 9 | 10 11</code></pre>
+<p>— or essentially, these values as output if we just naivly use <code>r % bound</code>:</p>
+<pre><code>0 1 2 3 4 | 0 1 2 3 4 | 0 1</code></pre>
+<p>. Can you see how <code>0</code> and <code>1</code> occur <span class="math">\(\frac{3}{12}\)</span> times, but <code>2</code>, <code>3</code>, and <code>4</code> occur <span class="math">\(\frac{2}{12}\)</span> times?</p>
+<h4 id="the-fix-adjust-the-range">The fix — adjust the range!</h4>
+<p>Now, we can fix the above example by simply throwing out certain values. The approach I used in the <a href="2013-07-12-generating-random-numbers-without-modulo-bias.html">old appraoch</a> was to discard the right hand side values. So, in our example with <code>bound = 5</code>, where we have</p>
+<pre><code>0 1 2 3 4 | 0 1 2 3 4 | 0 1</code></pre>
+<p>, the old example tried to discard the last 2 values, like this:</p>
+<pre><code>0 1 2 3 4 | 0 1 2 3 4 | x x</code></pre>
+<p>. In other words, if <code>r</code> fell within the range 10 through 11, then we’d simply discard it and call <code>some_rand()</code> again.</p>
+<p>But it doesn’t have to be this way. Instead of throwing out the values on the right, we can throw out the values on the left! So, instead of</p>
+<pre><code>0 1 2 3 4 | 0 1 2 3 4 | x x</code></pre>
+<p>we can instead do</p>
+<pre><code>x x 2 3 4 | 0 1 2 3 4 | 0 1</code></pre>
+<p>. Can you see how all of the values 0 through 4 occur exactly 2 times? No more bias!</p>
+<h3 id="pcgs-approach">PCG’s approach</h3>
+<p>The approach in PCG is the same; here is the code again:</p>
+<table class="sourceCode numberLines c"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="sourceCode"><pre><code class="sourceCode c"><span class="dt">uint32_t</span> pcg32_boundedrand_r(pcg32_random_t* rng, <span class="dt">uint32_t</span> bound)
+{
+	<span class="dt">uint32_t</span> threshold = -bound % bound;
+	<span class="kw">for</span> (;;) {
+		<span class="dt">uint32_t</span> r = pcg32_random_r(rng);
+		<span class="kw">if</span> (r &gt;= threshold)
+			<span class="kw">return</span> r % bound;
+	}
+}</code></pre></td></tr></table>
+<p>. The <code>threshold</code> value is the initial range that must be discarded. So we can visualize it like this:</p>
+<pre><code>x x 2 3 4 | 0 1 2 3 4 | 0 1
+
+// The `x x` here is the initial threshold range, that must be discarded.</code></pre>
+<p>On line 3, we determine the value of <code>threshold</code>, and then on line 4 we enter a <code>for</code> loop that repeatedly calls the RNG until we get a value outside of this threshold range (well, technically, <em>greater-than-or-equal-to</em> the threshold value). If we do get such a value, then we return the modulo of it. If we visualize it, it’s like this:</p>
+<pre><code>0 1 2 3 4 | 5 6 7 8 9 | 10 11
+
+- Discard 0 and 1 (the threshold area).
+
+x x 2 3 4 | 5 6 7 8 9 | 10 11
+
+- Return (r % bound).
+
+x x 2 3 4 | 0 1 2 3 4 | 0 1</code></pre>
+<p>.</p>
+<h4 id="how-is-threshold-calculated">How is <code>threshold</code> calculated?</h4>
+<p>The above high-level explanation should be sufficient for you, dear reader. But if you want to go down to the innards of C, to see how <code>pcg32_boundedrand_r</code> works, read on.</p>
+<p>The cornerstone of the PCG approach is to use a variable called <code>threshold</code>. The code to calculate <code>threshold</code> is somewhat complicated:</p>
+<pre class="sourceCode c"><code class="sourceCode c"><span class="dt">uint32_t</span> threshold = -bound % bound;</code></pre>
+<p>. Now, let’s remind ourselves that the whole point of <code>threshold</code> is to be a minimum value that sets a cutoff of values to be discarded — if the generated value <code>r</code> is too low (lower than our threshold), then we discard it.</p>
+<p>Consider the following diagram, with <code>RAND_MAX</code> set to <code>11</code>, and <code>bound</code> set to 5:</p>
+<pre><code>0 1 2 3 4 | 5 6 7 8 9 | 10 11</code></pre>
+<p>. We can visualze the above like this instead:</p>
+<pre><code>R R R R R | _ _ R R R | R R</code></pre>
+<p>. The underscores represent the values that must be <em>skipped</em> over, in order to eliminate modulo bias. The question then, is to figure out how to count the number of underscores. In our case, it is 2, and so as long as we skip the first two values 0 and 1, we should be fine.</p>
+<p>The first step is to count backwards from the right-hand edge:</p>
+<pre><code>                |&lt;---count|
+R R R R R | _ _ R R R | R R
+                t         |
+                          \-&gt; RAND_MAX</code></pre>
+<p>. We end up where <code>t</code> is on the diagram above, by counting backwards from <code>RAND_MAX</code>. If we then take the modulo of this by <code>count</code> itself, then we end up with <code>t</code> being the value we want — the number of underscores. This is the essence of <code>-bound % bound</code> — we first take <code>-bound</code> which is obtained by counting backwards from <code>RAND_MAX</code>, and then we take the modulo of this number by <code>bound</code> itself, to get what we need. Using the ASCII diagram again, we get</p>
+<pre><code>                |&lt;-----count|
+0 1 2 3 4 | 5 6 7 8 9 | 10 11
+                t          |
+                           \-&gt; RAND_MAX
+</code></pre>
+<p>where <code>t</code> is 7, and now applying % 5, we get:</p>
+<pre><code>0 1 2 3 4 | 0 1 2 3 4 | 0 1
+                t</code></pre>
+<p><code>t = 2</code>, the correct answer! You can try out different values for <code>RAND_MAX</code> and <code>bound</code>, but you will get the right answer each time using <code>threshold = -bound % bound</code>.</p>
+<h5 id="but-why-is--bound-the-way-it-is">But why is <code>-bound</code> the way it is?</h5>
+<p>The <a href="http://stackoverflow.com/questions/2711522/what-happens-if-i-assign-a-negative-value-to-an-unsigned-variable">C standard</a> says that a negative unsigned value is stored as a positive value. Without getting too technical, here is what the values of <code>bound</code> look like:</p>
+<pre><code>Bound | Actual value
+------+-------------
+2     | 2
+1     | 1
+0     | 0
+-1    | (2^32) - 1 (same as RAND_MAX)
+-2    | (2^32) - 2 (same as RAND_MAX - 1)
+-3    | (2^32) - 3 (same as RAND_MAX - 2)
+... and so on</code></pre>
+<p>. In our case, if our <code>RAND_MAX</code> is 11, and <code>bound</code> is 5, then <code>-bound</code> is indeed 7.</p>
+<pre><code>Bound | Actual value
+------+-------------
+0     | 0
+-1    | 11 - 0 (same as RAND_MAX)
+-2    | 11 - 1 (same as RAND_MAX - 1)
+-3    | 11 - 2 (same as RAND_MAX - 2)
+-4    | 11 - 3 (same as RAND_MAX - 3)
+-5    | 11 - 4 (same as RAND_MAX - 4) = 7
+... and so on</code></pre>
+<h2 id="conclusion">Conclusion</h2>
+<p>I thoroughly enjoyed looking at the source code in PCG, only to discover an elegant solution around removing modulo bias. Unfortunately, I do not know the true origin of this approach; it is possible that the authors of the PCG code invented it, but I find this improbable. Meanwhile, I strongly recommend the following code for anyone using a low-level generator that does not come with a bounded version:</p>
+<div class="code-and-raw">
+<table class="sourceCode numberLines c" input="code/rng/pcg-style.c"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="sourceCode"><pre><code class="sourceCode c"><span class="co">/*</span>
+<span class="co"> * Uniformly return an integer from 0 to (bound - 1). We assume that rand()</span>
+<span class="co"> * returns a 32-bit unsigned integer, so we use uint32_t.</span>
+<span class="co"> */</span>
+<span class="dt">uint32_t</span> bound = some_arbitrary_bound;
+<span class="dt">uint32_t</span> r;
+<span class="dt">uint32_t</span> threshold = -bound % bound;
+<span class="kw">while</span> (r = rand() &lt; threshold) {};
+<span class="kw">return</span> r % bound;</code></pre></td></tr></table>
+<div class="raw-link">
+<a  class="raw"  href= "/code/rng/pcg-style.c"  mimetype=text/plain > pcg-style.c </a>
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>Any RNG worth their salt will return a uniformly distributed value, typically from 0 to RAND_MAX. In the example here, our RAND_MAX is 11.<a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p>For a 32-bit unsigned integer RNG, <span class="math">\(2^{32} - 1\)</span> (all 1 bits set) is the highest value that can be returned. That is, our RNG returns a value from 0 (no bits set) to <code>RAND_MAX</code> (all bits set). This means that our RNG generates everything from all 0s to all 1s and everything in between.<a href="#fnref2">↩</a></p></li>
+</ol>
+</div>
+]]></summary>
+</entry>
+<entry>
     <title>Programming Puzzle: Game Button Sequence Recognizer</title>
     <link href="http://listx.github.io/post/2015-02-24-puzzle-game-button-recognizer.html" />
     <id>http://listx.github.io/post/2015-02-24-puzzle-game-button-recognizer.html</id>
@@ -2499,130 +2678,6 @@ NVRM: components have the same version.</code></pre></td></tr></table>
 <hr />
 <ol>
 <li id="fn1"><p>I tried using the higher refresh rate modelines, but they resulted in my monitors going crazy (extreme artifacting, lines shrieking irregularly with different colors, etc.).<a href="#fnref1">↩</a></p></li>
-</ol>
-</div>
-]]></summary>
-</entry>
-<entry>
-    <title>Linus's Haskell Coding Style (LHCS)</title>
-    <link href="http://listx.github.io/post/2014-05-02-linus-haskell-coding-style.html" />
-    <id>http://listx.github.io/post/2014-05-02-linus-haskell-coding-style.html</id>
-    <published>2014-05-02T00:00:00Z</published>
-    <updated>2014-05-02T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="info center">
-	<code class="date">2014-05-02</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2014-05-02-linus-haskell-coding-style.md" title="History">*</a>
-	<br>
-	<a href="/tag/haskell.html">haskell</a>, <a href="/tag/programming.html">programming</a>
-</div>
-
-<p>Haskell is my favorite programming language. However, unlike mainstream languages (C, Java, Ruby, etc.), there are no known “coding styles” for it. C has the venerable Linux Kernel Coding Style <a href="https://www.kernel.org/doc/Documentation/CodingStyle">LKCS</a>, among many others. I really like LKCS because it is designed to be as readable as possible, and is actually pretty simple (no fancy indentation/brace rules). I just wish there was something like LKCS for Haskell, mainly because every time I open up Haskell code somebody else wrote, it is plagued with gargantuan amounts of indentation. It really has gotten out of hand. So, I hereby propose some rules to reduce the level of indentation, whether you use tabs or spaces.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a></p>
-<p>NOTE: I use 4-character-wide tabs for Haskell; your browser may not render this correctly, but bear with me.</p>
-<h2 id="chapter-1-indentation">Chapter 1: Indentation</h2>
-<h3 id="wherever-possible-use-minimal-hanging-indentation">Wherever possible, use minimal hanging indentation</h3>
-<p>That is, indent as little as possible.</p>
-<h4 id="where-clause"><code>where</code> clause</h4>
-<p>Whenever you use a <code>where</code> clause, use it like this:</p>
-<pre><code>...
-f x y
-	where
-	f = ...
-	x = ...
-	y = ...
-	...</code></pre>
-<p>That is, put <code>where</code> on its own line, and then avoid any additional indentation for all definitions that follow.</p>
-<h4 id="guards">Guards</h4>
-<p>Use guards like this:</p>
-<pre><code>someArbitraryFunctionName x y z
-	| x == 0 = ...
-	| y == 0 = ...
-	| z == 0 = ...
-	| otherwise = ...</code></pre>
-<p>not like this:</p>
-<pre><code>someArbitraryFunctionName x y z | x == 0 = ...
-                                | y == 0 = ...
-                                | z == 0 = ...
-                                | otherwise = ...</code></pre>
-<p>I.e., put guards on their own line with a single indent.</p>
-<h4 id="case-expressions"><code>case</code> expressions</h4>
-<p>Do not vertically-align the different cases.</p>
-<p>Do</p>
-<pre><code>foo x = case x of
-	Abcdef y -&gt; ...
-	Foo y -&gt; ...
-	Abracadabra y -&gt; ...</code></pre>
-<p>instead of</p>
-<pre><code>foo x = case x of
-	Abcdef y      -&gt; ...
-	Foo y         -&gt; ...
-	Abracadabra y -&gt; ...</code></pre>
-<p>. The only time you should vertically align <em>anything</em> is for lists, or perhaps long tuples.</p>
-<h4 id="lists">Lists</h4>
-<p>Align lists as follows:</p>
-<pre><code>someLongList =
-	[ abcd
-	, efghi
-	, jkl
-	, m
-	, nopqrstu
-	, vwxyz
-	]</code></pre>
-<p>. You may align long tuples in a similar manner.</p>
-<h4 id="do-notation"><code>do</code> notation</h4>
-<p>Use ``hanging’’ do-notation:</p>
-<pre><code>main = do
-	x &lt;- foo
-	y z</code></pre>
-<p>instead of</p>
-<pre><code>main = do x &lt;- foo
-          y z</code></pre>
-<p>(which tries to align the <code>x</code> and <code>y</code> together)</p>
-<p>or</p>
-<pre><code>main = do
-          x &lt;- foo
-          y z</code></pre>
-<p>. When writing <code>let</code> statements inside <code>do</code> notation, write the keyword <code>let</code> on its own line, and indent any subsequent <code>let</code>-bindings.</p>
-<h2 id="chapter-2-misc-guidelines">Chapter 2: Misc Guidelines</h2>
-<h3 id="always-use-explicit-type-signatures">Always use explicit type signatures</h3>
-<p>Everyone reading your code will appreciate it. Don’t force me to load up your code in GHCi to figure out how to use it with (:t) — <strong>stop wasting everyone’s time</strong>.</p>
-<h3 id="refrain-from-infix-notation">Refrain from infix notation</h3>
-<p>Sometimes infix notation makes code shorter, but it gets confusing when you use the same function with and without it. Also, in many cases prefix notation is simply shorter because you don’t have to use the two backtick characters around the function name. Use infix notation as often as you’d use GOTO in C.</p>
-<h3 id="prefer-where-over-let">Prefer <code>where</code> over <code>let</code></h3>
-<p>This is because if you use <code>where</code> clauses, the high-level code comes first, followed by <code>where</code> and the various smaller components that make up the preceding code. Macro-to-micro reading/understanding is almost always superior. Using <code>where</code> clauses also has the benefit of allowing you to more easily move out helper functions defined as part of a <code>where</code> block into their own standalone functions if they grow too big. If you use <code>let</code> expressions, you run the risk of including variables in the parent function block’s scope, which makes “detaching” them harder later on.</p>
-<h3 id="do-not-use-multiline-----comment-blocks">Do not use multiline {- -} comment blocks</h3>
-<p>Haddock prefers single-line comments, anyway.</p>
-<h3 id="use-two-groups-of-imports-system-wide-and-package-wide-and-have-each-group-alphabetically-ordered">Use two groups of imports: system-wide and package-wide (and have each group alphabetically ordered)</h3>
-<p>Import all external library modules in their own ``paragraph’’, followed by those modules of your own library; e.g., do</p>
-<pre><code>import Control.Monad
-import Data.Maybe
-import Data.Text
-
-import MyModule.One
-import MyModule.Two</code></pre>
-<p>.</p>
-<h3 id="place-one-pragma-per-line-in-alphabetical-order">Place one pragma per line, in alphabetical order</h3>
-<p>Do it like this:</p>
-<pre><code>{-# LANGUAGE SomeBadExtension #-}
-{-# LANGUAGE SomeCoolExtension #-}
-{-# LANGUAGE SomeScaryExtension #-}
-{-# LANGUAGE SomeUglyExtension #-}
-{-# LANGUAGE StrangeExtensionNobodyUnderstands #-}</code></pre>
-<h3 id="try-to-use-as-few-pragmas-as-possible">Try to use as few pragmas as possible</h3>
-<p>Do not use 20 language extensions when you don’t have to. Saving a handful of keystrokes is not a good reason to use a multitude of extensions.</p>
-<h3 id="when-writing-documentation-prefer-high-level-documentation-over-line-by-line-documentation">When writing documentation, prefer high-level documentation over line-by-line documentation</h3>
-<p>If you have a 20-line function, write how it works with a high-level overview. Haskell is a pure language so it’s very easy to tell how the small pieces work. So, explain the bigger pieces, and <em>why</em> they are necessary as written.</p>
-<h3 id="breaking-long-lines-and-strings">Breaking long lines and strings</h3>
-<p>We follow LKCS’s 80-character column limit.</p>
-<p>If you must, break long lines into sensible chunks. If a function has numerous arguments, you may put each argument on its own line. If you want to break up a long chain of functions, break them up like this:</p>
-<pre><code>foo x y z = head
-	. init
-	. blahblah y
-	. funcMX x
-	$ abcd z</code></pre>
-<p>, with each function on its own line, with the function composition operator <code>.</code> as the leading character, similar to how the comma <code>,</code> is the leading character for breaking up long lists.</p>
-<div class="footnotes">
-<hr />
-<ol>
-<li id="fn1"><p>I prefer tabs for indentation, and spaces for alignment (which does happen once in a blue moon).<a href="#fnref1">↩</a></p></li>
 </ol>
 </div>
 ]]></summary>
