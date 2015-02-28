@@ -55,7 +55,7 @@ return r % bound;</code></pre>
 <pre><code>0 1 2 3 | 4 5 6 7 | 8 9 10 11</code></pre>
 <p>. If each of the 12 values 0 through 11 occurs uniformly<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a>, then we can assume that each of the values occurs <span class="math">\(\frac{1}{12}\)</span> times. If we apply <code>% 4</code> to the values, then our output range looks like this:</p>
 <pre><code>0 1 2 3 | 0 1 2 3 | 0 1 2 3</code></pre>
-<p>. Can you see how the two halves are the same? What’s more, 0 will occur <span class="math">\(\frac{3}{12} = \frac{1}{4}\)</span> times. The same goes for <code>1</code>, <code>2</code>, and <code>3</code>. Because all 4 possible values, 0 through 4, occur an equal <span class="math">\(\frac{1}{4}\)</span> times, there is <em>no modulo bias here</em>!</p>
+<p>. Can you see how the three subparts are the same? What’s more, 0 will occur <span class="math">\(\frac{3}{12} = \frac{1}{4}\)</span> times. The same goes for <code>1</code>, <code>2</code>, and <code>3</code>. Because all 4 possible values, 0 through 4, occur an equal <span class="math">\(\frac{1}{4}\)</span> times, there is <em>no modulo bias here</em>!</p>
 <h4 id="what-if-the-modulus-is-not-a-nice-number-with-respect-to-rand_max">What if the modulus is not a nice number with respect to RAND_MAX?</h4>
 <p>This is where the problem occurs. <code>RAND_MAX</code> is the highest value returned by our RNG, and thus defines the range of the possible values output by the RNG.<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> Continuing with our example above, if instead of <code>bound = 4</code>, we used another value like 5, we will get this instead:</p>
 <pre><code>0 1 2 3 4 | 5 6 7 8 9 | 10 11</code></pre>
