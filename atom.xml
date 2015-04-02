@@ -738,7 +738,7 @@ unitTests <span class="fu">=</span> testGroup <span class="st">&quot;Unit tests&
 	<a href="/tag/programming.html">programming</a>, <a href="/tag/haskell.html">haskell</a>, <a href="/tag/arch.html">arch</a>, <a href="/tag/linux.html">linux</a>, <a href="/tag/nix.html">nix</a>
 </div>
 
-<p>I recently installed and configured NixOS on a laptop and had to learn how to develop Haskell on it. The Nix community uses something called <code>cabal2nix</code> and <code>nix-shell</code> to get the job done. While things work quite smoothly right now in NixOS, I was wondering if I could do the same on my desktop Arch Linux box.</p>
+<p>I recently installed and configured NixOS on a laptop and had to learn how to develop Haskell on it. The Nix community uses something called <code>cabal2nix</code> (version 2.0 and up!) and <code>nix-shell</code> to get the job done. While things work quite smoothly right now in NixOS, I was wondering if I could do the same on my desktop Arch Linux box.</p>
 <p>The answer is yes — you can easily use Nix to create a ‘system sandbox’ of sorts (the Nix store) that is completely isolated from Arch’s own Haskell packages/GHC. To be clear, what we are trying to do is install the Nix package manager (which is composed of many satellite programs like <code>nix-env</code>, <code>nix-shell</code>, etc.) so that we can develop Haskell programs with all the advantages that come with it.</p>
 <p>For myself, I have several different Haskell projects, and I wanted to avoid redownloading and recompiling the same packages for each project’s Cabal sandbox environment. Using Nix, I still have the same Cabal sandboxes (one for each project root), but Nix allows all the different sandboxes to share the same packages if the versions and dependencies are the same. And plus, because the Nix store (where Nix stores everything — <code>/nix/store</code>) is independent of Arch’s <code>pacman</code> tool, there is no fear of conflict or things breaking whenever you upgrade Arch Linux’s own Haskell packages.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a></p>
 <h1 id="use-the-nix-manual-to-install-nix">Use the Nix Manual to install Nix</h1>
@@ -1954,7 +1954,7 @@ main <span class="fu">=</span> <span class="kw">do</span>
 </div>
 </div>
 <h2 id="haskell">Haskell</h2>
-<p>The Haskell version is a direct translation of the Ruby version, as an iterative approach works just fine. The only drawback is that we use <code>Int</code> instead of the arbitrarily large <code>Integer</code> type for succinctness (we can use <code>Integer</code>, but some built-in functions like <code>sort</code> only work on <code>Int</code>). However, it is interesting if only for the fact that the edge cases are made explicit — there seems to be no way to avoid “lying” to Haskell about the complexity of our problem!</p>
+<p>The Haskell version is a direct translation of the Ruby version, as an iterative approach works just fine. The only drawback is that we use <code>Int</code> instead of the arbitrarily large <code>Integer</code> type for succinctness (we can use <code>Integer</code>, but some built-in functions like <code>sort</code> only work on <code>Int</code>).</p>
 <div class="code-and-raw">
 <table class="sourceCode numberLines haskell" input="code/toy/parking-space.hs"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
@@ -1982,6 +1982,28 @@ getParkingSpace ts
 <a  class="raw"  href= "/code/toy/parking-space.hs"  mimetype=text/plain > parking-space.hs </a>
 </div>
 </div>
+<h3 id="functional-solution">Functional solution</h3>
+<p>Michele Alzetta kindly sent me another solution, which has a much stronger “Haskell” flavor. I’ve made some slight adjustments; here it is:</p>
+<div class="code-and-raw">
+<table class="sourceCode numberLines haskell" input="code/toy/parking-space2.hs"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="sourceCode"><pre><code class="sourceCode haskell"><span class="kw">import </span><span class="dt">Data.List</span>
+<span class="kw">import </span><span class="dt">Data.Maybe</span>
+
+<span class="ot">getParkingSpace&#39; ::</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> <span class="dt">Int</span>
+getParkingSpace&#39; ts <span class="fu">=</span> fromMaybe
+	(length ts)
+	(elemIndex <span class="dt">False</span> <span class="fu">.</span> zipWith (<span class="fu">==</span>) [<span class="dv">0</span><span class="fu">..</span>] <span class="fu">$</span> sort ts)</code></pre></td></tr></table>
+<div class="raw-link">
+<a  class="raw"  href= "/code/toy/parking-space2.hs"  mimetype=text/plain > parking-space2.hs </a>
+</div>
+</div>
+<p>. The biggest advantage this version has over the first version is that it only evaluates <code>length ts</code> (the input list) as a last resort (unlike <code>loop</code> where it is always called). This version also uses a handful of standard Prelude functions like <code>elemIndex</code>, <code>zipWith</code>, and <code>fromMaybe</code> for easier understanding. Thanks Michele!</p>
 <h2 id="low-level-interlude">Low-Level Interlude</h2>
 <p>Did you realize that the basic concept here is the same as finding the least significant bit (LSB)? I.e., if the parking lot is one giant computer word, and a <code>1</code> bit represents an available parking space, then we are simply trying to find the LSB (the index of the bit being the same thing as the parking space number). This is such a common scenario, that there are native hardware instructions for this on most all CPUs. The canonical name for this operation is <a href="http://en.wikipedia.org/wiki/Find_first_set"><em>find first set</em></a> or <em>find first one</em>.<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> In Linux, you can do <code>man ffs</code> to learn about how to use it in your C program.</p>
 <p>Of course, the parking lot in our problem is of infinite size, which makes the size of <code>T</code> arbitrarily large; alas, we cannot use <code>ffs</code> here.</p>
