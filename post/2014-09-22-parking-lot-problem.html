@@ -51,9 +51,7 @@
 <p>. You may notice that the input list is sorted (for readability), but recall that <code>T</code> <em>may or may not</em> be sorted! Try your own solution against these expected outputs!</p>
 <h2 id="some-preliminary-observations">Some Preliminary Observations</h2>
 <p>The most important thing here is <code>T</code>. If <code>T</code> is empty, then our parking lot is empty, so the answer is obviously <code>0</code>. In all other cases, we have to figure out the lowest number that is <em>absent</em> from <code>T</code>. Essentially, we can reduce the problem as follows:</p>
-<ul>
-<li>Find the lowest number not present in the set of integers <code>T</code>, where the lowest possible number is <code>0</code>.</li>
-</ul>
+Find the lowest number not present in the set of integers <code>T</code>, where the lowest possible number is <code>0</code>.
 <p>I used the metaphor of the parking spaces because it is more memorable, and more importantly, more familiar to the general public.</p>
 <h2 id="mathematical-approach">Mathematical Approach</h2>
 <p>Conceptually, the problem is very simple. Consider the infinite set <code>N</code>, which includes all natural numbers, starting from <code>0</code>. Then obviously, we can start with <code>N</code> itself, and remove every number in <code>N</code> that is also present in <code>T</code>. Then, when we are done (<code>T</code> is empty), we can look at <code>N</code> and retrieve the lowest number.</p>
@@ -64,7 +62,7 @@
 <h2 id="ruby">Ruby</h2>
 <p>I think it is time for some actual code. While I could explain how the Ruby version works, I feel that I have already expounded upon the problem enough above, so that the code here should make intuitive sense.</p>
 <div class="code-and-raw">
-<table class="sourceCode numberLines ruby" input="code/toy/parking-space.rb"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+<div class="sourceCode" input="code/toy/parking-space.rb"><table class="sourceCode numberLines ruby"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
 4
@@ -89,7 +87,7 @@
 	<span class="kw">end</span>
 
 	<span class="kw">return</span> i
-<span class="kw">end</span></code></pre></td></tr></table>
+<span class="kw">end</span></code></pre></td></tr></table></div>
 <div class="raw-link">
 <a class="raw" href="../code/toy/parking-space.rb" mimetype="text/plain"> parking-space.rb </a>
 </div>
@@ -97,7 +95,7 @@
 <h2 id="haskell">Haskell</h2>
 <p>The Haskell version is a direct translation of the Ruby version, as an iterative approach works just fine. The only drawback is that we use <code>Int</code> instead of the arbitrarily large <code>Integer</code> type for succinctness (we can use <code>Integer</code>, but some built-in functions like <code>sort</code> only work on <code>Int</code>).</p>
 <div class="code-and-raw">
-<table class="sourceCode numberLines haskell" input="code/toy/parking-space.hs"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+<div class="sourceCode" input="code/toy/parking-space.hs"><table class="sourceCode numberLines haskell"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
 4
@@ -118,7 +116,7 @@ getParkingSpace ts
 	loop i xs
 		<span class="fu">|</span> i <span class="fu">==</span> length xs <span class="fu">=</span> i
 		<span class="fu">|</span> i <span class="fu">&lt;</span> xs <span class="fu">!!</span> i <span class="fu">=</span> i
-		<span class="fu">|</span> otherwise <span class="fu">=</span> loop (i <span class="fu">+</span> <span class="dv">1</span>) xs</code></pre></td></tr></table>
+		<span class="fu">|</span> otherwise <span class="fu">=</span> loop (i <span class="fu">+</span> <span class="dv">1</span>) xs</code></pre></td></tr></table></div>
 <div class="raw-link">
 <a class="raw" href="../code/toy/parking-space.hs" mimetype="text/plain"> parking-space.hs </a>
 </div>
@@ -126,7 +124,7 @@ getParkingSpace ts
 <h3 id="functional-solution">Functional solution</h3>
 <p>Michele Alzetta kindly sent me another solution, which has a much stronger “Haskell” flavor. I’ve made some slight adjustments; here it is:</p>
 <div class="code-and-raw">
-<table class="sourceCode numberLines haskell" input="code/toy/parking-space2.hs"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+<div class="sourceCode" input="code/toy/parking-space2.hs"><table class="sourceCode numberLines haskell"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
 4
@@ -139,12 +137,12 @@ getParkingSpace ts
 <span class="ot">getParkingSpace' ::</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> <span class="dt">Int</span>
 getParkingSpace' ts <span class="fu">=</span> fromMaybe
 	(length ts)
-	(elemIndex <span class="dt">False</span> <span class="fu">.</span> zipWith (<span class="fu">==</span>) [<span class="dv">0</span><span class="fu">..</span>] <span class="fu">$</span> sort ts)</code></pre></td></tr></table>
+	(elemIndex <span class="dt">False</span> <span class="fu">.</span> zipWith (<span class="fu">==</span>) [<span class="dv">0</span><span class="fu">..</span>] <span class="fu">$</span> sort ts)</code></pre></td></tr></table></div>
 <div class="raw-link">
 <a class="raw" href="../code/toy/parking-space2.hs" mimetype="text/plain"> parking-space2.hs </a>
 </div>
 </div>
-<p>. The biggest advantage this version has over the first version is that it only evaluates <code>length ts</code> (the input list) as a last resort (unlike <code>loop</code> where it is always called). This version also uses a handful of standard Prelude functions like <code>elemIndex</code>, <code>zipWith</code>, and <code>fromMaybe</code> for easier understanding. Thanks Michele!</p>
+<p>. The advantage of this version is that it only evaluates <code>length ts</code> (the input list) as a last resort, thanks to <code>fromMaybe</code>. It also uses standard Prelude functions like <code>elemIndex</code> and <code>zipWith</code> for easier understanding. Thanks Michele!</p>
 <h2 id="low-level-interlude">Low-Level Interlude</h2>
 <p>Did you realize that the basic concept here is the same as finding the least significant bit (LSB)? I.e., if the parking lot is one giant computer word, and a <code>1</code> bit represents an available parking space, then we are simply trying to find the LSB (the index of the bit being the same thing as the parking space number). This is such a common scenario, that there are native hardware instructions for this on most all CPUs. The canonical name for this operation is <a href="http://en.wikipedia.org/wiki/Find_first_set"><em>find first set</em></a> or <em>find first one</em>.<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> In Linux, you can do <code>man ffs</code> to learn about how to use it in your C program.</p>
 <p>Of course, the parking lot in our problem is of infinite size, which makes the size of <code>T</code> arbitrarily large; alas, we cannot use <code>ffs</code> here.</p>
@@ -165,7 +163,7 @@ getParkingSpace' ts <span class="fu">=</span> fromMaybe
 <h2 id="ruby-1">Ruby</h2>
 <p>Without further ado, here is the Ruby solution.</p>
 <div class="code-and-raw">
-<table class="sourceCode numberLines ruby" input="code/toy/parking-spaces.rb"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+<div class="sourceCode" input="code/toy/parking-spaces.rb"><table class="sourceCode numberLines ruby"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
 4
@@ -178,7 +176,7 @@ getParkingSpace' ts <span class="fu">=</span> fromMaybe
 	<span class="kw">else</span>
 		<span class="kw">return</span> (t.max - t.size) + <span class="dv">1</span>
 	<span class="kw">end</span>
-<span class="kw">end</span></code></pre></td></tr></table>
+<span class="kw">end</span></code></pre></td></tr></table></div>
 <div class="raw-link">
 <a class="raw" href="../code/toy/parking-spaces.rb" mimetype="text/plain"> parking-spaces.rb </a>
 </div>
@@ -186,14 +184,14 @@ getParkingSpace' ts <span class="fu">=</span> fromMaybe
 <h2 id="haskell-1">Haskell</h2>
 <p>The Haskell version is not much different.</p>
 <div class="code-and-raw">
-<table class="sourceCode numberLines haskell" input="code/toy/parking-spaces.hs"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+<div class="sourceCode" input="code/toy/parking-spaces.hs"><table class="sourceCode numberLines haskell"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
 4
 </pre></td><td class="sourceCode"><pre><code class="sourceCode haskell"><span class="ot">getParkingSpaces ::</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> <span class="dt">Either</span> <span class="dt">String</span> <span class="dt">Int</span>
 getParkingSpaces t
 	<span class="fu">|</span> null t <span class="fu">=</span> <span class="dt">Left</span> <span class="st">&quot;N/A&quot;</span>
-	<span class="fu">|</span> otherwise <span class="fu">=</span> <span class="dt">Right</span> <span class="fu">$</span> (maximum t) <span class="fu">-</span> (length t) <span class="fu">+</span> <span class="dv">1</span></code></pre></td></tr></table>
+	<span class="fu">|</span> otherwise <span class="fu">=</span> <span class="dt">Right</span> <span class="fu">$</span> (maximum t) <span class="fu">-</span> (length t) <span class="fu">+</span> <span class="dv">1</span></code></pre></td></tr></table></div>
 <div class="raw-link">
 <a class="raw" href="../code/toy/parking-spaces.hs" mimetype="text/plain"> parking-spaces.hs </a>
 </div>

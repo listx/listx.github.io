@@ -37,7 +37,7 @@
 <h2 id="ruby">Ruby</h2>
 <p>First, the Ruby version:</p>
 <div class="code-and-raw">
-<table class="sourceCode numberLines ruby" input="code/toy/rpn.rb"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+<div class="sourceCode" input="code/toy/rpn.rb"><table class="sourceCode numberLines ruby"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
 4
@@ -80,7 +80,7 @@
 		<span class="kw">end</span>
 	<span class="kw">end</span>
 	stack
-<span class="kw">end</span></code></pre></td></tr></table>
+<span class="kw">end</span></code></pre></td></tr></table></div>
 <div class="raw-link">
 <a class="raw" href="../code/toy/rpn.rb" mimetype="text/plain"> rpn.rb </a>
 </div>
@@ -90,7 +90,7 @@
 <h2 id="haskell">Haskell</h2>
 <p>Here is the Haskell version:</p>
 <div class="code-and-raw">
-<table class="sourceCode numberLines haskell" input="code/toy/rpn.hs"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+<div class="sourceCode" input="code/toy/rpn.hs"><table class="sourceCode numberLines haskell"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
 4
@@ -141,7 +141,7 @@ evalTerms <span class="fu">=</span> foldl modifyStack []
 		<span class="dt">TermInt</span> n <span class="ot">-&gt;</span> n <span class="fu">:</span> stack
 		<span class="dt">TermOp</span> op <span class="ot">-&gt;</span> <span class="kw">case</span> stack <span class="kw">of</span>
 			(a<span class="fu">:</span>b<span class="fu">:</span>_) <span class="ot">-&gt;</span> op a b <span class="fu">:</span> drop <span class="dv">2</span> stack
-			_ <span class="ot">-&gt;</span> error <span class="st">&quot;stack too small for operator application&quot;</span></code></pre></td></tr></table>
+			_ <span class="ot">-&gt;</span> error <span class="st">&quot;stack too small for operator application&quot;</span></code></pre></td></tr></table></div>
 <div class="raw-link">
 <a class="raw" href="../code/toy/rpn.hs" mimetype="text/plain"> rpn.hs </a>
 </div>

@@ -35,20 +35,18 @@
 
 <p>After more than a year of struggling with my Brother printer, I finally got it to print flawlessly. I will kindly refrain from getting into the drama, and just write a short tutorial to set it up with CUPS in Arch Linux.</p>
 <p>First, install the <code>cups</code> package, as well as the Brother driver packages in the AUR:</p>
-<ul>
-<li><code>brother-cups-wrapper-ac</code></li>
-<li><code>brother-cups-wrapper-common</code></li>
-<li><code>brother-lpr-drivers-ac</code></li>
-<li><code>brother-lpr-drivers-common</code></li>
-</ul>
+<code>brother-cups-wrapper-ac</code>
+<code>brother-cups-wrapper-common</code>
+<code>brother-lpr-drivers-ac</code>
+<code>brother-lpr-drivers-common</code>
 <p>Then, enable the <code>cups</code> daemon with <code>systemd</code>, and then start it:</p>
-<table class="sourceCode numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+<div class="sourceCode"><table class="sourceCode numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 </pre></td><td class="sourceCode"><pre><code class="sourceCode">sudo systemctl enable cups.service
-sudo systemctl start cups.service</code></pre></td></tr></table>
+sudo systemctl start cups.service</code></pre></td></tr></table></div>
 <p>Now go into your favorite web browser, and go to <code>http://localhost:631</code>, to find the CUPS web admin interface. From here, just add a new printer using the web form buttons. When adding the printer, use the LPR/LPD protocol, as follows:</p>
-<table class="sourceCode numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
-</pre></td><td class="sourceCode"><pre><code class="sourceCode">lpd://IP_ADDRESS_OF_PRINTER/BINARY_P1</code></pre></td></tr></table>
+<div class="sourceCode"><table class="sourceCode numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+</pre></td><td class="sourceCode"><pre><code class="sourceCode">lpd://IP_ADDRESS_OF_PRINTER/BINARY_P1</code></pre></td></tr></table></div>
 <p>and use the appropriate IP address that your printer has on the network. For the driver, select the CUPS driver for the MFC-9840CDW model (the various Brother drivers will only appear after installing the Brother driver packages from the AUR).</p>
 <p>Done!</p>
 

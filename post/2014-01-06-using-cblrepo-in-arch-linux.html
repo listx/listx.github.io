@@ -47,7 +47,7 @@
 <li>Finally run <code>sudo pacman -U &lt;package_arch_linux_format&gt;</code> on it to track it with <code>pacman</code>.</li>
 </ol>
 <p>The problem is that steps 3 and 4 take forever to do by hand because you have to add every single package individually, writing out the version numbers (and, it is something of a mystery unless you know where to look for the crucial information).<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> Plus, you have to redo all steps 1 through 7 each time you upgrade <code>ghc</code>. So, naturally, I wrote a script (called <code>maintain_cblrepo.sh</code>) to automate things a bit.</p>
-<table class="sourceCode numberLines bash"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+<div class="sourceCode"><table class="sourceCode numberLines bash"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
 4
@@ -288,18 +288,18 @@
 	*<span class="kw">)</span>
 	<span class="kw">echo</span> <span class="st">&quot;Unrecognized &lt;MODE&gt;; valid ones are: initdb initdb-sync pkgbuild makepkg&quot;</span>
 	<span class="kw">;;</span>
-<span class="kw">esac</span></code></pre></td></tr></table>
+<span class="kw">esac</span></code></pre></td></tr></table></div>
 <p>A simple <code>HACKAGE_PACKAGES_FILE</code> (perhaps named <code>hackage_pkgs</code>) might look something like this:</p>
-<table class="sourceCode numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+<div class="sourceCode"><table class="sourceCode numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
 4
 </pre></td><td class="sourceCode"><pre><code class="sourceCode">bindings-DSL
 bindings-GLFW
 GLFW-b
-rosezipper</code></pre></td></tr></table>
+rosezipper</code></pre></td></tr></table></div>
 <p>Here is sample output from the command <code>./maintain_cblrepo.sh hackage_pkgs initdb</code>:</p>
-<table class="sourceCode numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+<div class="sourceCode"><table class="sourceCode numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
 4
@@ -576,7 +576,7 @@ cblrepo add --distro-pkg zlib,0.5.4.1,2
 cblrepo add --cbl-url http://hackage.haskell.org/package/bindings-DSL-1.0.20/bindings-DSL.cabal
 cblrepo add --cbl-url http://hackage.haskell.org/package/bindings-GLFW-3.0.3.2/bindings-GLFW.cabal
 cblrepo add --cbl-url http://hackage.haskell.org/package/GLFW-b-1.4.6/GLFW-b.cabal
-cblrepo add --cbl-url http://hackage.haskell.org/package/rosezipper-0.2/rosezipper.cabal</code></pre></td></tr></table>
+cblrepo add --cbl-url http://hackage.haskell.org/package/rosezipper-0.2/rosezipper.cabal</code></pre></td></tr></table></div>
 <p>This is infinitely faster than adding each package by hand. Feel free to copy/paste/modify/redistribute the code in <code>maintain_cblrepo.sh</code> to suit your needs.</p>
 <div class="footnotes">
 <hr />

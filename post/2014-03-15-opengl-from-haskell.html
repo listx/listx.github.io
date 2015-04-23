@@ -38,7 +38,7 @@
 <p>I went ahead and added type signatures for all top-level functions — something that many Haskell tutorial writers hate doing for some strange, unknown reason.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> Also, I ran the code through <code>ghc --make -Wall</code> and silenced all warnings.</p>
 <p>I hereby release it into the Public Domain. From what I can tell, YPares’s code doesn’t have a license… I think this should be OK.</p>
 <div class="code-and-raw">
-<table class="sourceCode numberLines haskell" input="code/opengl/triangle.hs"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+<div class="sourceCode" input="code/opengl/triangle.hs"><table class="sourceCode numberLines haskell"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
 4
@@ -435,7 +435,7 @@ drawStuff <span class="dt">GLIDs</span>{<span class="fu">..</span>} <span class=
 	glUseProgram progId
 	bindBufferToAttrib vertexBufferId <span class="dv">0</span>
 	glDrawArrays gl_TRIANGLES <span class="dv">0</span> <span class="dv">3</span> <span class="co">-- for attrib array 0, draw 3 vertices</span>
-	glDisableVertexAttribArray <span class="dv">0</span> <span class="co">-- disable attrib array 0</span></code></pre></td></tr></table>
+	glDisableVertexAttribArray <span class="dv">0</span> <span class="co">-- disable attrib array 0</span></code></pre></td></tr></table></div>
 <div class="raw-link">
 <a class="raw" href="../code/opengl/triangle.hs" mimetype="text/plain"> triangle.hs </a>
 </div>

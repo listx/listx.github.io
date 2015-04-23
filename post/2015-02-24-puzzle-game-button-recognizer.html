@@ -51,7 +51,7 @@ on_button(&quot;punch&quot;)     # [&quot;uppercut&quot;, &quot;uppercut_2&quot;
 <h2 id="my-nervous-wreck-solution">My Nervous-Wreck Solution</h2>
 <p>I decided to use pure Haskell code in the actual interview. The code I wrote had the general idea, but it was a big failure because it performed a naive, custom search without any thought given to data structures. I actually went back and revised the code to make it compile and work <em>after</em> the interview was over; here it is in all its glory:</p>
 <div class="code-and-raw">
-<table class="sourceCode numberLines haskell" input="code/toy/game-button-seq/interview_ver.hs"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+<div class="sourceCode" input="code/toy/game-button-seq/interview_ver.hs"><table class="sourceCode numberLines haskell"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
 4
@@ -128,7 +128,7 @@ onButtons buttonHist db <span class="fu">=</span> map snd
 		remaining <span class="fu">=</span> filter ((<span class="fu">==</span>button) <span class="fu">.</span> last <span class="fu">.</span> fst)
 			<span class="fu">$</span> filter (not <span class="fu">.</span> null <span class="fu">.</span> fst) dbRem
 		dbRem' <span class="fu">=</span> map (\(a, b) <span class="ot">-&gt;</span> (init a, b)) remaining
-		entriesComplete <span class="fu">=</span> filter (null <span class="fu">.</span> fst) dbRem'</code></pre></td></tr></table>
+		entriesComplete <span class="fu">=</span> filter (null <span class="fu">.</span> fst) dbRem'</code></pre></td></tr></table></div>
 <div class="raw-link">
 <a class="raw" href="../code/toy/game-button-seq/interview_ver.hs" mimetype="text/plain"> interview_ver.hs </a>
 </div>
@@ -153,7 +153,7 @@ Ok, modules loaded: Main.
 <h2 id="ruby-solution-using-hashes">Ruby Solution Using Hashes</h2>
 <p>So on the day after (that is, <em>today</em> as of the time of this writing), I thought about the problem again and realized we can use hashes. It is a very simple approach, with far less lines of code. I even wrote some tests for it. Here is the implementation below.</p>
 <div class="code-and-raw">
-<table class="sourceCode numberLines ruby" input="code/toy/game-button-seq/hash_ver.rb"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+<div class="sourceCode" input="code/toy/game-button-seq/hash_ver.rb"><table class="sourceCode numberLines ruby"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
 4
@@ -236,14 +236,14 @@ Ok, modules loaded: Main.
   <span class="kw">def</span> <span class="dt">GameButtonSeq</span>.add_hist(button_hist, button_name)
     button_hist + [button_name]
   <span class="kw">end</span>
-<span class="kw">end</span></code></pre></td></tr></table>
+<span class="kw">end</span></code></pre></td></tr></table></div>
 <div class="raw-link">
 <a class="raw" href="../code/toy/game-button-seq/hash_ver.rb" mimetype="text/plain"> hash_ver.rb </a>
 </div>
 </div>
 <p>And here is the test suite for it. You can run it with <code>ruby test_hash_ver.rb</code>.</p>
 <div class="code-and-raw">
-<table class="sourceCode numberLines ruby" input="code/toy/game-button-seq/test_hash_ver.rb"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+<div class="sourceCode" input="code/toy/game-button-seq/test_hash_ver.rb"><table class="sourceCode numberLines ruby"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
 4
@@ -340,7 +340,7 @@ require_relative <span class="st">'./hash_ver.rb'</span>
     assert_equal [<span class="st">&quot;hadoken&quot;</span>, <span class="st">&quot;charger&quot;</span>],
       <span class="dt">GameButtonSeq</span>.on_buttons(<span class="ot">@button_hist</span>, <span class="ot">@db</span>)
   <span class="kw">end</span>
-<span class="kw">end</span></code></pre></td></tr></table>
+<span class="kw">end</span></code></pre></td></tr></table></div>
 <div class="raw-link">
 <a class="raw" href="../code/toy/game-button-seq/test_hash_ver.rb" mimetype="text/plain"> test_hash_ver.rb </a>
 </div>
@@ -351,7 +351,7 @@ require_relative <span class="st">'./hash_ver.rb'</span>
 <h2 id="haskell-solution-using-hashes">Haskell Solution Using Hashes</h2>
 <p>Inspired by the Ruby solution, I rewrote a Haskell version — with tests to boot! Here is the implementation.</p>
 <div class="code-and-raw">
-<table class="sourceCode numberLines haskell" input="code/toy/game-button-seq/GameButtonSeq.hs"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+<div class="sourceCode" input="code/toy/game-button-seq/GameButtonSeq.hs"><table class="sourceCode numberLines haskell"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
 4
@@ -416,14 +416,14 @@ onButtons buttonHist db <span class="fu">=</span> concatMap extractNames buttonH
 <span class="ot">onButtons2 ::</span> <span class="dt">ButtonSeq</span> <span class="ot">-&gt;</span> <span class="dt">ButtonSeqDB</span> <span class="ot">-&gt;</span> [<span class="dt">Name</span>]
 onButtons2 buttonHist db <span class="fu">=</span> concat <span class="fu">$</span> mapMaybe (flip M.lookup db) buttonHists
 	<span class="kw">where</span>
-	buttonHists <span class="fu">=</span> take (length buttonHist) <span class="fu">$</span> iterate tail buttonHist</code></pre></td></tr></table>
+	buttonHists <span class="fu">=</span> take (length buttonHist) <span class="fu">$</span> iterate tail buttonHist</code></pre></td></tr></table></div>
 <div class="raw-link">
 <a class="raw" href="../code/toy/game-button-seq/GameButtonSeq.hs" mimetype="text/plain"> GameButtonSeq.hs </a>
 </div>
 </div>
 <p>The file is named <code>GameButtonSeq</code> because of Haskell naming conventions for files containing module code. And here is the test for it.</p>
 <div class="code-and-raw">
-<table class="sourceCode numberLines haskell" input="code/toy/game-button-seq/test_hash_ver.hs"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+<div class="sourceCode" input="code/toy/game-button-seq/test_hash_ver.hs"><table class="sourceCode numberLines haskell"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
 4
@@ -532,7 +532,7 @@ unitTests <span class="fu">=</span> testGroup <span class="st">&quot;Unit tests&
 		[ ([<span class="st">&quot;down&quot;</span>, <span class="st">&quot;forward&quot;</span>, <span class="st">&quot;punch&quot;</span>], [<span class="st">&quot;hadoken&quot;</span>])
 		, ([<span class="st">&quot;forward&quot;</span>, <span class="st">&quot;punch&quot;</span>], [<span class="st">&quot;charger&quot;</span>])
 		, ([<span class="st">&quot;up&quot;</span>, <span class="st">&quot;punch&quot;</span>], [<span class="st">&quot;uppercut&quot;</span>])
-		]</code></pre></td></tr></table>
+		]</code></pre></td></tr></table></div>
 <div class="raw-link">
 <a class="raw" href="../code/toy/game-button-seq/test_hash_ver.hs" mimetype="text/plain"> test_hash_ver.hs </a>
 </div>

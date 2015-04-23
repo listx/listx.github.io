@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Linus's Blog - Programming Puzzles: Letter and Word Frequency</title>
+		<link rel="stylesheet" href="../css/base.css">
+		<link rel="stylesheet" href="../css/syntax.css">
+		<link href="http://fonts.googleapis.com/css?family=Merriweather:300,300italic,700italic,700" rel="stylesheet" type="text/css">
+		<link rel="shortcut icon" type="image/png" href="../favicon.png">
+		<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+	</head>
+	<body>
+		<div id="header">
+			<a href="../">Home</a>
+			&bull;
+			<a href="../about.html">About</a>
+			&bull;
+			<a href="../art.html">Art</a>
+			&bull;
+			<a href="../code.html">Code</a>
+			&bull;
+			<a href="../papers.html">Papers</a>
+			&bull;
+			<a href="../archive.html">Archive</a>
+		</div>
+
+		<div id="content">
+			<h1 class="center">Programming Puzzles: Letter and Word Frequency</h1>
+
+			<div class="info center">
+	<code class="date">2015-04-22</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2015-04-22-letter-word-frequency.md" title="History">*</a>
+	<br>
+	<a href="../tag/programming.html">programming</a>, <a href="../tag/haskell.html">haskell</a>, <a href="../tag/ruby.html">ruby</a>
+</div>
+
+<p>I recently purchased an ErgoDox keyboard<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a>, and I’ve been thinking about creating my own keyboard layout in the spirit of the Dvorak Simplified Keyboard layout (DSK). One of the guiding principles of DSK was putting an emphasis on reducing finger travel by identifying the most commonly occurring letters of the English language, and placing them on the home row of the keyboard. Now, the Dvorak layout was patented in 1936 according to Wikipedia, with subsequent adjustments culminating in the present form of DSK.</p>
+<h2 id="motivation">Motivation</h2>
+<p>I want to find out for myself what letters are the most common. Sure, I could blindly trust an online source like Wikipedia, but it just feels like an easy problem to solve. Also, I am not sure if Dvorak considered <em>word</em> frequency as well as <em>letter</em> frequency. Ideally, one should use the data of both word and letter frequency to determine what is the most commonly typed “letter” on a US ASCII keyboard for English writers.</p>
+<h2 id="the-problems">The Problems</h2>
+<h3 id="letter-frequency">Letter Frequency</h3>
+<p>Write a program that reads a file (plaintext) and counts how many times each letter occurs in the file. You must treat <code>A</code> as the same letter as <code>a</code>. You may limit yourself to the plain US ASCII 26-letter alphabet, discarding all letters with diacritics. Sort the letters by their frequence; for each letter, display the letter itself, its relative frequency percentage to the file as a whole, and the number of times this letter appears (raw count). E.g., the letter <code>a</code> counted by this program might look like this: <code>a = 2.00% (200 occurrences)</code>.</p>
+<h3 id="word-frequency">Word Frequency</h3>
+<p>Write a program that reads a file (plaintext) and counts how many times each <em>word</em> occurs in the file. The precise definition of a “word” is up to you, but you must exclude arabic numerals and also standalone punctuation characters (e.g., “* is not a word”). Display the 100 most common words in similar fashion to the Letter Frequency problem.</p>
+<p>Both the letter and word frequency problems will use the Project Gutenberg plaintext file of <a href="http://www.gutenberg.org/cache/epub/2701/pg2701.txt"><em>Moby Dick</em></a>.</p>
+<p>Now, before you go on to read my solutions, I encourage you to write a solution on your own using your favorite programming language.</p>
+<h2 id="ruby-version">Ruby Version</h2>
+<div class="code-and-raw">
+<div class="sourceCode" input="code/toy/text-freq/text_freq.rb"><table class="sourceCode numberLines ruby"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+</pre></td><td class="sourceCode"><pre><code class="sourceCode ruby"><span class="kw">module</span> <span class="dt">TextFreq</span>
+  <span class="co"># Given a string, count every occurrence of letters a-z (case insensitively).</span>
+  <span class="kw">def</span> <span class="dt">TextFreq</span>.freq_l(src)
+    <span class="co"># Construct the array to hold the running totals (occurrences) of each</span>
+    <span class="co"># letter. There are 26 letters in the alphabet, so we can just have an array</span>
+    <span class="co"># of 26 integers.</span>
+    occs = <span class="dt">Array</span>.new(<span class="dv">26</span>, <span class="dv">0</span>)
+
+    <span class="co"># Count occurrences of each letter.</span>
+    src.each_char <span class="kw">do</span> |c|
+      <span class="kw">if</span> !char_to_idx(c.downcase).nil?
+        occs[char_to_idx(c.downcase)] += <span class="dv">1</span>
+      <span class="kw">end</span>
+    <span class="kw">end</span>
+
+    occs
+  <span class="kw">end</span>
+
+  <span class="co"># Simply check if the given character belongs to the range of lowercase ASCII</span>
+  <span class="co"># characters that make up the alphabet. &quot;a&quot; is 97, and &quot;z&quot; is 122; the numbers</span>
+  <span class="co"># for bounds-checking &quot;c&quot; come from these two (offset by 1 to account for the</span>
+  <span class="co"># exclusive comparison).</span>
+  <span class="kw">def</span> <span class="dt">TextFreq</span>.char_to_idx(c)
+    <span class="dv">96</span> &lt; c.ord &amp;&amp; c.ord &lt; <span class="dv">123</span> ? c.ord - <span class="dv">97</span> : <span class="dv">nil</span>
+  <span class="kw">end</span>
+
+  <span class="co"># Given a string, count every occurrence of a particular word. We define a</span>
+  <span class="co"># &quot;word&quot; as a sequence of charactes that</span>
+  <span class="co">#   - does not have any punctuation characters at the beginning or end, and</span>
+  <span class="co">#   - does not have any numbers in it</span>
+  <span class="co"># . We take into account that text files from Project Gutenberg use a double</span>
+  <span class="co"># dash for an em dash to separate two words.</span>
+  <span class="kw">def</span> <span class="dt">TextFreq</span>.freq_w(src)
+    occs = {}
+    words = src.split(<span class="ot">/\W*\s\W*/</span>).map <span class="kw">do</span> |w|
+        w.empty? ? <span class="dv">nil</span> : w.downcase
+      <span class="kw">end</span>.compact
+    words.each <span class="kw">do</span> |w|
+      <span class="co"># Guard against cases like &quot;*&quot; for bullet points and such.</span>
+      <span class="kw">if</span> w =~ <span class="ot">/\w/</span>
+        <span class="kw">if</span> w =~ <span class="ot">/--/</span>
+          w.split(<span class="st">&quot;--&quot;</span>).each <span class="kw">do</span> |y|
+            count_word(occs, lstrip_punc(y))
+          <span class="kw">end</span>
+        <span class="kw">else</span>
+          count_word(occs, lstrip_punc(w))
+        <span class="kw">end</span>
+      <span class="kw">end</span>
+    <span class="kw">end</span>
+
+    occs
+  <span class="kw">end</span>
+
+  <span class="co"># Add 1 to the hash for an existing key (word); otherwise, store a new</span>
+  <span class="co"># instance of that word.</span>
+  <span class="kw">def</span> <span class="dt">TextFreq</span>.count_word(hash, w)
+    hash.key?(w) ? hash[w] += <span class="dv">1</span> : hash.store(w, <span class="dv">1</span>)
+    hash
+  <span class="kw">end</span>
+
+  <span class="co"># Remove leading punctuation.</span>
+  <span class="kw">def</span> <span class="dt">TextFreq</span>.lstrip_punc(w)
+    w.match(<span class="ot">/\w.*/</span>)[<span class="dv">0</span>]
+  <span class="kw">end</span>
+
+  <span class="co"># Display the frequencies of letters and or words. For letters, we are only</span>
+  <span class="co"># concerned about 26 different values, so we print all of them out. However</span>
+  <span class="co"># for words, depending on the corpus there might be thousands, or even</span>
+  <span class="co"># millions, of different words; thus, we only display the top 100 most common</span>
+  <span class="co"># words.</span>
+  <span class="kw">def</span> <span class="dt">TextFreq</span>.disp_freq(occs)
+    <span class="kw">if</span> occs.is_a?(<span class="dt">Array</span>)
+      sum = occs.inject(<span class="dv">0</span>, :+)
+      occs.zip((<span class="st">&quot;a&quot;</span>..<span class="st">&quot;z&quot;</span>).to_a).sort.reverse.each <span class="kw">do</span> |cnt, c|
+        puts <span class="st">&quot;</span><span class="ot">#{</span>c<span class="ot">}</span><span class="st"> = &quot;</span>\
+          + <span class="st">&quot;%.2f%%&quot;</span> % (cnt/sum.to_f * <span class="fl">100.0</span>)\
+          + <span class="st">&quot; (</span><span class="ot">#{</span>cnt<span class="ot">}</span><span class="st"> occurrences)&quot;</span>
+      <span class="kw">end</span>
+    <span class="kw">else</span>
+      sum = occs.values.inject(<span class="dv">0</span>, :+)
+      occs.sort_by {|w, cnt| cnt}.reverse.take(<span class="dv">100</span>).each <span class="kw">do</span> |w, cnt|
+        puts <span class="st">&quot;</span><span class="ot">#{</span>w<span class="ot">}</span><span class="st"> = &quot;</span>\
+          + <span class="st">&quot;%.2f%%&quot;</span> % (cnt/sum.to_f * <span class="fl">100.0</span>)\
+          + <span class="st">&quot; (</span><span class="ot">#{</span>cnt<span class="ot">}</span><span class="st"> occurrences)&quot;</span>
+      <span class="kw">end</span>
+    <span class="kw">end</span>
+  <span class="kw">end</span>
+<span class="kw">end</span></code></pre></td></tr></table></div>
+<div class="raw-link">
+<a class="raw" href="../code/toy/text-freq/text_freq.rb" mimetype="text/plain"> text_freq.rb </a>
+</div>
+</div>
+<div class="code-and-raw">
+<div class="sourceCode" input="code/toy/text-freq/analyze.rb"><table class="sourceCode numberLines ruby"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+</pre></td><td class="sourceCode"><pre><code class="sourceCode ruby"><span class="kw">#!/usr/bin/env ruby</span>
+
+require_relative <span class="st">'./text_freq'</span>
+
+fname = <span class="dt">ARGV</span>[<span class="dv">0</span>]
+file = <span class="dt">File</span>.open(fname, <span class="st">'r:utf-8'</span>)
+corpus = file.read
+
+occs_l = <span class="dt">TextFreq</span>.freq_l(corpus)
+<span class="dt">TextFreq</span>.disp_freq(occs_l)
+
+puts <span class="st">&quot;-&quot;</span> * <span class="dv">80</span>
+
+occs_w = <span class="dt">TextFreq</span>.freq_w(corpus)
+<span class="dt">TextFreq</span>.disp_freq(occs_w)
+
+file.close</code></pre></td></tr></table></div>
+<div class="raw-link">
+<a class="raw" href="../code/toy/text-freq/analyze.rb" mimetype="text/plain"> analyze.rb </a>
+</div>
+</div>
+<p>And here is the output (<code>pg2701.txt</code> is <em>Moby Dick</em>):</p>
+<pre><code>$ ./analyze.rb ~/pg2701.txt
+e = 12.29% (118967 occurrences)
+t = 9.25% (89549 occurrences)
+a = 8.16% (78959 occurrences)
+o = 7.31% (70698 occurrences)
+n = 6.89% (66670 occurrences)
+i = 6.88% (66585 occurrences)
+s = 6.72% (65012 occurrences)
+h = 6.56% (63444 occurrences)
+r = 5.51% (53342 occurrences)
+l = 4.47% (43298 occurrences)
+d = 4.01% (38769 occurrences)
+u = 2.81% (27217 occurrences)
+m = 2.44% (23655 occurrences)
+c = 2.39% (23122 occurrences)
+w = 2.33% (22500 occurrences)
+g = 2.19% (21239 occurrences)
+f = 2.19% (21228 occurrences)
+p = 1.83% (17711 occurrences)
+y = 1.78% (17209 occurrences)
+b = 1.77% (17165 occurrences)
+v = 0.90% (8721 occurrences)
+k = 0.85% (8196 occurrences)
+q = 0.16% (1567 occurrences)
+j = 0.12% (1176 occurrences)
+x = 0.11% (1062 occurrences)
+z = 0.07% (636 occurrences)
+--------------------------------------------------------------------------------
+the = 6.74% (14616 occurrences)
+of = 3.10% (6708 occurrences)
+and = 2.99% (6488 occurrences)
+a = 2.20% (4760 occurrences)
+to = 2.16% (4677 occurrences)
+in = 1.95% (4223 occurrences)
+that = 1.38% (2999 occurrences)
+his = 1.17% (2530 occurrences)
+it = 1.12% (2419 occurrences)
+i = 0.92% (1988 occurrences)
+but = 0.84% (1823 occurrences)
+he = 0.82% (1777 occurrences)
+with = 0.82% (1770 occurrences)
+as = 0.81% (1751 occurrences)
+is = 0.81% (1747 occurrences)
+for = 0.76% (1645 occurrences)
+was = 0.76% (1645 occurrences)
+all = 0.70% (1523 occurrences)
+this = 0.66% (1440 occurrences)
+at = 0.62% (1334 occurrences)
+by = 0.56% (1223 occurrences)
+not = 0.54% (1169 occurrences)
+from = 0.51% (1105 occurrences)
+on = 0.49% (1069 occurrences)
+him = 0.49% (1062 occurrences)
+so = 0.49% (1061 occurrences)
+be = 0.49% (1060 occurrences)
+whale = 0.45% (972 occurrences)
+you = 0.44% (944 occurrences)
+one = 0.42% (906 occurrences)
+or = 0.37% (797 occurrences)
+there = 0.37% (792 occurrences)
+now = 0.36% (779 occurrences)
+had = 0.36% (779 occurrences)
+have = 0.36% (772 occurrences)
+were = 0.32% (683 occurrences)
+they = 0.31% (664 occurrences)
+which = 0.30% (655 occurrences)
+then = 0.29% (628 occurrences)
+me = 0.29% (621 occurrences)
+their = 0.29% (620 occurrences)
+are = 0.29% (619 occurrences)
+some = 0.29% (619 occurrences)
+when = 0.28% (607 occurrences)
+an = 0.28% (600 occurrences)
+no = 0.27% (594 occurrences)
+my = 0.27% (589 occurrences)
+like = 0.27% (581 occurrences)
+upon = 0.26% (567 occurrences)
+what = 0.26% (566 occurrences)
+out = 0.24% (528 occurrences)
+into = 0.24% (523 occurrences)
+up = 0.24% (516 occurrences)
+more = 0.23% (506 occurrences)
+if = 0.23% (500 occurrences)
+them = 0.22% (471 occurrences)
+we = 0.21% (455 occurrences)
+man = 0.21% (445 occurrences)
+old = 0.20% (444 occurrences)
+ahab = 0.20% (432 occurrences)
+ye = 0.20% (428 occurrences)
+would = 0.20% (428 occurrences)
+other = 0.19% (416 occurrences)
+been = 0.19% (415 occurrences)
+these = 0.19% (405 occurrences)
+over = 0.19% (403 occurrences)
+will = 0.18% (396 occurrences)
+ship = 0.18% (391 occurrences)
+though = 0.18% (383 occurrences)
+sea = 0.18% (382 occurrences)
+its = 0.18% (382 occurrences)
+only = 0.17% (378 occurrences)
+such = 0.17% (376 occurrences)
+down = 0.17% (367 occurrences)
+any = 0.17% (363 occurrences)
+who = 0.16% (345 occurrences)
+yet = 0.16% (344 occurrences)
+her = 0.15% (329 occurrences)
+time = 0.15% (326 occurrences)
+very = 0.15% (323 occurrences)
+do = 0.15% (321 occurrences)
+long = 0.15% (319 occurrences)
+about = 0.15% (318 occurrences)
+than = 0.14% (311 occurrences)
+still = 0.14% (311 occurrences)
+those = 0.14% (307 occurrences)
+great = 0.14% (303 occurrences)
+said = 0.14% (301 occurrences)
+captain = 0.14% (300 occurrences)
+before = 0.14% (300 occurrences)
+here = 0.14% (299 occurrences)
+has = 0.14% (294 occurrences)
+must = 0.13% (292 occurrences)
+two = 0.13% (288 occurrences)
+most = 0.13% (284 occurrences)
+seemed = 0.13% (283 occurrences)
+last = 0.13% (276 occurrences)
+head = 0.13% (275 occurrences)
+see = 0.12% (268 occurrences)
+thou = 0.12% (267 occurrences)</code></pre>
+<p>. The file of course contains remarks and legalese from Project Gutenberg, so if you want more accuracy you would have to redact those parts before running this script.</p>
+<h3 id="letter-frequency-1">Letter Frequency</h3>
+<p>The <code>freq_l</code> method views letters in the limited US ASCII range and uses crude, C-like letter-to-integer equivalence via <code>char_to_idx</code>. We use a simple array of 26 integers, each one corresponding to a letter. But thanks to its stupidity, <code>freq_l</code> runs quite fast — chugging through Moby Dick in a few seconds on my Core i7-4770K 4GHz machine.</p>
+<h3 id="word-frequency-1">Word Frequency</h3>
+<p>The <code>freq_w</code> method relies almost entirely on a single regex, <code>/\W*\s\W*/</code>, to split the input into words. These words are further processed; we perform a basic sanity check with the <code>/\w/</code> regex to make sure we are not dealing with just numbers or punctuation, and we also take into account the em dash <code>--</code>. We use a basic hash structure to store the words as keys, and their counts as values.</p>
+<h2 id="haskell-version">Haskell Version</h2>
+<div class="code-and-raw">
+<div class="sourceCode" input="code/toy/text-freq/TextFreq.hs"><table class="sourceCode numberLines haskell"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+</pre></td><td class="sourceCode"><pre><code class="sourceCode haskell"><span class="kw">module</span> <span class="dt">TextFreq</span> <span class="kw">where</span>
+
+<span class="kw">import </span><span class="dt">Data.Char</span>
+<span class="kw">import </span><span class="dt">Data.List</span>
+<span class="kw">import qualified</span> <span class="dt">Data.Map.Strict</span> <span class="kw">as</span> <span class="dt">M</span>
+<span class="kw">import </span><span class="dt">Data.Ord</span> (comparing)
+<span class="kw">import qualified</span> <span class="dt">Data.Text.Lazy</span> <span class="kw">as</span> <span class="dt">T</span>
+<span class="kw">import </span><span class="dt">Data.Word</span>
+<span class="kw">import qualified</span> <span class="dt">Text.Printf</span> <span class="kw">as</span> <span class="dt">TP</span>
+
+<span class="kw">type</span> <span class="dt">LHash</span> <span class="fu">=</span> <span class="dt">M.Map</span> <span class="dt">Char</span> <span class="dt">Word64</span>
+
+<span class="kw">type</span> <span class="dt">WProto</span> <span class="fu">=</span> <span class="dt">T.Text</span>
+<span class="kw">type</span> <span class="dt">WHash</span> <span class="fu">=</span> <span class="dt">M.Map</span> <span class="dt">WProto</span> <span class="dt">Word64</span>
+<span class="kw">data</span> <span class="dt">WFSM</span>
+	<span class="fu">=</span> <span class="dt">WordIn</span>
+	<span class="fu">|</span> <span class="dt">WordOutMaybe</span>
+	<span class="fu">|</span> <span class="dt">WordOut</span>
+	<span class="kw">deriving</span> (<span class="dt">Eq</span>)
+<span class="kw">data</span> <span class="dt">WBuild</span> <span class="fu">=</span> <span class="dt">WBuild</span> <span class="dt">WFSM</span> <span class="dt">WProto</span> <span class="dt">WHash</span>
+
+<span class="ot">freqL ::</span> <span class="dt">T.Text</span> <span class="ot">-&gt;</span> <span class="dt">LHash</span>
+freqL <span class="fu">=</span> T.foldl step occs
+	<span class="kw">where</span>
+	occs <span class="fu">=</span> M.empty
+	step lhash c
+		<span class="fu">|</span> isAlpha c <span class="fu">=</span> M.insertWith (<span class="fu">+</span>) (toLower c) <span class="dv">1</span> lhash
+		<span class="fu">|</span> otherwise <span class="fu">=</span> lhash
+
+<span class="ot">freqW ::</span> <span class="dt">T.Text</span> <span class="ot">-&gt;</span> <span class="dt">WHash</span>
+freqW <span class="fu">=</span> (\(<span class="dt">WBuild</span> _ _ whash) <span class="ot">-&gt;</span> whash) <span class="fu">.</span> T.foldl step occs
+	<span class="kw">where</span>
+	<span class="co">-- Use WordOut as the initial state for WFSM, because we're starting from</span>
+	<span class="co">-- nothing!</span>
+<span class="ot">	occs ::</span> <span class="dt">WBuild</span>
+	occs <span class="fu">=</span> <span class="dt">WBuild</span> <span class="dt">WordOut</span> T.empty M.empty
+	step wb<span class="fu">@</span>(<span class="dt">WBuild</span> wfsm wproto whash) c
+		<span class="co">-- Letter.</span>
+		<span class="fu">|</span> isAlpha c <span class="fu">=</span> <span class="kw">case</span> wfsm <span class="kw">of</span>
+			<span class="co">-- This is when we first encounter a letter.</span>
+			<span class="dt">WordOut</span> <span class="ot">-&gt;</span> <span class="dt">WBuild</span> <span class="dt">WordIn</span> (T.singleton c') whash
+			_ <span class="ot">-&gt;</span> <span class="dt">WBuild</span> <span class="dt">WordIn</span> (T.snoc wproto c') whash
+		<span class="co">-- Apostrophe. We ignore all leading apostrophes and only store</span>
+		<span class="co">-- apostrophes at the end of a word, such as &quot;goin'&quot;.</span>
+		<span class="fu">|</span> c <span class="fu">==</span> <span class="ch">'\''</span> <span class="fu">=</span> <span class="kw">case</span> wfsm <span class="kw">of</span>
+			<span class="co">-- This is when we encounter an apostrophe either at the middle or</span>
+			<span class="co">-- end of a word.</span>
+			<span class="dt">WordIn</span> <span class="ot">-&gt;</span> <span class="dt">WBuild</span> <span class="dt">WordOutMaybe</span> (T.snoc wproto c') whash
+			<span class="co">-- E.g., &quot;goin''&quot; (a contracted &quot;goin''&quot; ending with a nested inner</span>
+			<span class="co">-- quote). We store it as &quot;goin'&quot;.</span>
+			<span class="dt">WordOutMaybe</span> <span class="ot">-&gt;</span> <span class="dt">WBuild</span> <span class="dt">WordOut</span> T.empty
+				<span class="fu">$</span> M.insertWith (<span class="fu">+</span>) wproto <span class="dv">1</span> whash
+			<span class="co">-- Already out of a word area, such as a space character. We do</span>
+			<span class="co">-- nothing.</span>
+			<span class="dt">WordOut</span> <span class="ot">-&gt;</span> wb
+		<span class="co">-- If we're looking at neither a letter nor an apostrophe.</span>
+		<span class="fu">|</span> otherwise <span class="fu">=</span> <span class="kw">case</span> wfsm <span class="kw">of</span>
+			<span class="co">-- A series of nonsense chars; ignore.</span>
+			<span class="dt">WordOut</span> <span class="ot">-&gt;</span> wb
+			<span class="co">-- End of a word.</span>
+			_ <span class="ot">-&gt;</span> <span class="dt">WBuild</span> <span class="dt">WordOut</span> T.empty
+				<span class="fu">$</span> M.insertWith (<span class="fu">+</span>) wproto <span class="dv">1</span> whash
+		<span class="kw">where</span>
+		c' <span class="fu">=</span> toLower c
+
+<span class="ot">dispFreqL ::</span> <span class="dt">LHash</span> <span class="ot">-&gt;</span> <span class="dt">IO</span> ()
+dispFreqL lhash <span class="fu">=</span> mapM_ f <span class="fu">.</span> reverse <span class="fu">.</span> sortBy (comparing snd) <span class="fu">$</span> M.toList lhash
+	<span class="kw">where</span>
+<span class="ot">	total ::</span> <span class="dt">Word64</span>
+	total <span class="fu">=</span> sum <span class="fu">$</span> M.elems lhash
+<span class="ot">	f ::</span> (<span class="dt">Char</span>, <span class="dt">Word64</span>) <span class="ot">-&gt;</span> <span class="dt">IO</span> ()
+	f (c, n) <span class="fu">=</span> putStrLn <span class="fu">$</span> msg1 <span class="fu">++</span> msg2 <span class="fu">++</span> msg3
+		<span class="kw">where</span>
+<span class="ot">		perc ::</span> <span class="dt">Double</span>
+		perc
+			<span class="fu">|</span> total <span class="fu">==</span> <span class="dv">0</span> <span class="fu">=</span> <span class="dv">0</span>
+			<span class="fu">|</span> otherwise <span class="fu">=</span> (fromIntegral n) <span class="fu">/</span> (fromIntegral total) <span class="fu">*</span> <span class="dv">100</span>
+		msg1 <span class="fu">=</span> [c] <span class="fu">++</span> <span class="st">&quot; = &quot;</span>
+		msg2 <span class="fu">=</span> TP.printf <span class="st">&quot;%.2f%%&quot;</span> perc
+		msg3 <span class="fu">=</span> <span class="st">&quot; (&quot;</span> <span class="fu">++</span> show n <span class="fu">++</span> <span class="st">&quot; occurrences)&quot;</span>
+
+<span class="ot">dispFreqW ::</span> <span class="dt">WHash</span> <span class="ot">-&gt;</span> <span class="dt">IO</span> ()
+dispFreqW whash <span class="fu">=</span> mapM_ f <span class="fu">.</span> take <span class="dv">100</span> <span class="fu">.</span> reverse <span class="fu">.</span> sortBy (comparing snd) <span class="fu">$</span> M.toList whash
+	<span class="kw">where</span>
+<span class="ot">	total ::</span> <span class="dt">Word64</span>
+	total <span class="fu">=</span> sum <span class="fu">$</span> M.elems whash
+<span class="ot">	f ::</span> (<span class="dt">WProto</span>, <span class="dt">Word64</span>) <span class="ot">-&gt;</span> <span class="dt">IO</span> ()
+	f (w, n) <span class="fu">=</span> putStrLn <span class="fu">$</span> msg1 <span class="fu">++</span> msg2 <span class="fu">++</span> msg3
+		<span class="kw">where</span>
+<span class="ot">		perc ::</span> <span class="dt">Double</span>
+		perc
+			<span class="fu">|</span> total <span class="fu">==</span> <span class="dv">0</span> <span class="fu">=</span> <span class="dv">0</span>
+			<span class="fu">|</span> otherwise <span class="fu">=</span> (fromIntegral n) <span class="fu">/</span> (fromIntegral total) <span class="fu">*</span> <span class="dv">100</span>
+		msg1 <span class="fu">=</span> T.unpack w <span class="fu">++</span> <span class="st">&quot; = &quot;</span>
+		msg2 <span class="fu">=</span> TP.printf <span class="st">&quot;%.2f%%&quot;</span> perc
+		msg3 <span class="fu">=</span> <span class="st">&quot; (&quot;</span> <span class="fu">++</span> show n <span class="fu">++</span> <span class="st">&quot; occurrences)&quot;</span></code></pre></td></tr></table></div>
+<div class="raw-link">
+<a class="raw" href="../code/toy/text-freq/TextFreq.hs" mimetype="text/plain"> TextFreq.hs </a>
+</div>
+</div>
+<div class="code-and-raw">
+<div class="sourceCode" input="code/toy/text-freq/analyze.hs"><table class="sourceCode numberLines haskell"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+</pre></td><td class="sourceCode"><pre><code class="sourceCode haskell"><span class="kw">module</span> <span class="dt">Main</span> <span class="kw">where</span>
+
+<span class="kw">import qualified</span> <span class="dt">Data.Text.Lazy.IO</span> <span class="kw">as</span> <span class="dt">T</span>
+<span class="kw">import </span><span class="dt">System.Environment</span>
+
+<span class="kw">import </span><span class="dt">TextFreq</span>
+
+<span class="ot">main ::</span> <span class="dt">IO</span> ()
+main <span class="fu">=</span> <span class="kw">do</span>
+	args <span class="ot">&lt;-</span> getArgs
+	src <span class="ot">&lt;-</span> T.readFile <span class="fu">$</span> args<span class="fu">!!</span><span class="dv">0</span>
+	dispFreqL <span class="fu">$</span> freqL src
+	putStrLn <span class="fu">$</span> replicate <span class="dv">80</span> <span class="ch">'-'</span>
+	dispFreqW <span class="fu">$</span> freqW src</code></pre></td></tr></table></div>
+<div class="raw-link">
+<a class="raw" href="../code/toy/text-freq/analyze.hs" mimetype="text/plain"> analyze.hs </a>
+</div>
+</div>
+<p>Here is the same run against our copy of <em>Moby Dick</em>:</p>
+<pre><code>$ ./analyze ~/pg2701.txt
+e = 12.29% (118967 occurrences)
+t = 9.25% (89549 occurrences)
+a = 8.16% (78959 occurrences)
+o = 7.31% (70698 occurrences)
+n = 6.89% (66670 occurrences)
+i = 6.88% (66585 occurrences)
+s = 6.72% (65012 occurrences)
+h = 6.56% (63444 occurrences)
+r = 5.51% (53342 occurrences)
+l = 4.47% (43298 occurrences)
+d = 4.01% (38769 occurrences)
+u = 2.81% (27217 occurrences)
+m = 2.44% (23655 occurrences)
+c = 2.39% (23122 occurrences)
+w = 2.33% (22500 occurrences)
+g = 2.19% (21239 occurrences)
+f = 2.19% (21228 occurrences)
+p = 1.83% (17711 occurrences)
+y = 1.78% (17209 occurrences)
+b = 1.77% (17165 occurrences)
+v = 0.90% (8721 occurrences)
+k = 0.85% (8196 occurrences)
+q = 0.16% (1567 occurrences)
+j = 0.12% (1176 occurrences)
+x = 0.11% (1062 occurrences)
+z = 0.07% (636 occurrences)
+--------------------------------------------------------------------------------
+the = 6.67% (14620 occurrences)
+of = 3.07% (6732 occurrences)
+and = 2.97% (6502 occurrences)
+a = 2.18% (4788 occurrences)
+to = 2.15% (4706 occurrences)
+in = 1.93% (4231 occurrences)
+that = 1.37% (3005 occurrences)
+his = 1.15% (2530 occurrences)
+it = 1.11% (2434 occurrences)
+i = 0.91% (1993 occurrences)
+but = 0.83% (1823 occurrences)
+he = 0.81% (1780 occurrences)
+with = 0.81% (1770 occurrences)
+as = 0.80% (1752 occurrences)
+is = 0.80% (1748 occurrences)
+was = 0.75% (1646 occurrences)
+for = 0.75% (1646 occurrences)
+all = 0.70% (1543 occurrences)
+this = 0.66% (1443 occurrences)
+at = 0.61% (1335 occurrences)
+by = 0.56% (1226 occurrences)
+not = 0.53% (1171 occurrences)
+whale = 0.51% (1108 occurrences)
+from = 0.50% (1105 occurrences)
+on = 0.49% (1073 occurrences)
+him = 0.49% (1067 occurrences)
+so = 0.49% (1066 occurrences)
+be = 0.49% (1064 occurrences)
+you = 0.43% (946 occurrences)
+one = 0.42% (914 occurrences)
+there = 0.37% (805 occurrences)
+or = 0.36% (797 occurrences)
+now = 0.36% (783 occurrences)
+had = 0.36% (779 occurrences)
+have = 0.35% (773 occurrences)
+were = 0.31% (683 occurrences)
+they = 0.30% (664 occurrences)
+which = 0.30% (655 occurrences)
+like = 0.30% (647 occurrences)
+me = 0.29% (632 occurrences)
+then = 0.29% (630 occurrences)
+their = 0.28% (620 occurrences)
+some = 0.28% (619 occurrences)
+are = 0.28% (619 occurrences)
+when = 0.28% (607 occurrences)
+an = 0.27% (600 occurrences)
+no = 0.27% (596 occurrences)
+my = 0.27% (589 occurrences)
+upon = 0.26% (568 occurrences)
+what = 0.26% (566 occurrences)
+out = 0.25% (539 occurrences)
+up = 0.24% (524 occurrences)
+into = 0.24% (523 occurrences)
+more = 0.23% (508 occurrences)
+if = 0.23% (501 occurrences)
+man = 0.22% (476 occurrences)
+them = 0.22% (474 occurrences)
+we = 0.21% (455 occurrences)
+sea = 0.21% (454 occurrences)
+old = 0.21% (452 occurrences)
+ship = 0.20% (438 occurrences)
+ahab = 0.20% (436 occurrences)
+ye = 0.20% (431 occurrences)
+would = 0.20% (430 occurrences)
+other = 0.19% (416 occurrences)
+been = 0.19% (415 occurrences)
+over = 0.19% (409 occurrences)
+these = 0.19% (406 occurrences)
+will = 0.18% (398 occurrences)
+though = 0.18% (384 occurrences)
+its = 0.17% (382 occurrences)
+only = 0.17% (378 occurrences)
+down = 0.17% (378 occurrences)
+such = 0.17% (376 occurrences)
+any = 0.17% (364 occurrences)
+who = 0.16% (347 occurrences)
+yet = 0.16% (345 occurrences)
+head = 0.16% (344 occurrences)
+time = 0.15% (334 occurrences)
+long = 0.15% (334 occurrences)
+her = 0.15% (332 occurrences)
+do = 0.15% (324 occurrences)
+very = 0.15% (323 occurrences)
+about = 0.15% (318 occurrences)
+still = 0.14% (312 occurrences)
+than = 0.14% (311 occurrences)
+captain = 0.14% (308 occurrences)
+those = 0.14% (307 occurrences)
+great = 0.14% (306 occurrences)
+said = 0.14% (305 occurrences)
+here = 0.14% (302 occurrences)
+before = 0.14% (301 occurrences)
+two = 0.14% (298 occurrences)
+boat = 0.14% (297 occurrences)
+has = 0.13% (294 occurrences)
+must = 0.13% (293 occurrences)
+most = 0.13% (284 occurrences)
+seemed = 0.13% (283 occurrences)
+white = 0.13% (281 occurrences)
+last = 0.13% (278 occurrences)</code></pre>
+<p>.</p>
+<h3 id="letter-frequency-2">Letter Frequency</h3>
+<p><code>freqL</code> handles letter frequency, and it is a simple <code>foldl</code> operation over the input, while using the <code>Map</code> data structure from the <code>Data.Map</code> library (which acts as a simple hash structure with keys and values). The de facto Haskell compiler GHC comes with the <code>base</code> library which includes the <code>Data.Char</code> module; unlike Ruby, we can simply ask whether a character is a letter with <code>isAlpha</code>, and then use <code>toLower</code> on it to convert it to lowercase. <code>freqL</code> owes its brevity to these standard library functions.</p>
+<p>Thanks to these standard library functions, we can easily keep track of more than just the basic 26 alphabetical letters (although in the case of <em>Moby Dick</em>, there does not seem to be any such characters).</p>
+<h3 id="word-frequency-2">Word Frequency</h3>
+<p>This is probably a convoluted way to keep track of words. I could have used the excellent Parsec library, but I just felt like rolling my own solution. <code>freqW</code> works by looking at just one character at a time, just like <code>freqL</code>. It also keeps track of the evaluation of the previously-looked-at character, with the <code>wfsm</code> variable (for <em>Word Finite State Machine</em>, a fancy but still pertinent name). <code>wfsm</code> can either say that the last character made us go <em>in</em> a word (<code>WordIn</code>), <em>out</em> of a word for sure (<code>WordOut</code>), or possibly out of a word (<code>WordOutMaybe</code>). Depending on the status of <code>wfsm</code> and the current character, <code>freqW</code> makes various choices.</p>
+<p>Now, this mechanism isn’t without its warts. But still, I consider it somewhat elegant in its description of all possible states.</p>
+<h2 id="a-diff">A Diff</h2>
+<p>For fun, let’s look at the diff of the outputs of the Ruby and Haskell versions. Interestingly, the letter frequency outputs were identical. The word frequency outputs did have some significant changes, such as the word <em>whale</em> occurring 972 and 1108 times in the Ruby and Haskell versions, respectively. I’ve sorted the output by lines for saner diffing.</p>
+<pre><code>$ diff -u routW houtW
+--- routW	2015-04-22 22:01:59.061404962 -0700
++++ houtW	2015-04-22 22:02:57.679828155 -0700
+@@ -1,100 +1,100 @@
+-a = 2.20% (4760 occurrences)
++a = 2.18% (4788 occurrences)
+ about = 0.15% (318 occurrences)
+-ahab = 0.20% (432 occurrences)
+-all = 0.70% (1523 occurrences)
+-an = 0.28% (600 occurrences)
+-and = 2.99% (6488 occurrences)
+-any = 0.17% (363 occurrences)
+-are = 0.29% (619 occurrences)
+-as = 0.81% (1751 occurrences)
+-at = 0.62% (1334 occurrences)
+-be = 0.49% (1060 occurrences)
++ahab = 0.20% (436 occurrences)
++all = 0.70% (1543 occurrences)
++an = 0.27% (600 occurrences)
++and = 2.97% (6502 occurrences)
++any = 0.17% (364 occurrences)
++are = 0.28% (619 occurrences)
++as = 0.80% (1752 occurrences)
++at = 0.61% (1335 occurrences)
++be = 0.49% (1064 occurrences)
+ been = 0.19% (415 occurrences)
+-before = 0.14% (300 occurrences)
+-but = 0.84% (1823 occurrences)
+-by = 0.56% (1223 occurrences)
+-captain = 0.14% (300 occurrences)
+-do = 0.15% (321 occurrences)
+-down = 0.17% (367 occurrences)
+-for = 0.76% (1645 occurrences)
+-from = 0.51% (1105 occurrences)
+-great = 0.14% (303 occurrences)
++before = 0.14% (301 occurrences)
++boat = 0.14% (297 occurrences)
++but = 0.83% (1823 occurrences)
++by = 0.56% (1226 occurrences)
++captain = 0.14% (308 occurrences)
++do = 0.15% (324 occurrences)
++down = 0.17% (378 occurrences)
++for = 0.75% (1646 occurrences)
++from = 0.50% (1105 occurrences)
++great = 0.14% (306 occurrences)
+ had = 0.36% (779 occurrences)
+-has = 0.14% (294 occurrences)
+-have = 0.36% (772 occurrences)
+-he = 0.82% (1777 occurrences)
+-head = 0.13% (275 occurrences)
+-her = 0.15% (329 occurrences)
+-here = 0.14% (299 occurrences)
+-him = 0.49% (1062 occurrences)
+-his = 1.17% (2530 occurrences)
+-i = 0.92% (1988 occurrences)
+-if = 0.23% (500 occurrences)
+-in = 1.95% (4223 occurrences)
++has = 0.13% (294 occurrences)
++have = 0.35% (773 occurrences)
++he = 0.81% (1780 occurrences)
++head = 0.16% (344 occurrences)
++her = 0.15% (332 occurrences)
++here = 0.14% (302 occurrences)
++him = 0.49% (1067 occurrences)
++his = 1.15% (2530 occurrences)
++i = 0.91% (1993 occurrences)
++if = 0.23% (501 occurrences)
++in = 1.93% (4231 occurrences)
+ into = 0.24% (523 occurrences)
+-is = 0.81% (1747 occurrences)
+-it = 1.12% (2419 occurrences)
+-its = 0.18% (382 occurrences)
+-last = 0.13% (276 occurrences)
+-like = 0.27% (581 occurrences)
+-long = 0.15% (319 occurrences)
+-man = 0.21% (445 occurrences)
+-me = 0.29% (621 occurrences)
+-more = 0.23% (506 occurrences)
++is = 0.80% (1748 occurrences)
++it = 1.11% (2434 occurrences)
++its = 0.17% (382 occurrences)
++last = 0.13% (278 occurrences)
++like = 0.30% (647 occurrences)
++long = 0.15% (334 occurrences)
++man = 0.22% (476 occurrences)
++me = 0.29% (632 occurrences)
++more = 0.23% (508 occurrences)
+ most = 0.13% (284 occurrences)
+-must = 0.13% (292 occurrences)
++must = 0.13% (293 occurrences)
+ my = 0.27% (589 occurrences)
+-no = 0.27% (594 occurrences)
+-not = 0.54% (1169 occurrences)
+-now = 0.36% (779 occurrences)
+-of = 3.10% (6708 occurrences)
+-old = 0.20% (444 occurrences)
+-on = 0.49% (1069 occurrences)
+-one = 0.42% (906 occurrences)
++no = 0.27% (596 occurrences)
++not = 0.53% (1171 occurrences)
++now = 0.36% (783 occurrences)
++of = 3.07% (6732 occurrences)
++old = 0.21% (452 occurrences)
++on = 0.49% (1073 occurrences)
++one = 0.42% (914 occurrences)
+ only = 0.17% (378 occurrences)
+-or = 0.37% (797 occurrences)
++or = 0.36% (797 occurrences)
+ other = 0.19% (416 occurrences)
+-out = 0.24% (528 occurrences)
+-over = 0.19% (403 occurrences)
+-said = 0.14% (301 occurrences)
+-sea = 0.18% (382 occurrences)
+-see = 0.12% (268 occurrences)
++out = 0.25% (539 occurrences)
++over = 0.19% (409 occurrences)
++said = 0.14% (305 occurrences)
++sea = 0.21% (454 occurrences)
+ seemed = 0.13% (283 occurrences)
+-ship = 0.18% (391 occurrences)
+-so = 0.49% (1061 occurrences)
+-some = 0.29% (619 occurrences)
+-still = 0.14% (311 occurrences)
++ship = 0.20% (438 occurrences)
++so = 0.49% (1066 occurrences)
++some = 0.28% (619 occurrences)
++still = 0.14% (312 occurrences)
+ such = 0.17% (376 occurrences)
+ than = 0.14% (311 occurrences)
+-that = 1.38% (2999 occurrences)
+-the = 6.74% (14616 occurrences)
+-their = 0.29% (620 occurrences)
+-them = 0.22% (471 occurrences)
+-then = 0.29% (628 occurrences)
+-there = 0.37% (792 occurrences)
+-these = 0.19% (405 occurrences)
+-they = 0.31% (664 occurrences)
+-this = 0.66% (1440 occurrences)
++that = 1.37% (3005 occurrences)
++the = 6.67% (14620 occurrences)
++their = 0.28% (620 occurrences)
++them = 0.22% (474 occurrences)
++then = 0.29% (630 occurrences)
++there = 0.37% (805 occurrences)
++these = 0.19% (406 occurrences)
++they = 0.30% (664 occurrences)
++this = 0.66% (1443 occurrences)
+ those = 0.14% (307 occurrences)
+-thou = 0.12% (267 occurrences)
+-though = 0.18% (383 occurrences)
+-time = 0.15% (326 occurrences)
+-to = 2.16% (4677 occurrences)
+-two = 0.13% (288 occurrences)
+-up = 0.24% (516 occurrences)
+-upon = 0.26% (567 occurrences)
++though = 0.18% (384 occurrences)
++time = 0.15% (334 occurrences)
++to = 2.15% (4706 occurrences)
++two = 0.14% (298 occurrences)
++up = 0.24% (524 occurrences)
++upon = 0.26% (568 occurrences)
+ very = 0.15% (323 occurrences)
+-was = 0.76% (1645 occurrences)
++was = 0.75% (1646 occurrences)
+ we = 0.21% (455 occurrences)
+-were = 0.32% (683 occurrences)
+-whale = 0.45% (972 occurrences)
++were = 0.31% (683 occurrences)
++whale = 0.51% (1108 occurrences)
+ what = 0.26% (566 occurrences)
+ when = 0.28% (607 occurrences)
+ which = 0.30% (655 occurrences)
+-who = 0.16% (345 occurrences)
+-will = 0.18% (396 occurrences)
+-with = 0.82% (1770 occurrences)
+-would = 0.20% (428 occurrences)
+-ye = 0.20% (428 occurrences)
+-yet = 0.16% (344 occurrences)
+-you = 0.44% (944 occurrences)
++white = 0.13% (281 occurrences)
++who = 0.16% (347 occurrences)
++will = 0.18% (398 occurrences)
++with = 0.81% (1770 occurrences)
++would = 0.20% (430 occurrences)
++ye = 0.20% (431 occurrences)
++yet = 0.16% (345 occurrences)
++you = 0.43% (946 occurrences)</code></pre>
+<h2 id="french">French?</h2>
+<p>Here is the Haskell version’s output on the first volume of <a href="http://www.gutenberg.org/cache/epub/17489/pg17489.txt"><em>Les Misérables</em></a> in the original French:</p>
+<pre><code>e = 14.68% (77528 occurrences)
+a = 8.12% (42892 occurrences)
+i = 7.65% (40424 occurrences)
+t = 7.62% (40270 occurrences)
+s = 7.27% (38395 occurrences)
+n = 6.76% (35704 occurrences)
+r = 6.25% (32985 occurrences)
+u = 6.16% (32553 occurrences)
+l = 5.81% (30686 occurrences)
+o = 5.17% (27315 occurrences)
+d = 3.46% (18262 occurrences)
+c = 3.06% (16150 occurrences)
+m = 2.99% (15800 occurrences)
+p = 2.61% (13784 occurrences)
+v = 1.95% (10285 occurrences)
+é = 1.87% (9852 occurrences)
+q = 1.26% (6637 occurrences)
+f = 1.18% (6245 occurrences)
+h = 1.06% (5623 occurrences)
+b = 0.99% (5244 occurrences)
+g = 0.93% (4910 occurrences)
+j = 0.56% (2973 occurrences)
+à = 0.53% (2795 occurrences)
+x = 0.40% (2102 occurrences)
+y = 0.39% (2051 occurrences)
+è = 0.32% (1702 occurrences)
+ê = 0.30% (1584 occurrences)
+z = 0.18% (964 occurrences)
+â = 0.08% (410 occurrences)
+ç = 0.07% (355 occurrences)
+û = 0.06% (335 occurrences)
+ô = 0.05% (290 occurrences)
+ù = 0.05% (285 occurrences)
+w = 0.05% (284 occurrences)
+î = 0.05% (276 occurrences)
+k = 0.03% (151 occurrences)
+ï = 0.01% (47 occurrences)
+ë = 0.00% (5 occurrences)
+ü = 0.00% (2 occurrences)
+ñ = 0.00% (2 occurrences)
+--------------------------------------------------------------------------------
+de = 3.89% (4472 occurrences)
+la = 2.64% (3040 occurrences)
+et = 2.57% (2949 occurrences)
+il = 2.25% (2582 occurrences)
+le = 2.22% (2548 occurrences)
+à = 1.94% (2236 occurrences)
+les = 1.34% (1538 occurrences)
+un = 1.27% (1459 occurrences)
+que = 1.17% (1350 occurrences)
+qui = 1.11% (1278 occurrences)
+dans = 0.99% (1134 occurrences)
+une = 0.92% (1062 occurrences)
+ce = 0.92% (1062 occurrences)
+en = 0.90% (1036 occurrences)
+des = 0.82% (948 occurrences)
+pas = 0.76% (879 occurrences)
+se = 0.75% (859 occurrences)
+ne = 0.73% (843 occurrences)
+était = 0.69% (792 occurrences)
+vous = 0.68% (783 occurrences)
+je = 0.67% (770 occurrences)
+avait = 0.66% (760 occurrences)
+lui = 0.63% (721 occurrences)
+du = 0.62% (714 occurrences)
+elle = 0.57% (660 occurrences)
+sur = 0.56% (640 occurrences)
+sa = 0.55% (635 occurrences)
+pour = 0.54% (620 occurrences)
+son = 0.53% (611 occurrences)
+au = 0.50% (579 occurrences)
+cette = 0.48% (556 occurrences)
+on = 0.47% (537 occurrences)
+est = 0.46% (533 occurrences)
+qu'il = 0.46% (528 occurrences)
+a = 0.46% (524 occurrences)
+tout = 0.45% (514 occurrences)
+plus = 0.44% (508 occurrences)
+comme = 0.44% (503 occurrences)
+dit = 0.39% (446 occurrences)
+avec = 0.38% (432 occurrences)
+c'est = 0.36% (416 occurrences)
+y = 0.35% (404 occurrences)
+par = 0.34% (392 occurrences)
+mais = 0.30% (350 occurrences)
+nous = 0.30% (340 occurrences)
+ses = 0.28% (321 occurrences)
+là = 0.27% (308 occurrences)
+bien = 0.27% (305 occurrences)
+deux = 0.26% (303 occurrences)
+monsieur = 0.26% (296 occurrences)
+même = 0.26% (295 occurrences)
+cela = 0.26% (295 occurrences)
+ces = 0.26% (294 occurrences)
+si = 0.24% (273 occurrences)
+où = 0.23% (269 occurrences)
+m = 0.23% (266 occurrences)
+me = 0.21% (238 occurrences)
+l'évêque = 0.21% (236 occurrences)
+homme = 0.20% (234 occurrences)
+sans = 0.20% (233 occurrences)
+aux = 0.20% (232 occurrences)
+fait = 0.20% (230 occurrences)
+madeleine = 0.19% (214 occurrences)
+qu'on = 0.18% (210 occurrences)
+jean = 0.18% (210 occurrences)
+d'un = 0.18% (208 occurrences)
+c'était = 0.17% (199 occurrences)
+valjean = 0.17% (197 occurrences)
+être = 0.17% (196 occurrences)
+fantine = 0.17% (192 occurrences)
+d'une = 0.17% (190 occurrences)
+javert = 0.15% (177 occurrences)
+the = 0.15% (176 occurrences)
+peu = 0.15% (173 occurrences)
+cet = 0.15% (173 occurrences)
+faire = 0.15% (172 occurrences)
+puis = 0.15% (169 occurrences)
+moi = 0.15% (168 occurrences)
+j'ai = 0.14% (164 occurrences)
+chose = 0.14% (164 occurrences)
+été = 0.14% (163 occurrences)
+maire = 0.14% (162 occurrences)
+dire = 0.14% (159 occurrences)
+rien = 0.14% (158 occurrences)
+quand = 0.14% (157 occurrences)
+sont = 0.13% (153 occurrences)
+quelque = 0.13% (153 occurrences)
+tous = 0.13% (152 occurrences)
+porte = 0.13% (150 occurrences)
+ou = 0.13% (148 occurrences)
+toute = 0.13% (147 occurrences)
+chapitre = 0.13% (144 occurrences)
+sous = 0.12% (142 occurrences)
+peut = 0.12% (140 occurrences)
+mon = 0.12% (138 occurrences)
+moment = 0.12% (138 occurrences)
+dieu = 0.12% (137 occurrences)
+encore = 0.12% (134 occurrences)
+l'homme = 0.11% (130 occurrences)
+eût = 0.11% (130 occurrences)</code></pre>
+<p>. The most common French word in this book is <em>de</em>, meaning <em>of</em> in English. This is because the word for <em>the</em> is split into many different words, most notably <em>la</em> and <em>le</em>, not to mention <em>l’</em> as in <em>l’homme</em> (as you can see near the end of the list), due to the French language’s gender and vowel contraction rules (unlike English, contractions like <em>l’homme</em> in French are mandatory regardless of tone).</p>
+<p>And, as a bit of trivia, it is interesting to note that <em>dieu</em> (God) edges out <em>’lhomme</em> (man) by 7 occurrences in this text.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>I hope you’ve had some fun working on these letter and word frequency problems. The word frequency problem, if you really want to do it correctly, should be handled by a parser using a robust library. By writing these programs, I learned that the <em>input</em> of a program (Unicode? ASCII only?) is just as important as its output.</p>
+<p>Happy hacking!</p>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>After I receive it and assemble it, I will post a review about it.<a href="#fnref1">↩</a></p></li>
+</ol>
+</div>
+
+		</div>
+		<div id="footer">
+			<p>Copyright (C) 2013-2014 Linus Arver. All rights reserved.</p>
+			<a href="https://github.com/listx/listx_blog">Site</a>
+			<a href="https://github.com/listx/listx.github.io">generated</a>
+			with
+			<a href="http://jaspervdj.be/hakyll">Hakyll</a>
+			and
+			<a href="http://sebastiaanvisser.github.com/clay">Clay</a>.
+			<br>
+			<a href="../atom.xml">Atom feed</a>
+		</div>
+	</body>
+</html>

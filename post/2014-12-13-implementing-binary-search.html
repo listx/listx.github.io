@@ -52,7 +52,7 @@
 <p>The heading of this subsection might have already given you a hint as to what binary search entails. (Although, if you’ve read the <em>Binary Subdivision</em> section, you should have had a good idea anyhow.) Binary search takes the concept of bounds-checking, and applies it repeatedly, recursively, against <code>KEYS</code>. The only difference when I say “bounds-checking” in the context of binary search is that we do <em>not</em> care about the values of those bounds, but merely that they <em>are</em> the bounds. This is because we only concern ourselves with dividing the list of sorted numbers by <span class="math">\(\frac{1}{2}\)</span> every time and take the <em>middle</em> index <code>middle_index</code>, which is located as close as possible to the middle element (halfway between the two bounds). Indeed, the only way to get a valid <code>middle_index</code> value is if we know the bounds (the size of the list). We keep doing this recursively until <code>KEYS[mid] == key</code>.</p>
 <p>The following is the pseudocode.</p>
 <div class="code-and-raw">
-<table class="sourceCode numberLines" input="code/toy/binary-search-pseudo-0.txt"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+<div class="sourceCode" input="code/toy/binary-search-pseudo-0.txt"><table class="sourceCode numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
 4
@@ -79,7 +79,7 @@ binary_search(KEYS, key):
 		binary_search(upper_KEYS, key)
 	else
 		return middle_index
-	end</code></pre></td></tr></table>
+	end</code></pre></td></tr></table></div>
 <div class="raw-link">
 <a class="raw" href="../code/toy/binary-search-pseudo-0.txt" mimetype="text/plain"> binary-search-pseudo-0.txt </a>
 </div>
@@ -92,7 +92,7 @@ binary_search(KEYS, key):
 <p>instead of just <code>else</code> on line 12, but that is redundant. This is because we already test for the two other conditions of <code>key</code> being <em>lesser</em> or <em>greater</em> than <code>middle_index</code>. Therefore, we’ve excluded the two other conditions and are already only left with the third condition of <code>key == KEYS[mid]</code> evaluating to TRUE — hence we write just <code>else</code> on line 12.</p>
 <p>Addressing the holes above, we get the next version.<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a></p>
 <div class="code-and-raw">
-<table class="sourceCode numberLines" input="code/toy/binary-search-pseudo-1.txt"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+<div class="sourceCode" input="code/toy/binary-search-pseudo-1.txt"><table class="sourceCode numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
 4
@@ -131,7 +131,7 @@ binary_search(KEYS, key, first_index, last_index):
 		binary_search(KEYS, key, middle_index + 1, last_index)
 	else
 		return middle_index
-	end</code></pre></td></tr></table>
+	end</code></pre></td></tr></table></div>
 <div class="raw-link">
 <a class="raw" href="../code/toy/binary-search-pseudo-1.txt" mimetype="text/plain"> binary-search-pseudo-1.txt </a>
 </div>
@@ -145,7 +145,7 @@ binary_search(KEYS, key, first_index, last_index):
 <p>I said at the beginning of the post that I would show a naive implementation in C, Ruby, and Haskell. I could have simply written a <code>binary_search()</code> function (and only that function) for all three languages — but instead I chose to write full standalone programs for all three that print out the same results. Because they are all standalone programs, you can easily tweak some settings (namely, the <code>KEYS_TOTAL</code> value), and see how it scales.<a href="#fn6" class="footnoteRef" id="fnref6"><sup>6</sup></a> All versions use the new <a href="http://www.pcg-random.org">PCG family</a> of pseudorandom number generators (RNGs), which have been created by Prof. Melissa E. O’Neill, author of the great paper <em>The Genuine Sieve of Eratosthenes</em>.<a href="#fn7" class="footnoteRef" id="fnref7"><sup>7</sup></a></p>
 <h3 id="c-version-linux">C Version (Linux)</h3>
 <div class="code-and-raw">
-<table class="sourceCode numberLines c" input="code/toy/binary-search.c"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+<div class="sourceCode" input="code/toy/binary-search.c"><table class="sourceCode numberLines c"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
 4
@@ -462,22 +462,20 @@ u32 init_array(u32 *keys, bool has_key, pcg32_random_t *rng)
 	printf(<span class="st">&quot;END C VERSION</span><span class="ch">\n</span><span class="st">&quot;</span>);
 	free(keys);
 	<span class="kw">return</span> <span class="dv">0</span>;
-}</code></pre></td></tr></table>
+}</code></pre></td></tr></table></div>
 <div class="raw-link">
 <a class="raw" href="../code/toy/binary-search.c" mimetype="text/plain"> binary-search.c </a>
 </div>
 </div>
 <p>Overview:</p>
-<ul>
-<li><code>pcg32_random_r()</code> is PCG’s minimal implementation version. This is RNG we depend on to get identical randomly-generated data in the other Ruby and Haskell versions.</li>
-<li><code>uniform32()</code> tames all raw RNG’s like <code>pcg32_random_r()</code>; it <a href="2013-07-12-generating-random-numbers-without-modulo-bias.html">removes any bias</a> that might be introduced if we were to use a simple modulo operation. Hence, we use <code>uniform32()</code> for all our RNG needs.</li>
-<li><code>init_array()</code> takes an empty array of fixed size, and populates it with semi-random numbers. I say <em>semi-random</em> because the number chosen to populate the array, in sequence, is steadily bumped up with the <code>j</code> variable, <strong>eliminating the need for sorting it afterwards</strong> in preparation for passing it to <code>binary_search()</code>.</li>
-<li>Finally, we have <code>binary_search()</code> itself, written in a way to closely match the pseudocode presented above.</li>
-</ul>
+<code>pcg32_random_r()</code> is PCG’s minimal implementation version. This is RNG we depend on to get identical randomly-generated data in the other Ruby and Haskell versions.
+<code>uniform32()</code> tames all raw RNG’s like <code>pcg32_random_r()</code>; it <a href="2013-07-12-generating-random-numbers-without-modulo-bias.html">removes any bias</a> that might be introduced if we were to use a simple modulo operation. Hence, we use <code>uniform32()</code> for all our RNG needs.
+<code>init_array()</code> takes an empty array of fixed size, and populates it with semi-random numbers. I say <em>semi-random</em> because the number chosen to populate the array, in sequence, is steadily bumped up with the <code>j</code> variable, <strong>eliminating the need for sorting it afterwards</strong> in preparation for passing it to <code>binary_search()</code>.
+Finally, we have <code>binary_search()</code> itself, written in a way to closely match the pseudocode presented above.
 <p>I’ve tried to keep the code simple. You may find it disturbing that we use the same type for <code>KEY_NOT_FOUND</code> as the actual valid key value (<code>mid</code>) itself. This kind of type overloading is common in C, and is what gives C its bare metal speed — at the cost of (probable) disaster, of course.</p>
 <h3 id="ruby-version">Ruby Version</h3>
 <div class="code-and-raw">
-<table class="sourceCode numberLines ruby" input="code/toy/binary-search.rb"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+<div class="sourceCode" input="code/toy/binary-search.rb"><table class="sourceCode numberLines ruby"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
 4
@@ -706,7 +704,7 @@ keys = []
 		puts <span class="st">&quot;key `</span><span class="ot">#{</span>key<span class="ot">}</span><span class="st">' found at keys[</span><span class="ot">#{</span>mid<span class="ot">}</span><span class="st">].&quot;</span>
 	<span class="kw">end</span>
 <span class="kw">end</span>
-puts <span class="st">&quot;END RUBY VERSION&quot;</span></code></pre></td></tr></table>
+puts <span class="st">&quot;END RUBY VERSION&quot;</span></code></pre></td></tr></table></div>
 <div class="raw-link">
 <a class="raw" href="../code/toy/binary-search.rb" mimetype="text/plain"> binary-search.rb </a>
 </div>
@@ -714,7 +712,7 @@ puts <span class="st">&quot;END RUBY VERSION&quot;</span></code></pre></td></tr>
 <p>This version, like the Haskell version, tries to follow the C version as much as possible. One drawback of this version is that because Ruby does not support fixed-width integers, we have to make liberal use of the modulo operator <code>%</code> to emulate integer overflow. We could just do a bitwise AND (<code>&amp;</code>) with a mask, but that would risk increased verbosity.</p>
 <h3 id="haskell-version">Haskell Version</h3>
 <div class="code-and-raw">
-<table class="sourceCode numberLines haskell" input="code/toy/binary-search.hs"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+<div class="sourceCode" input="code/toy/binary-search.hs"><table class="sourceCode numberLines haskell"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
 4
@@ -1031,7 +1029,7 @@ main <span class="fu">=</span> <span class="kw">do</span>
 		(keys, key, rng2) <span class="fu">=</span> init_array keys_total has_key rng1
 		min' <span class="fu">=</span> <span class="dv">0</span>
 		max' <span class="fu">=</span> keys_total <span class="fu">-</span> <span class="dv">1</span>
-		foundMid <span class="fu">=</span> binary_search keys key min' max'</code></pre></td></tr></table>
+		foundMid <span class="fu">=</span> binary_search keys key min' max'</code></pre></td></tr></table></div>
 <div class="raw-link">
 <a class="raw" href="../code/toy/binary-search.hs" mimetype="text/plain"> binary-search.hs </a>
 </div>

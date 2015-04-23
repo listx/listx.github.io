@@ -36,7 +36,7 @@
 <p>UPDATE: See <a href="2015-02-27-removing-modulo-bias-redux.html">this blog post</a>.</p>
 <p>Let’s say you need a random number from 0 to 2 (0, 1, or 2). If you do this:</p>
 <div class="code-and-raw">
-<table class="sourceCode numberLines c" input="code/rng/listing-1.c"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+<div class="sourceCode" input="code/rng/listing-1.c"><table class="sourceCode numberLines c"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
 4
@@ -45,7 +45,7 @@
 <span class="dt">int</span> n, x;
 n = <span class="dv">3</span>;
 x = rand() % n;
-<span class="kw">return</span> x;</code></pre></td></tr></table>
+<span class="kw">return</span> x;</code></pre></td></tr></table></div>
 <div class="raw-link">
 <a class="raw" href="../code/rng/listing-1.c" mimetype="text/plain"> listing-1.c </a>
 </div>
@@ -55,7 +55,7 @@ x = rand() % n;
 <p><img src="../img/mbias.png" alt="Modulo bias" title="Modulo bias" width="100%"></p>
 <p>The following code is correct:</p>
 <div class="code-and-raw">
-<table class="sourceCode numberLines c" input="code/rng/listing-2.c"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+<div class="sourceCode" input="code/rng/listing-2.c"><table class="sourceCode numberLines c"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
 4
@@ -68,7 +68,7 @@ n = <span class="dv">3</span>;
 rand_excess = (RAND_MAX + <span class="dv">1</span>) % n;
 rand_limit = RAND_MAX - rand_excess;
 <span class="kw">while</span> (x = rand() &gt; rand_limit) {};
-<span class="kw">return</span> x % n;</code></pre></td></tr></table>
+<span class="kw">return</span> x % n;</code></pre></td></tr></table></div>
 <div class="raw-link">
 <a class="raw" href="../code/rng/listing-2.c" mimetype="text/plain"> listing-2.c </a>
 </div>
@@ -80,7 +80,7 @@ rand_limit = RAND_MAX - rand_excess;
 \]</span>. Then <code>rand_limit</code> becomes <span class="math">\(4 - 2 = 2\)</span>. The <code>while</code> statement then throws out the values 3 and 4 (i.e., x is only allowed to be 0, 1, or 2). Then, we return the modulo expression <code>x % n</code> (which is redundant here onlyu because <code>RAND_MAX</code> is very low for the sake of our example).</p>
 <p>A problem might exist if <code>RAND_MAX</code> is already the maximum value allowed by the type that <code>rand()</code> returns. E.g., if <code>rand()</code> returns a 64-bit unsigned integer (in C99, this is the <code>uint64_t</code> type) , and <code>RAND_MAX</code> is already set to <span class="math">\(2^{64} - 1\)</span>, then <code>RAND_MAX - 1</code> would wrap back around to 0, and <code>rand_excess</code> would likewise be 0. To avoid this, you can use the alternate expression <code>rand_excess = (RAND_MAX % n) + 1;</code> for setting <code>rand_excess</code>:</p>
 <div class="code-and-raw">
-<table class="sourceCode numberLines c" input="code/rng/listing-3.c"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+<div class="sourceCode" input="code/rng/listing-3.c"><table class="sourceCode numberLines c"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
 4
@@ -93,7 +93,7 @@ n = <span class="dv">3</span>;
 rand_excess = (RAND_MAX % n) + <span class="dv">1</span>; <span class="co">/* only difference vs listing-2.c */</span>
 rand_limit = RAND_MAX - rand_excess;
 <span class="kw">while</span> (x = rand() &gt; rand_limit) {};
-<span class="kw">return</span> x % n;</code></pre></td></tr></table>
+<span class="kw">return</span> x % n;</code></pre></td></tr></table></div>
 <div class="raw-link">
 <a class="raw" href="../code/rng/listing-3.c" mimetype="text/plain"> listing-3.c </a>
 </div>
@@ -104,7 +104,7 @@ rand_limit = RAND_MAX - rand_excess;
 = 3
 \]</span>. Now <code>rand_limit</code> is <span class="math">\(8 - 3 = 5\)</span>. But <code>RAND_MAX</code> of 8 is already valid because there are 9 possible values 0 through 8, and there is no modulo bias to begin with (since <span class="math">\(9 \mbox{ mod 3} = 0\)</span>)! To get around this, we can do one more modulo operation <code>rand_excess = ((RAND_MAX % n) + 1) % n;</code> to avoid the case where <code>rand_excess</code> could equal <code>n</code>:</p>
 <div class="code-and-raw">
-<table class="sourceCode numberLines c" input="code/rng/listing-4.c"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+<div class="sourceCode" input="code/rng/listing-4.c"><table class="sourceCode numberLines c"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
 4
@@ -117,7 +117,7 @@ n = <span class="dv">3</span>;
 rand_excess = ((RAND_MAX % n) + <span class="dv">1</span>) % n; <span class="co">/* only difference vs listing-3.c */</span>
 rand_limit = RAND_MAX - rand_excess;
 <span class="kw">while</span> (x = rand() &gt; rand_limit) {};
-<span class="kw">return</span> x % n;</code></pre></td></tr></table>
+<span class="kw">return</span> x % n;</code></pre></td></tr></table></div>
 <div class="raw-link">
 <a class="raw" href="../code/rng/listing-4.c" mimetype="text/plain"> listing-4.c </a>
 </div>

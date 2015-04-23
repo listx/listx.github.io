@@ -37,15 +37,15 @@
 <h2 id="write-programs-for-people-not-computers">Write Programs for People, Not Computers</h2>
 <h4 id="a-program-should-not-require-its-readers-to-hold-more-than-a-handful-of-facts-in-memory-at-once.">A program should not require its readers to hold more than a handful of facts in memory at once.</h4>
 <p>Instead of</p>
-<table class="sourceCode numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+<div class="sourceCode"><table class="sourceCode numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 </pre></td><td class="sourceCode"><pre><code class="sourceCode">def rect_area(x1, y1, x2, y2):
-	...calculation...</code></pre></td></tr></table>
+	...calculation...</code></pre></td></tr></table></div>
 <p>write</p>
-<table class="sourceCode numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+<div class="sourceCode"><table class="sourceCode numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 </pre></td><td class="sourceCode"><pre><code class="sourceCode">def rect_area(point1, point2):
-	...calculation...</code></pre></td></tr></table>
+	...calculation...</code></pre></td></tr></table></div>
 <p>. You should make function arguments less dependent on argument order, or remove argument ordering requirements completely.</p>
 <h4 id="names-should-be-consistent-distinctive-and-meaningful.">Names should be consistent, distinctive, and meaningful.</h4>
 <p>On a similar note, do not name variables “data” or “foo”. I think this also depends on static vs. dynamic typing.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a></p>
@@ -63,12 +63,10 @@
 <h2 id="use-the-computer-to-record-history">Use the Computer to Record History</h2>
 <h4 id="software-tools-should-be-used-to-track-computational-work-automatically-to-achieve-provenance.">Software tools should be used to track computational work automatically, to achieve provenance.</h4>
 <p>The ability to reproduce your results, you should record everything needed to re-create the output<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a>, and such record-keeping should be done automatically. In a software development context, the most immediate example is version control, which keeps all of the code necessary to recreate the desired program behavior. However, there are several other things which you should also keep track of in your development notebook:</p>
-<ul>
-<li>UUIDs and version numbers for raw data records (e.g., sample parameters/input for your program);</li>
-<li>UUIDs and version numbers for programs and libraries;</li>
-<li>the values and parameters used to generate any given output; and</li>
-<li>the names and version numbers of programs (however small) used to generate those outputs.</li>
-</ul>
+UUIDs and version numbers for raw data records (e.g., sample parameters/input for your program);
+UUIDs and version numbers for programs and libraries;
+the values and parameters used to generate any given output; and
+the names and version numbers of programs (however small) used to generate those outputs.
 <p>This is not entirely on point, but every Linux distribution keeps careful records of all packages (dependencies, version numbers, etc.), so that a user can reliably install and use that package if they want to. There is a lesson to be learned here.</p>
 <h2 id="make-incremental-changes">Make Incremental Changes</h2>
 <h4 id="work-in-small-steps-with-frequent-feedback-and-course-correction.">Work in small steps with frequent feedback and course correction.</h4>

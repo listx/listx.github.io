@@ -34,14 +34,14 @@
 </div>
 
 <p>Sometimes when you do a system upgrade on Arch, Xorg will die on a reboot and you’ll get this kernel error (available with <code>dmesg</code>):</p>
-<table class="sourceCode numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+<div class="sourceCode"><table class="sourceCode numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
 4
 </pre></td><td class="sourceCode"><pre><code class="sourceCode">NVRM: API mismatch: the client has the version XXX.XX, but
 NVRM: this kernel module has the version YYY.YY.  Please
 NVRM: make sure that this kernel module and all NVIDIA driver
-NVRM: components have the same version.</code></pre></td></tr></table>
+NVRM: components have the same version.</code></pre></td></tr></table></div>
 <p>. This is usually the case when you upgrade your <code>linux</code> package, followed by upgrading your <code>nvidia</code> package. The problem is that the new kernel image references your older <code>nvidia</code> package (when it executed <code>mkinitcpio -p linux</code> before <code>nvidia</code> got upgraded). There are two possible solutions:</p>
 <ol style="list-style-type: decimal">
 <li>Simply remake your kernel image against your newly upgraded <code>nvidia</code> package. Run <code>mkinitcpio -p linux</code> again, and reboot.</li>
