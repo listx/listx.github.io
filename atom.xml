@@ -2378,10 +2378,12 @@ u32 init_array(u32 *keys, bool has_key, pcg32_random_t *rng)
 </div>
 </div>
 <p>Overview:</p>
-<code>pcg32_random_r()</code> is PCG’s minimal implementation version. This is RNG we depend on to get identical randomly-generated data in the other Ruby and Haskell versions.
-<code>uniform32()</code> tames all raw RNG’s like <code>pcg32_random_r()</code>; it <a href="2013-07-12-generating-random-numbers-without-modulo-bias.html">removes any bias</a> that might be introduced if we were to use a simple modulo operation. Hence, we use <code>uniform32()</code> for all our RNG needs.
-<code>init_array()</code> takes an empty array of fixed size, and populates it with semi-random numbers. I say <em>semi-random</em> because the number chosen to populate the array, in sequence, is steadily bumped up with the <code>j</code> variable, <strong>eliminating the need for sorting it afterwards</strong> in preparation for passing it to <code>binary_search()</code>.
-Finally, we have <code>binary_search()</code> itself, written in a way to closely match the pseudocode presented above.
+<ul>
+<li><code>pcg32_random_r()</code> is PCG’s minimal implementation version. This is RNG we depend on to get identical randomly-generated data in the other Ruby and Haskell versions.</li>
+<li><code>uniform32()</code> tames all raw RNG’s like <code>pcg32_random_r()</code>; it <a href="2013-07-12-generating-random-numbers-without-modulo-bias.html">removes any bias</a> that might be introduced if we were to use a simple modulo operation. Hence, we use <code>uniform32()</code> for all our RNG needs.</li>
+<li><code>init_array()</code> takes an empty array of fixed size, and populates it with semi-random numbers. I say <em>semi-random</em> because the number chosen to populate the array, in sequence, is steadily bumped up with the <code>j</code> variable, <strong>eliminating the need for sorting it afterwards</strong> in preparation for passing it to <code>binary_search()</code>.</li>
+<li>Finally, we have <code>binary_search()</code> itself, written in a way to closely match the pseudocode presented above.</li>
+</ul>
 <p>I’ve tried to keep the code simple. You may find it disturbing that we use the same type for <code>KEY_NOT_FOUND</code> as the actual valid key value (<code>mid</code>) itself. This kind of type overloading is common in C, and is what gives C its bare metal speed — at the cost of (probable) disaster, of course.</p>
 <h3 id="ruby-version">Ruby Version</h3>
 <div class="code-and-raw">
@@ -2998,7 +3000,9 @@ main <span class="fu">=</span> <span class="kw">do</span>
 <p>. You may notice that the input list is sorted (for readability), but recall that <code>T</code> <em>may or may not</em> be sorted! Try your own solution against these expected outputs!</p>
 <h2 id="some-preliminary-observations">Some Preliminary Observations</h2>
 <p>The most important thing here is <code>T</code>. If <code>T</code> is empty, then our parking lot is empty, so the answer is obviously <code>0</code>. In all other cases, we have to figure out the lowest number that is <em>absent</em> from <code>T</code>. Essentially, we can reduce the problem as follows:</p>
-Find the lowest number not present in the set of integers <code>T</code>, where the lowest possible number is <code>0</code>.
+<ul>
+<li>Find the lowest number not present in the set of integers <code>T</code>, where the lowest possible number is <code>0</code>.</li>
+</ul>
 <p>I used the metaphor of the parking spaces because it is more memorable, and more importantly, more familiar to the general public.</p>
 <h2 id="mathematical-approach">Mathematical Approach</h2>
 <p>Conceptually, the problem is very simple. Consider the infinite set <code>N</code>, which includes all natural numbers, starting from <code>0</code>. Then obviously, we can start with <code>N</code> itself, and remove every number in <code>N</code> that is also present in <code>T</code>. Then, when we are done (<code>T</code> is empty), we can look at <code>N</code> and retrieve the lowest number.</p>

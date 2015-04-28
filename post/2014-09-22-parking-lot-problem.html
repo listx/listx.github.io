@@ -51,7 +51,9 @@
 <p>. You may notice that the input list is sorted (for readability), but recall that <code>T</code> <em>may or may not</em> be sorted! Try your own solution against these expected outputs!</p>
 <h2 id="some-preliminary-observations">Some Preliminary Observations</h2>
 <p>The most important thing here is <code>T</code>. If <code>T</code> is empty, then our parking lot is empty, so the answer is obviously <code>0</code>. In all other cases, we have to figure out the lowest number that is <em>absent</em> from <code>T</code>. Essentially, we can reduce the problem as follows:</p>
-Find the lowest number not present in the set of integers <code>T</code>, where the lowest possible number is <code>0</code>.
+<ul>
+<li>Find the lowest number not present in the set of integers <code>T</code>, where the lowest possible number is <code>0</code>.</li>
+</ul>
 <p>I used the metaphor of the parking spaces because it is more memorable, and more importantly, more familiar to the general public.</p>
 <h2 id="mathematical-approach">Mathematical Approach</h2>
 <p>Conceptually, the problem is very simple. Consider the infinite set <code>N</code>, which includes all natural numbers, starting from <code>0</code>. Then obviously, we can start with <code>N</code> itself, and remove every number in <code>N</code> that is also present in <code>T</code>. Then, when we are done (<code>T</code> is empty), we can look at <code>N</code> and retrieve the lowest number.</p>

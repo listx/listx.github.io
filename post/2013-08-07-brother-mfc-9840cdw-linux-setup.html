@@ -35,10 +35,12 @@
 
 <p>After more than a year of struggling with my Brother printer, I finally got it to print flawlessly. I will kindly refrain from getting into the drama, and just write a short tutorial to set it up with CUPS in Arch Linux.</p>
 <p>First, install the <code>cups</code> package, as well as the Brother driver packages in the AUR:</p>
-<code>brother-cups-wrapper-ac</code>
-<code>brother-cups-wrapper-common</code>
-<code>brother-lpr-drivers-ac</code>
-<code>brother-lpr-drivers-common</code>
+<ul>
+<li><code>brother-cups-wrapper-ac</code></li>
+<li><code>brother-cups-wrapper-common</code></li>
+<li><code>brother-lpr-drivers-ac</code></li>
+<li><code>brother-lpr-drivers-common</code></li>
+</ul>
 <p>Then, enable the <code>cups</code> daemon with <code>systemd</code>, and then start it:</p>
 <div class="sourceCode"><table class="sourceCode numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
