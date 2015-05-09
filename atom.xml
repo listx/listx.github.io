@@ -8,8 +8,1054 @@
         <name>Linus Arver</name>
         <email></email>
     </author>
-    <updated>2015-04-22T00:00:00Z</updated>
+    <updated>2015-05-04T00:00:00Z</updated>
     <entry>
+    <title>SRM 485: AfraidOfEven</title>
+    <link href="http://listx.github.io/post/2015-05-04-puzzle-srm-485-afraid-of-even.html" />
+    <id>http://listx.github.io/post/2015-05-04-puzzle-srm-485-afraid-of-even.html</id>
+    <published>2015-05-04T00:00:00Z</published>
+    <updated>2015-05-04T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="info center">
+	<code class="date">2015-05-04</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2015-05-04-puzzle-srm-485-afraid-of-even.org" title="History">*</a>
+	<br>
+	<a href="/tag/programming.html">programming</a>, <a href="/tag/math.html">math</a>, <a href="/tag/haskell.html">haskell</a>, <a href="/tag/ruby.html">ruby</a>
+</div>
+
+<h1>Introduction</h1>
+<p>The heart of this problem comes from TopCoder's <a href="http://community.topcoder.com/stat?c%3Dproblem_statement&amp;pm%3D11146&amp;rd%3D14238">SRM 485 &quot;AfraidOfEven&quot;</a>. The version given below is a bit harder to solve because there are negative numbers allowed in the input. There is quite a lot of discussion behind the somewhat elementary math principles, so you might want to skip down to the code directly after reading the problem statement.</p>
+<h1>The Problem</h1>
+<p>An <a href="http://en.wikipedia.org/wiki/Arithmetic_progression">arithmetic progression</a> <span class="math">\(AP\)</span> has been changed by the mutation function <span class="math">\(M()\)</span> in the following way: any even number <span class="math">\(w\)</span> in the sequence has been replaced by <span class="math">\(\frac{w}{2}\)</span>, repeatedly, until it has become odd. For example, if <span class="math">\(AP = \{2, 4, 6, 8\}\)</span>, then <span class="math">\(M(AP) = \{1, 1, 3, 1\}\)</span> (because <span class="math">\(\frac{6}{2} = 3\)</span> and <span class="math">\(3\)</span> is an odd number, it stopped mutating). Given a mutated sequence <span class="math">\(M(AP) = MP\)</span>, design an &quot;unmutate&quot; function <span class="math">\(U()\)</span> such that <span class="math">\(U(MP) \approx AP\)</span>. If more than one possible sequence <span class="math">\(AP\)</span> exists, find the one with the lowest lexicographical order.</p>
+<h2>Constraints</h2>
+<p><span class="math">\(MP\)</span> is limited to 4 to 50 terms. Each term in <span class="math">\(MP\)</span> is from <span class="math">\(1\)</span> to <span class="math">\(1000\)</span>, inclusive (for now; later on we will consider numbers less than <span class="math">\(1\)</span>). The difference (let's call it <span class="math">\(m\)</span>) between each term can be <span class="math">\(0\)</span>, so the following is still a valid arithmetic progression: <span class="math">\(\{-17, -17, -17, -17, -17\}\)</span>.</p>
+<h3>Lexicographic Order</h3>
+<p>Given the input</p>
+<p><span class="math">\[
+MP = \{1, 1, 3, 1, 5\}
+\]</span></p>
+<p>, we get the output</p>
+<p><span class="math">\[
+U(AP) = \{1, 2, 3, 4, 5\}
+\]</span></p>
+<p>. It is possible that <span class="math">\(AP\)</span> was actually <span class="math">\(\{2, 4, 6, 8, 10\}\)</span> (or even <span class="math">\(\{4, 8, 12, 16, 20\}\)</span>), but because <span class="math">\(\{1, 2, 3, 4, 5\}\)</span> has the smaller lexicographic representation, it is the correct answer.</p>
+<h1>Interlude</h1>
+<p>I will include both Haskell and Ruby solutions in this post below. If you'd like to solve the problem on your own, please read the rest of this post at a later time.</p>
+<h1>The Math</h1>
+<p>Let us consider the universe of possible arithmetic progressions, and then derive a general algorithm. Because the mutation involves even numbers, it makes sense to look at arithmetic progressions in terms of even and odd numbers (aka <em>parity</em>).</p>
+<p>The two most important parts of an arithmetic progression are the rate of change, <span class="math">\(m\)</span>, and the first term <span class="math">\(A_0\)</span>. This is because any arithmetic progression can be recreated by knowing only these two values.</p>
+<p>Now, <span class="math">\(m\)</span> can be either even (<span class="math">\(E\)</span>), odd (<span class="math">\(O\)</span>), or zero. The first term <span class="math">\(A_0\)</span> can be either even or odd. Let's plug these possible variations into a table, and see if there are any patterns we can exploit. To determine <span class="math">\(AP\)</span> based on <span class="math">\(m\)</span> and <span class="math">\(A_0\)</span>, we only need to know three laws of parity:</p>
+<ol>
+<li><span class="math">\(\mathrm{O + O = E}\)</span></li>
+<li><span class="math">\(\mathrm{E + E = E}\)</span></li>
+<li><span class="math">\(\mathrm{O + E = O}\)</span></li>
+</ol>
+<p>. Using these laws, we can construct the entire sequence <span class="math">\(AP\)</span> by adding <span class="math">\(m\)</span> into <span class="math">\(A_0\)</span> repeatedly.</p>
+<p>The only time that adding two numbers together results in an odd number is when one term is odd and the other term is even. This rule is true regardless of whether we are adding or subtracting (adding a negative term), or whether either term is positive or negative. Another interesting point is that adding by an even number does not change the parity of the original term, while adding by an odd number always flips the parity of the original. We now know how to construct <span class="math">\(AP\)</span> from <span class="math">\(m\)</span> and <span class="math">\(A_0\)</span>, so let's examine the possible outcomes below:</p>
+<table>
+<thead>
+<tr class="header">
+<th align="center"></th>
+<th align="center"><span class="math">\(m\)</span></th>
+<th align="center"><span class="math">\(A_0\)</span></th>
+<th align="center"><span class="math">\(AP\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">1</td>
+<td align="center"><span class="math">\(0\)</span></td>
+<td align="center"><span class="math">\(\mathrm{O}\)</span></td>
+<td align="center"><span class="math">\(\{\mathrm{O, O, O, O, \cdots{}}\}\)</span></td>
+</tr>
+<tr class="even">
+<td align="center">2</td>
+<td align="center"><span class="math">\(0\)</span></td>
+<td align="center"><span class="math">\(\mathrm{E}\)</span></td>
+<td align="center"><span class="math">\(\{\mathrm{E, E, E, E, \cdots{}}\}\)</span></td>
+</tr>
+<tr class="odd">
+<td align="center">3</td>
+<td align="center"><span class="math">\(\mathrm{E}\)</span></td>
+<td align="center"><span class="math">\(\mathrm{O}\)</span></td>
+<td align="center"><span class="math">\(\{\mathrm{O, O, O, O, \cdots{}}\}\)</span></td>
+</tr>
+<tr class="even">
+<td align="center">4</td>
+<td align="center"><span class="math">\(\mathrm{E}\)</span></td>
+<td align="center"><span class="math">\(\mathrm{E}\)</span></td>
+<td align="center"><span class="math">\(\{\mathrm{E, E, E, E, \cdots{}}\}\)</span></td>
+</tr>
+<tr class="odd">
+<td align="center">5</td>
+<td align="center"><span class="math">\(\mathrm{O}\)</span></td>
+<td align="center"><span class="math">\(\mathrm{O}\)</span></td>
+<td align="center"><span class="math">\(\{\mathrm{O, E, O, E, \cdots{}}\}\)</span></td>
+</tr>
+<tr class="even">
+<td align="center">6</td>
+<td align="center"><span class="math">\(\mathrm{O}\)</span></td>
+<td align="center"><span class="math">\(\mathrm{E}\)</span></td>
+<td align="center"><span class="math">\(\{\mathrm{E, O, E, O, \cdots{}}\}\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>. Let's now look at each of the 6 possible cases, and see if we can simplify things more. We will look at each case from the perspective of <span class="math">\(m\)</span>.</p>
+<h2>Mutation When <span class="math">\(m\)</span> is Zero</h2>
+<p>If <span class="math">\(m\)</span> is zero, then <span class="math">\[AP = {A_0, A_0, A_0\cdots{}A_0}\]</span>. That is, subsequent terms after <span class="math">\(A_0\)</span> do not change, so it is a constant sequence of the first term, <span class="math">\(A_0\)</span>.</p>
+<p>If <span class="math">\(m\)</span> is zero and <span class="math">\(A_0\)</span> is <strong>odd</strong>, then all terms remain the same after the mutation; so, <span class="math">\(M(AP) = AP\)</span> (no change). E.g.,</p>
+<table>
+<tbody>
+<tr class="odd">
+<td align="center"><span class="math">\(AP = \{\mathrm{3, 3, 3, 3, \cdots{}, 3}\}\)</span></td>
+</tr>
+<tr class="even">
+<td align="center">becomes</td>
+</tr>
+<tr class="odd">
+<td align="center"><span class="math">\(MP = \{\mathrm{3, 3, 3, 3, \cdots{}, 3}\}\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>. If <span class="math">\(m\)</span> is zero and <span class="math">\(A_0\)</span> is <strong>even</strong>, then all terms are likewise even, and all terms will become odd by application of <span class="math">\(M()\)</span>. What's more, every term in <span class="math">\(M_0\)</span> will be the same odd number, essentially becoming &quot;reduced&quot; to the case where <span class="math">\(A_0\)</span> was originally odd. E.g.,</p>
+<table>
+<tbody>
+<tr class="odd">
+<td align="center"><span class="math">\(AP = \{\mathrm{10, 10, 10, 10, \cdots{}, 10}\}\)</span></td>
+</tr>
+<tr class="even">
+<td align="center">becomes</td>
+</tr>
+<tr class="odd">
+<td align="center"><span class="math">\(MP = \{\mathrm{5, 5, 5, 5, \cdots{}, 5}\}\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>.</p>
+<h2>Mutation When <span class="math">\(m\)</span> is Even</h2>
+<p>If <span class="math">\(m\)</span> is even, then all terms in <span class="math">\(AP\)</span> are either even or odd, based on the first term <span class="math">\(A_0\)</span>. Essentially, <span class="math">\(AP\)</span> behaves in an identical manner to the case where <span class="math">\(m = 0\)</span> as far as parity is concerned --- the only difference here is that the subsequent terms change in value by <span class="math">\(m\)</span>.</p>
+<p>However, there is a slight twist when we apply mutation. If <span class="math">\(A_0 = \mathrm{O}\)</span>, then there are no numbers to mutate, and we get <span class="math">\(MP\)</span> where all terms are odd and they change by <span class="math">\(m\)</span>. But if <span class="math">\(A_0 = \mathrm{E}\)</span>, then we get <em>changing</em> even numbers for <span class="math">\(MP\)</span>. So unlike in the case of <span class="math">\(m = 0\)</span> where all even numbers reduced down to the same odd number after applying the mutation, we get <em>different</em> odd numbers. E.g.,</p>
+<table>
+<tbody>
+<tr class="odd">
+<td align="center"><span class="math">\(AP = \{\mathrm{40, 48, 56, 64, 72}\}\)</span></td>
+</tr>
+<tr class="even">
+<td align="center">becomes</td>
+</tr>
+<tr class="odd">
+<td align="center"><span class="math">\(MP = \{\mathrm{5, 3, 7, 1, 9}\}\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>. Notice how even though <span class="math">\(AP\)</span> has a sequence of <em>increasing</em> terms, <span class="math">\(MP\)</span>'s terms are not increasing in the same manner. We will revisit this case below when simplifying the categories of behavior for <span class="math">\(MP\)</span>.</p>
+<h2>Mutation When <span class="math">\(m\)</span> is Odd</h2>
+<p>This is where things get interesting. If <span class="math">\(m\)</span> is odd, then <span class="math">\(AP\)</span> becomes a <em>series of alternating even and odd numbers</em>. Whether <span class="math">\(AP\)</span> begins with an even or odd number depends, naturally, on the parity of <span class="math">\(A_0\)</span>. The more general observation we can make is that, given the fact that we have alternating even and odd numbers in <span class="math">\(AP\)</span>, <span class="math">\(MP\)</span> will be populated with &quot;originally odd&quot; and &quot;fake odd&quot; (mutated) terms. Let's call these mutated terms <span class="math">\(O_F\)</span>. So if <span class="math">\(m\)</span> is odd, then we get either</p>
+<table>
+<tbody>
+<tr class="odd">
+<td align="center"><span class="math">\(AP = \{\mathrm{O, E, O, E}\}, MP = \{\mathrm{O, O_F, O, O_F}\}\)</span></td>
+</tr>
+<tr class="even">
+<td align="center">or</td>
+</tr>
+<tr class="odd">
+<td align="center"><span class="math">\(AP = \{\mathrm{E, O, E, O}\}, MP = \{\mathrm{O_F, O, O_F, O}\}\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>.</p>
+<h1>A Summary of the Behavior of the Mutation Function <span class="math">\(M()\)</span></h1>
+<p>We've exhausted the universe of all possible arithmetic sequences, and how they would mutate after applying <span class="math">\(M()\)</span>. We know exactly how <span class="math">\(M()\)</span> behaves in all edge cases! Let us now simplify the various cases to two general cases.</p>
+<h2>There is nothing to &quot;unmutate&quot; as <span class="math">\(MP\)</span> is already the same as the answer <span class="math">\(AP\)</span></h2>
+<p>This can happen in two ways. The easiest way is if <span class="math">\(m = 0\)</span>, where all terms in <span class="math">\(MP\)</span> are the same and there is nothing to calculate (<span class="math">\(M()\)</span> will ensure that this case always results in the same repeating odd number). The other way is if <span class="math">\(m\)</span> is even, and <span class="math">\(A_0\)</span> is odd --- resulting in an &quot;unmutatable&quot; sequence such that <span class="math">\(M(AP) = AP\)</span>. E.g. (where <span class="math">\(m = 10\)</span> and <span class="math">\(A_0 = 11\)</span>),</p>
+<table>
+<tbody>
+<tr class="odd">
+<td align="center"><span class="math">\(AP = \{\mathrm{11, 21, 31, 41, 51}\}\)</span></td>
+</tr>
+<tr class="even">
+<td align="center">becomes</td>
+</tr>
+<tr class="odd">
+<td align="center"><span class="math">\(MP = \{\mathrm{11, 21, 31, 41, 51}\}\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>.</p>
+<h2>The terms in <span class="math">\(AP\)</span> alternate between even and odd</h2>
+<p>This covers the case when <span class="math">\(m\)</span> is odd. If <span class="math">\(m\)</span> is odd, then regardless of the parity of <span class="math">\(A_0\)</span>, we get an alternating sequence of even and odd numbers. The import thing to keep in mind here is that the even numbers will mutate after <span class="math">\(\mathrm{M()}\)</span> is applied, while the odd numbers will stay as-is as &quot;originals&quot;.</p>
+<h1>How to Design <span class="math">\(U()\)</span></h1>
+<p>Let's think back to what our mutation function <span class="math">\(M()\)</span> does: it simply mutates an even number to an odd number by repeatedly dividing it by 2. If the number if odd to begin with, then there is nothing to mutate; essentially, <em>original</em> odd numbers act as immutable beacons of truth --- they do not have to change form when returning to their <span class="math">\(AP\)</span> form! Our task in designing an &quot;unmutate&quot; function <span class="math">\(U()\)</span> is to preserve the &quot;honest&quot; odd numbers while converting the mutated, &quot;fake&quot; odd numbers back to their evenness, to get back the original progression <span class="math">\(AP\)</span> (or at least something close to it if there are multiple such <span class="math">\(AP\)</span>s out there.</p>
+<p>You can now see where our extensive parity breakdown of the possible <span class="math">\(MP\)</span> can come in handy --- we know in what patterns the honest odd numbers show themselves in <em>any</em> <span class="math">\(MP\)</span>. Let's rewrite the table of all possibilities, with this analogy of &quot;honest&quot; and &quot;fake&quot; (<span class="math">\(O_F\)</span>) odd numbers after the mutation.</p>
+<table>
+<thead>
+<tr class="header">
+<th align="center"></th>
+<th align="center"><span class="math">\(m\)</span></th>
+<th align="center"><span class="math">\(A_0\)</span></th>
+<th align="center"><span class="math">\(AP\)</span></th>
+<th align="center"><span class="math">\(MP\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">1</td>
+<td align="center"><span class="math">\(0\)</span></td>
+<td align="center"><span class="math">\(\mathrm{O}\)</span></td>
+<td align="center"><span class="math">\(\{\mathrm{O, O, O, O, \cdots{}}\}\)</span></td>
+<td align="center"><span class="math">\(\{\mathrm{O, O, O, O, \cdots{}}\}\)</span></td>
+</tr>
+<tr class="even">
+<td align="center">2</td>
+<td align="center"><span class="math">\(0\)</span></td>
+<td align="center"><span class="math">\(\mathrm{E}\)</span></td>
+<td align="center"><span class="math">\(\{\mathrm{E, E, E, E, \cdots{}}\}\)</span></td>
+<td align="center"><span class="math">\(\{\mathrm{O, O, O, O, \cdots{}}\}\)</span></td>
+</tr>
+<tr class="odd">
+<td align="center">3</td>
+<td align="center"><span class="math">\(\mathrm{E}\)</span></td>
+<td align="center"><span class="math">\(\mathrm{O}\)</span></td>
+<td align="center"><span class="math">\(\{\mathrm{O, O, O, O, \cdots{}}\}\)</span></td>
+<td align="center"><span class="math">\(\{\mathrm{O, O, O, O, \cdots{}}\}\)</span></td>
+</tr>
+<tr class="even">
+<td align="center">4</td>
+<td align="center"><span class="math">\(\mathrm{E}\)</span></td>
+<td align="center"><span class="math">\(\mathrm{E}\)</span></td>
+<td align="center"><span class="math">\(\{\mathrm{E, E, E, E, \cdots{}}\}\)</span></td>
+<td align="center"><span class="math">\(?\)</span></td>
+</tr>
+<tr class="odd">
+<td align="center">5</td>
+<td align="center"><span class="math">\(\mathrm{O}\)</span></td>
+<td align="center"><span class="math">\(\mathrm{O}\)</span></td>
+<td align="center"><span class="math">\(\{\mathrm{O, E, O, E, \cdots{}}\}\)</span></td>
+<td align="center"><span class="math">\(\{\mathrm{O, O_F, O, O_F, \cdots{}}\}\)</span></td>
+</tr>
+<tr class="even">
+<td align="center">6</td>
+<td align="center"><span class="math">\(\mathrm{O}\)</span></td>
+<td align="center"><span class="math">\(\mathrm{E}\)</span></td>
+<td align="center"><span class="math">\(\{\mathrm{E, O, E, O, \cdots{}}\}\)</span></td>
+<td align="center"><span class="math">\(\{\mathrm{O_F, O, O_F, O, \cdots{}}\}\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>As you can see, the two dominating patterns are either the all-odd (and honest!) numbers (first 3 rows) or the alternating honest or fake odd numbers. But what about the case where <span class="math">\(m\)</span> is a nonzero even value and <span class="math">\(A_0\)</span> is even as well (row 4)? In the universe of all possible even numbers of <span class="math">\(m\)</span> and <span class="math">\(A_0\)</span>, how can we know for a fact that the mutation to <span class="math">\(MP\)</span> will fall into a neat pattern?</p>
+<h1>When both <span class="math">\(m\)</span> and <span class="math">\(A_0\)</span> are even</h1>
+<p>The short answer is, we can prove that all such sequences will mutate to the familiar <span class="math">\(\{\mathrm{O, O, O, O, \cdots{}}\}\)</span>, <span class="math">\(\{\mathrm{O, O_F, O, O_F, \cdots{}}\}\)</span>, or <span class="math">\(\{\mathrm{O_F, O, O_F, O, \cdots{}}\}\)</span> pattern shown in the table above. The long answer is that it helps to think of linear equations, and to see the possible ways in which we can <em>grow</em> the <span class="math">\(AP\)</span> progression from <span class="math">\(m\)</span> and <span class="math">\(A_0\)</span>.</p>
+<p>If you paid attention in high school algebra class, you will probably remember the formula <span class="math">\(y = mx + b\)</span> to describe a straight line (except the vertical line!) in the cartesian coordinate system (in the <span class="math">\(x\)</span> and <span class="math">\(y\)</span> axes). We can use the <strong>same</strong> equation to describe the growth behavior of an arithmetic sequence! And for that, we use the following translation:</p>
+<table>
+<tbody>
+<tr class="odd">
+<td align="center"><span class="math">\(y = mx + b\)</span></td>
+</tr>
+<tr class="even">
+<td align="center">becomes</td>
+</tr>
+<tr class="odd">
+<td align="center"><span class="math">\(A_n = mn + A_0\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>, where <span class="math">\(A_n\)</span> is the n-th term to be calculated in <span class="math">\(AP\)</span>. Luckily, we've used the same letter <span class="math">\(m\)</span> in both contexts --- it describes the rate of change in one, and the distance between each term in the other. Let's simplify the equation with a concern to parity only.</p>
+<p>First, let's rewrite the equation as follows:</p>
+<table>
+<tbody>
+<tr class="odd">
+<td align="center"><span class="math">\(A_n = \mathrm{E\cdot{}}n + \mathrm{E}\)</span></td>
+</tr>
+<tr class="even">
+<td align="center">or</td>
+</tr>
+<tr class="odd">
+<td align="center"><span class="math">\(A_n = \mathrm{E_m}\cdot{}n + \mathrm{E_{A0}}\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>. The <span class="math">\(\mathrm{E}\)</span> here represents that this number is an even number, with the subscript denoting whether it is <span class="math">\(m\)</span> (<span class="math">\(\mathrm{E_m}\)</span>) or the first term in the sequence (<span class="math">\(\mathrm{E_{A0}}\)</span>). If we use this equation to map out the first 4 elements of <span class="math">\(AP\)</span>, we get the following:</p>
+<table>
+<tbody>
+<tr class="odd">
+<td align="center"><span class="math">\(A_0 = \mathrm{E_m\cdot{}0 + E_{A0}}\)</span></td>
+</tr>
+<tr class="even">
+<td align="center"><span class="math">\(A_1 = \mathrm{E_m\cdot{}1 + E_{A0}}\)</span></td>
+</tr>
+<tr class="odd">
+<td align="center"><span class="math">\(A_2 = \mathrm{E_m\cdot{}2 + E_{A0}}\)</span></td>
+</tr>
+<tr class="even">
+<td align="center"><span class="math">\(A_3 = \mathrm{E_m\cdot{}3 + E_{A0}}\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>. It should be noted that both <span class="math">\(\mathrm{E_m}\)</span> and <span class="math">\(\mathrm{E_{A0}}\)</span> remain the <strong>same</strong> throughout the entire sequence <span class="math">\(AP\)</span>. The only thing that changes is <span class="math">\(n\)</span>, which always increments by <span class="math">\(1\)</span>, starting from <span class="math">\(0\)</span>.</p>
+<p>And now we're faced with a problem. Ideally, we'd like to get rid of all those even terms in our formula --- they don't help us out at all! This is where we use the concept of <em>scaling</em>. There are two scaling rules: (1) if you multiply all terms of an arithmetic progression by some nonzero integer <span class="math">\(k\)</span>, <em>the new progression remains arithmetic</em>; (2) the same is true if you divide all terms by <span class="math">\(k\)</span>.</p>
+<p>The first scaling rule works because</p>
+<table>
+<tbody>
+<tr class="odd">
+<td align="center"><span class="math">\(A_n = \mathrm{E_m\cdot{}}n + \mathrm{E_{A0}}\)</span></td>
+</tr>
+<tr class="even">
+<td align="center">becomes</td>
+</tr>
+<tr class="odd">
+<td align="center"><span class="math">\(A_n\cdot{}k = (\mathrm{E_m\cdot{}}n + \mathrm{E_{A0}})\cdot{}k\)</span></td>
+</tr>
+<tr class="even">
+<td align="center">becomes</td>
+</tr>
+<tr class="odd">
+<td align="center"><span class="math">\(A_n\cdot{}k = (\mathrm{E_m}\cdot{}{k})\cdot{}n + \mathrm{E_{A0}}\cdot{}k\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>, where the terms <span class="math">\(\mathrm{E_{A0}}\cdot{}k\)</span> and <span class="math">\(\mathrm{E_m}\cdot{}k\)</span> both remain as constants --- we are still dealing with a <a href="http://en.wikipedia.org/wiki/Degree_of_a_polynomial">degree 1 polynomial</a> (linear expression). Apart from increasing the first term <span class="math">\(\mathrm{A_0}\)</span> by <span class="math">\(k\)</span>, all we did was increase the gap between each term by a factor of <span class="math">\(k\)</span>. Likewise, if you <em>divide</em> all terms of an arithmetic progression by some nonzero integer <span class="math">\(k\)</span>, the new progression still remains arithmetic, because what you are doing is</p>
+<table>
+<tbody>
+<tr class="odd">
+<td align="center"><span class="math">\(A_n = \mathrm{E_m\cdot{}}n + \mathrm{E_{A0}}\)</span></td>
+</tr>
+<tr class="even">
+<td align="center">becomes</td>
+</tr>
+<tr class="odd">
+<td align="center"><span class="math">\(\frac{A_n}{k} = \frac{\mathrm{E_m\cdot{}}n + \mathrm{E_{A0}}}{k}\)</span></td>
+</tr>
+<tr class="even">
+<td align="center">becomes</td>
+</tr>
+<tr class="odd">
+<td align="center"><span class="math">\(\frac{A_n}{k} = \frac{\mathrm{E_m}}{k}\cdot{}n + \frac{\mathrm{E_{A0}}}{k}\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>. Division is simply multiplication by the inverse, so the same reasoning as for the first scaling rule applies here as well. By the way, we don't have to worry about what <span class="math">\(A_n\cdot{}k\)</span> or <span class="math">\(\frac{A_n}{k}\)</span> would look like --- we are merely concerned with how <em>parity</em> behaves, and for that we rely on the right hand side of the equation.</p>
+<p>Going back to our problem, recall that we want to ultimately output some arithmetic progression that <em>could</em> have resulted in the given mutated list <span class="math">\(MP\)</span>. This is what scaling gives us --- it gives us the leeway that we need to stay within our original problem domain while changing around the parity of <span class="math">\(A_n\)</span> with <span class="math">\(k\)</span>.</p>
+<p>Let us scale the entire progression by <span class="math">\(k = \frac{1}{2}\)</span>. That is, let us repeatedly divide <span class="math">\(\mathrm{E_m}\)</span> and <span class="math">\(\mathrm{E_{A0}}\)</span> by 2, until one or both of them become odd. When either one becomes odd, we stop scaling and reuse the parity laws we discussed above to draw deeper conclusions. Which variable, <span class="math">\(\mathrm{E_m}\)</span> or <span class="math">\(\mathrm{E_{A0}}\)</span>, has more 2's in it (as prime factors)? Which term is more <em>even</em> than the other?</p>
+<p>There are three possible scenarios when we scale (let's call it <span class="math">\(\mathrm{S()}\)</span>) by <span class="math">\(\frac{1}{2}\)</span> <strong>repeatedly</strong> as described above: (1) <span class="math">\(\mathrm{E_{A0}}\)</span> becomes odd first, (2) <span class="math">\(\mathrm{E_m}\)</span> becomes odd first, or (3) both become equally odd. If we write these three scenarios into a table, we get the following:</p>
+<table>
+<thead>
+<tr class="header">
+<th align="center"></th>
+<th align="center">Scaled by <span class="math">\(\frac{1}{2}\)</span> repeatedly</th>
+<th align="center">Parity of Scaled <span class="math">\(AP\)</span></th>
+<th align="center">Parity of Scaled <span class="math">\(MP\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">1</td>
+<td align="center"><span class="math">\(\mathrm{S(E_m\cdot{}}n + \mathrm{E_{A0}}) = \mathrm{E\cdot{}}n + \mathrm{O}\)</span></td>
+<td align="center"><span class="math">\(\{\mathrm{O, O, O, O, \cdots{}}\}\)</span></td>
+<td align="center"><span class="math">\(\{\mathrm{O, O, O, O, \cdots{}}\}\)</span></td>
+</tr>
+<tr class="even">
+<td align="center">2</td>
+<td align="center"><span class="math">\(\mathrm{S(E_m\cdot{}}n + \mathrm{E_{A0}}) = \mathrm{O\cdot{}}n + \mathrm{E}\)</span></td>
+<td align="center"><span class="math">\(\{\mathrm{E, O, E, O, \cdots{}}\}\)</span></td>
+<td align="center"><span class="math">\(\{\mathrm{O_F, O, O_F, O, \cdots{}}\}\)</span></td>
+</tr>
+<tr class="odd">
+<td align="center">3</td>
+<td align="center"><span class="math">\(\mathrm{S(E_m\cdot{}}n + \mathrm{E_{A0}}) = \mathrm{O\cdot{}}n + \mathrm{O}\)</span></td>
+<td align="center"><span class="math">\(\{\mathrm{O, E, O, E, \cdots{}}\}\)</span></td>
+<td align="center"><span class="math">\(\{\mathrm{O, O_F, O, O_F, \cdots{}}\}\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>. The parity of each scaled <span class="math">\(AP\)</span> is calculated by simply replacing <span class="math">\(n\)</span> with 0, 1, 2, etc. and relying on our three parity laws from the beginning of this post. If you want to lessen your load of mental arithmetic, we can simplify the parity expressions further. If we reword the additive parity laws with multiplication in mind (which is simply addition repeated many times over), we can derive two more parity laws:</p>
+<ol>
+<li><span class="math">\(\mathrm{E\cdot{}}n = \mathrm{E}\)</span>, regardless of <span class="math">\(n\)</span>, and</li>
+<li><span class="math">\(\mathrm{O\cdot{}}n = \mathrm{P}_n\)</span> --- i.e., the parity of <span class="math">\(\mathrm{O\cdot{}}n\)</span> is the same as the parity of <span class="math">\(n\)</span> itself</li>
+</ol>
+<p>. Going back to our table above, we can simplify the scaled expressions further:</p>
+<ol>
+<li><span class="math">\(\mathrm{E + O} = \mathrm{O}\)</span>, because adding by an even number preserves the parity of <span class="math">\(\mathrm{O}\)</span>.</li>
+<li><span class="math">\(\mathrm{P}_n + \mathrm{E} = \mathrm{P}_n\)</span>, because adding by an even number preserves the parity of <span class="math">\(\mathrm{P}_n\)</span>.</li>
+<li><span class="math">\(\mathrm{P}_n + \mathrm{O} = \neg{}\mathrm{P}_n\)</span>, because adding by an odd number flips the parity of <span class="math">\(\mathrm{P}_n\)</span></li>
+</ol>
+<p>.</p>
+<p>And now we can finally say that when both <span class="math">\(m\)</span> and <span class="math">\(A_0\)</span> are even, the parity of terms in in <span class="math">\(AP\)</span> can be either all odd or alternating between even and odd! I.e., if both <span class="math">\(m = \mathrm{E}\)</span> and <span class="math">\(A_0 = \mathrm{E}\)</span>, then <span class="math">\(M(AP) = \{\mathrm{O, O, O, O, \cdots{}}\}\)</span>, <span class="math">\(\{\mathrm{O, O_F, O, O_F, \cdots{}}\}\)</span>, or <span class="math">\(\{\mathrm{O_F, O, O_F, O, \cdots{}}\}\)</span>!</p>
+<h1>Back to Designing <span class="math">\(U()\)</span></h1>
+<p>Through our discussion up to this point, we've established that the universe of all possible <span class="math">\(MP\)</span>'s fall under three parity patterns: all honest odd (<span class="math">\(\mathrm{O}\)</span>) terms, or alternating between &quot;honest&quot; odd (<span class="math">\(\mathrm{O}\)</span>) and &quot;fake&quot; odd (<span class="math">\(\mathrm{O_F}\)</span>) terms. There are actually four patterns because the all-honest-odd-terms pattern can be broken down into two cases: (1) all terms are the same odd number (<span class="math">\(m = 0\)</span>), or (2) the terms are the same as those in <span class="math">\(AP\)</span> (i.e., <span class="math">\(AP\)</span> was all odd terms to begin with, so there was no actual mutation involved by applying <span class="math">\(M()\)</span>).</p>
+<p>So, we can finally start sketching out the design for our &quot;unmutate&quot; function <span class="math">\(U()\)</span>.</p>
+<div class="code-and-raw">
+<div class="sourceCode" input="code/toy/srm485-afraid-of-even/pseudocode.txt"><table class="sourceCode numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+</pre></td><td class="sourceCode"><pre><code class="sourceCode"># Convert MP into a possible AP.
+def unmutate(MP)
+	if length(MP) &lt; 4
+		return NULL (we need at least 4 values to calculate an AP)
+	elsif every term in MP are the same
+		return MP (no change)
+	elsif MP is already an arithmetic sequence (MP = AP)
+		return MP (no change)
+	else
+		1) Assume every 0th, 2nd, 4th, etc. term is &quot;honest&quot; and that the rest are
+		&quot;fake&quot;; construct a tentative AP (call it BP) with the honest terms by
+		taking the difference between these honest terms to find the rate of change
+		*m*, and see if mutate(BP) = MP --- if so, then return BP.
+
+		2) Otherwise, every 1st, 3rd, 5th, etc. term is &quot;honest&quot; --- so
+		reconstruct BP, and check if mutate(AP) = MP (i.e., check that the
+		dishonest terms from mutate(BP) are the same as those in the given MP).
+		If the check fails, then we know that the input was not a true MP ---
+		the original AP was not an arithmetic progression to begin with!
+	end
+end
+
+# Convert AP into MP
+def mutate(AP)
+	MP = []
+	for every term &#39;a&#39; in AP:
+		MP.insert(make_odd(a))
+	end
+end
+
+# Divide an integer n by 2 until it becomes odd. The edge case is when n is 0,
+# because dividing by 2 repeatedly does not change its parity.
+def make_odd(n)
+	if n is odd or n is 0
+		return n
+	else
+		return (make_odd(n/2))
+	end
+end</code></pre></td></tr></table></div>
+<div class="raw-link">
+<a  class="raw"  href= "/code/toy/srm485-afraid-of-even/pseudocode.txt"  mimetype=text/plain > pseudocode.txt </a>
+</div>
+</div>
+<p>The interesting point is in line 18; thanks to our math work, we can even declare that a given mutated sequence was somehow either tampered with, or that the original sequence was not an arithmetic progression! We can make these assertions because we've exhausted all possible cases of arithmetic sequences and their mutations --- and if things don't fit the way we expect them to, then the only conclusion is that the given sequence <span class="math">\(MP\)</span> was not a byproduct of mutating an <em>arithmetic sequence</em>, but some other kind of sequence. Behold the power of math!</p>
+<p>The other thing is that in line 34 we allow <span class="math">\(0\)</span> as a possible value in <span class="math">\(AP\)</span>. This means that after a mutation, we might still have an even number (<span class="math">\(0\)</span>) in <span class="math">\(MP\)</span>! Although this sounds like it would break all of the mathematic discussion we've had so far, it does not --- the proof is in the Haskell code below. The short answer is that a <span class="math">\(0\)</span> is harmless because it shares the same quality --- immutability --- with all other originally odd terms in <span class="math">\(AP\)</span>; thus, treating it as an &quot;odd&quot; number does not change our logic.</p>
+<h1>Haskell version</h1>
+<div class="code-and-raw">
+<div class="sourceCode" input="code/toy/srm485-afraid-of-even/Unmutate.hs"><table class="sourceCode numberLines haskell"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+</pre></td><td class="sourceCode"><pre><code class="sourceCode haskell"><span class="kw">module</span> <span class="dt">Unmutate</span> <span class="kw">where</span>
+
+<span class="co">-- Convert mutated numbers back into an arithmetic progression (if possible).</span>
+<span class="ot">unmutate ::</span> <span class="dt">Integral</span> a <span class="ot">=&gt;</span> [a] <span class="ot">-&gt;</span> <span class="dt">Maybe</span> [a]
+unmutate ts
+	<span class="co">-- The input must be at least 4 terms!</span>
+	<span class="fu">|</span> length ts <span class="fu">&lt;</span> <span class="dv">4</span> <span class="fu">=</span> <span class="dt">Nothing</span>
+	<span class="fu">|</span> all (<span class="fu">==</span>t) ts <span class="fu">=</span> <span class="dt">Just</span> ts
+	<span class="fu">|</span> isArithmetic ts <span class="fu">=</span> <span class="dt">Just</span> ts
+	<span class="fu">|</span> mutate bp1 <span class="fu">==</span> ts <span class="fu">=</span> <span class="dt">Just</span> bp1
+	<span class="fu">|</span> mutate bp2 <span class="fu">==</span> ts <span class="fu">=</span> <span class="dt">Just</span> bp2
+	<span class="co">-- Could optionally raise an error saying ts was not derived from an</span>
+	<span class="co">-- arithmetic progression in the first place!</span>
+	<span class="fu">|</span> otherwise <span class="fu">=</span> <span class="dt">Nothing</span>
+	<span class="kw">where</span>
+	t <span class="fu">=</span> head ts
+	<span class="co">-- O_F, O, O_F, O...</span>
+	bp1Terms <span class="fu">=</span> everyNth0 <span class="dv">2</span> ts
+	bp1 <span class="fu">=</span> makeBP (length ts) <span class="dt">False</span> bp1Terms
+	<span class="co">-- O, O_F, O, O_F...</span>
+	bp2Terms <span class="fu">=</span> everyNth <span class="dv">2</span> ts
+	bp2 <span class="fu">=</span> makeBP (length ts) <span class="dt">True</span> bp2Terms
+
+<span class="co">-- Create a tentative arithmetic progression &quot;BP&quot; from the given arguments. The</span>
+<span class="co">-- `makeFirstTerm` boolean determines whether we are dealing with a &quot;O_F, O,</span>
+<span class="co">-- O_F, O...&quot; or a &quot;O, O_F, O, O_F&quot; pattern.</span>
+<span class="ot">makeBP ::</span> <span class="dt">Integral</span> a <span class="ot">=&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Bool</span> <span class="ot">-&gt;</span> [a] <span class="ot">-&gt;</span> [a]
+makeBP len makeFirstTerm originals
+	<span class="fu">|</span> length originals <span class="fu">&lt;</span> <span class="dv">2</span> <span class="fu">=</span> []
+	<span class="fu">|</span> makeFirstTerm <span class="fu">=</span> (o0 <span class="fu">-</span> m) <span class="fu">:</span> init bp
+	<span class="fu">|</span> otherwise <span class="fu">=</span> bp
+	<span class="kw">where</span>
+	o0 <span class="fu">=</span> originals<span class="fu">!!</span><span class="dv">0</span>
+	o1 <span class="fu">=</span> originals<span class="fu">!!</span><span class="dv">1</span>
+	m <span class="fu">=</span> div (o1 <span class="fu">-</span> o0) <span class="dv">2</span>
+	bp <span class="fu">=</span> reverse
+		<span class="fu">.</span> foldl (\acc n <span class="ot">-&gt;</span> (m<span class="fu">*</span>n <span class="fu">+</span> o0)<span class="fu">:</span>acc) []
+		<span class="fu">$</span> take len [<span class="dv">0</span><span class="fu">..</span>]
+
+<span class="ot">isArithmetic ::</span> <span class="dt">Integral</span> a <span class="ot">=&gt;</span> [a] <span class="ot">-&gt;</span> <span class="dt">Bool</span>
+isArithmetic ts
+	<span class="co">-- A progression (before we even get to whether it is arithmetic) must have</span>
+	<span class="co">-- at least 2 terms in it.</span>
+	<span class="fu">|</span> length ts <span class="fu">&lt;</span> <span class="dv">2</span> <span class="fu">=</span> <span class="dt">False</span>
+	<span class="fu">|</span> otherwise <span class="fu">=</span> all (<span class="fu">==</span>m) <span class="fu">$</span> zipWith (<span class="fu">-</span>) (tail ts) (init ts)
+	<span class="kw">where</span>
+	t0 <span class="fu">=</span> ts<span class="fu">!!</span><span class="dv">0</span>
+	t1 <span class="fu">=</span> ts<span class="fu">!!</span><span class="dv">1</span>
+	m <span class="fu">=</span> t1 <span class="fu">-</span> t0
+
+<span class="ot">mutate ::</span> <span class="dt">Integral</span> a <span class="ot">=&gt;</span> [a] <span class="ot">-&gt;</span> [a]
+mutate <span class="fu">=</span> map makeOdd
+	<span class="kw">where</span>
+<span class="ot">	makeOdd ::</span> <span class="dt">Integral</span> a <span class="ot">=&gt;</span> a <span class="ot">-&gt;</span> a
+	makeOdd n
+		<span class="co">-- 0 cannot be turned into an odd number! Keep it as is.</span>
+		<span class="fu">|</span> n <span class="fu">==</span> <span class="dv">0</span> <span class="fu">=</span> <span class="dv">0</span>
+		<span class="fu">|</span> odd n <span class="fu">=</span> n
+		<span class="fu">|</span> otherwise <span class="fu">=</span> makeOdd <span class="fu">$</span> div n <span class="dv">2</span>
+
+<span class="co">-- Given a list of &#39;a&#39;s, return the elements at indices [0n, 1n, 2n, 3n, ...].</span>
+<span class="co">-- E.g., given a list [0..] and n = 2, we get [0, 2, 4, 6..]. From</span>
+<span class="co">-- http://stackoverflow.com/a/2028758/437583.</span>
+<span class="ot">everyNth0 ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> [a] <span class="ot">-&gt;</span> [a]
+everyNth0 _ [] <span class="fu">=</span> []
+everyNth0 n as <span class="fu">=</span> head as <span class="fu">:</span> everyNth0 n (drop n as)
+
+<span class="co">-- Same as `everyNth0`, but start at the nth element. E.g., given a list [0..]</span>
+<span class="co">-- and n = 2, we get [1, 3, 5, 7..].</span>
+<span class="ot">everyNth ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> [a] <span class="ot">-&gt;</span> [a]
+everyNth n <span class="fu">=</span> everyNth0 n <span class="fu">.</span> drop (n <span class="fu">-</span> <span class="dv">1</span>)</code></pre></td></tr></table></div>
+<div class="raw-link">
+<a  class="raw"  href= "/code/toy/srm485-afraid-of-even/Unmutate.hs"  mimetype=text/plain > Unmutate.hs </a>
+</div>
+</div>
+<div class="code-and-raw">
+<div class="sourceCode" input="code/toy/srm485-afraid-of-even/test-unmutate.hs"><table class="sourceCode numberLines haskell"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+</pre></td><td class="sourceCode"><pre><code class="sourceCode haskell"><span class="kw">module</span> <span class="dt">Main</span> <span class="kw">where</span>
+
+<span class="kw">import </span><span class="dt">Data.Maybe</span>
+<span class="kw">import </span><span class="dt">Test.Tasty</span>
+<span class="kw">import </span><span class="dt">Test.Tasty.HUnit</span>
+<span class="kw">import </span><span class="dt">Test.Tasty.QuickCheck</span> <span class="kw">as</span> <span class="dt">QC</span>
+
+<span class="kw">import </span><span class="dt">Unmutate</span>
+
+<span class="ot">main ::</span> <span class="dt">IO</span> ()
+main <span class="fu">=</span> defaultMain tests
+
+<span class="ot">tests ::</span> <span class="dt">TestTree</span>
+tests <span class="fu">=</span> testGroup <span class="st">&quot;Tests&quot;</span> [qcProps, unitTests]
+
+<span class="kw">data</span> <span class="dt">AP</span> <span class="fu">=</span> <span class="dt">AP</span> [<span class="dt">Integer</span>]
+	<span class="kw">deriving</span> (<span class="dt">Eq</span>, <span class="dt">Show</span>)
+
+<span class="co">-- Generate a random arithmetic progression.</span>
+<span class="kw">instance</span> <span class="dt">Arbitrary</span> <span class="dt">AP</span> <span class="kw">where</span>
+	arbitrary <span class="fu">=</span> <span class="kw">do</span>
+		<span class="co">-- Choose random m (change between terms).</span>
+		m <span class="ot">&lt;- arbitrary ::</span> <span class="dt">Gen</span> <span class="dt">Int</span>
+		<span class="co">-- Choose random first term. It&#39;s important that we make it into an</span>
+		<span class="co">-- Integer type, because if we use Int we might end up with integer</span>
+		<span class="co">-- overflow if m is too large.</span>
+		t <span class="ot">&lt;- arbitrary ::</span> <span class="dt">Gen</span> <span class="dt">Integer</span>
+		<span class="co">-- Choose random length of 4 to 50.</span>
+		len <span class="ot">&lt;-</span> choose (<span class="dv">4</span>, <span class="dv">50</span>)
+		return
+			<span class="fu">.</span> <span class="dt">AP</span>
+			<span class="fu">.</span> foldl (\acc n <span class="ot">-&gt;</span> ((fromIntegral m)<span class="fu">*</span>n <span class="fu">+</span> t)<span class="fu">:</span>acc) []
+			<span class="fu">$</span> take len [<span class="dv">0</span><span class="fu">..</span>]
+
+<span class="ot">qcProps ::</span> <span class="dt">TestTree</span>
+qcProps <span class="fu">=</span> testGroup <span class="st">&quot;(checked by QuickCheck)&quot;</span>
+	[ QC.testProperty <span class="st">&quot;Unmutate (U(M(AP)) results in calculable (isJust))&quot;</span>
+		(\(<span class="dt">AP</span> ts) <span class="ot">-&gt;</span> isJust <span class="fu">.</span> unmutate <span class="fu">$</span> mutate ts)
+	, QC.testProperty <span class="st">&quot;Unmutate (U(M(AP)) results in a nonempty list)&quot;</span>
+		(\(<span class="dt">AP</span> ts) <span class="ot">-&gt;</span> not
+			<span class="fu">.</span> null
+			<span class="fu">.</span> fromJust
+			<span class="fu">.</span> unmutate
+			<span class="fu">$</span> mutate ts)
+	, QC.testProperty <span class="st">&quot;Unmutate (U(M(AP)) results in an arithmetic progression)&quot;</span>
+		(\(<span class="dt">AP</span> ts) <span class="ot">-&gt;</span> isArithmetic
+			<span class="fu">.</span> fromJust
+			<span class="fu">.</span> unmutate
+			<span class="fu">$</span> mutate ts)
+	]
+
+<span class="ot">unitTests ::</span> <span class="dt">TestTree</span>
+unitTests <span class="fu">=</span> testGroup <span class="st">&quot;Unit tests&quot;</span>
+	[ testCase <span class="st">&quot;Unmutate (empty list is not calculable)&quot;</span>
+		<span class="fu">$</span> unmutate ([]<span class="ot">::</span>[<span class="dt">Int</span>])
+		<span class="fu">@?=</span> <span class="dt">Nothing</span>
+	, testCase <span class="st">&quot;Unmutate (AP is all odd, so AP == MP)&quot;</span>
+		<span class="fu">$</span> unmutate [<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">9</span><span class="ot"> ::</span> <span class="dt">Int</span>]
+		<span class="fu">@?=</span> <span class="dt">Just</span> [<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">9</span><span class="ot"> ::</span> <span class="dt">Int</span>]
+	, testCase <span class="st">&quot;Unmutate (m = 0, so all elements in mp are the same)&quot;</span>
+		<span class="fu">$</span> unmutate [<span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">5</span><span class="ot"> ::</span> <span class="dt">Int</span>]
+		<span class="fu">@?=</span> <span class="dt">Just</span> [<span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">5</span><span class="ot"> ::</span> <span class="dt">Int</span>]
+	, testCase <span class="st">&quot;Unmutate (known case 1)&quot;</span>
+		<span class="fu">$</span> unmutate [<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">1</span>, <span class="dv">5</span><span class="ot"> ::</span> <span class="dt">Int</span>]
+		<span class="fu">@?=</span> <span class="dt">Just</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span><span class="ot"> ::</span> <span class="dt">Int</span>]
+	, testCase <span class="st">&quot;Unmutate (known case 2)&quot;</span>
+		<span class="fu">$</span> unmutate [<span class="dv">7</span>, <span class="dv">47</span>, <span class="dv">5</span>, <span class="dv">113</span>, <span class="dv">73</span>, <span class="dv">179</span>, <span class="dv">53</span><span class="ot"> ::</span> <span class="dt">Int</span>]
+		<span class="fu">@?=</span> <span class="dt">Just</span> [<span class="dv">14</span>, <span class="dv">47</span>, <span class="dv">80</span>, <span class="dv">113</span>, <span class="dv">146</span>, <span class="dv">179</span>, <span class="dv">212</span><span class="ot"> ::</span> <span class="dt">Int</span>]
+	, testCase <span class="st">&quot;Unmutate (known case 3)&quot;</span>
+		<span class="fu">$</span> unmutate [<span class="dv">749</span>, <span class="dv">999</span>, <span class="dv">125</span>, <span class="dv">1</span><span class="ot"> ::</span> <span class="dt">Int</span>]
+		<span class="fu">@?=</span> <span class="dt">Just</span> [<span class="dv">1498</span>, <span class="dv">999</span>, <span class="dv">500</span>, <span class="dv">1</span><span class="ot"> ::</span> <span class="dt">Int</span>]
+	, testCase <span class="st">&quot;Unmutate (known case 4)&quot;</span>
+		<span class="fu">$</span> unmutate [<span class="fu">-</span><span class="dv">11</span>, <span class="dv">0</span>, <span class="dv">11</span>, <span class="dv">11</span>, <span class="dv">33</span>, <span class="dv">11</span><span class="ot"> ::</span> <span class="dt">Int</span>]
+		<span class="fu">@?=</span> <span class="dt">Just</span> [<span class="fu">-</span><span class="dv">11</span>, <span class="dv">0</span>, <span class="dv">11</span>, <span class="dv">22</span>, <span class="dv">33</span>, <span class="dv">44</span><span class="ot"> ::</span> <span class="dt">Int</span>]
+	]</code></pre></td></tr></table></div>
+<div class="raw-link">
+<a  class="raw"  href= "/code/toy/srm485-afraid-of-even/test-unmutate.hs"  mimetype=text/plain > test-unmutate.hs </a>
+</div>
+</div>
+<p>As you can see, most of the real work involves identifying the <strong>original, immutable numbers</strong> we can work with as-is (<span class="math">\(\mathrm{O}\)</span>) (as opposed to the ones we have to ignore (<span class="math">\(\mathrm{O_F}\)</span>)) to construct our tentative sister arithmetic progression <span class="math">\(BP\)</span>.</p>
+<h1>Ruby version</h1>
+<div class="code-and-raw">
+<div class="sourceCode" input="code/toy/srm485-afraid-of-even/unmutate.rb"><table class="sourceCode numberLines ruby"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+</pre></td><td class="sourceCode"><pre><code class="sourceCode ruby"><span class="kw">module</span> <span class="dt">Unmutate</span>
+  <span class="kw">def</span> <span class="dt">Unmutate</span>.unmutate(ts)
+    <span class="kw">if</span> ts.size &lt; <span class="dv">4</span>
+      <span class="kw">return</span> <span class="dv">nil</span>
+    <span class="kw">end</span>
+
+    bp1_terms = every_nth0(<span class="dv">2</span>, ts)
+    bp1 = make_BP(ts.size, <span class="dv">false</span>, bp1_terms)
+    bp2_terms = every_nth(<span class="dv">2</span>, ts)
+    bp2 = make_BP(ts.size, <span class="dv">true</span>, bp2_terms)
+
+    <span class="kw">if</span> ts.uniq.size == <span class="dv">1</span>
+      ts
+    <span class="kw">elsif</span> <span class="dt">Unmutate</span>.arithmetic?(ts)
+      ts
+    <span class="kw">elsif</span> <span class="dt">Unmutate</span>.mutate(bp1) == ts
+      bp1
+    <span class="kw">elsif</span> <span class="dt">Unmutate</span>.mutate(bp2) == ts
+      bp2
+    <span class="kw">else</span>
+      <span class="dv">nil</span>
+    <span class="kw">end</span>
+  <span class="kw">end</span>
+
+  <span class="kw">def</span> <span class="dt">Unmutate</span>.make_BP(len, make_first_term, originals)
+    <span class="kw">if</span> originals.size &lt; <span class="dv">2</span>
+      <span class="kw">return</span> []
+    <span class="kw">end</span>
+
+    o0 = originals[<span class="dv">0</span>]
+    o1 = originals[<span class="dv">1</span>]
+    m = (o1 - o0) / <span class="dv">2</span>
+    bp = []
+
+    <span class="kw">for</span> n <span class="kw">in</span> (<span class="dv">0</span>..(len - <span class="dv">1</span>)) <span class="kw">do</span>
+      bp &lt;&lt; m*n + o0
+    <span class="kw">end</span>
+
+    <span class="kw">if</span> make_first_term
+      [o0 - m] + bp.take(len - <span class="dv">1</span>)
+    <span class="kw">else</span>
+      bp
+    <span class="kw">end</span>
+  <span class="kw">end</span>
+
+  <span class="kw">def</span> <span class="dt">Unmutate</span>.mutate(ts)
+    ts.map{|t| make_odd t}
+  <span class="kw">end</span>
+
+  <span class="kw">def</span> <span class="dt">Unmutate</span>.arithmetic?(ts)
+    <span class="kw">if</span> ts.size &lt; <span class="dv">2</span>
+      <span class="kw">return</span> <span class="dv">false</span>
+    <span class="kw">end</span>
+
+    m = ts[<span class="dv">1</span>] - ts[<span class="dv">0</span>]
+    ms = ts.drop(<span class="dv">1</span>).zip(ts.take(ts.size - <span class="dv">1</span>))
+
+    ms.each <span class="kw">do</span> |t1, t0|
+      <span class="kw">if</span> (t1 - t0) != m
+        <span class="kw">return</span> <span class="dv">false</span>
+      <span class="kw">end</span>
+    <span class="kw">end</span>
+
+    <span class="dv">true</span>
+  <span class="kw">end</span>
+<span class="kw">end</span>
+
+<span class="kw">def</span> make_odd(t)
+  <span class="kw">if</span> t.odd? || t == <span class="dv">0</span>
+    t
+  <span class="kw">else</span>
+    make_odd(t/<span class="dv">2</span>)
+  <span class="kw">end</span>
+<span class="kw">end</span>
+
+<span class="kw">def</span> every_nth0(n, ts)
+  arr = []
+  <span class="kw">for</span> i <span class="kw">in</span> (<span class="dv">0</span>..(ts.size - <span class="dv">1</span>)) <span class="kw">do</span>
+    <span class="kw">if</span> i % n == <span class="dv">0</span>
+      arr &lt;&lt; ts[i]
+    <span class="kw">end</span>
+  <span class="kw">end</span>
+  arr
+<span class="kw">end</span>
+
+<span class="kw">def</span> every_nth(n, ts)
+  arr = []
+  <span class="kw">for</span> i <span class="kw">in</span> (<span class="dv">0</span>..(ts.size - <span class="dv">1</span>)) <span class="kw">do</span>
+    <span class="kw">if</span> (i + <span class="dv">1</span>) % n == <span class="dv">0</span>
+      arr &lt;&lt; ts[i]
+    <span class="kw">end</span>
+  <span class="kw">end</span>
+  arr
+<span class="kw">end</span></code></pre></td></tr></table></div>
+<div class="raw-link">
+<a  class="raw"  href= "/code/toy/srm485-afraid-of-even/unmutate.rb"  mimetype=text/plain > unmutate.rb </a>
+</div>
+</div>
+<div class="code-and-raw">
+<div class="sourceCode" input="code/toy/srm485-afraid-of-even/test-unmutate.rb"><table class="sourceCode numberLines ruby"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+</pre></td><td class="sourceCode"><pre><code class="sourceCode ruby"><span class="co"># Usage: ruby unmutate.rb</span>
+
+require <span class="st">&#39;minitest/autorun&#39;</span>
+require_relative <span class="st">&#39;./unmutate.rb&#39;</span>
+
+<span class="kw">class</span> <span class="dt">TestUnmutate</span> &lt; <span class="dt">Minitest</span>::<span class="dt">Test</span>
+  <span class="kw">def</span> test_empty_list_incalculable
+    assert_equal <span class="dv">nil</span>, <span class="dt">Unmutate</span>.unmutate([])
+  <span class="kw">end</span>
+
+  <span class="kw">def</span> test_all_odd_no_change
+    assert_equal [<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">9</span>],
+      <span class="dt">Unmutate</span>.unmutate([<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">9</span>])
+  <span class="kw">end</span>
+
+  <span class="kw">def</span> test_m_is_0
+    assert_equal [<span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">5</span>],
+      <span class="dt">Unmutate</span>.unmutate([<span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">5</span>])
+  <span class="kw">end</span>
+
+  <span class="kw">def</span> test_known_case_1
+    assert_equal [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>],
+      <span class="dt">Unmutate</span>.unmutate([<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">1</span>, <span class="dv">5</span>])
+  <span class="kw">end</span>
+
+  <span class="kw">def</span> test_known_case_2
+    assert_equal [<span class="dv">14</span>, <span class="dv">47</span>, <span class="dv">80</span>, <span class="dv">113</span>, <span class="dv">146</span>, <span class="dv">179</span>, <span class="dv">212</span>],
+      <span class="dt">Unmutate</span>.unmutate([<span class="dv">7</span>, <span class="dv">47</span>, <span class="dv">5</span>, <span class="dv">113</span>, <span class="dv">73</span>, <span class="dv">179</span>, <span class="dv">53</span>])
+  <span class="kw">end</span>
+
+  <span class="kw">def</span> test_known_case_3
+    assert_equal [<span class="dv">1498</span>, <span class="dv">999</span>, <span class="dv">500</span>, <span class="dv">1</span>],
+      <span class="dt">Unmutate</span>.unmutate([<span class="dv">749</span>, <span class="dv">999</span>, <span class="dv">125</span>, <span class="dv">1</span>])
+  <span class="kw">end</span>
+
+  <span class="kw">def</span> test_known_case_4
+    assert_equal [-<span class="dv">11</span>, <span class="dv">0</span>, <span class="dv">11</span>, <span class="dv">22</span>, <span class="dv">33</span>, <span class="dv">44</span>],
+      <span class="dt">Unmutate</span>.unmutate([-<span class="dv">11</span>, <span class="dv">0</span>, <span class="dv">11</span>, <span class="dv">11</span>, <span class="dv">33</span>, <span class="dv">11</span>])
+  <span class="kw">end</span>
+<span class="kw">end</span></code></pre></td></tr></table></div>
+<div class="raw-link">
+<a  class="raw"  href= "/code/toy/srm485-afraid-of-even/test-unmutate.rb"  mimetype=text/plain > test-unmutate.rb </a>
+</div>
+</div>
+<p>This Ruby version is essentially a port of the Haskell version. The problem at hand is so mathematical that it makes sense to simply preserve the clean Haskell definitions.</p>
+<h1>Conclusion</h1>
+<p>I hope you enjoyed this somewhat prolonged mathematical adventure. The most interesting part for me was seeing the problem as a linear equation, and using the formula (which I learned in high school) to derive powerful conclusions. High school algebra is useful after all! Until next time, happy hacking!</p>
+]]></summary>
+</entry>
+<entry>
     <title>Programming Puzzles: Letter and Word Frequency</title>
     <link href="http://listx.github.io/post/2015-04-22-letter-word-frequency.html" />
     <id>http://listx.github.io/post/2015-04-22-letter-word-frequency.html</id>
@@ -3375,35 +4421,6 @@ evalTerms <span class="fu">=</span> foldl modifyStack []
 <li id="fn1"><p>See the <a href="https://www.kernel.org/doc/Documentation/CodingStyle">Linux Kernel Coding Style</a>, “Chapter 2: Breaking long lines and strings”.<a href="#fnref1">↩</a></p></li>
 </ol>
 </div>
-]]></summary>
-</entry>
-<entry>
-    <title>Solving the "NVRM: API mismatch" Problem on Arch Linux</title>
-    <link href="http://listx.github.io/post/2014-06-04-nvrm-api-mismatch.html" />
-    <id>http://listx.github.io/post/2014-06-04-nvrm-api-mismatch.html</id>
-    <published>2014-06-04T00:00:00Z</published>
-    <updated>2014-06-04T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="info center">
-	<code class="date">2014-06-04</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2014-06-04-nvrm-api-mismatch.md" title="History">*</a>
-	<br>
-	<a href="/tag/arch.html">arch</a>, <a href="/tag/linux.html">linux</a>, <a href="/tag/nvidia.html">nvidia</a>
-</div>
-
-<p>Sometimes when you do a system upgrade on Arch, Xorg will die on a reboot and you’ll get this kernel error (available with <code>dmesg</code>):</p>
-<div class="sourceCode"><table class="sourceCode numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
-2
-3
-4
-</pre></td><td class="sourceCode"><pre><code class="sourceCode">NVRM: API mismatch: the client has the version XXX.XX, but
-NVRM: this kernel module has the version YYY.YY.  Please
-NVRM: make sure that this kernel module and all NVIDIA driver
-NVRM: components have the same version.</code></pre></td></tr></table></div>
-<p>. This is usually the case when you upgrade your <code>linux</code> package, followed by upgrading your <code>nvidia</code> package. The problem is that the new kernel image references your older <code>nvidia</code> package (when it executed <code>mkinitcpio -p linux</code> before <code>nvidia</code> got upgraded). There are two possible solutions:</p>
-<ol style="list-style-type: decimal">
-<li>Simply remake your kernel image against your newly upgraded <code>nvidia</code> package. Run <code>mkinitcpio -p linux</code> again, and reboot.</li>
-<li>In the alternative, downgrade to your previous set of <code>nvidia</code> drivers, located in <code>/var/cache/pacman/pkg/</code>.</li>
-</ol>
-<p>Hope this helps someone out there. =)</p>
 ]]></summary>
 </entry>
 
