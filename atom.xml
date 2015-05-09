@@ -1006,7 +1006,7 @@ unitTests <span class="fu">=</span> testGroup <span class="st">&quot;Unit tests&
 38
 39
 40
-</pre></td><td class="sourceCode"><pre><code class="sourceCode ruby"><span class="co"># Usage: ruby unmutate.rb</span>
+</pre></td><td class="sourceCode"><pre><code class="sourceCode ruby"><span class="co"># Usage: ruby test-unmutate.rb</span>
 
 require <span class="st">&#39;minitest/autorun&#39;</span>
 require_relative <span class="st">&#39;./unmutate.rb&#39;</span>
