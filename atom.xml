@@ -8,8 +8,81 @@
         <name>Linus Arver</name>
         <email></email>
     </author>
-    <updated>2015-05-04T00:00:00Z</updated>
+    <updated>2015-06-25T00:00:00Z</updated>
     <entry>
+    <title>Useful rxvt-unicode (URxvt) Plugins</title>
+    <link href="http://listx.github.io/post/2015-06-25-urxvt-plugins.html" />
+    <id>http://listx.github.io/post/2015-06-25-urxvt-plugins.html</id>
+    <published>2015-06-25T00:00:00Z</published>
+    <updated>2015-06-25T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="info center">
+	<code class="date">2015-06-25</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2015-06-25-urxvt-plugins.org" title="History">*</a>
+	<br>
+	<a href="/tag/programming.html">programming</a>, <a href="/tag/linux.html">linux</a>
+</div>
+
+<h1>Introduction</h1>
+<p>I’ve been using <a href="http://software.schmorp.de/pkg/rxvt-unicode.html">rxvt-unicode</a> (<code>urxvt</code>) for years. But, I never really bothered to customize it beyond adding in some simple font changing hotkeys. I discovered that <code>urxvt</code> can be customized with Perl plugins. This post shows some of the plugins I’ve started using.</p>
+<p>For this post, I will use the terms <strong>terminal</strong> and <code>urxvt</code> interchangeably. The plugins are configured in your <code>~/.Xdefaults</code> file, and to have this file take effect, run</p>
+<pre><code>xrdb -merge ~/.Xdefaults
+</code></pre>
+<p>. The hotkeys are defined with key names from <a href="http://cgit.freedesktop.org/xorg/proto/x11proto/plain/keysymdef.h">keysymdef.h</a> as part of X11.</p>
+<h1>keyoard-select</h1>
+<p><a href="https://github.com/muennich/urxvt-perls">Homepage</a> (part of <code>urxvt-perls</code>)</p>
+<p>This is by far the most useful plugin. If you ever need surgical precision to select a particular chunk of text in your terminal, you can use this plugin. It gives you Vim-like <em>normal mode</em> navigation in your terminal — and then you can use hotkeys like <code>v</code> or <code>V</code> to select chunks of text, and use <code>y</code> to copy it to your X primary buffer.</p>
+<p>I use the snippet below in my <code>~/.Xdefaults</code>:</p>
+<pre><code>! keyboard-select
+URxvt.keysym.M-s: perl:keyboard-select:activate
+URxvt.keysym.M-r: perl:keyboard-select:search
+</code></pre>
+<p>. Now, <code>M-s</code> (<code>Alt-s</code> for you folks not familiar with Emacs-style shortcut-naming) in the terminal gives you Vim-like normal mode like I mentioned above. The other shortcut, <code>M-r</code>, gives your reverse search against your terminal’s buffer.</p>
+<p>Let <code>M-r</code> sink in. This means that your terminal is basically running a virtual <code>less</code> pager. Any time you want to go search against some text in your terminal, just use <code>M-r</code> and search; use <code>n</code> and <code>N</code> just like <code>less</code>.</p>
+<p>Actually, <code>M-r</code> is basically doing <code>M-s</code> followed by <code>?</code>. So, if you like searching forwards (not backwards), just do <code>M-s</code> and then <code>/</code>. But considering how terminal buffers are always <strong>above</strong> the cursor, it makes sense to search backwards by default with <code>M-r</code>. For me this runs against my habit of using <code>less</code> and <code>/</code>, but there you have it.</p>
+<h1>clipboard</h1>
+<p><a href="https://github.com/muennich/urxvt-perls">Homepage</a> (part of <code>urxvt-perls</code>)</p>
+<p><code>~/.Xdefaults</code> snippet:</p>
+<pre><code>! clipboard
+! update clipboard whenever primary gets updated
+URxvt.clipboard.autocopy: true
+URxvt.keysym.M-c: perl:clipboard:copy
+URxvt.keysym.M-v: perl:clipboard:paste
+URxvt.keysym.M-C-v: perl:clipboard:paste_escaped
+</code></pre>
+<p>. To be honest I think the <code>autocopy</code> feature is a bit flaky (at least when using these shortcuts inside a NixOS VirtualBox VM from a Mac) — but that’s not that important.</p>
+<p><code>M-c</code> copies the X11 primary buffer (aka X selection) to the clipboard buffer.</p>
+<p>What’s really nice is the <code>M-v</code> shortcut — it pastes the <strong>clipboard</strong> buffer, not the X11 primary buffer (there is <code>S-&lt;insert&gt;</code> (Shift-Insert) for that). Now you don’t have to type <code>$(xsel -b)</code> for the same thing.</p>
+<p><code>M-C-v</code> (<code>Alt-Control-v</code>) does the same thing, but escapes any special characters. This is very handy — a simple use case might be using <code>M-s</code> (search shortcut discussed above) to find a particular file with a long name (think MP3 files) from the output of <code>ls</code> — you can then just use <code>v</code> to copy that filename to the X11 buffer, then use <code>M-c</code> to copy it to clipboard buffer (if <code>autocopy</code> is working this step is unnecessary), then use <code>M-C-v</code> to paste it in, escaping things like space characters so that you can use other tools like <code>cp</code> or <code>mv</code> on them more easily.</p>
+<h1>url-select</h1>
+<p><a href="https://github.com/muennich/urxvt-perls">Homepage</a> (part of <code>urxvt-perls</code>)</p>
+<p><code>~/.Xdefaults</code> snippet:</p>
+<pre><code>! url-select. We can middle-click on any url and this will launch the browser
+! defined by `URxvt.url-select.launcher`.
+URxvt.keysym.M-u: perl:url-select:select_next
+URxvt.url-select.underline: true
+URxvt.url-select.launcher: firefox
+</code></pre>
+<p>. Now you can use <code>M-u</code> to jump between any URL that was printed to the terminal buffer. Use <code>j</code> and <code>k</code> to jump to the next/previous URL, and <code>y</code> to copy it to your X primary buffer (and <code>M-c</code> to make sure it’s also in the clipboard) for easy URL handling. Or, simply press <code>ENTER</code> to open that link in your browser. Next time you grab your mouse to carefully highlight a URL in the terminal, think again!</p>
+<h1>font-size</h1>
+<p><a href="https://github.com/majutsushi/urxvt-font-size">Homepage</a></p>
+<p>This plugin allows you to scale fonts up or down.</p>
+<p><code>~/.Xdefaults</code> snippet:</p>
+<pre><code>! `font-size` plugin
+URxvt.keysym.C-minus: perl:font-size:decrease
+URxvt.keysym.C-equal: perl:font-size:increase
+! The default font increase step size is 1. This is for portability across all
+! fonts (some fonts do not support particular font sizes). Because changing font
+! size only really makes sense for anti-aliased fonts (Terminus is bitmapped),
+! and because anti-aliased fonts support any size, it makes sense to just use a
+! size step of 4 for faster transitions between font size changes.
+URxvt.font-size.step: 4
+</code></pre>
+<p>. This is pretty self-explanatory. Use <code>C-minus</code> or <code>C-equal</code> to change your font size as needed — perfect for screencasts or demos!</p>
+<h1>Conclusion</h1>
+<p>Now that I use these plugins, there’s even less interruption to use the mouse. I hope you find them as useful as I have.</p>
+<p>Happy hacking!</p>
+]]></summary>
+</entry>
+<entry>
     <title>SRM 485: AfraidOfEven</title>
     <link href="http://listx.github.io/post/2015-05-04-puzzle-srm-485-afraid-of-even.html" />
     <id>http://listx.github.io/post/2015-05-04-puzzle-srm-485-afraid-of-even.html</id>
@@ -22,366 +95,366 @@
 </div>
 
 <h1>Introduction</h1>
-<p>The heart of this problem comes from TopCoder's <a href="http://community.topcoder.com/stat?c%3Dproblem_statement&amp;pm%3D11146&amp;rd%3D14238">SRM 485 &quot;AfraidOfEven&quot;</a>. There is quite a lot of discussion behind the somewhat elementary math principles, so you might want to skip down to the code directly after reading the problem statement.</p>
+<p>The heart of this problem comes from TopCoder’s <a href="http://community.topcoder.com/stat?c%3Dproblem_statement&amp;pm%3D11146&amp;rd%3D14238">SRM 485 “AfraidOfEven”</a>. There is quite a lot of discussion behind the somewhat elementary math principles, so you might want to skip down to the code directly after reading the problem statement.</p>
 <h1>The Problem</h1>
-<p>An <a href="http://en.wikipedia.org/wiki/Arithmetic_progression">arithmetic progression</a> <span class="math">\(AP\)</span> has been changed by the mutation function <span class="math">\(M()\)</span> in the following way: any even number <span class="math">\(w\)</span> in the sequence has been replaced by <span class="math">\(\frac{w}{2}\)</span>, repeatedly, until it has become odd. For example, if <span class="math">\(AP = \{2, 4, 6, 8\}\)</span>, then <span class="math">\(M(AP) = \{1, 1, 3, 1\}\)</span> (because <span class="math">\(\frac{6}{2} = 3\)</span> and <span class="math">\(3\)</span> is an odd number, it stopped mutating). Given a mutated sequence <span class="math">\(M(AP) = MP\)</span>, design an &quot;unmutate&quot; function <span class="math">\(U()\)</span> such that <span class="math">\(U(MP) \approx AP\)</span>. If more than one possible sequence <span class="math">\(AP\)</span> exists, find the one with the lowest lexicographical order.</p>
+<p>An <a href="http://en.wikipedia.org/wiki/Arithmetic_progression">arithmetic progression</a> <span class="math inline">\(AP\)</span> has been changed by the mutation function <span class="math inline">\(M()\)</span> in the following way: any even number <span class="math inline">\(w\)</span> in the sequence has been replaced by <span class="math inline">\(\frac{w}{2}\)</span>, repeatedly, until it has become odd. For example, if <span class="math inline">\(AP = \{2, 4, 6, 8\}\)</span>, then <span class="math inline">\(M(AP) = \{1, 1, 3, 1\}\)</span> (because <span class="math inline">\(\frac{6}{2} = 3\)</span> and <span class="math inline">\(3\)</span> is an odd number, it stopped mutating). Given a mutated sequence <span class="math inline">\(M(AP) = MP\)</span>, design an “unmutate” function <span class="math inline">\(U()\)</span> such that <span class="math inline">\(U(MP) \approx AP\)</span>. If more than one possible sequence <span class="math inline">\(AP\)</span> exists, find the one with the lowest lexicographical order.</p>
 <h2>Constraints</h2>
-<p><span class="math">\(MP\)</span> is limited to 4 to 50 terms. Each term in <span class="math">\(MP\)</span> is from <span class="math">\(1\)</span> to <span class="math">\(1000\)</span>, inclusive (for now; later on we will consider numbers less than <span class="math">\(1\)</span>). The difference (let's call it <span class="math">\(m\)</span>) between each term can be <span class="math">\(0\)</span>, so the following is still a valid arithmetic progression: <span class="math">\(\{-17, -17, -17, -17, -17\}\)</span>.</p>
+<p><span class="math inline">\(MP\)</span> is limited to 4 to 50 terms. Each term in <span class="math inline">\(MP\)</span> is from <span class="math inline">\(1\)</span> to <span class="math inline">\(1000\)</span>, inclusive (for now; later on we will consider numbers less than <span class="math inline">\(1\)</span>). The difference (let’s call it <span class="math inline">\(m\)</span>) between each term can be <span class="math inline">\(0\)</span>, so the following is still a valid arithmetic progression: <span class="math inline">\(\{-17, -17, -17, -17, -17\}\)</span>.</p>
 <h3>Lexicographic Order</h3>
 <p>Given the input</p>
-<p><span class="math">\[
+<p><span class="math display">\[
 MP = \{1, 1, 3, 1, 5\}
 \]</span></p>
 <p>, we get the output</p>
-<p><span class="math">\[
+<p><span class="math display">\[
 U(AP) = \{1, 2, 3, 4, 5\}
 \]</span></p>
-<p>. It is possible that <span class="math">\(AP\)</span> was actually <span class="math">\(\{2, 4, 6, 8, 10\}\)</span> (or even <span class="math">\(\{4, 8, 12, 16, 20\}\)</span>), but because <span class="math">\(\{1, 2, 3, 4, 5\}\)</span> has the smaller lexicographic representation, it is the correct answer.</p>
+<p>. It is possible that <span class="math inline">\(AP\)</span> was actually <span class="math inline">\(\{2, 4, 6, 8, 10\}\)</span> (or even <span class="math inline">\(\{4, 8, 12, 16, 20\}\)</span>), but because <span class="math inline">\(\{1, 2, 3, 4, 5\}\)</span> has the smaller lexicographic representation, it is the correct answer.</p>
 <h1>Interlude</h1>
-<p>I will include both Haskell and Ruby solutions in this post below. If you'd like to solve the problem on your own, please read the rest of this post at a later time.</p>
+<p>I will include both Haskell and Ruby solutions in this post below. If you’d like to solve the problem on your own, please read the rest of this post at a later time.</p>
 <h1>The Math</h1>
 <p>Let us consider the universe of possible arithmetic progressions, and then derive a general algorithm. Because the mutation involves even numbers, it makes sense to look at arithmetic progressions in terms of even and odd numbers (aka <em>parity</em>).</p>
-<p>The two most important parts of an arithmetic progression are the rate of change, <span class="math">\(m\)</span>, and the first term <span class="math">\(A_0\)</span>. This is because any arithmetic progression can be recreated by knowing only these two values.</p>
-<p>Now, <span class="math">\(m\)</span> can be either even (<span class="math">\(E\)</span>), odd (<span class="math">\(O\)</span>), or zero. The first term <span class="math">\(A_0\)</span> can be either even or odd. Let's plug these possible variations into a table, and see if there are any patterns we can exploit. To determine <span class="math">\(AP\)</span> based on <span class="math">\(m\)</span> and <span class="math">\(A_0\)</span>, we only need to know three laws of parity:</p>
+<p>The two most important parts of an arithmetic progression are the rate of change, <span class="math inline">\(m\)</span>, and the first term <span class="math inline">\(A_0\)</span>. This is because any arithmetic progression can be recreated by knowing only these two values.</p>
+<p>Now, <span class="math inline">\(m\)</span> can be either even (<span class="math inline">\(E\)</span>), odd (<span class="math inline">\(O\)</span>), or zero. The first term <span class="math inline">\(A_0\)</span> can be either even or odd. Let’s plug these possible variations into a table, and see if there are any patterns we can exploit. To determine <span class="math inline">\(AP\)</span> based on <span class="math inline">\(m\)</span> and <span class="math inline">\(A_0\)</span>, we only need to know three laws of parity:</p>
 <ol>
-<li><span class="math">\(\mathrm{O + O = E}\)</span></li>
-<li><span class="math">\(\mathrm{E + E = E}\)</span></li>
-<li><span class="math">\(\mathrm{O + E = O}\)</span></li>
+<li><span class="math inline">\(\mathrm{O + O = E}\)</span></li>
+<li><span class="math inline">\(\mathrm{E + E = E}\)</span></li>
+<li><span class="math inline">\(\mathrm{O + E = O}\)</span></li>
 </ol>
-<p>. Using these laws, we can construct the entire sequence <span class="math">\(AP\)</span> by adding <span class="math">\(m\)</span> into <span class="math">\(A_0\)</span> repeatedly.</p>
-<p>The only time that adding two numbers together results in an odd number is when one term is odd and the other term is even. This rule is true regardless of whether we are adding or subtracting (adding a negative term), or whether either term is positive or negative. Another interesting point is that adding by an even number does not change the parity of the original term, while adding by an odd number always flips the parity of the original. We now know how to construct <span class="math">\(AP\)</span> from <span class="math">\(m\)</span> and <span class="math">\(A_0\)</span>, so let's examine the possible outcomes below:</p>
+<p>. Using these laws, we can construct the entire sequence <span class="math inline">\(AP\)</span> by adding <span class="math inline">\(m\)</span> into <span class="math inline">\(A_0\)</span> repeatedly.</p>
+<p>The only time that adding two numbers together results in an odd number is when one term is odd and the other term is even. This rule is true regardless of whether we are adding or subtracting (adding a negative term), or whether either term is positive or negative. Another interesting point is that adding by an even number does not change the parity of the original term, while adding by an odd number always flips the parity of the original. We now know how to construct <span class="math inline">\(AP\)</span> from <span class="math inline">\(m\)</span> and <span class="math inline">\(A_0\)</span>, so let’s examine the possible outcomes below:</p>
 <table>
 <thead>
 <tr class="header">
 <th align="center"></th>
-<th align="center"><span class="math">\(m\)</span></th>
-<th align="center"><span class="math">\(A_0\)</span></th>
-<th align="center"><span class="math">\(AP\)</span></th>
+<th align="center"><span class="math inline">\(m\)</span></th>
+<th align="center"><span class="math inline">\(A_0\)</span></th>
+<th align="center"><span class="math inline">\(AP\)</span></th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td align="center">1</td>
-<td align="center"><span class="math">\(0\)</span></td>
-<td align="center"><span class="math">\(\mathrm{O}\)</span></td>
-<td align="center"><span class="math">\(\{\mathrm{O, O, O, O, \cdots{}}\}\)</span></td>
+<td align="center"><span class="math inline">\(0\)</span></td>
+<td align="center"><span class="math inline">\(\mathrm{O}\)</span></td>
+<td align="center"><span class="math inline">\(\{\mathrm{O, O, O, O, \cdots{}}\}\)</span></td>
 </tr>
 <tr class="even">
 <td align="center">2</td>
-<td align="center"><span class="math">\(0\)</span></td>
-<td align="center"><span class="math">\(\mathrm{E}\)</span></td>
-<td align="center"><span class="math">\(\{\mathrm{E, E, E, E, \cdots{}}\}\)</span></td>
+<td align="center"><span class="math inline">\(0\)</span></td>
+<td align="center"><span class="math inline">\(\mathrm{E}\)</span></td>
+<td align="center"><span class="math inline">\(\{\mathrm{E, E, E, E, \cdots{}}\}\)</span></td>
 </tr>
 <tr class="odd">
 <td align="center">3</td>
-<td align="center"><span class="math">\(\mathrm{E}\)</span></td>
-<td align="center"><span class="math">\(\mathrm{O}\)</span></td>
-<td align="center"><span class="math">\(\{\mathrm{O, O, O, O, \cdots{}}\}\)</span></td>
+<td align="center"><span class="math inline">\(\mathrm{E}\)</span></td>
+<td align="center"><span class="math inline">\(\mathrm{O}\)</span></td>
+<td align="center"><span class="math inline">\(\{\mathrm{O, O, O, O, \cdots{}}\}\)</span></td>
 </tr>
 <tr class="even">
 <td align="center">4</td>
-<td align="center"><span class="math">\(\mathrm{E}\)</span></td>
-<td align="center"><span class="math">\(\mathrm{E}\)</span></td>
-<td align="center"><span class="math">\(\{\mathrm{E, E, E, E, \cdots{}}\}\)</span></td>
+<td align="center"><span class="math inline">\(\mathrm{E}\)</span></td>
+<td align="center"><span class="math inline">\(\mathrm{E}\)</span></td>
+<td align="center"><span class="math inline">\(\{\mathrm{E, E, E, E, \cdots{}}\}\)</span></td>
 </tr>
 <tr class="odd">
 <td align="center">5</td>
-<td align="center"><span class="math">\(\mathrm{O}\)</span></td>
-<td align="center"><span class="math">\(\mathrm{O}\)</span></td>
-<td align="center"><span class="math">\(\{\mathrm{O, E, O, E, \cdots{}}\}\)</span></td>
+<td align="center"><span class="math inline">\(\mathrm{O}\)</span></td>
+<td align="center"><span class="math inline">\(\mathrm{O}\)</span></td>
+<td align="center"><span class="math inline">\(\{\mathrm{O, E, O, E, \cdots{}}\}\)</span></td>
 </tr>
 <tr class="even">
 <td align="center">6</td>
-<td align="center"><span class="math">\(\mathrm{O}\)</span></td>
-<td align="center"><span class="math">\(\mathrm{E}\)</span></td>
-<td align="center"><span class="math">\(\{\mathrm{E, O, E, O, \cdots{}}\}\)</span></td>
+<td align="center"><span class="math inline">\(\mathrm{O}\)</span></td>
+<td align="center"><span class="math inline">\(\mathrm{E}\)</span></td>
+<td align="center"><span class="math inline">\(\{\mathrm{E, O, E, O, \cdots{}}\}\)</span></td>
 </tr>
 </tbody>
 </table>
-<p>. Let's now look at each of the 6 possible cases, and see if we can simplify things more. We will look at each case from the perspective of <span class="math">\(m\)</span>.</p>
-<h2>Mutation When <span class="math">\(m\)</span> is Zero</h2>
-<p>If <span class="math">\(m\)</span> is zero, then <span class="math">\[AP = {A_0, A_0, A_0\cdots{}A_0}\]</span>. That is, subsequent terms after <span class="math">\(A_0\)</span> do not change, so it is a constant sequence of the first term, <span class="math">\(A_0\)</span>.</p>
-<p>If <span class="math">\(m\)</span> is zero and <span class="math">\(A_0\)</span> is <strong>odd</strong>, then all terms remain the same after the mutation; so, <span class="math">\(M(AP) = AP\)</span> (no change). E.g.,</p>
+<p>. Let’s now look at each of the 6 possible cases, and see if we can simplify things more. We will look at each case from the perspective of <span class="math inline">\(m\)</span>.</p>
+<h2>Mutation When <span class="math inline">\(m\)</span> is Zero</h2>
+<p>If <span class="math inline">\(m\)</span> is zero, then <span class="math display">\[AP = {A_0, A_0, A_0\cdots{}A_0}\]</span>. That is, subsequent terms after <span class="math inline">\(A_0\)</span> do not change, so it is a constant sequence of the first term, <span class="math inline">\(A_0\)</span>.</p>
+<p>If <span class="math inline">\(m\)</span> is zero and <span class="math inline">\(A_0\)</span> is <strong>odd</strong>, then all terms remain the same after the mutation; so, <span class="math inline">\(M(AP) = AP\)</span> (no change). E.g.,</p>
 <table>
 <tbody>
 <tr class="odd">
-<td align="center"><span class="math">\(AP = \{\mathrm{3, 3, 3, 3, \cdots{}, 3}\}\)</span></td>
+<td align="center"><span class="math inline">\(AP = \{\mathrm{3, 3, 3, 3, \cdots{}, 3}\}\)</span></td>
 </tr>
 <tr class="even">
 <td align="center">becomes</td>
 </tr>
 <tr class="odd">
-<td align="center"><span class="math">\(MP = \{\mathrm{3, 3, 3, 3, \cdots{}, 3}\}\)</span></td>
+<td align="center"><span class="math inline">\(MP = \{\mathrm{3, 3, 3, 3, \cdots{}, 3}\}\)</span></td>
 </tr>
 </tbody>
 </table>
-<p>. If <span class="math">\(m\)</span> is zero and <span class="math">\(A_0\)</span> is <strong>even</strong>, then all terms are likewise even, and all terms will become odd by application of <span class="math">\(M()\)</span>. What's more, every term in <span class="math">\(M_0\)</span> will be the same odd number, essentially becoming &quot;reduced&quot; to the case where <span class="math">\(A_0\)</span> was originally odd. E.g.,</p>
+<p>. If <span class="math inline">\(m\)</span> is zero and <span class="math inline">\(A_0\)</span> is <strong>even</strong>, then all terms are likewise even, and all terms will become odd by application of <span class="math inline">\(M()\)</span>. What’s more, every term in <span class="math inline">\(M_0\)</span> will be the same odd number, essentially becoming “reduced” to the case where <span class="math inline">\(A_0\)</span> was originally odd. E.g.,</p>
 <table>
 <tbody>
 <tr class="odd">
-<td align="center"><span class="math">\(AP = \{\mathrm{10, 10, 10, 10, \cdots{}, 10}\}\)</span></td>
+<td align="center"><span class="math inline">\(AP = \{\mathrm{10, 10, 10, 10, \cdots{}, 10}\}\)</span></td>
 </tr>
 <tr class="even">
 <td align="center">becomes</td>
 </tr>
 <tr class="odd">
-<td align="center"><span class="math">\(MP = \{\mathrm{5, 5, 5, 5, \cdots{}, 5}\}\)</span></td>
+<td align="center"><span class="math inline">\(MP = \{\mathrm{5, 5, 5, 5, \cdots{}, 5}\}\)</span></td>
 </tr>
 </tbody>
 </table>
 <p>.</p>
-<h2>Mutation When <span class="math">\(m\)</span> is Even</h2>
-<p>If <span class="math">\(m\)</span> is even, then all terms in <span class="math">\(AP\)</span> are either even or odd, based on the first term <span class="math">\(A_0\)</span>. Essentially, <span class="math">\(AP\)</span> behaves in an identical manner to the case where <span class="math">\(m = 0\)</span> as far as parity is concerned --- the only difference here is that the subsequent terms change in value by <span class="math">\(m\)</span>.</p>
-<p>However, there is a slight twist when we apply mutation. If <span class="math">\(A_0 = \mathrm{O}\)</span>, then there are no numbers to mutate, and we get <span class="math">\(MP\)</span> where all terms are odd and they change by <span class="math">\(m\)</span>. But if <span class="math">\(A_0 = \mathrm{E}\)</span>, then we get <em>changing</em> even numbers for <span class="math">\(MP\)</span>. So unlike in the case of <span class="math">\(m = 0\)</span> where all even numbers reduced down to the same odd number after applying the mutation, we get <em>different</em> odd numbers. E.g.,</p>
+<h2>Mutation When <span class="math inline">\(m\)</span> is Even</h2>
+<p>If <span class="math inline">\(m\)</span> is even, then all terms in <span class="math inline">\(AP\)</span> are either even or odd, based on the first term <span class="math inline">\(A_0\)</span>. Essentially, <span class="math inline">\(AP\)</span> behaves in an identical manner to the case where <span class="math inline">\(m = 0\)</span> as far as parity is concerned — the only difference here is that the subsequent terms change in value by <span class="math inline">\(m\)</span>.</p>
+<p>However, there is a slight twist when we apply mutation. If <span class="math inline">\(A_0 = \mathrm{O}\)</span>, then there are no numbers to mutate, and we get <span class="math inline">\(MP\)</span> where all terms are odd and they change by <span class="math inline">\(m\)</span>. But if <span class="math inline">\(A_0 = \mathrm{E}\)</span>, then we get <em>changing</em> even numbers for <span class="math inline">\(MP\)</span>. So unlike in the case of <span class="math inline">\(m = 0\)</span> where all even numbers reduced down to the same odd number after applying the mutation, we get <em>different</em> odd numbers. E.g.,</p>
 <table>
 <tbody>
 <tr class="odd">
-<td align="center"><span class="math">\(AP = \{\mathrm{40, 48, 56, 64, 72}\}\)</span></td>
+<td align="center"><span class="math inline">\(AP = \{\mathrm{40, 48, 56, 64, 72}\}\)</span></td>
 </tr>
 <tr class="even">
 <td align="center">becomes</td>
 </tr>
 <tr class="odd">
-<td align="center"><span class="math">\(MP = \{\mathrm{5, 3, 7, 1, 9}\}\)</span></td>
+<td align="center"><span class="math inline">\(MP = \{\mathrm{5, 3, 7, 1, 9}\}\)</span></td>
 </tr>
 </tbody>
 </table>
-<p>. Notice how even though <span class="math">\(AP\)</span> has a sequence of <em>increasing</em> terms, <span class="math">\(MP\)</span>'s terms are not increasing in the same manner. We will revisit this case below when simplifying the categories of behavior for <span class="math">\(MP\)</span>.</p>
-<h2>Mutation When <span class="math">\(m\)</span> is Odd</h2>
-<p>This is where things get interesting. If <span class="math">\(m\)</span> is odd, then <span class="math">\(AP\)</span> becomes a <em>series of alternating even and odd numbers</em>. Whether <span class="math">\(AP\)</span> begins with an even or odd number depends, naturally, on the parity of <span class="math">\(A_0\)</span>. The more general observation we can make is that, given the fact that we have alternating even and odd numbers in <span class="math">\(AP\)</span>, <span class="math">\(MP\)</span> will be populated with &quot;originally odd&quot; and &quot;fake odd&quot; (mutated) terms. Let's call these mutated terms <span class="math">\(O_F\)</span>. So if <span class="math">\(m\)</span> is odd, then we get either</p>
+<p>. Notice how even though <span class="math inline">\(AP\)</span> has a sequence of <em>increasing</em> terms, <span class="math inline">\(MP\)</span>’s terms are not increasing in the same manner. We will revisit this case below when simplifying the categories of behavior for <span class="math inline">\(MP\)</span>.</p>
+<h2>Mutation When <span class="math inline">\(m\)</span> is Odd</h2>
+<p>This is where things get interesting. If <span class="math inline">\(m\)</span> is odd, then <span class="math inline">\(AP\)</span> becomes a <em>series of alternating even and odd numbers</em>. Whether <span class="math inline">\(AP\)</span> begins with an even or odd number depends, naturally, on the parity of <span class="math inline">\(A_0\)</span>. The more general observation we can make is that, given the fact that we have alternating even and odd numbers in <span class="math inline">\(AP\)</span>, <span class="math inline">\(MP\)</span> will be populated with “originally odd” and “fake odd” (mutated) terms. Let’s call these mutated terms <span class="math inline">\(O_F\)</span>. So if <span class="math inline">\(m\)</span> is odd, then we get either</p>
 <table>
 <tbody>
 <tr class="odd">
-<td align="center"><span class="math">\(AP = \{\mathrm{O, E, O, E}\}, MP = \{\mathrm{O, O_F, O, O_F}\}\)</span></td>
+<td align="center"><span class="math inline">\(AP = \{\mathrm{O, E, O, E}\}, MP = \{\mathrm{O, O_F, O, O_F}\}\)</span></td>
 </tr>
 <tr class="even">
 <td align="center">or</td>
 </tr>
 <tr class="odd">
-<td align="center"><span class="math">\(AP = \{\mathrm{E, O, E, O}\}, MP = \{\mathrm{O_F, O, O_F, O}\}\)</span></td>
+<td align="center"><span class="math inline">\(AP = \{\mathrm{E, O, E, O}\}, MP = \{\mathrm{O_F, O, O_F, O}\}\)</span></td>
 </tr>
 </tbody>
 </table>
 <p>.</p>
-<h1>A Summary of the Behavior of the Mutation Function <span class="math">\(M()\)</span></h1>
-<p>We've exhausted the universe of all possible arithmetic sequences, and how they would mutate after applying <span class="math">\(M()\)</span>. We know exactly how <span class="math">\(M()\)</span> behaves in all edge cases! Let us now simplify the various cases to two general cases.</p>
-<h2>There is nothing to &quot;unmutate&quot; as <span class="math">\(MP\)</span> is already the same as the answer <span class="math">\(AP\)</span></h2>
-<p>This can happen in two ways. The easiest way is if <span class="math">\(m = 0\)</span>, where all terms in <span class="math">\(MP\)</span> are the same and there is nothing to calculate (<span class="math">\(M()\)</span> will ensure that this case always results in the same repeating odd number). The other way is if <span class="math">\(m\)</span> is even, and <span class="math">\(A_0\)</span> is odd --- resulting in an &quot;unmutatable&quot; sequence such that <span class="math">\(M(AP) = AP\)</span>. E.g. (where <span class="math">\(m = 10\)</span> and <span class="math">\(A_0 = 11\)</span>),</p>
+<h1>A Summary of the Behavior of the Mutation Function <span class="math inline">\(M()\)</span></h1>
+<p>We’ve exhausted the universe of all possible arithmetic sequences, and how they would mutate after applying <span class="math inline">\(M()\)</span>. We know exactly how <span class="math inline">\(M()\)</span> behaves in all edge cases! Let us now simplify the various cases to two general cases.</p>
+<h2>There is nothing to “unmutate” as <span class="math inline">\(MP\)</span> is already the same as the answer <span class="math inline">\(AP\)</span></h2>
+<p>This can happen in two ways. The easiest way is if <span class="math inline">\(m = 0\)</span>, where all terms in <span class="math inline">\(MP\)</span> are the same and there is nothing to calculate (<span class="math inline">\(M()\)</span> will ensure that this case always results in the same repeating odd number). The other way is if <span class="math inline">\(m\)</span> is even, and <span class="math inline">\(A_0\)</span> is odd — resulting in an “unmutatable” sequence such that <span class="math inline">\(M(AP) = AP\)</span>. E.g. (where <span class="math inline">\(m = 10\)</span> and <span class="math inline">\(A_0 = 11\)</span>),</p>
 <table>
 <tbody>
 <tr class="odd">
-<td align="center"><span class="math">\(AP = \{\mathrm{11, 21, 31, 41, 51}\}\)</span></td>
+<td align="center"><span class="math inline">\(AP = \{\mathrm{11, 21, 31, 41, 51}\}\)</span></td>
 </tr>
 <tr class="even">
 <td align="center">becomes</td>
 </tr>
 <tr class="odd">
-<td align="center"><span class="math">\(MP = \{\mathrm{11, 21, 31, 41, 51}\}\)</span></td>
+<td align="center"><span class="math inline">\(MP = \{\mathrm{11, 21, 31, 41, 51}\}\)</span></td>
 </tr>
 </tbody>
 </table>
 <p>.</p>
-<h2>The terms in <span class="math">\(AP\)</span> alternate between even and odd</h2>
-<p>This covers the case when <span class="math">\(m\)</span> is odd. If <span class="math">\(m\)</span> is odd, then regardless of the parity of <span class="math">\(A_0\)</span>, we get an alternating sequence of even and odd numbers. The import thing to keep in mind here is that the even numbers will mutate after <span class="math">\(\mathrm{M()}\)</span> is applied, while the odd numbers will stay as-is as &quot;originals&quot;.</p>
-<h1>How to Design <span class="math">\(U()\)</span></h1>
-<p>Let's think back to what our mutation function <span class="math">\(M()\)</span> does: it simply mutates an even number to an odd number by repeatedly dividing it by 2. If the number if odd to begin with, then there is nothing to mutate; essentially, <em>original</em> odd numbers act as immutable beacons of truth --- they do not have to change form when returning to their <span class="math">\(AP\)</span> form! Our task in designing an &quot;unmutate&quot; function <span class="math">\(U()\)</span> is to preserve the &quot;honest&quot; odd numbers while converting the mutated, &quot;fake&quot; odd numbers back to their evenness, to get back the original progression <span class="math">\(AP\)</span> (or at least something close to it if there are multiple such <span class="math">\(AP\)</span>s out there.</p>
-<p>You can now see where our extensive parity breakdown of the possible <span class="math">\(MP\)</span> can come in handy --- we know in what patterns the honest odd numbers show themselves in <em>any</em> <span class="math">\(MP\)</span>. Let's rewrite the table of all possibilities, with this analogy of &quot;honest&quot; and &quot;fake&quot; (<span class="math">\(O_F\)</span>) odd numbers after the mutation.</p>
+<h2>The terms in <span class="math inline">\(AP\)</span> alternate between even and odd</h2>
+<p>This covers the case when <span class="math inline">\(m\)</span> is odd. If <span class="math inline">\(m\)</span> is odd, then regardless of the parity of <span class="math inline">\(A_0\)</span>, we get an alternating sequence of even and odd numbers. The import thing to keep in mind here is that the even numbers will mutate after <span class="math inline">\(\mathrm{M()}\)</span> is applied, while the odd numbers will stay as-is as “originals”.</p>
+<h1>How to Design <span class="math inline">\(U()\)</span></h1>
+<p>Let’s think back to what our mutation function <span class="math inline">\(M()\)</span> does: it simply mutates an even number to an odd number by repeatedly dividing it by 2. If the number if odd to begin with, then there is nothing to mutate; essentially, <em>original</em> odd numbers act as immutable beacons of truth — they do not have to change form when returning to their <span class="math inline">\(AP\)</span> form! Our task in designing an “unmutate” function <span class="math inline">\(U()\)</span> is to preserve the “honest” odd numbers while converting the mutated, “fake” odd numbers back to their evenness, to get back the original progression <span class="math inline">\(AP\)</span> (or at least something close to it if there are multiple such <span class="math inline">\(AP\)</span>s out there.</p>
+<p>You can now see where our extensive parity breakdown of the possible <span class="math inline">\(MP\)</span> can come in handy — we know in what patterns the honest odd numbers show themselves in <em>any</em> <span class="math inline">\(MP\)</span>. Let’s rewrite the table of all possibilities, with this analogy of “honest” and “fake” (<span class="math inline">\(O_F\)</span>) odd numbers after the mutation.</p>
 <table>
 <thead>
 <tr class="header">
 <th align="center"></th>
-<th align="center"><span class="math">\(m\)</span></th>
-<th align="center"><span class="math">\(A_0\)</span></th>
-<th align="center"><span class="math">\(AP\)</span></th>
-<th align="center"><span class="math">\(MP\)</span></th>
+<th align="center"><span class="math inline">\(m\)</span></th>
+<th align="center"><span class="math inline">\(A_0\)</span></th>
+<th align="center"><span class="math inline">\(AP\)</span></th>
+<th align="center"><span class="math inline">\(MP\)</span></th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td align="center">1</td>
-<td align="center"><span class="math">\(0\)</span></td>
-<td align="center"><span class="math">\(\mathrm{O}\)</span></td>
-<td align="center"><span class="math">\(\{\mathrm{O, O, O, O, \cdots{}}\}\)</span></td>
-<td align="center"><span class="math">\(\{\mathrm{O, O, O, O, \cdots{}}\}\)</span></td>
+<td align="center"><span class="math inline">\(0\)</span></td>
+<td align="center"><span class="math inline">\(\mathrm{O}\)</span></td>
+<td align="center"><span class="math inline">\(\{\mathrm{O, O, O, O, \cdots{}}\}\)</span></td>
+<td align="center"><span class="math inline">\(\{\mathrm{O, O, O, O, \cdots{}}\}\)</span></td>
 </tr>
 <tr class="even">
 <td align="center">2</td>
-<td align="center"><span class="math">\(0\)</span></td>
-<td align="center"><span class="math">\(\mathrm{E}\)</span></td>
-<td align="center"><span class="math">\(\{\mathrm{E, E, E, E, \cdots{}}\}\)</span></td>
-<td align="center"><span class="math">\(\{\mathrm{O, O, O, O, \cdots{}}\}\)</span></td>
+<td align="center"><span class="math inline">\(0\)</span></td>
+<td align="center"><span class="math inline">\(\mathrm{E}\)</span></td>
+<td align="center"><span class="math inline">\(\{\mathrm{E, E, E, E, \cdots{}}\}\)</span></td>
+<td align="center"><span class="math inline">\(\{\mathrm{O, O, O, O, \cdots{}}\}\)</span></td>
 </tr>
 <tr class="odd">
 <td align="center">3</td>
-<td align="center"><span class="math">\(\mathrm{E}\)</span></td>
-<td align="center"><span class="math">\(\mathrm{O}\)</span></td>
-<td align="center"><span class="math">\(\{\mathrm{O, O, O, O, \cdots{}}\}\)</span></td>
-<td align="center"><span class="math">\(\{\mathrm{O, O, O, O, \cdots{}}\}\)</span></td>
+<td align="center"><span class="math inline">\(\mathrm{E}\)</span></td>
+<td align="center"><span class="math inline">\(\mathrm{O}\)</span></td>
+<td align="center"><span class="math inline">\(\{\mathrm{O, O, O, O, \cdots{}}\}\)</span></td>
+<td align="center"><span class="math inline">\(\{\mathrm{O, O, O, O, \cdots{}}\}\)</span></td>
 </tr>
 <tr class="even">
 <td align="center">4</td>
-<td align="center"><span class="math">\(\mathrm{E}\)</span></td>
-<td align="center"><span class="math">\(\mathrm{E}\)</span></td>
-<td align="center"><span class="math">\(\{\mathrm{E, E, E, E, \cdots{}}\}\)</span></td>
-<td align="center"><span class="math">\(?\)</span></td>
+<td align="center"><span class="math inline">\(\mathrm{E}\)</span></td>
+<td align="center"><span class="math inline">\(\mathrm{E}\)</span></td>
+<td align="center"><span class="math inline">\(\{\mathrm{E, E, E, E, \cdots{}}\}\)</span></td>
+<td align="center"><span class="math inline">\(?\)</span></td>
 </tr>
 <tr class="odd">
 <td align="center">5</td>
-<td align="center"><span class="math">\(\mathrm{O}\)</span></td>
-<td align="center"><span class="math">\(\mathrm{O}\)</span></td>
-<td align="center"><span class="math">\(\{\mathrm{O, E, O, E, \cdots{}}\}\)</span></td>
-<td align="center"><span class="math">\(\{\mathrm{O, O_F, O, O_F, \cdots{}}\}\)</span></td>
+<td align="center"><span class="math inline">\(\mathrm{O}\)</span></td>
+<td align="center"><span class="math inline">\(\mathrm{O}\)</span></td>
+<td align="center"><span class="math inline">\(\{\mathrm{O, E, O, E, \cdots{}}\}\)</span></td>
+<td align="center"><span class="math inline">\(\{\mathrm{O, O_F, O, O_F, \cdots{}}\}\)</span></td>
 </tr>
 <tr class="even">
 <td align="center">6</td>
-<td align="center"><span class="math">\(\mathrm{O}\)</span></td>
-<td align="center"><span class="math">\(\mathrm{E}\)</span></td>
-<td align="center"><span class="math">\(\{\mathrm{E, O, E, O, \cdots{}}\}\)</span></td>
-<td align="center"><span class="math">\(\{\mathrm{O_F, O, O_F, O, \cdots{}}\}\)</span></td>
+<td align="center"><span class="math inline">\(\mathrm{O}\)</span></td>
+<td align="center"><span class="math inline">\(\mathrm{E}\)</span></td>
+<td align="center"><span class="math inline">\(\{\mathrm{E, O, E, O, \cdots{}}\}\)</span></td>
+<td align="center"><span class="math inline">\(\{\mathrm{O_F, O, O_F, O, \cdots{}}\}\)</span></td>
 </tr>
 </tbody>
 </table>
-<p>As you can see, the two dominating patterns are either the all-odd (and honest!) numbers (first 3 rows) or the alternating honest or fake odd numbers. But what about the case where <span class="math">\(m\)</span> is a nonzero even value and <span class="math">\(A_0\)</span> is even as well (row 4)? In the universe of all possible even numbers of <span class="math">\(m\)</span> and <span class="math">\(A_0\)</span>, how can we know for a fact that the mutation to <span class="math">\(MP\)</span> will fall into a neat pattern?</p>
-<h1>When both <span class="math">\(m\)</span> and <span class="math">\(A_0\)</span> are even</h1>
-<p>The short answer is, we can prove that all such sequences will mutate to the familiar <span class="math">\(\{\mathrm{O, O, O, O, \cdots{}}\}\)</span>, <span class="math">\(\{\mathrm{O, O_F, O, O_F, \cdots{}}\}\)</span>, or <span class="math">\(\{\mathrm{O_F, O, O_F, O, \cdots{}}\}\)</span> pattern shown in the table above. The long answer is that it helps to think of linear equations, and to see the possible ways in which we can <em>grow</em> the <span class="math">\(AP\)</span> progression from <span class="math">\(m\)</span> and <span class="math">\(A_0\)</span>.</p>
-<p>If you paid attention in high school algebra class, you will probably remember the formula <span class="math">\(y = mx + b\)</span> to describe a straight line (except the vertical line!) in the cartesian coordinate system (in the <span class="math">\(x\)</span> and <span class="math">\(y\)</span> axes). We can use the <strong>same</strong> equation to describe the growth behavior of an arithmetic sequence! And for that, we use the following translation:</p>
+<p>As you can see, the two dominating patterns are either the all-odd (and honest!) numbers (first 3 rows) or the alternating honest or fake odd numbers. But what about the case where <span class="math inline">\(m\)</span> is a nonzero even value and <span class="math inline">\(A_0\)</span> is even as well (row 4)? In the universe of all possible even numbers of <span class="math inline">\(m\)</span> and <span class="math inline">\(A_0\)</span>, how can we know for a fact that the mutation to <span class="math inline">\(MP\)</span> will fall into a neat pattern?</p>
+<h1>When both <span class="math inline">\(m\)</span> and <span class="math inline">\(A_0\)</span> are even</h1>
+<p>The short answer is, we can prove that all such sequences will mutate to the familiar <span class="math inline">\(\{\mathrm{O, O, O, O, \cdots{}}\}\)</span>, <span class="math inline">\(\{\mathrm{O, O_F, O, O_F, \cdots{}}\}\)</span>, or <span class="math inline">\(\{\mathrm{O_F, O, O_F, O, \cdots{}}\}\)</span> pattern shown in the table above. The long answer is that it helps to think of linear equations, and to see the possible ways in which we can <em>grow</em> the <span class="math inline">\(AP\)</span> progression from <span class="math inline">\(m\)</span> and <span class="math inline">\(A_0\)</span>.</p>
+<p>If you paid attention in high school algebra class, you will probably remember the formula <span class="math inline">\(y = mx + b\)</span> to describe a straight line (except the vertical line!) in the cartesian coordinate system (in the <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> axes). We can use the <strong>same</strong> equation to describe the growth behavior of an arithmetic sequence! And for that, we use the following translation:</p>
 <table>
 <tbody>
 <tr class="odd">
-<td align="center"><span class="math">\(y = mx + b\)</span></td>
+<td align="center"><span class="math inline">\(y = mx + b\)</span></td>
 </tr>
 <tr class="even">
 <td align="center">becomes</td>
 </tr>
 <tr class="odd">
-<td align="center"><span class="math">\(A_n = mn + A_0\)</span></td>
+<td align="center"><span class="math inline">\(A_n = mn + A_0\)</span></td>
 </tr>
 </tbody>
 </table>
-<p>, where <span class="math">\(A_n\)</span> is the n-th term to be calculated in <span class="math">\(AP\)</span>. Luckily, we've used the same letter <span class="math">\(m\)</span> in both contexts --- it describes the rate of change in one, and the distance between each term in the other. Let's simplify the equation with a concern to parity only.</p>
-<p>First, let's rewrite the equation as follows:</p>
+<p>, where <span class="math inline">\(A_n\)</span> is the n-th term to be calculated in <span class="math inline">\(AP\)</span>. Luckily, we’ve used the same letter <span class="math inline">\(m\)</span> in both contexts — it describes the rate of change in one, and the distance between each term in the other. Let’s simplify the equation with a concern to parity only.</p>
+<p>First, let’s rewrite the equation as follows:</p>
 <table>
 <tbody>
 <tr class="odd">
-<td align="center"><span class="math">\(A_n = \mathrm{E\cdot{}}n + \mathrm{E}\)</span></td>
+<td align="center"><span class="math inline">\(A_n = \mathrm{E\cdot{}}n + \mathrm{E}\)</span></td>
 </tr>
 <tr class="even">
 <td align="center">or</td>
 </tr>
 <tr class="odd">
-<td align="center"><span class="math">\(A_n = \mathrm{E_m}\cdot{}n + \mathrm{E_{A0}}\)</span></td>
+<td align="center"><span class="math inline">\(A_n = \mathrm{E_m}\cdot{}n + \mathrm{E_{A0}}\)</span></td>
 </tr>
 </tbody>
 </table>
-<p>. The <span class="math">\(\mathrm{E}\)</span> here represents that this number is an even number, with the subscript denoting whether it is <span class="math">\(m\)</span> (<span class="math">\(\mathrm{E_m}\)</span>) or the first term in the sequence (<span class="math">\(\mathrm{E_{A0}}\)</span>). If we use this equation to map out the first 4 elements of <span class="math">\(AP\)</span>, we get the following:</p>
+<p>. The <span class="math inline">\(\mathrm{E}\)</span> here represents that this number is an even number, with the subscript denoting whether it is <span class="math inline">\(m\)</span> (<span class="math inline">\(\mathrm{E_m}\)</span>) or the first term in the sequence (<span class="math inline">\(\mathrm{E_{A0}}\)</span>). If we use this equation to map out the first 4 elements of <span class="math inline">\(AP\)</span>, we get the following:</p>
 <table>
 <tbody>
 <tr class="odd">
-<td align="center"><span class="math">\(A_0 = \mathrm{E_m\cdot{}0 + E_{A0}}\)</span></td>
+<td align="center"><span class="math inline">\(A_0 = \mathrm{E_m\cdot{}0 + E_{A0}}\)</span></td>
 </tr>
 <tr class="even">
-<td align="center"><span class="math">\(A_1 = \mathrm{E_m\cdot{}1 + E_{A0}}\)</span></td>
+<td align="center"><span class="math inline">\(A_1 = \mathrm{E_m\cdot{}1 + E_{A0}}\)</span></td>
 </tr>
 <tr class="odd">
-<td align="center"><span class="math">\(A_2 = \mathrm{E_m\cdot{}2 + E_{A0}}\)</span></td>
+<td align="center"><span class="math inline">\(A_2 = \mathrm{E_m\cdot{}2 + E_{A0}}\)</span></td>
 </tr>
 <tr class="even">
-<td align="center"><span class="math">\(A_3 = \mathrm{E_m\cdot{}3 + E_{A0}}\)</span></td>
+<td align="center"><span class="math inline">\(A_3 = \mathrm{E_m\cdot{}3 + E_{A0}}\)</span></td>
 </tr>
 </tbody>
 </table>
-<p>. It should be noted that both <span class="math">\(\mathrm{E_m}\)</span> and <span class="math">\(\mathrm{E_{A0}}\)</span> remain the <strong>same</strong> throughout the entire sequence <span class="math">\(AP\)</span>. The only thing that changes is <span class="math">\(n\)</span>, which always increments by <span class="math">\(1\)</span>, starting from <span class="math">\(0\)</span>.</p>
-<p>And now we're faced with a problem. Ideally, we'd like to get rid of all those even terms in our formula --- they don't help us out at all! This is where we use the concept of <em>scaling</em>. There are two scaling rules: (1) if you multiply all terms of an arithmetic progression by some nonzero integer <span class="math">\(k\)</span>, <em>the new progression remains arithmetic</em>; (2) the same is true if you divide all terms by <span class="math">\(k\)</span>.</p>
+<p>. It should be noted that both <span class="math inline">\(\mathrm{E_m}\)</span> and <span class="math inline">\(\mathrm{E_{A0}}\)</span> remain the <strong>same</strong> throughout the entire sequence <span class="math inline">\(AP\)</span>. The only thing that changes is <span class="math inline">\(n\)</span>, which always increments by <span class="math inline">\(1\)</span>, starting from <span class="math inline">\(0\)</span>.</p>
+<p>And now we’re faced with a problem. Ideally, we’d like to get rid of all those even terms in our formula — they don’t help us out at all! This is where we use the concept of <em>scaling</em>. There are two scaling rules: (1) if you multiply all terms of an arithmetic progression by some nonzero integer <span class="math inline">\(k\)</span>, <em>the new progression remains arithmetic</em>; (2) the same is true if you divide all terms by <span class="math inline">\(k\)</span>.</p>
 <p>The first scaling rule works because</p>
 <table>
 <tbody>
 <tr class="odd">
-<td align="center"><span class="math">\(A_n = \mathrm{E_m\cdot{}}n + \mathrm{E_{A0}}\)</span></td>
+<td align="center"><span class="math inline">\(A_n = \mathrm{E_m\cdot{}}n + \mathrm{E_{A0}}\)</span></td>
 </tr>
 <tr class="even">
 <td align="center">becomes</td>
 </tr>
 <tr class="odd">
-<td align="center"><span class="math">\(A_n\cdot{}k = (\mathrm{E_m\cdot{}}n + \mathrm{E_{A0}})\cdot{}k\)</span></td>
+<td align="center"><span class="math inline">\(A_n\cdot{}k = (\mathrm{E_m\cdot{}}n + \mathrm{E_{A0}})\cdot{}k\)</span></td>
 </tr>
 <tr class="even">
 <td align="center">becomes</td>
 </tr>
 <tr class="odd">
-<td align="center"><span class="math">\(A_n\cdot{}k = (\mathrm{E_m}\cdot{}{k})\cdot{}n + \mathrm{E_{A0}}\cdot{}k\)</span></td>
+<td align="center"><span class="math inline">\(A_n\cdot{}k = (\mathrm{E_m}\cdot{}{k})\cdot{}n + \mathrm{E_{A0}}\cdot{}k\)</span></td>
 </tr>
 </tbody>
 </table>
-<p>, where the terms <span class="math">\(\mathrm{E_{A0}}\cdot{}k\)</span> and <span class="math">\(\mathrm{E_m}\cdot{}k\)</span> both remain as constants --- we are still dealing with a <a href="http://en.wikipedia.org/wiki/Degree_of_a_polynomial">degree 1 polynomial</a> (linear expression). Apart from increasing the first term <span class="math">\(\mathrm{A_0}\)</span> by <span class="math">\(k\)</span>, all we did was increase the gap between each term by a factor of <span class="math">\(k\)</span>. Likewise, if you <em>divide</em> all terms of an arithmetic progression by some nonzero integer <span class="math">\(k\)</span>, the new progression still remains arithmetic, because what you are doing is</p>
+<p>, where the terms <span class="math inline">\(\mathrm{E_{A0}}\cdot{}k\)</span> and <span class="math inline">\(\mathrm{E_m}\cdot{}k\)</span> both remain as constants — we are still dealing with a <a href="http://en.wikipedia.org/wiki/Degree_of_a_polynomial">degree 1 polynomial</a> (linear expression). Apart from increasing the first term <span class="math inline">\(\mathrm{A_0}\)</span> by <span class="math inline">\(k\)</span>, all we did was increase the gap between each term by a factor of <span class="math inline">\(k\)</span>. Likewise, if you <em>divide</em> all terms of an arithmetic progression by some nonzero integer <span class="math inline">\(k\)</span>, the new progression still remains arithmetic, because what you are doing is</p>
 <table>
 <tbody>
 <tr class="odd">
-<td align="center"><span class="math">\(A_n = \mathrm{E_m\cdot{}}n + \mathrm{E_{A0}}\)</span></td>
+<td align="center"><span class="math inline">\(A_n = \mathrm{E_m\cdot{}}n + \mathrm{E_{A0}}\)</span></td>
 </tr>
 <tr class="even">
 <td align="center">becomes</td>
 </tr>
 <tr class="odd">
-<td align="center"><span class="math">\(\frac{A_n}{k} = \frac{\mathrm{E_m\cdot{}}n + \mathrm{E_{A0}}}{k}\)</span></td>
+<td align="center"><span class="math inline">\(\frac{A_n}{k} = \frac{\mathrm{E_m\cdot{}}n + \mathrm{E_{A0}}}{k}\)</span></td>
 </tr>
 <tr class="even">
 <td align="center">becomes</td>
 </tr>
 <tr class="odd">
-<td align="center"><span class="math">\(\frac{A_n}{k} = \frac{\mathrm{E_m}}{k}\cdot{}n + \frac{\mathrm{E_{A0}}}{k}\)</span></td>
+<td align="center"><span class="math inline">\(\frac{A_n}{k} = \frac{\mathrm{E_m}}{k}\cdot{}n + \frac{\mathrm{E_{A0}}}{k}\)</span></td>
 </tr>
 </tbody>
 </table>
-<p>. Division is simply multiplication by the inverse, so the same reasoning as for the first scaling rule applies here as well. By the way, we don't have to worry about what <span class="math">\(A_n\cdot{}k\)</span> or <span class="math">\(\frac{A_n}{k}\)</span> would look like --- we are merely concerned with how <em>parity</em> behaves, and for that we rely on the right hand side of the equation.</p>
-<p>Going back to our problem, recall that we want to ultimately output some arithmetic progression that <em>could</em> have resulted in the given mutated list <span class="math">\(MP\)</span>. This is what scaling gives us --- it gives us the leeway that we need to stay within our original problem domain while changing around the parity of <span class="math">\(A_n\)</span> with <span class="math">\(k\)</span>.</p>
-<p>Let us scale the entire progression by <span class="math">\(k = \frac{1}{2}\)</span>. That is, let us repeatedly divide <span class="math">\(\mathrm{E_m}\)</span> and <span class="math">\(\mathrm{E_{A0}}\)</span> by 2, until one or both of them become odd. When either one becomes odd, we stop scaling and reuse the parity laws we discussed above to draw deeper conclusions. Which variable, <span class="math">\(\mathrm{E_m}\)</span> or <span class="math">\(\mathrm{E_{A0}}\)</span>, has more 2's in it (as prime factors)? Which term is more <em>even</em> than the other?</p>
-<p>There are three possible scenarios when we scale (let's call it <span class="math">\(\mathrm{S()}\)</span>) by <span class="math">\(\frac{1}{2}\)</span> <strong>repeatedly</strong> as described above: (1) <span class="math">\(\mathrm{E_{A0}}\)</span> becomes odd first, (2) <span class="math">\(\mathrm{E_m}\)</span> becomes odd first, or (3) both become equally odd. If we write these three scenarios into a table, we get the following:</p>
+<p>. Division is simply multiplication by the inverse, so the same reasoning as for the first scaling rule applies here as well. By the way, we don’t have to worry about what <span class="math inline">\(A_n\cdot{}k\)</span> or <span class="math inline">\(\frac{A_n}{k}\)</span> would look like — we are merely concerned with how <em>parity</em> behaves, and for that we rely on the right hand side of the equation.</p>
+<p>Going back to our problem, recall that we want to ultimately output some arithmetic progression that <em>could</em> have resulted in the given mutated list <span class="math inline">\(MP\)</span>. This is what scaling gives us — it gives us the leeway that we need to stay within our original problem domain while changing around the parity of <span class="math inline">\(A_n\)</span> with <span class="math inline">\(k\)</span>.</p>
+<p>Let us scale the entire progression by <span class="math inline">\(k = \frac{1}{2}\)</span>. That is, let us repeatedly divide <span class="math inline">\(\mathrm{E_m}\)</span> and <span class="math inline">\(\mathrm{E_{A0}}\)</span> by 2, until one or both of them become odd. When either one becomes odd, we stop scaling and reuse the parity laws we discussed above to draw deeper conclusions. Which variable, <span class="math inline">\(\mathrm{E_m}\)</span> or <span class="math inline">\(\mathrm{E_{A0}}\)</span>, has more 2’s in it (as prime factors)? Which term is more <em>even</em> than the other?</p>
+<p>There are three possible scenarios when we scale (let’s call it <span class="math inline">\(\mathrm{S()}\)</span>) by <span class="math inline">\(\frac{1}{2}\)</span> <strong>repeatedly</strong> as described above: (1) <span class="math inline">\(\mathrm{E_{A0}}\)</span> becomes odd first, (2) <span class="math inline">\(\mathrm{E_m}\)</span> becomes odd first, or (3) both become equally odd. If we write these three scenarios into a table, we get the following:</p>
 <table>
 <thead>
 <tr class="header">
 <th align="center"></th>
-<th align="center">Scaled by <span class="math">\(\frac{1}{2}\)</span> repeatedly</th>
-<th align="center">Parity of Scaled <span class="math">\(AP\)</span></th>
-<th align="center">Parity of Scaled <span class="math">\(MP\)</span></th>
+<th align="center">Scaled by <span class="math inline">\(\frac{1}{2}\)</span> repeatedly</th>
+<th align="center">Parity of Scaled <span class="math inline">\(AP\)</span></th>
+<th align="center">Parity of Scaled <span class="math inline">\(MP\)</span></th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td align="center">1</td>
-<td align="center"><span class="math">\(\mathrm{S(E_m\cdot{}}n + \mathrm{E_{A0}}) = \mathrm{E\cdot{}}n + \mathrm{O}\)</span></td>
-<td align="center"><span class="math">\(\{\mathrm{O, O, O, O, \cdots{}}\}\)</span></td>
-<td align="center"><span class="math">\(\{\mathrm{O, O, O, O, \cdots{}}\}\)</span></td>
+<td align="center"><span class="math inline">\(\mathrm{S(E_m\cdot{}}n + \mathrm{E_{A0}}) = \mathrm{E\cdot{}}n + \mathrm{O}\)</span></td>
+<td align="center"><span class="math inline">\(\{\mathrm{O, O, O, O, \cdots{}}\}\)</span></td>
+<td align="center"><span class="math inline">\(\{\mathrm{O, O, O, O, \cdots{}}\}\)</span></td>
 </tr>
 <tr class="even">
 <td align="center">2</td>
-<td align="center"><span class="math">\(\mathrm{S(E_m\cdot{}}n + \mathrm{E_{A0}}) = \mathrm{O\cdot{}}n + \mathrm{E}\)</span></td>
-<td align="center"><span class="math">\(\{\mathrm{E, O, E, O, \cdots{}}\}\)</span></td>
-<td align="center"><span class="math">\(\{\mathrm{O_F, O, O_F, O, \cdots{}}\}\)</span></td>
+<td align="center"><span class="math inline">\(\mathrm{S(E_m\cdot{}}n + \mathrm{E_{A0}}) = \mathrm{O\cdot{}}n + \mathrm{E}\)</span></td>
+<td align="center"><span class="math inline">\(\{\mathrm{E, O, E, O, \cdots{}}\}\)</span></td>
+<td align="center"><span class="math inline">\(\{\mathrm{O_F, O, O_F, O, \cdots{}}\}\)</span></td>
 </tr>
 <tr class="odd">
 <td align="center">3</td>
-<td align="center"><span class="math">\(\mathrm{S(E_m\cdot{}}n + \mathrm{E_{A0}}) = \mathrm{O\cdot{}}n + \mathrm{O}\)</span></td>
-<td align="center"><span class="math">\(\{\mathrm{O, E, O, E, \cdots{}}\}\)</span></td>
-<td align="center"><span class="math">\(\{\mathrm{O, O_F, O, O_F, \cdots{}}\}\)</span></td>
+<td align="center"><span class="math inline">\(\mathrm{S(E_m\cdot{}}n + \mathrm{E_{A0}}) = \mathrm{O\cdot{}}n + \mathrm{O}\)</span></td>
+<td align="center"><span class="math inline">\(\{\mathrm{O, E, O, E, \cdots{}}\}\)</span></td>
+<td align="center"><span class="math inline">\(\{\mathrm{O, O_F, O, O_F, \cdots{}}\}\)</span></td>
 </tr>
 </tbody>
 </table>
-<p>. The parity of each scaled <span class="math">\(AP\)</span> is calculated by simply replacing <span class="math">\(n\)</span> with 0, 1, 2, etc. and relying on our three parity laws from the beginning of this post. If you want to lessen your load of mental arithmetic, we can simplify the parity expressions further. If we reword the additive parity laws with multiplication in mind (which is simply addition repeated many times over), we can derive two more parity laws:</p>
+<p>. The parity of each scaled <span class="math inline">\(AP\)</span> is calculated by simply replacing <span class="math inline">\(n\)</span> with 0, 1, 2, etc. and relying on our three parity laws from the beginning of this post. If you want to lessen your load of mental arithmetic, we can simplify the parity expressions further. If we reword the additive parity laws with multiplication in mind (which is simply addition repeated many times over), we can derive two more parity laws:</p>
 <ol>
-<li><span class="math">\(\mathrm{E\cdot{}}n = \mathrm{E}\)</span>, regardless of <span class="math">\(n\)</span>, and</li>
-<li><span class="math">\(\mathrm{O\cdot{}}n = \mathrm{P}_n\)</span> --- i.e., the parity of <span class="math">\(\mathrm{O\cdot{}}n\)</span> is the same as the parity of <span class="math">\(n\)</span> itself</li>
+<li><span class="math inline">\(\mathrm{E\cdot{}}n = \mathrm{E}\)</span>, regardless of <span class="math inline">\(n\)</span>, and</li>
+<li><span class="math inline">\(\mathrm{O\cdot{}}n = \mathrm{P}_n\)</span> — i.e., the parity of <span class="math inline">\(\mathrm{O\cdot{}}n\)</span> is the same as the parity of <span class="math inline">\(n\)</span> itself</li>
 </ol>
 <p>. Going back to our table above, we can simplify the scaled expressions further:</p>
 <ol>
-<li><span class="math">\(\mathrm{E + O} = \mathrm{O}\)</span>, because adding by an even number preserves the parity of <span class="math">\(\mathrm{O}\)</span>.</li>
-<li><span class="math">\(\mathrm{P}_n + \mathrm{E} = \mathrm{P}_n\)</span>, because adding by an even number preserves the parity of <span class="math">\(\mathrm{P}_n\)</span>.</li>
-<li><span class="math">\(\mathrm{P}_n + \mathrm{O} = \neg{}\mathrm{P}_n\)</span>, because adding by an odd number flips the parity of <span class="math">\(\mathrm{P}_n\)</span></li>
+<li><span class="math inline">\(\mathrm{E + O} = \mathrm{O}\)</span>, because adding by an even number preserves the parity of <span class="math inline">\(\mathrm{O}\)</span>.</li>
+<li><span class="math inline">\(\mathrm{P}_n + \mathrm{E} = \mathrm{P}_n\)</span>, because adding by an even number preserves the parity of <span class="math inline">\(\mathrm{P}_n\)</span>.</li>
+<li><span class="math inline">\(\mathrm{P}_n + \mathrm{O} = \neg{}\mathrm{P}_n\)</span>, because adding by an odd number flips the parity of <span class="math inline">\(\mathrm{P}_n\)</span></li>
 </ol>
 <p>.</p>
-<p>And now we can finally say that when both <span class="math">\(m\)</span> and <span class="math">\(A_0\)</span> are even, the parity of terms in in <span class="math">\(AP\)</span> can be either all odd or alternating between even and odd! I.e., if both <span class="math">\(m = \mathrm{E}\)</span> and <span class="math">\(A_0 = \mathrm{E}\)</span>, then <span class="math">\(M(AP) = \{\mathrm{O, O, O, O, \cdots{}}\}\)</span>, <span class="math">\(\{\mathrm{O, O_F, O, O_F, \cdots{}}\}\)</span>, or <span class="math">\(\{\mathrm{O_F, O, O_F, O, \cdots{}}\}\)</span>!</p>
-<h1>Back to Designing <span class="math">\(U()\)</span></h1>
-<p>Through our discussion up to this point, we've established that the universe of all possible <span class="math">\(MP\)</span>'s fall under three parity patterns: all honest odd (<span class="math">\(\mathrm{O}\)</span>) terms, or alternating between &quot;honest&quot; odd (<span class="math">\(\mathrm{O}\)</span>) and &quot;fake&quot; odd (<span class="math">\(\mathrm{O_F}\)</span>) terms. There are actually four patterns because the all-honest-odd-terms pattern can be broken down into two cases: (1) all terms are the same odd number (<span class="math">\(m = 0\)</span>), or (2) the terms are the same as those in <span class="math">\(AP\)</span> (i.e., <span class="math">\(AP\)</span> was all odd terms to begin with, so there was no actual mutation involved by applying <span class="math">\(M()\)</span>).</p>
-<p>So, we can finally start sketching out the design for our &quot;unmutate&quot; function <span class="math">\(U()\)</span>.</p>
+<p>And now we can finally say that when both <span class="math inline">\(m\)</span> and <span class="math inline">\(A_0\)</span> are even, the parity of terms in in <span class="math inline">\(AP\)</span> can be either all odd or alternating between even and odd! I.e., if both <span class="math inline">\(m = \mathrm{E}\)</span> and <span class="math inline">\(A_0 = \mathrm{E}\)</span>, then <span class="math inline">\(M(AP) = \{\mathrm{O, O, O, O, \cdots{}}\}\)</span>, <span class="math inline">\(\{\mathrm{O, O_F, O, O_F, \cdots{}}\}\)</span>, or <span class="math inline">\(\{\mathrm{O_F, O, O_F, O, \cdots{}}\}\)</span>!</p>
+<h1>Back to Designing <span class="math inline">\(U()\)</span></h1>
+<p>Through our discussion up to this point, we’ve established that the universe of all possible <span class="math inline">\(MP\)</span>’s fall under three parity patterns: all honest odd (<span class="math inline">\(\mathrm{O}\)</span>) terms, or alternating between “honest” odd (<span class="math inline">\(\mathrm{O}\)</span>) and “fake” odd (<span class="math inline">\(\mathrm{O_F}\)</span>) terms. There are actually four patterns because the all-honest-odd-terms pattern can be broken down into two cases: (1) all terms are the same odd number (<span class="math inline">\(m = 0\)</span>), or (2) the terms are the same as those in <span class="math inline">\(AP\)</span> (i.e., <span class="math inline">\(AP\)</span> was all odd terms to begin with, so there was no actual mutation involved by applying <span class="math inline">\(M()\)</span>).</p>
+<p>So, we can finally start sketching out the design for our “unmutate” function <span class="math inline">\(U()\)</span>.</p>
 <div class="code-and-raw">
 <div class="sourceCode" input="code/toy/srm485-afraid-of-even/pseudocode.txt"><table class="sourceCode numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
@@ -465,8 +538,8 @@ end</code></pre></td></tr></table></div>
 <a  class="raw"  href= "/code/toy/srm485-afraid-of-even/pseudocode.txt"  mimetype=text/plain > pseudocode.txt </a>
 </div>
 </div>
-<p>The interesting point is in line 18; thanks to our math work, we can even declare that a given mutated sequence was somehow either tampered with, or that the original sequence was not an arithmetic progression! We can make these assertions because we've exhausted all possible cases of arithmetic sequences and their mutations --- and if things don't fit the way we expect them to, then the only conclusion is that the given sequence <span class="math">\(MP\)</span> was not a byproduct of mutating an <em>arithmetic sequence</em>, but some other kind of sequence. Behold the power of math!</p>
-<p>The other thing is that in line 34 we allow <span class="math">\(0\)</span> as a possible value in <span class="math">\(AP\)</span>. This means that after a mutation, we might still have an even number (<span class="math">\(0\)</span>) in <span class="math">\(MP\)</span>! Although this sounds like it would break all of the mathematic discussion we've had so far, it does not --- the proof is in the Haskell code below. The short answer is that a <span class="math">\(0\)</span> is harmless because it shares the same quality --- immutability --- with all other originally odd terms in <span class="math">\(AP\)</span>; thus, treating it as an &quot;odd&quot; number does not change our logic.</p>
+<p>The interesting point is in line 18; thanks to our math work, we can even declare that a given mutated sequence was somehow either tampered with, or that the original sequence was not an arithmetic progression! We can make these assertions because we’ve exhausted all possible cases of arithmetic sequences and their mutations — and if things don’t fit the way we expect them to, then the only conclusion is that the given sequence <span class="math inline">\(MP\)</span> was not a byproduct of mutating an <em>arithmetic sequence</em>, but some other kind of sequence. Behold the power of math!</p>
+<p>The other thing is that in line 34 we allow <span class="math inline">\(0\)</span> as a possible value in <span class="math inline">\(AP\)</span>. This means that after a mutation, we might still have an even number (<span class="math inline">\(0\)</span>) in <span class="math inline">\(MP\)</span>! Although this sounds like it would break all of the mathematic discussion we’ve had so far, it does not — the proof is in the Haskell code below. The short answer is that a <span class="math inline">\(0\)</span> is harmless because it shares the same quality — immutability — with all other originally odd terms in <span class="math inline">\(AP\)</span>; thus, treating it as an “odd” number does not change our logic.</p>
 <h1>Haskell version</h1>
 <div class="code-and-raw">
 <div class="sourceCode" input="code/toy/srm485-afraid-of-even/Unmutate.hs"><table class="sourceCode numberLines haskell"><tr class="sourceCode"><td class="lineNumbers"><pre>1
@@ -770,7 +843,7 @@ unitTests <span class="fu">=</span> testGroup <span class="st">&quot;Unit tests&
 <a  class="raw"  href= "/code/toy/srm485-afraid-of-even/test-unmutate.hs"  mimetype=text/plain > test-unmutate.hs </a>
 </div>
 </div>
-<p>As you can see, most of the real work involves identifying the <strong>original, immutable numbers</strong> we can work with as-is (<span class="math">\(\mathrm{O}\)</span>) (as opposed to the ones we have to ignore (<span class="math">\(\mathrm{O_F}\)</span>)) to construct our tentative sister arithmetic progression <span class="math">\(BP\)</span>.</p>
+<p>As you can see, most of the real work involves identifying the <strong>original, immutable numbers</strong> we can work with as-is (<span class="math inline">\(\mathrm{O}\)</span>) (as opposed to the ones we have to ignore (<span class="math inline">\(\mathrm{O_F}\)</span>)) to construct our tentative sister arithmetic progression <span class="math inline">\(BP\)</span>.</p>
 <h1>Ruby version</h1>
 <div class="code-and-raw">
 <div class="sourceCode" input="code/toy/srm485-afraid-of-even/unmutate.rb"><table class="sourceCode numberLines ruby"><tr class="sourceCode"><td class="lineNumbers"><pre>1
@@ -2178,7 +2251,7 @@ eût = 0.11% (130 occurrences)</code></pre>
 			<span class="kw">return</span> r % bound;
 	}
 }</code></pre></td></tr></table></div>
-<p>. If <code>bound</code> is 5, then the function will return a uniform range from 0 to 4. I.e., the return value <code>r</code> is such that <span class="math">\(0 \leq r &lt; bound\)</span>.</p>
+<p>. If <code>bound</code> is 5, then the function will return a uniform range from 0 to 4. I.e., the return value <code>r</code> is such that <span class="math inline">\(0 \leq r &lt; bound\)</span>.</p>
 <h2 id="explanation-of-the-pcg-version">Explanation of the PCG Version</h2>
 <p>Although I generally prefer to explain code in the order they appear, top to bottom, for this case I would like to explain the <code>pcg32_boundedrand_r()</code> function by talking about the usual broken version found in the wild.</p>
 <h3 id="broken-version">Broken Version</h3>
@@ -2189,15 +2262,15 @@ return r % bound;</code></pre>
 <pre><code>0 1 2 3 4 5 6 7 8 9 10 11</code></pre>
 <p>. So, <code>some_rng()</code> has 12 possible unique values, 0 through 11. If our bound was <code>4</code>, then doing <code>r % bound</code> is perfectly fine, because we can chop the RNG range into three equal parts of length 4 each, like this:</p>
 <pre><code>0 1 2 3 | 4 5 6 7 | 8 9 10 11</code></pre>
-<p>. If each of the 12 values 0 through 11 occurs uniformly<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a>, then we can assume that each of the values occurs <span class="math">\(\frac{1}{12}\)</span> times. If we apply <code>% 4</code> to the values, then our output range looks like this:</p>
+<p>. If each of the 12 values 0 through 11 occurs uniformly<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a>, then we can assume that each of the values occurs <span class="math inline">\(\frac{1}{12}\)</span> times. If we apply <code>% 4</code> to the values, then our output range looks like this:</p>
 <pre><code>0 1 2 3 | 0 1 2 3 | 0 1 2 3</code></pre>
-<p>. Can you see how the three subparts are the same? What’s more, 0 will occur <span class="math">\(\frac{3}{12} = \frac{1}{4}\)</span> times. The same goes for <code>1</code>, <code>2</code>, and <code>3</code>. Because all 4 possible values, 0 through 4, occur an equal <span class="math">\(\frac{1}{4}\)</span> times, there is <em>no modulo bias here</em>!</p>
+<p>. Can you see how the three subparts are the same? What’s more, 0 will occur <span class="math inline">\(\frac{3}{12} = \frac{1}{4}\)</span> times. The same goes for <code>1</code>, <code>2</code>, and <code>3</code>. Because all 4 possible values, 0 through 4, occur an equal <span class="math inline">\(\frac{1}{4}\)</span> times, there is <em>no modulo bias here</em>!</p>
 <h4 id="what-if-the-modulus-is-not-a-nice-number-with-respect-to-rand_max">What if the modulus is not a nice number with respect to <code>RAND_MAX</code>?</h4>
 <p>This is where the problem occurs. <code>RAND_MAX</code> is the highest value returned by our RNG, and thus defines the range of the possible values output by the RNG.<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> Continuing with our example above, if instead of <code>bound = 4</code>, we used another value like 5, we will get this instead:</p>
 <pre><code>0 1 2 3 4 | 5 6 7 8 9 | 10 11</code></pre>
 <p>— or essentially, these values are output if we just naively use <code>r % bound</code>:</p>
 <pre><code>0 1 2 3 4 | 0 1 2 3 4 | 0 1</code></pre>
-<p>. Can you see how <code>0</code> and <code>1</code> will occur <span class="math">\(\frac{3}{12}\)</span> times, but <code>2</code>, <code>3</code>, and <code>4</code> will occur only <span class="math">\(\frac{2}{12}\)</span> times?</p>
+<p>. Can you see how <code>0</code> and <code>1</code> will occur <span class="math inline">\(\frac{3}{12}\)</span> times, but <code>2</code>, <code>3</code>, and <code>4</code> will occur only <span class="math inline">\(\frac{2}{12}\)</span> times?</p>
 <h4 id="the-fix-adjust-the-range">The fix — adjust the range!</h4>
 <p>Now, we can fix the above example by simply throwing out certain values. The approach I used in the <a href="2013-07-12-generating-random-numbers-without-modulo-bias.html">old blog post</a> was to discard the right hand side values. So, in our example with <code>bound = 5</code>, where we have</p>
 <pre><code>0 1 2 3 4 | 0 1 2 3 4 | 0 1</code></pre>
@@ -2319,7 +2392,7 @@ R R R R R | _ _ R R R | R R
 <hr />
 <ol>
 <li id="fn1"><p>Any RNG worth their salt will return a uniformly distributed value, typically from 0 to <code>RAND_MAX</code>. In the example here, our <code>RAND_MAX</code> is 11.<a href="#fnref1">↩</a></p></li>
-<li id="fn2"><p>For a 32-bit unsigned integer RNG, <span class="math">\(2^{32} - 1\)</span> (all 1 bits set) is the highest value that can be returned. That is, our RNG returns a value from 0 (no bits set) to <code>RAND_MAX</code> (all bits set). This means that our RNG generates everything from all 0s to all 1s and everything in between.<a href="#fnref2">↩</a></p></li>
+<li id="fn2"><p>For a 32-bit unsigned integer RNG, <span class="math inline">\(2^{32} - 1\)</span> (all 1 bits set) is the highest value that can be returned. That is, our RNG returns a value from 0 (no bits set) to <code>RAND_MAX</code> (all bits set). This means that our RNG generates everything from all 0s to all 1s and everything in between.<a href="#fnref2">↩</a></p></li>
 </ol>
 </div>
 ]]></summary>
@@ -2449,7 +2522,7 @@ Ok, modules loaded: Main.
 <p>.</p>
 <p>Anyway, I will explain the behavior of the code. The first thing to notice is that we feed into <code>step</code> the <em>reversed</em> list of <code>buttonHist</code>, so that we examine the button press history, from newest to oldest. So we look at the just-pressed-button, then the one before that, and the one before, etc, backwards up the history.</p>
 <p>As we look at each <code>button</code>, we use it to filter out all known sequences. This filtering is done in <code>remaining</code>, where we check the last button of every known sequence, and see if that matches the current button. That’s what the line <code>filter ((==button) . last . fst)</code> does; the sister line <code>filter (not . null . fst) dbRem</code> is just there to prevent calling <code>last</code> on an empty list.</p>
-<p>After we’re done checking, we modify the entire sequence database <code>db</code>, such that we only care about the first <span class="math">\(N - 1\)</span> buttons in the sequence. This way, on the next iteration, we can rest assured that checking against the “last” button in a sequence is not always the same button. In subsequent runs of <code>step</code>, we have <code>dbRem</code>‘s sequences slowly get reduced down to nothing as we keep chopping off all sequences’ last button. Keep in mind that we feed the filtered, matching entries of <code>db</code> back into subsequent runs of <code>step</code>, so that effectively we’re only working with matching sequences. Once we reach down to no buttons, we label these named sequences as <code>entriesComplete</code>, and append it into <code>foundSoFar</code>.</p>
+<p>After we’re done checking, we modify the entire sequence database <code>db</code>, such that we only care about the first <span class="math inline">\(N - 1\)</span> buttons in the sequence. This way, on the next iteration, we can rest assured that checking against the “last” button in a sequence is not always the same button. In subsequent runs of <code>step</code>, we have <code>dbRem</code>‘s sequences slowly get reduced down to nothing as we keep chopping off all sequences’ last button. Keep in mind that we feed the filtered, matching entries of <code>db</code> back into subsequent runs of <code>step</code>, so that effectively we’re only working with matching sequences. Once we reach down to no buttons, we label these named sequences as <code>entriesComplete</code>, and append it into <code>foundSoFar</code>.</p>
 <h3 id="analysis">Analysis</h3>
 <p>Obviously, this code has many problems. First, it is virtually unreadable. Readability is important, and the code feels very counter-intuitive — it is marvelously complex when the problem statement sounds so simple.</p>
 <p>Second, the fact that we have to bring in and mutate <code>dbRem</code>, which is a copy of the original given <code>ButtonSeqDB</code> type, seems wasteful. We’re wasting a lot of CPU cycles here.</p>
@@ -2847,7 +2920,7 @@ unitTests <span class="fu">=</span> testGroup <span class="st">&quot;Unit tests&
 ,               [&quot;right&quot;, &quot;left&quot;]
 ,                        [&quot;left&quot;]
 ]</code></pre>
-<p>(spaces added for readability). What we do is reduce the initial input list into all of the “sublist” combinations of <span class="math">\(N\)</span> buttons, <span class="math">\(N - 1\)</span> buttons, <span class="math">\(N - 2\)</span> buttons, etc.</p>
+<p>(spaces added for readability). What we do is reduce the initial input list into all of the “sublist” combinations of <span class="math inline">\(N\)</span> buttons, <span class="math inline">\(N - 1\)</span> buttons, <span class="math inline">\(N - 2\)</span> buttons, etc.</p>
 <p>The next step is to simply look at each sublist with <code>concatMap</code>, calling <code>extractNames</code>; we treat each sublist as a key, and look for it in our <code>db</code> hash. We then simply concatenate the results.</p>
 <p>The <code>onButtons2</code> is an alternate version which uses <code>mapMaybe</code> to reduce it down to just two lines of code.</p>
 <h2 id="conclusion">Conclusion</h2>
@@ -2994,7 +3067,7 @@ alias nix=&#39;. /home/l/.nix-profile/etc/profile.d/nix.sh&#39;</code></pre>
 <p>You can skip this section if you want — I merely want to write how I first met and fell in love with the concept of <em>binary subdivision</em>. I first discovered binary division when I was in high school. It was a very pleasant realization, and at the time I did not fully realize what I had accidentally encountered.</p>
 <p>The situation was so: my Biology teacher, Mr. Kennedy, told everyone to draw an even 4x4 square grid on the palms of our hands. Everyone was supposed to draw their own 4x4 grid — but this was when I asked myself, “how can I draw the most even-looking grid without using a ruler?” You see, I could not use a ruler because I was using my right hand to draw onto my left hand — and to hold a ruler properly I would need a third hand! So there was the problem.</p>
 <p>On the one hand, I could not simply draw the four horizontal and four vertical lines one after the other, left to right, top to bottom, because I knew that I would introduce a great deal of additive error.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> I did not want to draw an ugly, lopsided square.</p>
-<p>It took me a few seconds, but I came up with a plan. I first drew a single large square. Then knowing that I could easily eyeball with good accuracy where the <em>middle point of that square</em> was horizontally, I drew a vertical line down the <em>middle</em>. I then did the same thing in the other axis vertically. I repeated this procedure a few more times, <em>recursively subdividing</em> each smaller rectangular shape into halves, finally ending up with a nice-looking grid. I glanced around the room, and later looked at other students’ palms to see if they had discovered this “divide by <span class="math">\(\frac{1}{2}\)</span>” trick, but to my dismay no one had done it; I knew this was the case because everybody else’s square was sloppy.</p>
+<p>It took me a few seconds, but I came up with a plan. I first drew a single large square. Then knowing that I could easily eyeball with good accuracy where the <em>middle point of that square</em> was horizontally, I drew a vertical line down the <em>middle</em>. I then did the same thing in the other axis vertically. I repeated this procedure a few more times, <em>recursively subdividing</em> each smaller rectangular shape into halves, finally ending up with a nice-looking grid. I glanced around the room, and later looked at other students’ palms to see if they had discovered this “divide by <span class="math inline">\(\frac{1}{2}\)</span>” trick, but to my dismay no one had done it; I knew this was the case because everybody else’s square was sloppy.</p>
 <p>I cannot honestly say if this was the very first time I realized the underlying geometric concepts at play here, but I can affirmatively say that it really was the first time I systematically applied such an elegant solution to a given problem. I wonder if most people who draw grids even bother to think of it as a problem.</p>
 <p>To me, binary subdivision is the underpinning principle behind binary search. Continued subdvision by halves is like exponentiation in reverse; pretty soon, you end up with extremely tiny numbers. This is where the power of binary search comes from! Simply put, binary search is like binary subdivision, but you get to subdivide <em>toward</em> the location of whatever you’re looking for. Isn’t that cool?</p>
 <h2 id="the-problem">The Problem</h2>
@@ -3005,7 +3078,7 @@ alias nix=&#39;. /home/l/.nix-profile/etc/profile.d/nix.sh&#39;</code></pre>
 <p>If you wanted to get a little more clever to avoid this problem of searching all 1 trillion items, you could tell the algorithm to refuse to enter the <strong>for</strong>-loop if <code>key</code> lies outside the <em>bounds</em> of <code>KEYS</code>. Checking the bounds is easy and takes constant time, as you merely check for the first and last item’s size (again, as <code>KEYS</code> is sorted), and those are your bounds. This way, if <code>key</code> lies outside the bounds, you can <em>guarantee</em> that it is not in <code>KEYS</code>, no matter how many items <code>KEYS</code> has.</p>
 <p>And, this is it. There is nothing more to optimize using this method (let’s not get into parallelization). What else can you do, really, when searching linearly, looping through every item from the beginning to the next?</p>
 <h2 id="inverted-bounds-checking-aka-binary-search">Inverted Bounds-Checking, aka Binary Search</h2>
-<p>The heading of this subsection might have already given you a hint as to what binary search entails. (Although, if you’ve read the <em>Binary Subdivision</em> section, you should have had a good idea anyhow.) Binary search takes the concept of bounds-checking, and applies it repeatedly, recursively, against <code>KEYS</code>. The only difference when I say “bounds-checking” in the context of binary search is that we do <em>not</em> care about the values of those bounds, but merely that they <em>are</em> the bounds. This is because we only concern ourselves with dividing the list of sorted numbers by <span class="math">\(\frac{1}{2}\)</span> every time and take the <em>middle</em> index <code>middle_index</code>, which is located as close as possible to the middle element (halfway between the two bounds). Indeed, the only way to get a valid <code>middle_index</code> value is if we know the bounds (the size of the list). We keep doing this recursively until <code>KEYS[mid] == key</code>.</p>
+<p>The heading of this subsection might have already given you a hint as to what binary search entails. (Although, if you’ve read the <em>Binary Subdivision</em> section, you should have had a good idea anyhow.) Binary search takes the concept of bounds-checking, and applies it repeatedly, recursively, against <code>KEYS</code>. The only difference when I say “bounds-checking” in the context of binary search is that we do <em>not</em> care about the values of those bounds, but merely that they <em>are</em> the bounds. This is because we only concern ourselves with dividing the list of sorted numbers by <span class="math inline">\(\frac{1}{2}\)</span> every time and take the <em>middle</em> index <code>middle_index</code>, which is located as close as possible to the middle element (halfway between the two bounds). Indeed, the only way to get a valid <code>middle_index</code> value is if we know the bounds (the size of the list). We keep doing this recursively until <code>KEYS[mid] == key</code>.</p>
 <p>The following is the pseudocode.</p>
 <div class="code-and-raw">
 <div class="sourceCode" input="code/toy/binary-search-pseudo-0.txt"><table class="sourceCode numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
@@ -3094,8 +3167,8 @@ binary_search(KEYS, key, first_index, last_index):
 </div>
 <p>There are some obvious differences — mainly the fact that we concern ourselves primarily with the first and last index numbers of the list, and work with these indices instead of working with the entire list <code>KEYS</code> itself. The <code>get_below()</code> and <code>get_above()</code> functions are gone and have been replaced with the index bounds <code>first_index, middle_index</code> and <code>middle_index + 1, last_index</code>, respectively. As you can see, working with these index numbers directly avoids a lot of abstraction. Actually, the <code>list_size</code> abstraction can be further reduced in terms of indices, so that <code>list_size == 0</code> can be rewritten as <code>first_index &gt; last_index</code>.<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a></p>
 <h2 id="theoretical-performance">Theoretical Performance</h2>
-<p>You can probably see why binary search is so powerful. It repeatedly divides the search region into <span class="math">\(\frac{1}{2}\)</span> of its original size. It’s sort of like <a href="http://en.wikipedia.org/wiki/Zeno%27s_paradoxes">Zeno’s Dichotomy Paradox</a>, except that it uses the “absurdity” of Zeno’s argument, and uses that to its advantage. To me, these somewhat related, even tangential, connections make binary search that much more elegant.</p>
-<p>Consider this: a list that has 100,000 elements will only take, in the worst case, around 16 calls. Compare that to linear search, which will take at most 100,000 calls or iterations (if our item happens to be at the very last index).<a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a> The time complexity of binary search for a list of <span class="math">\(\mathit{KEYS\_TOTAL}\)</span> elements is defined to be <span class="math">\(\lfloor\log_2\mathit{KEYS\_TOTAL}\rfloor\)</span>. Because this defines an exponential relationship, we can rest assured that we can <em>cut down</em> a very large list quickly.<a href="#fn5" class="footnoteRef" id="fnref5"><sup>5</sup></a></p>
+<p>You can probably see why binary search is so powerful. It repeatedly divides the search region into <span class="math inline">\(\frac{1}{2}\)</span> of its original size. It’s sort of like <a href="http://en.wikipedia.org/wiki/Zeno%27s_paradoxes">Zeno’s Dichotomy Paradox</a>, except that it uses the “absurdity” of Zeno’s argument, and uses that to its advantage. To me, these somewhat related, even tangential, connections make binary search that much more elegant.</p>
+<p>Consider this: a list that has 100,000 elements will only take, in the worst case, around 16 calls. Compare that to linear search, which will take at most 100,000 calls or iterations (if our item happens to be at the very last index).<a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a> The time complexity of binary search for a list of <span class="math inline">\(\mathit{KEYS\_TOTAL}\)</span> elements is defined to be <span class="math inline">\(\lfloor\log_2\mathit{KEYS\_TOTAL}\rfloor\)</span>. Because this defines an exponential relationship, we can rest assured that we can <em>cut down</em> a very large list quickly.<a href="#fn5" class="footnoteRef" id="fnref5"><sup>5</sup></a></p>
 <h2 id="naive-implementations">Naive Implementations</h2>
 <h3 id="preliminary-details">Preliminary Details</h3>
 <p>I said at the beginning of the post that I would show a naive implementation in C, Ruby, and Haskell. I could have simply written a <code>binary_search()</code> function (and only that function) for all three languages — but instead I chose to write full standalone programs for all three that print out the same results. Because they are all standalone programs, you can easily tweak some settings (namely, the <code>KEYS_TOTAL</code> value), and see how it scales.<a href="#fn6" class="footnoteRef" id="fnref6"><sup>6</sup></a> All versions use the new <a href="http://www.pcg-random.org">PCG family</a> of pseudorandom number generators (RNGs), which have been created by Prof. Melissa E. O’Neill, author of the great paper <em>The Genuine Sieve of Eratosthenes</em>.<a href="#fn7" class="footnoteRef" id="fnref7"><sup>7</sup></a></p>
@@ -4054,7 +4127,7 @@ main <span class="fu">=</span> <span class="kw">do</span>
 <p>Conceptually, the problem is very simple. Consider the infinite set <code>N</code>, which includes all natural numbers, starting from <code>0</code>. Then obviously, we can start with <code>N</code> itself, and remove every number in <code>N</code> that is also present in <code>T</code>. Then, when we are done (<code>T</code> is empty), we can look at <code>N</code> and retrieve the lowest number.</p>
 <h3 id="sorting">Sorting</h3>
 <p>Intuitively, we are really only interested in the first consecutive group of cars parked next to each other. Essentially, what you do is walk along from the very first parking space, <code>0</code>, and see if it is occupied. If it is occupied, you move on to the next space — if it is not occupied, you can stop because you found your answer!</p>
-<p>There is no way to solve the problem without first sorting <code>T</code>.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> You can solve the problem without sorting only in the edge case where <code>T</code>’s lowest number is greater than <code>0</code> — i.e., if the car most closely parked to the entrance is not on <code>0</code>, then you do not need to bother sorting <code>T</code>, because the answer is simply <code>0</code>. And, finding the lowest number in a given set is always a <span class="math">\(O(n)\)</span> operation because you need to loop through the entire set just once, keeping track of the lowest number found.</p>
+<p>There is no way to solve the problem without first sorting <code>T</code>.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> You can solve the problem without sorting only in the edge case where <code>T</code>’s lowest number is greater than <code>0</code> — i.e., if the car most closely parked to the entrance is not on <code>0</code>, then you do not need to bother sorting <code>T</code>, because the answer is simply <code>0</code>. And, finding the lowest number in a given set is always a <span class="math inline">\(O(n)\)</span> operation because you need to loop through the entire set just once, keeping track of the lowest number found.</p>
 <p>In the more common case (as seen in real life), the parking space closest to the driver (the most desirable parking space) is already taken; and what’s more, the group of spaces closest to the driver is already taken. In this case, we have to proceed from space <code>0</code>, and incrementally observe every subsequent space, until we arrive at an empty parking space. The insight here is that we are treating the multitude of consecutively parked cars as one giant car parked across multiple spaces, and are just trying to find the total number of spaces this car occupies.</p>
 <h2 id="ruby">Ruby</h2>
 <p>I think it is time for some actual code. While I could explain how the Ruby version works, I feel that I have already expounded upon the problem enough above, so that the code here should make intuitive sense.</p>
@@ -4204,7 +4277,7 @@ getParkingSpaces t
 <div class="footnotes">
 <hr />
 <ol>
-<li id="fn1"><p>You can, for example, loop from <code>0</code> to infinity and then see if this number exists in <code>T</code> — but this is probably the worst way to solve the problem, at least from a computational perspective. E.g., if it takes <span class="math">\(O(n)\)</span> to search through <code>T</code> to see if some integer <code>i</code> exists in it, then this algorithm has <span class="math">\(O(n^2)\)</span> complexity because you need to run the search for every single integer in <code>T</code>.<a href="#fnref1">↩</a></p></li>
+<li id="fn1"><p>You can, for example, loop from <code>0</code> to infinity and then see if this number exists in <code>T</code> — but this is probably the worst way to solve the problem, at least from a computational perspective. E.g., if it takes <span class="math inline">\(O(n)\)</span> to search through <code>T</code> to see if some integer <code>i</code> exists in it, then this algorithm has <span class="math inline">\(O(n^2)\)</span> complexity because you need to run the search for every single integer in <code>T</code>.<a href="#fnref1">↩</a></p></li>
 <li id="fn2"><p>A closely related operation is <a href="http://en.wikipedia.org/wiki/Two&#39;s_complement">two’s complement</a> arithmetic. You can read about it from the <a href="http://en.wikipedia.org/wiki/Find_first_set">“Find first set”</a> article on Wikipedia.<a href="#fnref2">↩</a></p></li>
 <li id="fn3"><p>No, I did not get the job. But I did get a free lesson in interviewing over Skype. And I also had a very pleasant conversation about sparse bitsets, and this alone made the whole thing worthwhile.<a href="#fnref3">↩</a></p></li>
 </ol>
@@ -4377,7 +4450,7 @@ evalTerms <span class="fu">=</span> foldl modifyStack []
 </div>
 <p>Probably the first thing to note is that we define a robust data type, <code>Term</code>, to encapsulate the values held in a given RPN string. We take advantage of Haskell’s functions-as-first-class-values ability, and define the <code>TermOp</code> constructor with it (i.e., it needs an arithmetic function <code>(Integer -&gt; Integer -&gt; Integer)</code> as an argument).</p>
 <p>The next thing to notice is that the <code>evaluate</code> function is composed of smaller helper functions, <code>mkTerm</code> and <code>evalTerms</code>. <code>mkTerm</code> simply converts a <code>String</code> type into an appropriate <code>Term</code> type. <code>evalTerms</code> takes a list of <code>Term</code> values, and reduces it as much as possible by applying the <code>modifyStack</code> function over it with <code>foldl</code> (Haskell’s version of a single-pass loop).</p>
-<p>When <code>modifyStack</code> encounters a <code>TermInt</code>, it pushes the number into the stack. When it encounters a <code>TermOp</code>, it applies that operator to the first 2 items in <code>stack</code>, and pushes this result back into <code>stack</code>. We use pattern matching with <code>(a:b:_)</code> to pull out the <code>a</code> and <code>b</code> values from the stack — the expression <code>(a:b:_)</code> means a value that matches either <span class="math">\([x_1, x_2]\)</span>, or <span class="math">\([x_1, x_2, ... , x_n]\)</span>, because the <code>_</code> operator matches anything, including the empty list <code>[]</code> used to finalize list creation. The <code>drop 2 stack</code> is necessary because Haskell’s types by default are immutable.</p>
+<p>When <code>modifyStack</code> encounters a <code>TermInt</code>, it pushes the number into the stack. When it encounters a <code>TermOp</code>, it applies that operator to the first 2 items in <code>stack</code>, and pushes this result back into <code>stack</code>. We use pattern matching with <code>(a:b:_)</code> to pull out the <code>a</code> and <code>b</code> values from the stack — the expression <code>(a:b:_)</code> means a value that matches either <span class="math inline">\([x_1, x_2]\)</span>, or <span class="math inline">\([x_1, x_2, ... , x_n]\)</span>, because the <code>_</code> operator matches anything, including the empty list <code>[]</code> used to finalize list creation. The <code>drop 2 stack</code> is necessary because Haskell’s types by default are immutable.</p>
 <h2 id="thoughts">Thoughts</h2>
 <p>I much prefer the Haskell version.</p>
 <p>The separation of concerns is a big win — we can easily create helper functions like <code>mkTerm</code> and <code>evalTerms</code> because of Haskell’s purity<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a>. Haskell embraces the use of algebraic data types (i.e., <code>Term</code> here), and perhaps this preference lends itself to the use of helper functions that convert things from one type to another. Ruby does not have types, at least in the sense of Haskell types, so to artificially create such concepts and to implement them would be difficult.<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> I mean, I really want to write equivalent <code>mkTerm</code> and <code>evalTerms</code> methods in Ruby, but my beginner skills prevent me from doing it in a simple, straightforward way. I know enough about coding to abandon “solutions” that require circuitous, complex design.</p>
@@ -4388,37 +4461,6 @@ evalTerms <span class="fu">=</span> foldl modifyStack []
 <ol>
 <li id="fn1"><p>Haskell’s <em>purity</em> is a term of art. Look it up!<a href="#fnref1">↩</a></p></li>
 <li id="fn2"><p>The closest thing to Haskell types in Ruby, in my mind, are Ruby objects. Certainly, Ruby knows the difference between two objects belonging to different classes, but to do that here would make the code much longer and offer little benefit.<a href="#fnref2">↩</a></p></li>
-</ol>
-</div>
-]]></summary>
-</entry>
-<entry>
-    <title>Find Lines with 80+ Columns in Multiple Files</title>
-    <link href="http://listx.github.io/post/2014-08-11-find-files-with-80%2B-columns.html" />
-    <id>http://listx.github.io/post/2014-08-11-find-files-with-80%2B-columns.html</id>
-    <published>2014-08-11T00:00:00Z</published>
-    <updated>2014-08-11T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="info center">
-	<code class="date">2014-08-11</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2014-08-11-find-files-with-80+-columns.md" title="History">*</a>
-	<br>
-	<a href="/tag/linux.html">linux</a>, <a href="/tag/programming.html">programming</a>
-</div>
-
-<p>It’s nice to follow the 80-columns-per-line rule<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a>, but what if you have some lingering project that has yet to conform?</p>
-<p>Just go to that project’s sources directory and do</p>
-<div class="code-and-raw">
-<div class="sourceCode" input="code/find-80-cols.sh"><table class="sourceCode numberLines bash"><tr class="sourceCode"><td class="lineNumbers"><pre>1
-</pre></td><td class="sourceCode"><pre><code class="sourceCode bash"><span class="kw">find</span> . -type f -exec sh -c <span class="st">&quot;expand -t 8 {} | grep -n </span><span class="dt">\&quot;</span><span class="st">.\{81\}</span><span class="dt">\&quot;</span><span class="st">&quot;</span> <span class="dt">\;</span> -print</code></pre></td></tr></table></div>
-<div class="raw-link">
-<a  class="raw"  href= "/code/find-80-cols.sh"  mimetype=text/plain > find-80-cols.sh </a>
-</div>
-</div>
-<p>.</p>
-<p>The call to <code>expand</code> is necessary because different people use different widths for tabs. That is, we are trying to find files with 80+ <em>columns</em> (as they appear to humans), not 80+ <em>characters</em> (as they appear to the computer).</p>
-<div class="footnotes">
-<hr />
-<ol>
-<li id="fn1"><p>See the <a href="https://www.kernel.org/doc/Documentation/CodingStyle">Linux Kernel Coding Style</a>, “Chapter 2: Breaking long lines and strings”.<a href="#fnref1">↩</a></p></li>
 </ol>
 </div>
 ]]></summary>

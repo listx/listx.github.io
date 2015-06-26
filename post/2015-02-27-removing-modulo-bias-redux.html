@@ -54,7 +54,7 @@
 			<span class="kw">return</span> r % bound;
 	}
 }</code></pre></td></tr></table></div>
-<p>. If <code>bound</code> is 5, then the function will return a uniform range from 0 to 4. I.e., the return value <code>r</code> is such that <span class="math">\(0 \leq r &lt; bound\)</span>.</p>
+<p>. If <code>bound</code> is 5, then the function will return a uniform range from 0 to 4. I.e., the return value <code>r</code> is such that <span class="math inline">\(0 \leq r &lt; bound\)</span>.</p>
 <h2 id="explanation-of-the-pcg-version">Explanation of the PCG Version</h2>
 <p>Although I generally prefer to explain code in the order they appear, top to bottom, for this case I would like to explain the <code>pcg32_boundedrand_r()</code> function by talking about the usual broken version found in the wild.</p>
 <h3 id="broken-version">Broken Version</h3>
@@ -65,15 +65,15 @@ return r % bound;</code></pre>
 <pre><code>0 1 2 3 4 5 6 7 8 9 10 11</code></pre>
 <p>. So, <code>some_rng()</code> has 12 possible unique values, 0 through 11. If our bound was <code>4</code>, then doing <code>r % bound</code> is perfectly fine, because we can chop the RNG range into three equal parts of length 4 each, like this:</p>
 <pre><code>0 1 2 3 | 4 5 6 7 | 8 9 10 11</code></pre>
-<p>. If each of the 12 values 0 through 11 occurs uniformly<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a>, then we can assume that each of the values occurs <span class="math">\(\frac{1}{12}\)</span> times. If we apply <code>% 4</code> to the values, then our output range looks like this:</p>
+<p>. If each of the 12 values 0 through 11 occurs uniformly<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a>, then we can assume that each of the values occurs <span class="math inline">\(\frac{1}{12}\)</span> times. If we apply <code>% 4</code> to the values, then our output range looks like this:</p>
 <pre><code>0 1 2 3 | 0 1 2 3 | 0 1 2 3</code></pre>
-<p>. Can you see how the three subparts are the same? What’s more, 0 will occur <span class="math">\(\frac{3}{12} = \frac{1}{4}\)</span> times. The same goes for <code>1</code>, <code>2</code>, and <code>3</code>. Because all 4 possible values, 0 through 4, occur an equal <span class="math">\(\frac{1}{4}\)</span> times, there is <em>no modulo bias here</em>!</p>
+<p>. Can you see how the three subparts are the same? What’s more, 0 will occur <span class="math inline">\(\frac{3}{12} = \frac{1}{4}\)</span> times. The same goes for <code>1</code>, <code>2</code>, and <code>3</code>. Because all 4 possible values, 0 through 4, occur an equal <span class="math inline">\(\frac{1}{4}\)</span> times, there is <em>no modulo bias here</em>!</p>
 <h4 id="what-if-the-modulus-is-not-a-nice-number-with-respect-to-rand_max">What if the modulus is not a nice number with respect to <code>RAND_MAX</code>?</h4>
 <p>This is where the problem occurs. <code>RAND_MAX</code> is the highest value returned by our RNG, and thus defines the range of the possible values output by the RNG.<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> Continuing with our example above, if instead of <code>bound = 4</code>, we used another value like 5, we will get this instead:</p>
 <pre><code>0 1 2 3 4 | 5 6 7 8 9 | 10 11</code></pre>
 <p>— or essentially, these values are output if we just naively use <code>r % bound</code>:</p>
 <pre><code>0 1 2 3 4 | 0 1 2 3 4 | 0 1</code></pre>
-<p>. Can you see how <code>0</code> and <code>1</code> will occur <span class="math">\(\frac{3}{12}\)</span> times, but <code>2</code>, <code>3</code>, and <code>4</code> will occur only <span class="math">\(\frac{2}{12}\)</span> times?</p>
+<p>. Can you see how <code>0</code> and <code>1</code> will occur <span class="math inline">\(\frac{3}{12}\)</span> times, but <code>2</code>, <code>3</code>, and <code>4</code> will occur only <span class="math inline">\(\frac{2}{12}\)</span> times?</p>
 <h4 id="the-fix-adjust-the-range">The fix — adjust the range!</h4>
 <p>Now, we can fix the above example by simply throwing out certain values. The approach I used in the <a href="2013-07-12-generating-random-numbers-without-modulo-bias.html">old blog post</a> was to discard the right hand side values. So, in our example with <code>bound = 5</code>, where we have</p>
 <pre><code>0 1 2 3 4 | 0 1 2 3 4 | 0 1</code></pre>
@@ -195,7 +195,7 @@ R R R R R | _ _ R R R | R R
 <hr />
 <ol>
 <li id="fn1"><p>Any RNG worth their salt will return a uniformly distributed value, typically from 0 to <code>RAND_MAX</code>. In the example here, our <code>RAND_MAX</code> is 11.<a href="#fnref1">↩</a></p></li>
-<li id="fn2"><p>For a 32-bit unsigned integer RNG, <span class="math">\(2^{32} - 1\)</span> (all 1 bits set) is the highest value that can be returned. That is, our RNG returns a value from 0 (no bits set) to <code>RAND_MAX</code> (all bits set). This means that our RNG generates everything from all 0s to all 1s and everything in between.<a href="#fnref2">↩</a></p></li>
+<li id="fn2"><p>For a 32-bit unsigned integer RNG, <span class="math inline">\(2^{32} - 1\)</span> (all 1 bits set) is the highest value that can be returned. That is, our RNG returns a value from 0 (no bits set) to <code>RAND_MAX</code> (all bits set). This means that our RNG generates everything from all 0s to all 1s and everything in between.<a href="#fnref2">↩</a></p></li>
 </ol>
 </div>
 
