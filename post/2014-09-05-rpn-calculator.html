@@ -131,7 +131,7 @@ mkTerm termStr <span class="fu">=</span> <span class="kw">case</span> termStr <s
 	<span class="st">&quot;-&quot;</span> <span class="ot">-&gt;</span> <span class="dt">TermOp</span> (<span class="fu">-</span>)
 	<span class="st">&quot;*&quot;</span> <span class="ot">-&gt;</span> <span class="dt">TermOp</span> (<span class="fu">*</span>)
 	_
-		<span class="fu">|</span> and <span class="fu">$</span> map isDigit termStr <span class="ot">-&gt;</span> <span class="dt">TermInt</span> <span class="fu">$</span> read termStr
+		<span class="fu">|</span> all isDigit termStr <span class="ot">-&gt;</span> <span class="dt">TermInt</span> <span class="fu">$</span> read termStr
 		<span class="fu">|</span> otherwise <span class="ot">-&gt;</span> error <span class="fu">$</span> <span class="st">&quot;invalid input `&quot;</span> <span class="fu">++</span> termStr <span class="fu">++</span> <span class="st">&quot;'&quot;</span>
 
 <span class="ot">evalTerms ::</span> [<span class="dt">Term</span>] <span class="ot">-&gt;</span> [<span class="dt">Integer</span>]
