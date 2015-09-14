@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Linus's Blog - Tig Tips</title>
+		<link rel="stylesheet" href="../css/base.css">
+		<link rel="stylesheet" href="../css/syntax.css">
+		<link href="http://fonts.googleapis.com/css?family=Merriweather:300,300italic,700italic,700" rel="stylesheet" type="text/css">
+		<link rel="shortcut icon" type="image/png" href="../favicon.png">
+		
+	</head>
+	<body>
+		<div id="header">
+			<a href="../">Home</a>
+			&bull;
+			<a href="../about.html">About</a>
+			&bull;
+			<a href="../art.html">Art</a>
+			&bull;
+			<a href="../code.html">Code</a>
+			&bull;
+			<a href="../papers.html">Papers</a>
+			&bull;
+			<a href="../archive.html">Archive</a>
+		</div>
+
+		<div id="content">
+			<h1 class="center">Tig Tips</h1>
+
+			<div class="info center">
+	<code class="date">2015-09-12</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2015-09-12-tig-tips.org" title="History">*</a>
+	<br>
+	<a href="../tag/programming.html">programming</a>, <a href="../tag/linux.html">linux</a>, <a href="../tag/git.html">git</a>
+</div>
+
+<p>I love <a href="https://github.com/jonas/tig">tig</a>. Still, I think the defaults aren’t the best for most developers. Here are two easy customizations to make the default view better.</p>
+<p>First, put</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">alias</span> tig=<span class="st">'tig -n 1000'</span></code></pre></div>
+<p>in your <code>~/.bashrc</code> to reduce tig’s startup time (especially on large repositories). There’s rarely a need to go back more than 1000 commits from your current HEAD position in an interactive, GUI-driven manner. And if you really need to see everything, do</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ \<span class="kw">tig</span></code></pre></div>
+<p>on the terminal to bypass the shell alias.</p>
+<p>Second, put the following in your <code>~/.tigrc</code> file:</p>
+<pre><code>set main-view = date author id:width=10 commit-title:yes,graph,refs
+</code></pre>
+<p>. This makes the default view show git commit hashes (where <code>width</code> is the number of hex digits to show), so that you don’t have to press ENTER on a particular commit to see its hash.</p>
+<p>Happy hacking!</p>
+
+		</div>
+		<div id="footer">
+			<p>Copyright (C) 2013-2015 Linus Arver. All rights reserved.</p>
+			<a href="https://github.com/listx/listx_blog">Site</a>
+			<a href="https://github.com/listx/listx.github.io">generated</a>
+			with
+			<a href="http://jaspervdj.be/hakyll">Hakyll</a>
+			and
+			<a href="http://sebastiaanvisser.github.com/clay">Clay</a>.
+			<br>
+			<a href="../atom.xml">Atom feed</a>
+		</div>
+	</body>
+</html>
