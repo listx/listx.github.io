@@ -129,6 +129,11 @@ source-code-pro-2.010
     :front &quot;^\\\\begin{code}\n&quot;
     :back &quot;^\\\\end{code}&quot;
   )))
+
+; Re-fontify sub-mode portions when idle. The manual command for this is
+; `mmm-parse-buffer&#39;. If you don&#39;t do this, then syntax highlighting won&#39;t work
+; for new regions of Haskell code in the \begin{code}...\end{code} blocks.
+(setq mmm-parse-when-idle &#39;t)
 </code></pre>
 <p>. Now it’s a matter of running the following commands whenever you open up a <code>.lhs</code> file:</p>
 <pre><code>(setq mmm-global-mode &#39;t)
