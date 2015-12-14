@@ -1756,6 +1756,24 @@ thou = 0.12% (267 occurrences)</code></pre>
 94
 95
 96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
 </pre></td><td class="sourceCode"><pre><code class="sourceCode haskell"><span class="kw">module</span> <span class="dt">TextFreq</span> <span class="kw">where</span>
 
 <span class="kw">import </span><span class="dt">Data.Char</span>
@@ -1782,8 +1800,26 @@ freqL <span class="fu">=</span> T.foldl step occs
 	<span class="kw">where</span>
 	occs <span class="fu">=</span> M.empty
 	step lhash c
-		<span class="fu">|</span> isAlpha c <span class="fu">=</span> M.insertWith (<span class="fu">+</span>) (toLower c) <span class="dv">1</span> lhash
+		<span class="co">-- | isAlpha c = M.insertWith (+) (toLower c) 1 lhash -- this picks up non-ASCII &#39;word&#39; letters, even korean/japanese!</span>
+		<span class="fu">|</span> elem c ([<span class="ch">&#39;a&#39;</span><span class="fu">..</span><span class="ch">&#39;z&#39;</span>] <span class="fu">++</span> [<span class="ch">&#39;A&#39;</span><span class="fu">..</span><span class="ch">&#39;Z&#39;</span>]) <span class="fu">=</span> M.insertWith (<span class="fu">+</span>) (toLower c) <span class="dv">1</span> lhash
+		<span class="fu">|</span> elem c (concat puncKeys) <span class="fu">=</span> <span class="kw">case</span> lookup c puncTuples <span class="kw">of</span>
+			<span class="dt">Just</span> pkey <span class="ot">-&gt;</span> M.insertWith (<span class="fu">+</span>) pkey <span class="dv">1</span> lhash
+			<span class="dt">Nothing</span> <span class="ot">-&gt;</span> lhash
 		<span class="fu">|</span> otherwise <span class="fu">=</span> lhash
+	puncKeys <span class="fu">=</span>
+		[ <span class="st">&quot;`~&quot;</span>
+		, <span class="st">&quot;-_&quot;</span>
+		, <span class="st">&quot;=+&quot;</span>
+		, <span class="st">&quot;[{&quot;</span>
+		, <span class="st">&quot;}]&quot;</span>
+		, <span class="st">&quot;\\|&quot;</span>
+		, <span class="st">&quot;;:&quot;</span>
+		, <span class="st">&quot;&#39;\&quot;&quot;</span>
+		, <span class="st">&quot;,&lt;&quot;</span>
+		, <span class="st">&quot;.&gt;&quot;</span>
+		, <span class="st">&quot;/?&quot;</span>
+		]
+	puncTuples <span class="fu">=</span> concatMap (\keyPair <span class="ot">-&gt;</span> [(head keyPair, head keyPair), (last keyPair, head keyPair)]) puncKeys
 
 <span class="ot">freqW ::</span> <span class="dt">T.Text</span> <span class="ot">-&gt;</span> <span class="dt">WHash</span>
 freqW <span class="fu">=</span> (\(<span class="dt">WBuild</span> _ _ whash) <span class="ot">-&gt;</span> whash) <span class="fu">.</span> T.foldl step occs
@@ -1871,17 +1907,19 @@ dispFreqW whash <span class="fu">=</span> mapM_ f <span class="fu">.</span> take
 12
 13
 14
+15
 </pre></td><td class="sourceCode"><pre><code class="sourceCode haskell"><span class="kw">module</span> <span class="dt">Main</span> <span class="kw">where</span>
 
+<span class="kw">import </span><span class="dt">Control.Monad</span>
+<span class="kw">import qualified</span> <span class="dt">Data.Text.Lazy</span> <span class="kw">as</span> <span class="dt">T</span>
 <span class="kw">import qualified</span> <span class="dt">Data.Text.Lazy.IO</span> <span class="kw">as</span> <span class="dt">T</span>
-<span class="kw">import </span><span class="dt">System.Environment</span>
 
 <span class="kw">import </span><span class="dt">TextFreq</span>
 
 <span class="ot">main ::</span> <span class="dt">IO</span> ()
 main <span class="fu">=</span> <span class="kw">do</span>
-	args <span class="ot">&lt;-</span> getArgs
-	src <span class="ot">&lt;-</span> T.readFile <span class="fu">$</span> args<span class="fu">!!</span><span class="dv">0</span>
+	fileList <span class="ot">&lt;-</span> T.getContents
+	src <span class="ot">&lt;-</span> liftM T.concat <span class="fu">.</span> mapM (T.readFile <span class="fu">.</span> T.unpack) <span class="fu">$</span> T.lines fileList
 	dispFreqL <span class="fu">$</span> freqL src
 	putStrLn <span class="fu">$</span> replicate <span class="dv">80</span> <span class="ch">&#39;-&#39;</span>
 	dispFreqW <span class="fu">$</span> freqW src</code></pre></td></tr></table></div>
