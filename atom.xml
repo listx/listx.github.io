@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
     <title>Linus's Blog</title>
-    <link href="http://listx.github.io/atom.xml" rel="self" />
-    <link href="http://listx.github.io" />
-    <id>http://listx.github.io/atom.xml</id>
+    <link href="http://funloop.org/atom.xml" rel="self" />
+    <link href="http://funloop.org" />
+    <id>http://funloop.org/atom.xml</id>
     <author>
         <name>Linus Arver</name>
         <email></email>
@@ -11,8 +11,8 @@
     <updated>2015-09-12T00:00:00Z</updated>
     <entry>
     <title>Tig Tips</title>
-    <link href="http://listx.github.io/post/2015-09-12-tig-tips.html" />
-    <id>http://listx.github.io/post/2015-09-12-tig-tips.html</id>
+    <link href="http://funloop.org/post/2015-09-12-tig-tips.html" />
+    <id>http://funloop.org/post/2015-09-12-tig-tips.html</id>
     <published>2015-09-12T00:00:00Z</published>
     <updated>2015-09-12T00:00:00Z</updated>
     <summary type="html"><![CDATA[<div class="info center">
@@ -36,8 +36,8 @@
 </entry>
 <entry>
     <title>Why I Use NixOS</title>
-    <link href="http://listx.github.io/post/2015-08-01-why-i-use-nixos.html" />
-    <id>http://listx.github.io/post/2015-08-01-why-i-use-nixos.html</id>
+    <link href="http://funloop.org/post/2015-08-01-why-i-use-nixos.html" />
+    <id>http://funloop.org/post/2015-08-01-why-i-use-nixos.html</id>
     <published>2015-08-01T00:00:00Z</published>
     <updated>2015-08-01T00:00:00Z</updated>
     <summary type="html"><![CDATA[<div class="info center">
@@ -96,8 +96,8 @@ source-code-pro-2.010
 </entry>
 <entry>
     <title>Emacs: Setting Up mmm-mode for Literate Haskell</title>
-    <link href="http://listx.github.io/post/2015-07-28-literate-haskell-mmm-mode.html" />
-    <id>http://listx.github.io/post/2015-07-28-literate-haskell-mmm-mode.html</id>
+    <link href="http://funloop.org/post/2015-07-28-literate-haskell-mmm-mode.html" />
+    <id>http://funloop.org/post/2015-07-28-literate-haskell-mmm-mode.html</id>
     <published>2015-07-28T00:00:00Z</published>
     <updated>2015-07-28T00:00:00Z</updated>
     <summary type="html"><![CDATA[<div class="info center">
@@ -164,8 +164,8 @@ source-code-pro-2.010
 </entry>
 <entry>
     <title>Useful rxvt-unicode (URxvt) Plugins</title>
-    <link href="http://listx.github.io/post/2015-06-25-urxvt-plugins.html" />
-    <id>http://listx.github.io/post/2015-06-25-urxvt-plugins.html</id>
+    <link href="http://funloop.org/post/2015-06-25-urxvt-plugins.html" />
+    <id>http://funloop.org/post/2015-06-25-urxvt-plugins.html</id>
     <published>2015-06-25T00:00:00Z</published>
     <updated>2015-06-25T00:00:00Z</updated>
     <summary type="html"><![CDATA[<div class="info center">
@@ -237,8 +237,8 @@ URxvt.font-size.step: 4
 </entry>
 <entry>
     <title>SRM 485: AfraidOfEven</title>
-    <link href="http://listx.github.io/post/2015-05-04-puzzle-srm-485-afraid-of-even.html" />
-    <id>http://listx.github.io/post/2015-05-04-puzzle-srm-485-afraid-of-even.html</id>
+    <link href="http://funloop.org/post/2015-05-04-puzzle-srm-485-afraid-of-even.html" />
+    <id>http://funloop.org/post/2015-05-04-puzzle-srm-485-afraid-of-even.html</id>
     <published>2015-05-04T00:00:00Z</published>
     <updated>2015-05-04T00:00:00Z</updated>
     <summary type="html"><![CDATA[<div class="info center">
@@ -1283,8 +1283,8 @@ require_relative <span class="st">&#39;./unmutate.rb&#39;</span>
 </entry>
 <entry>
     <title>Programming Puzzles: Letter and Word Frequency</title>
-    <link href="http://listx.github.io/post/2015-04-22-letter-word-frequency.html" />
-    <id>http://listx.github.io/post/2015-04-22-letter-word-frequency.html</id>
+    <link href="http://funloop.org/post/2015-04-22-letter-word-frequency.html" />
+    <id>http://funloop.org/post/2015-04-22-letter-word-frequency.html</id>
     <published>2015-04-22T00:00:00Z</published>
     <updated>2015-04-22T00:00:00Z</updated>
     <summary type="html"><![CDATA[<div class="info center">
@@ -2411,8 +2411,8 @@ eût = 0.11% (130 occurrences)</code></pre>
 </entry>
 <entry>
     <title>Generating Random Numbers without Modulo Bias, Redux</title>
-    <link href="http://listx.github.io/post/2015-02-27-removing-modulo-bias-redux.html" />
-    <id>http://listx.github.io/post/2015-02-27-removing-modulo-bias-redux.html</id>
+    <link href="http://funloop.org/post/2015-02-27-removing-modulo-bias-redux.html" />
+    <id>http://funloop.org/post/2015-02-27-removing-modulo-bias-redux.html</id>
     <published>2015-02-27T00:00:00Z</published>
     <updated>2015-02-27T00:00:00Z</updated>
     <summary type="html"><![CDATA[<div class="info center">
@@ -2590,8 +2590,8 @@ R R R R R | _ _ R R R | R R
 </entry>
 <entry>
     <title>Programming Puzzle: Game Button Sequence Recognizer</title>
-    <link href="http://listx.github.io/post/2015-02-24-puzzle-game-button-recognizer.html" />
-    <id>http://listx.github.io/post/2015-02-24-puzzle-game-button-recognizer.html</id>
+    <link href="http://funloop.org/post/2015-02-24-puzzle-game-button-recognizer.html" />
+    <id>http://funloop.org/post/2015-02-24-puzzle-game-button-recognizer.html</id>
     <published>2015-02-24T00:00:00Z</published>
     <updated>2015-02-24T00:00:00Z</updated>
     <summary type="html"><![CDATA[<div class="info center">
@@ -3128,8 +3128,8 @@ unitTests <span class="fu">=</span> testGroup <span class="st">&quot;Unit tests&
 </entry>
 <entry>
     <title>Using the Nix Package Manager for Haskell Development from Arch Linux</title>
-    <link href="http://listx.github.io/post/2015-02-10-using-nix-from-arch.html" />
-    <id>http://listx.github.io/post/2015-02-10-using-nix-from-arch.html</id>
+    <link href="http://funloop.org/post/2015-02-10-using-nix-from-arch.html" />
+    <id>http://funloop.org/post/2015-02-10-using-nix-from-arch.html</id>
     <published>2015-02-10T00:00:00Z</published>
     <updated>2015-02-10T00:00:00Z</updated>
     <summary type="html"><![CDATA[<div class="info center">
@@ -3243,8 +3243,8 @@ alias nix=&#39;. /home/l/.nix-profile/etc/profile.d/nix.sh&#39;</code></pre>
 </entry>
 <entry>
     <title>Implementing Binary Search</title>
-    <link href="http://listx.github.io/post/2014-12-13-implementing-binary-search.html" />
-    <id>http://listx.github.io/post/2014-12-13-implementing-binary-search.html</id>
+    <link href="http://funloop.org/post/2014-12-13-implementing-binary-search.html" />
+    <id>http://funloop.org/post/2014-12-13-implementing-binary-search.html</id>
     <published>2014-12-13T00:00:00Z</published>
     <updated>2014-12-13T00:00:00Z</updated>
     <summary type="html"><![CDATA[<div class="info center">
