@@ -8,8 +8,144 @@
         <name>Linus Arver</name>
         <email></email>
     </author>
-    <updated>2016-01-04T00:00:00Z</updated>
+    <updated>2016-04-14T00:00:00Z</updated>
     <entry>
+    <title>My Quest for Keyboard Perfection: The Esrille Nisse</title>
+    <link href="http://funloop.org/post/2016-04-14-esrille-nisse-keyboard.html" />
+    <id>http://funloop.org/post/2016-04-14-esrille-nisse-keyboard.html</id>
+    <published>2016-04-14T00:00:00Z</published>
+    <updated>2016-04-14T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="info center">
+	<code class="date">2016-04-14</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2016-04-14-esrille-nisse-keyboard.org" title="History">*</a>
+	<br>
+	<a href="/tag/hardware.html">hardware</a>, <a href="/tag/esrille.html">esrille</a>, <a href="/tag/cherry%20mx.html">cherry mx</a>
+</div>
+
+<p>About a year ago, I preordered an ErgoDox keyboard from Massdrop. Unfortunately, that order was delayed for months; frustrated and disillusioned with the experience, I searched for an alternative. Eventually I settled on the <a href="https://www.esrille.com/keyboard/">Esrille Nisse</a>. It was more expensive than the ErgoDox, but it looked more ergonomic so I took a leap of faith and decided to buy it. I am glad I did!</p>
+<p>I’ve had the Nisse since last October, but did not use it right away. I spent many days spread across six months customizing the firmware and also writing my own keyboard layout optimization program to make the most out of my new keyboard. Every time I thought I had finally settled on a design, I thought of ways of improving it. My initial stab at a first iteration of my custom layout was completed just days ago; I’m just happy to write about it as I promised at the <a href="./2016-01-04-status-update.html">beginning of the year</a>!</p>
+<p>Here is a brief review of the Nisse on build quality, comfort, and price, followed by a section on how I’ve customized it (to the extreme!) and my thoughts on going down this path.</p>
+<h1 id="build-quality">Build Quality</h1>
+<p>The Nisse has a thin outer metal case. You can easily remove the case by undoing a handful of screws. While it doesn’t give an impression of the same kind of build strength as a Filco or Unicomp, it feels well-designed. There is no backplate for the key switches, and this gives the keyboard a much lighter feel. I personally would like it to have a thicker case and backplate, but I imagine that that would move the keyboard up to a much higher price point.</p>
+<h1 id="comfort">Comfort</h1>
+<p>I ordered mine with Cherry MX Brown switches, and they felt fine. I write in the past tense because, during my long wait for the ErgoDox, I had ordered a set of aftermarket Cherry MX springs which are much stiffer than the stock Brown springs (rated at 67 grams). I swapped out the springs and enjoy them so far; they somewhat imitate the much stiffer buckling spring switches found in the Unicomp but without the loud clicking noise. I should add that I also added 3mm thick O-rings around the stem of each keycap to reduce not only noise but keypress travel to reasonable effect.</p>
+<p>Overall, I really love the thumb row of keys. They really make a lot of sense giving each thumb 5 keys to work with on the same row (more ergonomic than the ErgoDox), and I am learning to use my right thumb more (on Qwerty I always use the left thumb for pressing the spacebar, as my brain tends to get confused if I try to use both thumbs for it).</p>
+<h1 id="price">Price</h1>
+<p>The Nisse is not cheap. I had to pay close to $500 USD for this keyboard and wait a few weeks for it to get produced (it is not a mass-produced item; I am the proud owner of Nisse #42). Given that I don’t spend money on other things in life, I was able to afford it. Still, you should only get something like this if you are serious about your keyboard typing comfort and want to upgrade the experience. My fingers spend many hours every single day on a keyboard, so I trust my investment.</p>
+<h1 id="customizability">Customizability</h1>
+<p>This is where the Nisse really shines. The firmware is compiled from a handful of C files. This keyboard is unique in that it comes preloaded with multiple layouts; as of the time of this writing, the preloaded layouts are as follows:</p>
+<ul>
+<li>English
+<ul>
+<li>Qwerty</li>
+<li>Dvorak</li>
+<li>Colemak</li>
+</ul></li>
+<li>Japanese
+<ul>
+<li>Qwerty (JIS)</li>
+<li>Stickney Next</li>
+<li>Nicola (Thumb Shift)</li>
+<li>M-type</li>
+<li>JIS X6004</li>
+<li>TRON Kana</li>
+</ul></li>
+</ul>
+<p>. There is also a shared FN layer between the English and Japanese layouts.</p>
+<p>Through much trial and error, I was able to incorporate some cool ideas that come with one of the Japanese layouts into my own custom layout, which I’ve dubbed the <a href="https://github.com/listx/new-keyboard/tree/zq">“ZQ” layout</a>. I added an extra “FN2” layer and also made the Shift key “sticky” (premptively hitting the Shift key is enough — no need to press the Shift key simultaneously with a letter key to get a capital letter). In addition, I bound some punctuation marks to be just one keypress, such as double quotes (“), dollar sign ($), and underscore (_). Because of the extra FN2 layer, everything is reachable with minimal effort. In fact, a lot of keys around the far corners of the keyboard are surplus keys and left unbound.</p>
+<p>As for the actual keyboard layout, I wrote a <a href="https://github.com/listx/keylo">Haskell program</a> to help find a decent layout. It uses either simulated annealing or a simple hill climber algorithm to find an optimal layout. Because the search space is so large, and because a lot of the rules and penalties for what makes a good layout can be somewhat arbitrary, I’ve discovered that it takes a combination of human guidance (artificially imposed constraints) and computer search to find the most desirable layouts.</p>
+<p>Below you can see my layout’s base layer. The empty squares represent empty (unbound) keys. Because I’m using ASCII art to represent the layout, it’s a bit awkward, but I’ve done my best to label the legends with non-interfering symbols so that it is unambiguous. (This is actually better than taking photos because I use blank keycaps.)</p>
+<pre><code>    □ □ □ □ □ □     □ □ □ □ □ □
+    = ~ / ? &amp;         ` 1 - ! $
+□ □ z r d f . 1     2 &quot; y u p q □ □
+□ 2 s n t h l :     * x a e i o 3 □ &lt;--- Home row
+  3 c w g m ;         &#39; j k b v 4
+      4 5 6 7 8     5 , 6 7 8 &lt;--------- Thumb row
+
+Left-side legend
+1) Home
+2) Shift
+3) Escape
+4) Super (Windows key)
+5) Caps Lock (remapped with xmodmap to Hyper key)
+6) Space
+7) Enter
+8) Control
+
+Right-side legend
+1) Underscore
+2) End
+3) Shift
+4) Tab
+5) FN2
+6) FN
+7) Alt
+8) Right Alt (aka &quot;AltGr&quot; for US International Layout)
+</code></pre>
+<p>Here’s my FN layer.</p>
+<pre><code>    □ □ □ □ □ □     □ □ □ □ □ □
+    □ □ c □ □         □ □ a □ □
+□ □ b 7 8 9 □ d     b % [ \ | ] □ □
+□ □ a 4 5 6 □ □     □ # { ( ) } □ □
+  □ 0 1 2 3 □         ^ &lt; + @ &gt; □
+      □ □ □ □ □     □ □ □ □ □
+
+Left-side legend
+a) 00 (Macro that presses &#39;0&#39; 2x)
+b) 000 (Macro that presses &#39;0&#39; 3x)
+c) Shift+Insert
+d) Page Up
+
+Right-side legend
+a) Super+x (my hotkey to spawn terminals)
+b) Page Down
+</code></pre>
+<p>Finally, this is the FN2 layer.</p>
+<pre><code>    □ □ □ □ □ □     □ □ □ □ □ □
+    □ □ □ □ □         □ □ □ □ □
+□ □ i j k l □ □     □ □ □ a □ □ □ □
+□ □ e f g h □ □     □ □ b c d □ □ □
+  □ a b c d □         □ □ □ □ □ □
+      □ □ □ □ □     □ □ □ □ □
+
+Left-side legend
+a) F1
+b) F2
+c) F3
+d) F4
+e) F5
+f) F6
+g) F7
+h) F8
+i) F9
+j) F10
+k) F11
+l) F12
+
+Right-side legend
+a) Up Arrow
+b) Left Arrow
+c) Down Arrow
+d) Right Arrow
+</code></pre>
+<p>There were some overriding design choices behind the layout; the most important ones are listed below.</p>
+<ul>
+<li>HJKL keys should be somewhat intuitive (H must be left of L; J must be left of K and preferably on the same row).</li>
+<li>Common keys should be on the home row.</li>
+<li>Most modifier keys should be used with the thumbs.</li>
+<li>For better granularity, punctuation symbols should be treated uniquely as separate keys (do not treat “/” and “?” as the same physical key).</li>
+<li>Use numpad arrangement for numbers.</li>
+</ul>
+<p>The result of all of these considerations is that my layout does not make use of all the physical keys the hardware gives us; instead, it uses keys closest to my fingers.</p>
+<p>I have yet to master my own custom layout, but it’s coming along with incremental, daily improvments. I hope to reach 60 wpm in a few month’s time, after which I should be able to switch to it full-time on my primary desktop computer. I will probably make additional changes to the layout as I get more “real world” experience with it; we shall see.</p>
+<p>Because of the openness of the firmware, the Nisse is extremely customizable, and I’m very happy with it. One modification I am particularly fond of is how I’ve managed to map the <code>Shift</code>, <code>FN</code>, and <code>FN2</code> keys to the blue, green, and red LEDs on the keyboard. These LEDs are traditionally used for the Scroll, Caps, and Num lock keys and in all my years of using the computer I’ve hardly ever seen either the Scroll or Caps LEDs being lit; it’s nice to see these LEDs go off when I use my modifier keys as a visual reminder of the layers involved.</p>
+<h1 id="conclusion">Conclusion</h1>
+<p>I know that I’m going down a rabbit hole here. If Esrille ever goes under, it means I am on my own as far as obtaining a replacement board with the same physical dimensions. Hopefully that day will never come, but if it does, I might just grab an ErgoDox or something else that’s similar and port my layout to that system.</p>
+<p>As it stands, there are still improvements to be made — but it’s all in the firmware. For example, I’d like to also make a layout for Japanese (type Japanese faster!), probably by just shifting some of the keys in the existing TRON or some other layout that the Nisse comes with to match ZQ’s distribution of letter keys vs. punctuation keys. The same goes for a Korean layout.</p>
+<p>Those concerns will probably be addressed sometime later this year, or perhaps the next. It all depends on how much time I end up studying those languages again. For now, I’m just happy learning to type a little bit more comfortably on the Nisse (lots of home row goodness!).</p>
+<p>Happy hacking!</p>
+]]></summary>
+</entry>
+<entry>
     <title>Status Update</title>
     <link href="http://funloop.org/post/2016-01-04-status-update.html" />
     <id>http://funloop.org/post/2016-01-04-status-update.html</id>
@@ -24,16 +160,16 @@
 <p>Happy 2016 everyone!</p>
 <p>I thought I should update this blog, even though it’s taking time away from some really fun side hobbies/projects! This post breaks with the unspoken tradition on this blog, which is that every post should be something meaningful, with original content; but, I now think that I should use this space for more personal/opinion/meta things too, not just pure technical articles.</p>
 <p>Anyway, below are some updates on various things going on in my life.</p>
-<h1>Side projects</h1>
+<h1 id="side-projects">Side projects</h1>
 <p>I have a number of side projects all clamoring for my loving care. In years past, I would work on multiple projects at the same time, and start new ones even without finishing old ones. This year, I plan to just focus on one project at a time!</p>
 <p>Currently, I am working on a computer keyboard layout optimizer, using the well-known <a href="https://en.wikipedia.org/wiki/Simulated_annealing">Simulated Annealing</a> algorithm. It’s a very interesting problem, and although currently my SA implementation lacks enough heuristics to make it perform any differently than random search, it is still fun to hack on. Once it is done, I will open-source it.</p>
 <p>After that, I want to finish up the core features for a simple terminal-based password manager program. Making a GUI application, even console-based, is quite the challenge!</p>
-<h2>Haskell book</h2>
+<h2 id="haskell-book">Haskell book</h2>
 <p>Eagle-eyed readers may have noticed that I silently pushed back timeframe for my <a href="http://funloop.org/papers.html#haskell-for-newbies-tentative-title-coming-2016">book</a> the Haskell programming language. I did this on purpose, because what with a new job and whatnot, I have not had the time as before to work on it. But, it is not dead, and I do intend to finish it — later this year!</p>
-<h1>New hobbies</h1>
+<h1 id="new-hobbies">New hobbies</h1>
 <p>I picked up a new hobby — the ancient game of <a href="https://en.wikipedia.org/wiki/Go_(game)">Go</a>! I’ve been playing on my phone and even got myself some decent equipment, and I have to say that it is much more fun than chess (I say this as a former avid chess player). Maybe I’ll find a way to tie it into programming.</p>
 <p>My brother gave me a rather expensive camera and I started to take some pictures with it, although I have yet to really put serious time into it. But I do know that it’s one of the first things I’m grabbing the next time I go on a trip.</p>
-<h1>Retrospect</h1>
+<h1 id="retrospect">Retrospect</h1>
 <p>Perhaps this section is a bit out of place, but I think I should mention the big highlights of 2015 for myself:</p>
 <ul>
 <li>I got hired at a <a href="http://www.twinprime.com/">fantastic tech company</a> (doing DevOps) and basically ended the self-imposed exile of staying out of the professional tech world</li>
@@ -42,7 +178,7 @@
 <li>I learned a lot of new things (from work)</li>
 </ul>
 <p>. I should note that, before my current job, I had purposefully refrained from seeking professional positions in the tech sector because I had a fear that somehow my passion for programming would be lost. Thankfully, I can say that this fear was unfounded. Almost every day, after work and dinner, I sit and code (Haskell)!</p>
-<h1>Onward</h1>
+<h1 id="onward">Onward</h1>
 <p>I will be posting something at least once a month, I hope, to share some thoughts with you all. I thank all past, present, and future readers, for giving me the motivation to keep this blog alive!</p>
 ]]></summary>
 </entry>
@@ -84,19 +220,19 @@
 </div>
 
 <p>Since March 2015, I’ve been using NixOS on my main desktop machine at home. I was on Arch Linux for 6~7 years before that. So, why did I switch?</p>
-<h1>Arch Linux</h1>
+<h1 id="arch-linux">Arch Linux</h1>
 <p>Let’s review the reasons I switched to Arch Linux in the first place. I switched to Arch Linux from Xubuntu because I did not want to do big distribution upgrades from one major version to the next. Arch Linux is based on a rolling release schedule — packages are updated on a daily basis. What people often say is that Arch is “bleeding edge”. While that is true, they don’t realize that at the same time, you can choose to do weekly or monthly upgrades (in an incremental fashion) rather than waiting six months or a year for a big fat distribution upgrade.</p>
-<h2>System age</h2>
+<h2 id="system-age">System age</h2>
 <p>The problem though, is that with age the system becomes increasingly confusing because of unused files/directories. You install packages, then delete them, but then your system still has traces of them left. I still have an old laptop with Arch on it dating from an earlier install probably about five years back (or more) — and the <code>$HOME</code> directory on there has a lot of dotfiles and other folders — some of which I have no clue about. <a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> It’s not very different from the same feeling I got as a teenager looking at Windows XP’s <code>regedit.exe</code> and wondering what some of the registry keys did, or if they were used at all.</p>
-<h2>Power user mindset</h2>
+<h2 id="power-user-mindset">Power user mindset</h2>
 <p>Another problem is that Arch expects the user to understand their entire system from the bottom up! The culture is very much “RTFM”, but not only that, you are expected to sign up to the Arch mailing lists and also read the distro homepage on a regular basis. Dare I say it — the only reason the Arch Wiki is so well-regarded is because of this culture of “you must know everything”.</p>
 <p>This is fine, but ultimately I believe that it is too much responsibility. For example, every once in a while, <code>pacman</code> generates copies of existing system files whenever they would get overwritten by newer ones. One example is the <code>/etc/group</code> file. Call me lazy but I never bothered learning about the ins-and-outs of this file and what the syntax means. But every Arch Linux user out there has to do a <code>vimdiff</code> against the old/new versions of this file and perform the correct changes (basically merge them), usually with the helper CLI tool called <code>yaourt</code> with its <code>-C</code> flag.</p>
-<h2>Package confusion</h2>
+<h2 id="package-confusion">Package confusion</h2>
 <p>As you use Arch Linux, you invariably end up installing one package after another. Right now, there is no way to introduce some hierarchical system of organizing packages. For example, let’s say you install the <code>firefox</code> package because you want to use, well, Firefox! In <code>pacman</code>’s point of view, there is no difference between <code>firefox</code> and <code>libfoo</code>. I.e., high-visibility, userland packages like <code>firefox</code> are treated the same in all respects as <code>libfoo</code>. You can do clever things like have meta-packages, which are defined in terms of other packages (e.g., LibreOffice), but this kind of organizational structure is hard-coded at the <code>PKGBUILD</code> level. <a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a></p>
 <p>I’m sure there are <code>pacman</code> helper scripts/programs out there to give you a better, organized understanding of all of your installed packages. But do you really want to know that you have <code>libvdpau</code> installed, or that it needs to get updated? As you press <code>pacman -Syu&lt;ENTER&gt;</code>, do you really care about the exact names of the 50 low-level system packages that your userland programs (like Firefox) depend on?</p>
-<h1>NixOS</h1>
+<h1 id="nixos">NixOS</h1>
 <p>So what makes NixOS better?</p>
-<h2>Pros</h2>
+<h2 id="pros">Pros</h2>
 <p>First off, system age has no real bearing on NixOS. Because everything is done in a functional way with the Nix package manager, your <strong>entire system</strong> becomes “recreated” each time you decide to upgrade. By default, you cannot directly write to places like <code>/usr/share</code> or <code>/usr/local</code>. Essentially, anything outside of <code>$HOME</code> can only be manipulated via the Nix package manager. And Nix does an excellent job of keeping all system directories clean and stateless!</p>
 <p>Second, you don’t have to hand-tune system files like <code>/etc/group</code>. The NixOS configuration file is where you define system-wide things like users and groups, and after you set it once, it’s done for good.</p>
 <p>Third, you can either hard-code what packages get installed system-wide in your config file (<code>/etc/nixos/configuration.nix</code>), or you can define your own set of packages on top of the ones defined by the official NixOS Nix expression. I used to do the former, but now I do the latter; and all I do now to see what packages I have installed explicitly is invoke <code>nix-env -q</code>, and I get this:</p>
@@ -116,10 +252,10 @@ source-code-pro-2.010
 <p>. Those <code>l-set-</code> packages are ones where I have defined a hierarchy — i.e., I’ve coded up Arch Linux’s version of meta-packages. What’s great is that it’s all done in a programmatic way using the Nix expression language. <a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a> The rest are official packages I chose to install. But basically this sure beats doing something like <code>pacman -Q</code>, which grabs all installed packages on the entire system.</p>
 <p>Fourth, I really like how I can do a <strong>system</strong> upgrade without touching my explicitly-installed packages in my user’s Nix environment (<code>nix-env</code>). I can update my version of <code>firefox</code> as much as I like without touching low-level packages like Xorg or the kernel, or vice-versa. It gives me the flexibility of a “rolling release” distro without the stability issues.</p>
 <p>Fifth, the heart of NixOS — the Nix package manager — works by looking at a single “master” Nix expression. So if you have any custom Nix expressions, they better play well with the other ones officially provided upstream by the NixOS team! In Nix, no package is an island; in a sense, it’s a lot like how FreeBSD keeps all of their packages in a single code repository to guarantee stability.</p>
-<h2>Cons</h2>
+<h2 id="cons">Cons</h2>
 <p>Granted, there are problems with NixOS. The biggest problem is the lack of adoption. It still has not hit critical mass, and most of the core contributors are overloaded with far too much work.</p>
 <p>The second problem is that there is no way to do things like <code>make install</code> after you download the source code to some program <code>foo</code>. This is because NixOS does not have directories like <code>/usr/share</code> — the whole Linux Filesystem Hierarchy Standard is thrown out the window in favor of symlinks to the “compiled” Nix expressions. So, you have to Nxifiy it first, and then install it via its Nix expression (<code>foo.nix</code>). In this respect it shares the same pain point with <a href="http://www.gobolinux.org/">GoboLinux</a>. Personally this is not a huge problem for me, but it’s still a problem.</p>
-<h1>Conclusion</h1>
+<h1 id="conclusion">Conclusion</h1>
 <p>I hope this post gave you some motivation to try out NixOS. It has a steep learning curve but after you get most things working, it’s really great. Happy hacking!</p>
 <div class="footnotes">
 <hr />
@@ -144,7 +280,7 @@ source-code-pro-2.010
 </div>
 
 <p>I use <a href="https://wiki.haskell.org/Literate_programming">Literate Haskell</a> for some of my personal Haskell projects and for a long time I used the auto-loaded <code>literate-haskell-mode</code> that comes with <a href="https://github.com/haskell/haskell-mode">haskell-mode</a>. This past weekend, I finally buckled down and made use of <a href="https://github.com/purcell/mmm-mode">mmm-mode</a> to make the literate programming experience better. The biggest advantage of using <code>mmm-mode</code> is that you can define subregions of your file which are handled by a different major mode. In other words, you can get proper syntax highlighting for 2, 3, or more different languages in the same file!</p>
-<h1>Setup</h1>
+<h1 id="setup">Setup</h1>
 <p>You’ll need to install <a href="https://github.com/purcell/mmm-mode">mmm-mode</a> along with <a href="https://github.com/haskell/haskell-mode">haskell-mode</a>. I personally use <a href="http://melpa.org/">MELPA</a> for all of my Emacs packages because once you set it up it’s really painless.</p>
 <p>In your <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Init-File.html">emacs configuration file</a> add these lines:</p>
 <pre><code>; Remove the hard-coded &#39;literate-haskell-mode&#39; activation for `.lhs&#39; files that
@@ -211,13 +347,13 @@ source-code-pro-2.010
 	<a href="/tag/programming.html">programming</a>, <a href="/tag/linux.html">linux</a>
 </div>
 
-<h1>Introduction</h1>
+<h1 id="introduction">Introduction</h1>
 <p>I’ve been using <a href="http://software.schmorp.de/pkg/rxvt-unicode.html">rxvt-unicode</a> (<code>urxvt</code>) for years. But, I never really bothered to customize it beyond adding in some simple font changing hotkeys. I discovered that <code>urxvt</code> can be customized with Perl plugins. This post shows some of the plugins I’ve started using.</p>
 <p>For this post, I will use the terms <strong>terminal</strong> and <code>urxvt</code> interchangeably. The plugins are configured in your <code>~/.Xdefaults</code> file, and to have this file take effect, run</p>
 <pre><code>xrdb -merge ~/.Xdefaults
 </code></pre>
 <p>. The hotkeys are defined with key names from <a href="http://cgit.freedesktop.org/xorg/proto/x11proto/plain/keysymdef.h">keysymdef.h</a> as part of X11.</p>
-<h1>keyboard-select</h1>
+<h1 id="keyboard-select">keyboard-select</h1>
 <p><a href="https://github.com/muennich/urxvt-perls">Homepage</a> (part of <code>urxvt-perls</code>)</p>
 <p>This is by far the most useful plugin. If you ever need surgical precision to select a particular chunk of text in your terminal, you can use this plugin. It gives you Vim-like <em>normal mode</em> navigation in your terminal — and then you can use hotkeys like <code>v</code> or <code>V</code> to select chunks of text, and use <code>y</code> to copy it to your X primary buffer.</p>
 <p>I use the snippet below in my <code>~/.Xdefaults</code>:</p>
@@ -228,7 +364,7 @@ URxvt.keysym.M-r: perl:keyboard-select:search
 <p>. Now, <code>M-s</code> (<code>Alt-s</code> for you folks not familiar with Emacs-style shortcut-naming) in the terminal gives you Vim-like normal mode like I mentioned above. The other shortcut, <code>M-r</code>, gives your reverse search against your terminal’s buffer.</p>
 <p>Let <code>M-r</code> sink in. This means that your terminal is basically running a virtual <code>less</code> pager. Any time you want to go search against some text in your terminal, just use <code>M-r</code> and search; use <code>n</code> and <code>N</code> just like <code>less</code>.</p>
 <p>Actually, <code>M-r</code> is basically doing <code>M-s</code> followed by <code>?</code>. So, if you like searching forwards (not backwards), just do <code>M-s</code> and then <code>/</code>. But considering how terminal buffers are always <strong>above</strong> the cursor, it makes sense to search backwards by default with <code>M-r</code>. For me this runs against my habit of using <code>less</code> and <code>/</code>, but there you have it.</p>
-<h1>clipboard</h1>
+<h1 id="clipboard">clipboard</h1>
 <p><a href="https://github.com/muennich/urxvt-perls">Homepage</a> (part of <code>urxvt-perls</code>)</p>
 <p><code>~/.Xdefaults</code> snippet:</p>
 <pre><code>! clipboard
@@ -242,7 +378,7 @@ URxvt.keysym.M-C-v: perl:clipboard:paste_escaped
 <p><code>M-c</code> copies the X11 primary buffer (aka X selection) to the clipboard buffer.</p>
 <p>What’s really nice is the <code>M-v</code> shortcut — it pastes the <strong>clipboard</strong> buffer, not the X11 primary buffer (there is <code>S-&lt;insert&gt;</code> (Shift-Insert) for that). Now you don’t have to type <code>$(xsel -b)</code> for the same thing.</p>
 <p><code>M-C-v</code> (<code>Alt-Control-v</code>) does the same thing, but escapes any special characters. This is very handy — a simple use case might be using <code>M-s</code> (search shortcut discussed above) to find a particular file with a long name (think MP3 files) from the output of <code>ls</code> — you can then just use <code>v</code> to copy that filename to the X11 buffer, then use <code>M-c</code> to copy it to clipboard buffer (if <code>autocopy</code> is working this step is unnecessary), then use <code>M-C-v</code> to paste it in, escaping things like space characters so that you can use other tools like <code>cp</code> or <code>mv</code> on them more easily.</p>
-<h1>url-select</h1>
+<h1 id="url-select">url-select</h1>
 <p><a href="https://github.com/muennich/urxvt-perls">Homepage</a> (part of <code>urxvt-perls</code>)</p>
 <p><code>~/.Xdefaults</code> snippet:</p>
 <pre><code>! url-select. We can middle-click on any url and this will launch the browser
@@ -252,7 +388,7 @@ URxvt.url-select.underline: true
 URxvt.url-select.launcher: firefox
 </code></pre>
 <p>. Now you can use <code>M-u</code> to jump between any URL that was printed to the terminal buffer. Use <code>j</code> and <code>k</code> to jump to the next/previous URL, and <code>y</code> to copy it to your X primary buffer (and <code>M-c</code> to make sure it’s also in the clipboard) for easy URL handling. Or, simply press <code>ENTER</code> to open that link in your browser. Next time you grab your mouse to carefully highlight a URL in the terminal, think again!</p>
-<h1>font-size</h1>
+<h1 id="font-size">font-size</h1>
 <p><a href="https://github.com/majutsushi/urxvt-font-size">Homepage</a></p>
 <p>This plugin allows you to scale fonts up or down.</p>
 <p><code>~/.Xdefaults</code> snippet:</p>
@@ -267,7 +403,7 @@ URxvt.keysym.C-equal: perl:font-size:increase
 URxvt.font-size.step: 4
 </code></pre>
 <p>. This is pretty self-explanatory. Use <code>C-minus</code> or <code>C-equal</code> to change your font size as needed — perfect for screencasts or demos!</p>
-<h1>Conclusion</h1>
+<h1 id="conclusion">Conclusion</h1>
 <p>Now that I use these plugins, there’s even less interruption to use the mouse. I hope you find them as useful as I have.</p>
 <p>Happy hacking!</p>
 ]]></summary>
@@ -284,13 +420,13 @@ URxvt.font-size.step: 4
 	<a href="/tag/programming.html">programming</a>, <a href="/tag/math.html">math</a>, <a href="/tag/haskell.html">haskell</a>, <a href="/tag/ruby.html">ruby</a>
 </div>
 
-<h1>Introduction</h1>
+<h1 id="introduction">Introduction</h1>
 <p>The heart of this problem comes from TopCoder’s <a href="http://community.topcoder.com/stat?c%3Dproblem_statement&amp;pm%3D11146&amp;rd%3D14238">SRM 485 “AfraidOfEven”</a>. There is quite a lot of discussion behind the somewhat elementary math principles, so you might want to skip down to the code directly after reading the problem statement.</p>
-<h1>The Problem</h1>
+<h1 id="the-problem">The Problem</h1>
 <p>An <a href="http://en.wikipedia.org/wiki/Arithmetic_progression">arithmetic progression</a> <span class="math inline">\(AP\)</span> has been changed by the mutation function <span class="math inline">\(M()\)</span> in the following way: any even number <span class="math inline">\(w\)</span> in the sequence has been replaced by <span class="math inline">\(\frac{w}{2}\)</span>, repeatedly, until it has become odd. For example, if <span class="math inline">\(AP = \{2, 4, 6, 8\}\)</span>, then <span class="math inline">\(M(AP) = \{1, 1, 3, 1\}\)</span> (because <span class="math inline">\(\frac{6}{2} = 3\)</span> and <span class="math inline">\(3\)</span> is an odd number, it stopped mutating). Given a mutated sequence <span class="math inline">\(M(AP) = MP\)</span>, design an “unmutate” function <span class="math inline">\(U()\)</span> such that <span class="math inline">\(U(MP) \approx AP\)</span>. If more than one possible sequence <span class="math inline">\(AP\)</span> exists, find the one with the lowest lexicographical order.</p>
-<h2>Constraints</h2>
+<h2 id="constraints">Constraints</h2>
 <p><span class="math inline">\(MP\)</span> is limited to 4 to 50 terms. Each term in <span class="math inline">\(MP\)</span> is from <span class="math inline">\(1\)</span> to <span class="math inline">\(1000\)</span>, inclusive (for now; later on we will consider numbers less than <span class="math inline">\(1\)</span>). The difference (let’s call it <span class="math inline">\(m\)</span>) between each term can be <span class="math inline">\(0\)</span>, so the following is still a valid arithmetic progression: <span class="math inline">\(\{-17, -17, -17, -17, -17\}\)</span>.</p>
-<h3>Lexicographic Order</h3>
+<h3 id="lexicographic-order">Lexicographic Order</h3>
 <p>Given the input</p>
 <p><span class="math display">\[
 MP = \{1, 1, 3, 1, 5\}
@@ -300,9 +436,9 @@ MP = \{1, 1, 3, 1, 5\}
 U(AP) = \{1, 2, 3, 4, 5\}
 \]</span></p>
 <p>. It is possible that <span class="math inline">\(AP\)</span> was actually <span class="math inline">\(\{2, 4, 6, 8, 10\}\)</span> (or even <span class="math inline">\(\{4, 8, 12, 16, 20\}\)</span>), but because <span class="math inline">\(\{1, 2, 3, 4, 5\}\)</span> has the smaller lexicographic representation, it is the correct answer.</p>
-<h1>Interlude</h1>
+<h1 id="interlude">Interlude</h1>
 <p>I will include both Haskell and Ruby solutions in this post below. If you’d like to solve the problem on your own, please read the rest of this post at a later time.</p>
-<h1>The Math</h1>
+<h1 id="the-math">The Math</h1>
 <p>Let us consider the universe of possible arithmetic progressions, and then derive a general algorithm. Because the mutation involves even numbers, it makes sense to look at arithmetic progressions in terms of even and odd numbers (aka <em>parity</em>).</p>
 <p>The two most important parts of an arithmetic progression are the rate of change, <span class="math inline">\(m\)</span>, and the first term <span class="math inline">\(A_0\)</span>. This is because any arithmetic progression can be recreated by knowing only these two values.</p>
 <p>Now, <span class="math inline">\(m\)</span> can be either even (<span class="math inline">\(E\)</span>), odd (<span class="math inline">\(O\)</span>), or zero. The first term <span class="math inline">\(A_0\)</span> can be either even or odd. Let’s plug these possible variations into a table, and see if there are any patterns we can exploit. To determine <span class="math inline">\(AP\)</span> based on <span class="math inline">\(m\)</span> and <span class="math inline">\(A_0\)</span>, we only need to know three laws of parity:</p>
@@ -362,7 +498,7 @@ U(AP) = \{1, 2, 3, 4, 5\}
 </tbody>
 </table>
 <p>. Let’s now look at each of the 6 possible cases, and see if we can simplify things more. We will look at each case from the perspective of <span class="math inline">\(m\)</span>.</p>
-<h2>Mutation When <span class="math inline">\(m\)</span> is Zero</h2>
+<h2 id="mutation-when-m-is-zero">Mutation When <span class="math inline">\(m\)</span> is Zero</h2>
 <p>If <span class="math inline">\(m\)</span> is zero, then <span class="math display">\[AP = {A_0, A_0, A_0\cdots{}A_0}\]</span>. That is, subsequent terms after <span class="math inline">\(A_0\)</span> do not change, so it is a constant sequence of the first term, <span class="math inline">\(A_0\)</span>.</p>
 <p>If <span class="math inline">\(m\)</span> is zero and <span class="math inline">\(A_0\)</span> is <strong>odd</strong>, then all terms remain the same after the mutation; so, <span class="math inline">\(M(AP) = AP\)</span> (no change). E.g.,</p>
 <table>
@@ -393,7 +529,7 @@ U(AP) = \{1, 2, 3, 4, 5\}
 </tbody>
 </table>
 <p>.</p>
-<h2>Mutation When <span class="math inline">\(m\)</span> is Even</h2>
+<h2 id="mutation-when-m-is-even">Mutation When <span class="math inline">\(m\)</span> is Even</h2>
 <p>If <span class="math inline">\(m\)</span> is even, then all terms in <span class="math inline">\(AP\)</span> are either even or odd, based on the first term <span class="math inline">\(A_0\)</span>. Essentially, <span class="math inline">\(AP\)</span> behaves in an identical manner to the case where <span class="math inline">\(m = 0\)</span> as far as parity is concerned — the only difference here is that the subsequent terms change in value by <span class="math inline">\(m\)</span>.</p>
 <p>However, there is a slight twist when we apply mutation. If <span class="math inline">\(A_0 = \mathrm{O}\)</span>, then there are no numbers to mutate, and we get <span class="math inline">\(MP\)</span> where all terms are odd and they change by <span class="math inline">\(m\)</span>. But if <span class="math inline">\(A_0 = \mathrm{E}\)</span>, then we get <em>changing</em> even numbers for <span class="math inline">\(MP\)</span>. So unlike in the case of <span class="math inline">\(m = 0\)</span> where all even numbers reduced down to the same odd number after applying the mutation, we get <em>different</em> odd numbers. E.g.,</p>
 <table>
@@ -410,7 +546,7 @@ U(AP) = \{1, 2, 3, 4, 5\}
 </tbody>
 </table>
 <p>. Notice how even though <span class="math inline">\(AP\)</span> has a sequence of <em>increasing</em> terms, <span class="math inline">\(MP\)</span>’s terms are not increasing in the same manner. We will revisit this case below when simplifying the categories of behavior for <span class="math inline">\(MP\)</span>.</p>
-<h2>Mutation When <span class="math inline">\(m\)</span> is Odd</h2>
+<h2 id="mutation-when-m-is-odd">Mutation When <span class="math inline">\(m\)</span> is Odd</h2>
 <p>This is where things get interesting. If <span class="math inline">\(m\)</span> is odd, then <span class="math inline">\(AP\)</span> becomes a <em>series of alternating even and odd numbers</em>. Whether <span class="math inline">\(AP\)</span> begins with an even or odd number depends, naturally, on the parity of <span class="math inline">\(A_0\)</span>. The more general observation we can make is that, given the fact that we have alternating even and odd numbers in <span class="math inline">\(AP\)</span>, <span class="math inline">\(MP\)</span> will be populated with “originally odd” and “fake odd” (mutated) terms. Let’s call these mutated terms <span class="math inline">\(O_F\)</span>. So if <span class="math inline">\(m\)</span> is odd, then we get either</p>
 <table>
 <tbody>
@@ -426,9 +562,9 @@ U(AP) = \{1, 2, 3, 4, 5\}
 </tbody>
 </table>
 <p>.</p>
-<h1>A Summary of the Behavior of the Mutation Function <span class="math inline">\(M()\)</span></h1>
+<h1 id="a-summary-of-the-behavior-of-the-mutation-function-m">A Summary of the Behavior of the Mutation Function <span class="math inline">\(M()\)</span></h1>
 <p>We’ve exhausted the universe of all possible arithmetic sequences, and how they would mutate after applying <span class="math inline">\(M()\)</span>. We know exactly how <span class="math inline">\(M()\)</span> behaves in all edge cases! Let us now simplify the various cases to two general cases.</p>
-<h2>There is nothing to “unmutate” as <span class="math inline">\(MP\)</span> is already the same as the answer <span class="math inline">\(AP\)</span></h2>
+<h2 id="there-is-nothing-to-unmutate-as-mp-is-already-the-same-as-the-answer-ap">There is nothing to “unmutate” as <span class="math inline">\(MP\)</span> is already the same as the answer <span class="math inline">\(AP\)</span></h2>
 <p>This can happen in two ways. The easiest way is if <span class="math inline">\(m = 0\)</span>, where all terms in <span class="math inline">\(MP\)</span> are the same and there is nothing to calculate (<span class="math inline">\(M()\)</span> will ensure that this case always results in the same repeating odd number). The other way is if <span class="math inline">\(m\)</span> is even, and <span class="math inline">\(A_0\)</span> is odd — resulting in an “unmutatable” sequence such that <span class="math inline">\(M(AP) = AP\)</span>. E.g. (where <span class="math inline">\(m = 10\)</span> and <span class="math inline">\(A_0 = 11\)</span>),</p>
 <table>
 <tbody>
@@ -444,9 +580,9 @@ U(AP) = \{1, 2, 3, 4, 5\}
 </tbody>
 </table>
 <p>.</p>
-<h2>The terms in <span class="math inline">\(AP\)</span> alternate between even and odd</h2>
+<h2 id="the-terms-in-ap-alternate-between-even-and-odd">The terms in <span class="math inline">\(AP\)</span> alternate between even and odd</h2>
 <p>This covers the case when <span class="math inline">\(m\)</span> is odd. If <span class="math inline">\(m\)</span> is odd, then regardless of the parity of <span class="math inline">\(A_0\)</span>, we get an alternating sequence of even and odd numbers. The import thing to keep in mind here is that the even numbers will mutate after <span class="math inline">\(\mathrm{M()}\)</span> is applied, while the odd numbers will stay as-is as “originals”.</p>
-<h1>How to Design <span class="math inline">\(U()\)</span></h1>
+<h1 id="how-to-design-u">How to Design <span class="math inline">\(U()\)</span></h1>
 <p>Let’s think back to what our mutation function <span class="math inline">\(M()\)</span> does: it simply mutates an even number to an odd number by repeatedly dividing it by 2. If the number if odd to begin with, then there is nothing to mutate; essentially, <em>original</em> odd numbers act as immutable beacons of truth — they do not have to change form when returning to their <span class="math inline">\(AP\)</span> form! Our task in designing an “unmutate” function <span class="math inline">\(U()\)</span> is to preserve the “honest” odd numbers while converting the mutated, “fake” odd numbers back to their evenness, to get back the original progression <span class="math inline">\(AP\)</span> (or at least something close to it if there are multiple such <span class="math inline">\(AP\)</span>s out there.</p>
 <p>You can now see where our extensive parity breakdown of the possible <span class="math inline">\(MP\)</span> can come in handy — we know in what patterns the honest odd numbers show themselves in <em>any</em> <span class="math inline">\(MP\)</span>. Let’s rewrite the table of all possibilities, with this analogy of “honest” and “fake” (<span class="math inline">\(O_F\)</span>) odd numbers after the mutation.</p>
 <table>
@@ -505,7 +641,7 @@ U(AP) = \{1, 2, 3, 4, 5\}
 </tbody>
 </table>
 <p>As you can see, the two dominating patterns are either the all-odd (and honest!) numbers (first 3 rows) or the alternating honest or fake odd numbers. But what about the case where <span class="math inline">\(m\)</span> is a nonzero even value and <span class="math inline">\(A_0\)</span> is even as well (row 4)? In the universe of all possible even numbers of <span class="math inline">\(m\)</span> and <span class="math inline">\(A_0\)</span>, how can we know for a fact that the mutation to <span class="math inline">\(MP\)</span> will fall into a neat pattern?</p>
-<h1>When both <span class="math inline">\(m\)</span> and <span class="math inline">\(A_0\)</span> are even</h1>
+<h1 id="when-both-m-and-a_0-are-even">When both <span class="math inline">\(m\)</span> and <span class="math inline">\(A_0\)</span> are even</h1>
 <p>The short answer is, we can prove that all such sequences will mutate to the familiar <span class="math inline">\(\{\mathrm{O, O, O, O, \cdots{}}\}\)</span>, <span class="math inline">\(\{\mathrm{O, O_F, O, O_F, \cdots{}}\}\)</span>, or <span class="math inline">\(\{\mathrm{O_F, O, O_F, O, \cdots{}}\}\)</span> pattern shown in the table above. The long answer is that it helps to think of linear equations, and to see the possible ways in which we can <em>grow</em> the <span class="math inline">\(AP\)</span> progression from <span class="math inline">\(m\)</span> and <span class="math inline">\(A_0\)</span>.</p>
 <p>If you paid attention in high school algebra class, you will probably remember the formula <span class="math inline">\(y = mx + b\)</span> to describe a straight line (except the vertical line!) in the cartesian coordinate system (in the <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> axes). We can use the <strong>same</strong> equation to describe the growth behavior of an arithmetic sequence! And for that, we use the following translation:</p>
 <table>
@@ -642,7 +778,7 @@ U(AP) = \{1, 2, 3, 4, 5\}
 </ol>
 <p>.</p>
 <p>And now we can finally say that when both <span class="math inline">\(m\)</span> and <span class="math inline">\(A_0\)</span> are even, the parity of terms in in <span class="math inline">\(AP\)</span> can be either all odd or alternating between even and odd! I.e., if both <span class="math inline">\(m = \mathrm{E}\)</span> and <span class="math inline">\(A_0 = \mathrm{E}\)</span>, then <span class="math inline">\(M(AP) = \{\mathrm{O, O, O, O, \cdots{}}\}\)</span>, <span class="math inline">\(\{\mathrm{O, O_F, O, O_F, \cdots{}}\}\)</span>, or <span class="math inline">\(\{\mathrm{O_F, O, O_F, O, \cdots{}}\}\)</span>!</p>
-<h1>Back to Designing <span class="math inline">\(U()\)</span></h1>
+<h1 id="back-to-designing-u">Back to Designing <span class="math inline">\(U()\)</span></h1>
 <p>Through our discussion up to this point, we’ve established that the universe of all possible <span class="math inline">\(MP\)</span>’s fall under three parity patterns: all honest odd (<span class="math inline">\(\mathrm{O}\)</span>) terms, or alternating between “honest” odd (<span class="math inline">\(\mathrm{O}\)</span>) and “fake” odd (<span class="math inline">\(\mathrm{O_F}\)</span>) terms. There are actually four patterns because the all-honest-odd-terms pattern can be broken down into two cases: (1) all terms are the same odd number (<span class="math inline">\(m = 0\)</span>), or (2) the terms are the same as those in <span class="math inline">\(AP\)</span> (i.e., <span class="math inline">\(AP\)</span> was all odd terms to begin with, so there was no actual mutation involved by applying <span class="math inline">\(M()\)</span>).</p>
 <p>So, we can finally start sketching out the design for our “unmutate” function <span class="math inline">\(U()\)</span>.</p>
 <div class="code-and-raw">
@@ -730,7 +866,7 @@ end</code></pre></td></tr></table></div>
 </div>
 <p>The interesting point is in line 18; thanks to our math work, we can even declare that a given mutated sequence was somehow either tampered with, or that the original sequence was not an arithmetic progression! We can make these assertions because we’ve exhausted all possible cases of arithmetic sequences and their mutations — and if things don’t fit the way we expect them to, then the only conclusion is that the given sequence <span class="math inline">\(MP\)</span> was not a byproduct of mutating an <em>arithmetic sequence</em>, but some other kind of sequence. Behold the power of math!</p>
 <p>The other thing is that in line 34 we allow <span class="math inline">\(0\)</span> as a possible value in <span class="math inline">\(AP\)</span>. This means that after a mutation, we might still have an even number (<span class="math inline">\(0\)</span>) in <span class="math inline">\(MP\)</span>! Although this sounds like it would break all of the mathematic discussion we’ve had so far, it does not — the proof is in the Haskell code below. The short answer is that a <span class="math inline">\(0\)</span> is harmless because it shares the same quality — immutability — with all other originally odd terms in <span class="math inline">\(AP\)</span>; thus, treating it as an “odd” number does not change our logic.</p>
-<h1>Haskell version</h1>
+<h1 id="haskell-version">Haskell version</h1>
 <div class="code-and-raw">
 <div class="sourceCode" input="code/toy/srm485-afraid-of-even/Unmutate.hs"><table class="sourceCode numberLines haskell"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
@@ -1034,7 +1170,7 @@ unitTests <span class="fu">=</span> testGroup <span class="st">&quot;Unit tests&
 </div>
 </div>
 <p>As you can see, most of the real work involves identifying the <strong>original, immutable numbers</strong> we can work with as-is (<span class="math inline">\(\mathrm{O}\)</span>) (as opposed to the ones we have to ignore (<span class="math inline">\(\mathrm{O_F}\)</span>)) to construct our tentative sister arithmetic progression <span class="math inline">\(BP\)</span>.</p>
-<h1>Ruby version</h1>
+<h1 id="ruby-version">Ruby version</h1>
 <div class="code-and-raw">
 <div class="sourceCode" input="code/toy/srm485-afraid-of-even/unmutate.rb"><table class="sourceCode numberLines ruby"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
@@ -1314,7 +1450,7 @@ require_relative <span class="st">&#39;./unmutate.rb&#39;</span>
 </div>
 </div>
 <p>This Ruby version is essentially a port of the Haskell version. The problem at hand is so mathematical that it makes sense to simply preserve the clean Haskell definitions.</p>
-<h1>Conclusion</h1>
+<h1 id="conclusion">Conclusion</h1>
 <p>I hope you enjoyed this somewhat prolonged mathematical adventure. The most interesting part for me was seeing the problem as a linear equation, and using the formula (which I learned in high school) to derive powerful conclusions. High school algebra is useful after all! Until next time, happy hacking!</p>
 ]]></summary>
 </entry>
@@ -3159,121 +3295,6 @@ unitTests <span class="fu">=</span> testGroup <span class="st">&quot;Unit tests&
 <hr />
 <ol>
 <li id="fn1"><p>You can test the Haskell hash version in this blog post if you clone this blog’s repo and then build it with Cabal (I’ve listed the program as an executable with all the constraints in the <code>blog.cabal</code> file in the repo root folder). For the Ruby version, simply do <code>ruby path/to/test_hash_ver.rb</code> and Ruby will run the tests inside.<a href="#fnref1">↩</a></p></li>
-</ol>
-</div>
-]]></summary>
-</entry>
-<entry>
-    <title>Using the Nix Package Manager for Haskell Development from Arch Linux</title>
-    <link href="http://funloop.org/post/2015-02-10-using-nix-from-arch.html" />
-    <id>http://funloop.org/post/2015-02-10-using-nix-from-arch.html</id>
-    <published>2015-02-10T00:00:00Z</published>
-    <updated>2015-02-10T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="info center">
-	<code class="date">2015-02-10</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2015-02-10-using-nix-from-arch.md" title="History">*</a>
-	<br>
-	<a href="/tag/programming.html">programming</a>, <a href="/tag/haskell.html">haskell</a>, <a href="/tag/arch.html">arch</a>, <a href="/tag/linux.html">linux</a>, <a href="/tag/nix.html">nix</a>
-</div>
-
-<p>I recently installed and configured NixOS on a laptop and had to learn how to develop Haskell on it. The Nix community uses something called <code>cabal2nix</code> (version 2.0 and up!) and <code>nix-shell</code> to get the job done. While things work quite smoothly right now in NixOS, I was wondering if I could do the same on my desktop Arch Linux box.</p>
-<p>The answer is yes — you can easily use Nix to create a ‘system sandbox’ of sorts (the Nix store) that is completely isolated from Arch’s own Haskell packages/GHC. To be clear, what we are trying to do is install the Nix package manager (which is composed of many satellite programs like <code>nix-env</code>, <code>nix-shell</code>, etc.) so that we can develop Haskell programs with all the advantages that come with it.</p>
-<p>For myself, I have several different Haskell projects, and I wanted to avoid redownloading and recompiling the same packages for each project’s Cabal sandbox environment. Using Nix, I still have the same Cabal sandboxes (one for each project root), but Nix allows all the different sandboxes to share the same packages if the versions and dependencies are the same. And plus, because the Nix store (where Nix stores everything — <code>/nix/store</code>) is independent of Arch’s <code>pacman</code> tool, there is no fear of conflict or things breaking whenever you upgrade Arch Linux’s own Haskell packages.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a></p>
-<h1 id="use-the-nix-manual-to-install-nix">Use the Nix Manual to install Nix</h1>
-<p>The <a href="http://nixos.org/nix/manual/">Nix manual</a> has up-to-date documentation on how to get Nix. When we say <em>Nix</em>, we are talking about the collection of console programs (with a <code>nix-</code> prefix in their names) that make up to form the Nix package management system — much like how <em>Git</em> is made up of smaller programs that work as a team. There is a <code>nix</code> package on the AUR, but I suggest simply following this guide.</p>
-<p>The first step is to run the install script from the NixOS site (which hosts Nix and other related programs) as a normal user:</p>
-<pre><code>$ bash &lt;(curl https://nixos.org/nix/install)</code></pre>
-<p>. You will now have a directory called <code>/nix</code> in your system. This is where everything related to Nix will be stored. In addition, the script will create some hidden files under your user’s home directory with the <code>.nix-</code> prefix. The most important file for now is <code>~/.nix-profile</code>, because it links to a shell script that initializes the Nix environment (to bring in <code>nix-*</code> utilities into the current shell’s scope). You will get a message from the shell script to source this file, like this:</p>
-<pre><code>$ . /home/l/.nix-profile/etc/profile.d/nix.sh</code></pre>
-<p>. For me, I put the whole thing into an alias for my shell called <code>nix</code>, like this:</p>
-<pre><code># somewhere in my ~/.zshrc
-alias nix=&#39;. /home/l/.nix-profile/etc/profile.d/nix.sh&#39;</code></pre>
-<p>.<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> So, whenever I want access to Nix utilities, I just type in <code>nix</code> and go on my merry way.</p>
-<h1 id="install-cabal2nix-and-cabal">Install <code>cabal2nix</code> and <code>cabal</code></h1>
-<p>Now, use your alias to enable Nix.</p>
-<pre><code>$ nix</code></pre>
-<p>You now have access to all the <code>nix-*</code> utilities that make up to provide the Nix package management system. You can list all Nix-packaged packages with <code>nix-env -qaP</code>. For us, we’re interested in the <code>cabal2nix</code> package. As of the time of this writing, it is called <code>nixpkgs.haskellPackages.cabal2nix</code>. However, the <code>haskellPackages</code> prefix refers to the old system that has been more or less deprecated as of <a href="http://article.gmane.org/gmane.linux.distributions.nixos/15513">January 2015</a>. We need to use the <code>haskellngPackages</code> (note the <code>ng</code>) prefix instead. I know that <code>nixpkgs.haskellngPackages.cabal2nix</code> isn’t listed with the <code>nix-env -qaP</code> command, but I believe that’s for legacy reasons. You can still install it! Let’s do that now:</p>
-<pre><code>$ nix-env -iA nixpkgs.haskellngPackages.cabal2nix</code></pre>
-<p>. This will give you the very useful <code>cabal2nix</code> binary which you can use to convert any <code>.cabal</code> file into something that Nix can understand! Let’s also install <code>cabal</code> for Nix:</p>
-<pre><code>$ nix-env -iA nixpkgs.haskellngPackages.cabal-install</code></pre>
-<p>. This will install <code>cabal</code> to <code>~/.nix-profile/bin/cabal</code>. This step is not really necessary if you have <code>cabal-install</code> already installed on the Arch Linux side with <code>pacman</code>. However, I still recommend it because</p>
-<ol style="list-style-type: decimal">
-<li>if you’re using Nix for Haskell development, there is no longer a need to use <code>cabal</code> outside of the Haskell/Nix development process;</li>
-<li>it just makes sense to use the <code>cabal</code> package that comes from the same source tree as <code>cabal2nix</code> (i.e., from the same <code>haskellngPackages</code> set<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a>); and</li>
-<li>as of the time of this writing the <code>cabal-install</code> version from Nix packages set is newer than the Arch version.</li>
-</ol>
-<p>At the end of the day, your <code>cabal</code> binary should be writing to <code>~/.cabal</code> so take care to use one version and stick with it.</p>
-<h1 id="nixify-your-project">Nixify your project</h1>
-<h2 id="create-a-.cabal-file">Create a <code>.cabal</code> file</h2>
-<p>If you haven’t done so already, create a Cabal file <code>your_project.cabal</code> in your project’s root folder to describe the dependencies in the traditional Haskell way. This step is mandatory!</p>
-<h2 id="create-a-shell.nix-file">Create a <code>shell.nix</code> file</h2>
-<p>Go to your project’s root folder that contains <code>your_project.cabal</code>, and do</p>
-<pre><code>$ cabal2nix --shell . &gt; shell.nix</code></pre>
-<p>. The actual syntax is <code>cabal2nix --shell path/to/cabal/file</code>, which prints out the contents of the <code>.nix</code> file to STDOUT. In the case above, we redirect it to a file named <code>shell.nix</code>. The name of this file is important because it is what <code>nix-shell</code> expects.</p>
-<p>Now just invoke</p>
-<pre><code>$ nix-shell</code></pre>
-<p>and you’re set. You will be dropped into a <code>bash</code> instance that has knowledge of the Nix store. The first time you run <code>nix-shell</code>, Nix will identify any missing dependencies and install them for you. Because your project’s <code>shell.nix</code> file describes a Haskell project, <code>nix-shell</code> will install GHC along the way. So when it’s ready, you can start <code>ghci</code>. Because you installed <code>cabal2nix</code> earlier, you have access to <code>cabal</code> (i.e., <code>cabal</code> is a dependency of <code>cabal2nix</code>).</p>
-<p>To build your binary just do <code>cabal build</code>! Personally I like to instantiate a Cabal sandbox with <code>cabal sandbox init</code> first, and then do <code>cabal configure</code>, <code>cabal repl</code>, <code>cabal build</code>, etc.</p>
-<h1 id="local-dependencies">Local dependencies</h1>
-<p>If you’re like me, you might have a Haskell library you wrote for yourself (let’s call it “Private Project X” (PPX)) which is not on Hackage. If you just want to build PPX on its own, you can use the same steps outlined above. But what if your other project depends on PPX?</p>
-<p>The trick is to use <code>cabal2nix</code>, and to set up your <code>~/.nixpkgs</code> folder. You should already have <code>~/.nixpkgs</code> created by now as a result of installing Nix. Make a folder called <code>~/.nixpkgs/my-local-hs</code>. Now do</p>
-<pre><code>$ cabal2nix path/to/ppx &gt; ~/.nixpkgs/my-local-hs/ppx.nix</code></pre>
-<p>. This will create a Nix expression that can be used to build PPX with Nix. It’s like creating a PKGBUILD file. The next step is to create a <code>~/.nixpkgs/config.nix</code> file, as follows:</p>
-<div class="code-and-raw">
-<div class="sourceCode" input="code/config.nix"><table class="sourceCode numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-</pre></td><td class="sourceCode"><pre><code class="sourceCode"># Taken from
-# http://lists.science.uu.nl/pipermail/nix-dev/2015-January/015601.html.
-{
-  packageOverrides = super: let self = super.pkgs; in
-  {
-    haskellngPackages = super.haskellngPackages.override {
-      overrides = self: super: {
-
-        # Enable profiling. Taken from
-        # http://lists.science.uu.nl/pipermail/nix-dev/2015-January/015620.html.
-        # Comment out this line if you do not want to enable profiling!
-        mkDerivation = expr: super.mkDerivation (expr // {
-          enableLibraryProfiling = true; });
-
-        # Private package
-        ztile = self.callPackage ./my-local-hs/ppx.nix {};
-      };
-    };
-  };
-}</code></pre></td></tr></table></div>
-<div class="raw-link">
-<a  class="raw"  href= "/code/config.nix"  mimetype=text/plain > config.nix </a>
-</div>
-</div>
-<p>. Now, invoke <code>cabal2nix --shell</code> for your other project that depends on PPX. When you invoke <code>nix-shell</code> for this other project, Nix should be able to resolve the dependency, based on the information you gave it in <code>~/.nixpkgs/config.nix</code>. That’s it!</p>
-<h1 id="conclusion">Conclusion</h1>
-<p>I recommend trying Nix out for Haskell development, or just as a secondary package manager in general. Right now, everything “Just Works” and it’s a pleasure to see different Haskell projects re-use the same packages, even when they are Cabal-sandboxed, as long as you are doing everything within <code>nix-shell</code>.</p>
-<p>Even though the title of this post suggests that this is an Arch Linux guide to Nix, there is nothing Arch-specific about it. You should be able to use the steps in this post for any Linux distribution.</p>
-<p>Happy hacking!</p>
-<div class="footnotes">
-<hr />
-<ol>
-<li id="fn1"><p>That being said, if you’re using Nix then there is little reason to continue to use the Arch packages. I say this with some reluctance, as I am the author of the <a href="https://github.com/listx/cabal2pkgbuild">cabal2pkgbuild utility</a>.<a href="#fnref1">↩</a></p></li>
-<li id="fn2"><p>There are no Nix utilities with <code>nix</code> as its name, so there’s no concern about name clashing.<a href="#fnref2">↩</a></p></li>
-<li id="fn3"><p>To figure out what Nix packages set, a.k.a. <em>channel</em> you are using, do <code>nix-channel --list</code>.<a href="#fnref3">↩</a></p></li>
 </ol>
 </div>
 ]]></summary>

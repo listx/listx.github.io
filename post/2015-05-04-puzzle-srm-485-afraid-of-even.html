@@ -35,13 +35,13 @@
 	<a href="../tag/programming.html">programming</a>, <a href="../tag/math.html">math</a>, <a href="../tag/haskell.html">haskell</a>, <a href="../tag/ruby.html">ruby</a>
 </div>
 
-<h1>Introduction</h1>
+<h1 id="introduction">Introduction</h1>
 <p>The heart of this problem comes from TopCoder’s <a href="http://community.topcoder.com/stat?c%3Dproblem_statement&amp;pm%3D11146&amp;rd%3D14238">SRM 485 “AfraidOfEven”</a>. There is quite a lot of discussion behind the somewhat elementary math principles, so you might want to skip down to the code directly after reading the problem statement.</p>
-<h1>The Problem</h1>
+<h1 id="the-problem">The Problem</h1>
 <p>An <a href="http://en.wikipedia.org/wiki/Arithmetic_progression">arithmetic progression</a> <span class="math inline">\(AP\)</span> has been changed by the mutation function <span class="math inline">\(M()\)</span> in the following way: any even number <span class="math inline">\(w\)</span> in the sequence has been replaced by <span class="math inline">\(\frac{w}{2}\)</span>, repeatedly, until it has become odd. For example, if <span class="math inline">\(AP = \{2, 4, 6, 8\}\)</span>, then <span class="math inline">\(M(AP) = \{1, 1, 3, 1\}\)</span> (because <span class="math inline">\(\frac{6}{2} = 3\)</span> and <span class="math inline">\(3\)</span> is an odd number, it stopped mutating). Given a mutated sequence <span class="math inline">\(M(AP) = MP\)</span>, design an “unmutate” function <span class="math inline">\(U()\)</span> such that <span class="math inline">\(U(MP) \approx AP\)</span>. If more than one possible sequence <span class="math inline">\(AP\)</span> exists, find the one with the lowest lexicographical order.</p>
-<h2>Constraints</h2>
+<h2 id="constraints">Constraints</h2>
 <p><span class="math inline">\(MP\)</span> is limited to 4 to 50 terms. Each term in <span class="math inline">\(MP\)</span> is from <span class="math inline">\(1\)</span> to <span class="math inline">\(1000\)</span>, inclusive (for now; later on we will consider numbers less than <span class="math inline">\(1\)</span>). The difference (let’s call it <span class="math inline">\(m\)</span>) between each term can be <span class="math inline">\(0\)</span>, so the following is still a valid arithmetic progression: <span class="math inline">\(\{-17, -17, -17, -17, -17\}\)</span>.</p>
-<h3>Lexicographic Order</h3>
+<h3 id="lexicographic-order">Lexicographic Order</h3>
 <p>Given the input</p>
 <p><span class="math display">\[
 MP = \{1, 1, 3, 1, 5\}
@@ -51,9 +51,9 @@ MP = \{1, 1, 3, 1, 5\}
 U(AP) = \{1, 2, 3, 4, 5\}
 \]</span></p>
 <p>. It is possible that <span class="math inline">\(AP\)</span> was actually <span class="math inline">\(\{2, 4, 6, 8, 10\}\)</span> (or even <span class="math inline">\(\{4, 8, 12, 16, 20\}\)</span>), but because <span class="math inline">\(\{1, 2, 3, 4, 5\}\)</span> has the smaller lexicographic representation, it is the correct answer.</p>
-<h1>Interlude</h1>
+<h1 id="interlude">Interlude</h1>
 <p>I will include both Haskell and Ruby solutions in this post below. If you’d like to solve the problem on your own, please read the rest of this post at a later time.</p>
-<h1>The Math</h1>
+<h1 id="the-math">The Math</h1>
 <p>Let us consider the universe of possible arithmetic progressions, and then derive a general algorithm. Because the mutation involves even numbers, it makes sense to look at arithmetic progressions in terms of even and odd numbers (aka <em>parity</em>).</p>
 <p>The two most important parts of an arithmetic progression are the rate of change, <span class="math inline">\(m\)</span>, and the first term <span class="math inline">\(A_0\)</span>. This is because any arithmetic progression can be recreated by knowing only these two values.</p>
 <p>Now, <span class="math inline">\(m\)</span> can be either even (<span class="math inline">\(E\)</span>), odd (<span class="math inline">\(O\)</span>), or zero. The first term <span class="math inline">\(A_0\)</span> can be either even or odd. Let’s plug these possible variations into a table, and see if there are any patterns we can exploit. To determine <span class="math inline">\(AP\)</span> based on <span class="math inline">\(m\)</span> and <span class="math inline">\(A_0\)</span>, we only need to know three laws of parity:</p>
@@ -113,7 +113,7 @@ U(AP) = \{1, 2, 3, 4, 5\}
 </tbody>
 </table>
 <p>. Let’s now look at each of the 6 possible cases, and see if we can simplify things more. We will look at each case from the perspective of <span class="math inline">\(m\)</span>.</p>
-<h2>Mutation When <span class="math inline">\(m\)</span> is Zero</h2>
+<h2 id="mutation-when-m-is-zero">Mutation When <span class="math inline">\(m\)</span> is Zero</h2>
 <p>If <span class="math inline">\(m\)</span> is zero, then <span class="math display">\[AP = {A_0, A_0, A_0\cdots{}A_0}\]</span>. That is, subsequent terms after <span class="math inline">\(A_0\)</span> do not change, so it is a constant sequence of the first term, <span class="math inline">\(A_0\)</span>.</p>
 <p>If <span class="math inline">\(m\)</span> is zero and <span class="math inline">\(A_0\)</span> is <strong>odd</strong>, then all terms remain the same after the mutation; so, <span class="math inline">\(M(AP) = AP\)</span> (no change). E.g.,</p>
 <table>
@@ -144,7 +144,7 @@ U(AP) = \{1, 2, 3, 4, 5\}
 </tbody>
 </table>
 <p>.</p>
-<h2>Mutation When <span class="math inline">\(m\)</span> is Even</h2>
+<h2 id="mutation-when-m-is-even">Mutation When <span class="math inline">\(m\)</span> is Even</h2>
 <p>If <span class="math inline">\(m\)</span> is even, then all terms in <span class="math inline">\(AP\)</span> are either even or odd, based on the first term <span class="math inline">\(A_0\)</span>. Essentially, <span class="math inline">\(AP\)</span> behaves in an identical manner to the case where <span class="math inline">\(m = 0\)</span> as far as parity is concerned — the only difference here is that the subsequent terms change in value by <span class="math inline">\(m\)</span>.</p>
 <p>However, there is a slight twist when we apply mutation. If <span class="math inline">\(A_0 = \mathrm{O}\)</span>, then there are no numbers to mutate, and we get <span class="math inline">\(MP\)</span> where all terms are odd and they change by <span class="math inline">\(m\)</span>. But if <span class="math inline">\(A_0 = \mathrm{E}\)</span>, then we get <em>changing</em> even numbers for <span class="math inline">\(MP\)</span>. So unlike in the case of <span class="math inline">\(m = 0\)</span> where all even numbers reduced down to the same odd number after applying the mutation, we get <em>different</em> odd numbers. E.g.,</p>
 <table>
@@ -161,7 +161,7 @@ U(AP) = \{1, 2, 3, 4, 5\}
 </tbody>
 </table>
 <p>. Notice how even though <span class="math inline">\(AP\)</span> has a sequence of <em>increasing</em> terms, <span class="math inline">\(MP\)</span>’s terms are not increasing in the same manner. We will revisit this case below when simplifying the categories of behavior for <span class="math inline">\(MP\)</span>.</p>
-<h2>Mutation When <span class="math inline">\(m\)</span> is Odd</h2>
+<h2 id="mutation-when-m-is-odd">Mutation When <span class="math inline">\(m\)</span> is Odd</h2>
 <p>This is where things get interesting. If <span class="math inline">\(m\)</span> is odd, then <span class="math inline">\(AP\)</span> becomes a <em>series of alternating even and odd numbers</em>. Whether <span class="math inline">\(AP\)</span> begins with an even or odd number depends, naturally, on the parity of <span class="math inline">\(A_0\)</span>. The more general observation we can make is that, given the fact that we have alternating even and odd numbers in <span class="math inline">\(AP\)</span>, <span class="math inline">\(MP\)</span> will be populated with “originally odd” and “fake odd” (mutated) terms. Let’s call these mutated terms <span class="math inline">\(O_F\)</span>. So if <span class="math inline">\(m\)</span> is odd, then we get either</p>
 <table>
 <tbody>
@@ -177,9 +177,9 @@ U(AP) = \{1, 2, 3, 4, 5\}
 </tbody>
 </table>
 <p>.</p>
-<h1>A Summary of the Behavior of the Mutation Function <span class="math inline">\(M()\)</span></h1>
+<h1 id="a-summary-of-the-behavior-of-the-mutation-function-m">A Summary of the Behavior of the Mutation Function <span class="math inline">\(M()\)</span></h1>
 <p>We’ve exhausted the universe of all possible arithmetic sequences, and how they would mutate after applying <span class="math inline">\(M()\)</span>. We know exactly how <span class="math inline">\(M()\)</span> behaves in all edge cases! Let us now simplify the various cases to two general cases.</p>
-<h2>There is nothing to “unmutate” as <span class="math inline">\(MP\)</span> is already the same as the answer <span class="math inline">\(AP\)</span></h2>
+<h2 id="there-is-nothing-to-unmutate-as-mp-is-already-the-same-as-the-answer-ap">There is nothing to “unmutate” as <span class="math inline">\(MP\)</span> is already the same as the answer <span class="math inline">\(AP\)</span></h2>
 <p>This can happen in two ways. The easiest way is if <span class="math inline">\(m = 0\)</span>, where all terms in <span class="math inline">\(MP\)</span> are the same and there is nothing to calculate (<span class="math inline">\(M()\)</span> will ensure that this case always results in the same repeating odd number). The other way is if <span class="math inline">\(m\)</span> is even, and <span class="math inline">\(A_0\)</span> is odd — resulting in an “unmutatable” sequence such that <span class="math inline">\(M(AP) = AP\)</span>. E.g. (where <span class="math inline">\(m = 10\)</span> and <span class="math inline">\(A_0 = 11\)</span>),</p>
 <table>
 <tbody>
@@ -195,9 +195,9 @@ U(AP) = \{1, 2, 3, 4, 5\}
 </tbody>
 </table>
 <p>.</p>
-<h2>The terms in <span class="math inline">\(AP\)</span> alternate between even and odd</h2>
+<h2 id="the-terms-in-ap-alternate-between-even-and-odd">The terms in <span class="math inline">\(AP\)</span> alternate between even and odd</h2>
 <p>This covers the case when <span class="math inline">\(m\)</span> is odd. If <span class="math inline">\(m\)</span> is odd, then regardless of the parity of <span class="math inline">\(A_0\)</span>, we get an alternating sequence of even and odd numbers. The import thing to keep in mind here is that the even numbers will mutate after <span class="math inline">\(\mathrm{M()}\)</span> is applied, while the odd numbers will stay as-is as “originals”.</p>
-<h1>How to Design <span class="math inline">\(U()\)</span></h1>
+<h1 id="how-to-design-u">How to Design <span class="math inline">\(U()\)</span></h1>
 <p>Let’s think back to what our mutation function <span class="math inline">\(M()\)</span> does: it simply mutates an even number to an odd number by repeatedly dividing it by 2. If the number if odd to begin with, then there is nothing to mutate; essentially, <em>original</em> odd numbers act as immutable beacons of truth — they do not have to change form when returning to their <span class="math inline">\(AP\)</span> form! Our task in designing an “unmutate” function <span class="math inline">\(U()\)</span> is to preserve the “honest” odd numbers while converting the mutated, “fake” odd numbers back to their evenness, to get back the original progression <span class="math inline">\(AP\)</span> (or at least something close to it if there are multiple such <span class="math inline">\(AP\)</span>s out there.</p>
 <p>You can now see where our extensive parity breakdown of the possible <span class="math inline">\(MP\)</span> can come in handy — we know in what patterns the honest odd numbers show themselves in <em>any</em> <span class="math inline">\(MP\)</span>. Let’s rewrite the table of all possibilities, with this analogy of “honest” and “fake” (<span class="math inline">\(O_F\)</span>) odd numbers after the mutation.</p>
 <table>
@@ -256,7 +256,7 @@ U(AP) = \{1, 2, 3, 4, 5\}
 </tbody>
 </table>
 <p>As you can see, the two dominating patterns are either the all-odd (and honest!) numbers (first 3 rows) or the alternating honest or fake odd numbers. But what about the case where <span class="math inline">\(m\)</span> is a nonzero even value and <span class="math inline">\(A_0\)</span> is even as well (row 4)? In the universe of all possible even numbers of <span class="math inline">\(m\)</span> and <span class="math inline">\(A_0\)</span>, how can we know for a fact that the mutation to <span class="math inline">\(MP\)</span> will fall into a neat pattern?</p>
-<h1>When both <span class="math inline">\(m\)</span> and <span class="math inline">\(A_0\)</span> are even</h1>
+<h1 id="when-both-m-and-a_0-are-even">When both <span class="math inline">\(m\)</span> and <span class="math inline">\(A_0\)</span> are even</h1>
 <p>The short answer is, we can prove that all such sequences will mutate to the familiar <span class="math inline">\(\{\mathrm{O, O, O, O, \cdots{}}\}\)</span>, <span class="math inline">\(\{\mathrm{O, O_F, O, O_F, \cdots{}}\}\)</span>, or <span class="math inline">\(\{\mathrm{O_F, O, O_F, O, \cdots{}}\}\)</span> pattern shown in the table above. The long answer is that it helps to think of linear equations, and to see the possible ways in which we can <em>grow</em> the <span class="math inline">\(AP\)</span> progression from <span class="math inline">\(m\)</span> and <span class="math inline">\(A_0\)</span>.</p>
 <p>If you paid attention in high school algebra class, you will probably remember the formula <span class="math inline">\(y = mx + b\)</span> to describe a straight line (except the vertical line!) in the cartesian coordinate system (in the <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> axes). We can use the <strong>same</strong> equation to describe the growth behavior of an arithmetic sequence! And for that, we use the following translation:</p>
 <table>
@@ -393,7 +393,7 @@ U(AP) = \{1, 2, 3, 4, 5\}
 </ol>
 <p>.</p>
 <p>And now we can finally say that when both <span class="math inline">\(m\)</span> and <span class="math inline">\(A_0\)</span> are even, the parity of terms in in <span class="math inline">\(AP\)</span> can be either all odd or alternating between even and odd! I.e., if both <span class="math inline">\(m = \mathrm{E}\)</span> and <span class="math inline">\(A_0 = \mathrm{E}\)</span>, then <span class="math inline">\(M(AP) = \{\mathrm{O, O, O, O, \cdots{}}\}\)</span>, <span class="math inline">\(\{\mathrm{O, O_F, O, O_F, \cdots{}}\}\)</span>, or <span class="math inline">\(\{\mathrm{O_F, O, O_F, O, \cdots{}}\}\)</span>!</p>
-<h1>Back to Designing <span class="math inline">\(U()\)</span></h1>
+<h1 id="back-to-designing-u">Back to Designing <span class="math inline">\(U()\)</span></h1>
 <p>Through our discussion up to this point, we’ve established that the universe of all possible <span class="math inline">\(MP\)</span>’s fall under three parity patterns: all honest odd (<span class="math inline">\(\mathrm{O}\)</span>) terms, or alternating between “honest” odd (<span class="math inline">\(\mathrm{O}\)</span>) and “fake” odd (<span class="math inline">\(\mathrm{O_F}\)</span>) terms. There are actually four patterns because the all-honest-odd-terms pattern can be broken down into two cases: (1) all terms are the same odd number (<span class="math inline">\(m = 0\)</span>), or (2) the terms are the same as those in <span class="math inline">\(AP\)</span> (i.e., <span class="math inline">\(AP\)</span> was all odd terms to begin with, so there was no actual mutation involved by applying <span class="math inline">\(M()\)</span>).</p>
 <p>So, we can finally start sketching out the design for our “unmutate” function <span class="math inline">\(U()\)</span>.</p>
 <div class="code-and-raw">
@@ -481,7 +481,7 @@ end</code></pre></td></tr></table></div>
 </div>
 <p>The interesting point is in line 18; thanks to our math work, we can even declare that a given mutated sequence was somehow either tampered with, or that the original sequence was not an arithmetic progression! We can make these assertions because we’ve exhausted all possible cases of arithmetic sequences and their mutations — and if things don’t fit the way we expect them to, then the only conclusion is that the given sequence <span class="math inline">\(MP\)</span> was not a byproduct of mutating an <em>arithmetic sequence</em>, but some other kind of sequence. Behold the power of math!</p>
 <p>The other thing is that in line 34 we allow <span class="math inline">\(0\)</span> as a possible value in <span class="math inline">\(AP\)</span>. This means that after a mutation, we might still have an even number (<span class="math inline">\(0\)</span>) in <span class="math inline">\(MP\)</span>! Although this sounds like it would break all of the mathematic discussion we’ve had so far, it does not — the proof is in the Haskell code below. The short answer is that a <span class="math inline">\(0\)</span> is harmless because it shares the same quality — immutability — with all other originally odd terms in <span class="math inline">\(AP\)</span>; thus, treating it as an “odd” number does not change our logic.</p>
-<h1>Haskell version</h1>
+<h1 id="haskell-version">Haskell version</h1>
 <div class="code-and-raw">
 <div class="sourceCode" input="code/toy/srm485-afraid-of-even/Unmutate.hs"><table class="sourceCode numberLines haskell"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
@@ -785,7 +785,7 @@ unitTests <span class="fu">=</span> testGroup <span class="st">&quot;Unit tests&
 </div>
 </div>
 <p>As you can see, most of the real work involves identifying the <strong>original, immutable numbers</strong> we can work with as-is (<span class="math inline">\(\mathrm{O}\)</span>) (as opposed to the ones we have to ignore (<span class="math inline">\(\mathrm{O_F}\)</span>)) to construct our tentative sister arithmetic progression <span class="math inline">\(BP\)</span>.</p>
-<h1>Ruby version</h1>
+<h1 id="ruby-version">Ruby version</h1>
 <div class="code-and-raw">
 <div class="sourceCode" input="code/toy/srm485-afraid-of-even/unmutate.rb"><table class="sourceCode numberLines ruby"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
@@ -1065,12 +1065,12 @@ require_relative <span class="st">'./unmutate.rb'</span>
 </div>
 </div>
 <p>This Ruby version is essentially a port of the Haskell version. The problem at hand is so mathematical that it makes sense to simply preserve the clean Haskell definitions.</p>
-<h1>Conclusion</h1>
+<h1 id="conclusion">Conclusion</h1>
 <p>I hope you enjoyed this somewhat prolonged mathematical adventure. The most interesting part for me was seeing the problem as a linear equation, and using the formula (which I learned in high school) to derive powerful conclusions. High school algebra is useful after all! Until next time, happy hacking!</p>
 
 		</div>
 		<div id="footer">
-			<p>Copyright (C) 2013-2015 Linus Arver. All rights reserved.</p>
+			<p>Copyright (C) 2013-2016 Linus Arver. All rights reserved.</p>
 			<a href="https://github.com/listx/listx_blog">Site</a>
 			<a href="https://github.com/listx/listx.github.io">generated</a>
 			with
