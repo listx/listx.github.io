@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Linus's Blog - TexLive 2016 with Docker</title>
+		<link rel="stylesheet" href="../css/base.css">
+		<link rel="stylesheet" href="../css/syntax.css">
+		<link href="http://fonts.googleapis.com/css?family=Merriweather:300,300italic,700italic,700" rel="stylesheet" type="text/css">
+		<link rel="shortcut icon" type="image/png" href="../favicon.png">
+		<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+		<script src="../misc.js"></script>
+		
+	</head>
+	<body>
+		<div id="header">
+			<a href="../">Home</a>
+			&bull;
+			<a href="../about.html">About</a>
+			&bull;
+			<a href="../art.html">Art</a>
+			&bull;
+			<a href="../code.html">Code</a>
+			&bull;
+			<a href="../papers.html">Papers</a>
+			&bull;
+			<a href="../archive.html">Archive</a>
+		</div>
+
+		<div id="content">
+			<h1 class="center" id="page-title">TexLive 2016 with Docker</h1>
+
+			<div class="info center">
+	<code class="date">2016-08-28</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2016-08-28-texlive-with-docker.org" title="History">*</a>
+	<br>
+	<a href="../tag/linux.html">linux</a>, <a href="../tag/tex.html">tex</a>, <a href="../tag/docker.html">docker</a>
+</div>
+
+<h1 id="motivation">Motivation</h1>
+<p>When I first started using TeX, my main OS was Arch Linux. This was fine until I switched to NixOS a couple years ago — I found that NixOS’s packaging of <a href="https://en.wikipedia.org/wiki/TeX_Live">TexLive</a> was not as current as Arch Linux.</p>
+<p>This is still the case today.</p>
+<p>As much as I love using NixOS, creating a Nix package of a very large project like TexLive is no joke.</p>
+<h1 id="enter-docker">Enter Docker</h1>
+<p>Containerization makes sense for small, do-one-thing-well services like webservers and such, but it makes even more sense for big, complicated <em>collections</em> of packages like TexLive. There are hundreds (thousands?) of components in TexLive: individual TeX packages, fonts, typesetting engines, etc. Thankfully, Arch Linux maintainers do a great of keeping up with upstream packages, and TexLive is no exception!</p>
+<p>I’ve created a <a href="https://github.com/listx/texlive-docker">new Github project</a> (simply called <code>texlive-docker</code>) to house the Dockerfiles I use to create TexLive images — all built on top of Arch Linux as the base image. The project uses <a href="https://travis-ci.org/listx/texlive-docker">TravisCI</a> to upload images to <a href="https://hub.docker.com/r/listx/texlive/tags/">Docker Hub</a>.</p>
+<p>Be sure to have a look at the <a href="https://github.com/listx/texlive-docker/blob/master/README.md">README</a> for suggestions on usage.</p>
+<h1 id="closing-thoughts">Closing Thoughts</h1>
+<p>If you have any suggestions for improvement (please bear in mind that we want to keep the images as simple as possible), please let me know in the Github issue tracker.</p>
+<p>Happy TeX-ing!</p>
+
+		</div>
+		<div id="footer">
+			<p>Copyright (C) 2013-2016 Linus Arver. All rights reserved.</p>
+			<a href="https://github.com/listx/listx_blog">Site</a>
+			<a href="https://github.com/listx/listx.github.io">generated</a>
+			with
+			<a href="http://jaspervdj.be/hakyll">Hakyll</a>
+			and
+			<a href="http://sebastiaanvisser.github.com/clay">Clay</a>.
+			<br>
+			<a href="../atom.xml">Atom feed</a>
+		</div>
+	</body>
+</html>
