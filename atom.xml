@@ -8,8 +8,132 @@
         <name>Linus Arver</name>
         <email></email>
     </author>
-    <updated>2016-09-24T00:00:00Z</updated>
+    <updated>2016-10-01T00:00:00Z</updated>
     <entry>
+    <title>My Esrille Layout: The ZQ Layout</title>
+    <link href="http://funloop.org/post/2016-10-01-my-esrille-layout.html" />
+    <id>http://funloop.org/post/2016-10-01-my-esrille-layout.html</id>
+    <published>2016-10-01T00:00:00Z</published>
+    <updated>2016-10-01T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="info center">
+	<code class="date">2016-10-01</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2016-10-01-my-esrille-layout.org" title="History">*</a>
+	<br>
+	<a href="/tag/programming.html">programming</a>, <a href="/tag/c.html">c</a>, <a href="/tag/hardware.html">hardware</a>
+</div>
+
+<h1 id="the-zq-keyoard-layout">The ZQ Keyoard Layout</h1>
+<p>I’ve spent quite some time on keyboards in my previous posts, and this post is no different. After several months of tweaking my <a href="./2016-04-14-esrille-nisse-keyboard.html">original layout</a>, I have more or less settled on the final design. You can get the sources at my repo <a href="https://github.com/listx/new-keyboard">here</a>.</p>
+<p>Is for the name “ZQ”, it was originally chosen from the way these keys were arranged; the location of these keys have sence changed, but the name has stuck.</p>
+<h2 id="base-layer">Base Layer</h2>
+<pre><code>    □ □ □ □ □ □     □ □ □ □ □ □
+    ! # * □ □         □ □ / ~ $
+□ □ ; y o p v 1     1 m f t r _ □ □
+□ 2 a i e u w 3     2 h j k l n 3 □ &lt;--- Home row
+  4 z x q &#39; &quot;         b d g c s 4
+      5 6 7 8 9     5 , 6 7 8 &lt;--------- Thumb row
+
+Left-side legend
+
+1) PageUp
+2) Escape
+3) Tab
+4) Shift
+5) Insert
+6) Super (Windows key)
+7) Space
+8) Caps Lock (remapped with xmodmap to Hyper key)
+9) Control
+
+Right-side legend
+
+1) PageDown
+2) Return
+3) Delete
+4) Shift
+5) FN2
+6) FN
+7) Alt
+8) Right Alt (aka &quot;AltGr&quot; for US International Layout)
+</code></pre>
+<h2 id="fn-layer">FN Layer</h2>
+<pre><code>    □ □ □ □ □ □     □ □ □ □ □ □
+    □ □ □ □ □         □ □ □ □ □
+□ □ ? 7 8 9 = a     a ` \ . : &amp; □ □
+□ □ - 4 5 6 + ^     @ b { ( ) } □ □ &lt;--- Home row
+  □ 0 1 2 3 %         | [ &lt; &gt; ] □
+      □ □ b □ □     □ □ □ □ □ &lt;--------- Thumb row
+
+Left-side legend
+
+a) Home
+b) Space
+
+Right-side legend
+
+a) End
+b) Backspace
+</code></pre>
+<h2 id="fn2-layer">FN2 Layer</h2>
+<pre><code>    □ □ □ □ □ □     □ □ □ □ □ □
+    □ □ □ □ □         □ □ □ □ □
+□ □ l g h i □ □     □ □ □ □ □ □ □ □
+□ □ k d e f □ □     □ a b c d □ □ □ &lt;--- Home row
+  □ j a b c □         □ □ □ □ □ □
+      □ □ □ □ □     □ □ □ □ □ &lt;--------- Thumb row
+
+Left-side legend
+
+a) F1
+b) F2
+c) F3
+d) F4
+e) F5
+f) F6
+g) F7
+h) F8
+i) F9
+j) F10
+k) F11
+l) F12
+
+Right-side legend
+
+a) Left Arrow
+b) Down Arrow
+c) Up Arrow
+d) Right Arrow
+</code></pre>
+<h2 id="keycap-arrangement">Keycap Arrangement</h2>
+<p>I have not covered this topic before, but I think it is worth mentioning. On the underside of each keycap, there is a number; presumably for the row that the keycap is designed for. I’ve rearranged the default keycap placement to better reflect how I use my keys. The biggest change from the default Esrille setup is that I vertically flip the thumb row keys, so that they are “upside-down”. I find this arrangement more comfortable for my thumbs.</p>
+<pre><code>    n n n n n n     n n n n n n
+    n n n n n         n n n n n
+n 3 3 3 3 3 3 n     n 3 3 3 3 3 3 n
+3 3 2 2 2 2 2 n     n 2 2 2 2 2 3 3 &lt;--- Home row
+  1 2 1 1 1 2         2 1 1 1 2 1
+      1 1 1 1 1     1 1 1 1 1 &lt;--------- Thumb row*
+
+Legend
+
+n) No number
+1) Row 1
+2) Row 2
+3) Row 3
+
+*The thumb row keycaps are flipped upside-down for better comfort.
+</code></pre>
+<h1 id="typing-speed">Typing Speed</h1>
+<p>After some time, I realized that the end goal was to design a layout that was not more “optimal” in the sense of mechanical efficiency, but rather to design something more <em>comfortable</em> to use. I can readily say that even at this early stage, I tend to like this layout more over Qwerty because my hands stay put as I type. The only time I move my wrists from their default position is when I need to reach the six keys up top in the base layer (<code>!#*/~$</code>).</p>
+<p>It may turn out that this new layout does not really improve raw typing speed; but really I don’t care because home-row access to parentheses and the backspace key are too good to let go.</p>
+<h1 id="other-thoughts">Other Thoughts</h1>
+<p>The design has changed quite a bit in these past few months. After some initial trials, I realized that the arrangement recommended by my <a href="https://github.com/listx/keylo">program</a> was not really optimized the way I wanted it to be. For one, the corpus I fed into the program was not very good because it didn’t realy reflect my real-world use-case; I use Vim-style HJKL keys almost everywhere, and really to get a truly representative histogram of keypresses, I should have used a keylogger for some months to record my actual usage. As time was of the essence, I decided to just evolve the layout gradually, tweaking bits I found annoying.</p>
+<p>One hurdle was simply trying to avoid using the same finger in succession. In the current ZQ layout, the right index finger is charged with six keys: MHBFJD. It took a lot of trial and error to arrive at this combination.</p>
+<p>I also just kept the original Qwerty placement of the HJKL keys. The main reason is that I use these keys all the time, so much that they deserve their original home-row placement. And, actually they helped in reducing same-finger consecutiveness (J and K are rare letters in English).</p>
+<p>Another point of concern was the interaction of some key combinations like YN and &lt;Return&gt;. It is common to type either Y or N and press &lt;Return&gt; immediately after, when dealing with interactive torminal programs. The same goes for some UNIX-y combinations like <code>~/</code> for the home directory in the filesystem, or <code>*</code> and <code>/</code> for interactive search in vim(1) and less(1), respectvely. The current design of ZQ strives to make these combinations easy to type.</p>
+<p>Lastly, I paid a great deal of attention for certain common letter combinations — in particular, “gh”, “ch”, “sh”, “th”, and “wh”. Because I decided to keep HJKL keys on the home row, and because H was assigned to the right index finger, I had to make sure that I place the GCSTW keys either on the left side of the keyboard (as I did with “W”), or place them for the other fingers. This effort alone resulted in dictating where most of the keys ended up.</p>
+<p>After all that’s been said, time will tell if I truly do end up using this layout. I have a friend who uses Dvorak for work and Qwerty for gaming; perhaps I’ll end up in a similar boat.</p>
+]]></summary>
+</entry>
+<entry>
     <title>The Parking Lot Problem, or "Smallest Free Number"</title>
     <link href="http://funloop.org/post/2016-09-24-parking-lot-problem-revisited.html" />
     <id>http://funloop.org/post/2016-09-24-parking-lot-problem-revisited.html</id>
@@ -975,79 +1099,6 @@ source-code-pro-2.010
 )
 </code></pre>
 <p>. Emacs will now automatically pick up <code>.lhs</code> files and apply <code>latex-mode</code> and <code>haskell-mode</code> with <code>mmm-mode</code>. Happy hacking!</p>
-]]></summary>
-</entry>
-<entry>
-    <title>Useful rxvt-unicode (URxvt) Plugins</title>
-    <link href="http://funloop.org/post/2015-06-25-urxvt-plugins.html" />
-    <id>http://funloop.org/post/2015-06-25-urxvt-plugins.html</id>
-    <published>2015-06-25T00:00:00Z</published>
-    <updated>2015-06-25T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="info center">
-	<code class="date">2015-06-25</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2015-06-25-urxvt-plugins.org" title="History">*</a>
-	<br>
-	<a href="/tag/programming.html">programming</a>, <a href="/tag/linux.html">linux</a>
-</div>
-
-<h1 id="introduction">Introduction</h1>
-<p>I’ve been using <a href="http://software.schmorp.de/pkg/rxvt-unicode.html">rxvt-unicode</a> (<code>urxvt</code>) for years. But, I never really bothered to customize it beyond adding in some simple font changing hotkeys. I discovered that <code>urxvt</code> can be customized with Perl plugins. This post shows some of the plugins I’ve started using.</p>
-<p>For this post, I will use the terms <strong>terminal</strong> and <code>urxvt</code> interchangeably. The plugins are configured in your <code>~/.Xdefaults</code> file, and to have this file take effect, run</p>
-<pre><code>xrdb -merge ~/.Xdefaults
-</code></pre>
-<p>. The hotkeys are defined with key names from <a href="http://cgit.freedesktop.org/xorg/proto/x11proto/plain/keysymdef.h">keysymdef.h</a> as part of X11.</p>
-<h1 id="keyboard-select">keyboard-select</h1>
-<p><a href="https://github.com/muennich/urxvt-perls">Homepage</a> (part of <code>urxvt-perls</code>)</p>
-<p>This is by far the most useful plugin. If you ever need surgical precision to select a particular chunk of text in your terminal, you can use this plugin. It gives you Vim-like <em>normal mode</em> navigation in your terminal — and then you can use hotkeys like <code>v</code> or <code>V</code> to select chunks of text, and use <code>y</code> to copy it to your X primary buffer.</p>
-<p>I use the snippet below in my <code>~/.Xdefaults</code>:</p>
-<pre><code>! keyboard-select
-URxvt.keysym.M-s: perl:keyboard-select:activate
-URxvt.keysym.M-r: perl:keyboard-select:search
-</code></pre>
-<p>. Now, <code>M-s</code> (<code>Alt-s</code> for you folks not familiar with Emacs-style shortcut-naming) in the terminal gives you Vim-like normal mode like I mentioned above. The other shortcut, <code>M-r</code>, gives your reverse search against your terminal’s buffer.</p>
-<p>Let <code>M-r</code> sink in. This means that your terminal is basically running a virtual <code>less</code> pager. Any time you want to go search against some text in your terminal, just use <code>M-r</code> and search; use <code>n</code> and <code>N</code> just like <code>less</code>.</p>
-<p>Actually, <code>M-r</code> is basically doing <code>M-s</code> followed by <code>?</code>. So, if you like searching forwards (not backwards), just do <code>M-s</code> and then <code>/</code>. But considering how terminal buffers are always <strong>above</strong> the cursor, it makes sense to search backwards by default with <code>M-r</code>. For me this runs against my habit of using <code>less</code> and <code>/</code>, but there you have it.</p>
-<h1 id="clipboard">clipboard</h1>
-<p><a href="https://github.com/muennich/urxvt-perls">Homepage</a> (part of <code>urxvt-perls</code>)</p>
-<p><code>~/.Xdefaults</code> snippet:</p>
-<pre><code>! clipboard
-! update clipboard whenever primary gets updated
-URxvt.clipboard.autocopy: true
-URxvt.keysym.M-c: perl:clipboard:copy
-URxvt.keysym.M-v: perl:clipboard:paste
-URxvt.keysym.M-C-v: perl:clipboard:paste_escaped
-</code></pre>
-<p>. To be honest I think the <code>autocopy</code> feature is a bit flaky (at least when using these shortcuts inside a NixOS VirtualBox VM from a Mac) — but that’s not that important.</p>
-<p><code>M-c</code> copies the X11 primary buffer (aka X selection) to the clipboard buffer.</p>
-<p>What’s really nice is the <code>M-v</code> shortcut — it pastes the <strong>clipboard</strong> buffer, not the X11 primary buffer (there is <code>S-&lt;insert&gt;</code> (Shift-Insert) for that). Now you don’t have to type <code>$(xsel -b)</code> for the same thing.</p>
-<p><code>M-C-v</code> (<code>Alt-Control-v</code>) does the same thing, but escapes any special characters. This is very handy — a simple use case might be using <code>M-s</code> (search shortcut discussed above) to find a particular file with a long name (think MP3 files) from the output of <code>ls</code> — you can then just use <code>v</code> to copy that filename to the X11 buffer, then use <code>M-c</code> to copy it to clipboard buffer (if <code>autocopy</code> is working this step is unnecessary), then use <code>M-C-v</code> to paste it in, escaping things like space characters so that you can use other tools like <code>cp</code> or <code>mv</code> on them more easily.</p>
-<h1 id="url-select">url-select</h1>
-<p><a href="https://github.com/muennich/urxvt-perls">Homepage</a> (part of <code>urxvt-perls</code>)</p>
-<p><code>~/.Xdefaults</code> snippet:</p>
-<pre><code>! url-select. We can middle-click on any url and this will launch the browser
-! defined by `URxvt.url-select.launcher`.
-URxvt.keysym.M-u: perl:url-select:select_next
-URxvt.url-select.underline: true
-URxvt.url-select.launcher: firefox
-</code></pre>
-<p>. Now you can use <code>M-u</code> to jump between any URL that was printed to the terminal buffer. Use <code>j</code> and <code>k</code> to jump to the next/previous URL, and <code>y</code> to copy it to your X primary buffer (and <code>M-c</code> to make sure it’s also in the clipboard) for easy URL handling. Or, simply press <code>ENTER</code> to open that link in your browser. Next time you grab your mouse to carefully highlight a URL in the terminal, think again!</p>
-<h1 id="font-size">font-size</h1>
-<p><a href="https://github.com/majutsushi/urxvt-font-size">Homepage</a></p>
-<p>This plugin allows you to scale fonts up or down.</p>
-<p><code>~/.Xdefaults</code> snippet:</p>
-<pre><code>! `font-size` plugin
-URxvt.keysym.C-minus: perl:font-size:decrease
-URxvt.keysym.C-equal: perl:font-size:increase
-! The default font increase step size is 1. This is for portability across all
-! fonts (some fonts do not support particular font sizes). Because changing font
-! size only really makes sense for anti-aliased fonts (Terminus is bitmapped),
-! and because anti-aliased fonts support any size, it makes sense to just use a
-! size step of 4 for faster transitions between font size changes.
-URxvt.font-size.step: 4
-</code></pre>
-<p>. This is pretty self-explanatory. Use <code>C-minus</code> or <code>C-equal</code> to change your font size as needed — perfect for screencasts or demos!</p>
-<h1 id="conclusion">Conclusion</h1>
-<p>Now that I use these plugins, there’s even less interruption to use the mouse. I hope you find them as useful as I have.</p>
-<p>Happy hacking!</p>
 ]]></summary>
 </entry>
 
