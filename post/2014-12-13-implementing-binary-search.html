@@ -317,12 +317,12 @@ binary_search(KEYS, key, first_index, last_index):
 <span class="co"> * call with the argument &quot;rng&quot;.</span>
 <span class="co"> */</span>
 
-<span class="ot">#include &lt;stdbool.h&gt; </span><span class="co">/* bool */</span>
-<span class="ot">#include &lt;stdio.h&gt;</span>
-<span class="ot">#include &lt;stdint.h&gt; </span><span class="co">/* UINT32_MAX */</span>
-<span class="ot">#include &lt;stdlib.h&gt; </span><span class="co">/* malloc() */</span>
-<span class="ot">#include &lt;string.h&gt; </span><span class="co">/* strcmp() */</span>
-<span class="ot">#include &lt;inttypes.h&gt; </span><span class="co">/* uint32_t */</span>
+<span class="pp">#include </span><span class="im">&lt;stdbool.h&gt;</span><span class="pp"> </span><span class="co">/* bool */</span>
+<span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span>
+<span class="pp">#include </span><span class="im">&lt;stdint.h&gt;</span><span class="pp"> </span><span class="co">/* UINT32_MAX */</span>
+<span class="pp">#include </span><span class="im">&lt;stdlib.h&gt;</span><span class="pp"> </span><span class="co">/* malloc() */</span>
+<span class="pp">#include </span><span class="im">&lt;string.h&gt;</span><span class="pp"> </span><span class="co">/* strcmp() */</span>
+<span class="pp">#include </span><span class="im">&lt;inttypes.h&gt;</span><span class="pp"> </span><span class="co">/* uint32_t */</span>
 
 <span class="kw">typedef</span> <span class="dt">uint32_t</span> u32;
 <span class="kw">typedef</span> <span class="dt">uint64_t</span> u64;
@@ -345,7 +345,7 @@ u32 pcg32_random_r(pcg32_random_t *rng)
 	rng-&gt;state = oldstate * 6364136223846793005ULL + (rng-&gt;inc|<span class="dv">1</span>);
 	u32 xorshifted = ((oldstate &gt;&gt; 18u) ^ oldstate) &gt;&gt; 27u;
 	u32 rot = oldstate &gt;&gt; 59u;
-	<span class="kw">return</span> (xorshifted &gt;&gt; rot) | (xorshifted &lt;&lt; ((-rot) &amp; <span class="dv">31</span>));
+	<span class="cf">return</span> (xorshifted &gt;&gt; rot) | (xorshifted &lt;&lt; ((-rot) &amp; <span class="dv">31</span>));
 }
 
 u32 uniform32(<span class="dt">int</span> range, pcg32_random_t *rng)
@@ -354,8 +354,8 @@ u32 uniform32(<span class="dt">int</span> range, pcg32_random_t *rng)
 	u32 x;
 	rand_excess = ((UINT32_MAX % range) + <span class="dv">1</span>) % range;
 	rand_limit = UINT32_MAX - rand_excess;
-	<span class="kw">while</span> ((x = pcg32_random_r(rng)) &gt; rand_limit) {};
-	<span class="kw">return</span> x % range;
+	<span class="cf">while</span> ((x = pcg32_random_r(rng)) &gt; rand_limit) {};
+	<span class="cf">return</span> x % range;
 }
 
 <span class="co">/* Populate an array with increasing numbers; we randomly choose whether to skip</span>
@@ -365,7 +365,7 @@ u32 uniform32(<span class="dt">int</span> range, pcg32_random_t *rng)
 u32 init_array(u32 *keys, bool has_key, pcg32_random_t *rng)
 {
 	<span class="dt">int</span> i, j;
-	<span class="kw">for</span> (i = <span class="dv">0</span>, j = <span class="dv">0</span>; i &lt; KEYS_TOTAL; i++) {
+	<span class="cf">for</span> (i = <span class="dv">0</span>, j = <span class="dv">0</span>; i &lt; KEYS_TOTAL; i++) {
 		j += uniform32(<span class="dv">2</span>, rng);
 		keys[i] = i + j;
 	}
@@ -376,11 +376,11 @@ u32 init_array(u32 *keys, bool has_key, pcg32_random_t *rng)
 <span class="co">	 * &quot;impossible&quot; means a key whose value lies outside the range of values</span>
 <span class="co">	 * that exist in the array).</span>
 <span class="co">	 */</span>
-	<span class="kw">if</span> (has_key)
-		<span class="kw">return</span> keys[uniform32(KEYS_TOTAL, rng)];
-	<span class="kw">else</span>
+	<span class="cf">if</span> (has_key)
+		<span class="cf">return</span> keys[uniform32(KEYS_TOTAL, rng)];
+	<span class="cf">else</span>
 		<span class="co">/* Impossible key = biggest key + 1 */</span>
-		<span class="kw">return</span> keys[KEYS_TOTAL - <span class="dv">1</span>] + <span class="dv">1</span>;
+		<span class="cf">return</span> keys[KEYS_TOTAL - <span class="dv">1</span>] + <span class="dv">1</span>;
 }
 
 <span class="dt">int</span> binary_search(u32 *keys, u32 key, <span class="dt">int</span> min, <span class="dt">int</span> max)
@@ -389,17 +389,17 @@ u32 init_array(u32 *keys, bool has_key, pcg32_random_t *rng)
 	<span class="dt">int</span> mid;
 
 	list_size = (max - min) + <span class="dv">1</span>;
-	<span class="kw">if</span> (list_size == <span class="dv">0</span>)
-		<span class="kw">return</span> KEY_NOT_FOUND;
+	<span class="cf">if</span> (list_size == <span class="dv">0</span>)
+		<span class="cf">return</span> KEY_NOT_FOUND;
 
 	mid = (list_size / <span class="dv">2</span>) + min;
 
-	<span class="kw">if</span> (key &lt; keys[mid]) {
-		<span class="kw">return</span> binary_search(keys, key, min, mid - <span class="dv">1</span>);
-	} <span class="kw">else</span> <span class="kw">if</span> (key &gt; keys[mid]) {
-		<span class="kw">return</span> binary_search(keys, key, mid + <span class="dv">1</span>, max);
-	} <span class="kw">else</span> {
-		<span class="kw">return</span> mid;
+	<span class="cf">if</span> (key &lt; keys[mid]) {
+		<span class="cf">return</span> binary_search(keys, key, min, mid - <span class="dv">1</span>);
+	} <span class="cf">else</span> <span class="cf">if</span> (key &gt; keys[mid]) {
+		<span class="cf">return</span> binary_search(keys, key, mid + <span class="dv">1</span>, max);
+	} <span class="cf">else</span> {
+		<span class="cf">return</span> mid;
 	}
 }
 
@@ -413,30 +413,30 @@ u32 init_array(u32 *keys, bool has_key, pcg32_random_t *rng)
 	pcg32_random_t rng = {0x1234567890abcdefULL, 0x1234567890abcdefULL};
 
 	<span class="co">/* RNG self-test. */</span>
-	<span class="kw">if</span> (argc &gt; <span class="dv">1</span> &amp;&amp; strcmp(argv[<span class="dv">1</span>], <span class="st">&quot;rng&quot;</span>) == <span class="dv">0</span>) {
-		printf(<span class="st">&quot;Running RNG self-test.</span><span class="ch">\n</span><span class="st">&quot;</span>);
-		printf(<span class="st">&quot;%&quot;</span>PRIu32<span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>, pcg32_random_r(&amp;rng));
-		<span class="kw">for</span> (i = <span class="dv">0</span>; i &lt; <span class="dv">1000000</span>; i++) {
+	<span class="cf">if</span> (argc &gt; <span class="dv">1</span> &amp;&amp; strcmp(argv[<span class="dv">1</span>], <span class="st">&quot;rng&quot;</span>) == <span class="dv">0</span>) {
+		printf(<span class="st">&quot;Running RNG self-test.</span><span class="sc">\n</span><span class="st">&quot;</span>);
+		printf(<span class="st">&quot;%&quot;</span>PRIu32<span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>, pcg32_random_r(&amp;rng));
+		<span class="cf">for</span> (i = <span class="dv">0</span>; i &lt; <span class="dv">1000000</span>; i++) {
 			pcg32_random_r(&amp;rng);
 		}
-		printf(<span class="st">&quot;%&quot;</span>PRIu32<span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>, pcg32_random_r(&amp;rng));
-		<span class="kw">for</span> (i = <span class="dv">0</span>; i &lt; <span class="dv">100</span>; i++) {
-			printf(<span class="st">&quot;%&quot;</span>PRIu32<span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>,
+		printf(<span class="st">&quot;%&quot;</span>PRIu32<span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>, pcg32_random_r(&amp;rng));
+		<span class="cf">for</span> (i = <span class="dv">0</span>; i &lt; <span class="dv">100</span>; i++) {
+			printf(<span class="st">&quot;%&quot;</span>PRIu32<span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>,
 				uniform32((UINT32_MAX / <span class="dv">2</span>) + (UINT32_MAX / <span class="dv">3</span>),
 				&amp;rng));
 		}
 		keys = malloc(KEYS_TOTAL * <span class="kw">sizeof</span>(u32));
-		<span class="kw">for</span> (i = <span class="dv">0</span>; i &lt; <span class="dv">10</span>; i++) {
+		<span class="cf">for</span> (i = <span class="dv">0</span>; i &lt; <span class="dv">10</span>; i++) {
 			has_key = (bool)uniform32(<span class="dv">2</span>, &amp;rng);
 			key = init_array(keys, has_key, &amp;rng);
 			printf(<span class="st">&quot;last number in array %d for key %&quot;</span>PRIu32<span class="st">&quot;: &quot;</span>,
 				i, key);
-			printf(<span class="st">&quot;%&quot;</span>PRIu32<span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>, keys[KEYS_TOTAL - <span class="dv">1</span>]);
+			printf(<span class="st">&quot;%&quot;</span>PRIu32<span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>, keys[KEYS_TOTAL - <span class="dv">1</span>]);
 		}
-		printf(<span class="st">&quot;Done.</span><span class="ch">\n</span><span class="st">&quot;</span>);
-		printf(<span class="st">&quot;END C VERSION</span><span class="ch">\n</span><span class="st">&quot;</span>);
+		printf(<span class="st">&quot;Done.</span><span class="sc">\n</span><span class="st">&quot;</span>);
+		printf(<span class="st">&quot;END C VERSION</span><span class="sc">\n</span><span class="st">&quot;</span>);
 		free(keys);
-		<span class="kw">return</span> <span class="dv">0</span>;
+		<span class="cf">return</span> <span class="dv">0</span>;
 	}
 
 	<span class="co">/*</span>
@@ -446,24 +446,24 @@ u32 init_array(u32 *keys, bool has_key, pcg32_random_t *rng)
 	keys = malloc(KEYS_TOTAL * <span class="kw">sizeof</span>(u32));
 
 	<span class="co">/* Stress-test binary_search(). */</span>
-	<span class="kw">for</span> (i = <span class="dv">0</span>; i &lt; <span class="dv">20</span>; i++) {
+	<span class="cf">for</span> (i = <span class="dv">0</span>; i &lt; <span class="dv">20</span>; i++) {
 		has_key = (bool)uniform32(<span class="dv">2</span>, &amp;rng);
 		key = init_array(keys, has_key, &amp;rng);
 		min = <span class="dv">0</span>;
 		max = KEYS_TOTAL - <span class="dv">1</span>;
 		mid = binary_search(keys, key, min, max);
 		printf(<span class="st">&quot;%02d - &quot;</span>, i + <span class="dv">1</span>);
-		<span class="kw">if</span> (mid == KEY_NOT_FOUND) {
-			printf(<span class="st">&quot;key `%&quot;</span>PRIu32<span class="st">&quot;' not found.</span><span class="ch">\n</span><span class="st">&quot;</span>, key);
-		} <span class="kw">else</span> {
-			printf(<span class="st">&quot;key `%&quot;</span>PRIu32<span class="st">&quot;' found at keys[%d].</span><span class="ch">\n</span><span class="st">&quot;</span>,
+		<span class="cf">if</span> (mid == KEY_NOT_FOUND) {
+			printf(<span class="st">&quot;key `%&quot;</span>PRIu32<span class="st">&quot;' not found.</span><span class="sc">\n</span><span class="st">&quot;</span>, key);
+		} <span class="cf">else</span> {
+			printf(<span class="st">&quot;key `%&quot;</span>PRIu32<span class="st">&quot;' found at keys[%d].</span><span class="sc">\n</span><span class="st">&quot;</span>,
 				key, mid);
 		}
 	}
 
-	printf(<span class="st">&quot;END C VERSION</span><span class="ch">\n</span><span class="st">&quot;</span>);
+	printf(<span class="st">&quot;END C VERSION</span><span class="sc">\n</span><span class="st">&quot;</span>);
 	free(keys);
-	<span class="kw">return</span> <span class="dv">0</span>;
+	<span class="cf">return</span> <span class="dv">0</span>;
 }</code></pre></td></tr></table></div>
 <div class="raw-link">
 <a class="raw" href="../code/toy/binary-search.c" mimetype="text/plain"> binary-search.c </a>
@@ -878,13 +878,13 @@ puts <span class="st">&quot;END RUBY VERSION&quot;</span></code></pre></td></tr>
 </pre></td><td class="sourceCode"><pre><code class="sourceCode haskell"><span class="ot">{-# LANGUAGE RecordWildCards #-}</span>
 
 <span class="co">-- LICENSE: PUBLIC DOMAIN</span>
-<span class="fu">--</span>
+<span class="co">--</span>
 <span class="co">-- Compile with `ghc --make -Wall -Werror -O2 -dynamic -o binary-search-hs</span>
 <span class="co">-- binary-search.hs'. For better conformance with the C and Ruby versions, we</span>
 <span class="co">-- use snake_case instead of camelCase wherever there is a direct parallel.</span>
-<span class="fu">--</span>
+<span class="co">--</span>
 <span class="co">-- Interact with `ghci path/to/this/file`.</span>
-<span class="fu">--</span>
+<span class="co">--</span>
 <span class="co">-- Usage: just execute the binary as-is without any arguments. To test the RNG,</span>
 <span class="co">-- call with the argument &quot;rng&quot;.</span>
 

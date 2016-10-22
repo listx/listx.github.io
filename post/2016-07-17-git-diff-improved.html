@@ -234,67 +234,67 @@ git_find_repo()
 <div class="sourceCode"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span class="ot">fpath=(</span>~/.zsh/func <span class="ot">$fpath)</span> <span class="co"># add ~/.zsh/func to $fpath</span>
 <span class="kw">autoload</span> -U ~/.zsh/func/*<span class="kw">(</span>:t<span class="kw">)</span> <span class="co"># load all functions in ~/.zsh/func</span></code></pre></div>
 <p>Here is some sample output (used in the course of writing this blog post):</p>
-<div class="sourceCode"><pre class="sourceCode diff"><code class="sourceCode diff">    -- blog --
- T  diff --git a/post/2016-07-17-git-diff-improved.org b/post/2016-07-17-git-diff-improved.org
- R  index 631bcf4..9f6fbac 100644
- E  --- a/post/2016-07-17-git-diff-improved.org
- E  +++ b/post/2016-07-17-git-diff-improved.org
-    @@ -7,7 +7,7 @@ tags: programming
- ┃
- ┃   * Motivation
- ┃
- ┃  -Like most people, I use git every day.
- ┃  +Like most people, I use git daily.
- ┃   For many years, I used to have these two aliases:
- ┃
- ┃   #+begin_src shell
- ┃  @@ -15,9 +15,9 @@ alias gdf=&quot;git diff&quot;
- ┃   alias gdfc=&quot;git diff --cached&quot;
- ┃   #+end_src
- ┃
- ┃  -Last year, I started working professionally as a developer, and I began to work on many different repos at the same time.
- ┃  +Last year I started working professionally as a developer and I began to work on many different repos at the same time.
- ┃   Oftentimes I would do either a ~git diff~ or ~git diff --cached~, then come back to it 10 minutes later but then forget whether the diff had a ~--cached~ flag or not.
- ┃  -So, I needed to script some more git helpers functions!
- ┃  +I needed to script some more git helpers functions!
- ┃
- ┃   * Implementation
- ┃
- ┃  @@ -41,9 +41,11 @@ autoload -U ~/.zsh/func/*(:t) # load all functions in ~/.zsh/func
- ┃   Here is some sample output:
- ┃
- ┃   #+begin_src diff
-    + foo
- T   #+end_src
- R
- E   #+begin_src diff
- E  +
-     + bar
- ┃    #+end_src
- ┃
- ┃   * Conclusion
-    -- blog --</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode diff"><code class="sourceCode diff">    -- blog --
- I  diff --git a/post/2016-07-17-git-diff-improved.org b/post/2016-07-17-git-diff-improved.org
- N  index dc2fca4..631bcf4 100644
- D  --- a/post/2016-07-17-git-diff-improved.org
- E  +++ b/post/2016-07-17-git-diff-improved.org
- X  @@ -38,6 +38,14 @@ fpath=(~/.zsh/func $fpath) # add ~/.zsh/func to $fpath
-     autoload -U ~/.zsh/func/*(:t) # load all functions in ~/.zsh/func
- ┃   #+end_src
- ┃
- ┃  +Here is some sample output:
- ┃  +
- ┃  +#+begin_src diff
- ┃  +#+end_src
- ┃  +
- ┃  +#+begin_src diff
- ┃  +#+end_src
- ┃  +
- ┃   * Conclusion
- ┃
- ┃   I've been a happy ~gdf~ user for some months now.
-    -- blog --</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode diff"><code class="sourceCode diff">   -- blog --
+T  diff --git a/post/2016-07-17-git-diff-improved.org b/post/2016-07-17-git-diff-improved.org
+R  index 631bcf4..9f6fbac 100644
+E  --- a/post/2016-07-17-git-diff-improved.org
+E  +++ b/post/2016-07-17-git-diff-improved.org
+   @@ -7,7 +7,7 @@ tags: programming
+┃
+┃   * Motivation
+┃
+┃  -Like most people, I use git every day.
+┃  +Like most people, I use git daily.
+┃   For many years, I used to have these two aliases:
+┃
+┃   #+begin_src shell
+┃  @@ -15,9 +15,9 @@ alias gdf=&quot;git diff&quot;
+┃   alias gdfc=&quot;git diff --cached&quot;
+┃   #+end_src
+┃
+┃  -Last year, I started working professionally as a developer, and I began to work on many different repos at the same time.
+┃  +Last year I started working professionally as a developer and I began to work on many different repos at the same time.
+┃   Oftentimes I would do either a ~git diff~ or ~git diff --cached~, then come back to it 10 minutes later but then forget whether the diff had a ~--cached~ flag or not.
+┃  -So, I needed to script some more git helpers functions!
+┃  +I needed to script some more git helpers functions!
+┃
+┃   * Implementation
+┃
+┃  @@ -41,9 +41,11 @@ autoload -U ~/.zsh/func/*(:t) # load all functions in ~/.zsh/func
+┃   Here is some sample output:
+┃
+┃   #+begin_src diff
+   + foo
+T   #+end_src
+R
+E   #+begin_src diff
+E  +
+    + bar
+┃    #+end_src
+┃
+┃   * Conclusion
+   -- blog --</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode diff"><code class="sourceCode diff">   -- blog --
+I  diff --git a/post/2016-07-17-git-diff-improved.org b/post/2016-07-17-git-diff-improved.org
+N  index dc2fca4..631bcf4 100644
+D  --- a/post/2016-07-17-git-diff-improved.org
+E  +++ b/post/2016-07-17-git-diff-improved.org
+X  @@ -38,6 +38,14 @@ fpath=(~/.zsh/func $fpath) # add ~/.zsh/func to $fpath
+    autoload -U ~/.zsh/func/*(:t) # load all functions in ~/.zsh/func
+┃   #+end_src
+┃
+┃  +Here is some sample output:
+┃  +
+┃  +#+begin_src diff
+┃  +#+end_src
+┃  +
+┃  +#+begin_src diff
+┃  +#+end_src
+┃  +
+┃   * Conclusion
+┃
+┃   I've been a happy ~gdf~ user for some months now.
+   -- blog --</code></pre></div>
 <h1 id="conclusion">Conclusion</h1>
 <p>I’ve been a happy <code>gdf</code> user for some months now. The only “downside” is that because of the vertical ribbon (and the repo name at the top/bottom), the output is no longer readable by <code>patch</code> (or copy-pastable into a diff-reading utility/service). But, this is a minor grievance at best as one can easily invoke the low-level <code>git diff</code> or <code>git diff --cached</code> directly to get the raw (<code>patch</code>-able) output.</p>
 <p>Happy hacking!</p>

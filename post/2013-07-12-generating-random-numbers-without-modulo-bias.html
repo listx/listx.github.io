@@ -47,7 +47,7 @@
 <span class="dt">int</span> n, x;
 n = <span class="dv">3</span>;
 x = rand() % n;
-<span class="kw">return</span> x;</code></pre></td></tr></table></div>
+<span class="cf">return</span> x;</code></pre></td></tr></table></div>
 <div class="raw-link">
 <a class="raw" href="../code/rng/listing-1.c" mimetype="text/plain"> listing-1.c </a>
 </div>
@@ -69,8 +69,8 @@ x = rand() % n;
 n = <span class="dv">3</span>;
 rand_excess = (RAND_MAX + <span class="dv">1</span>) % n;
 rand_limit = RAND_MAX - rand_excess;
-<span class="kw">while</span> (x = rand() &gt; rand_limit) {};
-<span class="kw">return</span> x % n;</code></pre></td></tr></table></div>
+<span class="cf">while</span> (x = rand() &gt; rand_limit) {};
+<span class="cf">return</span> x % n;</code></pre></td></tr></table></div>
 <div class="raw-link">
 <a class="raw" href="../code/rng/listing-2.c" mimetype="text/plain"> listing-2.c </a>
 </div>
@@ -94,8 +94,8 @@ rand_limit = RAND_MAX - rand_excess;
 n = <span class="dv">3</span>;
 rand_excess = (RAND_MAX % n) + <span class="dv">1</span>; <span class="co">/* only difference vs listing-2.c */</span>
 rand_limit = RAND_MAX - rand_excess;
-<span class="kw">while</span> (x = rand() &gt; rand_limit) {};
-<span class="kw">return</span> x % n;</code></pre></td></tr></table></div>
+<span class="cf">while</span> (x = rand() &gt; rand_limit) {};
+<span class="cf">return</span> x % n;</code></pre></td></tr></table></div>
 <div class="raw-link">
 <a class="raw" href="../code/rng/listing-3.c" mimetype="text/plain"> listing-3.c </a>
 </div>
@@ -118,8 +118,8 @@ rand_limit = RAND_MAX - rand_excess;
 n = <span class="dv">3</span>;
 rand_excess = ((RAND_MAX % n) + <span class="dv">1</span>) % n; <span class="co">/* only difference vs listing-3.c */</span>
 rand_limit = RAND_MAX - rand_excess;
-<span class="kw">while</span> (x = rand() &gt; rand_limit) {};
-<span class="kw">return</span> x % n;</code></pre></td></tr></table></div>
+<span class="cf">while</span> (x = rand() &gt; rand_limit) {};
+<span class="cf">return</span> x % n;</code></pre></td></tr></table></div>
 <div class="raw-link">
 <a class="raw" href="../code/rng/listing-4.c" mimetype="text/plain"> listing-4.c </a>
 </div>

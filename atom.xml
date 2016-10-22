@@ -23,7 +23,7 @@
 
 <h1 id="the-zq-keyoard-layout">The ZQ Keyoard Layout</h1>
 <p>I’ve spent quite some time on keyboards in my previous posts, and this post is no different. After several months of tweaking my <a href="./2016-04-14-esrille-nisse-keyboard.html">original layout</a>, I have more or less settled on the final design. You can get the sources at my repo <a href="https://github.com/listx/new-keyboard">here</a>.</p>
-<p>Is for the name “ZQ”, it was originally chosen from the way these keys were arranged; the location of these keys have sence changed, but the name has stuck.</p>
+<p>Is for the name “ZQ”, it was originally chosen from the way these keys were arranged; the location of these keys have since changed, but the name has stuck.</p>
 <h2 id="base-layer">Base Layer</h2>
 <pre><code>    □ □ □ □ □ □     □ □ □ □ □ □
     ! # * □ □         □ □ / ~ $
@@ -207,7 +207,7 @@ minfreeNaive(xs)
 <blockquote>
 <p>For any <strong>n</strong> cars parked, we can consider the spots numbered <code>[0..(n-1)]</code>; if all of those spots are full, we can assign spot <strong>n</strong> itself.</p>
 </blockquote>
-<p>(This statement may seem elementary, but it plays a crucial role in the divide-and-conquer approach discussed later). Now, since <code>length [0..(n-1)]</code> coincidentally happens to be just <strong>n</strong>, the total number of spots taken into consideration for this problem is <strong>n + 1</strong> — parking spots <code>[0..(n-1)]</code> and spot <code>n</code> itself. And so we can reduce the free set to just <code>[0..(n-1)] ++ [n]</code>, or the equivalent <code>[0 .. length xs]</code> and ignore all other possible free spots. <a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> To restate, our answer to the original problem statement lies somewhere in this range <code>[0 .. length xs]</code>, which we will call <strong>reducedFrees</strong>.</p>
+<p>(This statement may seem elementary, but it plays a crucial role in the divide-and-conquer approach discussed later.) Now, since <code>length [0..(n-1)]</code> coincidentally happens to be just <strong>n</strong>, the total number of spots taken into consideration for this problem is <strong>n + 1</strong> — parking spots <code>[0..(n-1)]</code> and spot <code>n</code> itself. And so we can reduce the free set to just <code>[0..(n-1)] ++ [n]</code>, or the equivalent <code>[0 .. length xs]</code> and ignore all other possible free spots. <a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> To restate, our answer to the original problem statement lies somewhere in this range <code>[0 .. length xs]</code>, which we will call <strong>reducedFrees</strong>.</p>
 <p>Now let’s look at the second sentence. It describes the set <code>filter (&lt;n) xs</code>, which we will call <strong>reducedXs</strong>. <a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a> The set <strong>reducedXs</strong> is found by removing all elements in <strong>xs</strong> that are too big for our problem size of <strong>n + 1</strong> spots — i.e., beyond the range in <strong>reducedFrees</strong>.</p>
 <h1 id="improved-array-based-solution">Improved array-based solution</h1>
 <p>Using the insight gained above, we can restate the problem as follows:</p>
@@ -320,7 +320,7 @@ minfreeArray2 <span class="fu">=</span> search <span class="fu">.</span> checkli
 <a  class="raw"  href= "/code/2016-09-24-parking-lot-problem-revisited/array2.hs"  mimetype=text/plain > array2.hs </a>
 </div>
 </div>
-<p>. The use of the ST monad here reduces memory overhead, and according to Bird it is the most efficient approach using and imperative style on top of arrays.</p>
+<p>. The use of the ST monad here reduces memory overhead, and according to Bird it is the most efficient approach using an imperative style on top of arrays.</p>
 <h1 id="divide-and-conquer-via-recursion">Divide and Conquer via Recursion</h1>
 <p>Ah, recursion. Bird describes the following divide-and-conquer algorithm as a faster alternative to <code>accumArray</code>. <a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a></p>
 <div class="code-and-raw">
@@ -643,67 +643,67 @@ git_find_repo()
 <div class="sourceCode"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span class="ot">fpath=(</span>~/.zsh/func <span class="ot">$fpath)</span> <span class="co"># add ~/.zsh/func to $fpath</span>
 <span class="kw">autoload</span> -U ~/.zsh/func/*<span class="kw">(</span>:t<span class="kw">)</span> <span class="co"># load all functions in ~/.zsh/func</span></code></pre></div>
 <p>Here is some sample output (used in the course of writing this blog post):</p>
-<div class="sourceCode"><pre class="sourceCode diff"><code class="sourceCode diff">    -- blog --
- T  diff --git a/post/2016-07-17-git-diff-improved.org b/post/2016-07-17-git-diff-improved.org
- R  index 631bcf4..9f6fbac 100644
- E  --- a/post/2016-07-17-git-diff-improved.org
- E  +++ b/post/2016-07-17-git-diff-improved.org
-    @@ -7,7 +7,7 @@ tags: programming
- ┃
- ┃   * Motivation
- ┃
- ┃  -Like most people, I use git every day.
- ┃  +Like most people, I use git daily.
- ┃   For many years, I used to have these two aliases:
- ┃
- ┃   #+begin_src shell
- ┃  @@ -15,9 +15,9 @@ alias gdf=&quot;git diff&quot;
- ┃   alias gdfc=&quot;git diff --cached&quot;
- ┃   #+end_src
- ┃
- ┃  -Last year, I started working professionally as a developer, and I began to work on many different repos at the same time.
- ┃  +Last year I started working professionally as a developer and I began to work on many different repos at the same time.
- ┃   Oftentimes I would do either a ~git diff~ or ~git diff --cached~, then come back to it 10 minutes later but then forget whether the diff had a ~--cached~ flag or not.
- ┃  -So, I needed to script some more git helpers functions!
- ┃  +I needed to script some more git helpers functions!
- ┃
- ┃   * Implementation
- ┃
- ┃  @@ -41,9 +41,11 @@ autoload -U ~/.zsh/func/*(:t) # load all functions in ~/.zsh/func
- ┃   Here is some sample output:
- ┃
- ┃   #+begin_src diff
-    + foo
- T   #+end_src
- R
- E   #+begin_src diff
- E  +
-     + bar
- ┃    #+end_src
- ┃
- ┃   * Conclusion
-    -- blog --</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode diff"><code class="sourceCode diff">    -- blog --
- I  diff --git a/post/2016-07-17-git-diff-improved.org b/post/2016-07-17-git-diff-improved.org
- N  index dc2fca4..631bcf4 100644
- D  --- a/post/2016-07-17-git-diff-improved.org
- E  +++ b/post/2016-07-17-git-diff-improved.org
- X  @@ -38,6 +38,14 @@ fpath=(~/.zsh/func $fpath) # add ~/.zsh/func to $fpath
-     autoload -U ~/.zsh/func/*(:t) # load all functions in ~/.zsh/func
- ┃   #+end_src
- ┃
- ┃  +Here is some sample output:
- ┃  +
- ┃  +#+begin_src diff
- ┃  +#+end_src
- ┃  +
- ┃  +#+begin_src diff
- ┃  +#+end_src
- ┃  +
- ┃   * Conclusion
- ┃
- ┃   I&#39;ve been a happy ~gdf~ user for some months now.
-    -- blog --</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode diff"><code class="sourceCode diff">   -- blog --
+T  diff --git a/post/2016-07-17-git-diff-improved.org b/post/2016-07-17-git-diff-improved.org
+R  index 631bcf4..9f6fbac 100644
+E  --- a/post/2016-07-17-git-diff-improved.org
+E  +++ b/post/2016-07-17-git-diff-improved.org
+   @@ -7,7 +7,7 @@ tags: programming
+┃
+┃   * Motivation
+┃
+┃  -Like most people, I use git every day.
+┃  +Like most people, I use git daily.
+┃   For many years, I used to have these two aliases:
+┃
+┃   #+begin_src shell
+┃  @@ -15,9 +15,9 @@ alias gdf=&quot;git diff&quot;
+┃   alias gdfc=&quot;git diff --cached&quot;
+┃   #+end_src
+┃
+┃  -Last year, I started working professionally as a developer, and I began to work on many different repos at the same time.
+┃  +Last year I started working professionally as a developer and I began to work on many different repos at the same time.
+┃   Oftentimes I would do either a ~git diff~ or ~git diff --cached~, then come back to it 10 minutes later but then forget whether the diff had a ~--cached~ flag or not.
+┃  -So, I needed to script some more git helpers functions!
+┃  +I needed to script some more git helpers functions!
+┃
+┃   * Implementation
+┃
+┃  @@ -41,9 +41,11 @@ autoload -U ~/.zsh/func/*(:t) # load all functions in ~/.zsh/func
+┃   Here is some sample output:
+┃
+┃   #+begin_src diff
+   + foo
+T   #+end_src
+R
+E   #+begin_src diff
+E  +
+    + bar
+┃    #+end_src
+┃
+┃   * Conclusion
+   -- blog --</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode diff"><code class="sourceCode diff">   -- blog --
+I  diff --git a/post/2016-07-17-git-diff-improved.org b/post/2016-07-17-git-diff-improved.org
+N  index dc2fca4..631bcf4 100644
+D  --- a/post/2016-07-17-git-diff-improved.org
+E  +++ b/post/2016-07-17-git-diff-improved.org
+X  @@ -38,6 +38,14 @@ fpath=(~/.zsh/func $fpath) # add ~/.zsh/func to $fpath
+    autoload -U ~/.zsh/func/*(:t) # load all functions in ~/.zsh/func
+┃   #+end_src
+┃
+┃  +Here is some sample output:
+┃  +
+┃  +#+begin_src diff
+┃  +#+end_src
+┃  +
+┃  +#+begin_src diff
+┃  +#+end_src
+┃  +
+┃   * Conclusion
+┃
+┃   I&#39;ve been a happy ~gdf~ user for some months now.
+   -- blog --</code></pre></div>
 <h1 id="conclusion">Conclusion</h1>
 <p>I’ve been a happy <code>gdf</code> user for some months now. The only “downside” is that because of the vertical ribbon (and the repo name at the top/bottom), the output is no longer readable by <code>patch</code> (or copy-pastable into a diff-reading utility/service). But, this is a minor grievance at best as one can easily invoke the low-level <code>git diff</code> or <code>git diff --cached</code> directly to get the raw (<code>patch</code>-able) output.</p>
 <p>Happy hacking!</p>
@@ -962,9 +962,9 @@ d) Right Arrow
 
 <p>I love <a href="https://github.com/jonas/tig">tig</a>. Still, I think the defaults aren’t the best for most developers. Here are two easy customizations to make the default view better.</p>
 <p>First, put</p>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">alias</span> tig=<span class="st">&#39;tig -n 1000&#39;</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="bu">alias</span> tig=<span class="st">&#39;tig -n 1000&#39;</span></code></pre></div>
 <p>in your <code>~/.bashrc</code> to reduce tig’s startup time (especially on large repositories). There’s rarely a need to go back more than 1000 commits from your current HEAD position in an interactive, GUI-driven manner. And if you really need to see everything, do</p>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ \<span class="kw">tig</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ \<span class="ex">tig</span></code></pre></div>
 <p>on the terminal to bypass the shell alias.</p>
 <p>Second, put the following in your <code>~/.tigrc</code> file:</p>
 <pre><code>set main-view = date author id:width=10 commit-title:yes,graph,refs

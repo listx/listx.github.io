@@ -55,9 +55,9 @@
 <div class="sourceCode"><table class="sourceCode bash numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
-</pre></td><td class="sourceCode"><pre><code class="sourceCode bash"><span class="kw">git</span> clone --depth 1 git://github.com/tmhedberg/hsenv.git
-<span class="kw">cd</span> hsenv
-<span class="kw">cabal</span> install</code></pre></td></tr></table></div>
+</pre></td><td class="sourceCode"><pre><code class="sourceCode bash"><span class="fu">git</span> clone --depth 1 git://github.com/tmhedberg/hsenv.git
+<span class="bu">cd</span> hsenv
+<span class="ex">cabal</span> install</code></pre></td></tr></table></div>
 <h2 id="download-hakyll-and-install-it-with-hsenv-for-your-new-blog">Download hakyll and install it with hsenv for your new blog</h2>
 <p>Now we need to get the latest <code>hakyll</code>. I decided to check out the <code>hakyll4</code> branch because from what I can tell this version allows you to do painless syntax highlighting with <code>pandoc</code>. You could just use the regular <code>master</code> branch (hakyll 3.x) but syntax highlighting support on code blocks is a pain; plus, you’re going to have to migrate to hakyll 4 later anyway, so just use <code>hakyll4</code>.</p>
 <pre><code>git clone --depth 1 -b hakyll4 http://github.com/jaspervdj/hakyll.git</code></pre>
@@ -70,12 +70,12 @@
 4
 5
 6
-</pre></td><td class="sourceCode"><pre><code class="sourceCode bash"><span class="kw">cd</span> ~/myblog
-<span class="kw">~/.cabal/bin/hsenv</span>
-<span class="kw">source</span> .hsenv_myblog/bin/activate
-<span class="kw">cd</span> ~/hakyll
-<span class="kw">cabal</span> install
-<span class="kw">cd</span> ~/myblog</code></pre></td></tr></table></div>
+</pre></td><td class="sourceCode"><pre><code class="sourceCode bash"><span class="bu">cd</span> ~/myblog
+<span class="ex">~/.cabal/bin/hsenv</span>
+<span class="bu">source</span> .hsenv_myblog/bin/activate
+<span class="bu">cd</span> ~/hakyll
+<span class="ex">cabal</span> install
+<span class="bu">cd</span> ~/myblog</code></pre></td></tr></table></div>
 <p>The <code>hsenv</code> basically changes your shell’s path parameters and also installs everything into the <code>.hsenv_myblog</code> folder, thus giving your shell a different “vision”, so to speak, of what packages are installed. We use the sandbox environment inside <code>hsenv</code> whenever we want to generate our blog’s static generator binary (remember, <code>hakyll</code> is just a library; we need to write a static site generator program that makes use of it to generate the static html/css).</p>
 <p>To deactivate the sandbox, invoke <code>deactivate_hsenv</code> or just close your shell. Just remember to call <code>source .hsenv_myblog/bin/activate</code> when you want to make changes to your blog or edit your blog’s binary. A sample creating/edition session would look something like this:</p>
 <div class="sourceCode"><table class="sourceCode bash numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
@@ -86,14 +86,14 @@
 6
 7
 8
-</pre></td><td class="sourceCode"><pre><code class="sourceCode bash"><span class="kw">cd</span> ~/myblog
-<span class="kw">source</span> .hsenv_myblog/bin/activate
+</pre></td><td class="sourceCode"><pre><code class="sourceCode bash"><span class="bu">cd</span> ~/myblog
+<span class="bu">source</span> .hsenv_myblog/bin/activate
 <span class="co"># edit some files, including site.hs, the static generator binary</span>
 <span class="co"># compile site.hs</span>
-<span class="kw">./site</span> rebuild
-<span class="kw">./site</span> preview
-<span class="kw">...</span>
-<span class="kw">deactivate_hsenv</span></code></pre></td></tr></table></div>
+<span class="ex">./site</span> rebuild
+<span class="ex">./site</span> preview
+<span class="ex">...</span>
+<span class="ex">deactivate_hsenv</span></code></pre></td></tr></table></div>
 <p>Your static site will be available at <code>~/myblog/_site</code>.</p>
 <h2 id="create-and-upload-your-site-to-github">Create and upload your site to GitHub</h2>
 <p>At your GitHub site/account, create a repo named <code>username.github.io</code>. Now link it up with your static site:</p>
@@ -103,12 +103,12 @@
 4
 5
 6
-</pre></td><td class="sourceCode"><pre><code class="sourceCode bash"><span class="kw">cd</span> ~/myblog/_site
-<span class="kw">git</span> init
-<span class="kw">git</span> add *.html <span class="co"># add css, etc.</span>
-<span class="kw">git</span> commit -m <span class="st">&quot;initial import&quot;</span>
-<span class="kw">git</span> remote add origin https://github.com/username/username.github.io.git
-<span class="kw">git</span> push -u origin master</code></pre></td></tr></table></div>
+</pre></td><td class="sourceCode"><pre><code class="sourceCode bash"><span class="bu">cd</span> ~/myblog/_site
+<span class="fu">git</span> init
+<span class="fu">git</span> add *.html <span class="co"># add css, etc.</span>
+<span class="fu">git</span> commit -m <span class="st">&quot;initial import&quot;</span>
+<span class="fu">git</span> remote add origin https://github.com/username/username.github.io.git
+<span class="fu">git</span> push -u origin master</code></pre></td></tr></table></div>
 <h2 id="source">Source</h2>
 <p>This site’s source code is available <a href="https://github.com/listx/listx_blog">here</a>. This site’s static code is available <a href="https://github.com/listx/listx.github.io">here</a>.</p>
 

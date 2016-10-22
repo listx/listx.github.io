@@ -173,122 +173,122 @@
 </pre></td><td class="sourceCode"><pre><code class="sourceCode bash"><span class="co">#!/usr/bin/env zsh</span>
 <span class="co"># LICENSE: PUBLIC DOMAIN</span>
 <span class="co"># Usage: ./maintain_cblrepo.sh &lt;HACKAGE_PACKAGES_FILE&gt; &lt;MODE&gt;</span>
-<span class="ot">usage=</span><span class="st">&quot;Usage: ./maintain_cblrepo.sh &lt;HACKAGE_PACKAGES_FILE&gt; &lt;MODE&gt;&quot;</span>
+<span class="va">usage=</span><span class="st">&quot;Usage: ./maintain_cblrepo.sh &lt;HACKAGE_PACKAGES_FILE&gt; &lt;MODE&gt;&quot;</span>
 
 <span class="co"># Exit immediately if any errors are found</span>
-<span class="kw">setopt</span> errexit
+<span class="ex">setopt</span> errexit
 <span class="co"># Avoid &quot;no matches found&quot; error if a file does not exist; see</span>
 <span class="co"># http://www.zsh.org/mla/users/2008/msg01139.html</span>
-<span class="kw">setopt</span> local_options no_nomatch
+<span class="ex">setopt</span> local_options no_nomatch
 
-<span class="kw">if [[</span> <span class="ot">-z</span> <span class="ot">$1</span><span class="kw"> ]]</span>; <span class="kw">then</span>
-	<span class="kw">echo</span> <span class="ot">$usage</span>
-	<span class="kw">exit</span> 1
+<span class="kw">if [[</span> <span class="ot">-z</span> <span class="va">$1</span><span class="kw"> ]]</span>; <span class="kw">then</span>
+	<span class="bu">echo</span> <span class="va">$usage</span>
+	<span class="bu">exit</span> 1
 <span class="kw">fi</span>
-<span class="kw">if [[</span> <span class="ot">!</span> <span class="ot">-f</span> <span class="ot">$1</span><span class="kw"> ]]</span>; <span class="kw">then</span>
-	<span class="kw">echo</span> <span class="st">&quot;</span><span class="dt">\`</span><span class="ot">$1</span><span class="st">' does not exist or is not a regular file&quot;</span>
-	<span class="kw">exit</span> 1
+<span class="kw">if [[</span> <span class="ot">!</span> <span class="ot">-f</span> <span class="va">$1</span><span class="kw"> ]]</span>; <span class="kw">then</span>
+	<span class="bu">echo</span> <span class="st">&quot;</span><span class="dt">\`</span><span class="va">$1</span><span class="st">' does not exist or is not a regular file&quot;</span>
+	<span class="bu">exit</span> 1
 <span class="kw">fi</span>
-<span class="kw">if [[</span> <span class="ot">-z</span> <span class="ot">$2</span><span class="kw"> ]]</span>; <span class="kw">then</span>
-	<span class="kw">echo</span> <span class="ot">$usage</span>
-	<span class="kw">exit</span> 1
+<span class="kw">if [[</span> <span class="ot">-z</span> <span class="va">$2</span><span class="kw"> ]]</span>; <span class="kw">then</span>
+	<span class="bu">echo</span> <span class="va">$usage</span>
+	<span class="bu">exit</span> 1
 <span class="kw">fi</span>
 
-<span class="ot">hackage_url=</span><span class="st">&quot;http://hackage.haskell.org&quot;</span>
-<span class="ot">hackage_packages_file=(</span><span class="kw">$(&lt;</span><span class="ot">$1</span><span class="kw">)</span><span class="ot">)</span>
+<span class="va">hackage_url=</span><span class="st">&quot;http://hackage.haskell.org&quot;</span>
+<span class="va">hackage_packages_file=(</span><span class="op">$(&lt;</span><span class="va">$1</span><span class="op">)</span><span class="va">)</span>
 
-<span class="ot">mode=$2</span>
+<span class="va">mode=$2</span>
 
-<span class="kw">case</span> <span class="ot">$mode</span><span class="kw"> in</span>
+<span class="kw">case</span> <span class="va">$mode</span><span class="kw"> in</span>
 	<span class="co">### Remove any old cblrepo.db file. ###</span>
 	<span class="kw">(</span>initdb<span class="kw">|</span>initdb-sync<span class="kw">)</span>
-	<span class="kw">rm</span> -f cblrepo.db
+	<span class="fu">rm</span> -f cblrepo.db
 
 	<span class="co"># Add packages provided by GHC</span>
 
 	<span class="co"># Pacman provides information about which modules are exposed by installing the</span>
 	<span class="co"># 'ghc' package. We put each package into an array.</span>
-	<span class="ot">provided=($(</span><span class="kw">pacman</span> -Qi ghc <span class="kw">|</span> <span class="kw">grep</span> Provides <span class="kw">|</span> <span class="kw">cut</span> -d <span class="st">&quot;:&quot;</span> -f2<span class="ot">))</span>
+	<span class="va">provided=($(</span><span class="ex">pacman</span> -Qi ghc <span class="kw">|</span> <span class="fu">grep</span> Provides <span class="kw">|</span> <span class="fu">cut</span> -d <span class="st">&quot;:&quot;</span> -f2<span class="va">))</span>
 
-	<span class="kw">for</span> <span class="kw">p</span> in <span class="ot">$provided</span><span class="kw">;</span> <span class="kw">do</span>
+	<span class="kw">for</span> <span class="ex">p</span> in <span class="va">$provided</span><span class="kw">;</span> <span class="kw">do</span>
 		<span class="co"># Change the syntax to be compatible with cblrepo. The `cut` command here</span>
 		<span class="co"># removes the 'haskell-' prefix for each package, and `sed` here replaces</span>
 		<span class="co"># each '=' sign with a ',', as per cblrepo's requirements.</span>
-		<span class="ot">package=$(</span><span class="kw">echo</span> <span class="ot">$p</span> <span class="kw">|</span> <span class="kw">cut</span> -c9- <span class="kw">|</span> <span class="kw">sed</span> <span class="st">'s/=/,/'</span><span class="ot">)</span>
-		<span class="ot">command=</span><span class="st">&quot;cblrepo add --ghc-pkg </span><span class="ot">$package</span><span class="st">&quot;</span>
+		<span class="va">package=$(</span><span class="bu">echo</span> <span class="va">$p</span> <span class="kw">|</span> <span class="fu">cut</span> -c9- <span class="kw">|</span> <span class="fu">sed</span> <span class="st">'s/=/,/'</span><span class="va">)</span>
+		<span class="va">command=</span><span class="st">&quot;cblrepo add --ghc-pkg </span><span class="va">$package</span><span class="st">&quot;</span>
 		<span class="co"># Tell user what we are going to do.</span>
-		<span class="kw">echo</span> <span class="ot">$command</span>
+		<span class="bu">echo</span> <span class="va">$command</span>
 		<span class="co"># Actually execute the command.</span>
-		<span class="kw">eval</span> <span class="ot">$command</span>
+		<span class="bu">eval</span> <span class="va">$command</span>
 	<span class="kw">done</span>
 
 	<span class="co"># Add packages installed by the user from [haskell-core] or some other Arch Linux repository</span>
-	<span class="ot">installed=($(</span><span class="kw">pacman</span> -Qq <span class="kw">|</span> <span class="kw">grep</span> <span class="st">&quot;^haskell-&quot;</span> <span class="kw">|</span> <span class="kw">sed</span> <span class="st">'s/^haskell-//'</span><span class="ot">))</span>
+	<span class="va">installed=($(</span><span class="ex">pacman</span> -Qq <span class="kw">|</span> <span class="fu">grep</span> <span class="st">&quot;^haskell-&quot;</span> <span class="kw">|</span> <span class="fu">sed</span> <span class="st">'s/^haskell-//'</span><span class="va">))</span>
 	<span class="co"># Filter out those packages that were installed from Hackage using this very</span>
 	<span class="co"># same script (in Arch Linux, the hackage packages, once installed, are in</span>
 	<span class="co"># the format `haskell-&lt;lowercased_package_name&gt;'). This way, we avoid</span>
 	<span class="co"># duplicate definitions and the packages added with --distro-pkg will really</span>
 	<span class="co"># be those packages available from the distribution's official haskell</span>
 	<span class="co"># repository.</span>
-	<span class="ot">hackage_lowercased=($hackage_packages_file</span>:l<span class="ot">)</span>
-	<span class="ot">installed_filtered=(${installed:</span><span class="er">|</span><span class="ot">hackage_lowercased})</span>
+	<span class="va">hackage_lowercased=($hackage_packages_file</span>:l<span class="va">)</span>
+	<span class="va">installed_filtered=(${installed:</span><span class="er">|</span><span class="va">hackage_lowercased})</span>
 
-	<span class="kw">for</span> <span class="kw">p</span> in <span class="ot">$installed_filtered</span><span class="kw">;</span> <span class="kw">do</span>
-		<span class="ot">version=$(</span><span class="kw">pacman</span> -Q haskell-<span class="ot">$p</span> <span class="kw">|</span> <span class="kw">cut</span> -d <span class="st">&quot; &quot;</span> -f2 <span class="kw">|</span> <span class="kw">sed</span> <span class="st">'s/-/,/'</span><span class="ot">)</span>
-		<span class="ot">command=</span><span class="st">&quot;cblrepo add --distro-pkg </span><span class="ot">$p</span><span class="st">,</span><span class="ot">$version</span><span class="st">&quot;</span>
-		<span class="kw">echo</span> <span class="ot">$command</span>
-		<span class="kw">eval</span> <span class="ot">$command</span>
+	<span class="kw">for</span> <span class="ex">p</span> in <span class="va">$installed_filtered</span><span class="kw">;</span> <span class="kw">do</span>
+		<span class="va">version=$(</span><span class="ex">pacman</span> -Q haskell-<span class="va">$p</span> <span class="kw">|</span> <span class="fu">cut</span> -d <span class="st">&quot; &quot;</span> -f2 <span class="kw">|</span> <span class="fu">sed</span> <span class="st">'s/-/,/'</span><span class="va">)</span>
+		<span class="va">command=</span><span class="st">&quot;cblrepo add --distro-pkg </span><span class="va">$p</span><span class="st">,</span><span class="va">$version</span><span class="st">&quot;</span>
+		<span class="bu">echo</span> <span class="va">$command</span>
+		<span class="bu">eval</span> <span class="va">$command</span>
 	<span class="kw">done</span>
 
-	<span class="kw">if [[</span> <span class="ot">$mode</span> <span class="ot">==</span> initdb-sync<span class="kw"> ]]</span>; <span class="kw">then</span>
+	<span class="kw">if [[</span> <span class="va">$mode</span> <span class="ot">==</span> initdb-sync<span class="kw"> ]]</span>; <span class="kw">then</span>
 		<span class="co"># Sync cblrepo with Hackage</span>
-		<span class="kw">echo</span> -n <span class="st">&quot;Syncing cblrepo with Hackage...&quot;</span>
-		<span class="kw">cblrepo</span> sync
-		<span class="kw">echo</span> <span class="st">&quot;done&quot;</span>
+		<span class="bu">echo</span> -n <span class="st">&quot;Syncing cblrepo with Hackage...&quot;</span>
+		<span class="ex">cblrepo</span> sync
+		<span class="bu">echo</span> <span class="st">&quot;done&quot;</span>
 	<span class="kw">fi</span>
 
 	<span class="co"># Add packages from Hackage</span>
-	<span class="kw">for</span> <span class="kw">hp</span> in <span class="ot">$hackage_packages_file</span><span class="kw">;</span> <span class="kw">do</span>
+	<span class="kw">for</span> <span class="ex">hp</span> in <span class="va">$hackage_packages_file</span><span class="kw">;</span> <span class="kw">do</span>
 		<span class="co"># Grab latest version of package</span>
-		<span class="ot">cabal_file=$(</span><span class="kw">curl</span> -s <span class="ot">$hackage_url</span>/package/<span class="ot">$hp</span> <span class="kw">|</span> <span class="kw">grep</span> -ioE <span class="st">&quot;Cabal source package[)&lt;&gt;/lia href=</span><span class="dt">\&quot;</span><span class="st">]+\/package\/.+\.cabal&quot;</span> <span class="kw">|</span> <span class="kw">grep</span> -ioE <span class="st">&quot;\/package.+&quot;</span><span class="ot">)</span>
-		<span class="ot">command=</span><span class="st">&quot;cblrepo add --cbl-url </span><span class="ot">$hackage_url$cabal_file</span><span class="st">&quot;</span>
-		<span class="kw">echo</span> <span class="ot">$command</span>
-		<span class="kw">eval</span> <span class="ot">$command</span>
+		<span class="va">cabal_file=$(</span><span class="ex">curl</span> -s <span class="va">$hackage_url</span>/package/<span class="va">$hp</span> <span class="kw">|</span> <span class="fu">grep</span> -ioE <span class="st">&quot;Cabal source package[)&lt;&gt;/lia href=</span><span class="dt">\&quot;</span><span class="st">]+\/package\/.+\.cabal&quot;</span> <span class="kw">|</span> <span class="fu">grep</span> -ioE <span class="st">&quot;\/package.+&quot;</span><span class="va">)</span>
+		<span class="va">command=</span><span class="st">&quot;cblrepo add --cbl-url </span><span class="va">$hackage_url$cabal_file</span><span class="st">&quot;</span>
+		<span class="bu">echo</span> <span class="va">$command</span>
+		<span class="bu">eval</span> <span class="va">$command</span>
 	<span class="kw">done</span>
 
 	<span class="co"># Link the generated cblrepo.db file into ~/.cblrepo</span>
-	<span class="kw">ln</span> -sf <span class="ot">$PWD</span>/cblrepo.db ~/.cblrepo/cblrepo.db
+	<span class="fu">ln</span> -sf <span class="va">$PWD</span>/cblrepo.db ~/.cblrepo/cblrepo.db
 	<span class="kw">;;</span>
 	<span class="co">### Generate PKGBUILD files for Hackage packages ###</span>
 	<span class="kw">(</span>pkgbuild<span class="kw">)</span>
 
 	<span class="co"># Remove any old packages.</span>
-	<span class="kw">echo</span> <span class="st">&quot;Deleting old PKGBUILD directories...&quot;</span>
-	<span class="kw">rm</span> -rfv haskell-*
+	<span class="bu">echo</span> <span class="st">&quot;Deleting old PKGBUILD directories...&quot;</span>
+	<span class="fu">rm</span> -rfv haskell-*
 
-	<span class="ot">i=</span>1
-	<span class="kw">for</span> <span class="kw">hp</span> in <span class="ot">${hackage_packages_file}</span><span class="kw">;</span> <span class="kw">do</span>
-		<span class="ot">command=</span><span class="st">&quot;cblrepo pkgbuild --patchdir patch </span><span class="ot">$hp</span><span class="st">&quot;</span>
-		<span class="kw">echo</span> <span class="st">&quot;(</span><span class="ot">$i</span><span class="st">/</span><span class="ot">${#hackage_packages_file}</span><span class="st">) </span><span class="ot">$command</span><span class="st">&quot;</span>
-		<span class="kw">eval</span> <span class="ot">$command</span>
+	<span class="va">i=</span>1
+	<span class="kw">for</span> <span class="ex">hp</span> in <span class="va">${hackage_packages_file}</span><span class="kw">;</span> <span class="kw">do</span>
+		<span class="va">command=</span><span class="st">&quot;cblrepo pkgbuild --patchdir patch </span><span class="va">$hp</span><span class="st">&quot;</span>
+		<span class="bu">echo</span> <span class="st">&quot;(</span><span class="va">$i</span><span class="st">/</span><span class="va">${#hackage_packages_file}</span><span class="st">) </span><span class="va">$command</span><span class="st">&quot;</span>
+		<span class="bu">eval</span> <span class="va">$command</span>
 		<span class="kw">((</span> i+=1 <span class="kw">))</span>
 	<span class="kw">done</span>
 	<span class="kw">;;</span>
 	<span class="co">### Create Arch Linux packages for the Hackage packages ###</span>
 	<span class="kw">(</span>makepkg<span class="kw">)</span>
-	<span class="kw">for</span> <span class="kw">pdir</span> in haskell-*<span class="kw">;</span> <span class="kw">do</span>
-		<span class="kw">cd</span> <span class="ot">$pdir</span>
-		<span class="kw">echo</span> <span class="ot">$(</span><span class="kw">basename</span> <span class="ot">$PWD)</span>
-		<span class="kw">makepkg</span> -sf
-		<span class="kw">sudo</span> pacman -U <span class="ot">$(</span><span class="kw">basename</span> <span class="ot">$PWD)</span>-*.pkg.tar.xz
-		<span class="kw">cd</span> ..
-		<span class="kw">echo</span>
-		<span class="kw">echo</span> <span class="st">&quot;  Finished making/installing package for </span><span class="ot">$pdir</span><span class="st">&quot;</span>
-		<span class="kw">echo</span>
+	<span class="kw">for</span> <span class="ex">pdir</span> in haskell-*<span class="kw">;</span> <span class="kw">do</span>
+		<span class="bu">cd</span> <span class="va">$pdir</span>
+		<span class="bu">echo</span> <span class="va">$(</span><span class="fu">basename</span> <span class="va">$PWD)</span>
+		<span class="ex">makepkg</span> -sf
+		<span class="fu">sudo</span> pacman -U <span class="va">$(</span><span class="fu">basename</span> <span class="va">$PWD)</span>-*.pkg.tar.xz
+		<span class="bu">cd</span> ..
+		<span class="bu">echo</span>
+		<span class="bu">echo</span> <span class="st">&quot;  Finished making/installing package for </span><span class="va">$pdir</span><span class="st">&quot;</span>
+		<span class="bu">echo</span>
 	<span class="kw">done</span>
 	<span class="kw">;;</span>
 	*<span class="kw">)</span>
-	<span class="kw">echo</span> <span class="st">&quot;Unrecognized &lt;MODE&gt;; valid ones are: initdb initdb-sync pkgbuild makepkg&quot;</span>
+	<span class="bu">echo</span> <span class="st">&quot;Unrecognized &lt;MODE&gt;; valid ones are: initdb initdb-sync pkgbuild makepkg&quot;</span>
 	<span class="kw">;;</span>
 <span class="kw">esac</span></code></pre></td></tr></table></div>
 <p>A simple <code>HACKAGE_PACKAGES_FILE</code> (perhaps named <code>hackage_pkgs</code>) might look something like this:</p>

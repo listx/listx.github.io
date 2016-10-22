@@ -97,7 +97,7 @@ minfreeNaive(xs)
 <blockquote>
 <p>For any <strong>n</strong> cars parked, we can consider the spots numbered <code>[0..(n-1)]</code>; if all of those spots are full, we can assign spot <strong>n</strong> itself.</p>
 </blockquote>
-<p>(This statement may seem elementary, but it plays a crucial role in the divide-and-conquer approach discussed later). Now, since <code>length [0..(n-1)]</code> coincidentally happens to be just <strong>n</strong>, the total number of spots taken into consideration for this problem is <strong>n + 1</strong> — parking spots <code>[0..(n-1)]</code> and spot <code>n</code> itself. And so we can reduce the free set to just <code>[0..(n-1)] ++ [n]</code>, or the equivalent <code>[0 .. length xs]</code> and ignore all other possible free spots. <a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> To restate, our answer to the original problem statement lies somewhere in this range <code>[0 .. length xs]</code>, which we will call <strong>reducedFrees</strong>.</p>
+<p>(This statement may seem elementary, but it plays a crucial role in the divide-and-conquer approach discussed later.) Now, since <code>length [0..(n-1)]</code> coincidentally happens to be just <strong>n</strong>, the total number of spots taken into consideration for this problem is <strong>n + 1</strong> — parking spots <code>[0..(n-1)]</code> and spot <code>n</code> itself. And so we can reduce the free set to just <code>[0..(n-1)] ++ [n]</code>, or the equivalent <code>[0 .. length xs]</code> and ignore all other possible free spots. <a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> To restate, our answer to the original problem statement lies somewhere in this range <code>[0 .. length xs]</code>, which we will call <strong>reducedFrees</strong>.</p>
 <p>Now let’s look at the second sentence. It describes the set <code>filter (&lt;n) xs</code>, which we will call <strong>reducedXs</strong>. <a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a> The set <strong>reducedXs</strong> is found by removing all elements in <strong>xs</strong> that are too big for our problem size of <strong>n + 1</strong> spots — i.e., beyond the range in <strong>reducedFrees</strong>.</p>
 <h1 id="improved-array-based-solution">Improved array-based solution</h1>
 <p>Using the insight gained above, we can restate the problem as follows:</p>
@@ -210,7 +210,7 @@ minfreeArray2 <span class="fu">=</span> search <span class="fu">.</span> checkli
 <a class="raw" href="../code/2016-09-24-parking-lot-problem-revisited/array2.hs" mimetype="text/plain"> array2.hs </a>
 </div>
 </div>
-<p>. The use of the ST monad here reduces memory overhead, and according to Bird it is the most efficient approach using and imperative style on top of arrays.</p>
+<p>. The use of the ST monad here reduces memory overhead, and according to Bird it is the most efficient approach using an imperative style on top of arrays.</p>
 <h1 id="divide-and-conquer-via-recursion">Divide and Conquer via Recursion</h1>
 <p>Ah, recursion. Bird describes the following divide-and-conquer algorithm as a faster alternative to <code>accumArray</code>. <a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a></p>
 <div class="code-and-raw">

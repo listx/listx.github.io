@@ -256,19 +256,19 @@
 <span class="co"># /dev/disk/by-uuid/XXXX for more fine-grained control; use &quot;blkid -o list&quot;</span>
 <span class="co"># to find out which drives are given which UUIDs.</span>
 
-<span class="kw">cfdisk</span> /dev/sda
+<span class="ex">cfdisk</span> /dev/sda
 
 <span class="co"># Now set up encryption on the LVM partition (the 2nd partition, so it's</span>
 <span class="co"># /dev/sda2). It is recommended to use aes-xts-plain64 if the partition is</span>
 <span class="co"># larger than 2 TB, I think.</span>
 
-<span class="kw">cryptsetup</span> -c aes-xts-plain -y -s 512 luksFormat /dev/sda2
+<span class="ex">cryptsetup</span> -c aes-xts-plain -y -s 512 luksFormat /dev/sda2
 
 <span class="co"># Decrypt the encrypted partition with LUKS. We need to decrypt it first</span>
 <span class="co"># before setting up LVM volumes and filesystems on it. This will create</span>
 <span class="co"># an entry under /dev/mapper/luks.</span>
 
-<span class="kw">cryptsetup</span> luksOpen /dev/sda2 luks
+<span class="ex">cryptsetup</span> luksOpen /dev/sda2 luks
 
 <span class="co"># Set up LVM. We call our volume group &quot;vg0&quot;. To be honest I am not sure if</span>
 <span class="co"># the &quot;--contiguous y&quot; option for swap matters because we are encrypting it</span>
@@ -278,20 +278,20 @@
 <span class="co"># in this case, for the &quot;home&quot; logical volume.</span>
 <span class="co"># Read more about LVM on your favorite online wiki.</span>
 
-<span class="kw">pvcreate</span> /dev/mapper/luks
-<span class="kw">vgcreate</span> vg0 /dev/mapper/luks
-<span class="kw">lvcreate</span> --size 40G vg0 --name root
-<span class="kw">lvcreate</span> --size 2G --contiguous y vg0 --name swap
-<span class="kw">lvcreate</span> -l +100%FREE vg0 --name home
+<span class="ex">pvcreate</span> /dev/mapper/luks
+<span class="ex">vgcreate</span> vg0 /dev/mapper/luks
+<span class="ex">lvcreate</span> --size 40G vg0 --name root
+<span class="ex">lvcreate</span> --size 2G --contiguous y vg0 --name swap
+<span class="ex">lvcreate</span> -l +100%FREE vg0 --name home
 
 <span class="co"># Initialize filesystems. Btrfs is still experimental, so I choose ext4</span>
 <span class="co"># here. The vg0-root, vg0-home, and vg0-swap volumes should</span>
 <span class="co"># appear under /dev/mapper as you create them with the lvcreate command.</span>
 
-<span class="kw">mkfs.ext4</span> /dev/sda1 <span class="co"># the boot partition</span>
-<span class="kw">mkfs.ext4</span> /dev/mapper/vg0-root
-<span class="kw">mkfs.ext4</span> /dev/mapper/vg0-home
-<span class="kw">mkswap</span> /dev/mapper/vg0-swap
+<span class="ex">mkfs.ext4</span> /dev/sda1 <span class="co"># the boot partition</span>
+<span class="ex">mkfs.ext4</span> /dev/mapper/vg0-root
+<span class="ex">mkfs.ext4</span> /dev/mapper/vg0-home
+<span class="ex">mkswap</span> /dev/mapper/vg0-swap
 
 <span class="co"># Mount the logical volumes. Why? Because we need to install Arch Linux onto</span>
 <span class="co"># it! You probably don't need to mount the &quot;home&quot; volume but it couldn't</span>
@@ -301,34 +301,34 @@
 <span class="co"># /mnt before creating more directories such as /mnt/boot, /mnt/home, etc. to</span>
 <span class="co"># mount the /boot, /home, and any other partitions.</span>
 
-<span class="kw">mount</span> /dev/mapper/vg0-root /mnt <span class="co"># /mnt is our system's &quot;/&quot; root   directory</span>
+<span class="fu">mount</span> /dev/mapper/vg0-root /mnt <span class="co"># /mnt is our system's &quot;/&quot; root   directory</span>
 
-<span class="kw">mkdir</span> /mnt/boot
-<span class="kw">mount</span> /dev/sda1 /mnt/boot
+<span class="fu">mkdir</span> /mnt/boot
+<span class="fu">mount</span> /dev/sda1 /mnt/boot
 
-<span class="kw">mkdir</span> /mnt/home
-<span class="kw">mount</span> /dev/mapper/vg0-home /mnt/home
+<span class="fu">mkdir</span> /mnt/home
+<span class="fu">mount</span> /dev/mapper/vg0-home /mnt/home
 
-<span class="kw">swapon</span> /dev/mapper/vg0-swap
+<span class="ex">swapon</span> /dev/mapper/vg0-swap
 
 <span class="co"># Set up package download mirrors. The kernel mirror is generally a good one</span>
 <span class="co"># if you live in the US. Google &quot;arch linux mirror status&quot; to find the</span>
 <span class="co"># fastest mirrors.</span>
 
-<span class="kw">vi</span> /etc/pacman.d/mirrorlist
+<span class="ex">vi</span> /etc/pacman.d/mirrorlist
 
 <span class="co"># Download and install the core minimum packages to get a working Linux</span>
 <span class="co"># terminal (console) environment. Ah, simplicity!</span>
 
-<span class="kw">pacstrap</span> -i /mnt base base-devel
+<span class="ex">pacstrap</span> -i /mnt base base-devel
 
 <span class="co"># Generate and inspect the filesystem tables needed when the system first</span>
 <span class="co"># starts. The file should contain four &quot;partitions&quot; (I put them in quotes</span>
 <span class="co"># because remember, we are using only 2 real partitions; 1st one is /boot and</span>
 <span class="co"># the 2nd one is our LVM containing /, /home, and swap).</span>
 
-<span class="kw">genfstab</span> -U -p /mnt <span class="kw">&gt;&gt;</span> /mnt/etc/fstab
-<span class="kw">vi</span> /mnt/etc/fstab
+<span class="ex">genfstab</span> -U -p /mnt <span class="op">&gt;&gt;</span> /mnt/etc/fstab
+<span class="ex">vi</span> /mnt/etc/fstab
 
 <span class="co"># Make the system pretend that /mnt is /. This is called &quot;chrooting&quot;. We need</span>
 <span class="co"># to do this because some of the commands like locale-gen, systemctl, etc.</span>
@@ -336,22 +336,22 @@
 <span class="co"># the /etc used by the Arch Linux live CD, not our newly-installed system's</span>
 <span class="co"># root directory, /mnt.</span>
 
-<span class="kw">arch-chroot</span> /mnt /bin/bash
+<span class="ex">arch-chroot</span> /mnt /bin/bash
 
 <span class="co"># Choose and generate locale; programs supporting internationalization (aka</span>
 <span class="co"># &quot;i18n&quot;) will use the language you pick to generate the proper text used in</span>
 <span class="co"># menus, error messages, etc. Just choose &quot;en_US.UTF-8 UTF-8&quot; if you live in</span>
 <span class="co"># the US.</span>
 
-<span class="kw">vi</span> /etc/locale.gen
-<span class="kw">locale-gen</span>
-<span class="kw">echo</span> LANG=en_US.UTF-8 <span class="kw">&gt;</span> /etc/locale.conf
+<span class="ex">vi</span> /etc/locale.gen
+<span class="ex">locale-gen</span>
+<span class="bu">echo</span> LANG=en_US.UTF-8 <span class="op">&gt;</span> /etc/locale.conf
 
 <span class="co"># Choose default font used by the virtual console (the terminal screen you</span>
 <span class="co"># will see when you first boot up your new Arch Linux system).</span>
 
-<span class="kw">setfont</span> Lat2-Terminus16
-<span class="kw">echo</span> FONT=Lat2-Terminus16 <span class="kw">&gt;</span> /etc/vconsole.conf
+<span class="fu">setfont</span> Lat2-Terminus16
+<span class="bu">echo</span> FONT=Lat2-Terminus16 <span class="op">&gt;</span> /etc/vconsole.conf
 
 <span class="co"># Choose timezone. Here, we tell hwclock that we want the hardware clock on</span>
 <span class="co"># the motherboard to be set to UTC, which will then be interpreted as UTC</span>
@@ -359,12 +359,12 @@
 <span class="co"># actually use the system. This is nice because UTC is the &quot;master&quot; time the</span>
 <span class="co"># world uses anyway, so it makes sense to tell your motherboard to use it.</span>
 
-<span class="kw">ln</span> -s /usr/share/zoneinfo/America/Los_Angeles /etc/localtime
-<span class="kw">hwclock</span> --systohc --utc
+<span class="fu">ln</span> -s /usr/share/zoneinfo/America/Los_Angeles /etc/localtime
+<span class="ex">hwclock</span> --systohc --utc
 
 <span class="co"># Choose your computer's name. Keep it simple, without spaces. I use &quot;k0&quot;.</span>
 
-<span class="kw">echo</span> MYHOSTNAME <span class="kw">&gt;</span> /etc/hostname
+<span class="bu">echo</span> MYHOSTNAME <span class="op">&gt;</span> /etc/hostname
 
 <span class="co"># Enable DHCPCD... aka &quot;acquire dynamic ip address from your router/switch&quot;.  Be</span>
 <span class="co"># sure to choose the right device name (typically eth0 or eth1 (eth2, if you</span>
@@ -375,7 +375,7 @@
 <span class="co"># /etc/systemd/system/multi-user.target.wants/dhcpcd@eth0.service to</span>
 <span class="co"># /etc/systemd/system/multi-user.target.wants/dhcpcd@eth1.service.</span>
 
-<span class="kw">systemctl</span> enable dhcpcd@DEVICENAME.service
+<span class="ex">systemctl</span> enable dhcpcd@DEVICENAME.service
 
 <span class="co"># Disable unused package repos. You will want to disable the [testing] repo</span>
 <span class="co"># unless you want to test unstable packages and engage in the package</span>
@@ -383,15 +383,15 @@
 <span class="co"># [haskell-core] repo (see</span>
 <span class="co"># https://wiki.archlinux.org/index.php/Haskell_Package_Guidelines).</span>
 
-<span class="kw">vi</span> /etc/pacman.conf
+<span class="ex">vi</span> /etc/pacman.conf
 
 <span class="co"># Set up the root user (&quot;administrator&quot; for you Windows people) password.</span>
 
-<span class="kw">passwd</span>
+<span class="fu">passwd</span>
 
 <span class="co"># Install zsh, because you will like it better any other shell out there.</span>
 
-<span class="kw">pacman</span> -S zsh
+<span class="ex">pacman</span> -S zsh
 
 <span class="co"># Add your regular user, and set up your password. This is your normal</span>
 <span class="co"># username. We use the &quot;-s /bin/zsh&quot; option to tell useradd that we want to</span>
@@ -406,21 +406,21 @@
 <span class="co"># full listing of my files looks very succinct, as I like to live in the</span>
 <span class="co"># terminal and use `ls` daily.</span>
 
-<span class="kw">useradd</span> -m -g users -G wheel,storage,power -s /bin/zsh MYUSERNAME
-<span class="kw">passwd</span> MYUSERNAME
+<span class="ex">useradd</span> -m -g users -G wheel,storage,power -s /bin/zsh MYUSERNAME
+<span class="fu">passwd</span> MYUSERNAME
 
 <span class="co"># VERY IMPORTANT: Add in the filesystem type that /root partition (LVM) is</span>
 <span class="co"># using (for this tutorial, it is &quot;ext4&quot;) into the MODULES variable and also</span>
 <span class="co"># add 'encrypt' and 'lvm2' into HOOKS.</span>
 
-<span class="kw">vi</span> /etc/mkinitcpio.conf
+<span class="ex">vi</span> /etc/mkinitcpio.conf
 
 <span class="co"># Re-generate the linux image to take into account the LVM and encrypt</span>
 <span class="co"># flags we added into /etc/mkinitcpio.conf. I say &quot;re-generate&quot; because this</span>
 <span class="co"># is our second time doing this (the first time was when we installed the</span>
 <span class="co"># linux package with the pacstrap command above).</span>
 
-<span class="kw">mkinitcpio</span> -p linux
+<span class="ex">mkinitcpio</span> -p linux
 
 <span class="co"># Install boot loader. I like SYSLINUX because of the saner/easier-looking boot</span>
 <span class="co"># configuration file, compared to GRUB 2. Be sure to add in (as a single line)</span>
@@ -436,22 +436,22 @@
 <span class="co"># You don't need to tell the kernel about your vg0-home volume because that will</span>
 <span class="co"># get mounted by /etc/fstab when it is read later in the boot process.</span>
 
-<span class="kw">pacman</span> -S syslinux
-<span class="kw">syslinux-install_update</span> -i -a -m
-<span class="kw">vi</span> /boot/syslinux/syslinux.cfg
+<span class="ex">pacman</span> -S syslinux
+<span class="ex">syslinux-install_update</span> -i -a -m
+<span class="ex">vi</span> /boot/syslinux/syslinux.cfg
 
 <span class="co"># Exit chroot environment.</span>
 
-<span class="kw">exit</span>
+<span class="bu">exit</span>
 
 <span class="co"># Unmount volumes, and reboot. Remove your Arch Linux live CD when your</span>
 <span class="co"># computer powers on again.</span>
 
-<span class="kw">umount</span> /mnt/boot
-<span class="kw">umount</span> /mnt/home
-<span class="kw">umount</span> /mnt
-<span class="kw">swapoff</span>
-<span class="kw">reboot</span></code></pre></td></tr></table></div>
+<span class="fu">umount</span> /mnt/boot
+<span class="fu">umount</span> /mnt/home
+<span class="fu">umount</span> /mnt
+<span class="ex">swapoff</span>
+<span class="ex">reboot</span></code></pre></td></tr></table></div>
 <div class="raw-link">
 <a class="raw" href="../code/arch-setup.sh" mimetype="text/plain"> arch-setup.sh </a>
 </div>
