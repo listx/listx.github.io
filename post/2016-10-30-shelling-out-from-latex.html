@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Linus's Blog - Shelling Out From Latex</title>
+		<link rel="stylesheet" href="../css/base.css">
+		<link rel="stylesheet" href="../css/syntax.css">
+		<link href="http://fonts.googleapis.com/css?family=Merriweather:300,300italic,700italic,700" rel="stylesheet" type="text/css">
+		<link rel="shortcut icon" type="image/png" href="../favicon.png">
+		<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+		<script src="../misc.js"></script>
+		
+	</head>
+	<body>
+		<div id="header">
+			<a href="../">Home</a>
+			&bull;
+			<a href="../about.html">About</a>
+			&bull;
+			<a href="../art.html">Art</a>
+			&bull;
+			<a href="../code.html">Code</a>
+			&bull;
+			<a href="../papers.html">Papers</a>
+			&bull;
+			<a href="../archive.html">Archive</a>
+		</div>
+
+		<div id="content">
+			<h1 class="center" id="page-title">Shelling Out From Latex</h1>
+
+			<div class="info center">
+	<code class="date">2016-10-30</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2016-10-30-shelling-out-from-latex.org" title="History">*</a>
+	<br>
+	<a href="../tag/programming.html">programming</a>, <a href="../tag/tex.html">tex</a>
+</div>
+
+<h1 id="the-problem">The Problem</h1>
+<p>For years, whenever I wanted to interact with the outer shell environment from Latex, I would use one of two methods:</p>
+<ol>
+<li>perform some shell step separately from Latex and inject it into the Latex sources, or</li>
+<li>save it somewhere else and pull it in from Latex with <code>\input{foo}</code>.</li>
+</ol>
+<p>But I learned recently that it can be done much more simply, if you are willing to use Luatex!</p>
+<h1 id="enter-luatex">Enter Luatex</h1>
+<p>Let’s assume that you keep your Latex document in source control and want to inject the Git hash into the document. First, define a new command called <code>\shell</code>.</p>
+<pre><code>% Call shell! See http://tex.stackexchange.com/a/114939/30920.
+\newcommand\shell[1]{\directlua{
+    local handle, err = io.popen([[#1]])
+    if not handle then
+        tex.print(err)
+        os.exit(1)
+    end
+    local result = handle:read(&quot;*a&quot;)
+    handle:close()
+    tex.print(result)
+}}
+</code></pre>
+<p>Then use it like this:</p>
+<pre><code>\shell{TZ='America/Los_Angeles' date}
+
+\shell{git describe --always}%
+\shell{(( $(git --no-pager diff 2&gt;/dev/null | wc -l) + $(git --no-pager diff --cached 2&gt;/dev/null | wc -l) &gt; 0 )) &amp;&amp; echo '*'}
+</code></pre>
+<p>. I then use <code>lualatex --shell-escape foo.tex</code> to compile it. This is actual code from a Luatex document of mine.</p>
+<p>I am not sure which shell program gets invoked, but for most things it should not matter much.</p>
+<h1 id="conclusion">Conclusion</h1>
+<p>Now you know how to shell out from Latex!</p>
+<p>Happy hacking!</p>
+
+		</div>
+		<div id="footer">
+			<p>Copyright (C) 2013-2016 Linus Arver. All rights reserved.</p>
+			<a href="https://github.com/listx/listx_blog">Site</a>
+			<a href="https://github.com/listx/listx.github.io">generated</a>
+			with
+			<a href="http://jaspervdj.be/hakyll">Hakyll</a>
+			and
+			<a href="http://sebastiaanvisser.github.com/clay">Clay</a>.
+			<br>
+			<a href="../atom.xml">Atom feed</a>
+		</div>
+	</body>
+</html>

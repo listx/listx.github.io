@@ -8,8 +8,54 @@
         <name>Linus Arver</name>
         <email></email>
     </author>
-    <updated>2016-10-01T00:00:00Z</updated>
+    <updated>2016-10-30T00:00:00Z</updated>
     <entry>
+    <title>Shelling Out From Latex</title>
+    <link href="http://funloop.org/post/2016-10-30-shelling-out-from-latex.html" />
+    <id>http://funloop.org/post/2016-10-30-shelling-out-from-latex.html</id>
+    <published>2016-10-30T00:00:00Z</published>
+    <updated>2016-10-30T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="info center">
+	<code class="date">2016-10-30</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2016-10-30-shelling-out-from-latex.org" title="History">*</a>
+	<br>
+	<a href="/tag/programming.html">programming</a>, <a href="/tag/tex.html">tex</a>
+</div>
+
+<h1 id="the-problem">The Problem</h1>
+<p>For years, whenever I wanted to interact with the outer shell environment from Latex, I would use one of two methods:</p>
+<ol>
+<li>perform some shell step separately from Latex and inject it into the Latex sources, or</li>
+<li>save it somewhere else and pull it in from Latex with <code>\input{foo}</code>.</li>
+</ol>
+<p>But I learned recently that it can be done much more simply, if you are willing to use Luatex!</p>
+<h1 id="enter-luatex">Enter Luatex</h1>
+<p>Let’s assume that you keep your Latex document in source control and want to inject the Git hash into the document. First, define a new command called <code>\shell</code>.</p>
+<pre><code>% Call shell! See http://tex.stackexchange.com/a/114939/30920.
+\newcommand\shell[1]{\directlua{
+    local handle, err = io.popen([[#1]])
+    if not handle then
+        tex.print(err)
+        os.exit(1)
+    end
+    local result = handle:read(&quot;*a&quot;)
+    handle:close()
+    tex.print(result)
+}}
+</code></pre>
+<p>Then use it like this:</p>
+<pre><code>\shell{TZ=&#39;America/Los_Angeles&#39; date}
+
+\shell{git describe --always}%
+\shell{(( $(git --no-pager diff 2&gt;/dev/null | wc -l) + $(git --no-pager diff --cached 2&gt;/dev/null | wc -l) &gt; 0 )) &amp;&amp; echo &#39;*&#39;}
+</code></pre>
+<p>. I then use <code>lualatex --shell-escape foo.tex</code> to compile it. This is actual code from a Luatex document of mine.</p>
+<p>I am not sure which shell program gets invoked, but for most things it should not matter much.</p>
+<h1 id="conclusion">Conclusion</h1>
+<p>Now you know how to shell out from Latex!</p>
+<p>Happy hacking!</p>
+]]></summary>
+</entry>
+<entry>
     <title>My Esrille Layout: The ZQ Layout</title>
     <link href="http://funloop.org/post/2016-10-01-my-esrille-layout.html" />
     <id>http://funloop.org/post/2016-10-01-my-esrille-layout.html</id>
@@ -1031,74 +1077,6 @@ source-code-pro-2.010
 <li id="fn3"><p>The Nix package manager only deals with *.nix files, which are exclusively written in the Nix expression language.<a href="#fnref3">↩</a></p></li>
 </ol>
 </div>
-]]></summary>
-</entry>
-<entry>
-    <title>Emacs: Setting Up mmm-mode for Literate Haskell</title>
-    <link href="http://funloop.org/post/2015-07-28-literate-haskell-mmm-mode.html" />
-    <id>http://funloop.org/post/2015-07-28-literate-haskell-mmm-mode.html</id>
-    <published>2015-07-28T00:00:00Z</published>
-    <updated>2015-07-28T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="info center">
-	<code class="date">2015-07-28</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2015-07-28-literate-haskell-mmm-mode.org" title="History">*</a>
-	<br>
-	<a href="/tag/programming.html">programming</a>, <a href="/tag/emacs.html">emacs</a>, <a href="/tag/haskell.html">haskell</a>
-</div>
-
-<p>I use <a href="https://wiki.haskell.org/Literate_programming">Literate Haskell</a> for some of my personal Haskell projects and for a long time I used the auto-loaded <code>literate-haskell-mode</code> that comes with <a href="https://github.com/haskell/haskell-mode">haskell-mode</a>. This past weekend, I finally buckled down and made use of <a href="https://github.com/purcell/mmm-mode">mmm-mode</a> to make the literate programming experience better. The biggest advantage of using <code>mmm-mode</code> is that you can define subregions of your file which are handled by a different major mode. In other words, you can get proper syntax highlighting for 2, 3, or more different languages in the same file!</p>
-<h1 id="setup">Setup</h1>
-<p>You’ll need to install <a href="https://github.com/purcell/mmm-mode">mmm-mode</a> along with <a href="https://github.com/haskell/haskell-mode">haskell-mode</a>. I personally use <a href="http://melpa.org/">MELPA</a> for all of my Emacs packages because once you set it up it’s really painless.</p>
-<p>In your <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Init-File.html">emacs configuration file</a> add these lines:</p>
-<pre><code>; Remove the hard-coded &#39;literate-haskell-mode&#39; activation for `.lhs&#39; files that
-; haskell-mode comes with. In exchange, enable LaTeX mode whenever we open up a
-; `.lhs&#39; file. Using mmm-mode, we will activate `haskell-mode&#39; in the code
-; sections.
-(setq auto-mode-alist
-  (remove
-    (rassoc &#39;literate-haskell-mode auto-mode-alist) auto-mode-alist))
-(add-to-list &#39;auto-mode-alist &#39;(&quot;\\.lhs$&quot; . latex-mode))
-
-; Literate Haskell - mmm-mode. Adopted from
-; https://wiki.haskell.org/Literate_programming#Multi-mode_support_in_Emacs
-(require &#39;mmm-auto)
-
-(mmm-add-classes
-  &#39;((literate-haskell-latex
-    :submode haskell-mode
-    :front &quot;^\\\\begin{code}\n&quot;
-    :back &quot;^\\\\end{code}&quot;
-  )))
-
-; Re-fontify sub-mode portions when idle. The manual command for this is
-; `mmm-parse-buffer&#39;. If you don&#39;t do this, then syntax highlighting won&#39;t work
-; for new regions of Haskell code in the \begin{code}...\end{code} blocks.
-(setq mmm-parse-when-idle &#39;t)
-</code></pre>
-<p>. Now it’s a matter of running the following commands whenever you open up a <code>.lhs</code> file:</p>
-<pre><code>(setq mmm-global-mode &#39;t)
-(setq mmm-submode-decoration-level 1)
-(mmm-ify-by-class &#39;literate-haskell-latex)
-</code></pre>
-<p>. Personally I use <a href="https://github.com/listx/kakapo-mode">kakapo-mode</a> so I have a file called <code>kakapo-project-settings</code> that has this snippet in it:</p>
-<pre><code>(defun my-kakapo-indents ()
-
-  ...
-
-  ; Literate Haskell
-  ((string-match &quot;\\.lhs$&quot; b)
-    (progn
-      (h &#39;latex-mode-hook t 4)
-      (setq mmm-global-mode &#39;t)
-      (setq mmm-submode-decoration-level 1)
-      (mmm-ify-by-class &#39;literate-haskell-latex)
-    )
-  )
-
-  ...
-
-)
-</code></pre>
-<p>. Emacs will now automatically pick up <code>.lhs</code> files and apply <code>latex-mode</code> and <code>haskell-mode</code> with <code>mmm-mode</code>. Happy hacking!</p>
 ]]></summary>
 </entry>
 
