@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Linus's Blog - Replaying Vim Macros</title>
+		<link rel="stylesheet" href="../css/base.css">
+		<link rel="stylesheet" href="../css/syntax.css">
+		<link href="http://fonts.googleapis.com/css?family=Merriweather:300,300italic,700italic,700" rel="stylesheet" type="text/css">
+		<link rel="shortcut icon" type="image/png" href="../favicon.png">
+		<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+		<script src="../misc.js"></script>
+		
+	</head>
+	<body>
+		<div id="header">
+			<a href="../">Home</a>
+			&bull;
+			<a href="../about.html">About</a>
+			&bull;
+			<a href="../art.html">Art</a>
+			&bull;
+			<a href="../code.html">Code</a>
+			&bull;
+			<a href="../papers.html">Papers</a>
+			&bull;
+			<a href="../archive.html">Archive</a>
+		</div>
+
+		<div id="content">
+			<h1 class="center" id="page-title">Replaying Vim Macros</h1>
+
+			<div class="info center">
+	<code class="date">2016-12-03</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2016-12-03-vim-macro-replay.org" title="History">*</a>
+	<br>
+	<a href="../tag/programming.html">programming</a>, <a href="../tag/emacs.html">emacs</a>, <a href="../tag/vim.html">vim</a>
+</div>
+
+<p>I’ve been using Vim (and now, Emacs with Evil mode) for years — and still, every once in a while I get a pleasant surprise. Today I learned that you can replay macros from Visual Line mode! So you don’t always have to record something like <code>j0</code> at the end of your macro to get down to the next line. I.e., after recording your macro for just 1 line, select other lines that you want to replay the macro against with Visual Line mode (<code>V</code>). To replay, do</p>
+<pre><code>:'&lt;,'&gt;g/^/norm @q
+</code></pre>
+<p>(assuming that you recorded your macro into the <code>q</code> register with <code>qq...q</code>).</p>
+<p>Thanks to <a href="https://twitter.com/chris_mccord/status/530770735107547136">Chris McCord</a> for the tip (seek to about 3:20 in the <a href="https://youtu.be/3wAeFiGv_yE?t=3m20s">video</a>).</p>
+
+		</div>
+		<div id="footer">
+			<p>Copyright (C) 2013-2016 Linus Arver. All rights reserved.</p>
+			<a href="https://github.com/listx/listx_blog">Site</a>
+			<a href="https://github.com/listx/listx.github.io">generated</a>
+			with
+			<a href="http://jaspervdj.be/hakyll">Hakyll</a>
+			and
+			<a href="http://sebastiaanvisser.github.com/clay">Clay</a>.
+			<br>
+			<a href="../atom.xml">Atom feed</a>
+		</div>
+	</body>
+</html>
