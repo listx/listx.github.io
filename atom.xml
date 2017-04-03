@@ -218,7 +218,7 @@ collect2: error: ld returned 1 exit status
 <h2 id="dont-settle">Don’t settle</h2>
 <p>Software evolves. Always be on the lookout for better software, and new ways to configure them! Leverage the power of open source (free upgrades!) and make it work for you.</p>
 <h1 id="do-you-track-your-configs">Do you track your configs?</h1>
-<p>If not, you should definitely consider it — what have you got to lose? I think that keeping track of configuration files Keeping a configuration repo (distributed across home computers) is probably the best way for you to learn how to use a distributed source control system; indeed it was how I learned to use Git properly.</p>
+<p>If not, you should definitely consider it — what have you got to lose? Keeping a configuration repo (distributed across home computers) is probably the best way for you to learn how to use a distributed source control system; indeed it was how I learned to use Git properly.</p>
 <p>Happy hacking!</p>
 ]]></summary>
 </entry>
