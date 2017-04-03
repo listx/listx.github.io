@@ -200,7 +200,7 @@
 <span class="va">mode=$2</span>
 
 <span class="kw">case</span> <span class="va">$mode</span><span class="kw"> in</span>
-	<span class="co">### Remove any old cblrepo.db file. ###</span>
+	<span class="al">###</span><span class="co"> Remove any old cblrepo.db file. </span><span class="al">###</span>
 	<span class="kw">(</span>initdb<span class="kw">|</span>initdb-sync<span class="kw">)</span>
 	<span class="fu">rm</span> -f cblrepo.db
 
@@ -259,7 +259,7 @@
 	<span class="co"># Link the generated cblrepo.db file into ~/.cblrepo</span>
 	<span class="fu">ln</span> -sf <span class="va">$PWD</span>/cblrepo.db ~/.cblrepo/cblrepo.db
 	<span class="kw">;;</span>
-	<span class="co">### Generate PKGBUILD files for Hackage packages ###</span>
+	<span class="al">###</span><span class="co"> Generate PKGBUILD files for Hackage packages </span><span class="al">###</span>
 	<span class="kw">(</span>pkgbuild<span class="kw">)</span>
 
 	<span class="co"># Remove any old packages.</span>
@@ -274,7 +274,7 @@
 		<span class="kw">((</span> i+=1 <span class="kw">))</span>
 	<span class="kw">done</span>
 	<span class="kw">;;</span>
-	<span class="co">### Create Arch Linux packages for the Hackage packages ###</span>
+	<span class="al">###</span><span class="co"> Create Arch Linux packages for the Hackage packages </span><span class="al">###</span>
 	<span class="kw">(</span>makepkg<span class="kw">)</span>
 	<span class="kw">for</span> <span class="ex">pdir</span> in haskell-*<span class="kw">;</span> <span class="kw">do</span>
 		<span class="bu">cd</span> <span class="va">$pdir</span>

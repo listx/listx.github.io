@@ -1035,27 +1035,27 @@ require_relative <span class="st">'./unmutate.rb'</span>
       <span class="dt">Unmutate</span>.unmutate([<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">9</span>])
   <span class="kw">end</span>
 
-  <span class="kw">def</span> test_m_is_0
+  <span class="kw">def</span> test_m_is<span class="dt">_0</span>
     assert_equal [<span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">5</span>],
       <span class="dt">Unmutate</span>.unmutate([<span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">5</span>])
   <span class="kw">end</span>
 
-  <span class="kw">def</span> test_known_case_1
+  <span class="kw">def</span> test_known_case<span class="dt">_1</span>
     assert_equal [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>],
       <span class="dt">Unmutate</span>.unmutate([<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">1</span>, <span class="dv">5</span>])
   <span class="kw">end</span>
 
-  <span class="kw">def</span> test_known_case_2
+  <span class="kw">def</span> test_known_case<span class="dt">_2</span>
     assert_equal [<span class="dv">14</span>, <span class="dv">47</span>, <span class="dv">80</span>, <span class="dv">113</span>, <span class="dv">146</span>, <span class="dv">179</span>, <span class="dv">212</span>],
       <span class="dt">Unmutate</span>.unmutate([<span class="dv">7</span>, <span class="dv">47</span>, <span class="dv">5</span>, <span class="dv">113</span>, <span class="dv">73</span>, <span class="dv">179</span>, <span class="dv">53</span>])
   <span class="kw">end</span>
 
-  <span class="kw">def</span> test_known_case_3
+  <span class="kw">def</span> test_known_case<span class="dt">_3</span>
     assert_equal [<span class="dv">1498</span>, <span class="dv">999</span>, <span class="dv">500</span>, <span class="dv">1</span>],
       <span class="dt">Unmutate</span>.unmutate([<span class="dv">749</span>, <span class="dv">999</span>, <span class="dv">125</span>, <span class="dv">1</span>])
   <span class="kw">end</span>
 
-  <span class="kw">def</span> test_known_case_4
+  <span class="kw">def</span> test_known_case<span class="dt">_4</span>
     assert_equal [-<span class="dv">11</span>, <span class="dv">0</span>, <span class="dv">11</span>, <span class="dv">22</span>, <span class="dv">33</span>, <span class="dv">44</span>],
       <span class="dt">Unmutate</span>.unmutate([-<span class="dv">11</span>, <span class="dv">0</span>, <span class="dv">11</span>, <span class="dv">11</span>, <span class="dv">33</span>, <span class="dv">11</span>])
   <span class="kw">end</span>
