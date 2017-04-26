@@ -17,13 +17,9 @@
 			&bull;
 			<a href="../about.html">About</a>
 			&bull;
-			<a href="../art.html">Art</a>
-			&bull;
 			<a href="../code.html">Code</a>
 			&bull;
 			<a href="../papers.html">Papers</a>
-			&bull;
-			<a href="../archive.html">Archive</a>
 		</div>
 
 		<div id="content">
@@ -43,7 +39,10 @@ alias gdfc=&quot;git diff --cached&quot;
 <p>Last year I started working professionally as a developer and I began to work on many different repos at the same time. Oftentimes I would do either a <code>git diff</code> or <code>git diff --cached</code>, then come back to it 10 minutes later but then forget whether the diff had a <code>--cached</code> flag or not. I needed to script some more git helpers functions!</p>
 <h1 id="implementation">Implementation</h1>
 <p>I created a new shell function called <code>gdf</code> to replace the two aliases above. It works by first showing you the <code>git diff</code> output, then the <code>git diff --cached</code> output. For both outputs, a vertical colored “ribbon” is printed on the left margin to denote whether it’s the working tree (<code>git diff</code>) or index (<code>git diff --cached</code> aka “staging area”). The name of the repo is prepended/appended to the output as well to further disambiguate it. Here are the functions:</p>
-<div class="code-and-raw">
+<div class="code-and-raw lineCntMax100">
+<div class="raw-link sourceCode">
+<table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/2016-07-17-git-diff-improved/gdf" mimetype="text/plain">gdf</a></code></pre></td></tr></tbody></table>
+</div>
 <div class="sourceCode" input="code/2016-07-17-git-diff-improved/gdf"><table class="sourceCode numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
@@ -138,11 +137,11 @@ gdf()
 		gst
 	fi
 }</code></pre></td></tr></table></div>
-<div class="raw-link">
-<a class="raw" href="../code/2016-07-17-git-diff-improved/gdf" mimetype="text/plain"> gdf </a>
 </div>
+<div class="code-and-raw lineCntMax100">
+<div class="raw-link sourceCode">
+<table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/2016-07-17-git-diff-improved/vertical_label" mimetype="text/plain">vertical_label</a></code></pre></td></tr></tbody></table>
 </div>
-<div class="code-and-raw">
 <div class="sourceCode" input="code/2016-07-17-git-diff-improved/vertical_label"><table class="sourceCode numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
@@ -195,11 +194,11 @@ vertical_label()
 		fi
 	done
 }</code></pre></td></tr></table></div>
-<div class="raw-link">
-<a class="raw" href="../code/2016-07-17-git-diff-improved/vertical_label" mimetype="text/plain"> vertical_label </a>
 </div>
+<div class="code-and-raw lineCntMax100">
+<div class="raw-link sourceCode">
+<table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/2016-07-17-git-diff-improved/git_find_repo" mimetype="text/plain">git_find_repo</a></code></pre></td></tr></tbody></table>
 </div>
-<div class="code-and-raw">
 <div class="sourceCode" input="code/2016-07-17-git-diff-improved/git_find_repo"><table class="sourceCode numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
@@ -226,9 +225,6 @@ git_find_repo()
 	done
 	echo ${PWD##*/}
 }</code></pre></td></tr></table></div>
-<div class="raw-link">
-<a class="raw" href="../code/2016-07-17-git-diff-improved/git_find_repo" mimetype="text/plain"> git_find_repo </a>
-</div>
 </div>
 <p>I use Zsh as my shell, so I wrote the above in Zsh. I simply drop these files inside my autoloaded directory, which is defined like this:</p>
 <div class="sourceCode"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span class="ot">fpath=(</span>~/.zsh/func <span class="ot">$fpath)</span> <span class="co"># add ~/.zsh/func to $fpath</span>
@@ -301,7 +297,7 @@ X  @@ -38,6 +38,14 @@ fpath=(~/.zsh/func $fpath) # add ~/.zsh/func to $fpath
 
 		</div>
 		<div id="footer">
-			<p>Copyright (C) 2013-2016 Linus Arver. All rights reserved.</p>
+			<p>Copyright (C) 2013-2017 Linus Arver. All rights reserved.</p>
 			<a href="https://github.com/listx/listx_blog">Site</a>
 			<a href="https://github.com/listx/listx.github.io">generated</a>
 			with

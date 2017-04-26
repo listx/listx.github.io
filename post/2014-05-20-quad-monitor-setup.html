@@ -17,13 +17,9 @@
 			&bull;
 			<a href="../about.html">About</a>
 			&bull;
-			<a href="../art.html">Art</a>
-			&bull;
 			<a href="../code.html">Code</a>
 			&bull;
 			<a href="../papers.html">Papers</a>
-			&bull;
-			<a href="../archive.html">Archive</a>
 		</div>
 
 		<div id="content">
@@ -40,7 +36,10 @@
 <p><img src="../img/quad-monitor.jpg" alt="Quad monitor setup" title="Quad monitor setup" width="100%"></p>
 <p>Using four monitors sounds difficult, but it’s a breeze with Xinerama and Xmonad. The hardest part was figuring out the correct <code>xorg.conf</code> configuration file. It was difficult because the QNIX monitors, being cheap, do not work out of the box, because the latest Nvidia driver (version 337.12) does not detect the correct resolution. What’s worse, the QNIXes do not support anything other than their native 2560x1440 resolution, so you’ll get blank screens if you try to just use these monitors without tweaking some <code>xorg.conf</code> settings. I actually ended up googling to find the correct <code>Modeline</code> value for <code>xorg.conf</code> for my QNIX, at 96hz refresh rate.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> You could try using the <code>cvt</code> program included with <code>xorg-server</code>, but when I tried it out on my own it generated different numbers and my QNIXes couldn’t handle those numbers.</p>
 <p>Here is my <code>xorg.conf</code>:</p>
-<div class="code-and-raw">
+<div class="code-and-raw lineCntMax1000">
+<div class="raw-link sourceCode">
+<table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/quad-monitor-portrait.xorg.conf" mimetype="text/plain">quad-monitor-portrait.xorg.conf</a></code></pre></td></tr></tbody></table>
+</div>
 <div class="sourceCode" input="code/quad-monitor-portrait.xorg.conf"><table class="sourceCode numberLines xorg"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
@@ -399,9 +398,6 @@
         Depth<span class="kw">       </span><span class="dv">24</span>
     <span class="fu">EndSubSection</span>
 <span class="fu">EndSection</span></code></pre></td></tr></table></div>
-<div class="raw-link">
-<a class="raw" href="../code/quad-monitor-portrait.xorg.conf" mimetype="text/plain"> quad-monitor-portrait.xorg.conf </a>
-</div>
 </div>
 <div class="footnotes">
 <hr />
@@ -412,7 +408,7 @@
 
 		</div>
 		<div id="footer">
-			<p>Copyright (C) 2013-2016 Linus Arver. All rights reserved.</p>
+			<p>Copyright (C) 2013-2017 Linus Arver. All rights reserved.</p>
 			<a href="https://github.com/listx/listx_blog">Site</a>
 			<a href="https://github.com/listx/listx.github.io">generated</a>
 			with

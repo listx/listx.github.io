@@ -17,13 +17,9 @@
 			&bull;
 			<a href="../about.html">About</a>
 			&bull;
-			<a href="../art.html">Art</a>
-			&bull;
 			<a href="../code.html">Code</a>
 			&bull;
 			<a href="../papers.html">Papers</a>
-			&bull;
-			<a href="../archive.html">Archive</a>
 		</div>
 
 		<div id="content">
@@ -41,7 +37,10 @@
 <p>Bird describes the problem as “computing the smallest natural number not in a given finite set <em>X</em> of natural numbers”. Here, <strong>natural numbers</strong> means the set of all positive integers and zero, or just <code>[0..]</code> in Haskell.</p>
 <p>I would like to add some further terminology. Let us think of the set <em>X</em> as <code>xs</code> (a list of elements in <em>X</em>), and call the set of all free numbers as the <em>free set</em>. Using our original parking lot analogy, the infinite parking lot is the set of all natural numbers, <em>X</em> is the list of parked spots (occupied), and finally the <em>free set</em> is the list of all unoccupied (open) parking spots.</p>
 <h1 id="naive-list-based-solution">Naive list-based solution</h1>
-<div class="code-and-raw">
+<div class="code-and-raw lineCntMax10">
+<div class="raw-link sourceCode">
+<table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/2016-09-24-parking-lot-problem-revisited/naive.hs" mimetype="text/plain">naive.hs</a></code></pre></td></tr></tbody></table>
+</div>
 <div class="sourceCode" input="code/2016-09-24-parking-lot-problem-revisited/naive.hs"><table class="sourceCode numberLines haskell"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
@@ -50,9 +49,6 @@
 
 <span class="ot">minfreeNaive ::</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> <span class="dt">Int</span>
 minfreeNaive xs <span class="fu">=</span> head ([<span class="dv">0</span><span class="fu">..</span>] \\ xs)</code></pre></td></tr></table></div>
-<div class="raw-link">
-<a class="raw" href="../code/2016-09-24-parking-lot-problem-revisited/naive.hs" mimetype="text/plain"> naive.hs </a>
-</div>
 </div>
 <p>The worst case of <strong>minfreeNaive</strong> is <span class="math inline">\(\Theta(n^2)\)</span>, because it translates into imperative pseudocode as follows:</p>
 <pre><code># Algorithm P1
@@ -101,7 +97,10 @@ minfreeNaive(xs)
 <p>Now let’s look at the second sentence. It describes the set <code>filter (&lt;n) xs</code>, which we will call <strong>reducedXs</strong>. <a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a> The set <strong>reducedXs</strong> is found by removing all elements in <strong>xs</strong> that are too big for our problem size of <strong>n + 1</strong> spots — i.e., beyond the range in <strong>reducedFrees</strong>.</p>
 <h1 id="improved-array-based-solution">Improved array-based solution</h1>
 <p>Using the insight gained above, we can restate the problem as follows:</p>
-<div class="code-and-raw">
+<div class="code-and-raw lineCntMax100">
+<div class="raw-link sourceCode">
+<table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/2016-09-24-parking-lot-problem-revisited/array2.hs" mimetype="text/plain">array2.hs</a></code></pre></td></tr></tbody></table>
+</div>
 <div class="sourceCode" input="code/2016-09-24-parking-lot-problem-revisited/array2.hs"><table class="sourceCode numberLines haskell"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
@@ -134,9 +133,6 @@ search <span class="fu">=</span>  length <span class="fu">.</span> takeWhile id 
 
 <span class="ot">minfreeArray2 ::</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> <span class="dt">Int</span>
 minfreeArray2 <span class="fu">=</span> search <span class="fu">.</span> checklist</code></pre></td></tr></table></div>
-<div class="raw-link">
-<a class="raw" href="../code/2016-09-24-parking-lot-problem-revisited/array2.hs" mimetype="text/plain"> array2.hs </a>
-</div>
 </div>
 <p>.</p>
 <p>Bird says “[t]he function <em>search</em> takes an array of Booleans, converts the array into a list of Booleans and returns the length of the longest initial segment consisting of <em>True</em> entries. This number will be the position of the first <em>False</em> entry.” This is true, and we’ll soon see why this is the case.</p>
@@ -173,7 +169,10 @@ sort xs <span class="fu">=</span> concat [ replicate k x <span class="fu">|</spa
 <p>It should be reiterated here that ultimately we want to have an ordered list of Booleans that preserves the occupied parking spot information in the original list of “taken” spots. The way in which <code>checklist</code> performs the conversion of unordered numbers into a nice list of Booleans in the range <code>[0..n]</code> is virtually identical in design to the algorithm described by Jon Bentley in the very first chapter of his book <em>Programming Pearls</em> (2nd Ed., 2000). There Bentley used a bitmap to represent a Boolean array because of strict memory requirements — but otherwise the spirit of the data structure remains the same.</p>
 <h1 id="further-improved-array-based-solution">(Further improved) Array-based solution</h1>
 <p>Bird’s final array-based algorithm uses the ST Monad to squeeze out some more performance of the <code>checklist</code> function. Here is the code:</p>
-<div class="code-and-raw">
+<div class="code-and-raw lineCntMax100">
+<div class="raw-link sourceCode">
+<table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/2016-09-24-parking-lot-problem-revisited/array2.hs" mimetype="text/plain">array2.hs</a></code></pre></td></tr></tbody></table>
+</div>
 <div class="sourceCode" input="code/2016-09-24-parking-lot-problem-revisited/array2.hs"><table class="sourceCode numberLines haskell"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
@@ -206,14 +205,14 @@ search <span class="fu">=</span>  length <span class="fu">.</span> takeWhile id 
 
 <span class="ot">minfreeArray2 ::</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> <span class="dt">Int</span>
 minfreeArray2 <span class="fu">=</span> search <span class="fu">.</span> checklist</code></pre></td></tr></table></div>
-<div class="raw-link">
-<a class="raw" href="../code/2016-09-24-parking-lot-problem-revisited/array2.hs" mimetype="text/plain"> array2.hs </a>
-</div>
 </div>
 <p>. The use of the ST monad here reduces memory overhead, and according to Bird it is the most efficient approach using an imperative style on top of arrays.</p>
 <h1 id="divide-and-conquer-via-recursion">Divide and Conquer via Recursion</h1>
 <p>Ah, recursion. Bird describes the following divide-and-conquer algorithm as a faster alternative to <code>accumArray</code>. <a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a></p>
-<div class="code-and-raw">
+<div class="code-and-raw lineCntMax100">
+<div class="raw-link sourceCode">
+<table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/2016-09-24-parking-lot-problem-revisited/divideAndConquer.hs" mimetype="text/plain">divideAndConquer.hs</a></code></pre></td></tr></tbody></table>
+</div>
 <div class="sourceCode" input="code/2016-09-24-parking-lot-problem-revisited/divideAndConquer.hs"><table class="sourceCode numberLines haskell"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
@@ -242,9 +241,6 @@ minfrom a (n, xs)
 	(as, bs) <span class="fu">=</span> partition (<span class="fu">&lt;</span>b) xs
 	b <span class="fu">=</span> a <span class="fu">+</span> (div n <span class="dv">2</span>) <span class="fu">+</span> <span class="dv">1</span>
 	m <span class="fu">=</span> length as</code></pre></td></tr></table></div>
-<div class="raw-link">
-<a class="raw" href="../code/2016-09-24-parking-lot-problem-revisited/divideAndConquer.hs" mimetype="text/plain"> divideAndConquer.hs </a>
-</div>
 </div>
 <p>The overall idea is that we can define the problem <code>minimum of ([0..] \\ xs)</code> by dividing up <code>xs</code> into 2 halves, and then look into the correct sub-part for the solution. Notice that we are partitioning the <code>xs</code> (soley the list of parked spots), and <em>not</em> the parking lot itself.</p>
 <p>For example, we can divide up <code>xs</code> into <code>as</code> and <code>bs</code>, where <code>(as, bs) = partition (&lt;b) xs</code>. (The <code>partition</code> library function simply splits up a given list into 2 subsets, those that satisfy the given condition, and those that do not.) Deciding which partition to look at is simple: look in the upper partition if the lower partition (containing the smaller-numbered parking spots) is full.</p>
@@ -298,7 +294,7 @@ b = 0 + (\mathrm{div}\;1\,2) = 0 + 0 = 0,
 
 		</div>
 		<div id="footer">
-			<p>Copyright (C) 2013-2016 Linus Arver. All rights reserved.</p>
+			<p>Copyright (C) 2013-2017 Linus Arver. All rights reserved.</p>
 			<a href="https://github.com/listx/listx_blog">Site</a>
 			<a href="https://github.com/listx/listx.github.io">generated</a>
 			with

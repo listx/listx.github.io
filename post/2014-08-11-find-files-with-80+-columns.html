@@ -17,13 +17,9 @@
 			&bull;
 			<a href="../about.html">About</a>
 			&bull;
-			<a href="../art.html">Art</a>
-			&bull;
 			<a href="../code.html">Code</a>
 			&bull;
 			<a href="../papers.html">Papers</a>
-			&bull;
-			<a href="../archive.html">Archive</a>
 		</div>
 
 		<div id="content">
@@ -37,12 +33,12 @@
 
 <p>It’s nice to follow the 80-columns-per-line rule<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a>, but what if you have some lingering project that has yet to conform?</p>
 <p>Just go to that project’s sources directory and do</p>
-<div class="code-and-raw">
+<div class="code-and-raw lineCntMax10">
+<div class="raw-link sourceCode">
+<table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/find-80-cols.sh" mimetype="text/plain">find-80-cols.sh</a></code></pre></td></tr></tbody></table>
+</div>
 <div class="sourceCode" input="code/find-80-cols.sh"><table class="sourceCode numberLines bash"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 </pre></td><td class="sourceCode"><pre><code class="sourceCode bash"><span class="fu">find</span> . -type f -exec sh -c <span class="st">&quot;expand -t 8 {} | grep -n </span><span class="dt">\&quot;</span><span class="st">.\{81\}</span><span class="dt">\&quot;</span><span class="st">&quot;</span> <span class="dt">\;</span> -print</code></pre></td></tr></table></div>
-<div class="raw-link">
-<a class="raw" href="../code/find-80-cols.sh" mimetype="text/plain"> find-80-cols.sh </a>
-</div>
 </div>
 <p>.</p>
 <p>The call to <code>expand</code> is necessary because different people use different widths for tabs. That is, we are trying to find files with 80+ <em>columns</em> (as they appear to humans), not 80+ <em>characters</em> (as they appear to the computer).</p>
@@ -55,7 +51,7 @@
 
 		</div>
 		<div id="footer">
-			<p>Copyright (C) 2013-2016 Linus Arver. All rights reserved.</p>
+			<p>Copyright (C) 2013-2017 Linus Arver. All rights reserved.</p>
 			<a href="https://github.com/listx/listx_blog">Site</a>
 			<a href="https://github.com/listx/listx.github.io">generated</a>
 			with

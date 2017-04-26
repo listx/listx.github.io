@@ -17,13 +17,9 @@
 			&bull;
 			<a href="../about.html">About</a>
 			&bull;
-			<a href="../art.html">Art</a>
-			&bull;
 			<a href="../code.html">Code</a>
 			&bull;
 			<a href="../papers.html">Papers</a>
-			&bull;
-			<a href="../archive.html">Archive</a>
 		</div>
 
 		<div id="content">
@@ -56,7 +52,10 @@
 <h3 id="the-solution">The Solution</h3>
 <p>To solve my problem, I just take the current date, then feed it to the SHA-1 function to get <code>sha1Hash</code>; I then then repeatedly call SHA-1 against <code>sha1Hash</code> recursively. Meanwhile, each time I get a SHA-1 hash of 20 bytes, I append it to an empty string of bytes, <code>acc</code>. When <code>acc</code> is large enough to be split up into 256 <code>Word32</code> elements, I feed it to <code>initialize</code>. The result is that I get much better seed-vs-similar-seed randomness with MWC.</p>
 <p>Here is the code:</p>
-<div class="code-and-raw">
+<div class="code-and-raw lineCntMax100">
+<div class="raw-link sourceCode">
+<table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/rng/mwc-seed.hs" mimetype="text/plain">mwc-seed.hs</a></code></pre></td></tr></tbody></table>
+</div>
 <div class="sourceCode" input="code/rng/mwc-seed.hs"><table class="sourceCode numberLines haskell"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
@@ -163,9 +162,6 @@ fromOctetsBE <span class="fu">=</span> foldl' accum <span class="dv">0</span>
 
 <span class="ot">fromOctetsLE ::</span> [<span class="dt">Word8</span>] <span class="ot">-&gt;</span> <span class="dt">Word32</span>
 fromOctetsLE <span class="fu">=</span> fromOctetsBE <span class="fu">.</span> reverse</code></pre></td></tr></table></div>
-<div class="raw-link">
-<a class="raw" href="../code/rng/mwc-seed.hs" mimetype="text/plain"> mwc-seed.hs </a>
-</div>
 </div>
 <p>The neat <code>chop</code> function is by <a href="http://stackoverflow.com/a/5188922/437583">Dan Burton</a>. The octet conversion functions between <code>Word8</code> and <code>Word32</code> types are from <a href="http://www.haskell.org/pipermail/beginners/2010-October/005571.html">this message</a>.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a></p>
 <div class="footnotes">
@@ -177,7 +173,7 @@ fromOctetsLE <span class="fu">=</span> fromOctetsBE <span class="fu">.</span> re
 
 		</div>
 		<div id="footer">
-			<p>Copyright (C) 2013-2016 Linus Arver. All rights reserved.</p>
+			<p>Copyright (C) 2013-2017 Linus Arver. All rights reserved.</p>
 			<a href="https://github.com/listx/listx_blog">Site</a>
 			<a href="https://github.com/listx/listx.github.io">generated</a>
 			with

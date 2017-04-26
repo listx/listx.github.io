@@ -17,13 +17,9 @@
 			&bull;
 			<a href="../about.html">About</a>
 			&bull;
-			<a href="../art.html">Art</a>
-			&bull;
 			<a href="../code.html">Code</a>
 			&bull;
 			<a href="../papers.html">Papers</a>
-			&bull;
-			<a href="../archive.html">Archive</a>
 		</div>
 
 		<div id="content">
@@ -40,7 +36,10 @@
 <p>I have also removed the use of backticks for Haskell’s infix notation (<code>`...`</code>). It’s not because I like using parentheses — I just don’t like using infix notation because it runs against the argument handling order of normal functions found everywhere else.</p>
 <p>Also, I have fixed YPares’s original <code>lookAt</code> function which is actually <a href="https://github.com/YPares/Haskell-OpenGL3.1-Tutos/commit/7a027b927d061fbd26138cb7357c40c4cacbc927">broken as of commit 7a027b927d061fbd26138cb7357c40c4cacbc927</a>; you will need my version if you wish to pursue the later tutorials that actually test the validity of this function, such as the keyboard/mouse input tutorial #6 from <a href="http://www.opengl-tutorial.org" class="uri">http://www.opengl-tutorial.org</a>.</p>
 <p>The code here is released into the Public Domain.</p>
-<div class="code-and-raw">
+<div class="code-and-raw lineCntMax1000">
+<div class="raw-link sourceCode">
+<table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/opengl/matrices.hs" mimetype="text/plain">matrices.hs</a></code></pre></td></tr></tbody></table>
+</div>
 <div class="sourceCode" input="code/opengl/matrices.hs"><table class="sourceCode numberLines haskell"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
@@ -559,14 +558,11 @@ lookAt eye target up <span class="fu">=</span> x <span class="fu">:.</span> y <s
 	y <span class="fu">=</span> snoc up' (<span class="fu">-</span>(dot up' eye))
 	z <span class="fu">=</span> snoc (<span class="fu">-</span>forward) (dot forward eye)
 	h <span class="fu">=</span> <span class="dv">0</span> <span class="fu">:.</span> <span class="dv">0</span> <span class="fu">:.</span> <span class="dv">0</span> <span class="fu">:.</span> <span class="dv">1</span> <span class="fu">:.</span> ()</code></pre></td></tr></table></div>
-<div class="raw-link">
-<a class="raw" href="../code/opengl/matrices.hs" mimetype="text/plain"> matrices.hs </a>
-</div>
 </div>
 
 		</div>
 		<div id="footer">
-			<p>Copyright (C) 2013-2016 Linus Arver. All rights reserved.</p>
+			<p>Copyright (C) 2013-2017 Linus Arver. All rights reserved.</p>
 			<a href="https://github.com/listx/listx_blog">Site</a>
 			<a href="https://github.com/listx/listx.github.io">generated</a>
 			with

@@ -17,13 +17,9 @@
 			&bull;
 			<a href="../about.html">About</a>
 			&bull;
-			<a href="../art.html">Art</a>
-			&bull;
 			<a href="../code.html">Code</a>
 			&bull;
 			<a href="../papers.html">Papers</a>
-			&bull;
-			<a href="../archive.html">Archive</a>
 		</div>
 
 		<div id="content">
@@ -396,7 +392,10 @@ U(AP) = \{1, 2, 3, 4, 5\}
 <h1 id="back-to-designing-u">Back to Designing <span class="math inline">\(U()\)</span></h1>
 <p>Through our discussion up to this point, we’ve established that the universe of all possible <span class="math inline">\(MP\)</span>’s fall under three parity patterns: all honest odd (<span class="math inline">\(\mathrm{O}\)</span>) terms, or alternating between “honest” odd (<span class="math inline">\(\mathrm{O}\)</span>) and “fake” odd (<span class="math inline">\(\mathrm{O_F}\)</span>) terms. There are actually four patterns because the all-honest-odd-terms pattern can be broken down into two cases: (1) all terms are the same odd number (<span class="math inline">\(m = 0\)</span>), or (2) the terms are the same as those in <span class="math inline">\(AP\)</span> (i.e., <span class="math inline">\(AP\)</span> was all odd terms to begin with, so there was no actual mutation involved by applying <span class="math inline">\(M()\)</span>).</p>
 <p>So, we can finally start sketching out the design for our “unmutate” function <span class="math inline">\(U()\)</span>.</p>
-<div class="code-and-raw">
+<div class="code-and-raw lineCntMax100">
+<div class="raw-link sourceCode">
+<table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/toy/srm485-afraid-of-even/pseudocode.txt" mimetype="text/plain">pseudocode.txt</a></code></pre></td></tr></tbody></table>
+</div>
 <div class="sourceCode" input="code/toy/srm485-afraid-of-even/pseudocode.txt"><table class="sourceCode numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
@@ -475,14 +474,14 @@ def make_odd(n)
 		return (make_odd(n/2))
 	end
 end</code></pre></td></tr></table></div>
-<div class="raw-link">
-<a class="raw" href="../code/toy/srm485-afraid-of-even/pseudocode.txt" mimetype="text/plain"> pseudocode.txt </a>
-</div>
 </div>
 <p>The interesting point is in line 18; thanks to our math work, we can even declare that a given mutated sequence was somehow either tampered with, or that the original sequence was not an arithmetic progression! We can make these assertions because we’ve exhausted all possible cases of arithmetic sequences and their mutations — and if things don’t fit the way we expect them to, then the only conclusion is that the given sequence <span class="math inline">\(MP\)</span> was not a byproduct of mutating an <em>arithmetic sequence</em>, but some other kind of sequence. Behold the power of math!</p>
 <p>The other thing is that in line 34 we allow <span class="math inline">\(0\)</span> as a possible value in <span class="math inline">\(AP\)</span>. This means that after a mutation, we might still have an even number (<span class="math inline">\(0\)</span>) in <span class="math inline">\(MP\)</span>! Although this sounds like it would break all of the mathematic discussion we’ve had so far, it does not — the proof is in the Haskell code below. The short answer is that a <span class="math inline">\(0\)</span> is harmless because it shares the same quality — immutability — with all other originally odd terms in <span class="math inline">\(AP\)</span>; thus, treating it as an “odd” number does not change our logic.</p>
 <h1 id="haskell-version">Haskell version</h1>
-<div class="code-and-raw">
+<div class="code-and-raw lineCntMax100">
+<div class="raw-link sourceCode">
+<table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/toy/srm485-afraid-of-even/Unmutate.hs" mimetype="text/plain">Unmutate.hs</a></code></pre></td></tr></tbody></table>
+</div>
 <div class="sourceCode" input="code/toy/srm485-afraid-of-even/Unmutate.hs"><table class="sourceCode numberLines haskell"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
@@ -625,11 +624,11 @@ everyNth0 n as <span class="fu">=</span> head as <span class="fu">:</span> every
 <span class="co">-- and n = 2, we get [1, 3, 5, 7..].</span>
 <span class="ot">everyNth ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> [a] <span class="ot">-&gt;</span> [a]
 everyNth n <span class="fu">=</span> everyNth0 n <span class="fu">.</span> drop (n <span class="fu">-</span> <span class="dv">1</span>)</code></pre></td></tr></table></div>
-<div class="raw-link">
-<a class="raw" href="../code/toy/srm485-afraid-of-even/Unmutate.hs" mimetype="text/plain"> Unmutate.hs </a>
 </div>
+<div class="code-and-raw lineCntMax100">
+<div class="raw-link sourceCode">
+<table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/toy/srm485-afraid-of-even/test-unmutate.hs" mimetype="text/plain">test-unmutate.hs</a></code></pre></td></tr></tbody></table>
 </div>
-<div class="code-and-raw">
 <div class="sourceCode" input="code/toy/srm485-afraid-of-even/test-unmutate.hs"><table class="sourceCode numberLines haskell"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
@@ -780,13 +779,13 @@ unitTests <span class="fu">=</span> testGroup <span class="st">&quot;Unit tests&
 		<span class="fu">$</span> unmutate [<span class="fu">-</span><span class="dv">11</span>, <span class="dv">0</span>, <span class="dv">11</span>, <span class="dv">11</span>, <span class="dv">33</span>, <span class="dv">11</span><span class="ot"> ::</span> <span class="dt">Int</span>]
 		<span class="fu">@?=</span> <span class="dt">Just</span> [<span class="fu">-</span><span class="dv">11</span>, <span class="dv">0</span>, <span class="dv">11</span>, <span class="dv">22</span>, <span class="dv">33</span>, <span class="dv">44</span><span class="ot"> ::</span> <span class="dt">Int</span>]
 	]</code></pre></td></tr></table></div>
-<div class="raw-link">
-<a class="raw" href="../code/toy/srm485-afraid-of-even/test-unmutate.hs" mimetype="text/plain"> test-unmutate.hs </a>
-</div>
 </div>
 <p>As you can see, most of the real work involves identifying the <strong>original, immutable numbers</strong> we can work with as-is (<span class="math inline">\(\mathrm{O}\)</span>) (as opposed to the ones we have to ignore (<span class="math inline">\(\mathrm{O_F}\)</span>)) to construct our tentative sister arithmetic progression <span class="math inline">\(BP\)</span>.</p>
 <h1 id="ruby-version">Ruby version</h1>
-<div class="code-and-raw">
+<div class="code-and-raw lineCntMax100">
+<div class="raw-link sourceCode">
+<table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/toy/srm485-afraid-of-even/unmutate.rb" mimetype="text/plain">unmutate.rb</a></code></pre></td></tr></tbody></table>
+</div>
 <div class="sourceCode" input="code/toy/srm485-afraid-of-even/unmutate.rb"><table class="sourceCode numberLines ruby"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
@@ -975,11 +974,11 @@ unitTests <span class="fu">=</span> testGroup <span class="st">&quot;Unit tests&
   <span class="kw">end</span>
   arr
 <span class="kw">end</span></code></pre></td></tr></table></div>
-<div class="raw-link">
-<a class="raw" href="../code/toy/srm485-afraid-of-even/unmutate.rb" mimetype="text/plain"> unmutate.rb </a>
 </div>
+<div class="code-and-raw lineCntMax100">
+<div class="raw-link sourceCode">
+<table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/toy/srm485-afraid-of-even/test-unmutate.rb" mimetype="text/plain">test-unmutate.rb</a></code></pre></td></tr></tbody></table>
 </div>
-<div class="code-and-raw">
 <div class="sourceCode" input="code/toy/srm485-afraid-of-even/test-unmutate.rb"><table class="sourceCode numberLines ruby"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
@@ -1060,9 +1059,6 @@ require_relative <span class="st">'./unmutate.rb'</span>
       <span class="dt">Unmutate</span>.unmutate([-<span class="dv">11</span>, <span class="dv">0</span>, <span class="dv">11</span>, <span class="dv">11</span>, <span class="dv">33</span>, <span class="dv">11</span>])
   <span class="kw">end</span>
 <span class="kw">end</span></code></pre></td></tr></table></div>
-<div class="raw-link">
-<a class="raw" href="../code/toy/srm485-afraid-of-even/test-unmutate.rb" mimetype="text/plain"> test-unmutate.rb </a>
-</div>
 </div>
 <p>This Ruby version is essentially a port of the Haskell version. The problem at hand is so mathematical that it makes sense to simply preserve the clean Haskell definitions.</p>
 <h1 id="conclusion">Conclusion</h1>
@@ -1070,7 +1066,7 @@ require_relative <span class="st">'./unmutate.rb'</span>
 
 		</div>
 		<div id="footer">
-			<p>Copyright (C) 2013-2016 Linus Arver. All rights reserved.</p>
+			<p>Copyright (C) 2013-2017 Linus Arver. All rights reserved.</p>
 			<a href="https://github.com/listx/listx_blog">Site</a>
 			<a href="https://github.com/listx/listx.github.io">generated</a>
 			with

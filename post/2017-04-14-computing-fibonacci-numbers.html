@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Linus's Blog - The Fastest Way to Compute the Nth Fibonacci Number: The Doubling Method</title>
+		<link rel="stylesheet" href="../css/base.css">
+		<link rel="stylesheet" href="../css/syntax.css">
+		<link href="http://fonts.googleapis.com/css?family=Merriweather:300,300italic,700italic,700" rel="stylesheet" type="text/css">
+		<link rel="shortcut icon" type="image/png" href="../favicon.png">
+		<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+		<script src="../misc.js"></script>
+		<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+	</head>
+	<body>
+		<div id="header">
+			<a href="../">Home</a>
+			&bull;
+			<a href="../about.html">About</a>
+			&bull;
+			<a href="../code.html">Code</a>
+			&bull;
+			<a href="../papers.html">Papers</a>
+		</div>
+
+		<div id="content">
+			<h1 class="center" id="page-title">The Fastest Way to Compute the Nth Fibonacci Number: The Doubling Method</h1>
+
+			<div class="info center">
+	<code class="date">2017-04-14</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2017-04-14-computing-fibonacci-numbers.org" title="History">*</a>
+	<br>
+	<a href="../tag/programming.html">programming</a>, <a href="../tag/python.html">python</a>
+</div>
+
+<h1 id="introduction">Introduction</h1>
+<p>The Fibonacci Sequence is defined as follows:</p>
+<p><span class="math display">\[
+\mathrm{F}_{0} = 0\\
+\mathrm{F}_{1} = 1\\
+\mathrm{F}_{n} = \mathrm{F}_{n - 2} + \mathrm{F}_{n - 1}.
+\]</span></p>
+<p>That is, each Fibonacci number <span class="math inline">\(\mathrm{F}_{n}\)</span> is the sum of the previous two Fibonacci numbers, except the very first two numbers which are defined to be 0 and 1. <a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a></p>
+<p>From the definition above, it appears that computing <span class="math inline">\(\mathrm{F}_{n}\)</span> requires one to always compute <span class="math inline">\(\mathrm{F}_{n - 2}\)</span> and <span class="math inline">\(\mathrm{F}_{n - 1}\)</span>. <strong>This is false:</strong> enter the “doubling method”. <a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> <a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a></p>
+<h1 id="the-genesis-of-the-doubling-method">The Genesis of the Doubling Method</h1>
+<p>The doubling method uses a couple of mathematical formulas derived from matrix multiplication as it applies to calculating Fibonacci numbers; it can be seen as an improvement over the matrix multiplication method, although it does not use matrix multplication itself. The matrix multiplication method uses the following formula:</p>
+<p><span class="math display">\[
+\begin{bmatrix}
+1 &amp; 1\\
+1 &amp; 0
+\end{bmatrix}^n
+=
+\begin{bmatrix}
+\mathrm{F}_{n + 1} &amp; \mathrm{F}_{n}\\
+\mathrm{F}_{n} &amp; \mathrm{F}_{n - 1}
+\end{bmatrix}.
+\]</span></p>
+<p>This result is quite interesting in its own right; to find <span class="math inline">\(\mathrm{F}_{n}\)</span> you only need to raise the matrix</p>
+<p><span class="math display">\[
+\begin{bmatrix}
+1 &amp; 1\\
+1 &amp; 0
+\end{bmatrix}
+\]</span></p>
+<p>to the <span class="math inline">\(n\)</span>th power. To be more precise, this method is matrix <em>exponentiation</em>. The only downside is that much of the answer is wasted — we don’t care about <span class="math inline">\(\mathrm{F}_{n - 1}\)</span>, not to mention how <span class="math inline">\(\mathrm{F}_{n}\)</span> is redundantly computed twice.</p>
+<h2 id="thinking-in-terms-of-mathrmf_n">Thinking in Terms of <span class="math inline">\(\mathrm{F}_{n}\)</span></h2>
+<p>What if we could find <span class="math inline">\(\mathrm{F}_{n}\)</span> not by multiplying or adding some numbers, but by multiplying and adding <em>other Fibonacci terms</em>? Of course, we’re not talking about adding <span class="math inline">\(\mathrm{F}_{n - 2}\)</span> and <span class="math inline">\(\mathrm{F}_{n - 1}\)</span> because that would be too slow. Let’s have a look at the matrix identity again (reversed for easier reading):</p>
+<p><span class="math display">\[
+\begin{bmatrix}
+\mathrm{F}_{n + 1} &amp; \mathrm{F}_{n}\\
+\mathrm{F}_{n} &amp; \mathrm{F}_{n - 1}
+\end{bmatrix}
+=
+\begin{bmatrix}
+1 &amp; 1\\
+1 &amp; 0
+\end{bmatrix}^n.
+\]</span></p>
+<p>If we substitute in <span class="math inline">\(2n\)</span> for <span class="math inline">\(n\)</span>, we get</p>
+<p><span class="math display">\[
+\begin{align}
+\begin{bmatrix}
+\mathrm{F}_{2n + 1} &amp; \mathrm{F}_{2n}\\
+\mathrm{F}_{2n} &amp; \mathrm{F}_{2n - 1}
+\end{bmatrix}
+&amp; =
+  \begin{bmatrix}
+  1 &amp; 1\\
+  1 &amp; 0
+  \end{bmatrix}^{2n} \\
+&amp; =
+  \bigg(\begin{bmatrix}
+  1 &amp; 1\\
+  1 &amp; 0
+  \end{bmatrix}^{n}\bigg)^2
+\end{align}
+\]</span></p>
+<p>and we can substitute in our matrix identity from above to rewrite this as</p>
+<p><span class="math display">\[
+\begin{align}
+&amp; =
+  \bigg(\begin{bmatrix}
+  \mathrm{F}_{n + 1} &amp; \mathrm{F}_{n}\\
+  \mathrm{F}_{n} &amp; \mathrm{F}_{n - 1}
+  \end{bmatrix}\bigg)^2
+\end{align}
+\]</span></p>
+<p>and carry out the squaring to get</p>
+<p><span class="math display">\[
+\begin{align}
+&amp; =
+  \begin{bmatrix}
+  {{\mathrm{F}_{n + 1}}^2 + {\mathrm{F}_{n}}^2} &amp; {{\mathrm{F}_{n + 1}\mathrm{F}_{n}} + {\mathrm{F}_{n}\mathrm{F}_{n - 1}}}\\
+  {{\mathrm{F}_{n}\mathrm{F}_{n + 1}} + {\mathrm{F}_{n - 1}\mathrm{F}_{n}}} &amp; {{\mathrm{F}_{n}}^2 + {\mathrm{F}_{n - 1}}^2}
+  \end{bmatrix}
+\end{align}.
+\]</span></p>
+<p>The top right and bottom left terms are identical; we can also rewrite them to be a bit simpler.</p>
+<p><span class="math display">\[
+\begin{align}
+  {{\mathrm{F}_{n + 1}\mathrm{F}_{n}} + {\mathrm{F}_{n}\mathrm{F}_{n - 1}}}
+&amp; =
+  \mathrm{F}_{n}(\mathrm{F}_{n + 1} + \mathrm{F}_{n - 1}) \\
+&amp; =
+  \mathrm{F}_{n}[\mathrm{F}_{n + 1} + (\mathrm{F}_{n + 1} - \mathrm{F}_{n})] \\
+&amp; =
+  \mathrm{F}_{n}(2\mathrm{F}_{n + 1} - \mathrm{F}_{n}).
+\end{align}
+\]</span></p>
+<p>This simplication achieves an important task — it obviates <span class="math inline">\(\mathrm{F}_{n - 1}\)</span> by cleverly defining it as <span class="math inline">\(\mathrm{F}_{n + 1} - \mathrm{F}_{n}\)</span>. Putting everything together, whe have</p>
+<p><span class="math display">\[
+\begin{align}
+\begin{bmatrix}
+\mathrm{F}_{2n + 1} &amp; \mathrm{F}_{2n}\\
+\mathrm{F}_{2n} &amp; \mathrm{F}_{2n - 1}
+\end{bmatrix}
+&amp; =
+  \begin{bmatrix}
+  {{\mathrm{F}_{n + 1}}^2 + {\mathrm{F}_{n}}^2} &amp; {\mathrm{F}_{n}(2\mathrm{F}_{n + 1} - \mathrm{F}_{n})}\\
+  {\mathrm{F}_{n}(2\mathrm{F}_{n + 1} - \mathrm{F}_{n})} &amp; {{\mathrm{F}_{n}}^2 + {\mathrm{F}_{n - 1}}^2}
+  \end{bmatrix}
+\end{align}
+\]</span></p>
+<p>where the first row (or column) gives us two very useful identities</p>
+<p><span class="math display">\[
+\begin{align}
+\mathrm{F}_{2n}
+&amp; =
+  {\mathrm{F}_{n}(2\mathrm{F}_{n + 1} - \mathrm{F}_{n})} \\
+\mathrm{F}_{2n + 1}
+&amp; =
+  {{\mathrm{F}_{n}}^2 + {\mathrm{F}_{n + 1}}^2}.
+\end{align}
+\]</span></p>
+<p>As these identities form the heart of the doubling method, let’s call them the <em>doubling identities</em>.</p>
+<p>And now we just need one more piece to formulate our doubling method; we need to borrow an idea from number theory. Given any positive integer <span class="math inline">\(n\)</span>, it is the same as either <span class="math inline">\(2m\)</span> (even) or <span class="math inline">\(2m + 1\)</span> (odd), where <span class="math inline">\(m = \lfloor\frac{n}{2}\rfloor\)</span>; for our purposes, let us call this property the “halving property”.</p>
+<p>Whereas the doubling identities allow us to “double” our way into bigger numbers, the halving property allows us to halve our way down to smaller and smaller numbers. The marriage of these two concepts gives rise to the doubling method.</p>
+<h1 id="the-doubling-method">The Doubling Method</h1>
+<p>To compute the <span class="math inline">\(n\)</span>th Fibonacci term we break <span class="math inline">\(n\)</span> itself down into its halves (<span class="math inline">\(2m\)</span>) recursively, until we go down to <span class="math inline">\(n = 0\)</span>. At this point we multiply our way back up using the doubling identities. Because halving and doubling by themselves always calculate <span class="math inline">\(\mathrm{F}_{2m}\)</span>, we have to manually return <span class="math inline">\(\mathrm{F}_{2m + 1}\)</span> if our current sequence index number <span class="math inline">\(n\)</span> is odd.</p>
+<div class="code-and-raw lineCntMax100">
+<div class="raw-link sourceCode">
+<table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/2017-04-14-computing-fibonacci-numbers/fibonacci-doubling.py" mimetype="text/plain">fibonacci-doubling.py</a></code></pre></td></tr></tbody></table>
+</div>
+<div class="sourceCode" input="code/2017-04-14-computing-fibonacci-numbers/fibonacci-doubling.py"><table class="sourceCode numberLines python"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+</pre></td><td class="sourceCode"><pre><code class="sourceCode python"><span class="kw">def</span> fibonacci_doubling(n):
+    <span class="co">&quot;&quot;&quot; Calculate the Nth Fibonacci number using the doubling method. &quot;&quot;&quot;</span>
+    <span class="cf">return</span> _fibonacci_doubling(n)[<span class="dv">0</span>]
+
+
+<span class="kw">def</span> _fibonacci_doubling(n):
+    <span class="co">&quot;&quot;&quot; Calculate Nth Fibonacci number using the doubling method. Return the</span>
+<span class="co">    tuple (F(n), F(n+1)).&quot;&quot;&quot;</span>
+    <span class="cf">if</span> n <span class="op">==</span> <span class="dv">0</span>:
+        <span class="cf">return</span> (<span class="dv">0</span>, <span class="dv">1</span>)
+    <span class="cf">else</span>:
+        a, b <span class="op">=</span> _fibonacci_doubling(n <span class="op">&gt;&gt;</span> <span class="dv">1</span>)
+        c <span class="op">=</span> a <span class="op">*</span> ((b <span class="op">&lt;&lt;</span> <span class="dv">1</span>) <span class="op">-</span> a)
+        d <span class="op">=</span> a <span class="op">*</span> a <span class="op">+</span> b <span class="op">*</span> b
+        <span class="cf">if</span> n <span class="op">&amp;</span> <span class="dv">1</span>:
+            <span class="cf">return</span> (d, c <span class="op">+</span> d)
+        <span class="cf">else</span>:
+            <span class="cf">return</span> (c, d)
+
+
+<span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">&quot;__main__&quot;</span>:
+    <span class="cf">for</span> n <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">20</span>):
+        <span class="bu">print</span>(fibonacci_doubling(n))
+    <span class="co"># As a demonstration of this algorithm's speed, here is a large n.</span>
+    <span class="bu">print</span>(fibonacci_doubling(<span class="dv">10000</span>))</code></pre></td></tr></table></div>
+</div>
+<p>Line 12 is where we do the halving. We use the right-shift operator to do this. Lines 13 and 14 are our doubling identities (I use the left-shift operator here because it feels more natural to me). The if-condition on line 15 returns <span class="math inline">\(\mathrm{F}_{2m + 1}\)</span> if <span class="math inline">\(n\)</span> was odd, and <span class="math inline">\(\mathrm{F}_{2m}\)</span> otherwise.</p>
+<p>For comparison, here is an iterative version. On the one hand it avoids Python’s recursion limit, but the downside is a small loss of elegance (we have to loop twice — first to build up the halving/doubling points, and again for the main loop).</p>
+<div class="code-and-raw lineCntMax100">
+<div class="raw-link sourceCode">
+<table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/2017-04-14-computing-fibonacci-numbers/fibonacci-doubling-iter.py" mimetype="text/plain">fibonacci-doubling-iter.py</a></code></pre></td></tr></tbody></table>
+</div>
+<div class="sourceCode" input="code/2017-04-14-computing-fibonacci-numbers/fibonacci-doubling-iter.py"><table class="sourceCode numberLines python"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+</pre></td><td class="sourceCode"><pre><code class="sourceCode python"><span class="kw">def</span> fibonacci_doubling_iter(n):
+    <span class="co">&quot;&quot;&quot; Calculate Nth Fibonacci number using the doubling method, using</span>
+<span class="co">    iteration. &quot;&quot;&quot;</span>
+    ns <span class="op">=</span> []
+    <span class="cf">while</span> n:
+        ns.extend([n])
+        n <span class="op">&gt;&gt;=</span> <span class="dv">1</span>
+
+    a, b <span class="op">=</span> <span class="dv">0</span>, <span class="dv">1</span>
+
+    <span class="cf">while</span> ns:
+        n <span class="op">=</span> ns.pop()
+        c <span class="op">=</span> a <span class="op">*</span> ((b <span class="op">&lt;&lt;</span> <span class="dv">1</span>) <span class="op">-</span> a)
+        d <span class="op">=</span> a <span class="op">*</span> a <span class="op">+</span> b <span class="op">*</span> b
+        <span class="cf">if</span> n <span class="op">&amp;</span> <span class="dv">1</span>:
+            a, b <span class="op">=</span> d, c <span class="op">+</span> d
+        <span class="cf">else</span>:
+            a, b <span class="op">=</span> c, d
+
+    <span class="cf">return</span> a</code></pre></td></tr></table></div>
+</div>
+<h1 id="conclusion">Conclusion</h1>
+<p>I hope you enjoyed reading about this method of calculationg Fibonacci numbers as much as I enjoyed learning the math behind it. This algorithm can be sped up if it uses a faster multiplication algorithm as <code>a</code> and <code>b</code> get very large (e.g., Karatsuba multiplication). Time complexity is <span class="math inline">\(\Theta(\log{n})\)</span>; it reminds me of the binary search algorithm, in how the problem space is halved repeatedly. Neat!</p>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>We can choose to define the first two terms as 1 and 1 instead, but this distinction is needlessly arbitrary.<a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p>There is actually a known formula for our purposes, where <span class="math display">\[ \mathrm{F}_{n} = \frac{\varphi^n - (-\varphi)^{-n}}{2\varphi - 1}\]</span> where <span class="math inline">\(\varphi = \frac{1 + \sqrt{5}}{2} \approx 1.6180339887\cdots\)</span> (the golden ratio). Unfortunately this requires arbitrary-precision floating point calculations.<a href="#fnref2">↩</a></p></li>
+<li id="fn3"><p>For more discussion, see <a href="https://www.nayuki.io/page/fast-fibonacci-algorithms" class="uri">https://www.nayuki.io/page/fast-fibonacci-algorithms</a>.<a href="#fnref3">↩</a></p></li>
+</ol>
+</div>
+
+		</div>
+		<div id="footer">
+			<p>Copyright (C) 2013-2017 Linus Arver. All rights reserved.</p>
+			<a href="https://github.com/listx/listx_blog">Site</a>
+			<a href="https://github.com/listx/listx.github.io">generated</a>
+			with
+			<a href="http://jaspervdj.be/hakyll">Hakyll</a>
+			and
+			<a href="http://sebastiaanvisser.github.com/clay">Clay</a>.
+			<br>
+			<a href="../atom.xml">Atom feed</a>
+		</div>
+	</body>
+</html>

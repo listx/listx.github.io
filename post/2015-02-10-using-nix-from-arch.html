@@ -17,13 +17,9 @@
 			&bull;
 			<a href="../about.html">About</a>
 			&bull;
-			<a href="../art.html">Art</a>
-			&bull;
 			<a href="../code.html">Code</a>
 			&bull;
 			<a href="../papers.html">Papers</a>
-			&bull;
-			<a href="../archive.html">Archive</a>
 		</div>
 
 		<div id="content">
@@ -78,7 +74,10 @@ alias nix='. /home/l/.nix-profile/etc/profile.d/nix.sh'</code></pre>
 <p>The trick is to use <code>cabal2nix</code>, and to set up your <code>~/.nixpkgs</code> folder. You should already have <code>~/.nixpkgs</code> created by now as a result of installing Nix. Make a folder called <code>~/.nixpkgs/my-local-hs</code>. Now do</p>
 <pre><code>$ cabal2nix path/to/ppx &gt; ~/.nixpkgs/my-local-hs/ppx.nix</code></pre>
 <p>. This will create a Nix expression that can be used to build PPX with Nix. It’s like creating a PKGBUILD file. The next step is to create a <code>~/.nixpkgs/config.nix</code> file, as follows:</p>
-<div class="code-and-raw">
+<div class="code-and-raw lineCntMax100">
+<div class="raw-link sourceCode">
+<table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/config.nix" mimetype="text/plain">config.nix</a></code></pre></td></tr></tbody></table>
+</div>
 <div class="sourceCode" input="code/config.nix"><table class="sourceCode numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
@@ -119,9 +118,6 @@ alias nix='. /home/l/.nix-profile/etc/profile.d/nix.sh'</code></pre>
     };
   };
 }</code></pre></td></tr></table></div>
-<div class="raw-link">
-<a class="raw" href="../code/config.nix" mimetype="text/plain"> config.nix </a>
-</div>
 </div>
 <p>. Now, invoke <code>cabal2nix --shell</code> for your other project that depends on PPX. When you invoke <code>nix-shell</code> for this other project, Nix should be able to resolve the dependency, based on the information you gave it in <code>~/.nixpkgs/config.nix</code>. That’s it!</p>
 <h1 id="conclusion">Conclusion</h1>
@@ -139,7 +135,7 @@ alias nix='. /home/l/.nix-profile/etc/profile.d/nix.sh'</code></pre>
 
 		</div>
 		<div id="footer">
-			<p>Copyright (C) 2013-2016 Linus Arver. All rights reserved.</p>
+			<p>Copyright (C) 2013-2017 Linus Arver. All rights reserved.</p>
 			<a href="https://github.com/listx/listx_blog">Site</a>
 			<a href="https://github.com/listx/listx.github.io">generated</a>
 			with

@@ -17,13 +17,9 @@
 			&bull;
 			<a href="../about.html">About</a>
 			&bull;
-			<a href="../art.html">Art</a>
-			&bull;
 			<a href="../code.html">Code</a>
 			&bull;
 			<a href="../papers.html">Papers</a>
-			&bull;
-			<a href="../archive.html">Archive</a>
 		</div>
 
 		<div id="content">
@@ -44,7 +40,10 @@
 <p>By default nox comments text, and the <code>-l c</code> option sets it to C-styled comments, <code>//</code>.</p>
 <h2 id="emacs">Emacs</h2>
 <p>I use <a href="http://gitorious.org/evil/pages/Home">evil-mode</a> with Emacs. Here is my relevant <code>.emacs</code> to set up <code>nox</code> correctly:</p>
-<div class="code-and-raw">
+<div class="code-and-raw lineCntMax100">
+<div class="raw-link sourceCode">
+<table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/emacs-unix-filter.el" mimetype="text/plain">emacs-unix-filter.el</a></code></pre></td></tr></tbody></table>
+</div>
 <div class="sourceCode" input="code/emacs-unix-filter.el"><table class="sourceCode numberLines commonlisp"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
@@ -141,9 +140,6 @@
 	(<span class="kw">lambda</span> () (interactive) (my-addrem-comment <span class="kw">t</span>))) <span class="co">; add comment</span>
 (define-key evil-normal-state-map <span class="st">&quot;,C&quot;</span>
 	(<span class="kw">lambda</span> () (interactive) (my-addrem-comment <span class="kw">nil</span>))) <span class="co">; remove comment</span></code></pre></td></tr></table></div>
-<div class="raw-link">
-<a class="raw" href="../code/emacs-unix-filter.el" mimetype="text/plain"> emacs-unix-filter.el </a>
-</div>
 </div>
 <p>This is certainly not the most beautiful code, but it works.</p>
 <h3 id="references">References</h3>
@@ -154,7 +150,7 @@
 
 		</div>
 		<div id="footer">
-			<p>Copyright (C) 2013-2016 Linus Arver. All rights reserved.</p>
+			<p>Copyright (C) 2013-2017 Linus Arver. All rights reserved.</p>
 			<a href="https://github.com/listx/listx_blog">Site</a>
 			<a href="https://github.com/listx/listx.github.io">generated</a>
 			with

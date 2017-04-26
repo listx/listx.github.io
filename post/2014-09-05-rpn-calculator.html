@@ -17,13 +17,9 @@
 			&bull;
 			<a href="../about.html">About</a>
 			&bull;
-			<a href="../art.html">Art</a>
-			&bull;
 			<a href="../code.html">Code</a>
 			&bull;
 			<a href="../papers.html">Papers</a>
-			&bull;
-			<a href="../archive.html">Archive</a>
 		</div>
 
 		<div id="content">
@@ -38,7 +34,10 @@
 <p>A friend of mine is in DevBootCamp, an intensive coding school program designed to get students ready for real world job placement. Anyway, he was telling me how he was given an extra credit assignment: implement a RPN calculator which supports 3 functions — add, subtract, and multiply — on integer numbers. I.e., write a function <code>evaluate()</code> that when given a string such as <code>&quot;3 4 + 8 *&quot;</code> gives the result <code>56</code>. He gave me his Ruby solution; in response, I wrote my own Ruby version and decided soon thereafter to write an equivalent Haskell version, because, why not?</p>
 <h2 id="ruby">Ruby</h2>
 <p>First, the Ruby version:</p>
-<div class="code-and-raw">
+<div class="code-and-raw lineCntMax100">
+<div class="raw-link sourceCode">
+<table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/toy/rpn.rb" mimetype="text/plain">rpn.rb</a></code></pre></td></tr></tbody></table>
+</div>
 <div class="sourceCode" input="code/toy/rpn.rb"><table class="sourceCode numberLines ruby"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
@@ -83,15 +82,15 @@
 	<span class="kw">end</span>
 	stack
 <span class="kw">end</span></code></pre></td></tr></table></div>
-<div class="raw-link">
-<a class="raw" href="../code/toy/rpn.rb" mimetype="text/plain"> rpn.rb </a>
-</div>
 </div>
 <p>Pretty straightforward, yes? The <code>terms</code> variable holds an array of numbers and operators. We use a calculator stack (aptly named, <code>stack</code>) to untangle the RPN in a stack-based way.</p>
 <p>In the <code>each</code> loop, the actions depend on what <code>term</code> looks like. If <code>term</code> is a number in string form, we convert it into a real number with <code>String#to_i</code>, and push it into <code>stack</code>. If <code>term</code> is one of the 3 recognized operators, we remove 2 terms <code>a</code> and <code>b</code> from <code>stack</code> and apply the necessary operation on it with Ruby’s magic <code>Object#send</code> method, and push the new term <code>c</code> back into <code>stack</code> for further operations (if any, in later iterations of the <code>while</code> loop). Otherwise, we reject the input as an invalid term.</p>
 <h2 id="haskell">Haskell</h2>
 <p>Here is the Haskell version:</p>
-<div class="code-and-raw">
+<div class="code-and-raw lineCntMax100">
+<div class="raw-link sourceCode">
+<table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/toy/rpn.hs" mimetype="text/plain">rpn.hs</a></code></pre></td></tr></tbody></table>
+</div>
 <div class="sourceCode" input="code/toy/rpn.hs"><table class="sourceCode numberLines haskell"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
@@ -144,9 +143,6 @@ evalTerms <span class="fu">=</span> foldl modifyStack []
 		<span class="dt">TermOp</span> op <span class="ot">-&gt;</span> <span class="kw">case</span> stack <span class="kw">of</span>
 			(a<span class="fu">:</span>b<span class="fu">:</span>_) <span class="ot">-&gt;</span> op a b <span class="fu">:</span> drop <span class="dv">2</span> stack
 			_ <span class="ot">-&gt;</span> error <span class="st">&quot;stack too small for operator application&quot;</span></code></pre></td></tr></table></div>
-<div class="raw-link">
-<a class="raw" href="../code/toy/rpn.hs" mimetype="text/plain"> rpn.hs </a>
-</div>
 </div>
 <p>Probably the first thing to note is that we define a robust data type, <code>Term</code>, to encapsulate the values held in a given RPN string. We take advantage of Haskell’s functions-as-first-class-values ability, and define the <code>TermOp</code> constructor with it (i.e., it needs an arithmetic function <code>(Integer -&gt; Integer -&gt; Integer)</code> as an argument).</p>
 <p>The next thing to notice is that the <code>evaluate</code> function is composed of smaller helper functions, <code>mkTerm</code> and <code>evalTerms</code>. <code>mkTerm</code> simply converts a <code>String</code> type into an appropriate <code>Term</code> type. <code>evalTerms</code> takes a list of <code>Term</code> values, and reduces it as much as possible by applying the <code>modifyStack</code> function over it with <code>foldl</code> (Haskell’s version of a single-pass loop).</p>
@@ -166,7 +162,7 @@ evalTerms <span class="fu">=</span> foldl modifyStack []
 
 		</div>
 		<div id="footer">
-			<p>Copyright (C) 2013-2016 Linus Arver. All rights reserved.</p>
+			<p>Copyright (C) 2013-2017 Linus Arver. All rights reserved.</p>
 			<a href="https://github.com/listx/listx_blog">Site</a>
 			<a href="https://github.com/listx/listx.github.io">generated</a>
 			with

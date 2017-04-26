@@ -17,13 +17,9 @@
 			&bull;
 			<a href="../about.html">About</a>
 			&bull;
-			<a href="../art.html">Art</a>
-			&bull;
 			<a href="../code.html">Code</a>
 			&bull;
 			<a href="../papers.html">Papers</a>
-			&bull;
-			<a href="../archive.html">Archive</a>
 		</div>
 
 		<div id="content">
@@ -51,14 +47,17 @@
 2 directories, 5 files
 </code></pre>
 <h2 id="file-contents">File Contents</h2>
-<div class="code-and-raw">
+<div class="code-and-raw lineCntMax10">
+<div class="raw-link sourceCode">
+<table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/2017-04-02-calling-c-from-haskell/c/gcd.h" mimetype="text/plain">gcd.h</a></code></pre></td></tr></tbody></table>
+</div>
 <div class="sourceCode" input="code/2017-04-02-calling-c-from-haskell/c/gcd.h"><table class="sourceCode numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 </pre></td><td class="sourceCode"><pre><code class="sourceCode">int gcd(int m, int r);</code></pre></td></tr></table></div>
-<div class="raw-link">
-<a class="raw" href="../code/2017-04-02-calling-c-from-haskell/c/gcd.h" mimetype="text/plain"> gcd.h </a>
 </div>
+<div class="code-and-raw lineCntMax100">
+<div class="raw-link sourceCode">
+<table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/2017-04-02-calling-c-from-haskell/c/gcd.c" mimetype="text/plain">gcd.c</a></code></pre></td></tr></tbody></table>
 </div>
-<div class="code-and-raw">
 <div class="sourceCode" input="code/2017-04-02-calling-c-from-haskell/c/gcd.c"><table class="sourceCode numberLines c"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
@@ -79,11 +78,11 @@
 
 	<span class="cf">return</span> gcd(r, m % r);
 }</code></pre></td></tr></table></div>
-<div class="raw-link">
-<a class="raw" href="../code/2017-04-02-calling-c-from-haskell/c/gcd.c" mimetype="text/plain"> gcd.c </a>
 </div>
+<div class="code-and-raw lineCntMax100">
+<div class="raw-link sourceCode">
+<table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/2017-04-02-calling-c-from-haskell/hs/GCD.hs" mimetype="text/plain">GCD.hs</a></code></pre></td></tr></tbody></table>
 </div>
-<div class="code-and-raw">
 <div class="sourceCode" input="code/2017-04-02-calling-c-from-haskell/hs/GCD.hs"><table class="sourceCode numberLines haskell"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
@@ -104,11 +103,11 @@ foreign <span class="kw">import </span>ccall &quot;gcd&quot;
 
 <span class="ot">f_gcd ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span>
 f_gcd a b <span class="fu">=</span> fromIntegral <span class="fu">$</span> c_gcd (fromIntegral a) (fromIntegral b)</code></pre></td></tr></table></div>
-<div class="raw-link">
-<a class="raw" href="../code/2017-04-02-calling-c-from-haskell/hs/GCD.hs" mimetype="text/plain"> GCD.hs </a>
 </div>
+<div class="code-and-raw lineCntMax10">
+<div class="raw-link sourceCode">
+<table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/2017-04-02-calling-c-from-haskell/hs/ffi.hs" mimetype="text/plain">ffi.hs</a></code></pre></td></tr></tbody></table>
 </div>
-<div class="code-and-raw">
 <div class="sourceCode" input="code/2017-04-02-calling-c-from-haskell/hs/ffi.hs"><table class="sourceCode numberLines haskell"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
@@ -117,11 +116,11 @@ f_gcd a b <span class="fu">=</span> fromIntegral <span class="fu">$</span> c_gcd
 
 <span class="ot">main ::</span> <span class="dt">IO</span> ()
 main <span class="fu">=</span> mapM_ (print <span class="fu">.</span> uncurry f_gcd) [(<span class="dv">8</span>, <span class="dv">12</span>), (<span class="dv">30</span>, <span class="dv">105</span>), (<span class="dv">24</span>, <span class="dv">108</span>)]</code></pre></td></tr></table></div>
-<div class="raw-link">
-<a class="raw" href="../code/2017-04-02-calling-c-from-haskell/hs/ffi.hs" mimetype="text/plain"> ffi.hs </a>
 </div>
+<div class="code-and-raw lineCntMax10">
+<div class="raw-link sourceCode">
+<table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/2017-04-02-calling-c-from-haskell/build.sh" mimetype="text/plain">build.sh</a></code></pre></td></tr></tbody></table>
 </div>
-<div class="code-and-raw">
 <div class="sourceCode" input="code/2017-04-02-calling-c-from-haskell/build.sh"><table class="sourceCode numberLines bash"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
@@ -140,9 +139,6 @@ main <span class="fu">=</span> mapM_ (print <span class="fu">.</span> uncurry f_
 <span class="bu">pushd</span> hs
 <span class="ex">ghc</span> --make ffi.hs ../c/gcd.o
 <span class="bu">popd</span></code></pre></td></tr></table></div>
-<div class="raw-link">
-<a class="raw" href="../code/2017-04-02-calling-c-from-haskell/build.sh" mimetype="text/plain"> build.sh </a>
-</div>
 </div>
 <h1 id="discussion">Discussion</h1>
 <p>To compile the example, run the <code>build.sh</code> script. Here is the expected output of the built executable:</p>
@@ -207,7 +203,7 @@ collect2: error: ld returned 1 exit status
 
 		</div>
 		<div id="footer">
-			<p>Copyright (C) 2013-2016 Linus Arver. All rights reserved.</p>
+			<p>Copyright (C) 2013-2017 Linus Arver. All rights reserved.</p>
 			<a href="https://github.com/listx/listx_blog">Site</a>
 			<a href="https://github.com/listx/listx.github.io">generated</a>
 			with

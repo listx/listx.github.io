@@ -17,13 +17,9 @@
 			&bull;
 			<a href="../about.html">About</a>
 			&bull;
-			<a href="../art.html">Art</a>
-			&bull;
 			<a href="../code.html">Code</a>
 			&bull;
 			<a href="../papers.html">Papers</a>
-			&bull;
-			<a href="../archive.html">Archive</a>
 		</div>
 
 		<div id="content">
@@ -52,7 +48,10 @@ on_button(&quot;punch&quot;)     # [&quot;uppercut&quot;, &quot;uppercut_2&quot;
 <p>You might have noticed that <code>on_button()</code> depends on the input history of whatever buttons were <em>previously</em> entered into the game. Because of this, you can alternatively write an <code>on_buttons()</code> function (plural with an “s”) that takes the history of buttons as input; this way you don’t have to silently depend on the global state of input history.</p>
 <h2 id="my-nervous-wreck-solution">My Nervous-Wreck Solution</h2>
 <p>I decided to use pure Haskell code in the actual interview. The code I wrote had the general idea, but it was a big failure because it performed a naive, custom search without any thought given to data structures. I actually went back and revised the code to make it compile and work <em>after</em> the interview was over; here it is in all its glory:</p>
-<div class="code-and-raw">
+<div class="code-and-raw lineCntMax100">
+<div class="raw-link sourceCode">
+<table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/toy/game-button-seq/interview_ver.hs" mimetype="text/plain">interview_ver.hs</a></code></pre></td></tr></tbody></table>
+</div>
 <div class="sourceCode" input="code/toy/game-button-seq/interview_ver.hs"><table class="sourceCode numberLines haskell"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
@@ -131,9 +130,6 @@ onButtons buttonHist db <span class="fu">=</span> map snd
 			<span class="fu">$</span> filter (not <span class="fu">.</span> null <span class="fu">.</span> fst) dbRem
 		dbRem' <span class="fu">=</span> map (\(a, b) <span class="ot">-&gt;</span> (init a, b)) remaining
 		entriesComplete <span class="fu">=</span> filter (null <span class="fu">.</span> fst) dbRem'</code></pre></td></tr></table></div>
-<div class="raw-link">
-<a class="raw" href="../code/toy/game-button-seq/interview_ver.hs" mimetype="text/plain"> interview_ver.hs </a>
-</div>
 </div>
 <p>. I have to admit, the <code>step</code> function in <code>onButtons</code> is essentially unreadable. But it does work:</p>
 <pre><code>$ ghci code/toy/game-button-seq/interview_ver.hs
@@ -154,7 +150,10 @@ Ok, modules loaded: Main.
 <p>Second, the fact that we have to bring in and mutate <code>dbRem</code>, which is a copy of the original given <code>ButtonSeqDB</code> type, seems wasteful. We’re wasting a lot of CPU cycles here.</p>
 <h2 id="ruby-solution-using-hashes">Ruby Solution Using Hashes</h2>
 <p>So on the day after (that is, <em>today</em> as of the time of this writing), I thought about the problem again and realized we can use hashes. It is a very simple approach, with far less lines of code. I even wrote some tests for it. Here is the implementation below.</p>
-<div class="code-and-raw">
+<div class="code-and-raw lineCntMax100">
+<div class="raw-link sourceCode">
+<table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/toy/game-button-seq/hash_ver.rb" mimetype="text/plain">hash_ver.rb</a></code></pre></td></tr></tbody></table>
+</div>
 <div class="sourceCode" input="code/toy/game-button-seq/hash_ver.rb"><table class="sourceCode numberLines ruby"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
@@ -239,12 +238,12 @@ Ok, modules loaded: Main.
     button_hist + [button_name]
   <span class="kw">end</span>
 <span class="kw">end</span></code></pre></td></tr></table></div>
-<div class="raw-link">
-<a class="raw" href="../code/toy/game-button-seq/hash_ver.rb" mimetype="text/plain"> hash_ver.rb </a>
-</div>
 </div>
 <p>And here is the test suite for it. You can run it with <code>ruby test_hash_ver.rb</code>.</p>
-<div class="code-and-raw">
+<div class="code-and-raw lineCntMax100">
+<div class="raw-link sourceCode">
+<table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/toy/game-button-seq/test_hash_ver.rb" mimetype="text/plain">test_hash_ver.rb</a></code></pre></td></tr></tbody></table>
+</div>
 <div class="sourceCode" input="code/toy/game-button-seq/test_hash_ver.rb"><table class="sourceCode numberLines ruby"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
@@ -343,16 +342,16 @@ require_relative <span class="st">'./hash_ver.rb'</span>
       <span class="dt">GameButtonSeq</span>.on_buttons(<span class="ot">@button_hist</span>, <span class="ot">@db</span>)
   <span class="kw">end</span>
 <span class="kw">end</span></code></pre></td></tr></table></div>
-<div class="raw-link">
-<a class="raw" href="../code/toy/game-button-seq/test_hash_ver.rb" mimetype="text/plain"> test_hash_ver.rb </a>
-</div>
 </div>
 <h3 id="analysis-1">Analysis</h3>
 <p>The key insight was when I realized that you could indeed use a hash even though we have the requirement that multiple, identical button sequences can have different names. The trick is to simply store the value as not a single name, but an array of possible names. This is reflected in the <code>GameButtonSeq.register</code> method.</p>
 <p>The heart of <code>on_buttons()</code> is a single <code>while</code> loop that checks the given button history against the database; we reduce the button sequence by 1 button on each iteration to check against shorter matches as well. That’s what the <code>button_seq.shift</code> is for.</p>
 <h2 id="haskell-solution-using-hashes">Haskell Solution Using Hashes</h2>
 <p>Inspired by the Ruby solution, I rewrote a Haskell version — with tests to boot! Here is the implementation.</p>
-<div class="code-and-raw">
+<div class="code-and-raw lineCntMax100">
+<div class="raw-link sourceCode">
+<table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/toy/game-button-seq/GameButtonSeq.hs" mimetype="text/plain">GameButtonSeq.hs</a></code></pre></td></tr></tbody></table>
+</div>
 <div class="sourceCode" input="code/toy/game-button-seq/GameButtonSeq.hs"><table class="sourceCode numberLines haskell"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
@@ -419,12 +418,12 @@ onButtons buttonHist db <span class="fu">=</span> concatMap extractNames buttonH
 onButtons2 buttonHist db <span class="fu">=</span> concat <span class="fu">$</span> mapMaybe (flip M.lookup db) buttonHists
 	<span class="kw">where</span>
 	buttonHists <span class="fu">=</span> take (length buttonHist) <span class="fu">$</span> iterate tail buttonHist</code></pre></td></tr></table></div>
-<div class="raw-link">
-<a class="raw" href="../code/toy/game-button-seq/GameButtonSeq.hs" mimetype="text/plain"> GameButtonSeq.hs </a>
-</div>
 </div>
 <p>The file is named <code>GameButtonSeq</code> because of Haskell naming conventions for files containing module code. And here is the test for it.</p>
-<div class="code-and-raw">
+<div class="code-and-raw lineCntMax100">
+<div class="raw-link sourceCode">
+<table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/toy/game-button-seq/test_hash_ver.hs" mimetype="text/plain">test_hash_ver.hs</a></code></pre></td></tr></tbody></table>
+</div>
 <div class="sourceCode" input="code/toy/game-button-seq/test_hash_ver.hs"><table class="sourceCode numberLines haskell"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
@@ -535,9 +534,6 @@ unitTests <span class="fu">=</span> testGroup <span class="st">&quot;Unit tests&
 		, ([<span class="st">&quot;forward&quot;</span>, <span class="st">&quot;punch&quot;</span>], [<span class="st">&quot;charger&quot;</span>])
 		, ([<span class="st">&quot;up&quot;</span>, <span class="st">&quot;punch&quot;</span>], [<span class="st">&quot;uppercut&quot;</span>])
 		]</code></pre></td></tr></table></div>
-<div class="raw-link">
-<a class="raw" href="../code/toy/game-button-seq/test_hash_ver.hs" mimetype="text/plain"> test_hash_ver.hs </a>
-</div>
 </div>
 <h3 id="analysis-2">Analysis</h3>
 <p>This Haskell version uses the standard <code>Data.Map</code> module, which provides an efficient, basic hash data structure. What we first do is expand <code>buttonHist</code> to all of the cases we are interested in — namely, all of the subsequences of concern. E.g., given a list like <code>[&quot;up&quot;, &quot;down&quot;, &quot;right&quot;, &quot;left&quot;]</code>, <code>buttonHists</code> becomes:</p>
@@ -562,7 +558,7 @@ unitTests <span class="fu">=</span> testGroup <span class="st">&quot;Unit tests&
 
 		</div>
 		<div id="footer">
-			<p>Copyright (C) 2013-2016 Linus Arver. All rights reserved.</p>
+			<p>Copyright (C) 2013-2017 Linus Arver. All rights reserved.</p>
 			<a href="https://github.com/listx/listx_blog">Site</a>
 			<a href="https://github.com/listx/listx.github.io">generated</a>
 			with

@@ -8,8 +8,258 @@
         <name>Linus Arver</name>
         <email></email>
     </author>
-    <updated>2017-04-02T00:00:00Z</updated>
+    <updated>2017-04-14T00:00:00Z</updated>
     <entry>
+    <title>The Fastest Way to Compute the Nth Fibonacci Number: The Doubling Method</title>
+    <link href="http://funloop.org/post/2017-04-14-computing-fibonacci-numbers.html" />
+    <id>http://funloop.org/post/2017-04-14-computing-fibonacci-numbers.html</id>
+    <published>2017-04-14T00:00:00Z</published>
+    <updated>2017-04-14T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="info center">
+	<code class="date">2017-04-14</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2017-04-14-computing-fibonacci-numbers.org" title="History">*</a>
+	<br>
+	<a href="/tag/programming.html">programming</a>, <a href="/tag/python.html">python</a>
+</div>
+
+<h1 id="introduction">Introduction</h1>
+<p>The Fibonacci Sequence is defined as follows:</p>
+<p><span class="math display">\[
+\mathrm{F}_{0} = 0\\
+\mathrm{F}_{1} = 1\\
+\mathrm{F}_{n} = \mathrm{F}_{n - 2} + \mathrm{F}_{n - 1}.
+\]</span></p>
+<p>That is, each Fibonacci number <span class="math inline">\(\mathrm{F}_{n}\)</span> is the sum of the previous two Fibonacci numbers, except the very first two numbers which are defined to be 0 and 1. <a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a></p>
+<p>From the definition above, it appears that computing <span class="math inline">\(\mathrm{F}_{n}\)</span> requires one to always compute <span class="math inline">\(\mathrm{F}_{n - 2}\)</span> and <span class="math inline">\(\mathrm{F}_{n - 1}\)</span>. <strong>This is false:</strong> enter the “doubling method”. <a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> <a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a></p>
+<h1 id="the-genesis-of-the-doubling-method">The Genesis of the Doubling Method</h1>
+<p>The doubling method uses a couple of mathematical formulas derived from matrix multiplication as it applies to calculating Fibonacci numbers; it can be seen as an improvement over the matrix multiplication method, although it does not use matrix multplication itself. The matrix multiplication method uses the following formula:</p>
+<p><span class="math display">\[
+\begin{bmatrix}
+1 &amp; 1\\
+1 &amp; 0
+\end{bmatrix}^n
+=
+\begin{bmatrix}
+\mathrm{F}_{n + 1} &amp; \mathrm{F}_{n}\\
+\mathrm{F}_{n} &amp; \mathrm{F}_{n - 1}
+\end{bmatrix}.
+\]</span></p>
+<p>This result is quite interesting in its own right; to find <span class="math inline">\(\mathrm{F}_{n}\)</span> you only need to raise the matrix</p>
+<p><span class="math display">\[
+\begin{bmatrix}
+1 &amp; 1\\
+1 &amp; 0
+\end{bmatrix}
+\]</span></p>
+<p>to the <span class="math inline">\(n\)</span>th power. To be more precise, this method is matrix <em>exponentiation</em>. The only downside is that much of the answer is wasted — we don’t care about <span class="math inline">\(\mathrm{F}_{n - 1}\)</span>, not to mention how <span class="math inline">\(\mathrm{F}_{n}\)</span> is redundantly computed twice.</p>
+<h2 id="thinking-in-terms-of-mathrmf_n">Thinking in Terms of <span class="math inline">\(\mathrm{F}_{n}\)</span></h2>
+<p>What if we could find <span class="math inline">\(\mathrm{F}_{n}\)</span> not by multiplying or adding some numbers, but by multiplying and adding <em>other Fibonacci terms</em>? Of course, we’re not talking about adding <span class="math inline">\(\mathrm{F}_{n - 2}\)</span> and <span class="math inline">\(\mathrm{F}_{n - 1}\)</span> because that would be too slow. Let’s have a look at the matrix identity again (reversed for easier reading):</p>
+<p><span class="math display">\[
+\begin{bmatrix}
+\mathrm{F}_{n + 1} &amp; \mathrm{F}_{n}\\
+\mathrm{F}_{n} &amp; \mathrm{F}_{n - 1}
+\end{bmatrix}
+=
+\begin{bmatrix}
+1 &amp; 1\\
+1 &amp; 0
+\end{bmatrix}^n.
+\]</span></p>
+<p>If we substitute in <span class="math inline">\(2n\)</span> for <span class="math inline">\(n\)</span>, we get</p>
+<p><span class="math display">\[
+\begin{align}
+\begin{bmatrix}
+\mathrm{F}_{2n + 1} &amp; \mathrm{F}_{2n}\\
+\mathrm{F}_{2n} &amp; \mathrm{F}_{2n - 1}
+\end{bmatrix}
+&amp; =
+  \begin{bmatrix}
+  1 &amp; 1\\
+  1 &amp; 0
+  \end{bmatrix}^{2n} \\
+&amp; =
+  \bigg(\begin{bmatrix}
+  1 &amp; 1\\
+  1 &amp; 0
+  \end{bmatrix}^{n}\bigg)^2
+\end{align}
+\]</span></p>
+<p>and we can substitute in our matrix identity from above to rewrite this as</p>
+<p><span class="math display">\[
+\begin{align}
+&amp; =
+  \bigg(\begin{bmatrix}
+  \mathrm{F}_{n + 1} &amp; \mathrm{F}_{n}\\
+  \mathrm{F}_{n} &amp; \mathrm{F}_{n - 1}
+  \end{bmatrix}\bigg)^2
+\end{align}
+\]</span></p>
+<p>and carry out the squaring to get</p>
+<p><span class="math display">\[
+\begin{align}
+&amp; =
+  \begin{bmatrix}
+  {{\mathrm{F}_{n + 1}}^2 + {\mathrm{F}_{n}}^2} &amp; {{\mathrm{F}_{n + 1}\mathrm{F}_{n}} + {\mathrm{F}_{n}\mathrm{F}_{n - 1}}}\\
+  {{\mathrm{F}_{n}\mathrm{F}_{n + 1}} + {\mathrm{F}_{n - 1}\mathrm{F}_{n}}} &amp; {{\mathrm{F}_{n}}^2 + {\mathrm{F}_{n - 1}}^2}
+  \end{bmatrix}
+\end{align}.
+\]</span></p>
+<p>The top right and bottom left terms are identical; we can also rewrite them to be a bit simpler.</p>
+<p><span class="math display">\[
+\begin{align}
+  {{\mathrm{F}_{n + 1}\mathrm{F}_{n}} + {\mathrm{F}_{n}\mathrm{F}_{n - 1}}}
+&amp; =
+  \mathrm{F}_{n}(\mathrm{F}_{n + 1} + \mathrm{F}_{n - 1}) \\
+&amp; =
+  \mathrm{F}_{n}[\mathrm{F}_{n + 1} + (\mathrm{F}_{n + 1} - \mathrm{F}_{n})] \\
+&amp; =
+  \mathrm{F}_{n}(2\mathrm{F}_{n + 1} - \mathrm{F}_{n}).
+\end{align}
+\]</span></p>
+<p>This simplication achieves an important task — it obviates <span class="math inline">\(\mathrm{F}_{n - 1}\)</span> by cleverly defining it as <span class="math inline">\(\mathrm{F}_{n + 1} - \mathrm{F}_{n}\)</span>. Putting everything together, whe have</p>
+<p><span class="math display">\[
+\begin{align}
+\begin{bmatrix}
+\mathrm{F}_{2n + 1} &amp; \mathrm{F}_{2n}\\
+\mathrm{F}_{2n} &amp; \mathrm{F}_{2n - 1}
+\end{bmatrix}
+&amp; =
+  \begin{bmatrix}
+  {{\mathrm{F}_{n + 1}}^2 + {\mathrm{F}_{n}}^2} &amp; {\mathrm{F}_{n}(2\mathrm{F}_{n + 1} - \mathrm{F}_{n})}\\
+  {\mathrm{F}_{n}(2\mathrm{F}_{n + 1} - \mathrm{F}_{n})} &amp; {{\mathrm{F}_{n}}^2 + {\mathrm{F}_{n - 1}}^2}
+  \end{bmatrix}
+\end{align}
+\]</span></p>
+<p>where the first row (or column) gives us two very useful identities</p>
+<p><span class="math display">\[
+\begin{align}
+\mathrm{F}_{2n}
+&amp; =
+  {\mathrm{F}_{n}(2\mathrm{F}_{n + 1} - \mathrm{F}_{n})} \\
+\mathrm{F}_{2n + 1}
+&amp; =
+  {{\mathrm{F}_{n}}^2 + {\mathrm{F}_{n + 1}}^2}.
+\end{align}
+\]</span></p>
+<p>As these identities form the heart of the doubling method, let’s call them the <em>doubling identities</em>.</p>
+<p>And now we just need one more piece to formulate our doubling method; we need to borrow an idea from number theory. Given any positive integer <span class="math inline">\(n\)</span>, it is the same as either <span class="math inline">\(2m\)</span> (even) or <span class="math inline">\(2m + 1\)</span> (odd), where <span class="math inline">\(m = \lfloor\frac{n}{2}\rfloor\)</span>; for our purposes, let us call this property the “halving property”.</p>
+<p>Whereas the doubling identities allow us to “double” our way into bigger numbers, the halving property allows us to halve our way down to smaller and smaller numbers. The marriage of these two concepts gives rise to the doubling method.</p>
+<h1 id="the-doubling-method">The Doubling Method</h1>
+<p>To compute the <span class="math inline">\(n\)</span>th Fibonacci term we break <span class="math inline">\(n\)</span> itself down into its halves (<span class="math inline">\(2m\)</span>) recursively, until we go down to <span class="math inline">\(n = 0\)</span>. At this point we multiply our way back up using the doubling identities. Because halving and doubling by themselves always calculate <span class="math inline">\(\mathrm{F}_{2m}\)</span>, we have to manually return <span class="math inline">\(\mathrm{F}_{2m + 1}\)</span> if our current sequence index number <span class="math inline">\(n\)</span> is odd.</p>
+<div class="code-and-raw lineCntMax100">
+<div class="raw-link sourceCode">
+<table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href= "/code/2017-04-14-computing-fibonacci-numbers/fibonacci-doubling.py" mimetype=text/plain >fibonacci-doubling.py</a></code></pre></td></tr></tbody></table>
+</div>
+<div class="sourceCode" input="code/2017-04-14-computing-fibonacci-numbers/fibonacci-doubling.py"><table class="sourceCode numberLines python"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+</pre></td><td class="sourceCode"><pre><code class="sourceCode python"><span class="kw">def</span> fibonacci_doubling(n):
+    <span class="co">&quot;&quot;&quot; Calculate the Nth Fibonacci number using the doubling method. &quot;&quot;&quot;</span>
+    <span class="cf">return</span> _fibonacci_doubling(n)[<span class="dv">0</span>]
+
+
+<span class="kw">def</span> _fibonacci_doubling(n):
+    <span class="co">&quot;&quot;&quot; Calculate Nth Fibonacci number using the doubling method. Return the</span>
+<span class="co">    tuple (F(n), F(n+1)).&quot;&quot;&quot;</span>
+    <span class="cf">if</span> n <span class="op">==</span> <span class="dv">0</span>:
+        <span class="cf">return</span> (<span class="dv">0</span>, <span class="dv">1</span>)
+    <span class="cf">else</span>:
+        a, b <span class="op">=</span> _fibonacci_doubling(n <span class="op">&gt;&gt;</span> <span class="dv">1</span>)
+        c <span class="op">=</span> a <span class="op">*</span> ((b <span class="op">&lt;&lt;</span> <span class="dv">1</span>) <span class="op">-</span> a)
+        d <span class="op">=</span> a <span class="op">*</span> a <span class="op">+</span> b <span class="op">*</span> b
+        <span class="cf">if</span> n <span class="op">&amp;</span> <span class="dv">1</span>:
+            <span class="cf">return</span> (d, c <span class="op">+</span> d)
+        <span class="cf">else</span>:
+            <span class="cf">return</span> (c, d)
+
+
+<span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">&quot;__main__&quot;</span>:
+    <span class="cf">for</span> n <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">20</span>):
+        <span class="bu">print</span>(fibonacci_doubling(n))
+    <span class="co"># As a demonstration of this algorithm&#39;s speed, here is a large n.</span>
+    <span class="bu">print</span>(fibonacci_doubling(<span class="dv">10000</span>))</code></pre></td></tr></table></div>
+</div>
+<p>Line 12 is where we do the halving. We use the right-shift operator to do this. Lines 13 and 14 are our doubling identities (I use the left-shift operator here because it feels more natural to me). The if-condition on line 15 returns <span class="math inline">\(\mathrm{F}_{2m + 1}\)</span> if <span class="math inline">\(n\)</span> was odd, and <span class="math inline">\(\mathrm{F}_{2m}\)</span> otherwise.</p>
+<p>For comparison, here is an iterative version. On the one hand it avoids Python’s recursion limit, but the downside is a small loss of elegance (we have to loop twice — first to build up the halving/doubling points, and again for the main loop).</p>
+<div class="code-and-raw lineCntMax100">
+<div class="raw-link sourceCode">
+<table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href= "/code/2017-04-14-computing-fibonacci-numbers/fibonacci-doubling-iter.py" mimetype=text/plain >fibonacci-doubling-iter.py</a></code></pre></td></tr></tbody></table>
+</div>
+<div class="sourceCode" input="code/2017-04-14-computing-fibonacci-numbers/fibonacci-doubling-iter.py"><table class="sourceCode numberLines python"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+</pre></td><td class="sourceCode"><pre><code class="sourceCode python"><span class="kw">def</span> fibonacci_doubling_iter(n):
+    <span class="co">&quot;&quot;&quot; Calculate Nth Fibonacci number using the doubling method, using</span>
+<span class="co">    iteration. &quot;&quot;&quot;</span>
+    ns <span class="op">=</span> []
+    <span class="cf">while</span> n:
+        ns.extend([n])
+        n <span class="op">&gt;&gt;=</span> <span class="dv">1</span>
+
+    a, b <span class="op">=</span> <span class="dv">0</span>, <span class="dv">1</span>
+
+    <span class="cf">while</span> ns:
+        n <span class="op">=</span> ns.pop()
+        c <span class="op">=</span> a <span class="op">*</span> ((b <span class="op">&lt;&lt;</span> <span class="dv">1</span>) <span class="op">-</span> a)
+        d <span class="op">=</span> a <span class="op">*</span> a <span class="op">+</span> b <span class="op">*</span> b
+        <span class="cf">if</span> n <span class="op">&amp;</span> <span class="dv">1</span>:
+            a, b <span class="op">=</span> d, c <span class="op">+</span> d
+        <span class="cf">else</span>:
+            a, b <span class="op">=</span> c, d
+
+    <span class="cf">return</span> a</code></pre></td></tr></table></div>
+</div>
+<h1 id="conclusion">Conclusion</h1>
+<p>I hope you enjoyed reading about this method of calculationg Fibonacci numbers as much as I enjoyed learning the math behind it. This algorithm can be sped up if it uses a faster multiplication algorithm as <code>a</code> and <code>b</code> get very large (e.g., Karatsuba multiplication). Time complexity is <span class="math inline">\(\Theta(\log{n})\)</span>; it reminds me of the binary search algorithm, in how the problem space is halved repeatedly. Neat!</p>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>We can choose to define the first two terms as 1 and 1 instead, but this distinction is needlessly arbitrary.<a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p>There is actually a known formula for our purposes, where <span class="math display">\[ \mathrm{F}_{n} = \frac{\varphi^n - (-\varphi)^{-n}}{2\varphi - 1}\]</span> where <span class="math inline">\(\varphi = \frac{1 + \sqrt{5}}{2} \approx 1.6180339887\cdots\)</span> (the golden ratio). Unfortunately this requires arbitrary-precision floating point calculations.<a href="#fnref2">↩</a></p></li>
+<li id="fn3"><p>For more discussion, see <a href="https://www.nayuki.io/page/fast-fibonacci-algorithms" class="uri">https://www.nayuki.io/page/fast-fibonacci-algorithms</a>.<a href="#fnref3">↩</a></p></li>
+</ol>
+</div>
+]]></summary>
+</entry>
+<entry>
     <title>Calling C from Haskell</title>
     <link href="http://funloop.org/post/2017-04-02-calling-c-from-haskell.html" />
     <id>http://funloop.org/post/2017-04-02-calling-c-from-haskell.html</id>
@@ -37,14 +287,17 @@
 2 directories, 5 files
 </code></pre>
 <h2 id="file-contents">File Contents</h2>
-<div class="code-and-raw">
+<div class="code-and-raw lineCntMax10">
+<div class="raw-link sourceCode">
+<table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>■</pre></td><td class="sourceCode"><pre><code><a class="raw" href= "/code/2017-04-02-calling-c-from-haskell/c/gcd.h" mimetype=text/plain >gcd.h</a></code></pre></td></tr></tbody></table>
+</div>
 <div class="sourceCode" input="code/2017-04-02-calling-c-from-haskell/c/gcd.h"><table class="sourceCode numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 </pre></td><td class="sourceCode"><pre><code class="sourceCode">int gcd(int m, int r);</code></pre></td></tr></table></div>
-<div class="raw-link">
-<a  class="raw"  href= "/code/2017-04-02-calling-c-from-haskell/c/gcd.h"  mimetype=text/plain > gcd.h </a>
 </div>
+<div class="code-and-raw lineCntMax100">
+<div class="raw-link sourceCode">
+<table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href= "/code/2017-04-02-calling-c-from-haskell/c/gcd.c" mimetype=text/plain >gcd.c</a></code></pre></td></tr></tbody></table>
 </div>
-<div class="code-and-raw">
 <div class="sourceCode" input="code/2017-04-02-calling-c-from-haskell/c/gcd.c"><table class="sourceCode numberLines c"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
@@ -65,11 +318,11 @@
 
 	<span class="cf">return</span> gcd(r, m % r);
 }</code></pre></td></tr></table></div>
-<div class="raw-link">
-<a  class="raw"  href= "/code/2017-04-02-calling-c-from-haskell/c/gcd.c"  mimetype=text/plain > gcd.c </a>
 </div>
+<div class="code-and-raw lineCntMax100">
+<div class="raw-link sourceCode">
+<table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href= "/code/2017-04-02-calling-c-from-haskell/hs/GCD.hs" mimetype=text/plain >GCD.hs</a></code></pre></td></tr></tbody></table>
 </div>
-<div class="code-and-raw">
 <div class="sourceCode" input="code/2017-04-02-calling-c-from-haskell/hs/GCD.hs"><table class="sourceCode numberLines haskell"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
@@ -90,11 +343,11 @@ foreign <span class="kw">import </span>ccall &quot;gcd&quot;
 
 <span class="ot">f_gcd ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span>
 f_gcd a b <span class="fu">=</span> fromIntegral <span class="fu">$</span> c_gcd (fromIntegral a) (fromIntegral b)</code></pre></td></tr></table></div>
-<div class="raw-link">
-<a  class="raw"  href= "/code/2017-04-02-calling-c-from-haskell/hs/GCD.hs"  mimetype=text/plain > GCD.hs </a>
 </div>
+<div class="code-and-raw lineCntMax10">
+<div class="raw-link sourceCode">
+<table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>■</pre></td><td class="sourceCode"><pre><code><a class="raw" href= "/code/2017-04-02-calling-c-from-haskell/hs/ffi.hs" mimetype=text/plain >ffi.hs</a></code></pre></td></tr></tbody></table>
 </div>
-<div class="code-and-raw">
 <div class="sourceCode" input="code/2017-04-02-calling-c-from-haskell/hs/ffi.hs"><table class="sourceCode numberLines haskell"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
@@ -103,11 +356,11 @@ f_gcd a b <span class="fu">=</span> fromIntegral <span class="fu">$</span> c_gcd
 
 <span class="ot">main ::</span> <span class="dt">IO</span> ()
 main <span class="fu">=</span> mapM_ (print <span class="fu">.</span> uncurry f_gcd) [(<span class="dv">8</span>, <span class="dv">12</span>), (<span class="dv">30</span>, <span class="dv">105</span>), (<span class="dv">24</span>, <span class="dv">108</span>)]</code></pre></td></tr></table></div>
-<div class="raw-link">
-<a  class="raw"  href= "/code/2017-04-02-calling-c-from-haskell/hs/ffi.hs"  mimetype=text/plain > ffi.hs </a>
 </div>
+<div class="code-and-raw lineCntMax10">
+<div class="raw-link sourceCode">
+<table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>■</pre></td><td class="sourceCode"><pre><code><a class="raw" href= "/code/2017-04-02-calling-c-from-haskell/build.sh" mimetype=text/plain >build.sh</a></code></pre></td></tr></tbody></table>
 </div>
-<div class="code-and-raw">
 <div class="sourceCode" input="code/2017-04-02-calling-c-from-haskell/build.sh"><table class="sourceCode numberLines bash"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
@@ -126,9 +379,6 @@ main <span class="fu">=</span> mapM_ (print <span class="fu">.</span> uncurry f_
 <span class="bu">pushd</span> hs
 <span class="ex">ghc</span> --make ffi.hs ../c/gcd.o
 <span class="bu">popd</span></code></pre></td></tr></table></div>
-<div class="raw-link">
-<a  class="raw"  href= "/code/2017-04-02-calling-c-from-haskell/build.sh"  mimetype=text/plain > build.sh </a>
-</div>
 </div>
 <h1 id="discussion">Discussion</h1>
 <p>To compile the example, run the <code>build.sh</code> script. Here is the expected output of the built executable:</p>
@@ -429,7 +679,10 @@ n) No number
 <p>Bird describes the problem as “computing the smallest natural number not in a given finite set <em>X</em> of natural numbers”. Here, <strong>natural numbers</strong> means the set of all positive integers and zero, or just <code>[0..]</code> in Haskell.</p>
 <p>I would like to add some further terminology. Let us think of the set <em>X</em> as <code>xs</code> (a list of elements in <em>X</em>), and call the set of all free numbers as the <em>free set</em>. Using our original parking lot analogy, the infinite parking lot is the set of all natural numbers, <em>X</em> is the list of parked spots (occupied), and finally the <em>free set</em> is the list of all unoccupied (open) parking spots.</p>
 <h1 id="naive-list-based-solution">Naive list-based solution</h1>
-<div class="code-and-raw">
+<div class="code-and-raw lineCntMax10">
+<div class="raw-link sourceCode">
+<table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>■</pre></td><td class="sourceCode"><pre><code><a class="raw" href= "/code/2016-09-24-parking-lot-problem-revisited/naive.hs" mimetype=text/plain >naive.hs</a></code></pre></td></tr></tbody></table>
+</div>
 <div class="sourceCode" input="code/2016-09-24-parking-lot-problem-revisited/naive.hs"><table class="sourceCode numberLines haskell"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
@@ -438,9 +691,6 @@ n) No number
 
 <span class="ot">minfreeNaive ::</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> <span class="dt">Int</span>
 minfreeNaive xs <span class="fu">=</span> head ([<span class="dv">0</span><span class="fu">..</span>] \\ xs)</code></pre></td></tr></table></div>
-<div class="raw-link">
-<a  class="raw"  href= "/code/2016-09-24-parking-lot-problem-revisited/naive.hs"  mimetype=text/plain > naive.hs </a>
-</div>
 </div>
 <p>The worst case of <strong>minfreeNaive</strong> is <span class="math inline">\(\Theta(n^2)\)</span>, because it translates into imperative pseudocode as follows:</p>
 <pre><code># Algorithm P1
@@ -489,7 +739,10 @@ minfreeNaive(xs)
 <p>Now let’s look at the second sentence. It describes the set <code>filter (&lt;n) xs</code>, which we will call <strong>reducedXs</strong>. <a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a> The set <strong>reducedXs</strong> is found by removing all elements in <strong>xs</strong> that are too big for our problem size of <strong>n + 1</strong> spots — i.e., beyond the range in <strong>reducedFrees</strong>.</p>
 <h1 id="improved-array-based-solution">Improved array-based solution</h1>
 <p>Using the insight gained above, we can restate the problem as follows:</p>
-<div class="code-and-raw">
+<div class="code-and-raw lineCntMax100">
+<div class="raw-link sourceCode">
+<table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href= "/code/2016-09-24-parking-lot-problem-revisited/array2.hs" mimetype=text/plain >array2.hs</a></code></pre></td></tr></tbody></table>
+</div>
 <div class="sourceCode" input="code/2016-09-24-parking-lot-problem-revisited/array2.hs"><table class="sourceCode numberLines haskell"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
@@ -522,9 +775,6 @@ search <span class="fu">=</span>  length <span class="fu">.</span> takeWhile id 
 
 <span class="ot">minfreeArray2 ::</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> <span class="dt">Int</span>
 minfreeArray2 <span class="fu">=</span> search <span class="fu">.</span> checklist</code></pre></td></tr></table></div>
-<div class="raw-link">
-<a  class="raw"  href= "/code/2016-09-24-parking-lot-problem-revisited/array2.hs"  mimetype=text/plain > array2.hs </a>
-</div>
 </div>
 <p>.</p>
 <p>Bird says “[t]he function <em>search</em> takes an array of Booleans, converts the array into a list of Booleans and returns the length of the longest initial segment consisting of <em>True</em> entries. This number will be the position of the first <em>False</em> entry.” This is true, and we’ll soon see why this is the case.</p>
@@ -561,7 +811,10 @@ sort xs <span class="fu">=</span> concat [ replicate k x <span class="fu">|</spa
 <p>It should be reiterated here that ultimately we want to have an ordered list of Booleans that preserves the occupied parking spot information in the original list of “taken” spots. The way in which <code>checklist</code> performs the conversion of unordered numbers into a nice list of Booleans in the range <code>[0..n]</code> is virtually identical in design to the algorithm described by Jon Bentley in the very first chapter of his book <em>Programming Pearls</em> (2nd Ed., 2000). There Bentley used a bitmap to represent a Boolean array because of strict memory requirements — but otherwise the spirit of the data structure remains the same.</p>
 <h1 id="further-improved-array-based-solution">(Further improved) Array-based solution</h1>
 <p>Bird’s final array-based algorithm uses the ST Monad to squeeze out some more performance of the <code>checklist</code> function. Here is the code:</p>
-<div class="code-and-raw">
+<div class="code-and-raw lineCntMax100">
+<div class="raw-link sourceCode">
+<table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href= "/code/2016-09-24-parking-lot-problem-revisited/array2.hs" mimetype=text/plain >array2.hs</a></code></pre></td></tr></tbody></table>
+</div>
 <div class="sourceCode" input="code/2016-09-24-parking-lot-problem-revisited/array2.hs"><table class="sourceCode numberLines haskell"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
@@ -594,14 +847,14 @@ search <span class="fu">=</span>  length <span class="fu">.</span> takeWhile id 
 
 <span class="ot">minfreeArray2 ::</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> <span class="dt">Int</span>
 minfreeArray2 <span class="fu">=</span> search <span class="fu">.</span> checklist</code></pre></td></tr></table></div>
-<div class="raw-link">
-<a  class="raw"  href= "/code/2016-09-24-parking-lot-problem-revisited/array2.hs"  mimetype=text/plain > array2.hs </a>
-</div>
 </div>
 <p>. The use of the ST monad here reduces memory overhead, and according to Bird it is the most efficient approach using an imperative style on top of arrays.</p>
 <h1 id="divide-and-conquer-via-recursion">Divide and Conquer via Recursion</h1>
 <p>Ah, recursion. Bird describes the following divide-and-conquer algorithm as a faster alternative to <code>accumArray</code>. <a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a></p>
-<div class="code-and-raw">
+<div class="code-and-raw lineCntMax100">
+<div class="raw-link sourceCode">
+<table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href= "/code/2016-09-24-parking-lot-problem-revisited/divideAndConquer.hs" mimetype=text/plain >divideAndConquer.hs</a></code></pre></td></tr></tbody></table>
+</div>
 <div class="sourceCode" input="code/2016-09-24-parking-lot-problem-revisited/divideAndConquer.hs"><table class="sourceCode numberLines haskell"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
@@ -630,9 +883,6 @@ minfrom a (n, xs)
 	(as, bs) <span class="fu">=</span> partition (<span class="fu">&lt;</span>b) xs
 	b <span class="fu">=</span> a <span class="fu">+</span> (div n <span class="dv">2</span>) <span class="fu">+</span> <span class="dv">1</span>
 	m <span class="fu">=</span> length as</code></pre></td></tr></table></div>
-<div class="raw-link">
-<a  class="raw"  href= "/code/2016-09-24-parking-lot-problem-revisited/divideAndConquer.hs"  mimetype=text/plain > divideAndConquer.hs </a>
-</div>
 </div>
 <p>The overall idea is that we can define the problem <code>minimum of ([0..] \\ xs)</code> by dividing up <code>xs</code> into 2 halves, and then look into the correct sub-part for the solution. Notice that we are partitioning the <code>xs</code> (soley the list of parked spots), and <em>not</em> the parking lot itself.</p>
 <p>For example, we can divide up <code>xs</code> into <code>as</code> and <code>bs</code>, where <code>(as, bs) = partition (&lt;b) xs</code>. (The <code>partition</code> library function simply splits up a given list into 2 subsets, those that satisfy the given condition, and those that do not.) Deciding which partition to look at is simple: look in the upper partition if the lower partition (containing the smaller-numbered parking spots) is full.</p>
@@ -730,7 +980,10 @@ alias gdfc=&quot;git diff --cached&quot;
 <p>Last year I started working professionally as a developer and I began to work on many different repos at the same time. Oftentimes I would do either a <code>git diff</code> or <code>git diff --cached</code>, then come back to it 10 minutes later but then forget whether the diff had a <code>--cached</code> flag or not. I needed to script some more git helpers functions!</p>
 <h1 id="implementation">Implementation</h1>
 <p>I created a new shell function called <code>gdf</code> to replace the two aliases above. It works by first showing you the <code>git diff</code> output, then the <code>git diff --cached</code> output. For both outputs, a vertical colored “ribbon” is printed on the left margin to denote whether it’s the working tree (<code>git diff</code>) or index (<code>git diff --cached</code> aka “staging area”). The name of the repo is prepended/appended to the output as well to further disambiguate it. Here are the functions:</p>
-<div class="code-and-raw">
+<div class="code-and-raw lineCntMax100">
+<div class="raw-link sourceCode">
+<table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href= "/code/2016-07-17-git-diff-improved/gdf" mimetype=text/plain >gdf</a></code></pre></td></tr></tbody></table>
+</div>
 <div class="sourceCode" input="code/2016-07-17-git-diff-improved/gdf"><table class="sourceCode numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
@@ -825,11 +1078,11 @@ gdf()
 		gst
 	fi
 }</code></pre></td></tr></table></div>
-<div class="raw-link">
-<a  class="raw"  href= "/code/2016-07-17-git-diff-improved/gdf"  mimetype=text/plain > gdf </a>
 </div>
+<div class="code-and-raw lineCntMax100">
+<div class="raw-link sourceCode">
+<table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href= "/code/2016-07-17-git-diff-improved/vertical_label" mimetype=text/plain >vertical_label</a></code></pre></td></tr></tbody></table>
 </div>
-<div class="code-and-raw">
 <div class="sourceCode" input="code/2016-07-17-git-diff-improved/vertical_label"><table class="sourceCode numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
@@ -882,11 +1135,11 @@ vertical_label()
 		fi
 	done
 }</code></pre></td></tr></table></div>
-<div class="raw-link">
-<a  class="raw"  href= "/code/2016-07-17-git-diff-improved/vertical_label"  mimetype=text/plain > vertical_label </a>
 </div>
+<div class="code-and-raw lineCntMax100">
+<div class="raw-link sourceCode">
+<table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href= "/code/2016-07-17-git-diff-improved/git_find_repo" mimetype=text/plain >git_find_repo</a></code></pre></td></tr></tbody></table>
 </div>
-<div class="code-and-raw">
 <div class="sourceCode" input="code/2016-07-17-git-diff-improved/git_find_repo"><table class="sourceCode numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
@@ -913,9 +1166,6 @@ git_find_repo()
 	done
 	echo ${PWD##*/}
 }</code></pre></td></tr></table></div>
-<div class="raw-link">
-<a  class="raw"  href= "/code/2016-07-17-git-diff-improved/git_find_repo"  mimetype=text/plain > git_find_repo </a>
-</div>
 </div>
 <p>I use Zsh as my shell, so I wrote the above in Zsh. I simply drop these files inside my autoloaded directory, which is defined like this:</p>
 <div class="sourceCode"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span class="ot">fpath=(</span>~/.zsh/func <span class="ot">$fpath)</span> <span class="co"># add ~/.zsh/func to $fpath</span>
@@ -1051,142 +1301,6 @@ X  @@ -38,6 +38,14 @@ fpath=(~/.zsh/func $fpath) # add ~/.zsh/func to $fpath
 <li id="fn1"><p>This is one reason why I love purity in Haskell so much — pure functions guarantee their inputs and outputs! It’s like coding with little mini-contracts everywhere!<a href="#fnref1">↩</a></p></li>
 </ol>
 </div>
-]]></summary>
-</entry>
-<entry>
-    <title>My Quest for Keyboard Perfection: The Esrille Nisse</title>
-    <link href="http://funloop.org/post/2016-04-14-esrille-nisse-keyboard.html" />
-    <id>http://funloop.org/post/2016-04-14-esrille-nisse-keyboard.html</id>
-    <published>2016-04-14T00:00:00Z</published>
-    <updated>2016-04-14T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="info center">
-	<code class="date">2016-04-14</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2016-04-14-esrille-nisse-keyboard.org" title="History">*</a>
-	<br>
-	<a href="/tag/hardware.html">hardware</a>, <a href="/tag/esrille.html">esrille</a>, <a href="/tag/cherry%20mx.html">cherry mx</a>
-</div>
-
-<p>About a year ago, I preordered an ErgoDox keyboard from Massdrop. Unfortunately, that order was delayed for months; frustrated and disillusioned with the experience, I searched for an alternative. Eventually I settled on the <a href="https://www.esrille.com/keyboard/">Esrille Nisse</a>. It was more expensive than the ErgoDox, but it looked more ergonomic so I took a leap of faith and decided to buy it. I am glad I did!</p>
-<p>I’ve had the Nisse since last October, but did not use it right away. I spent many days spread across six months customizing the firmware and also writing my own keyboard layout optimization program to make the most out of my new keyboard. Every time I thought I had finally settled on a design, I thought of ways of improving it. My initial stab at a first iteration of my custom layout was completed just days ago; I’m just happy to write about it as I promised at the <a href="./2016-01-04-status-update.html">beginning of the year</a>!</p>
-<p>Here is a brief review of the Nisse on build quality, comfort, and price, followed by a section on how I’ve customized it (to the extreme!) and my thoughts on going down this path.</p>
-<h1 id="build-quality">Build Quality</h1>
-<p>The Nisse has a thin outer metal case. You can easily remove the case by undoing a handful of screws. While it doesn’t give an impression of the same kind of build strength as a Filco or Unicomp, it feels well-designed. There is no backplate for the key switches, and this gives the keyboard a much lighter feel. I personally would like it to have a thicker case and backplate, but I imagine that that would move the keyboard up to a much higher price point.</p>
-<h1 id="comfort">Comfort</h1>
-<p>I ordered mine with Cherry MX Brown switches, and they felt fine. I write in the past tense because, during my long wait for the ErgoDox, I had ordered a set of aftermarket Cherry MX springs which are much stiffer than the stock Brown springs (rated at 67 grams). I swapped out the springs and enjoy them so far; they somewhat imitate the much stiffer buckling spring switches found in the Unicomp but without the loud clicking noise. I should add that I also added 3mm thick O-rings around the stem of each keycap to reduce not only noise but keypress travel to reasonable effect.</p>
-<p>Overall, I really love the thumb row of keys. They really make a lot of sense giving each thumb 5 keys to work with on the same row (more ergonomic than the ErgoDox), and I am learning to use my right thumb more (on Qwerty I always use the left thumb for pressing the spacebar, as my brain tends to get confused if I try to use both thumbs for it).</p>
-<h1 id="price">Price</h1>
-<p>The Nisse is not cheap. I had to pay close to $500 USD for this keyboard and wait a few weeks for it to get produced (it is not a mass-produced item; I am the proud owner of Nisse #42). Given that I don’t spend money on other things in life, I was able to afford it. Still, you should only get something like this if you are serious about your keyboard typing comfort and want to upgrade the experience. My fingers spend many hours every single day on a keyboard, so I trust my investment.</p>
-<h1 id="customizability">Customizability</h1>
-<p>This is where the Nisse really shines. The firmware is compiled from a handful of C files. This keyboard is unique in that it comes preloaded with multiple layouts; as of the time of this writing, the preloaded layouts are as follows:</p>
-<ul>
-<li>English
-<ul>
-<li>Qwerty</li>
-<li>Dvorak</li>
-<li>Colemak</li>
-</ul></li>
-<li>Japanese
-<ul>
-<li>Qwerty (JIS)</li>
-<li>Stickney Next</li>
-<li>Nicola (Thumb Shift)</li>
-<li>M-type</li>
-<li>JIS X6004</li>
-<li>TRON Kana</li>
-</ul></li>
-</ul>
-<p>. There is also a shared FN layer between the English and Japanese layouts.</p>
-<p>Through much trial and error, I was able to incorporate some cool ideas that come with one of the Japanese layouts into my own custom layout, which I’ve dubbed the <a href="https://github.com/listx/new-keyboard/tree/zq">“ZQ” layout</a>. I added an extra “FN2” layer and also made the Shift key “sticky” (premptively hitting the Shift key is enough — no need to press the Shift key simultaneously with a letter key to get a capital letter). In addition, I bound some punctuation marks to be just one keypress, such as double quotes (“), dollar sign ($), and underscore (_). Because of the extra FN2 layer, everything is reachable with minimal effort. In fact, a lot of keys around the far corners of the keyboard are surplus keys and left unbound.</p>
-<p>As for the actual keyboard layout, I wrote a <a href="https://github.com/listx/keylo">Haskell program</a> to help find a decent layout. It uses either simulated annealing or a simple hill climber algorithm to find an optimal layout. Because the search space is so large, and because a lot of the rules and penalties for what makes a good layout can be somewhat arbitrary, I’ve discovered that it takes a combination of human guidance (artificially imposed constraints) and computer search to find the most desirable layouts.</p>
-<p>Below you can see my layout’s base layer. The empty squares represent empty (unbound) keys. Because I’m using ASCII art to represent the layout, it’s a bit awkward, but I’ve done my best to label the legends with non-interfering symbols so that it is unambiguous. (This is actually better than taking photos because I use blank keycaps.)</p>
-<pre><code>    □ □ □ □ □ □     □ □ □ □ □ □
-    = ~ / ? &amp;         ` 1 - ! $
-□ □ z r d f . 1     2 &quot; y u p q □ □
-□ 2 s n t h l :     * x a e i o 3 □ &lt;--- Home row
-  3 c w g m ;         &#39; j k b v 4
-      4 5 6 7 8     5 , 6 7 8 &lt;--------- Thumb row
-
-Left-side legend
-1) Home
-2) Shift
-3) Escape
-4) Super (Windows key)
-5) Caps Lock (remapped with xmodmap to Hyper key)
-6) Space
-7) Enter
-8) Control
-
-Right-side legend
-1) Underscore
-2) End
-3) Shift
-4) Tab
-5) FN2
-6) FN
-7) Alt
-8) Right Alt (aka &quot;AltGr&quot; for US International Layout)
-</code></pre>
-<p>Here’s my FN layer.</p>
-<pre><code>    □ □ □ □ □ □     □ □ □ □ □ □
-    □ □ c □ □         □ □ a □ □
-□ □ b 7 8 9 □ d     b % [ \ | ] □ □
-□ □ a 4 5 6 □ □     □ # { ( ) } □ □
-  □ 0 1 2 3 □         ^ &lt; + @ &gt; □
-      □ □ □ □ □     □ □ □ □ □
-
-Left-side legend
-a) 00 (Macro that presses &#39;0&#39; 2x)
-b) 000 (Macro that presses &#39;0&#39; 3x)
-c) Shift+Insert
-d) Page Up
-
-Right-side legend
-a) Super+x (my hotkey to spawn terminals)
-b) Page Down
-</code></pre>
-<p>Finally, this is the FN2 layer.</p>
-<pre><code>    □ □ □ □ □ □     □ □ □ □ □ □
-    □ □ □ □ □         □ □ □ □ □
-□ □ i j k l □ □     □ □ □ a □ □ □ □
-□ □ e f g h □ □     □ □ b c d □ □ □
-  □ a b c d □         □ □ □ □ □ □
-      □ □ □ □ □     □ □ □ □ □
-
-Left-side legend
-a) F1
-b) F2
-c) F3
-d) F4
-e) F5
-f) F6
-g) F7
-h) F8
-i) F9
-j) F10
-k) F11
-l) F12
-
-Right-side legend
-a) Up Arrow
-b) Left Arrow
-c) Down Arrow
-d) Right Arrow
-</code></pre>
-<p>There were some overriding design choices behind the layout; the most important ones are listed below.</p>
-<ul>
-<li>HJKL keys should be somewhat intuitive (H must be left of L; J must be left of K and preferably on the same row).</li>
-<li>Common keys should be on the home row.</li>
-<li>Most modifier keys should be used with the thumbs.</li>
-<li>For better granularity, punctuation symbols should be treated uniquely as separate keys (do not treat “/” and “?” as the same physical key).</li>
-<li>Use numpad arrangement for numbers.</li>
-</ul>
-<p>The result of all of these considerations is that my layout does not make use of all the physical keys the hardware gives us; instead, it uses keys closest to my fingers.</p>
-<p>I have yet to master my own custom layout, but it’s coming along with incremental, daily improvments. I hope to reach 60 wpm in a few month’s time, after which I should be able to switch to it full-time on my primary desktop computer. I will probably make additional changes to the layout as I get more “real world” experience with it; we shall see.</p>
-<p>Because of the openness of the firmware, the Nisse is extremely customizable, and I’m very happy with it. One modification I am particularly fond of is how I’ve managed to map the <code>Shift</code>, <code>FN</code>, and <code>FN2</code> keys to the blue, green, and red LEDs on the keyboard. These LEDs are traditionally used for the Scroll, Caps, and Num lock keys and in all my years of using the computer I’ve hardly ever seen either the Scroll or Caps LEDs being lit; it’s nice to see these LEDs go off when I use my modifier keys as a visual reminder of the layers involved.</p>
-<h1 id="conclusion">Conclusion</h1>
-<p>I know that I’m going down a rabbit hole here. If Esrille ever goes under, it means I am on my own as far as obtaining a replacement board with the same physical dimensions. Hopefully that day will never come, but if it does, I might just grab an ErgoDox or something else that’s similar and port my layout to that system.</p>
-<p>As it stands, there are still improvements to be made — but it’s all in the firmware. For example, I’d like to also make a layout for Japanese (type Japanese faster!), probably by just shifting some of the keys in the existing TRON or some other layout that the Nisse comes with to match ZQ’s distribution of letter keys vs. punctuation keys. The same goes for a Korean layout.</p>
-<p>Those concerns will probably be addressed sometime later this year, or perhaps the next. It all depends on how much time I end up studying those languages again. For now, I’m just happy learning to type a little bit more comfortably on the Nisse (lots of home row goodness!).</p>
-<p>Happy hacking!</p>
 ]]></summary>
 </entry>
 

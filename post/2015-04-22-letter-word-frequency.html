@@ -17,13 +17,9 @@
 			&bull;
 			<a href="../about.html">About</a>
 			&bull;
-			<a href="../art.html">Art</a>
-			&bull;
 			<a href="../code.html">Code</a>
 			&bull;
 			<a href="../papers.html">Papers</a>
-			&bull;
-			<a href="../archive.html">Archive</a>
 		</div>
 
 		<div id="content">
@@ -46,7 +42,10 @@
 <p>Both the letter and word frequency problems will use the Project Gutenberg plaintext file of <a href="http://www.gutenberg.org/cache/epub/2701/pg2701.txt"><em>Moby Dick</em></a>.</p>
 <p>Now, before you go on to read my solutions, I encourage you to write a solution on your own using your favorite programming language.</p>
 <h2 id="ruby-version">Ruby Version</h2>
-<div class="code-and-raw">
+<div class="code-and-raw lineCntMax100">
+<div class="raw-link sourceCode">
+<table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/toy/text-freq/text_freq.rb" mimetype="text/plain">text_freq.rb</a></code></pre></td></tr></tbody></table>
+</div>
 <div class="sourceCode" input="code/toy/text-freq/text_freq.rb"><table class="sourceCode numberLines ruby"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
@@ -223,11 +222,11 @@
     <span class="kw">end</span>
   <span class="kw">end</span>
 <span class="kw">end</span></code></pre></td></tr></table></div>
-<div class="raw-link">
-<a class="raw" href="../code/toy/text-freq/text_freq.rb" mimetype="text/plain"> text_freq.rb </a>
 </div>
+<div class="code-and-raw lineCntMax100">
+<div class="raw-link sourceCode">
+<table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/toy/text-freq/analyze.rb" mimetype="text/plain">analyze.rb</a></code></pre></td></tr></tbody></table>
 </div>
-<div class="code-and-raw">
 <div class="sourceCode" input="code/toy/text-freq/analyze.rb"><table class="sourceCode numberLines ruby"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
@@ -262,9 +261,6 @@ occs_w = <span class="dt">TextFreq</span>.freq_w(corpus)
 <span class="dt">TextFreq</span>.disp_freq(occs_w)
 
 file.close</code></pre></td></tr></table></div>
-<div class="raw-link">
-<a class="raw" href="../code/toy/text-freq/analyze.rb" mimetype="text/plain"> analyze.rb </a>
-</div>
 </div>
 <p>And here is the output (<code>pg2701.txt</code> is <em>Moby Dick</em>):</p>
 <pre><code>$ ./analyze.rb ~/pg2701.txt
@@ -401,7 +397,10 @@ thou = 0.12% (267 occurrences)</code></pre>
 <h3 id="word-frequency-1">Word Frequency</h3>
 <p>The <code>freq_w</code> method relies almost entirely on a single regex, <code>/\W*\s\W*/</code>, to split the input into words. These words are further processed; we perform a basic sanity check with the <code>/\w/</code> regex to make sure we are not dealing with just numbers or punctuation, and we also take into account the em dash <code>--</code>. We use a basic hash structure to store the words as keys, and their counts as values.</p>
 <h2 id="haskell-version">Haskell Version</h2>
-<div class="code-and-raw">
+<div class="code-and-raw lineCntMax1000">
+<div class="raw-link sourceCode">
+<table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/toy/text-freq/TextFreq.hs" mimetype="text/plain">TextFreq.hs</a></code></pre></td></tr></tbody></table>
+</div>
 <div class="sourceCode" input="code/toy/text-freq/TextFreq.hs"><table class="sourceCode numberLines haskell"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
@@ -630,11 +629,11 @@ dispFreqW whash <span class="fu">=</span> mapM_ f <span class="fu">.</span> take
 		msg1 <span class="fu">=</span> T.unpack w <span class="fu">++</span> <span class="st">&quot; = &quot;</span>
 		msg2 <span class="fu">=</span> TP.printf <span class="st">&quot;%.2f%%&quot;</span> perc
 		msg3 <span class="fu">=</span> <span class="st">&quot; (&quot;</span> <span class="fu">++</span> show n <span class="fu">++</span> <span class="st">&quot; occurrences)&quot;</span></code></pre></td></tr></table></div>
-<div class="raw-link">
-<a class="raw" href="../code/toy/text-freq/TextFreq.hs" mimetype="text/plain"> TextFreq.hs </a>
 </div>
+<div class="code-and-raw lineCntMax100">
+<div class="raw-link sourceCode">
+<table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/toy/text-freq/analyze.hs" mimetype="text/plain">analyze.hs</a></code></pre></td></tr></tbody></table>
 </div>
-<div class="code-and-raw">
 <div class="sourceCode" input="code/toy/text-freq/analyze.hs"><table class="sourceCode numberLines haskell"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
@@ -665,9 +664,6 @@ main <span class="fu">=</span> <span class="kw">do</span>
 	dispFreqL <span class="fu">$</span> freqL src
 	putStrLn <span class="fu">$</span> replicate <span class="dv">80</span> <span class="ch">'-'</span>
 	dispFreqW <span class="fu">$</span> freqW src</code></pre></td></tr></table></div>
-<div class="raw-link">
-<a class="raw" href="../code/toy/text-freq/analyze.hs" mimetype="text/plain"> analyze.hs </a>
-</div>
 </div>
 <p>Here is the same run against our copy of <em>Moby Dick</em>:</p>
 <pre><code>$ ./analyze ~/pg2701.txt
@@ -1152,7 +1148,7 @@ eût = 0.11% (130 occurrences)</code></pre>
 
 		</div>
 		<div id="footer">
-			<p>Copyright (C) 2013-2016 Linus Arver. All rights reserved.</p>
+			<p>Copyright (C) 2013-2017 Linus Arver. All rights reserved.</p>
 			<a href="https://github.com/listx/listx_blog">Site</a>
 			<a href="https://github.com/listx/listx.github.io">generated</a>
 			with

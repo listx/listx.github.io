@@ -17,13 +17,9 @@
 			&bull;
 			<a href="../about.html">About</a>
 			&bull;
-			<a href="../art.html">Art</a>
-			&bull;
 			<a href="../code.html">Code</a>
 			&bull;
 			<a href="../papers.html">Papers</a>
-			&bull;
-			<a href="../archive.html">Archive</a>
 		</div>
 
 		<div id="content">
@@ -170,7 +166,10 @@ R R R R R | _ _ R R R | R R
 ... and so on</code></pre>
 <h2 id="conclusion">Conclusion</h2>
 <p>I thoroughly enjoyed looking at the source code in PCG, only to discover an elegant solution around removing modulo bias. Unfortunately, I do not know the true origin of this approach; it is possible that the authors of the PCG code invented it, but I find this improbable. Meanwhile, I strongly recommend the following code for anyone using a low-level generator that does not come with a bounded version:</p>
-<div class="code-and-raw">
+<div class="code-and-raw lineCntMax10">
+<div class="raw-link sourceCode">
+<table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/rng/pcg-style.c" mimetype="text/plain">pcg-style.c</a></code></pre></td></tr></tbody></table>
+</div>
 <div class="sourceCode" input="code/rng/pcg-style.c"><table class="sourceCode numberLines c"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
@@ -189,9 +188,6 @@ R R R R R | _ _ R R R | R R
 <span class="dt">uint32_t</span> threshold = -bound % bound;
 <span class="cf">while</span> (r = rand() &lt; threshold) {};
 <span class="cf">return</span> r % bound;</code></pre></td></tr></table></div>
-<div class="raw-link">
-<a class="raw" href="../code/rng/pcg-style.c" mimetype="text/plain"> pcg-style.c </a>
-</div>
 </div>
 <div class="footnotes">
 <hr />
@@ -203,7 +199,7 @@ R R R R R | _ _ R R R | R R
 
 		</div>
 		<div id="footer">
-			<p>Copyright (C) 2013-2016 Linus Arver. All rights reserved.</p>
+			<p>Copyright (C) 2013-2017 Linus Arver. All rights reserved.</p>
 			<a href="https://github.com/listx/listx_blog">Site</a>
 			<a href="https://github.com/listx/listx.github.io">generated</a>
 			with

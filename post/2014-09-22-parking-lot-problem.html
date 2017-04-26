@@ -17,13 +17,9 @@
 			&bull;
 			<a href="../about.html">About</a>
 			&bull;
-			<a href="../art.html">Art</a>
-			&bull;
 			<a href="../code.html">Code</a>
 			&bull;
 			<a href="../papers.html">Papers</a>
-			&bull;
-			<a href="../archive.html">Archive</a>
 		</div>
 
 		<div id="content">
@@ -65,7 +61,10 @@
 <p>In the more common case (as seen in real life), the parking space closest to the driver (the most desirable parking space) is already taken; and what’s more, the group of spaces closest to the driver is already taken. In this case, we have to proceed from space <code>0</code>, and incrementally observe every subsequent space, until we arrive at an empty parking space. The insight here is that we are treating the multitude of consecutively parked cars as one giant car parked across multiple spaces, and are just trying to find the total number of spaces this car occupies.</p>
 <h2 id="ruby">Ruby</h2>
 <p>I think it is time for some actual code. While I could explain how the Ruby version works, I feel that I have already expounded upon the problem enough above, so that the code here should make intuitive sense.</p>
-<div class="code-and-raw">
+<div class="code-and-raw lineCntMax100">
+<div class="raw-link sourceCode">
+<table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/toy/parking-space.rb" mimetype="text/plain">parking-space.rb</a></code></pre></td></tr></tbody></table>
+</div>
 <div class="sourceCode" input="code/toy/parking-space.rb"><table class="sourceCode numberLines ruby"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
@@ -92,13 +91,13 @@
 
 	<span class="kw">return</span> i
 <span class="kw">end</span></code></pre></td></tr></table></div>
-<div class="raw-link">
-<a class="raw" href="../code/toy/parking-space.rb" mimetype="text/plain"> parking-space.rb </a>
-</div>
 </div>
 <h2 id="haskell">Haskell</h2>
 <p>The Haskell version is a direct translation of the Ruby version, as an iterative approach works just fine. The only drawback is that we use <code>Int</code> instead of the arbitrarily large <code>Integer</code> type for succinctness (we can use <code>Integer</code>, but some built-in functions like <code>sort</code> only work on <code>Int</code>).</p>
-<div class="code-and-raw">
+<div class="code-and-raw lineCntMax100">
+<div class="raw-link sourceCode">
+<table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/toy/parking-space.hs" mimetype="text/plain">parking-space.hs</a></code></pre></td></tr></tbody></table>
+</div>
 <div class="sourceCode" input="code/toy/parking-space.hs"><table class="sourceCode numberLines haskell"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
@@ -121,13 +120,13 @@ getParkingSpace ts
 		<span class="fu">|</span> i <span class="fu">==</span> length xs <span class="fu">=</span> i
 		<span class="fu">|</span> i <span class="fu">&lt;</span> xs <span class="fu">!!</span> i <span class="fu">=</span> i
 		<span class="fu">|</span> otherwise <span class="fu">=</span> loop (i <span class="fu">+</span> <span class="dv">1</span>) xs</code></pre></td></tr></table></div>
-<div class="raw-link">
-<a class="raw" href="../code/toy/parking-space.hs" mimetype="text/plain"> parking-space.hs </a>
-</div>
 </div>
 <h3 id="functional-solution">Functional solution</h3>
 <p>Michele Alzetta kindly sent me another solution, which has a much stronger “Haskell” flavor. I’ve made some slight adjustments; here it is:</p>
-<div class="code-and-raw">
+<div class="code-and-raw lineCntMax10">
+<div class="raw-link sourceCode">
+<table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/toy/parking-space2.hs" mimetype="text/plain">parking-space2.hs</a></code></pre></td></tr></tbody></table>
+</div>
 <div class="sourceCode" input="code/toy/parking-space2.hs"><table class="sourceCode numberLines haskell"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
@@ -142,9 +141,6 @@ getParkingSpace ts
 getParkingSpace' ts <span class="fu">=</span> fromMaybe
 	(length ts)
 	(elemIndex <span class="dt">False</span> <span class="fu">.</span> zipWith (<span class="fu">==</span>) [<span class="dv">0</span><span class="fu">..</span>] <span class="fu">$</span> sort ts)</code></pre></td></tr></table></div>
-<div class="raw-link">
-<a class="raw" href="../code/toy/parking-space2.hs" mimetype="text/plain"> parking-space2.hs </a>
-</div>
 </div>
 <p>. The advantage of this version is that it only evaluates <code>length ts</code> (the input list) as a last resort, thanks to <code>fromMaybe</code>. It also uses standard Prelude functions like <code>elemIndex</code> and <code>zipWith</code> for easier understanding. Thanks Michele!</p>
 <h2 id="low-level-interlude">Low-Level Interlude</h2>
@@ -166,7 +162,10 @@ getParkingSpace' ts <span class="fu">=</span> fromMaybe
 <p>We return “N/A” for the empty case because this condition does not make sense under the terms of the problem, which defines the bounds of the parking lot based on the car farthest away; if there are no cars to begin with, the problem cannot be posed.</p>
 <h2 id="ruby-1">Ruby</h2>
 <p>Without further ado, here is the Ruby solution.</p>
-<div class="code-and-raw">
+<div class="code-and-raw lineCntMax10">
+<div class="raw-link sourceCode">
+<table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/toy/parking-spaces.rb" mimetype="text/plain">parking-spaces.rb</a></code></pre></td></tr></tbody></table>
+</div>
 <div class="sourceCode" input="code/toy/parking-spaces.rb"><table class="sourceCode numberLines ruby"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
@@ -181,13 +180,13 @@ getParkingSpace' ts <span class="fu">=</span> fromMaybe
 		<span class="kw">return</span> (t.max - t.size) + <span class="dv">1</span>
 	<span class="kw">end</span>
 <span class="kw">end</span></code></pre></td></tr></table></div>
-<div class="raw-link">
-<a class="raw" href="../code/toy/parking-spaces.rb" mimetype="text/plain"> parking-spaces.rb </a>
-</div>
 </div>
 <h2 id="haskell-1">Haskell</h2>
 <p>The Haskell version is not much different.</p>
-<div class="code-and-raw">
+<div class="code-and-raw lineCntMax10">
+<div class="raw-link sourceCode">
+<table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/toy/parking-spaces.hs" mimetype="text/plain">parking-spaces.hs</a></code></pre></td></tr></tbody></table>
+</div>
 <div class="sourceCode" input="code/toy/parking-spaces.hs"><table class="sourceCode numberLines haskell"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
@@ -196,9 +195,6 @@ getParkingSpace' ts <span class="fu">=</span> fromMaybe
 getParkingSpaces t
 	<span class="fu">|</span> null t <span class="fu">=</span> <span class="dt">Left</span> <span class="st">&quot;N/A&quot;</span>
 	<span class="fu">|</span> otherwise <span class="fu">=</span> <span class="dt">Right</span> <span class="fu">$</span> (maximum t) <span class="fu">-</span> (length t) <span class="fu">+</span> <span class="dv">1</span></code></pre></td></tr></table></div>
-<div class="raw-link">
-<a class="raw" href="../code/toy/parking-spaces.hs" mimetype="text/plain"> parking-spaces.hs </a>
-</div>
 </div>
 <h2 id="a-successor-to-fizzbuzz">A Successor to FizzBuzz?</h2>
 <p>For some reason, I get a strong feeling that these problems are much more interesting than <a href="http://en.wikipedia.org/wiki/Fizz_buzz">FizzBuzz</a>. The fact that we talk about an <em>infinitely large</em> parking lot will probably throw a lot of newbies and naive thinkers off the right track. You have to be especially careful about edge cases, such as the empty list in the second Haskell version. I believe that good coders have a keen sense of edge cases, because correct algorithms must withstand them without blowing up. Just review the Haskell solutions and notice all of the edge cases that we have to look out for!</p>
@@ -219,7 +215,7 @@ getParkingSpaces t
 
 		</div>
 		<div id="footer">
-			<p>Copyright (C) 2013-2016 Linus Arver. All rights reserved.</p>
+			<p>Copyright (C) 2013-2017 Linus Arver. All rights reserved.</p>
 			<a href="https://github.com/listx/listx_blog">Site</a>
 			<a href="https://github.com/listx/listx.github.io">generated</a>
 			with
