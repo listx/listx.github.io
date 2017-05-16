@@ -9,11 +9,26 @@
 		<link rel="shortcut icon" type="image/png" href="../favicon.png">
 		<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
 		<script src="../misc.js"></script>
-		<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+		<!-- https://github.com/mreid/markreidname-hakyll/blob/master/_templates/mathjax.html -->
+<script type="text/x-mathjax-config">
+	MathJax.Hub.Config({
+		extensions: ["tex2jax.js"],
+		jax: ["input/TeX", "output/HTML-CSS"],
+		tex2jax: {
+			inlineMath: [ ["\\(","\\)"] ],
+			displayMath: [ ["\\[","\\]"] ],
+			processEscapes: true
+		},
+		TeX: { equationNumbers: { autoNumber: "AMS" } },
+		"HTML-CSS": { availableFonts: ["TeX"] }
+	});
+</script>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"> </script>
+
 	</head>
 	<body>
 		<div id="header">
-			<a href="../">Home</a>
+			<a href="../">Blog</a>
 			&bull;
 			<a href="../about.html">About</a>
 			&bull;
@@ -34,15 +49,18 @@
 <h1 id="introduction">Introduction</h1>
 <p>The Fibonacci Sequence is defined as follows:</p>
 <p><span class="math display">\[
+\begin{align}
 \mathrm{F}_{0} = 0\\
 \mathrm{F}_{1} = 1\\
 \mathrm{F}_{n} = \mathrm{F}_{n - 2} + \mathrm{F}_{n - 1}.
+\end{align}
 \]</span></p>
 <p>That is, each Fibonacci number <span class="math inline">\(\mathrm{F}_{n}\)</span> is the sum of the previous two Fibonacci numbers, except the very first two numbers which are defined to be 0 and 1. <a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a></p>
 <p>From the definition above, it appears that computing <span class="math inline">\(\mathrm{F}_{n}\)</span> requires one to always compute <span class="math inline">\(\mathrm{F}_{n - 2}\)</span> and <span class="math inline">\(\mathrm{F}_{n - 1}\)</span>. <strong>This is false:</strong> enter the “doubling method”. <a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> <a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a></p>
 <h1 id="the-genesis-of-the-doubling-method">The Genesis of the Doubling Method</h1>
 <p>The doubling method uses a couple of mathematical formulas derived from matrix multiplication as it applies to calculating Fibonacci numbers; it can be seen as an improvement over the matrix multiplication method, although it does not use matrix multplication itself. The matrix multiplication method uses the following formula:</p>
 <p><span class="math display">\[
+\begin{equation}
 \begin{bmatrix}
 1 &amp; 1\\
 1 &amp; 0
@@ -52,6 +70,7 @@
 \mathrm{F}_{n + 1} &amp; \mathrm{F}_{n}\\
 \mathrm{F}_{n} &amp; \mathrm{F}_{n - 1}
 \end{bmatrix}.
+\end{equation}
 \]</span></p>
 <p>This result is quite interesting in its own right; to find <span class="math inline">\(\mathrm{F}_{n}\)</span> you only need to raise the matrix</p>
 <p><span class="math display">\[
@@ -64,6 +83,7 @@
 <h2 id="thinking-in-terms-of-mathrmf_n">Thinking in Terms of <span class="math inline">\(\mathrm{F}_{n}\)</span></h2>
 <p>What if we could find <span class="math inline">\(\mathrm{F}_{n}\)</span> not by multiplying or adding some numbers, but by multiplying and adding <em>other Fibonacci terms</em>? Of course, we’re not talking about adding <span class="math inline">\(\mathrm{F}_{n - 2}\)</span> and <span class="math inline">\(\mathrm{F}_{n - 1}\)</span> because that would be too slow. Let’s have a look at the matrix identity again (reversed for easier reading):</p>
 <p><span class="math display">\[
+\begin{equation}
 \begin{bmatrix}
 \mathrm{F}_{n + 1} &amp; \mathrm{F}_{n}\\
 \mathrm{F}_{n} &amp; \mathrm{F}_{n - 1}
@@ -73,6 +93,7 @@
 1 &amp; 1\\
 1 &amp; 0
 \end{bmatrix}^n.
+\end{equation}
 \]</span></p>
 <p>If we substitute in <span class="math inline">\(2n\)</span> for <span class="math inline">\(n\)</span>, we get</p>
 <p><span class="math display">\[
@@ -110,8 +131,8 @@
   \begin{bmatrix}
   {{\mathrm{F}_{n + 1}}^2 + {\mathrm{F}_{n}}^2} &amp; {{\mathrm{F}_{n + 1}\mathrm{F}_{n}} + {\mathrm{F}_{n}\mathrm{F}_{n - 1}}}\\
   {{\mathrm{F}_{n}\mathrm{F}_{n + 1}} + {\mathrm{F}_{n - 1}\mathrm{F}_{n}}} &amp; {{\mathrm{F}_{n}}^2 + {\mathrm{F}_{n - 1}}^2}
-  \end{bmatrix}
-\end{align}.
+  \end{bmatrix}.
+\end{align}
 \]</span></p>
 <p>The top right and bottom left terms are identical; we can also rewrite them to be a bit simpler.</p>
 <p><span class="math display">\[

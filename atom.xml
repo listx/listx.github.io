@@ -8,8 +8,241 @@
         <name>Linus Arver</name>
         <email></email>
     </author>
-    <updated>2017-04-14T00:00:00Z</updated>
+    <updated>2017-05-13T00:00:00Z</updated>
     <entry>
+    <title>The Math Behind the Tower of Hanoi</title>
+    <link href="http://funloop.org/post/2017-05-13-tower-of-hanoi.html" />
+    <id>http://funloop.org/post/2017-05-13-tower-of-hanoi.html</id>
+    <published>2017-05-13T00:00:00Z</published>
+    <updated>2017-05-13T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="info center">
+	<code class="date">2017-05-13</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2017-05-13-tower-of-hanoi.org" title="History">*</a>
+	<br>
+	<a href="/tag/math.html">math</a>
+</div>
+
+<p>In the very first chapter of the book <a href="https://en.wikipedia.org/wiki/Concrete_Mathematics"><em>Concrete Mathematics</em> 2ed</a> there is a discussion about the <a href="https://en.wikipedia.org/wiki/Tower_of_Hanoi">Tower of Hanoi</a>. This post is a distillation of that discussion.</p>
+<h1 id="the-problem">The Problem</h1>
+<p>There are 3 rods, with 8 discs (with holes) resting on one rod; the discs are sorted in size like a pyramid, with the smallest disc on top. We want to move all discs to another rod, but with the following rules: (1) a move consists of moving a single disc onto a rod; (2) you may never place a bigger disc on top of a smaller one. A question arises — <strong>how many steps are required to move the entire tower of disks onto another rod?</strong></p>
+<h1 id="finding-the-recurrence">Finding the Recurrence</h1>
+<p>First consider the simplest case, without any discs. Because there are no discs to move, we cannot make any moves, and so the number of steps required is 0. We can write this as</p>
+<p><span class="math display">\[
+S_0 = 0
+\]</span></p>
+<p>with <span class="math inline">\(S\)</span> meaning the number of steps and the subscript representing the number of discs in the tower.</p>
+<p>Now let’s consider how the problem scales. With 1 disc, the answer is a single step since the one disc is itself the entire tower. With 2 discs, the answer is three steps — one step to move the top (small) disc to another rod, one step to move the big disc to the destination rod, and lastly one step to move the small disc on top of the big disc. With 3 discs, the answer is seven steps — the insight here is that we treat the top two discs exactly the same as the previous problem; so we need 3 moves to move the top two to another rod, then one move to move the biggest disc to the destination rod, then again 3 moves to move the 2-disc sub-tower to the destination rod.</p>
+<p>The example with 3 discs is quite telling. We can use the insights gained there to set an upper bound to the number of steps required for the general case of <span class="math inline">\(n\)</span> discs; if we take more steps than this upper bound, we would know that we made mistakes. For a tower of size <span class="math inline">\(n\)</span>, we require <span class="math inline">\(S_{n - 1}\)</span> steps to move all discs except the biggest one, then move the biggest disc, then move the sub-tower on top of that disc with (again) <span class="math inline">\(S_{n - 1}\)</span> steps. So the upper bound is</p>
+<p><span class="math display">\[
+\begin{equation} \label{eq:recurrence}
+  S_n =
+  \begin{cases}
+    0                   &amp; \text{if } n = 0 \\
+    2 * (S_{n - 1}) + 1 &amp; \text{if } n &gt; 0.
+  \end{cases}
+\end{equation}
+\]</span></p>
+<p>If that’s the upper bound, then is there a separate formula for the <em>lower bound</em> (optimal solution)? Nope! It’s because there must come a time in solving the puzzle where we move the biggest disc to the destination rod. To get to the biggest disc, we must have moved all discs on top of it to another rod (the sub-tower); and, after having moved the biggest disc, we must move this sub-tower back on top of that rod (back onto the biggest disc). Because of these constraints stemming the definition of the puzzle itself, we know that for <span class="math inline">\(n\)</span> &gt; 0 we must take <em>at least</em> <span class="math inline">\(2 * (S_{n - 1}) + 1\)</span> steps.</p>
+<p>The upper and lower bounds agree in their formulation, and this formulation (Equation <span class="math inline">\(\ref{eq:recurrence}\)</span>) is our recurrence. In mathematics, a <a href="https://en.wikipedia.org/wiki/Recurrence_relation">recurrence relation</a> is basically a recursively-defined equation, where a <em>base case</em> in the recurrence defines the starting point. In Equation <span class="math inline">\(\ref{eq:recurrence}\)</span>, the base case is <span class="math inline">\(n = 0\)</span>; for <span class="math inline">\(n &gt; 0\)</span>, we define the number of steps required in a recursive manner.</p>
+<p>In our discussion of finding the upper and lower bounds, there were two key concepts — the need to move the biggest disc, and the need to move the sub-tower twice (before and after moving the biggest disc). Our recurrence clearly agrees with these two concepts. The “<span class="math inline">\(+ 1\)</span>” in the non-base case is the step of moving the biggest disc, whereas the <span class="math inline">\(2 * (S_{n - 1})\)</span> is the number of steps required to move the sub-tower <em>twice</em>.</p>
+<h1 id="simplifying-the-recurrence">Simplifying the Recurrence</h1>
+<p>Recurrences are great, but they are painful to compute. For example, it’s not immediately clear what <span class="math inline">\(S_{11}\)</span> or <span class="math inline">\(S_{54}\)</span> evaluates to. It would be really nice if we could avoid defining <span class="math inline">\(S_n\)</span> recursively.</p>
+<p>And this is where math meets science. In the scientific method, we have to come up with a hypothesis and then test that hypothesis with one or more experiments. We can do the same thing here by trying to guess the solution to the recurrence.</p>
+<p>For one thing, we know that <span class="math inline">\(S_n\)</span> grows as <span class="math inline">\(n\)</span> grows (it will never be the case that <span class="math inline">\(S_n\)</span> somehow plateaus or decreases down the road). The more discs there are, the more work we have to do, right? So let’s look at small cases to see how the numbers grow, and see if there is a pattern to the growth rate of <span class="math inline">\(S_n\)</span>.</p>
+<table>
+<thead>
+<tr class="header">
+<th align="center"><span class="math inline">\(n\)</span></th>
+<th align="center"><span class="math inline">\(S_n\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">0</td>
+<td align="center">0</td>
+</tr>
+<tr class="even">
+<td align="center">1</td>
+<td align="center">1</td>
+</tr>
+<tr class="odd">
+<td align="center">2</td>
+<td align="center">3</td>
+</tr>
+<tr class="even">
+<td align="center">3</td>
+<td align="center">7</td>
+</tr>
+<tr class="odd">
+<td align="center">4</td>
+<td align="center">15</td>
+</tr>
+<tr class="even">
+<td align="center">5</td>
+<td align="center">31</td>
+</tr>
+<tr class="odd">
+<td align="center">6</td>
+<td align="center">63</td>
+</tr>
+<tr class="even">
+<td align="center">7</td>
+<td align="center">127</td>
+</tr>
+<tr class="odd">
+<td align="center">8</td>
+<td align="center">255</td>
+</tr>
+</tbody>
+</table>
+<p>We don’t have to actually simulate the puzzle to derive these values; using the recurrence Equation <span class="math inline">\(\ref{eq:recurrence}\)</span> we start off from the first row (the base case) and then calculate our way down, reusing <span class="math inline">\(S_n\)</span> from the previous row as <span class="math inline">\(S_{n - 1}\)</span>. <a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a></p>
+<p>Anyway, the values of <span class="math inline">\(S_n\)</span> sure look familiar — especially if we use base 2.</p>
+<table>
+<thead>
+<tr class="header">
+<th align="center"><span class="math inline">\(n\)</span></th>
+<th align="right">binary(<span class="math inline">\(S_n\)</span>)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">0</td>
+<td align="right"><span class="math inline">\(0_2\)</span></td>
+</tr>
+<tr class="even">
+<td align="center">1</td>
+<td align="right"><span class="math inline">\(1_2\)</span></td>
+</tr>
+<tr class="odd">
+<td align="center">2</td>
+<td align="right"><span class="math inline">\(11_2\)</span></td>
+</tr>
+<tr class="even">
+<td align="center">3</td>
+<td align="right"><span class="math inline">\(111_2\)</span></td>
+</tr>
+<tr class="odd">
+<td align="center">4</td>
+<td align="right"><span class="math inline">\(1111_2\)</span></td>
+</tr>
+<tr class="even">
+<td align="center">5</td>
+<td align="right"><span class="math inline">\(11111_2\)</span></td>
+</tr>
+<tr class="odd">
+<td align="center">6</td>
+<td align="right"><span class="math inline">\(111111_2\)</span></td>
+</tr>
+<tr class="even">
+<td align="center">7</td>
+<td align="right"><span class="math inline">\(1111111_2\)</span></td>
+</tr>
+<tr class="odd">
+<td align="center">8</td>
+<td align="right"><span class="math inline">\(11111111_2\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>It looks like our recurrence simplifies to just</p>
+<p><span class="math display">\[
+\begin{equation} \label{eq:solution}
+  S_n = 2^n - 1 \quad \text{for } n \geq 0,
+\end{equation}
+\]</span></p>
+<p>except it is no longer a recurrence as there is no need to define a base case. We’ll call it a <em>solution</em> to the recurrence.</p>
+<h1 id="proving-the-solution">Proving the Solution</h1>
+<p>Although the empirical evidence looks very good, we have not formally proved that the solution (Equation <span class="math inline">\(\ref{eq:solution}\)</span>) holds for <em>all</em> <span class="math inline">\(n\)</span>. It’s one thing to say that something is true for all <em>observed</em> cases (scientific experiment), and quite another to say that something is true for <em>all</em> cases (mathematical proof).</p>
+<p>Can we prove it? Yes! Fortunately for us, Equation <span class="math inline">\(\ref{eq:recurrence}\)</span> lends itself to proof by <a href="https://en.wikipedia.org/wiki/Mathematical_induction">induction</a>. Induction requires you to first prove some number <span class="math inline">\(k_0\)</span> as a starting point (the base case) using some proposition <span class="math inline">\(P\)</span>. Then you prove that <span class="math inline">\(P\)</span> holds for <span class="math inline">\(k + 1\)</span> (the next number); i.e., show that going from <span class="math inline">\(k\)</span> to <span class="math inline">\(k + 1\)</span> does not change <span class="math inline">\(P\)</span>. This is the <em>inductive step</em>. In this way, we prove the “totality” of <span class="math inline">\(P\)</span> as it applies to all numbers in the range <span class="math inline">\([k_0, k_{m}]\)</span> and we are done. <a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a></p>
+<p>Here we want to prove that Equation <span class="math inline">\(\ref{eq:solution}\)</span> holds for all <span class="math inline">\(n\)</span> (all natural numbers). <a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a> For this proof let’s rewrite Equation <span class="math inline">\(\ref{eq:solution}\)</span> to use <span class="math inline">\(k\)</span> instead of <span class="math inline">\(n\)</span>:</p>
+<p><span class="math display">\[
+\begin{equation} \label{eq:proposition}
+  S_k = 2^k - 1 \quad \text{for } k \geq 0.
+\end{equation}
+\]</span></p>
+<p>Equation <span class="math inline">\(\ref{eq:proposition}\)</span> is our proposition <span class="math inline">\(P\)</span>. The base case is easy enough to prove: <span class="math inline">\(S_0 = 0\)</span> because there are no disks to move. For the inductive step, we use the non-base part of our recurrence from Equation <span class="math inline">\(\ref{eq:recurrence}\)</span> to get</p>
+<p><span class="math display">\[
+  \begin{align}
+  S_k &amp;= 2 * (S_{k - 1}) + 1 \label{eq:induct1}
+  \end{align}
+\]</span></p>
+<p>and rewrite it in terms of <span class="math inline">\(k + 1\)</span>:</p>
+<p><span class="math display">\[
+  \begin{align}
+  S_{k + 1} &amp;= 2 * (S_{k}) + 1. \label{eq:induct2}
+  \end{align}
+\]</span></p>
+<p>Now the critical part: we replace <span class="math inline">\(S_k\)</span> with Equation <span class="math inline">\(\ref{eq:proposition}\)</span> (our proposition), because we assume that our proposition is true for all steps up to <span class="math inline">\(k\)</span> (but not <span class="math inline">\(k + 1\)</span>, which is what we’re trying to prove):</p>
+<p><span class="math display">\[
+  \begin{align}
+  S_{k + 1} &amp;= 2 * (2^k - 1) + 1.
+  \end{align}
+\]</span></p>
+<p>In case you forgot algebra, <span class="math inline">\(2 * 2^k = 2^1 * 2^k = 2^{k + 1}\)</span> and we can use this to simplify our equation.</p>
+<p><span class="math display">\[
+  \begin{align}
+  S_{k + 1} &amp;= 2 * (2^k - 1) + 1\\
+  &amp;= [2 * (2^k - 1)] + 1\\
+  &amp;= [(2 * 2^k - 2)] + 1\\
+  &amp;= (2^{k + 1} - 2) + 1\\
+  &amp;= 2^{k + 1} - 1 \label{eq:induct3}.
+  \end{align}
+\]</span></p>
+<p>And now we can see that Equation <span class="math inline">\(\ref{eq:induct3}\)</span> (our “evolved” proposition <span class="math inline">\(P\)</span>, if you will) is the same as our solution (Equation <span class="math inline">\(\ref{eq:solution}\)</span>), even though we increased <span class="math inline">\(k\)</span> to <span class="math inline">\(k + 1\)</span>! This is because simple substitution allows us to replace “<span class="math inline">\(k + 1\)</span>” with “<span class="math inline">\(n\)</span>”. We have completed our proof by induction. <a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a></p>
+<h1 id="alternate-recurrence-and-solution">Alternate Recurrence and Solution</h1>
+<p>The book offers an alternate recurrence to Equation <span class="math inline">\(\ref{eq:recurrence}\)</span>, by adding 1 to both sides:</p>
+<p><span class="math display">\[
+\begin{align}
+  (S_n) + 1 &amp;=
+  \begin{cases}
+    0 + 1                   &amp; \text{if } n = 0 \\
+    2 * (S_{n - 1}) + 1 + 1 &amp; \text{if } n &gt; 0 \\
+  \end{cases}\\
+          &amp;=
+  \begin{cases}
+    1                   &amp; \text{if } n = 0 \\
+    2 * (S_{n - 1}) + 2 &amp; \text{if } n &gt; 0. \label{eq:recurrence2}
+  \end{cases}
+\end{align}
+\]</span></p>
+<p>This recurrence is the same as the original, except that it adds 1 to the answer. Now we let <span class="math inline">\(W_n = (S_n) + 1\)</span> and <span class="math inline">\(W_{n - 1} = (S_{n - 1}) + 1\)</span> and rewrite everything in terms of <span class="math inline">\(W\)</span>:</p>
+<p><span class="math display">\[
+\begin{align}
+  W_n &amp;=
+  \begin{cases}
+    1                   &amp; \text{if } n = 0 \\
+    2 * (W_{n - 1})     &amp; \text{if } n &gt; 0. \label{eq:recurrence3}
+  \end{cases}
+\end{align}
+\]</span></p>
+<p>Notice how the “<span class="math inline">\( + 2\)</span>” in Equation <span class="math inline">\(\ref{eq:recurrence2}\)</span> goes away, because the coefficient <span class="math inline">\(2\)</span> in Equation <span class="math inline">\(\ref{eq:recurrence3}\)</span> will multiply with the “<span class="math inline">\( + 1\)</span>” from <span class="math inline">\(W_{n - 1}\)</span> to get it back. Using this alternate recurrence, it’s easy to see that the solution is just <span class="math inline">\(W_n = 2^n\)</span>, because <span class="math inline">\(W\)</span> can only grow by multiplying <span class="math inline">\(2\)</span> to itself! Hence</p>
+<p><span class="math display">\[
+\begin{align}
+W_n = (S_n) + 1 = 2^n
+\end{align}
+\]</span></p>
+<p>and subtracting 1 from all sides gives us</p>
+<p><span class="math display">\[
+\begin{align}
+(W_n) - 1 =S_n = 2^n - 1.
+\end{align}
+\]</span></p>
+<p>The lesson here is that if it is difficult to find the solution to a recurrence, we can use basic algebra rules to transform the recurrence to something more amenable. In this case, all it took was adding 1 to the original recurrence.</p>
+<h1 id="conclusion">Conclusion</h1>
+<p>I thoroughly enjoyed figuring this stuff out because possibly for the first time in my life I used my programming experience (recurrence/recursion, memoization) to help myself understand mathematics — not the other way around. The other way around was not even enjoyable — calculating what <code>i</code> is in some <span class="math inline">\(n\)</span>th iteration of a <code>for</code>-loop never really excited me.</p>
+<p>I hope this explanation helps you better understand the first few pages of <em>Concrete Mathematics</em>; I had to read that part three times over to really “get it” (never having learned what induction was). And henceforth, I will never look at a string of consecutive 1’s in binary the same way again. 😃</p>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>In computer science, this process of avoiding the recalculation of previously known values is called <em>memoization</em> and is useful in generating the first N values of a recursive algorithm in <span class="math inline">\(O(N)\)</span> (linear) time.<a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p>Note that if <span class="math inline">\(k_0 = 0\)</span>, then <span class="math inline">\([k_0, k_{m}]\)</span> is the set of all natural numbers (zero plus the positive integers).<a href="#fnref2">↩</a></p></li>
+<li id="fn3"><p>There is no need to prove the recurrence (Equation <span class="math inline">\(\ref{eq:recurrence}\)</span>) as we have already proved it in the process of deriving it.<a href="#fnref3">↩</a></p></li>
+<li id="fn4"><p>In <em>Concrete Mathematics</em> 2 ed. p. 3 (where the book uses <span class="math inline">\(T_n\)</span> instead of <span class="math inline">\(S_n\)</span>), the proof is simply a one-liner: <span class="math display">\[
+T_n = 2(T_{n - 1}) + 1 = 2(2^{n - 1} - 1) + 1 = 2^n - 1.
+\]</span> But I find it a bit too terse for my tastes.<a href="#fnref4">↩</a></p></li>
+</ol>
+</div>
+]]></summary>
+</entry>
+<entry>
     <title>The Fastest Way to Compute the Nth Fibonacci Number: The Doubling Method</title>
     <link href="http://funloop.org/post/2017-04-14-computing-fibonacci-numbers.html" />
     <id>http://funloop.org/post/2017-04-14-computing-fibonacci-numbers.html</id>
@@ -24,15 +257,18 @@
 <h1 id="introduction">Introduction</h1>
 <p>The Fibonacci Sequence is defined as follows:</p>
 <p><span class="math display">\[
+\begin{align}
 \mathrm{F}_{0} = 0\\
 \mathrm{F}_{1} = 1\\
 \mathrm{F}_{n} = \mathrm{F}_{n - 2} + \mathrm{F}_{n - 1}.
+\end{align}
 \]</span></p>
 <p>That is, each Fibonacci number <span class="math inline">\(\mathrm{F}_{n}\)</span> is the sum of the previous two Fibonacci numbers, except the very first two numbers which are defined to be 0 and 1. <a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a></p>
 <p>From the definition above, it appears that computing <span class="math inline">\(\mathrm{F}_{n}\)</span> requires one to always compute <span class="math inline">\(\mathrm{F}_{n - 2}\)</span> and <span class="math inline">\(\mathrm{F}_{n - 1}\)</span>. <strong>This is false:</strong> enter the “doubling method”. <a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> <a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a></p>
 <h1 id="the-genesis-of-the-doubling-method">The Genesis of the Doubling Method</h1>
 <p>The doubling method uses a couple of mathematical formulas derived from matrix multiplication as it applies to calculating Fibonacci numbers; it can be seen as an improvement over the matrix multiplication method, although it does not use matrix multplication itself. The matrix multiplication method uses the following formula:</p>
 <p><span class="math display">\[
+\begin{equation}
 \begin{bmatrix}
 1 &amp; 1\\
 1 &amp; 0
@@ -42,6 +278,7 @@
 \mathrm{F}_{n + 1} &amp; \mathrm{F}_{n}\\
 \mathrm{F}_{n} &amp; \mathrm{F}_{n - 1}
 \end{bmatrix}.
+\end{equation}
 \]</span></p>
 <p>This result is quite interesting in its own right; to find <span class="math inline">\(\mathrm{F}_{n}\)</span> you only need to raise the matrix</p>
 <p><span class="math display">\[
@@ -54,6 +291,7 @@
 <h2 id="thinking-in-terms-of-mathrmf_n">Thinking in Terms of <span class="math inline">\(\mathrm{F}_{n}\)</span></h2>
 <p>What if we could find <span class="math inline">\(\mathrm{F}_{n}\)</span> not by multiplying or adding some numbers, but by multiplying and adding <em>other Fibonacci terms</em>? Of course, we’re not talking about adding <span class="math inline">\(\mathrm{F}_{n - 2}\)</span> and <span class="math inline">\(\mathrm{F}_{n - 1}\)</span> because that would be too slow. Let’s have a look at the matrix identity again (reversed for easier reading):</p>
 <p><span class="math display">\[
+\begin{equation}
 \begin{bmatrix}
 \mathrm{F}_{n + 1} &amp; \mathrm{F}_{n}\\
 \mathrm{F}_{n} &amp; \mathrm{F}_{n - 1}
@@ -63,6 +301,7 @@
 1 &amp; 1\\
 1 &amp; 0
 \end{bmatrix}^n.
+\end{equation}
 \]</span></p>
 <p>If we substitute in <span class="math inline">\(2n\)</span> for <span class="math inline">\(n\)</span>, we get</p>
 <p><span class="math display">\[
@@ -100,8 +339,8 @@
   \begin{bmatrix}
   {{\mathrm{F}_{n + 1}}^2 + {\mathrm{F}_{n}}^2} &amp; {{\mathrm{F}_{n + 1}\mathrm{F}_{n}} + {\mathrm{F}_{n}\mathrm{F}_{n - 1}}}\\
   {{\mathrm{F}_{n}\mathrm{F}_{n + 1}} + {\mathrm{F}_{n - 1}\mathrm{F}_{n}}} &amp; {{\mathrm{F}_{n}}^2 + {\mathrm{F}_{n - 1}}^2}
-  \end{bmatrix}
-\end{align}.
+  \end{bmatrix}.
+\end{align}
 \]</span></p>
 <p>The top right and bottom left terms are identical; we can also rewrite them to be a bit simpler.</p>
 <p><span class="math display">\[
@@ -1236,72 +1475,6 @@ X  @@ -38,6 +38,14 @@ fpath=(~/.zsh/func $fpath) # add ~/.zsh/func to $fpath
 <h1 id="conclusion">Conclusion</h1>
 <p>I’ve been a happy <code>gdf</code> user for some months now. The only “downside” is that because of the vertical ribbon (and the repo name at the top/bottom), the output is no longer readable by <code>patch</code> (or copy-pastable into a diff-reading utility/service). But, this is a minor grievance at best as one can easily invoke the low-level <code>git diff</code> or <code>git diff --cached</code> directly to get the raw (<code>patch</code>-able) output.</p>
 <p>Happy hacking!</p>
-]]></summary>
-</entry>
-<entry>
-    <title>Software Development Philosophy</title>
-    <link href="http://funloop.org/post/2016-04-29-software-development-philosophy.html" />
-    <id>http://funloop.org/post/2016-04-29-software-development-philosophy.html</id>
-    <published>2016-04-29T00:00:00Z</published>
-    <updated>2016-04-29T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="info center">
-	<code class="date">2016-04-29</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2016-04-29-software-development-philosophy.org" title="History">*</a>
-	<br>
-	<a href="/tag/programming.html">programming</a>
-</div>
-
-<p>I’ve been meaning to write about software development best practices for a while now. Here are some things that I believe in, after having distilled countless blog posts, comments, and arguments over the years.</p>
-<h1 id="take-version-control-seriously">1: Take version control seriously</h1>
-<p>Learning how to use version control was easily one of the big eye-opening events in my technical journey. I get sad when I see commit messages without any real explanation such as “Ugh!” or “Oops”.</p>
-<p>Although modern version control systems have many technical benefits (distributed nature allowing parallel collaboration, guaranteed data integrity, etc), I believe that the overruling importance of version control is <strong>history preservation</strong>. Reading the commit history of a well-maintained project is a pleasure: each commit explains why that commit was necessary at the time it was written, with references to other documents, bug reports, etc. If you have fine-grained commits, you can go back in time to reproduce bugs, or even use things like <strong>git-bisect</strong> to figure out which commit introduced a bug. If you are working to fix a regression that was introduced “around two months ago,” the last thing you want to do is look at 2-month old commits with useless commit messages.</p>
-<h1 id="be-consistent">2: Be consistent</h1>
-<p>No one can deny the power of simplicity. On the other hand, how do we achieve simplicity?</p>
-<p>Start by being consistent. There are multiple domains of “consistency” in a software project but here are some basic ones: coding style, naming convention, and comments. Yes, comments have to be written in a particular way as well! Let’s look at each in turn.</p>
-<h2 id="coding-style">Coding style</h2>
-<p>The simplest form of consistency is coding style. Every project must have some general consensus for coding style. Although 100% adherence may not be practical, you should at least make all <em>new</em> code follow the same convention. Automated linters can help in this area.</p>
-<h2 id="naming-convention">Naming convention</h2>
-<p>This is a superset of coding style. If you have variable names, they should be consistently named. If you use the term <strong>cfg</strong> in one variable or function, you should use it everywhere; do not use <strong>conf</strong> or <strong>config</strong> elsewhere.</p>
-<p>For functions, quite often in imperative languages they perform some action. And naturally, the action is performed on something. Now, where do we put the verb and the direct object? It doesn’t really matter, but be consistent!</p>
-<p>For the following functions, notice how the verb comes before the object, consistently:</p>
-<ul>
-<li><code>init_config()</code></li>
-<li><code>init_hash()</code></li>
-<li><code>mark_foo()</code></li>
-<li><code>gen_foo()</code></li>
-</ul>
-<p>. I believe that such subtle details do matter in the long run.</p>
-<h2 id="comments">Comments</h2>
-<p>Too often I find random-looking comments strewn across a single file — some one-liners, some just one word, etc. Comments should be written in a consistent style, too!</p>
-<p>Comments form the backbone of documentation for anyone not intimately familiar with the codebase. Thus, comments should never assume that the reader knows the basics of what’s going on. Rather, comments should strive to explain things to the layman, the outsider.</p>
-<p>Writing comments in this style does not mean that you should always repeat everything from zero; instead, explain the general bird’s eye view in one place, and refer to this introductory view. Also, avoid writing one-liner comments if you can, as they encourage laziness and half-baked explanations (how much meaning can you really convey in 1 line?); write a nice explanation for each “atomic” unit of code — this is typically one function definition.</p>
-<p>Lastly, do not comment out code and check it into a commit! This is a habit of the era before version control became popular. If you really want to save commented code, at least preface it with an explanation. Mystery dead code is the worst!</p>
-<h1 id="have-one-source-of-truth">3: Have one source of truth</h1>
-<p>This is another way of saying the DRY principle (“Do not Repeat Yourself”) which I find somewhat vague. I hereby coin this rule as the HOST principle (“Have One Source of Truth”).</p>
-<p>Under the HOST principle, if you are working with multiple components that depend on each other, it’s important to establish who is the original source for which things. Any component that feeds from the source of truth must act subserviently to the originator, as far as that piece of truth is concerned. The Object-Oriented Programming model encapsulates this with public and private methods; in the purely functional model this is less of a concern because of the lack of side effects.</p>
-<p>This is the one principle that gets overlooked time and again. It’s probably because the HOST principle can be violated in so many ways. Below are some typical violations.</p>
-<h2 id="global-variables">Global variables</h2>
-<p>Whereas global <strong>constants</strong> would be fine, global <strong>variables</strong> by their very nature allow anything to edit the originating source of truth. The result, all too often, is spaghetti code where it is unclear which function has authority over another function.</p>
-<h2 id="non-modularity">Non-modularity</h2>
-<p>A common mistake is when people do not make things modular and just copy/paste large files making minor changes between each one. For example, let’s say that there exists 3 different developer environments — “development”, “staging”, and “production” — and that each one shares about 90% of the configuration values, with the other 10% changing depending on the environment. You should not write 3 separate files; instead, you should keep in source control 1 file with all of the various values, and have some other process automatically generate the individual environment-specific configuration file. This way, you don’t have to edit 3 files when you make some global change that affects all environments.</p>
-<h2 id="lack-of-testing">Lack of testing</h2>
-<p>In the ideal world, every program ships with a contract, telling the user that the program will do X, Y, and Z, in such and such a way under such and such conditions. This contract would be the source of truth about a program’s intended behavior at runtime. Alas, such “contracts” do not exist, at least at the program-behavior-at-runtime level. <a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> While excellent documentation, commit history, and even community-driven “best practices” all attempt to define how a program behaves and what to expect, they still bow down to the test suite. This is because tests, by their very nature, are written expressly to keep in line the behavior of a program over its lifetime.</p>
-<p>Not all projects can have the traditional test suite covering every corner case (e.g., the Linux Kernel is one such project). But most projects can. At the very least, you should have some standard practice or system of ensuring that your program is stable and behaves as intended.</p>
-<h1 id="accuracy-is-more-important-than-performance">4: Accuracy is more important than performance</h1>
-<p>Ultimately, software is written to perform some <strong>task</strong>. If your software does not perform that task, it is useless. Your code should care foremost about correctness (being free from bugs).</p>
-<p>Whereas performance can always be improved given a naive (but correct) implementation, it is not so the other way around — a highly-performant yet buggy implementation cannot be easily debugged while maintaining existing performance benchmarks.</p>
-<h1 id="be-cautious-of-new-code">5: Be cautious of new code</h1>
-<p>Old code exists because it worked last year, last month, two weeks ago, and yesterday. Let that sink in. At the end of the day, something that works makes the <strong>user</strong> happy.</p>
-<p>If you have a new design or some new way of doing something, it better be superior to the old way. It should be as clear as night and day. Typically, new code is in bug fixes, where the “night and day” difference is obvious. But sometimes it is in new features or even in refactored code — and still, it should be judged against the same high standards.</p>
-<p>When I <a href="./2014-09-09-my-first-contribution-to-git.html">submitted my patch to fix some Git documentation</a> some years back, I originally submitted 7 commits. Of the 7, one of them was a patch to update the itemized list syntax; it was purely a change of form, not function. The maintainer (Junio Hamano) questioned this patch, and it was eventually dropped because I really could not make a good case for it. I keep thinking about this encounter once in a while, and remind myself that even something as harmless a documentation change should be treated with caution.</p>
-<p>All projects require new code — and this is how projects grow. Growth has to be done in moderation and with great care — this is how software must evolve. We can analogize software growth as mutation over time, with each commit as a particular “mutation”. We choose the best ones (thanks to distributed VCS branching/merging!) one at a time, easing growing pains. Commits with far-reaching changes are the worst type of mutations and should be avoided; an exception is if you have changes that delete more code than add code — these are golden if they can be vetted and proven to work, as they can cut bloat and slim down the codebase.</p>
-<h1 id="conclusion">Conclusion</h1>
-<p>In the real world, it’s hard to cross all your t’s and dot your i’s — I am no exception with regard to my own projects at home and at work. If I had to pick only one rule from the five above, it would be the first (treat version control seriously). Maybe I am biased because I love Git. Still, it’s hard to argue against having version control; the rest of the guidelines above can be argued against under particular circumstances, but version control remains sacrosanct. Version control is king!</p>
-<div class="footnotes">
-<hr />
-<ol>
-<li id="fn1"><p>This is one reason why I love purity in Haskell so much — pure functions guarantee their inputs and outputs! It’s like coding with little mini-contracts everywhere!<a href="#fnref1">↩</a></p></li>
-</ol>
-</div>
 ]]></summary>
 </entry>
 

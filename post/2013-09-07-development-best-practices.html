@@ -9,11 +9,26 @@
 		<link rel="shortcut icon" type="image/png" href="../favicon.png">
 		<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
 		<script src="../misc.js"></script>
-		
+		<!-- https://github.com/mreid/markreidname-hakyll/blob/master/_templates/mathjax.html -->
+<script type="text/x-mathjax-config">
+	MathJax.Hub.Config({
+		extensions: ["tex2jax.js"],
+		jax: ["input/TeX", "output/HTML-CSS"],
+		tex2jax: {
+			inlineMath: [ ["\\(","\\)"] ],
+			displayMath: [ ["\\[","\\]"] ],
+			processEscapes: true
+		},
+		TeX: { equationNumbers: { autoNumber: "AMS" } },
+		"HTML-CSS": { availableFonts: ["TeX"] }
+	});
+</script>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"> </script>
+
 	</head>
 	<body>
 		<div id="header">
-			<a href="../">Home</a>
+			<a href="../">Blog</a>
 			&bull;
 			<a href="../about.html">About</a>
 			&bull;
@@ -56,11 +71,11 @@
 <p>Write shell scripts if you need to.</p>
 <h4 id="save-recent-commands-in-a-file-for-re-use.">Save recent commands in a file for re-use.</h4>
 <p>Take advantage of your shell’s ability to save history.</p>
-<h4 id="use-a-build-tool-to-automate-their-scientific-workflows.">Use a build tool to automate their scientific workflows.</h4>
+<h4 id="use-a-build-tool-to-automate-workflows.">Use a build tool to automate workflows.</h4>
 <p>You can use <em>GNU Make</em> not only to compile code, but to describe a dependency graph of your workflow (do X before Y).</p>
 <h2 id="use-the-computer-to-record-history">Use the Computer to Record History</h2>
 <h4 id="software-tools-should-be-used-to-track-computational-work-automatically-to-achieve-provenance.">Software tools should be used to track computational work automatically, to achieve provenance.</h4>
-<p>The ability to reproduce your results, you should record everything needed to re-create the output<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a>, and such record-keeping should be done automatically. In a software development context, the most immediate example is version control, which keeps all of the code necessary to recreate the desired program behavior. However, there are several other things which you should also keep track of in your development notebook:</p>
+<p>To reproduce your results, you should record everything needed to re-create the output<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a>, and such record-keeping should be done automatically. In a software development context, the most immediate example is version control, which keeps all of the code necessary to recreate the desired program behavior. However, there are several other things which you should also keep track of in your development notebook:</p>
 <ul>
 <li>UUIDs and version numbers for raw data records (e.g., sample parameters/input for your program);</li>
 <li>UUIDs and version numbers for programs and libraries;</li>
