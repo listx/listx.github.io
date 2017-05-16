@@ -251,7 +251,7 @@ T_n = 2(T_{n - 1}) + 1 = 2(2^{n - 1} - 1) + 1 = 2^n - 1.
     <summary type="html"><![CDATA[<div class="info center">
 	<code class="date">2017-04-14</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2017-04-14-computing-fibonacci-numbers.org" title="History">*</a>
 	<br>
-	<a href="/tag/programming.html">programming</a>, <a href="/tag/python.html">python</a>
+	<a href="/tag/math.html">math</a>, <a href="/tag/programming.html">programming</a>, <a href="/tag/python.html">python</a>
 </div>
 
 <h1 id="introduction">Introduction</h1>
@@ -910,7 +910,7 @@ n) No number
     <summary type="html"><![CDATA[<div class="info center">
 	<code class="date">2016-09-24</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2016-09-24-parking-lot-problem-revisited.org" title="History">*</a>
 	<br>
-	<a href="/tag/programming.html">programming</a>, <a href="/tag/haskell.html">haskell</a>
+	<a href="/tag/math.html">math</a>, <a href="/tag/programming.html">programming</a>, <a href="/tag/haskell.html">haskell</a>
 </div>
 
 <p>Almost exactly two years ago, I discussed what I called the <a href="./2014-09-22-parking-lot-problem.html">Parking Lot Problem</a>. Recently I discovered that it is a widely-known problem, enough to be featured in the very first chapter of <em>Pearls of Functional Algorithm Design</em> (2010) by Richard Bird — where it is simply called “smallest free number”. In this post, I want to go over Bird’s explanations in more detail; my aim is to spare you the effort in deciphering his opaque writing style.</p>
