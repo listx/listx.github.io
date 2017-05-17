@@ -188,7 +188,7 @@ S_0 = 0
 \]</span></p>
 <p>And now we can see that Equation <span class="math inline">\(\ref{eq:induct3}\)</span> (our “evolved” proposition <span class="math inline">\(P\)</span>, if you will) is the same as our solution (Equation <span class="math inline">\(\ref{eq:solution}\)</span>), even though we increased <span class="math inline">\(k\)</span> to <span class="math inline">\(k + 1\)</span>! This is because simple substitution allows us to replace “<span class="math inline">\(k + 1\)</span>” with “<span class="math inline">\(n\)</span>”. We have completed our proof by induction. <a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a></p>
 <h1 id="alternate-recurrence-and-solution">Alternate Recurrence and Solution</h1>
-<p>The book offers an alternate recurrence to Equation <span class="math inline">\(\ref{eq:recurrence}\)</span>, by adding 1 to both sides:</p>
+<p>The book goes on to offer an alternate recurrence to Equation <span class="math inline">\(\ref{eq:recurrence}\)</span>, by adding 1 to both sides:</p>
 <p><span class="math display">\[
 \begin{align}
   (S_n) + 1 &amp;=
