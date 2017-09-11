@@ -10,7 +10,7 @@
     </author>
     <updated>2017-05-13T00:00:00Z</updated>
     <entry>
-    <title>The Math Behind the Tower of Hanoi</title>
+    <title>The Math Behind the Tower of Hanoi Problem</title>
     <link href="http://funloop.org/post/2017-05-13-tower-of-hanoi.html" />
     <id>http://funloop.org/post/2017-05-13-tower-of-hanoi.html</id>
     <published>2017-05-13T00:00:00Z</published>
@@ -492,7 +492,7 @@ T_n = 2(T_{n - 1}) + 1 = 2(2^{n - 1} - 1) + 1 = 2^n - 1.
 <hr />
 <ol>
 <li id="fn1"><p>We can choose to define the first two terms as 1 and 1 instead, but this distinction is needlessly arbitrary.<a href="#fnref1">↩</a></p></li>
-<li id="fn2"><p>There is actually a known formula for our purposes, where <span class="math display">\[ \mathrm{F}_{n} = \frac{\varphi^n - (-\varphi)^{-n}}{2\varphi - 1}\]</span> where <span class="math inline">\(\varphi = \frac{1 + \sqrt{5}}{2} \approx 1.6180339887\cdots\)</span> (the golden ratio). Unfortunately this requires arbitrary-precision floating point calculations.<a href="#fnref2">↩</a></p></li>
+<li id="fn2"><p>There is actually a known formula for our purposes, where <span class="math display">\[ \mathrm{F}_{n} = \frac{\varphi^n - (-\varphi)^{-n}}{2\varphi - 1}\]</span> and <span class="math inline">\(\varphi = \frac{1 + \sqrt{5}}{2} \approx 1.6180339887\cdots\)</span> (the golden ratio). Unfortunately this requires arbitrary-precision floating point calculations.<a href="#fnref2">↩</a></p></li>
 <li id="fn3"><p>For more discussion, see <a href="https://www.nayuki.io/page/fast-fibonacci-algorithms" class="uri">https://www.nayuki.io/page/fast-fibonacci-algorithms</a>.<a href="#fnref3">↩</a></p></li>
 <li id="fn4"><p>Python already uses Karatsuba multiplication natively for large integers.<a href="#fnref4">↩</a></p></li>
 </ol>
