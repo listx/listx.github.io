@@ -114,9 +114,9 @@ minfreeNaive(xs)
 <p>Using the insight gained above, we can restate the problem as follows:</p>
 <div class="code-and-raw lineCntMax100">
 <div class="raw-link sourceCode">
-<table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/2016-09-24-parking-lot-problem-revisited/array2.hs" mimetype="text/plain">array2.hs</a></code></pre></td></tr></tbody></table>
+<table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/2016-09-24-parking-lot-problem-revisited/array1.hs" mimetype="text/plain">array1.hs</a></code></pre></td></tr></tbody></table>
 </div>
-<div class="sourceCode" input="code/2016-09-24-parking-lot-problem-revisited/array2.hs"><table class="sourceCode numberLines haskell"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+<div class="sourceCode" input="code/2016-09-24-parking-lot-problem-revisited/array1.hs"><table class="sourceCode numberLines haskell"><tr class="sourceCode"><td class="lineNumbers"><pre>1
 2
 3
 4
@@ -132,22 +132,28 @@ minfreeNaive(xs)
 14
 15
 16
-</pre></td><td class="sourceCode"><pre><code class="sourceCode haskell"><span class="kw">import </span><span class="dt">Data.Array</span> (<span class="dt">Array</span>, elems)
-<span class="kw">import </span><span class="dt">Data.Array.ST</span> (runSTArray, newArray, writeArray)
+17
+18
+19
+</pre></td><td class="sourceCode"><pre><code class="sourceCode haskell"><span class="kw">import </span><span class="dt">Data.Array</span> (<span class="dt">Array</span>, accumArray, elems)
 
-<span class="ot">checklist ::</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> <span class="dt">Array</span> <span class="dt">Int</span> <span class="dt">Bool</span>
-checklist xs <span class="fu">=</span> runSTArray <span class="fu">$</span> <span class="kw">do</span>
-	a <span class="ot">&lt;-</span> newArray (<span class="dv">0</span>, n) <span class="dt">False</span>
-	sequence [writeArray a x <span class="dt">True</span> <span class="fu">|</span> x <span class="ot">&lt;-</span> xs, x <span class="fu">&lt;</span> n]
-	return a
-	<span class="kw">where</span>
-	n <span class="fu">=</span> length xs
+<span class="ot">minfreeArray1 ::</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> <span class="dt">Int</span>
+minfreeArray1 <span class="fu">=</span> search <span class="fu">.</span> checklist
 
+<span class="co">-- Look for first False value (empty space).</span>
 <span class="ot">search ::</span> <span class="dt">Array</span> <span class="dt">Int</span> <span class="dt">Bool</span> <span class="ot">-&gt;</span> <span class="dt">Int</span>
-search <span class="fu">=</span>  length <span class="fu">.</span> takeWhile id <span class="fu">.</span> elems
+search <span class="fu">=</span> length <span class="fu">.</span> takeWhile id <span class="fu">.</span> elems
 
-<span class="ot">minfreeArray2 ::</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> <span class="dt">Int</span>
-minfreeArray2 <span class="fu">=</span> search <span class="fu">.</span> checklist</code></pre></td></tr></table></div>
+<span class="co">-- Convert a list of parked spaces into an ordered list of Boolean values in the</span>
+<span class="co">-- range *reducedXs*.</span>
+<span class="ot">checklist ::</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> <span class="dt">Array</span> <span class="dt">Int</span> <span class="dt">Bool</span>
+checklist xs <span class="fu">=</span> accumArray
+	(<span class="fu">||</span>) <span class="co">-- accumulating function</span>
+	<span class="dt">False</span> <span class="co">-- initial value</span>
+	(<span class="dv">0</span>, n) <span class="co">-- bounds of the array</span>
+	(zip (filter (<span class="fu">&lt;</span>n) xs) (repeat <span class="dt">True</span>)) <span class="co">-- association list of `(index, value)' pairs</span>
+	<span class="kw">where</span>
+	n <span class="fu">=</span> length xs</code></pre></td></tr></table></div>
 </div>
 <p>.</p>
 <p>Bird says “[t]he function <em>search</em> takes an array of Booleans, converts the array into a list of Booleans and returns the length of the longest initial segment consisting of <em>True</em> entries. This number will be the position of the first <em>False</em> entry.” This is true, and we’ll soon see why this is the case.</p>
@@ -207,19 +213,19 @@ sort xs <span class="fu">=</span> concat [ replicate k x <span class="fu">|</spa
 </pre></td><td class="sourceCode"><pre><code class="sourceCode haskell"><span class="kw">import </span><span class="dt">Data.Array</span> (<span class="dt">Array</span>, elems)
 <span class="kw">import </span><span class="dt">Data.Array.ST</span> (runSTArray, newArray, writeArray)
 
+<span class="ot">minfreeArray2 ::</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> <span class="dt">Int</span>
+minfreeArray2 <span class="fu">=</span> search <span class="fu">.</span> checklist
+
+<span class="ot">search ::</span> <span class="dt">Array</span> <span class="dt">Int</span> <span class="dt">Bool</span> <span class="ot">-&gt;</span> <span class="dt">Int</span>
+search <span class="fu">=</span> length <span class="fu">.</span> takeWhile id <span class="fu">.</span> elems
+
 <span class="ot">checklist ::</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> <span class="dt">Array</span> <span class="dt">Int</span> <span class="dt">Bool</span>
 checklist xs <span class="fu">=</span> runSTArray <span class="fu">$</span> <span class="kw">do</span>
 	a <span class="ot">&lt;-</span> newArray (<span class="dv">0</span>, n) <span class="dt">False</span>
 	sequence [writeArray a x <span class="dt">True</span> <span class="fu">|</span> x <span class="ot">&lt;-</span> xs, x <span class="fu">&lt;</span> n]
 	return a
 	<span class="kw">where</span>
-	n <span class="fu">=</span> length xs
-
-<span class="ot">search ::</span> <span class="dt">Array</span> <span class="dt">Int</span> <span class="dt">Bool</span> <span class="ot">-&gt;</span> <span class="dt">Int</span>
-search <span class="fu">=</span>  length <span class="fu">.</span> takeWhile id <span class="fu">.</span> elems
-
-<span class="ot">minfreeArray2 ::</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> <span class="dt">Int</span>
-minfreeArray2 <span class="fu">=</span> search <span class="fu">.</span> checklist</code></pre></td></tr></table></div>
+	n <span class="fu">=</span> length xs</code></pre></td></tr></table></div>
 </div>
 <p>. The use of the ST monad here reduces memory overhead, and according to Bird it is the most efficient approach using an imperative style on top of arrays.</p>
 <h1 id="divide-and-conquer-via-recursion">Divide and Conquer via Recursion</h1>
