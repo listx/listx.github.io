@@ -115,36 +115,36 @@ on_button(&quot;punch&quot;)     # [&quot;uppercut&quot;, &quot;uppercut_2&quot;
 <span class="co">-- Default DB of button sequences.</span>
 <span class="ot">buttonSeqDB ::</span> <span class="dt">ButtonSeqDB</span>
 buttonSeqDB <span class="fu">=</span>
-	[ ([<span class="st">&quot;down&quot;</span>, <span class="st">&quot;forward&quot;</span>, <span class="st">&quot;punch&quot;</span>], <span class="st">&quot;hadoken&quot;</span>)
-	, ([<span class="st">&quot;forward&quot;</span>, <span class="st">&quot;punch&quot;</span>], <span class="st">&quot;charger&quot;</span>)
-	, ([<span class="st">&quot;up&quot;</span>, <span class="st">&quot;punch&quot;</span>], <span class="st">&quot;uppercut&quot;</span>)
-	]
+  [ ([<span class="st">&quot;down&quot;</span>, <span class="st">&quot;forward&quot;</span>, <span class="st">&quot;punch&quot;</span>], <span class="st">&quot;hadoken&quot;</span>)
+  , ([<span class="st">&quot;forward&quot;</span>, <span class="st">&quot;punch&quot;</span>], <span class="st">&quot;charger&quot;</span>)
+  , ([<span class="st">&quot;up&quot;</span>, <span class="st">&quot;punch&quot;</span>], <span class="st">&quot;uppercut&quot;</span>)
+  ]
 
 <span class="ot">register ::</span> <span class="dt">ButtonSeq</span> <span class="ot">-&gt;</span> <span class="dt">Name</span> <span class="ot">-&gt;</span> <span class="dt">ButtonSeqDB</span> <span class="ot">-&gt;</span> <span class="dt">ButtonSeqDB</span>
 register sequence name db
-	<span class="fu">|</span> null sequence <span class="fu">=</span> db
-	<span class="fu">|</span> alreadyExists <span class="fu">=</span> db
-	<span class="fu">|</span> otherwise <span class="fu">=</span> (sequence, name) <span class="fu">:</span> db
-	<span class="kw">where</span>
-	alreadyExists <span class="fu">=</span> elem (sequence, name) db
+  <span class="fu">|</span> null sequence <span class="fu">=</span> db
+  <span class="fu">|</span> alreadyExists <span class="fu">=</span> db
+  <span class="fu">|</span> otherwise <span class="fu">=</span> (sequence, name) <span class="fu">:</span> db
+  <span class="kw">where</span>
+  alreadyExists <span class="fu">=</span> elem (sequence, name) db
 
 <span class="ot">onButtons ::</span> <span class="dt">ButtonSeq</span> <span class="ot">-&gt;</span> <span class="dt">ButtonSeqDB</span> <span class="ot">-&gt;</span> [<span class="dt">Name</span>]
 onButtons buttonHist db <span class="fu">=</span> map snd
-	<span class="fu">.</span> fst
-	<span class="fu">.</span> foldl step ([], db)
-	<span class="fu">$</span> reverse buttonHist
-	<span class="kw">where</span>
-	step acc<span class="fu">@</span>(foundSoFar, dbRem) button
-		<span class="fu">|</span> null remaining <span class="fu">=</span> acc
-		<span class="fu">|</span> otherwise <span class="fu">=</span>
-			( foundSoFar <span class="fu">++</span> entriesComplete
-			, dbRem'
-			)
-		<span class="kw">where</span>
-		remaining <span class="fu">=</span> filter ((<span class="fu">==</span>button) <span class="fu">.</span> last <span class="fu">.</span> fst)
-			<span class="fu">$</span> filter (not <span class="fu">.</span> null <span class="fu">.</span> fst) dbRem
-		dbRem' <span class="fu">=</span> map (\(a, b) <span class="ot">-&gt;</span> (init a, b)) remaining
-		entriesComplete <span class="fu">=</span> filter (null <span class="fu">.</span> fst) dbRem'</code></pre></td></tr></table></div>
+  <span class="fu">.</span> fst
+  <span class="fu">.</span> foldl step ([], db)
+  <span class="fu">$</span> reverse buttonHist
+  <span class="kw">where</span>
+  step acc<span class="fu">@</span>(foundSoFar, dbRem) button
+    <span class="fu">|</span> null remaining <span class="fu">=</span> acc
+    <span class="fu">|</span> otherwise <span class="fu">=</span>
+      ( foundSoFar <span class="fu">++</span> entriesComplete
+      , dbRem'
+      )
+    <span class="kw">where</span>
+    remaining <span class="fu">=</span> filter ((<span class="fu">==</span>button) <span class="fu">.</span> last <span class="fu">.</span> fst)
+      <span class="fu">$</span> filter (not <span class="fu">.</span> null <span class="fu">.</span> fst) dbRem
+    dbRem' <span class="fu">=</span> map (\(a, b) <span class="ot">-&gt;</span> (init a, b)) remaining
+    entriesComplete <span class="fu">=</span> filter (null <span class="fu">.</span> fst) dbRem'</code></pre></td></tr></table></div>
 </div>
 <p>. I have to admit, the <code>step</code> function in <code>onButtons</code> is essentially unreadable. But it does work:</p>
 <pre><code>$ ghci code/toy/game-button-seq/interview_ver.hs
@@ -416,23 +416,23 @@ require_relative <span class="st">'./hash_ver.rb'</span>
 <span class="co">-- given name into that list of names..</span>
 <span class="ot">register ::</span> (<span class="dt">ButtonSeq</span>, <span class="dt">Name</span>) <span class="ot">-&gt;</span> <span class="dt">ButtonSeqDB</span> <span class="ot">-&gt;</span> <span class="dt">ButtonSeqDB</span>
 register (buttonSeq, name) db <span class="fu">=</span> <span class="kw">case</span> M.lookup buttonSeq db <span class="kw">of</span>
-	<span class="dt">Just</span> names <span class="ot">-&gt;</span> M.insert buttonSeq (name<span class="fu">:</span>names) db
-	<span class="dt">Nothing</span> <span class="ot">-&gt;</span> M.insert buttonSeq [name] db
+  <span class="dt">Just</span> names <span class="ot">-&gt;</span> M.insert buttonSeq (name<span class="fu">:</span>names) db
+  <span class="dt">Nothing</span> <span class="ot">-&gt;</span> M.insert buttonSeq [name] db
 
 <span class="co">-- Input `buttonSeq` is a list of buttons pressed, from oldest to newest, so</span>
 <span class="co">-- that the head of the list contains the oldest button.</span>
 <span class="ot">onButtons ::</span> <span class="dt">ButtonSeq</span> <span class="ot">-&gt;</span> <span class="dt">ButtonSeqDB</span> <span class="ot">-&gt;</span> [<span class="dt">Name</span>]
 onButtons buttonHist db <span class="fu">=</span> concatMap extractNames buttonHists
-	<span class="kw">where</span>
-	buttonHists <span class="fu">=</span> take (length buttonHist) <span class="fu">$</span> iterate tail buttonHist
-	extractNames bHist <span class="fu">=</span> <span class="kw">case</span> M.lookup bHist db <span class="kw">of</span>
-		<span class="dt">Just</span> names <span class="ot">-&gt;</span> names
-		<span class="dt">Nothing</span> <span class="ot">-&gt;</span> []
+  <span class="kw">where</span>
+  buttonHists <span class="fu">=</span> take (length buttonHist) <span class="fu">$</span> iterate tail buttonHist
+  extractNames bHist <span class="fu">=</span> <span class="kw">case</span> M.lookup bHist db <span class="kw">of</span>
+    <span class="dt">Just</span> names <span class="ot">-&gt;</span> names
+    <span class="dt">Nothing</span> <span class="ot">-&gt;</span> []
 
 <span class="ot">onButtons2 ::</span> <span class="dt">ButtonSeq</span> <span class="ot">-&gt;</span> <span class="dt">ButtonSeqDB</span> <span class="ot">-&gt;</span> [<span class="dt">Name</span>]
 onButtons2 buttonHist db <span class="fu">=</span> concat <span class="fu">$</span> mapMaybe (flip M.lookup db) buttonHists
-	<span class="kw">where</span>
-	buttonHists <span class="fu">=</span> take (length buttonHist) <span class="fu">$</span> iterate tail buttonHist</code></pre></td></tr></table></div>
+  <span class="kw">where</span>
+  buttonHists <span class="fu">=</span> take (length buttonHist) <span class="fu">$</span> iterate tail buttonHist</code></pre></td></tr></table></div>
 </div>
 <p>The file is named <code>GameButtonSeq</code> because of Haskell naming conventions for files containing module code. And here is the test for it.</p>
 <div class="code-and-raw lineCntMax100">
@@ -511,44 +511,44 @@ tests <span class="fu">=</span> testGroup <span class="st">&quot;Tests&quot;</sp
 
 <span class="ot">qcProps ::</span> <span class="dt">TestTree</span>
 qcProps <span class="fu">=</span> testGroup <span class="st">&quot;(checked by QuickCheck)&quot;</span>
-	[ QC.testProperty <span class="st">&quot;GameButtonSeq (empty DB cannot produce matches)&quot;</span> <span class="fu">$</span>
-		\buttonHist <span class="ot">-&gt;</span> onButtons (<span class="ot">buttonHist ::</span> <span class="dt">ButtonSeq</span>) M.empty <span class="fu">==</span> []
-	]
+  [ QC.testProperty <span class="st">&quot;GameButtonSeq (empty DB cannot produce matches)&quot;</span> <span class="fu">$</span>
+    \buttonHist <span class="ot">-&gt;</span> onButtons (<span class="ot">buttonHist ::</span> <span class="dt">ButtonSeq</span>) M.empty <span class="fu">==</span> []
+  ]
 
 <span class="ot">unitTests ::</span> <span class="dt">TestTree</span>
 unitTests <span class="fu">=</span> testGroup <span class="st">&quot;Unit tests&quot;</span>
-	[ testCase <span class="st">&quot;GameButtonSeq (entry of multiple sequences with same name)&quot;</span> <span class="fu">$</span>
-		(onButtons [<span class="st">&quot;up&quot;</span>, <span class="st">&quot;punch&quot;</span>]
-		<span class="fu">$</span> register ([<span class="st">&quot;up&quot;</span>, <span class="st">&quot;punch&quot;</span>], <span class="st">&quot;uppercut_2&quot;</span>) buttonSeqDB)
-			<span class="fu">@?=</span>
-			[<span class="st">&quot;uppercut_2&quot;</span>, <span class="st">&quot;uppercut&quot;</span>]
-	, testCase <span class="st">&quot;GameButtonSeq (no sequence found)&quot;</span> <span class="fu">$</span>
-		onButtons
-			[<span class="st">&quot;down&quot;</span>, <span class="st">&quot;down&quot;</span>, <span class="st">&quot;forward&quot;</span>, <span class="st">&quot;punch&quot;</span>, <span class="st">&quot;down&quot;</span>]
-			buttonSeqDB
-			<span class="fu">@?=</span>
-			[]
-	, testCase <span class="st">&quot;GameButtonSeq (one sequences found)&quot;</span> <span class="fu">$</span>
-		onButtons
-			[<span class="st">&quot;down&quot;</span>, <span class="st">&quot;down&quot;</span>, <span class="st">&quot;up&quot;</span>, <span class="st">&quot;punch&quot;</span>]
-			buttonSeqDB
-			<span class="fu">@?=</span>
-			[<span class="st">&quot;uppercut&quot;</span>]
-	, testCase <span class="st">&quot;GameButtonSeq (multiple sequences found)&quot;</span> <span class="fu">$</span>
-		onButtons
-			[<span class="st">&quot;down&quot;</span>, <span class="st">&quot;down&quot;</span>, <span class="st">&quot;forward&quot;</span>, <span class="st">&quot;punch&quot;</span>]
-			buttonSeqDB
-			<span class="fu">@?=</span>
-			[<span class="st">&quot;hadoken&quot;</span>, <span class="st">&quot;charger&quot;</span>]
-	]
-	<span class="kw">where</span>
-	<span class="co">-- Default DB of button sequences.</span>
-<span class="ot">	buttonSeqDB ::</span> <span class="dt">M.Map</span> <span class="dt">ButtonSeq</span> [<span class="dt">Name</span>]
-	buttonSeqDB <span class="fu">=</span> M.fromList
-		[ ([<span class="st">&quot;down&quot;</span>, <span class="st">&quot;forward&quot;</span>, <span class="st">&quot;punch&quot;</span>], [<span class="st">&quot;hadoken&quot;</span>])
-		, ([<span class="st">&quot;forward&quot;</span>, <span class="st">&quot;punch&quot;</span>], [<span class="st">&quot;charger&quot;</span>])
-		, ([<span class="st">&quot;up&quot;</span>, <span class="st">&quot;punch&quot;</span>], [<span class="st">&quot;uppercut&quot;</span>])
-		]</code></pre></td></tr></table></div>
+  [ testCase <span class="st">&quot;GameButtonSeq (entry of multiple sequences with same name)&quot;</span> <span class="fu">$</span>
+    (onButtons [<span class="st">&quot;up&quot;</span>, <span class="st">&quot;punch&quot;</span>]
+    <span class="fu">$</span> register ([<span class="st">&quot;up&quot;</span>, <span class="st">&quot;punch&quot;</span>], <span class="st">&quot;uppercut_2&quot;</span>) buttonSeqDB)
+      <span class="fu">@?=</span>
+      [<span class="st">&quot;uppercut_2&quot;</span>, <span class="st">&quot;uppercut&quot;</span>]
+  , testCase <span class="st">&quot;GameButtonSeq (no sequence found)&quot;</span> <span class="fu">$</span>
+    onButtons
+      [<span class="st">&quot;down&quot;</span>, <span class="st">&quot;down&quot;</span>, <span class="st">&quot;forward&quot;</span>, <span class="st">&quot;punch&quot;</span>, <span class="st">&quot;down&quot;</span>]
+      buttonSeqDB
+      <span class="fu">@?=</span>
+      []
+  , testCase <span class="st">&quot;GameButtonSeq (one sequences found)&quot;</span> <span class="fu">$</span>
+    onButtons
+      [<span class="st">&quot;down&quot;</span>, <span class="st">&quot;down&quot;</span>, <span class="st">&quot;up&quot;</span>, <span class="st">&quot;punch&quot;</span>]
+      buttonSeqDB
+      <span class="fu">@?=</span>
+      [<span class="st">&quot;uppercut&quot;</span>]
+  , testCase <span class="st">&quot;GameButtonSeq (multiple sequences found)&quot;</span> <span class="fu">$</span>
+    onButtons
+      [<span class="st">&quot;down&quot;</span>, <span class="st">&quot;down&quot;</span>, <span class="st">&quot;forward&quot;</span>, <span class="st">&quot;punch&quot;</span>]
+      buttonSeqDB
+      <span class="fu">@?=</span>
+      [<span class="st">&quot;hadoken&quot;</span>, <span class="st">&quot;charger&quot;</span>]
+  ]
+  <span class="kw">where</span>
+  <span class="co">-- Default DB of button sequences.</span>
+<span class="ot">  buttonSeqDB ::</span> <span class="dt">M.Map</span> <span class="dt">ButtonSeq</span> [<span class="dt">Name</span>]
+  buttonSeqDB <span class="fu">=</span> M.fromList
+    [ ([<span class="st">&quot;down&quot;</span>, <span class="st">&quot;forward&quot;</span>, <span class="st">&quot;punch&quot;</span>], [<span class="st">&quot;hadoken&quot;</span>])
+    , ([<span class="st">&quot;forward&quot;</span>, <span class="st">&quot;punch&quot;</span>], [<span class="st">&quot;charger&quot;</span>])
+    , ([<span class="st">&quot;up&quot;</span>, <span class="st">&quot;punch&quot;</span>], [<span class="st">&quot;uppercut&quot;</span>])
+    ]</code></pre></td></tr></table></div>
 </div>
 <h3 id="analysis-2">Analysis</h3>
 <p>This Haskell version uses the standard <code>Data.Map</code> module, which provides an efficient, basic hash data structure. What we first do is expand <code>buttonHist</code> to all of the cases we are interested in — namely, all of the subsequences of concern. E.g., given a list like <code>[&quot;up&quot;, &quot;down&quot;, &quot;right&quot;, &quot;left&quot;]</code>, <code>buttonHists</code> becomes:</p>

@@ -135,29 +135,29 @@
 </pre></td><td class="sourceCode"><pre><code class="sourceCode haskell"><span class="kw">import </span><span class="dt">Data.Char</span> (isDigit)
 
 <span class="kw">data</span> <span class="dt">Term</span>
-	<span class="fu">=</span> <span class="dt">TermInt</span> <span class="dt">Integer</span>
-	<span class="fu">|</span> <span class="dt">TermOp</span> (<span class="dt">Integer</span> <span class="ot">-&gt;</span> <span class="dt">Integer</span> <span class="ot">-&gt;</span> <span class="dt">Integer</span>)
+  <span class="fu">=</span> <span class="dt">TermInt</span> <span class="dt">Integer</span>
+  <span class="fu">|</span> <span class="dt">TermOp</span> (<span class="dt">Integer</span> <span class="ot">-&gt;</span> <span class="dt">Integer</span> <span class="ot">-&gt;</span> <span class="dt">Integer</span>)
 
 <span class="ot">evaluate ::</span> <span class="dt">String</span> <span class="ot">-&gt;</span> [<span class="dt">Integer</span>]
 evaluate <span class="fu">=</span> evalTerms <span class="fu">.</span> map mkTerm <span class="fu">.</span> words
 
 <span class="ot">mkTerm ::</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">Term</span>
 mkTerm termStr <span class="fu">=</span> <span class="kw">case</span> termStr <span class="kw">of</span>
-	<span class="st">&quot;+&quot;</span> <span class="ot">-&gt;</span> <span class="dt">TermOp</span> (<span class="fu">+</span>)
-	<span class="st">&quot;-&quot;</span> <span class="ot">-&gt;</span> <span class="dt">TermOp</span> (<span class="fu">-</span>)
-	<span class="st">&quot;*&quot;</span> <span class="ot">-&gt;</span> <span class="dt">TermOp</span> (<span class="fu">*</span>)
-	_
-		<span class="fu">|</span> all isDigit termStr <span class="ot">-&gt;</span> <span class="dt">TermInt</span> <span class="fu">$</span> read termStr
-		<span class="fu">|</span> otherwise <span class="ot">-&gt;</span> error <span class="fu">$</span> <span class="st">&quot;invalid input `&quot;</span> <span class="fu">++</span> termStr <span class="fu">++</span> <span class="st">&quot;'&quot;</span>
+  <span class="st">&quot;+&quot;</span> <span class="ot">-&gt;</span> <span class="dt">TermOp</span> (<span class="fu">+</span>)
+  <span class="st">&quot;-&quot;</span> <span class="ot">-&gt;</span> <span class="dt">TermOp</span> (<span class="fu">-</span>)
+  <span class="st">&quot;*&quot;</span> <span class="ot">-&gt;</span> <span class="dt">TermOp</span> (<span class="fu">*</span>)
+  _
+    <span class="fu">|</span> all isDigit termStr <span class="ot">-&gt;</span> <span class="dt">TermInt</span> <span class="fu">$</span> read termStr
+    <span class="fu">|</span> otherwise <span class="ot">-&gt;</span> error <span class="fu">$</span> <span class="st">&quot;invalid input `&quot;</span> <span class="fu">++</span> termStr <span class="fu">++</span> <span class="st">&quot;'&quot;</span>
 
 <span class="ot">evalTerms ::</span> [<span class="dt">Term</span>] <span class="ot">-&gt;</span> [<span class="dt">Integer</span>]
 evalTerms <span class="fu">=</span> foldl modifyStack []
-	<span class="kw">where</span>
-	modifyStack stack term <span class="fu">=</span> <span class="kw">case</span> term <span class="kw">of</span>
-		<span class="dt">TermInt</span> n <span class="ot">-&gt;</span> n <span class="fu">:</span> stack
-		<span class="dt">TermOp</span> op <span class="ot">-&gt;</span> <span class="kw">case</span> stack <span class="kw">of</span>
-			(a<span class="fu">:</span>b<span class="fu">:</span>_) <span class="ot">-&gt;</span> op a b <span class="fu">:</span> drop <span class="dv">2</span> stack
-			_ <span class="ot">-&gt;</span> error <span class="st">&quot;stack too small for operator application&quot;</span></code></pre></td></tr></table></div>
+  <span class="kw">where</span>
+  modifyStack stack term <span class="fu">=</span> <span class="kw">case</span> term <span class="kw">of</span>
+    <span class="dt">TermInt</span> n <span class="ot">-&gt;</span> n <span class="fu">:</span> stack
+    <span class="dt">TermOp</span> op <span class="ot">-&gt;</span> <span class="kw">case</span> stack <span class="kw">of</span>
+      (a<span class="fu">:</span>b<span class="fu">:</span>_) <span class="ot">-&gt;</span> op a b <span class="fu">:</span> drop <span class="dv">2</span> stack
+      _ <span class="ot">-&gt;</span> error <span class="st">&quot;stack too small for operator application&quot;</span></code></pre></td></tr></table></div>
 </div>
 <p>Probably the first thing to note is that we define a robust data type, <code>Term</code>, to encapsulate the values held in a given RPN string. We take advantage of Haskell’s functions-as-first-class-values ability, and define the <code>TermOp</code> constructor with it (i.e., it needs an arithmetic function <code>(Integer -&gt; Integer -&gt; Integer)</code> as an argument).</p>
 <p>The next thing to notice is that the <code>evaluate</code> function is composed of smaller helper functions, <code>mkTerm</code> and <code>evalTerms</code>. <code>mkTerm</code> simply converts a <code>String</code> type into an appropriate <code>Term</code> type. <code>evalTerms</code> takes a list of <code>Term</code> values, and reduces it as much as possible by applying the <code>modifyStack</code> function over it with <code>foldl</code> (Haskell’s version of a single-pass loop).</p>

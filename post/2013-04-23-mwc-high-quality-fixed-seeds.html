@@ -132,9 +132,9 @@
 <span class="kw">import </span><span class="dt">Data.Word</span>
 <span class="kw">import </span><span class="dt">System.Random.MWC</span>
 
-<span class="co">--	...</span>
-<span class="co">--	gen &lt;- initialize' $ year' + month' + day'</span>
-<span class="co">--	...</span>
+<span class="co">--  ...</span>
+<span class="co">--  gen &lt;- initialize' $ year' + month' + day'</span>
+<span class="co">--  ...</span>
 
 <span class="co">-- | Given a Word32 'num' generate a growing ByteString 'x' by repeatedly</span>
 <span class="co">-- generating a SHA1 digest, as a ByteString 'y', and appending it back to</span>
@@ -144,27 +144,27 @@
 <span class="co">-- System.Random.MWC's 'initialize' function on it.</span>
 <span class="ot">initialize' ::</span> <span class="dt">PrimMonad</span> m <span class="ot">=&gt;</span> <span class="dt">Word32</span> <span class="ot">-&gt;</span> m (<span class="dt">Gen</span> (<span class="dt">PrimState</span> m))
 initialize' num <span class="fu">=</span> initialize <span class="fu">.</span> V.fromList <span class="fu">.</span> loop B.empty <span class="fu">.</span> B.pack <span class="fu">$</span> octetsLE num
-	<span class="kw">where</span>
-<span class="ot">	loop ::</span> <span class="dt">B.ByteString</span> <span class="ot">-&gt;</span> <span class="dt">B.ByteString</span> <span class="ot">-&gt;</span> [<span class="dt">Word32</span>]
-	loop acc bs
-		<span class="fu">|</span> B.length acc <span class="fu">&gt;=</span> (<span class="dv">256</span> <span class="fu">*</span> <span class="dv">4</span>) <span class="fu">=</span> take <span class="dv">256</span> <span class="fu">$</span> toW32s acc
-		<span class="fu">|</span> otherwise <span class="fu">=</span> loop (B.append acc <span class="fu">$</span> sha1Bytes bs) (sha1Bytes bs)
-<span class="ot">	sha1Bytes ::</span> <span class="dt">B.ByteString</span> <span class="ot">-&gt;</span> <span class="dt">B.ByteString</span>
-	sha1Bytes <span class="fu">=</span> bytestringDigest <span class="fu">.</span> sha1
-<span class="ot">	toW32s ::</span> <span class="dt">B.ByteString</span> <span class="ot">-&gt;</span> [<span class="dt">Word32</span>]
-	toW32s <span class="fu">=</span> map fromOctetsLE <span class="fu">.</span> chop <span class="dv">4</span> <span class="fu">.</span> B.unpack
-<span class="ot">	chop ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> [a] <span class="ot">-&gt;</span> [[a]]
-	chop _ [] <span class="fu">=</span> []
-	chop n xs <span class="fu">=</span> take n xs <span class="fu">:</span> chop n (drop n xs)
+  <span class="kw">where</span>
+<span class="ot">  loop ::</span> <span class="dt">B.ByteString</span> <span class="ot">-&gt;</span> <span class="dt">B.ByteString</span> <span class="ot">-&gt;</span> [<span class="dt">Word32</span>]
+  loop acc bs
+    <span class="fu">|</span> B.length acc <span class="fu">&gt;=</span> (<span class="dv">256</span> <span class="fu">*</span> <span class="dv">4</span>) <span class="fu">=</span> take <span class="dv">256</span> <span class="fu">$</span> toW32s acc
+    <span class="fu">|</span> otherwise <span class="fu">=</span> loop (B.append acc <span class="fu">$</span> sha1Bytes bs) (sha1Bytes bs)
+<span class="ot">  sha1Bytes ::</span> <span class="dt">B.ByteString</span> <span class="ot">-&gt;</span> <span class="dt">B.ByteString</span>
+  sha1Bytes <span class="fu">=</span> bytestringDigest <span class="fu">.</span> sha1
+<span class="ot">  toW32s ::</span> <span class="dt">B.ByteString</span> <span class="ot">-&gt;</span> [<span class="dt">Word32</span>]
+  toW32s <span class="fu">=</span> map fromOctetsLE <span class="fu">.</span> chop <span class="dv">4</span> <span class="fu">.</span> B.unpack
+<span class="ot">  chop ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> [a] <span class="ot">-&gt;</span> [[a]]
+  chop _ [] <span class="fu">=</span> []
+  chop n xs <span class="fu">=</span> take n xs <span class="fu">:</span> chop n (drop n xs)
 
 <span class="co">-- For little-endian conversion.</span>
 <span class="ot">octetsLE ::</span> <span class="dt">Word32</span> <span class="ot">-&gt;</span> [<span class="dt">Word8</span>]
 octetsLE w <span class="fu">=</span>
-	[ fromIntegral w
-	, fromIntegral (w <span class="ot">`shiftR`</span> <span class="dv">8</span>)
-	, fromIntegral (w <span class="ot">`shiftR`</span> <span class="dv">16</span>)
-	, fromIntegral (w <span class="ot">`shiftR`</span> <span class="dv">24</span>)
-	]
+  [ fromIntegral w
+  , fromIntegral (w <span class="ot">`shiftR`</span> <span class="dv">8</span>)
+  , fromIntegral (w <span class="ot">`shiftR`</span> <span class="dv">16</span>)
+  , fromIntegral (w <span class="ot">`shiftR`</span> <span class="dv">24</span>)
+  ]
 
 <span class="co">-- For big-endian conversion.</span>
 <span class="ot">octetsBE ::</span> <span class="dt">Word32</span> <span class="ot">-&gt;</span> [<span class="dt">Word8</span>]
@@ -172,8 +172,8 @@ octetsBE <span class="fu">=</span> reverse <span class="fu">.</span> octetsLE
 
 <span class="ot">fromOctetsBE ::</span> [<span class="dt">Word8</span>] <span class="ot">-&gt;</span> <span class="dt">Word32</span>
 fromOctetsBE <span class="fu">=</span> foldl' accum <span class="dv">0</span>
-	<span class="kw">where</span>
-	accum a o <span class="fu">=</span> (a <span class="ot">`shiftL`</span> <span class="dv">8</span>) <span class="fu">.|.</span> fromIntegral o
+  <span class="kw">where</span>
+  accum a o <span class="fu">=</span> (a <span class="ot">`shiftL`</span> <span class="dv">8</span>) <span class="fu">.|.</span> fromIntegral o
 
 <span class="ot">fromOctetsLE ::</span> [<span class="dt">Word8</span>] <span class="ot">-&gt;</span> <span class="dt">Word32</span>
 fromOctetsLE <span class="fu">=</span> fromOctetsBE <span class="fu">.</span> reverse</code></pre></td></tr></table></div>

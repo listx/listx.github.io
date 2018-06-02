@@ -573,60 +573,60 @@ end</code></pre></td></tr></table></div>
 <span class="co">-- Convert mutated numbers back into an arithmetic progression (if possible).</span>
 <span class="ot">unmutate ::</span> <span class="dt">Integral</span> a <span class="ot">=&gt;</span> [a] <span class="ot">-&gt;</span> <span class="dt">Maybe</span> [a]
 unmutate ts
-	<span class="co">-- The input must be at least 4 terms!</span>
-	<span class="fu">|</span> length ts <span class="fu">&lt;</span> <span class="dv">4</span> <span class="fu">=</span> <span class="dt">Nothing</span>
-	<span class="fu">|</span> all (<span class="fu">==</span>t) ts <span class="fu">=</span> <span class="dt">Just</span> ts
-	<span class="fu">|</span> isArithmetic ts <span class="fu">=</span> <span class="dt">Just</span> ts
-	<span class="fu">|</span> mutate bp1 <span class="fu">==</span> ts <span class="fu">=</span> <span class="dt">Just</span> bp1
-	<span class="fu">|</span> mutate bp2 <span class="fu">==</span> ts <span class="fu">=</span> <span class="dt">Just</span> bp2
-	<span class="co">-- Could optionally raise an error saying ts was not derived from an</span>
-	<span class="co">-- arithmetic progression in the first place!</span>
-	<span class="fu">|</span> otherwise <span class="fu">=</span> <span class="dt">Nothing</span>
-	<span class="kw">where</span>
-	t <span class="fu">=</span> head ts
-	<span class="co">-- O_F, O, O_F, O...</span>
-	bp1Terms <span class="fu">=</span> everyNth0 <span class="dv">2</span> ts
-	bp1 <span class="fu">=</span> makeBP (length ts) <span class="dt">False</span> bp1Terms
-	<span class="co">-- O, O_F, O, O_F...</span>
-	bp2Terms <span class="fu">=</span> everyNth <span class="dv">2</span> ts
-	bp2 <span class="fu">=</span> makeBP (length ts) <span class="dt">True</span> bp2Terms
+  <span class="co">-- The input must be at least 4 terms!</span>
+  <span class="fu">|</span> length ts <span class="fu">&lt;</span> <span class="dv">4</span> <span class="fu">=</span> <span class="dt">Nothing</span>
+  <span class="fu">|</span> all (<span class="fu">==</span>t) ts <span class="fu">=</span> <span class="dt">Just</span> ts
+  <span class="fu">|</span> isArithmetic ts <span class="fu">=</span> <span class="dt">Just</span> ts
+  <span class="fu">|</span> mutate bp1 <span class="fu">==</span> ts <span class="fu">=</span> <span class="dt">Just</span> bp1
+  <span class="fu">|</span> mutate bp2 <span class="fu">==</span> ts <span class="fu">=</span> <span class="dt">Just</span> bp2
+  <span class="co">-- Could optionally raise an error saying ts was not derived from an</span>
+  <span class="co">-- arithmetic progression in the first place!</span>
+  <span class="fu">|</span> otherwise <span class="fu">=</span> <span class="dt">Nothing</span>
+  <span class="kw">where</span>
+  t <span class="fu">=</span> head ts
+  <span class="co">-- O_F, O, O_F, O...</span>
+  bp1Terms <span class="fu">=</span> everyNth0 <span class="dv">2</span> ts
+  bp1 <span class="fu">=</span> makeBP (length ts) <span class="dt">False</span> bp1Terms
+  <span class="co">-- O, O_F, O, O_F...</span>
+  bp2Terms <span class="fu">=</span> everyNth <span class="dv">2</span> ts
+  bp2 <span class="fu">=</span> makeBP (length ts) <span class="dt">True</span> bp2Terms
 
 <span class="co">-- Create a tentative arithmetic progression &quot;BP&quot; from the given arguments. The</span>
 <span class="co">-- `makeFirstTerm` boolean determines whether we are dealing with a &quot;O_F, O,</span>
 <span class="co">-- O_F, O...&quot; or a &quot;O, O_F, O, O_F&quot; pattern.</span>
 <span class="ot">makeBP ::</span> <span class="dt">Integral</span> a <span class="ot">=&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Bool</span> <span class="ot">-&gt;</span> [a] <span class="ot">-&gt;</span> [a]
 makeBP len makeFirstTerm originals
-	<span class="fu">|</span> length originals <span class="fu">&lt;</span> <span class="dv">2</span> <span class="fu">=</span> []
-	<span class="fu">|</span> makeFirstTerm <span class="fu">=</span> (o0 <span class="fu">-</span> m) <span class="fu">:</span> init bp
-	<span class="fu">|</span> otherwise <span class="fu">=</span> bp
-	<span class="kw">where</span>
-	o0 <span class="fu">=</span> originals<span class="fu">!!</span><span class="dv">0</span>
-	o1 <span class="fu">=</span> originals<span class="fu">!!</span><span class="dv">1</span>
-	m <span class="fu">=</span> div (o1 <span class="fu">-</span> o0) <span class="dv">2</span>
-	bp <span class="fu">=</span> reverse
-		<span class="fu">.</span> foldl (\acc n <span class="ot">-&gt;</span> (m<span class="fu">*</span>n <span class="fu">+</span> o0)<span class="fu">:</span>acc) []
-		<span class="fu">$</span> take len [<span class="dv">0</span><span class="fu">..</span>]
+  <span class="fu">|</span> length originals <span class="fu">&lt;</span> <span class="dv">2</span> <span class="fu">=</span> []
+  <span class="fu">|</span> makeFirstTerm <span class="fu">=</span> (o0 <span class="fu">-</span> m) <span class="fu">:</span> init bp
+  <span class="fu">|</span> otherwise <span class="fu">=</span> bp
+  <span class="kw">where</span>
+  o0 <span class="fu">=</span> originals<span class="fu">!!</span><span class="dv">0</span>
+  o1 <span class="fu">=</span> originals<span class="fu">!!</span><span class="dv">1</span>
+  m <span class="fu">=</span> div (o1 <span class="fu">-</span> o0) <span class="dv">2</span>
+  bp <span class="fu">=</span> reverse
+    <span class="fu">.</span> foldl (\acc n <span class="ot">-&gt;</span> (m<span class="fu">*</span>n <span class="fu">+</span> o0)<span class="fu">:</span>acc) []
+    <span class="fu">$</span> take len [<span class="dv">0</span><span class="fu">..</span>]
 
 <span class="ot">isArithmetic ::</span> <span class="dt">Integral</span> a <span class="ot">=&gt;</span> [a] <span class="ot">-&gt;</span> <span class="dt">Bool</span>
 isArithmetic ts
-	<span class="co">-- A progression (before we even get to whether it is arithmetic) must have</span>
-	<span class="co">-- at least 2 terms in it.</span>
-	<span class="fu">|</span> length ts <span class="fu">&lt;</span> <span class="dv">2</span> <span class="fu">=</span> <span class="dt">False</span>
-	<span class="fu">|</span> otherwise <span class="fu">=</span> all (<span class="fu">==</span>m) <span class="fu">$</span> zipWith (<span class="fu">-</span>) (tail ts) (init ts)
-	<span class="kw">where</span>
-	t0 <span class="fu">=</span> ts<span class="fu">!!</span><span class="dv">0</span>
-	t1 <span class="fu">=</span> ts<span class="fu">!!</span><span class="dv">1</span>
-	m <span class="fu">=</span> t1 <span class="fu">-</span> t0
+  <span class="co">-- A progression (before we even get to whether it is arithmetic) must have</span>
+  <span class="co">-- at least 2 terms in it.</span>
+  <span class="fu">|</span> length ts <span class="fu">&lt;</span> <span class="dv">2</span> <span class="fu">=</span> <span class="dt">False</span>
+  <span class="fu">|</span> otherwise <span class="fu">=</span> all (<span class="fu">==</span>m) <span class="fu">$</span> zipWith (<span class="fu">-</span>) (tail ts) (init ts)
+  <span class="kw">where</span>
+  t0 <span class="fu">=</span> ts<span class="fu">!!</span><span class="dv">0</span>
+  t1 <span class="fu">=</span> ts<span class="fu">!!</span><span class="dv">1</span>
+  m <span class="fu">=</span> t1 <span class="fu">-</span> t0
 
 <span class="ot">mutate ::</span> <span class="dt">Integral</span> a <span class="ot">=&gt;</span> [a] <span class="ot">-&gt;</span> [a]
 mutate <span class="fu">=</span> map makeOdd
-	<span class="kw">where</span>
-<span class="ot">	makeOdd ::</span> <span class="dt">Integral</span> a <span class="ot">=&gt;</span> a <span class="ot">-&gt;</span> a
-	makeOdd n
-		<span class="co">-- 0 cannot be turned into an odd number! Keep it as is.</span>
-		<span class="fu">|</span> n <span class="fu">==</span> <span class="dv">0</span> <span class="fu">=</span> <span class="dv">0</span>
-		<span class="fu">|</span> odd n <span class="fu">=</span> n
-		<span class="fu">|</span> otherwise <span class="fu">=</span> makeOdd <span class="fu">$</span> div n <span class="dv">2</span>
+  <span class="kw">where</span>
+<span class="ot">  makeOdd ::</span> <span class="dt">Integral</span> a <span class="ot">=&gt;</span> a <span class="ot">-&gt;</span> a
+  makeOdd n
+    <span class="co">-- 0 cannot be turned into an odd number! Keep it as is.</span>
+    <span class="fu">|</span> n <span class="fu">==</span> <span class="dv">0</span> <span class="fu">=</span> <span class="dv">0</span>
+    <span class="fu">|</span> odd n <span class="fu">=</span> n
+    <span class="fu">|</span> otherwise <span class="fu">=</span> makeOdd <span class="fu">$</span> div n <span class="dv">2</span>
 
 <span class="co">-- Given a list of 'a's, return the elements at indices [0n, 1n, 2n, 3n, ...].</span>
 <span class="co">-- E.g., given a list [0..] and n = 2, we get [0, 2, 4, 6..]. From</span>
@@ -735,65 +735,65 @@ main <span class="fu">=</span> defaultMain tests
 tests <span class="fu">=</span> testGroup <span class="st">&quot;Tests&quot;</span> [qcProps, unitTests]
 
 <span class="kw">data</span> <span class="dt">AP</span> <span class="fu">=</span> <span class="dt">AP</span> [<span class="dt">Integer</span>]
-	<span class="kw">deriving</span> (<span class="dt">Eq</span>, <span class="dt">Show</span>)
+  <span class="kw">deriving</span> (<span class="dt">Eq</span>, <span class="dt">Show</span>)
 
 <span class="co">-- Generate a random arithmetic progression.</span>
 <span class="kw">instance</span> <span class="dt">Arbitrary</span> <span class="dt">AP</span> <span class="kw">where</span>
-	arbitrary <span class="fu">=</span> <span class="kw">do</span>
-		<span class="co">-- Choose random m (change between terms).</span>
-		m <span class="ot">&lt;- arbitrary ::</span> <span class="dt">Gen</span> <span class="dt">Int</span>
-		<span class="co">-- Choose random first term. It's important that we make it into an</span>
-		<span class="co">-- Integer type, because if we use Int we might end up with integer</span>
-		<span class="co">-- overflow if m is too large.</span>
-		t <span class="ot">&lt;- arbitrary ::</span> <span class="dt">Gen</span> <span class="dt">Integer</span>
-		<span class="co">-- Choose random length of 4 to 50.</span>
-		len <span class="ot">&lt;-</span> choose (<span class="dv">4</span>, <span class="dv">50</span>)
-		return
-			<span class="fu">.</span> <span class="dt">AP</span>
-			<span class="fu">.</span> foldl (\acc n <span class="ot">-&gt;</span> ((fromIntegral m)<span class="fu">*</span>n <span class="fu">+</span> t)<span class="fu">:</span>acc) []
-			<span class="fu">$</span> take len [<span class="dv">0</span><span class="fu">..</span>]
+  arbitrary <span class="fu">=</span> <span class="kw">do</span>
+    <span class="co">-- Choose random m (change between terms).</span>
+    m <span class="ot">&lt;- arbitrary ::</span> <span class="dt">Gen</span> <span class="dt">Int</span>
+    <span class="co">-- Choose random first term. It's important that we make it into an</span>
+    <span class="co">-- Integer type, because if we use Int we might end up with integer</span>
+    <span class="co">-- overflow if m is too large.</span>
+    t <span class="ot">&lt;- arbitrary ::</span> <span class="dt">Gen</span> <span class="dt">Integer</span>
+    <span class="co">-- Choose random length of 4 to 50.</span>
+    len <span class="ot">&lt;-</span> choose (<span class="dv">4</span>, <span class="dv">50</span>)
+    return
+      <span class="fu">.</span> <span class="dt">AP</span>
+      <span class="fu">.</span> foldl (\acc n <span class="ot">-&gt;</span> ((fromIntegral m)<span class="fu">*</span>n <span class="fu">+</span> t)<span class="fu">:</span>acc) []
+      <span class="fu">$</span> take len [<span class="dv">0</span><span class="fu">..</span>]
 
 <span class="ot">qcProps ::</span> <span class="dt">TestTree</span>
 qcProps <span class="fu">=</span> testGroup <span class="st">&quot;(checked by QuickCheck)&quot;</span>
-	[ QC.testProperty <span class="st">&quot;Unmutate (U(M(AP)) results in calculable (isJust))&quot;</span>
-		(\(<span class="dt">AP</span> ts) <span class="ot">-&gt;</span> isJust <span class="fu">.</span> unmutate <span class="fu">$</span> mutate ts)
-	, QC.testProperty <span class="st">&quot;Unmutate (U(M(AP)) results in a nonempty list)&quot;</span>
-		(\(<span class="dt">AP</span> ts) <span class="ot">-&gt;</span> not
-			<span class="fu">.</span> null
-			<span class="fu">.</span> fromJust
-			<span class="fu">.</span> unmutate
-			<span class="fu">$</span> mutate ts)
-	, QC.testProperty <span class="st">&quot;Unmutate (U(M(AP)) results in an arithmetic progression)&quot;</span>
-		(\(<span class="dt">AP</span> ts) <span class="ot">-&gt;</span> isArithmetic
-			<span class="fu">.</span> fromJust
-			<span class="fu">.</span> unmutate
-			<span class="fu">$</span> mutate ts)
-	]
+  [ QC.testProperty <span class="st">&quot;Unmutate (U(M(AP)) results in calculable (isJust))&quot;</span>
+    (\(<span class="dt">AP</span> ts) <span class="ot">-&gt;</span> isJust <span class="fu">.</span> unmutate <span class="fu">$</span> mutate ts)
+  , QC.testProperty <span class="st">&quot;Unmutate (U(M(AP)) results in a nonempty list)&quot;</span>
+    (\(<span class="dt">AP</span> ts) <span class="ot">-&gt;</span> not
+      <span class="fu">.</span> null
+      <span class="fu">.</span> fromJust
+      <span class="fu">.</span> unmutate
+      <span class="fu">$</span> mutate ts)
+  , QC.testProperty <span class="st">&quot;Unmutate (U(M(AP)) results in an arithmetic progression)&quot;</span>
+    (\(<span class="dt">AP</span> ts) <span class="ot">-&gt;</span> isArithmetic
+      <span class="fu">.</span> fromJust
+      <span class="fu">.</span> unmutate
+      <span class="fu">$</span> mutate ts)
+  ]
 
 <span class="ot">unitTests ::</span> <span class="dt">TestTree</span>
 unitTests <span class="fu">=</span> testGroup <span class="st">&quot;Unit tests&quot;</span>
-	[ testCase <span class="st">&quot;Unmutate (empty list is not calculable)&quot;</span>
-		<span class="fu">$</span> unmutate ([]<span class="ot">::</span>[<span class="dt">Int</span>])
-		<span class="fu">@?=</span> <span class="dt">Nothing</span>
-	, testCase <span class="st">&quot;Unmutate (AP is all odd, so AP == MP)&quot;</span>
-		<span class="fu">$</span> unmutate [<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">9</span><span class="ot"> ::</span> <span class="dt">Int</span>]
-		<span class="fu">@?=</span> <span class="dt">Just</span> [<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">9</span><span class="ot"> ::</span> <span class="dt">Int</span>]
-	, testCase <span class="st">&quot;Unmutate (m = 0, so all elements in mp are the same)&quot;</span>
-		<span class="fu">$</span> unmutate [<span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">5</span><span class="ot"> ::</span> <span class="dt">Int</span>]
-		<span class="fu">@?=</span> <span class="dt">Just</span> [<span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">5</span><span class="ot"> ::</span> <span class="dt">Int</span>]
-	, testCase <span class="st">&quot;Unmutate (known case 1)&quot;</span>
-		<span class="fu">$</span> unmutate [<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">1</span>, <span class="dv">5</span><span class="ot"> ::</span> <span class="dt">Int</span>]
-		<span class="fu">@?=</span> <span class="dt">Just</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span><span class="ot"> ::</span> <span class="dt">Int</span>]
-	, testCase <span class="st">&quot;Unmutate (known case 2)&quot;</span>
-		<span class="fu">$</span> unmutate [<span class="dv">7</span>, <span class="dv">47</span>, <span class="dv">5</span>, <span class="dv">113</span>, <span class="dv">73</span>, <span class="dv">179</span>, <span class="dv">53</span><span class="ot"> ::</span> <span class="dt">Int</span>]
-		<span class="fu">@?=</span> <span class="dt">Just</span> [<span class="dv">14</span>, <span class="dv">47</span>, <span class="dv">80</span>, <span class="dv">113</span>, <span class="dv">146</span>, <span class="dv">179</span>, <span class="dv">212</span><span class="ot"> ::</span> <span class="dt">Int</span>]
-	, testCase <span class="st">&quot;Unmutate (known case 3)&quot;</span>
-		<span class="fu">$</span> unmutate [<span class="dv">749</span>, <span class="dv">999</span>, <span class="dv">125</span>, <span class="dv">1</span><span class="ot"> ::</span> <span class="dt">Int</span>]
-		<span class="fu">@?=</span> <span class="dt">Just</span> [<span class="dv">1498</span>, <span class="dv">999</span>, <span class="dv">500</span>, <span class="dv">1</span><span class="ot"> ::</span> <span class="dt">Int</span>]
-	, testCase <span class="st">&quot;Unmutate (known case 4)&quot;</span>
-		<span class="fu">$</span> unmutate [<span class="fu">-</span><span class="dv">11</span>, <span class="dv">0</span>, <span class="dv">11</span>, <span class="dv">11</span>, <span class="dv">33</span>, <span class="dv">11</span><span class="ot"> ::</span> <span class="dt">Int</span>]
-		<span class="fu">@?=</span> <span class="dt">Just</span> [<span class="fu">-</span><span class="dv">11</span>, <span class="dv">0</span>, <span class="dv">11</span>, <span class="dv">22</span>, <span class="dv">33</span>, <span class="dv">44</span><span class="ot"> ::</span> <span class="dt">Int</span>]
-	]</code></pre></td></tr></table></div>
+  [ testCase <span class="st">&quot;Unmutate (empty list is not calculable)&quot;</span>
+    <span class="fu">$</span> unmutate ([]<span class="ot">::</span>[<span class="dt">Int</span>])
+    <span class="fu">@?=</span> <span class="dt">Nothing</span>
+  , testCase <span class="st">&quot;Unmutate (AP is all odd, so AP == MP)&quot;</span>
+    <span class="fu">$</span> unmutate [<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">9</span><span class="ot"> ::</span> <span class="dt">Int</span>]
+    <span class="fu">@?=</span> <span class="dt">Just</span> [<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">9</span><span class="ot"> ::</span> <span class="dt">Int</span>]
+  , testCase <span class="st">&quot;Unmutate (m = 0, so all elements in mp are the same)&quot;</span>
+    <span class="fu">$</span> unmutate [<span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">5</span><span class="ot"> ::</span> <span class="dt">Int</span>]
+    <span class="fu">@?=</span> <span class="dt">Just</span> [<span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">5</span><span class="ot"> ::</span> <span class="dt">Int</span>]
+  , testCase <span class="st">&quot;Unmutate (known case 1)&quot;</span>
+    <span class="fu">$</span> unmutate [<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">1</span>, <span class="dv">5</span><span class="ot"> ::</span> <span class="dt">Int</span>]
+    <span class="fu">@?=</span> <span class="dt">Just</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span><span class="ot"> ::</span> <span class="dt">Int</span>]
+  , testCase <span class="st">&quot;Unmutate (known case 2)&quot;</span>
+    <span class="fu">$</span> unmutate [<span class="dv">7</span>, <span class="dv">47</span>, <span class="dv">5</span>, <span class="dv">113</span>, <span class="dv">73</span>, <span class="dv">179</span>, <span class="dv">53</span><span class="ot"> ::</span> <span class="dt">Int</span>]
+    <span class="fu">@?=</span> <span class="dt">Just</span> [<span class="dv">14</span>, <span class="dv">47</span>, <span class="dv">80</span>, <span class="dv">113</span>, <span class="dv">146</span>, <span class="dv">179</span>, <span class="dv">212</span><span class="ot"> ::</span> <span class="dt">Int</span>]
+  , testCase <span class="st">&quot;Unmutate (known case 3)&quot;</span>
+    <span class="fu">$</span> unmutate [<span class="dv">749</span>, <span class="dv">999</span>, <span class="dv">125</span>, <span class="dv">1</span><span class="ot"> ::</span> <span class="dt">Int</span>]
+    <span class="fu">@?=</span> <span class="dt">Just</span> [<span class="dv">1498</span>, <span class="dv">999</span>, <span class="dv">500</span>, <span class="dv">1</span><span class="ot"> ::</span> <span class="dt">Int</span>]
+  , testCase <span class="st">&quot;Unmutate (known case 4)&quot;</span>
+    <span class="fu">$</span> unmutate [<span class="fu">-</span><span class="dv">11</span>, <span class="dv">0</span>, <span class="dv">11</span>, <span class="dv">11</span>, <span class="dv">33</span>, <span class="dv">11</span><span class="ot"> ::</span> <span class="dt">Int</span>]
+    <span class="fu">@?=</span> <span class="dt">Just</span> [<span class="fu">-</span><span class="dv">11</span>, <span class="dv">0</span>, <span class="dv">11</span>, <span class="dv">22</span>, <span class="dv">33</span>, <span class="dv">44</span><span class="ot"> ::</span> <span class="dt">Int</span>]
+  ]</code></pre></td></tr></table></div>
 </div>
 <p>As you can see, most of the real work involves identifying the <strong>original, immutable numbers</strong> we can work with as-is (<span class="math inline">\(\mathrm{O}\)</span>) (as opposed to the ones we have to ignore (<span class="math inline">\(\mathrm{O_F}\)</span>)) to construct our tentative sister arithmetic progression <span class="math inline">\(BP\)</span>.</p>
 <h1 id="ruby-version">Ruby version</h1>

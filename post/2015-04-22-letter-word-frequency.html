@@ -545,105 +545,105 @@ thou = 0.12% (267 occurrences)</code></pre>
 <span class="kw">type</span> <span class="dt">WProto</span> <span class="fu">=</span> <span class="dt">T.Text</span>
 <span class="kw">type</span> <span class="dt">WHash</span> <span class="fu">=</span> <span class="dt">M.Map</span> <span class="dt">WProto</span> <span class="dt">Word64</span>
 <span class="kw">data</span> <span class="dt">WFSM</span>
-	<span class="fu">=</span> <span class="dt">WordIn</span>
-	<span class="fu">|</span> <span class="dt">WordOutMaybe</span>
-	<span class="fu">|</span> <span class="dt">WordOut</span>
-	<span class="kw">deriving</span> (<span class="dt">Eq</span>)
+  <span class="fu">=</span> <span class="dt">WordIn</span>
+  <span class="fu">|</span> <span class="dt">WordOutMaybe</span>
+  <span class="fu">|</span> <span class="dt">WordOut</span>
+  <span class="kw">deriving</span> (<span class="dt">Eq</span>)
 <span class="kw">data</span> <span class="dt">WBuild</span> <span class="fu">=</span> <span class="dt">WBuild</span> <span class="dt">WFSM</span> <span class="dt">WProto</span> <span class="dt">WHash</span>
 
 <span class="ot">freqL ::</span> <span class="dt">T.Text</span> <span class="ot">-&gt;</span> <span class="dt">LHash</span>
 freqL <span class="fu">=</span> T.foldl step occs
-	<span class="kw">where</span>
-	occs <span class="fu">=</span> M.empty
-	step lhash c
-		<span class="co">-- | isAlpha c = M.insertWith (+) (toLower c) 1 lhash -- this picks up non-ASCII 'word' letters, even korean/japanese!</span>
-		<span class="fu">|</span> elem c ([<span class="ch">'a'</span><span class="fu">..</span><span class="ch">'z'</span>] <span class="fu">++</span> [<span class="ch">'A'</span><span class="fu">..</span><span class="ch">'Z'</span>]) <span class="fu">=</span> M.insertWith (<span class="fu">+</span>) (toLower c) <span class="dv">1</span> lhash
-		<span class="fu">|</span> elem c (concat puncKeys) <span class="fu">=</span> <span class="kw">case</span> lookup c puncTuples <span class="kw">of</span>
-			<span class="dt">Just</span> pkey <span class="ot">-&gt;</span> M.insertWith (<span class="fu">+</span>) pkey <span class="dv">1</span> lhash
-			<span class="dt">Nothing</span> <span class="ot">-&gt;</span> lhash
-		<span class="fu">|</span> otherwise <span class="fu">=</span> lhash
-	puncKeys <span class="fu">=</span>
-		[ <span class="st">&quot;`~&quot;</span>
-		, <span class="st">&quot;-_&quot;</span>
-		, <span class="st">&quot;=+&quot;</span>
-		, <span class="st">&quot;[{&quot;</span>
-		, <span class="st">&quot;}]&quot;</span>
-		, <span class="st">&quot;\\|&quot;</span>
-		, <span class="st">&quot;;:&quot;</span>
-		, <span class="st">&quot;'\&quot;&quot;</span>
-		, <span class="st">&quot;,&lt;&quot;</span>
-		, <span class="st">&quot;.&gt;&quot;</span>
-		, <span class="st">&quot;/?&quot;</span>
-		]
-	puncTuples <span class="fu">=</span> concatMap (\keyPair <span class="ot">-&gt;</span> [(head keyPair, head keyPair), (last keyPair, head keyPair)]) puncKeys
+  <span class="kw">where</span>
+  occs <span class="fu">=</span> M.empty
+  step lhash c
+    <span class="co">-- | isAlpha c = M.insertWith (+) (toLower c) 1 lhash -- this picks up non-ASCII 'word' letters, even korean/japanese!</span>
+    <span class="fu">|</span> elem c ([<span class="ch">'a'</span><span class="fu">..</span><span class="ch">'z'</span>] <span class="fu">++</span> [<span class="ch">'A'</span><span class="fu">..</span><span class="ch">'Z'</span>]) <span class="fu">=</span> M.insertWith (<span class="fu">+</span>) (toLower c) <span class="dv">1</span> lhash
+    <span class="fu">|</span> elem c (concat puncKeys) <span class="fu">=</span> <span class="kw">case</span> lookup c puncTuples <span class="kw">of</span>
+      <span class="dt">Just</span> pkey <span class="ot">-&gt;</span> M.insertWith (<span class="fu">+</span>) pkey <span class="dv">1</span> lhash
+      <span class="dt">Nothing</span> <span class="ot">-&gt;</span> lhash
+    <span class="fu">|</span> otherwise <span class="fu">=</span> lhash
+  puncKeys <span class="fu">=</span>
+    [ <span class="st">&quot;`~&quot;</span>
+    , <span class="st">&quot;-_&quot;</span>
+    , <span class="st">&quot;=+&quot;</span>
+    , <span class="st">&quot;[{&quot;</span>
+    , <span class="st">&quot;}]&quot;</span>
+    , <span class="st">&quot;\\|&quot;</span>
+    , <span class="st">&quot;;:&quot;</span>
+    , <span class="st">&quot;'\&quot;&quot;</span>
+    , <span class="st">&quot;,&lt;&quot;</span>
+    , <span class="st">&quot;.&gt;&quot;</span>
+    , <span class="st">&quot;/?&quot;</span>
+    ]
+  puncTuples <span class="fu">=</span> concatMap (\keyPair <span class="ot">-&gt;</span> [(head keyPair, head keyPair), (last keyPair, head keyPair)]) puncKeys
 
 <span class="ot">freqW ::</span> <span class="dt">T.Text</span> <span class="ot">-&gt;</span> <span class="dt">WHash</span>
 freqW <span class="fu">=</span> (\(<span class="dt">WBuild</span> _ _ whash) <span class="ot">-&gt;</span> whash) <span class="fu">.</span> T.foldl step occs
-	<span class="kw">where</span>
-	<span class="co">-- Use WordOut as the initial state for WFSM, because we're starting from</span>
-	<span class="co">-- nothing!</span>
-<span class="ot">	occs ::</span> <span class="dt">WBuild</span>
-	occs <span class="fu">=</span> <span class="dt">WBuild</span> <span class="dt">WordOut</span> T.empty M.empty
-	step wb<span class="fu">@</span>(<span class="dt">WBuild</span> wfsm wproto whash) c
-		<span class="co">-- Letter.</span>
-		<span class="fu">|</span> isAlpha c <span class="fu">=</span> <span class="kw">case</span> wfsm <span class="kw">of</span>
-			<span class="co">-- This is when we first encounter a letter.</span>
-			<span class="dt">WordOut</span> <span class="ot">-&gt;</span> <span class="dt">WBuild</span> <span class="dt">WordIn</span> (T.singleton c') whash
-			_ <span class="ot">-&gt;</span> <span class="dt">WBuild</span> <span class="dt">WordIn</span> (T.snoc wproto c') whash
-		<span class="co">-- Apostrophe. We ignore all leading apostrophes and only store</span>
-		<span class="co">-- apostrophes at the end of a word, such as &quot;goin'&quot;.</span>
-		<span class="fu">|</span> c <span class="fu">==</span> <span class="ch">'\''</span> <span class="fu">=</span> <span class="kw">case</span> wfsm <span class="kw">of</span>
-			<span class="co">-- This is when we encounter an apostrophe either at the middle or</span>
-			<span class="co">-- end of a word.</span>
-			<span class="dt">WordIn</span> <span class="ot">-&gt;</span> <span class="dt">WBuild</span> <span class="dt">WordOutMaybe</span> (T.snoc wproto c') whash
-			<span class="co">-- E.g., &quot;goin''&quot; (a contracted &quot;goin''&quot; ending with a nested inner</span>
-			<span class="co">-- quote). We store it as &quot;goin'&quot;.</span>
-			<span class="dt">WordOutMaybe</span> <span class="ot">-&gt;</span> <span class="dt">WBuild</span> <span class="dt">WordOut</span> T.empty
-				<span class="fu">$</span> M.insertWith (<span class="fu">+</span>) wproto <span class="dv">1</span> whash
-			<span class="co">-- Already out of a word area, such as a space character. We do</span>
-			<span class="co">-- nothing.</span>
-			<span class="dt">WordOut</span> <span class="ot">-&gt;</span> wb
-		<span class="co">-- If we're looking at neither a letter nor an apostrophe.</span>
-		<span class="fu">|</span> otherwise <span class="fu">=</span> <span class="kw">case</span> wfsm <span class="kw">of</span>
-			<span class="co">-- A series of nonsense chars; ignore.</span>
-			<span class="dt">WordOut</span> <span class="ot">-&gt;</span> wb
-			<span class="co">-- End of a word.</span>
-			_ <span class="ot">-&gt;</span> <span class="dt">WBuild</span> <span class="dt">WordOut</span> T.empty
-				<span class="fu">$</span> M.insertWith (<span class="fu">+</span>) wproto <span class="dv">1</span> whash
-		<span class="kw">where</span>
-		c' <span class="fu">=</span> toLower c
+  <span class="kw">where</span>
+  <span class="co">-- Use WordOut as the initial state for WFSM, because we're starting from</span>
+  <span class="co">-- nothing!</span>
+<span class="ot">  occs ::</span> <span class="dt">WBuild</span>
+  occs <span class="fu">=</span> <span class="dt">WBuild</span> <span class="dt">WordOut</span> T.empty M.empty
+  step wb<span class="fu">@</span>(<span class="dt">WBuild</span> wfsm wproto whash) c
+    <span class="co">-- Letter.</span>
+    <span class="fu">|</span> isAlpha c <span class="fu">=</span> <span class="kw">case</span> wfsm <span class="kw">of</span>
+      <span class="co">-- This is when we first encounter a letter.</span>
+      <span class="dt">WordOut</span> <span class="ot">-&gt;</span> <span class="dt">WBuild</span> <span class="dt">WordIn</span> (T.singleton c') whash
+      _ <span class="ot">-&gt;</span> <span class="dt">WBuild</span> <span class="dt">WordIn</span> (T.snoc wproto c') whash
+    <span class="co">-- Apostrophe. We ignore all leading apostrophes and only store</span>
+    <span class="co">-- apostrophes at the end of a word, such as &quot;goin'&quot;.</span>
+    <span class="fu">|</span> c <span class="fu">==</span> <span class="ch">'\''</span> <span class="fu">=</span> <span class="kw">case</span> wfsm <span class="kw">of</span>
+      <span class="co">-- This is when we encounter an apostrophe either at the middle or</span>
+      <span class="co">-- end of a word.</span>
+      <span class="dt">WordIn</span> <span class="ot">-&gt;</span> <span class="dt">WBuild</span> <span class="dt">WordOutMaybe</span> (T.snoc wproto c') whash
+      <span class="co">-- E.g., &quot;goin''&quot; (a contracted &quot;goin''&quot; ending with a nested inner</span>
+      <span class="co">-- quote). We store it as &quot;goin'&quot;.</span>
+      <span class="dt">WordOutMaybe</span> <span class="ot">-&gt;</span> <span class="dt">WBuild</span> <span class="dt">WordOut</span> T.empty
+        <span class="fu">$</span> M.insertWith (<span class="fu">+</span>) wproto <span class="dv">1</span> whash
+      <span class="co">-- Already out of a word area, such as a space character. We do</span>
+      <span class="co">-- nothing.</span>
+      <span class="dt">WordOut</span> <span class="ot">-&gt;</span> wb
+    <span class="co">-- If we're looking at neither a letter nor an apostrophe.</span>
+    <span class="fu">|</span> otherwise <span class="fu">=</span> <span class="kw">case</span> wfsm <span class="kw">of</span>
+      <span class="co">-- A series of nonsense chars; ignore.</span>
+      <span class="dt">WordOut</span> <span class="ot">-&gt;</span> wb
+      <span class="co">-- End of a word.</span>
+      _ <span class="ot">-&gt;</span> <span class="dt">WBuild</span> <span class="dt">WordOut</span> T.empty
+        <span class="fu">$</span> M.insertWith (<span class="fu">+</span>) wproto <span class="dv">1</span> whash
+    <span class="kw">where</span>
+    c' <span class="fu">=</span> toLower c
 
 <span class="ot">dispFreqL ::</span> <span class="dt">LHash</span> <span class="ot">-&gt;</span> <span class="dt">IO</span> ()
 dispFreqL lhash <span class="fu">=</span> mapM_ f <span class="fu">.</span> reverse <span class="fu">.</span> sortBy (comparing snd) <span class="fu">$</span> M.toList lhash
-	<span class="kw">where</span>
-<span class="ot">	total ::</span> <span class="dt">Word64</span>
-	total <span class="fu">=</span> sum <span class="fu">$</span> M.elems lhash
-<span class="ot">	f ::</span> (<span class="dt">Char</span>, <span class="dt">Word64</span>) <span class="ot">-&gt;</span> <span class="dt">IO</span> ()
-	f (c, n) <span class="fu">=</span> putStrLn <span class="fu">$</span> msg1 <span class="fu">++</span> msg2 <span class="fu">++</span> msg3
-		<span class="kw">where</span>
-<span class="ot">		perc ::</span> <span class="dt">Double</span>
-		perc
-			<span class="fu">|</span> total <span class="fu">==</span> <span class="dv">0</span> <span class="fu">=</span> <span class="dv">0</span>
-			<span class="fu">|</span> otherwise <span class="fu">=</span> (fromIntegral n) <span class="fu">/</span> (fromIntegral total) <span class="fu">*</span> <span class="dv">100</span>
-		msg1 <span class="fu">=</span> [c] <span class="fu">++</span> <span class="st">&quot; = &quot;</span>
-		msg2 <span class="fu">=</span> TP.printf <span class="st">&quot;%.2f%%&quot;</span> perc
-		msg3 <span class="fu">=</span> <span class="st">&quot; (&quot;</span> <span class="fu">++</span> show n <span class="fu">++</span> <span class="st">&quot; occurrences)&quot;</span>
+  <span class="kw">where</span>
+<span class="ot">  total ::</span> <span class="dt">Word64</span>
+  total <span class="fu">=</span> sum <span class="fu">$</span> M.elems lhash
+<span class="ot">  f ::</span> (<span class="dt">Char</span>, <span class="dt">Word64</span>) <span class="ot">-&gt;</span> <span class="dt">IO</span> ()
+  f (c, n) <span class="fu">=</span> putStrLn <span class="fu">$</span> msg1 <span class="fu">++</span> msg2 <span class="fu">++</span> msg3
+    <span class="kw">where</span>
+<span class="ot">    perc ::</span> <span class="dt">Double</span>
+    perc
+      <span class="fu">|</span> total <span class="fu">==</span> <span class="dv">0</span> <span class="fu">=</span> <span class="dv">0</span>
+      <span class="fu">|</span> otherwise <span class="fu">=</span> (fromIntegral n) <span class="fu">/</span> (fromIntegral total) <span class="fu">*</span> <span class="dv">100</span>
+    msg1 <span class="fu">=</span> [c] <span class="fu">++</span> <span class="st">&quot; = &quot;</span>
+    msg2 <span class="fu">=</span> TP.printf <span class="st">&quot;%.2f%%&quot;</span> perc
+    msg3 <span class="fu">=</span> <span class="st">&quot; (&quot;</span> <span class="fu">++</span> show n <span class="fu">++</span> <span class="st">&quot; occurrences)&quot;</span>
 
 <span class="ot">dispFreqW ::</span> <span class="dt">WHash</span> <span class="ot">-&gt;</span> <span class="dt">IO</span> ()
 dispFreqW whash <span class="fu">=</span> mapM_ f <span class="fu">.</span> take <span class="dv">100</span> <span class="fu">.</span> reverse <span class="fu">.</span> sortBy (comparing snd) <span class="fu">$</span> M.toList whash
-	<span class="kw">where</span>
-<span class="ot">	total ::</span> <span class="dt">Word64</span>
-	total <span class="fu">=</span> sum <span class="fu">$</span> M.elems whash
-<span class="ot">	f ::</span> (<span class="dt">WProto</span>, <span class="dt">Word64</span>) <span class="ot">-&gt;</span> <span class="dt">IO</span> ()
-	f (w, n) <span class="fu">=</span> putStrLn <span class="fu">$</span> msg1 <span class="fu">++</span> msg2 <span class="fu">++</span> msg3
-		<span class="kw">where</span>
-<span class="ot">		perc ::</span> <span class="dt">Double</span>
-		perc
-			<span class="fu">|</span> total <span class="fu">==</span> <span class="dv">0</span> <span class="fu">=</span> <span class="dv">0</span>
-			<span class="fu">|</span> otherwise <span class="fu">=</span> (fromIntegral n) <span class="fu">/</span> (fromIntegral total) <span class="fu">*</span> <span class="dv">100</span>
-		msg1 <span class="fu">=</span> T.unpack w <span class="fu">++</span> <span class="st">&quot; = &quot;</span>
-		msg2 <span class="fu">=</span> TP.printf <span class="st">&quot;%.2f%%&quot;</span> perc
-		msg3 <span class="fu">=</span> <span class="st">&quot; (&quot;</span> <span class="fu">++</span> show n <span class="fu">++</span> <span class="st">&quot; occurrences)&quot;</span></code></pre></td></tr></table></div>
+  <span class="kw">where</span>
+<span class="ot">  total ::</span> <span class="dt">Word64</span>
+  total <span class="fu">=</span> sum <span class="fu">$</span> M.elems whash
+<span class="ot">  f ::</span> (<span class="dt">WProto</span>, <span class="dt">Word64</span>) <span class="ot">-&gt;</span> <span class="dt">IO</span> ()
+  f (w, n) <span class="fu">=</span> putStrLn <span class="fu">$</span> msg1 <span class="fu">++</span> msg2 <span class="fu">++</span> msg3
+    <span class="kw">where</span>
+<span class="ot">    perc ::</span> <span class="dt">Double</span>
+    perc
+      <span class="fu">|</span> total <span class="fu">==</span> <span class="dv">0</span> <span class="fu">=</span> <span class="dv">0</span>
+      <span class="fu">|</span> otherwise <span class="fu">=</span> (fromIntegral n) <span class="fu">/</span> (fromIntegral total) <span class="fu">*</span> <span class="dv">100</span>
+    msg1 <span class="fu">=</span> T.unpack w <span class="fu">++</span> <span class="st">&quot; = &quot;</span>
+    msg2 <span class="fu">=</span> TP.printf <span class="st">&quot;%.2f%%&quot;</span> perc
+    msg3 <span class="fu">=</span> <span class="st">&quot; (&quot;</span> <span class="fu">++</span> show n <span class="fu">++</span> <span class="st">&quot; occurrences)&quot;</span></code></pre></td></tr></table></div>
 </div>
 <div class="code-and-raw lineCntMax100">
 <div class="raw-link sourceCode">
@@ -674,11 +674,11 @@ dispFreqW whash <span class="fu">=</span> mapM_ f <span class="fu">.</span> take
 
 <span class="ot">main ::</span> <span class="dt">IO</span> ()
 main <span class="fu">=</span> <span class="kw">do</span>
-	fileList <span class="ot">&lt;-</span> T.getContents
-	src <span class="ot">&lt;-</span> liftM T.concat <span class="fu">.</span> mapM (T.readFile <span class="fu">.</span> T.unpack) <span class="fu">$</span> T.lines fileList
-	dispFreqL <span class="fu">$</span> freqL src
-	putStrLn <span class="fu">$</span> replicate <span class="dv">80</span> <span class="ch">'-'</span>
-	dispFreqW <span class="fu">$</span> freqW src</code></pre></td></tr></table></div>
+  fileList <span class="ot">&lt;-</span> T.getContents
+  src <span class="ot">&lt;-</span> liftM T.concat <span class="fu">.</span> mapM (T.readFile <span class="fu">.</span> T.unpack) <span class="fu">$</span> T.lines fileList
+  dispFreqL <span class="fu">$</span> freqL src
+  putStrLn <span class="fu">$</span> replicate <span class="dv">80</span> <span class="ch">'-'</span>
+  dispFreqW <span class="fu">$</span> freqW src</code></pre></td></tr></table></div>
 </div>
 <p>Here is the same run against our copy of <em>Moby Dick</em>:</p>
 <pre><code>$ ./analyze ~/pg2701.txt

@@ -918,136 +918,136 @@ u32_max <span class="fu">=</span> <span class="bn">0xffffffff</span>
 keys_total <span class="fu">=</span> <span class="dv">1000000</span>
 
 <span class="kw">data</span> <span class="dt">PCG32</span> <span class="fu">=</span> <span class="dt">PCG32</span>
-	{<span class="ot"> state ::</span> <span class="dt">Word64</span>
-	,<span class="ot"> inc ::</span> <span class="dt">Word64</span>
-	}
+  {<span class="ot"> state ::</span> <span class="dt">Word64</span>
+  ,<span class="ot"> inc ::</span> <span class="dt">Word64</span>
+  }
 
 <span class="ot">pcg32_random_r ::</span> <span class="dt">PCG32</span> <span class="ot">-&gt;</span> (<span class="dt">Word32</span>, <span class="dt">PCG32</span>)
 pcg32_random_r rng<span class="fu">@</span><span class="dt">PCG32</span>{<span class="fu">..</span>} <span class="fu">=</span> (result, rng {state <span class="fu">=</span> state'})
-	<span class="kw">where</span>
-<span class="ot">	state' ::</span> <span class="dt">Word64</span>
-	state' <span class="fu">=</span> state <span class="fu">*</span> <span class="dv">6364136223846793005</span> <span class="fu">+</span> (inc <span class="fu">.|.</span> <span class="dv">1</span>)
-<span class="ot">	xorshifted ::</span> <span class="dt">Word32</span>
-	xorshifted <span class="fu">=</span> fromIntegral <span class="fu">$</span> shiftR (xor (shiftR state <span class="dv">18</span>) state) <span class="dv">27</span>
-<span class="ot">	rot ::</span> <span class="dt">Word32</span>
-	rot <span class="fu">=</span> fromIntegral <span class="fu">$</span> shiftR state <span class="dv">59</span>
-<span class="ot">	result ::</span> <span class="dt">Word32</span>
-	result <span class="fu">=</span> fromIntegral
-		<span class="fu">$</span> (shiftR xorshifted <span class="fu">$</span> fromIntegral rot)
-			<span class="fu">.|.</span> (shiftL xorshifted <span class="fu">$</span> fromIntegral ((<span class="fu">-</span>rot) <span class="fu">.&amp;.</span> <span class="dv">31</span>))
+  <span class="kw">where</span>
+<span class="ot">  state' ::</span> <span class="dt">Word64</span>
+  state' <span class="fu">=</span> state <span class="fu">*</span> <span class="dv">6364136223846793005</span> <span class="fu">+</span> (inc <span class="fu">.|.</span> <span class="dv">1</span>)
+<span class="ot">  xorshifted ::</span> <span class="dt">Word32</span>
+  xorshifted <span class="fu">=</span> fromIntegral <span class="fu">$</span> shiftR (xor (shiftR state <span class="dv">18</span>) state) <span class="dv">27</span>
+<span class="ot">  rot ::</span> <span class="dt">Word32</span>
+  rot <span class="fu">=</span> fromIntegral <span class="fu">$</span> shiftR state <span class="dv">59</span>
+<span class="ot">  result ::</span> <span class="dt">Word32</span>
+  result <span class="fu">=</span> fromIntegral
+    <span class="fu">$</span> (shiftR xorshifted <span class="fu">$</span> fromIntegral rot)
+      <span class="fu">.|.</span> (shiftL xorshifted <span class="fu">$</span> fromIntegral ((<span class="fu">-</span>rot) <span class="fu">.&amp;.</span> <span class="dv">31</span>))
 
 <span class="ot">uniform32 ::</span> <span class="dt">Word32</span> <span class="ot">-&gt;</span> <span class="dt">PCG32</span> <span class="ot">-&gt;</span> (<span class="dt">Word32</span>, <span class="dt">PCG32</span>)
 uniform32 range rng <span class="fu">=</span> find_within_range rng
-	<span class="kw">where</span>
-<span class="ot">	rand_excess ::</span> <span class="dt">Word32</span>
-	rand_excess <span class="fu">=</span> mod ((mod u32_max range) <span class="fu">+</span> <span class="dv">1</span>) range
-<span class="ot">	rand_limit ::</span> <span class="dt">Word32</span>
-	rand_limit <span class="fu">=</span> u32_max <span class="fu">-</span> rand_excess
-	find_within_range rng' <span class="fu">=</span> <span class="kw">if</span> x <span class="fu">&gt;</span> rand_limit
-		<span class="kw">then</span> find_within_range rng''
-		<span class="kw">else</span> (mod x range, rng'')
-		<span class="kw">where</span>
-		(x, rng'') <span class="fu">=</span> pcg32_random_r rng'
+  <span class="kw">where</span>
+<span class="ot">  rand_excess ::</span> <span class="dt">Word32</span>
+  rand_excess <span class="fu">=</span> mod ((mod u32_max range) <span class="fu">+</span> <span class="dv">1</span>) range
+<span class="ot">  rand_limit ::</span> <span class="dt">Word32</span>
+  rand_limit <span class="fu">=</span> u32_max <span class="fu">-</span> rand_excess
+  find_within_range rng' <span class="fu">=</span> <span class="kw">if</span> x <span class="fu">&gt;</span> rand_limit
+    <span class="kw">then</span> find_within_range rng''
+    <span class="kw">else</span> (mod x range, rng'')
+    <span class="kw">where</span>
+    (x, rng'') <span class="fu">=</span> pcg32_random_r rng'
 
 <span class="ot">init_array ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Bool</span> <span class="ot">-&gt;</span> <span class="dt">PCG32</span> <span class="ot">-&gt;</span> ([<span class="dt">Word32</span>], <span class="dt">Word32</span>, <span class="dt">PCG32</span>)
 init_array keys_size has_key rng0 <span class="fu">=</span> (keys, key, rng3)
-	<span class="kw">where</span>
-	(keys', rng1) <span class="fu">=</span> genKeysList [] <span class="dv">0</span> <span class="dv">0</span> rng0
-	<span class="co">-- Need to reverse the list, because Haskell (like all Lispy languages?)</span>
-	<span class="co">-- builds a list backwards when using the cons (:) operator.</span>
-	keys <span class="fu">=</span> reverse keys'
-<span class="ot">	genKeysList ::</span> [<span class="dt">Word32</span>] <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">PCG32</span> <span class="ot">-&gt;</span> ([<span class="dt">Word32</span>], <span class="dt">PCG32</span>)
-	genKeysList arr i j0 rng <span class="fu">=</span> <span class="kw">if</span> i <span class="fu">&lt;</span> keys_size
-		<span class="kw">then</span> genKeysList ((i' <span class="fu">+</span> j2')<span class="fu">:</span>arr) (i <span class="fu">+</span> <span class="dv">1</span>) j2 rng'
-		<span class="kw">else</span> (arr, rng)
-		<span class="kw">where</span>
-		i' <span class="fu">=</span> fromIntegral i
-		j2' <span class="fu">=</span> fromIntegral j2
-		(j1, rng') <span class="fu">=</span> uniform32 <span class="dv">2</span> rng
-		j2 <span class="fu">=</span> j0 <span class="fu">+</span> fromIntegral j1
-	(key, rng3) <span class="fu">=</span> <span class="kw">if</span> has_key
-		<span class="kw">then</span>
-			<span class="kw">let</span>
-				(idx, rng2) <span class="fu">=</span> uniform32 (fromIntegral keys_total) rng1
-			<span class="kw">in</span>
-			(keys<span class="fu">!!</span>(fromIntegral idx), rng2)
-		<span class="kw">else</span> (keys<span class="fu">!!</span>(keys_total <span class="fu">-</span> <span class="dv">1</span>) <span class="fu">+</span> <span class="dv">1</span>, rng1)
+  <span class="kw">where</span>
+  (keys', rng1) <span class="fu">=</span> genKeysList [] <span class="dv">0</span> <span class="dv">0</span> rng0
+  <span class="co">-- Need to reverse the list, because Haskell (like all Lispy languages?)</span>
+  <span class="co">-- builds a list backwards when using the cons (:) operator.</span>
+  keys <span class="fu">=</span> reverse keys'
+<span class="ot">  genKeysList ::</span> [<span class="dt">Word32</span>] <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">PCG32</span> <span class="ot">-&gt;</span> ([<span class="dt">Word32</span>], <span class="dt">PCG32</span>)
+  genKeysList arr i j0 rng <span class="fu">=</span> <span class="kw">if</span> i <span class="fu">&lt;</span> keys_size
+    <span class="kw">then</span> genKeysList ((i' <span class="fu">+</span> j2')<span class="fu">:</span>arr) (i <span class="fu">+</span> <span class="dv">1</span>) j2 rng'
+    <span class="kw">else</span> (arr, rng)
+    <span class="kw">where</span>
+    i' <span class="fu">=</span> fromIntegral i
+    j2' <span class="fu">=</span> fromIntegral j2
+    (j1, rng') <span class="fu">=</span> uniform32 <span class="dv">2</span> rng
+    j2 <span class="fu">=</span> j0 <span class="fu">+</span> fromIntegral j1
+  (key, rng3) <span class="fu">=</span> <span class="kw">if</span> has_key
+    <span class="kw">then</span>
+      <span class="kw">let</span>
+        (idx, rng2) <span class="fu">=</span> uniform32 (fromIntegral keys_total) rng1
+      <span class="kw">in</span>
+      (keys<span class="fu">!!</span>(fromIntegral idx), rng2)
+    <span class="kw">else</span> (keys<span class="fu">!!</span>(keys_total <span class="fu">-</span> <span class="dv">1</span>) <span class="fu">+</span> <span class="dv">1</span>, rng1)
 
 <span class="co">-- We use min' and max' because the non-apostrophe versions name-clash with</span>
 <span class="co">-- Prelude's own functions. We could hide Prelude's imports, but that seems too</span>
 <span class="co">-- roundabout.</span>
 <span class="ot">binary_search ::</span> [<span class="dt">Word32</span>] <span class="ot">-&gt;</span> <span class="dt">Word32</span> <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Maybe</span> <span class="dt">Int</span>
 binary_search keys key min' max'
-	<span class="fu">|</span> list_size <span class="fu">==</span> <span class="dv">0</span> <span class="fu">=</span> <span class="dt">Nothing</span>
-	<span class="fu">|</span> key <span class="fu">&lt;</span> keys<span class="fu">!!</span>mid <span class="fu">=</span> binary_search keys key min' (mid <span class="fu">-</span> <span class="dv">1</span>)
-	<span class="fu">|</span> key <span class="fu">&gt;</span> keys<span class="fu">!!</span>mid <span class="fu">=</span> binary_search keys key (mid <span class="fu">+</span> <span class="dv">1</span>) max'
-	<span class="fu">|</span> otherwise <span class="fu">=</span> <span class="dt">Just</span> mid
-	<span class="kw">where</span>
-	list_size <span class="fu">=</span> (max' <span class="fu">-</span> min') <span class="fu">+</span> <span class="dv">1</span>
-	mid <span class="fu">=</span> (div list_size <span class="dv">2</span>) <span class="fu">+</span> min'
+  <span class="fu">|</span> list_size <span class="fu">==</span> <span class="dv">0</span> <span class="fu">=</span> <span class="dt">Nothing</span>
+  <span class="fu">|</span> key <span class="fu">&lt;</span> keys<span class="fu">!!</span>mid <span class="fu">=</span> binary_search keys key min' (mid <span class="fu">-</span> <span class="dv">1</span>)
+  <span class="fu">|</span> key <span class="fu">&gt;</span> keys<span class="fu">!!</span>mid <span class="fu">=</span> binary_search keys key (mid <span class="fu">+</span> <span class="dv">1</span>) max'
+  <span class="fu">|</span> otherwise <span class="fu">=</span> <span class="dt">Just</span> mid
+  <span class="kw">where</span>
+  list_size <span class="fu">=</span> (max' <span class="fu">-</span> min') <span class="fu">+</span> <span class="dv">1</span>
+  mid <span class="fu">=</span> (div list_size <span class="dv">2</span>) <span class="fu">+</span> min'
 
 <span class="ot">main ::</span> <span class="dt">IO</span> ()
 main <span class="fu">=</span> <span class="kw">do</span>
-	<span class="kw">let</span>
-		rng0 <span class="fu">=</span> <span class="dt">PCG32</span>
-			{ state <span class="fu">=</span> <span class="bn">0x1234567890abcdef</span>
-			, inc <span class="fu">=</span> <span class="bn">0x1234567890abcdef</span>
-			}
-	args <span class="ot">&lt;-</span> getArgs
-	when (args <span class="fu">==</span> [<span class="st">&quot;rng&quot;</span>]) <span class="fu">$</span> <span class="kw">do</span>
-		putStrLn <span class="st">&quot;Running RNG self-test&quot;</span>
-		<span class="kw">let</span>
-			(num0, rng1) <span class="fu">=</span> pcg32_random_r rng0
-		putStrLn <span class="fu">$</span> show num0
-		rng2 <span class="ot">&lt;-</span> foldM warmupRng rng1 [<span class="dv">0</span><span class="fu">..</span><span class="dv">999999</span><span class="ot">::</span><span class="dt">Int</span>]
-		<span class="kw">let</span>
-			(num1, rng3) <span class="fu">=</span> pcg32_random_r rng2
-		putStrLn <span class="fu">$</span> show num1
-		rng4 <span class="ot">&lt;-</span> foldM testUniform32 rng3 [<span class="dv">0</span><span class="fu">..</span><span class="dv">99</span><span class="ot">::</span><span class="dt">Int</span>]
-		_ <span class="ot">&lt;-</span> foldM testArray rng4 [<span class="dv">0</span><span class="fu">..</span><span class="dv">9</span><span class="ot">::</span><span class="dt">Int</span>]
-		putStrLn <span class="st">&quot;Done.&quot;</span>
-		putStrLn <span class="st">&quot;END HASKELL VERSION&quot;</span>
-		exitSuccess
-	_ <span class="ot">&lt;-</span> foldM testBinarySearch rng0 [<span class="dv">0</span><span class="fu">..</span><span class="dv">19</span><span class="ot">::</span><span class="dt">Int</span>]
-	putStrLn <span class="st">&quot;END HASKELL VERSION&quot;</span>
-	<span class="kw">where</span>
-	warmupRng rng _ <span class="fu">=</span> return <span class="fu">.</span> snd <span class="fu">$</span> pcg32_random_r rng
-	testUniform32 rng _ <span class="fu">=</span> <span class="kw">do</span>
-		putStrLn <span class="fu">$</span> show num
-		return rng'
-		<span class="kw">where</span>
-		(num, rng') <span class="fu">=</span> uniform32 (div u32_max <span class="dv">2</span> <span class="fu">+</span> div u32_max <span class="dv">3</span>) rng
-	testArray rng0 i <span class="fu">=</span> <span class="kw">do</span>
-		putStrLn <span class="fu">$</span> <span class="st">&quot;last number in array &quot;</span>
-			<span class="fu">++</span> show i
-			<span class="fu">++</span> <span class="st">&quot; for key &quot;</span>
-			<span class="fu">++</span> show key
-			<span class="fu">++</span> <span class="st">&quot;: &quot;</span>
-			<span class="fu">++</span> show (keys<span class="fu">!!</span>(keys_total <span class="fu">-</span> <span class="dv">1</span>))
-		return rng2
-		<span class="kw">where</span>
-		(res, rng1) <span class="fu">=</span> uniform32 <span class="dv">2</span> rng0
-		has_key <span class="fu">=</span> res <span class="fu">==</span> <span class="dv">1</span>
-		(keys, key, rng2) <span class="fu">=</span> init_array keys_total has_key rng1
-	testBinarySearch rng0 i <span class="fu">=</span> <span class="kw">do</span>
-		printf <span class="st">&quot;%02d - &quot;</span> (i <span class="fu">+</span> <span class="dv">1</span>)
-		<span class="kw">case</span> foundMid <span class="kw">of</span>
-			<span class="dt">Just</span> mid <span class="ot">-&gt;</span> putStrLn <span class="fu">$</span> <span class="st">&quot;key `&quot;</span>
-				<span class="fu">++</span> show key
-				<span class="fu">++</span> <span class="st">&quot;' found at keys[&quot;</span>
-				<span class="fu">++</span> show mid
-				<span class="fu">++</span> <span class="st">&quot;].&quot;</span>
-			<span class="dt">Nothing</span> <span class="ot">-&gt;</span> putStrLn <span class="fu">$</span> <span class="st">&quot;key `&quot;</span>
-				<span class="fu">++</span> show key
-				<span class="fu">++</span> <span class="st">&quot;' not found.&quot;</span>
-		return rng2
-		<span class="kw">where</span>
-		(res, rng1) <span class="fu">=</span> uniform32 <span class="dv">2</span> rng0
-		has_key <span class="fu">=</span> res <span class="fu">==</span> <span class="dv">1</span>
-		(keys, key, rng2) <span class="fu">=</span> init_array keys_total has_key rng1
-		min' <span class="fu">=</span> <span class="dv">0</span>
-		max' <span class="fu">=</span> keys_total <span class="fu">-</span> <span class="dv">1</span>
-		foundMid <span class="fu">=</span> binary_search keys key min' max'</code></pre></td></tr></table></div>
+  <span class="kw">let</span>
+    rng0 <span class="fu">=</span> <span class="dt">PCG32</span>
+      { state <span class="fu">=</span> <span class="bn">0x1234567890abcdef</span>
+      , inc <span class="fu">=</span> <span class="bn">0x1234567890abcdef</span>
+      }
+  args <span class="ot">&lt;-</span> getArgs
+  when (args <span class="fu">==</span> [<span class="st">&quot;rng&quot;</span>]) <span class="fu">$</span> <span class="kw">do</span>
+    putStrLn <span class="st">&quot;Running RNG self-test&quot;</span>
+    <span class="kw">let</span>
+      (num0, rng1) <span class="fu">=</span> pcg32_random_r rng0
+    putStrLn <span class="fu">$</span> show num0
+    rng2 <span class="ot">&lt;-</span> foldM warmupRng rng1 [<span class="dv">0</span><span class="fu">..</span><span class="dv">999999</span><span class="ot">::</span><span class="dt">Int</span>]
+    <span class="kw">let</span>
+      (num1, rng3) <span class="fu">=</span> pcg32_random_r rng2
+    putStrLn <span class="fu">$</span> show num1
+    rng4 <span class="ot">&lt;-</span> foldM testUniform32 rng3 [<span class="dv">0</span><span class="fu">..</span><span class="dv">99</span><span class="ot">::</span><span class="dt">Int</span>]
+    _ <span class="ot">&lt;-</span> foldM testArray rng4 [<span class="dv">0</span><span class="fu">..</span><span class="dv">9</span><span class="ot">::</span><span class="dt">Int</span>]
+    putStrLn <span class="st">&quot;Done.&quot;</span>
+    putStrLn <span class="st">&quot;END HASKELL VERSION&quot;</span>
+    exitSuccess
+  _ <span class="ot">&lt;-</span> foldM testBinarySearch rng0 [<span class="dv">0</span><span class="fu">..</span><span class="dv">19</span><span class="ot">::</span><span class="dt">Int</span>]
+  putStrLn <span class="st">&quot;END HASKELL VERSION&quot;</span>
+  <span class="kw">where</span>
+  warmupRng rng _ <span class="fu">=</span> return <span class="fu">.</span> snd <span class="fu">$</span> pcg32_random_r rng
+  testUniform32 rng _ <span class="fu">=</span> <span class="kw">do</span>
+    putStrLn <span class="fu">$</span> show num
+    return rng'
+    <span class="kw">where</span>
+    (num, rng') <span class="fu">=</span> uniform32 (div u32_max <span class="dv">2</span> <span class="fu">+</span> div u32_max <span class="dv">3</span>) rng
+  testArray rng0 i <span class="fu">=</span> <span class="kw">do</span>
+    putStrLn <span class="fu">$</span> <span class="st">&quot;last number in array &quot;</span>
+      <span class="fu">++</span> show i
+      <span class="fu">++</span> <span class="st">&quot; for key &quot;</span>
+      <span class="fu">++</span> show key
+      <span class="fu">++</span> <span class="st">&quot;: &quot;</span>
+      <span class="fu">++</span> show (keys<span class="fu">!!</span>(keys_total <span class="fu">-</span> <span class="dv">1</span>))
+    return rng2
+    <span class="kw">where</span>
+    (res, rng1) <span class="fu">=</span> uniform32 <span class="dv">2</span> rng0
+    has_key <span class="fu">=</span> res <span class="fu">==</span> <span class="dv">1</span>
+    (keys, key, rng2) <span class="fu">=</span> init_array keys_total has_key rng1
+  testBinarySearch rng0 i <span class="fu">=</span> <span class="kw">do</span>
+    printf <span class="st">&quot;%02d - &quot;</span> (i <span class="fu">+</span> <span class="dv">1</span>)
+    <span class="kw">case</span> foundMid <span class="kw">of</span>
+      <span class="dt">Just</span> mid <span class="ot">-&gt;</span> putStrLn <span class="fu">$</span> <span class="st">&quot;key `&quot;</span>
+        <span class="fu">++</span> show key
+        <span class="fu">++</span> <span class="st">&quot;' found at keys[&quot;</span>
+        <span class="fu">++</span> show mid
+        <span class="fu">++</span> <span class="st">&quot;].&quot;</span>
+      <span class="dt">Nothing</span> <span class="ot">-&gt;</span> putStrLn <span class="fu">$</span> <span class="st">&quot;key `&quot;</span>
+        <span class="fu">++</span> show key
+        <span class="fu">++</span> <span class="st">&quot;' not found.&quot;</span>
+    return rng2
+    <span class="kw">where</span>
+    (res, rng1) <span class="fu">=</span> uniform32 <span class="dv">2</span> rng0
+    has_key <span class="fu">=</span> res <span class="fu">==</span> <span class="dv">1</span>
+    (keys, key, rng2) <span class="fu">=</span> init_array keys_total has_key rng1
+    min' <span class="fu">=</span> <span class="dv">0</span>
+    max' <span class="fu">=</span> keys_total <span class="fu">-</span> <span class="dv">1</span>
+    foundMid <span class="fu">=</span> binary_search keys key min' max'</code></pre></td></tr></table></div>
 </div>
 <p>It pained me not to make use of Haskell’s much faster, efficient <code>Array</code> data structure instead of plain lists (that are constructed with the square brackets <code>[]</code>). And, I have to admit that it is written in a strange style; I’ve preserved the names of the variables from C and Ruby where I could, even though mixing snake_case with camelCase results in utter ugliness. I also restrained myself from using the <code>State</code> monad for keeping track of <code>PCG32</code>’s state. For you non-Haskellers, that means that I manually passed around RNG state (as you can see with <code>rng0</code>, <code>rng1</code>, <code>rng2</code>, etc.) as arguments and return values, because I did not want to place another barrier against quickly grasping the code. Do you really want monad transformers in a “naive” implementation?<a href="#fn8" class="footnoteRef" id="fnref8"><sup>8</sup></a></p>
 <p>The most immediate effect to me when writing the Haskell version was just how stateful the <code>uniform32()</code> and <code>init_array()</code> functions were. The C/Ruby brethren perform lots of variable mutation in those parts, and are consequently difficult to understand from a <em>pure</em> (type system) perspective. All of the silent type promotions in C were blatantly exposed by the Glasgow Haskell Compiler (GHC), making it necessary for me to include all of those explicit <code>fromIntegral</code> type promotions myself in <code>pcg32_random_r</code> and <code>init_array</code>.</p>

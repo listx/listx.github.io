@@ -267,191 +267,191 @@
 <span class="kw">import </span><span class="dt">System.Exit</span>
 
 <span class="kw">data</span> <span class="dt">GLIDs</span> <span class="fu">=</span> <span class="dt">GLIDs</span>
-	{<span class="ot"> progId ::</span> <span class="fu">!</span><span class="dt">GLuint</span>
-	,<span class="ot"> vertexArrayId ::</span> <span class="fu">!</span><span class="dt">GLuint</span>
-	,<span class="ot"> vertexBufferId ::</span> <span class="fu">!</span><span class="dt">GLuint</span>
-	}
+  {<span class="ot"> progId ::</span> <span class="fu">!</span><span class="dt">GLuint</span>
+  ,<span class="ot"> vertexArrayId ::</span> <span class="fu">!</span><span class="dt">GLuint</span>
+  ,<span class="ot"> vertexBufferId ::</span> <span class="fu">!</span><span class="dt">GLuint</span>
+  }
 
 <span class="ot">withNewPtr ::</span> <span class="dt">Storable</span> b <span class="ot">=&gt;</span> (<span class="dt">Ptr</span> b <span class="ot">-&gt;</span> <span class="dt">IO</span> a) <span class="ot">-&gt;</span> <span class="dt">IO</span> b
 withNewPtr f <span class="fu">=</span> alloca (\p <span class="ot">-&gt;</span> f p <span class="fu">&gt;&gt;</span> peek p)
 
 <span class="ot">initialize ::</span> <span class="dt">IO</span> <span class="dt">GLFW.Window</span>
 initialize <span class="fu">=</span> <span class="kw">do</span>
-	ok <span class="ot">&lt;-</span> GLFW.init
-	when (not ok) <span class="fu">$</span> <span class="kw">do</span>
-		_ <span class="ot">&lt;-</span> fail <span class="st">&quot;Failed to initialize GLFW&quot;</span>
-		exitFailure
-	mapM_ GLFW.windowHint
-		[ <span class="dt">GLFW.WindowHint'Samples</span> <span class="dv">4</span> <span class="co">-- 4x antialiasing</span>
-		, <span class="dt">GLFW.WindowHint'ContextVersionMajor</span> <span class="dv">3</span> <span class="co">-- OpenGL 3.3</span>
-		, <span class="dt">GLFW.WindowHint'ContextVersionMinor</span> <span class="dv">3</span>
-		<span class="co">-- we don't want the old OpenGL</span>
-		, <span class="dt">GLFW.WindowHint'OpenGLProfile</span> <span class="dt">GLFW.OpenGLProfile'Core</span>
-		]
+  ok <span class="ot">&lt;-</span> GLFW.init
+  when (not ok) <span class="fu">$</span> <span class="kw">do</span>
+    _ <span class="ot">&lt;-</span> fail <span class="st">&quot;Failed to initialize GLFW&quot;</span>
+    exitFailure
+  mapM_ GLFW.windowHint
+    [ <span class="dt">GLFW.WindowHint'Samples</span> <span class="dv">4</span> <span class="co">-- 4x antialiasing</span>
+    , <span class="dt">GLFW.WindowHint'ContextVersionMajor</span> <span class="dv">3</span> <span class="co">-- OpenGL 3.3</span>
+    , <span class="dt">GLFW.WindowHint'ContextVersionMinor</span> <span class="dv">3</span>
+    <span class="co">-- we don't want the old OpenGL</span>
+    , <span class="dt">GLFW.WindowHint'OpenGLProfile</span> <span class="dt">GLFW.OpenGLProfile'Core</span>
+    ]
 
-	win <span class="ot">&lt;-</span> GLFW.createWindow <span class="dv">800</span> <span class="dv">600</span> <span class="st">&quot;Window Title&quot;</span> <span class="dt">Nothing</span> <span class="dt">Nothing</span>
-	when (isNothing win) <span class="fu">$</span> <span class="kw">do</span>
-		_ <span class="ot">&lt;-</span> fail <span class="st">&quot;Failed to create OpenGL window&quot;</span>
-		GLFW.terminate
-		exitFailure
-	<span class="kw">let</span>
-		win' <span class="fu">=</span> fromJust win
-	GLFW.makeContextCurrent win
+  win <span class="ot">&lt;-</span> GLFW.createWindow <span class="dv">800</span> <span class="dv">600</span> <span class="st">&quot;Window Title&quot;</span> <span class="dt">Nothing</span> <span class="dt">Nothing</span>
+  when (isNothing win) <span class="fu">$</span> <span class="kw">do</span>
+    _ <span class="ot">&lt;-</span> fail <span class="st">&quot;Failed to create OpenGL window&quot;</span>
+    GLFW.terminate
+    exitFailure
+  <span class="kw">let</span>
+    win' <span class="fu">=</span> fromJust win
+  GLFW.makeContextCurrent win
 
-	GLFW.setStickyKeysInputMode win' <span class="dt">GLFW.StickyKeysInputMode'Enabled</span>
+  GLFW.setStickyKeysInputMode win' <span class="dt">GLFW.StickyKeysInputMode'Enabled</span>
 
-	return win'
+  return win'
 
 <span class="ot">initializeGL ::</span> <span class="dt">IO</span> <span class="dt">GLIDs</span>
 initializeGL <span class="fu">=</span> <span class="kw">do</span>
-	glClearColor <span class="dv">0</span> <span class="dv">0</span> <span class="fl">0.4</span> <span class="dv">0</span>
-	progId <span class="ot">&lt;-</span> loadProgram vertexShader1 fragmentShader1
-	vaId <span class="ot">&lt;-</span> newVAO
-	bufId <span class="ot">&lt;-</span> fillNewBuffer vertexBufferData
-	return <span class="fu">$</span> <span class="dt">GLIDs</span>
-		{ progId <span class="fu">=</span> progId
-		, vertexArrayId <span class="fu">=</span> vaId
-		, vertexBufferId <span class="fu">=</span> bufId
-		}
+  glClearColor <span class="dv">0</span> <span class="dv">0</span> <span class="fl">0.4</span> <span class="dv">0</span>
+  progId <span class="ot">&lt;-</span> loadProgram vertexShader1 fragmentShader1
+  vaId <span class="ot">&lt;-</span> newVAO
+  bufId <span class="ot">&lt;-</span> fillNewBuffer vertexBufferData
+  return <span class="fu">$</span> <span class="dt">GLIDs</span>
+    { progId <span class="fu">=</span> progId
+    , vertexArrayId <span class="fu">=</span> vaId
+    , vertexBufferId <span class="fu">=</span> bufId
+    }
 
 <span class="ot">freeResources ::</span> <span class="dt">GLIDs</span> <span class="ot">-&gt;</span> <span class="dt">IO</span> ()
 freeResources <span class="dt">GLIDs</span>{<span class="fu">..</span>} <span class="fu">=</span> <span class="kw">do</span>
-	with vertexBufferId <span class="fu">$</span> glDeleteBuffers <span class="dv">1</span>
-	with vertexArrayId <span class="fu">$</span> glDeleteVertexArrays <span class="dv">1</span>
+  with vertexBufferId <span class="fu">$</span> glDeleteBuffers <span class="dv">1</span>
+  with vertexArrayId <span class="fu">$</span> glDeleteVertexArrays <span class="dv">1</span>
 
 <span class="ot">newVAO ::</span> <span class="dt">IO</span> <span class="dt">GLuint</span>
 newVAO <span class="fu">=</span> <span class="kw">do</span>
-	vaId <span class="ot">&lt;-</span> withNewPtr (glGenVertexArrays <span class="dv">1</span>)
-	glBindVertexArray vaId
-	return vaId
+  vaId <span class="ot">&lt;-</span> withNewPtr (glGenVertexArrays <span class="dv">1</span>)
+  glBindVertexArray vaId
+  return vaId
 
 <span class="ot">fillNewBuffer ::</span> [<span class="dt">GLfloat</span>] <span class="ot">-&gt;</span> <span class="dt">IO</span> <span class="dt">GLuint</span>
 fillNewBuffer xs <span class="fu">=</span> <span class="kw">do</span>
-	bufId <span class="ot">&lt;-</span> withNewPtr (glGenBuffers <span class="dv">1</span>)
-	glBindBuffer gl_ARRAY_BUFFER bufId
-	withArrayLen xs func <span class="co">-- give given vertices to OpenGL</span>
-	return bufId
-	<span class="kw">where</span>
-	func len ptr <span class="fu">=</span> glBufferData
-		gl_ARRAY_BUFFER
-		(fromIntegral (len <span class="fu">*</span> sizeOf (undefined<span class="ot"> ::</span> <span class="dt">GLfloat</span>)))
-		(<span class="ot">ptr ::</span> <span class="dt">Ptr</span> <span class="dt">GLfloat</span>)
-		gl_STATIC_DRAW
+  bufId <span class="ot">&lt;-</span> withNewPtr (glGenBuffers <span class="dv">1</span>)
+  glBindBuffer gl_ARRAY_BUFFER bufId
+  withArrayLen xs func <span class="co">-- give given vertices to OpenGL</span>
+  return bufId
+  <span class="kw">where</span>
+  func len ptr <span class="fu">=</span> glBufferData
+    gl_ARRAY_BUFFER
+    (fromIntegral (len <span class="fu">*</span> sizeOf (undefined<span class="ot"> ::</span> <span class="dt">GLfloat</span>)))
+    (<span class="ot">ptr ::</span> <span class="dt">Ptr</span> <span class="dt">GLfloat</span>)
+    gl_STATIC_DRAW
 
 <span class="ot">bindBufferToAttrib ::</span> <span class="dt">GLuint</span> <span class="ot">-&gt;</span> <span class="dt">GLuint</span> <span class="ot">-&gt;</span> <span class="dt">IO</span> ()
 bindBufferToAttrib bufId attribLoc <span class="fu">=</span> <span class="kw">do</span>
-	glEnableVertexAttribArray attribLoc
-	glBindBuffer gl_ARRAY_BUFFER bufId
-	glVertexAttribPointer
-		attribLoc <span class="co">-- attribute location in the shader</span>
-		<span class="dv">3</span> <span class="co">-- 3 components per vertex</span>
-		gl_FLOAT <span class="co">-- coord type</span>
-		(fromBool <span class="dt">False</span>) <span class="co">-- normalize?</span>
-		<span class="dv">0</span> <span class="co">-- stride</span>
-		nullPtr <span class="co">-- vertex buffer offset</span>
+  glEnableVertexAttribArray attribLoc
+  glBindBuffer gl_ARRAY_BUFFER bufId
+  glVertexAttribPointer
+    attribLoc <span class="co">-- attribute location in the shader</span>
+    <span class="dv">3</span> <span class="co">-- 3 components per vertex</span>
+    gl_FLOAT <span class="co">-- coord type</span>
+    (fromBool <span class="dt">False</span>) <span class="co">-- normalize?</span>
+    <span class="dv">0</span> <span class="co">-- stride</span>
+    nullPtr <span class="co">-- vertex buffer offset</span>
 
 <span class="ot">loadProgram ::</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">IO</span> <span class="dt">GLuint</span>
 loadProgram vertShader fragShader <span class="fu">=</span> <span class="kw">do</span>
-	shaderIds <span class="ot">&lt;-</span> mapM (uncurry loadShader)
-		[ (gl_VERTEX_SHADER, vertShader)
-		, (gl_FRAGMENT_SHADER, fragShader)
-		]
-	progId <span class="ot">&lt;-</span> glCreateProgram
-	putStrLn <span class="st">&quot;Linking program&quot;</span>
-	mapM_ (glAttachShader progId) shaderIds
-	glLinkProgram progId
-	_ <span class="ot">&lt;-</span> checkStatus
-		gl_LINK_STATUS glGetProgramiv glGetProgramInfoLog progId
-	mapM_ glDeleteShader shaderIds
-	return progId
+  shaderIds <span class="ot">&lt;-</span> mapM (uncurry loadShader)
+    [ (gl_VERTEX_SHADER, vertShader)
+    , (gl_FRAGMENT_SHADER, fragShader)
+    ]
+  progId <span class="ot">&lt;-</span> glCreateProgram
+  putStrLn <span class="st">&quot;Linking program&quot;</span>
+  mapM_ (glAttachShader progId) shaderIds
+  glLinkProgram progId
+  _ <span class="ot">&lt;-</span> checkStatus
+    gl_LINK_STATUS glGetProgramiv glGetProgramInfoLog progId
+  mapM_ glDeleteShader shaderIds
+  return progId
 
 <span class="ot">loadShader ::</span> <span class="dt">GLenum</span> <span class="ot">-&gt;</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">IO</span> <span class="dt">GLuint</span>
 loadShader shaderTypeFlag code <span class="fu">=</span> <span class="kw">do</span>
-	shaderId <span class="ot">&lt;-</span> glCreateShader shaderTypeFlag
-	withCString code <span class="fu">$</span> \codePtr <span class="ot">-&gt;</span>
-		with codePtr <span class="fu">$</span> \codePtrPtr <span class="ot">-&gt;</span>
-			glShaderSource shaderId <span class="dv">1</span> codePtrPtr nullPtr
-	putStrLn <span class="st">&quot;Compiling shader...&quot;</span>
-	glCompileShader shaderId
-	_ <span class="ot">&lt;-</span> checkStatus
-		gl_COMPILE_STATUS glGetShaderiv glGetShaderInfoLog shaderId
-	return shaderId
+  shaderId <span class="ot">&lt;-</span> glCreateShader shaderTypeFlag
+  withCString code <span class="fu">$</span> \codePtr <span class="ot">-&gt;</span>
+    with codePtr <span class="fu">$</span> \codePtrPtr <span class="ot">-&gt;</span>
+      glShaderSource shaderId <span class="dv">1</span> codePtrPtr nullPtr
+  putStrLn <span class="st">&quot;Compiling shader...&quot;</span>
+  glCompileShader shaderId
+  _ <span class="ot">&lt;-</span> checkStatus
+    gl_COMPILE_STATUS glGetShaderiv glGetShaderInfoLog shaderId
+  return shaderId
 
 <span class="ot">checkStatus ::</span> (<span class="dt">Integral</span> a1, <span class="dt">Storable</span> a1)
-	<span class="ot">=&gt;</span> <span class="dt">GLenum</span>
-	<span class="ot">-&gt;</span> (t <span class="ot">-&gt;</span> <span class="dt">GLenum</span> <span class="ot">-&gt;</span> <span class="dt">Ptr</span> a1 <span class="ot">-&gt;</span> <span class="dt">IO</span> a)
-	<span class="ot">-&gt;</span> (t <span class="ot">-&gt;</span> a1 <span class="ot">-&gt;</span> <span class="dt">Ptr</span> a3 <span class="ot">-&gt;</span> <span class="dt">Ptr</span> <span class="dt">Foreign.C.Types.CChar</span> <span class="ot">-&gt;</span> <span class="dt">IO</span> a2)
-	<span class="ot">-&gt;</span> t
-	<span class="ot">-&gt;</span> <span class="dt">IO</span> <span class="dt">Bool</span>
+  <span class="ot">=&gt;</span> <span class="dt">GLenum</span>
+  <span class="ot">-&gt;</span> (t <span class="ot">-&gt;</span> <span class="dt">GLenum</span> <span class="ot">-&gt;</span> <span class="dt">Ptr</span> a1 <span class="ot">-&gt;</span> <span class="dt">IO</span> a)
+  <span class="ot">-&gt;</span> (t <span class="ot">-&gt;</span> a1 <span class="ot">-&gt;</span> <span class="dt">Ptr</span> a3 <span class="ot">-&gt;</span> <span class="dt">Ptr</span> <span class="dt">Foreign.C.Types.CChar</span> <span class="ot">-&gt;</span> <span class="dt">IO</span> a2)
+  <span class="ot">-&gt;</span> t
+  <span class="ot">-&gt;</span> <span class="dt">IO</span> <span class="dt">Bool</span>
 checkStatus statusFlag glGetFn glInfoLogFn componentId <span class="fu">=</span> <span class="kw">do</span>
-	<span class="kw">let</span>
-		fetch info <span class="fu">=</span> withNewPtr (glGetFn componentId info)
-	status <span class="ot">&lt;-</span> liftM toBool <span class="fu">$</span> fetch statusFlag
-	logLength <span class="ot">&lt;-</span> fetch gl_INFO_LOG_LENGTH
-	when (logLength <span class="fu">&gt;</span> <span class="dv">0</span>) <span class="fu">$</span>
-		allocaArray0 (fromIntegral logLength) <span class="fu">$</span> \msgPtr <span class="ot">-&gt;</span> <span class="kw">do</span>
-			_ <span class="ot">&lt;-</span> glInfoLogFn componentId logLength nullPtr msgPtr
-			msg <span class="ot">&lt;-</span> peekCString msgPtr
-			(<span class="kw">if</span> status <span class="kw">then</span> putStrLn <span class="kw">else</span> fail) msg
-	return status
+  <span class="kw">let</span>
+    fetch info <span class="fu">=</span> withNewPtr (glGetFn componentId info)
+  status <span class="ot">&lt;-</span> liftM toBool <span class="fu">$</span> fetch statusFlag
+  logLength <span class="ot">&lt;-</span> fetch gl_INFO_LOG_LENGTH
+  when (logLength <span class="fu">&gt;</span> <span class="dv">0</span>) <span class="fu">$</span>
+    allocaArray0 (fromIntegral logLength) <span class="fu">$</span> \msgPtr <span class="ot">-&gt;</span> <span class="kw">do</span>
+      _ <span class="ot">&lt;-</span> glInfoLogFn componentId logLength nullPtr msgPtr
+      msg <span class="ot">&lt;-</span> peekCString msgPtr
+      (<span class="kw">if</span> status <span class="kw">then</span> putStrLn <span class="kw">else</span> fail) msg
+  return status
 
 <span class="ot">fragmentShader1 ::</span> <span class="dt">String</span>
 fragmentShader1 <span class="fu">=</span> unlines
-	[ <span class="st">&quot;#version 330 core&quot;</span>
-	, <span class="st">&quot;out vec3 color;&quot;</span>
-	, <span class="st">&quot;void main()&quot;</span>
-	, <span class="st">&quot;{&quot;</span>
-		, <span class="st">&quot;color =  vec3(1,0,0);&quot;</span> <span class="co">-- paint it red!</span>
-	, <span class="st">&quot;}&quot;</span>
-	]
+  [ <span class="st">&quot;#version 330 core&quot;</span>
+  , <span class="st">&quot;out vec3 color;&quot;</span>
+  , <span class="st">&quot;void main()&quot;</span>
+  , <span class="st">&quot;{&quot;</span>
+    , <span class="st">&quot;color =  vec3(1,0,0);&quot;</span> <span class="co">-- paint it red!</span>
+  , <span class="st">&quot;}&quot;</span>
+  ]
 
 <span class="ot">vertexShader1 ::</span> <span class="dt">String</span>
 vertexShader1 <span class="fu">=</span> unlines
-	[ <span class="st">&quot;#version 330 core&quot;</span>
-	, <span class="st">&quot;layout(location = 0) in vec3 vPosition_modelspace;&quot;</span>
-	, <span class="st">&quot;void main()&quot;</span>
-	, <span class="st">&quot;{&quot;</span>
-		, <span class="st">&quot;gl_Position.xyz = vPosition_modelspace;&quot;</span>
-		, <span class="st">&quot;gl_Position.w = 1.0;&quot;</span>
-	, <span class="st">&quot;}&quot;</span>
-	]
+  [ <span class="st">&quot;#version 330 core&quot;</span>
+  , <span class="st">&quot;layout(location = 0) in vec3 vPosition_modelspace;&quot;</span>
+  , <span class="st">&quot;void main()&quot;</span>
+  , <span class="st">&quot;{&quot;</span>
+    , <span class="st">&quot;gl_Position.xyz = vPosition_modelspace;&quot;</span>
+    , <span class="st">&quot;gl_Position.w = 1.0;&quot;</span>
+  , <span class="st">&quot;}&quot;</span>
+  ]
 
 
 <span class="ot">vertexBufferData ::</span> [<span class="dt">GLfloat</span>]
 vertexBufferData <span class="fu">=</span>
-	<span class="co">-- x, y, z</span>
-	[ <span class="fu">-</span><span class="dv">1</span>, <span class="fu">-</span><span class="dv">1</span>, <span class="dv">0</span>
-	,  <span class="dv">1</span>, <span class="fu">-</span><span class="dv">1</span>, <span class="dv">0</span>
-	,  <span class="dv">0</span>,  <span class="dv">1</span>, <span class="dv">0</span>
-	]
+  <span class="co">-- x, y, z</span>
+  [ <span class="fu">-</span><span class="dv">1</span>, <span class="fu">-</span><span class="dv">1</span>, <span class="dv">0</span>
+  ,  <span class="dv">1</span>, <span class="fu">-</span><span class="dv">1</span>, <span class="dv">0</span>
+  ,  <span class="dv">0</span>,  <span class="dv">1</span>, <span class="dv">0</span>
+  ]
 
 <span class="ot">main ::</span> <span class="dt">IO</span> ()
 main <span class="fu">=</span> <span class="kw">do</span>
-	win <span class="ot">&lt;-</span> initialize
-	glids <span class="ot">&lt;-</span> initializeGL
-	inputLoop win glids
-	freeResources glids
-	GLFW.terminate
-	return ()
+  win <span class="ot">&lt;-</span> initialize
+  glids <span class="ot">&lt;-</span> initializeGL
+  inputLoop win glids
+  freeResources glids
+  GLFW.terminate
+  return ()
 
 <span class="ot">inputLoop ::</span> <span class="dt">GLFW.Window</span> <span class="ot">-&gt;</span> <span class="dt">GLIDs</span> <span class="ot">-&gt;</span> <span class="dt">IO</span> ()
 inputLoop win glids <span class="fu">=</span> <span class="kw">do</span>
-	drawStuff glids
-	GLFW.swapBuffers win
-	GLFW.pollEvents
-	keyState <span class="ot">&lt;-</span> GLFW.getKey win <span class="dt">GLFW.Key'Escape</span>
-	closeWindow <span class="ot">&lt;-</span> GLFW.windowShouldClose win
-	when (keyState <span class="fu">/=</span> <span class="dt">GLFW.KeyState'Pressed</span> <span class="fu">&amp;&amp;</span> closeWindow <span class="fu">==</span> <span class="dt">False</span>) <span class="fu">$</span>
-		inputLoop win glids
+  drawStuff glids
+  GLFW.swapBuffers win
+  GLFW.pollEvents
+  keyState <span class="ot">&lt;-</span> GLFW.getKey win <span class="dt">GLFW.Key'Escape</span>
+  closeWindow <span class="ot">&lt;-</span> GLFW.windowShouldClose win
+  when (keyState <span class="fu">/=</span> <span class="dt">GLFW.KeyState'Pressed</span> <span class="fu">&amp;&amp;</span> closeWindow <span class="fu">==</span> <span class="dt">False</span>) <span class="fu">$</span>
+    inputLoop win glids
 
 <span class="ot">drawStuff ::</span> <span class="dt">GLIDs</span> <span class="ot">-&gt;</span> <span class="dt">IO</span> ()
 drawStuff <span class="dt">GLIDs</span>{<span class="fu">..</span>} <span class="fu">=</span> <span class="kw">do</span>
-	glClear gl_COLOR_BUFFER_BIT
-	glClear gl_DEPTH_BUFFER_BIT
-	glUseProgram progId
-	bindBufferToAttrib vertexBufferId <span class="dv">0</span>
-	glDrawArrays gl_TRIANGLES <span class="dv">0</span> <span class="dv">3</span> <span class="co">-- for attrib array 0, draw 3 vertices</span>
-	glDisableVertexAttribArray <span class="dv">0</span> <span class="co">-- disable attrib array 0</span></code></pre></td></tr></table></div>
+  glClear gl_COLOR_BUFFER_BIT
+  glClear gl_DEPTH_BUFFER_BIT
+  glUseProgram progId
+  bindBufferToAttrib vertexBufferId <span class="dv">0</span>
+  glDrawArrays gl_TRIANGLES <span class="dv">0</span> <span class="dv">3</span> <span class="co">-- for attrib array 0, draw 3 vertices</span>
+  glDisableVertexAttribArray <span class="dv">0</span> <span class="co">-- disable attrib array 0</span></code></pre></td></tr></table></div>
 </div>
 <div class="footnotes">
 <hr />

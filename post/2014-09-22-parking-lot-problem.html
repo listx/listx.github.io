@@ -128,13 +128,13 @@
 
 <span class="ot">getParkingSpace ::</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> <span class="dt">Int</span>
 getParkingSpace ts
-	<span class="fu">|</span> null ts <span class="fu">=</span> <span class="dv">0</span>
-	<span class="fu">|</span> otherwise <span class="fu">=</span> loop <span class="dv">0</span> <span class="fu">$</span> sort ts
-	<span class="kw">where</span>
-	loop i xs
-		<span class="fu">|</span> i <span class="fu">==</span> length xs <span class="fu">=</span> i
-		<span class="fu">|</span> i <span class="fu">&lt;</span> xs <span class="fu">!!</span> i <span class="fu">=</span> i
-		<span class="fu">|</span> otherwise <span class="fu">=</span> loop (i <span class="fu">+</span> <span class="dv">1</span>) xs</code></pre></td></tr></table></div>
+  <span class="fu">|</span> null ts <span class="fu">=</span> <span class="dv">0</span>
+  <span class="fu">|</span> otherwise <span class="fu">=</span> loop <span class="dv">0</span> <span class="fu">$</span> sort ts
+  <span class="kw">where</span>
+  loop i xs
+    <span class="fu">|</span> i <span class="fu">==</span> length xs <span class="fu">=</span> i
+    <span class="fu">|</span> i <span class="fu">&lt;</span> xs <span class="fu">!!</span> i <span class="fu">=</span> i
+    <span class="fu">|</span> otherwise <span class="fu">=</span> loop (i <span class="fu">+</span> <span class="dv">1</span>) xs</code></pre></td></tr></table></div>
 </div>
 <h3 id="functional-solution">Functional solution</h3>
 <p>Michele Alzetta kindly sent me another solution, which has a much stronger “Haskell” flavor. I’ve made some slight adjustments; here it is:</p>
@@ -154,8 +154,8 @@ getParkingSpace ts
 
 <span class="ot">getParkingSpace' ::</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> <span class="dt">Int</span>
 getParkingSpace' ts <span class="fu">=</span> fromMaybe
-	(length ts)
-	(elemIndex <span class="dt">False</span> <span class="fu">.</span> zipWith (<span class="fu">==</span>) [<span class="dv">0</span><span class="fu">..</span>] <span class="fu">$</span> sort ts)</code></pre></td></tr></table></div>
+  (length ts)
+  (elemIndex <span class="dt">False</span> <span class="fu">.</span> zipWith (<span class="fu">==</span>) [<span class="dv">0</span><span class="fu">..</span>] <span class="fu">$</span> sort ts)</code></pre></td></tr></table></div>
 </div>
 <p>. The advantage of this version is that it only evaluates <code>length ts</code> (the input list) as a last resort, thanks to <code>fromMaybe</code>. It also uses standard Prelude functions like <code>elemIndex</code> and <code>zipWith</code> for easier understanding. Thanks Michele!</p>
 <h2 id="low-level-interlude">Low-Level Interlude</h2>
@@ -208,8 +208,8 @@ getParkingSpace' ts <span class="fu">=</span> fromMaybe
 4
 </pre></td><td class="sourceCode"><pre><code class="sourceCode haskell"><span class="ot">getParkingSpaces ::</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> <span class="dt">Either</span> <span class="dt">String</span> <span class="dt">Int</span>
 getParkingSpaces t
-	<span class="fu">|</span> null t <span class="fu">=</span> <span class="dt">Left</span> <span class="st">&quot;N/A&quot;</span>
-	<span class="fu">|</span> otherwise <span class="fu">=</span> <span class="dt">Right</span> <span class="fu">$</span> (maximum t) <span class="fu">-</span> (length t) <span class="fu">+</span> <span class="dv">1</span></code></pre></td></tr></table></div>
+  <span class="fu">|</span> null t <span class="fu">=</span> <span class="dt">Left</span> <span class="st">&quot;N/A&quot;</span>
+  <span class="fu">|</span> otherwise <span class="fu">=</span> <span class="dt">Right</span> <span class="fu">$</span> (maximum t) <span class="fu">-</span> (length t) <span class="fu">+</span> <span class="dv">1</span></code></pre></td></tr></table></div>
 </div>
 <h2 id="a-successor-to-fizzbuzz">A Successor to FizzBuzz?</h2>
 <p>For some reason, I get a strong feeling that these problems are much more interesting than <a href="http://en.wikipedia.org/wiki/Fizz_buzz">FizzBuzz</a>. The fact that we talk about an <em>infinitely large</em> parking lot will probably throw a lot of newbies and naive thinkers off the right track. You have to be especially careful about edge cases, such as the empty list in the second Haskell version. I believe that good coders have a keen sense of edge cases, because correct algorithms must withstand them without blowing up. Just review the Haskell solutions and notice all of the edge cases that we have to look out for!</p>
