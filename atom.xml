@@ -177,94 +177,94 @@ S_0 = 0
 <table>
 <thead>
 <tr class="header">
-<th align="center"><span class="math inline">\(n\)</span></th>
-<th align="center"><span class="math inline">\(S_n\)</span></th>
+<th style="text-align: center;"><span class="math inline">\(n\)</span></th>
+<th style="text-align: center;"><span class="math inline">\(S_n\)</span></th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="center">0</td>
-<td align="center">0</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
 </tr>
 <tr class="even">
-<td align="center">1</td>
-<td align="center">1</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">1</td>
 </tr>
 <tr class="odd">
-<td align="center">2</td>
-<td align="center">3</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">3</td>
 </tr>
 <tr class="even">
-<td align="center">3</td>
-<td align="center">7</td>
+<td style="text-align: center;">3</td>
+<td style="text-align: center;">7</td>
 </tr>
 <tr class="odd">
-<td align="center">4</td>
-<td align="center">15</td>
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">15</td>
 </tr>
 <tr class="even">
-<td align="center">5</td>
-<td align="center">31</td>
+<td style="text-align: center;">5</td>
+<td style="text-align: center;">31</td>
 </tr>
 <tr class="odd">
-<td align="center">6</td>
-<td align="center">63</td>
+<td style="text-align: center;">6</td>
+<td style="text-align: center;">63</td>
 </tr>
 <tr class="even">
-<td align="center">7</td>
-<td align="center">127</td>
+<td style="text-align: center;">7</td>
+<td style="text-align: center;">127</td>
 </tr>
 <tr class="odd">
-<td align="center">8</td>
-<td align="center">255</td>
+<td style="text-align: center;">8</td>
+<td style="text-align: center;">255</td>
 </tr>
 </tbody>
 </table>
-<p>We don’t have to actually simulate the puzzle to derive these values; using the recurrence Equation <span class="math inline">\(\ref{eq:recurrence}\)</span> we start off from the first row (the base case) and then calculate our way down, reusing <span class="math inline">\(S_n\)</span> from the previous row as <span class="math inline">\(S_{n - 1}\)</span>. <a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a></p>
+<p>We don’t have to actually simulate the puzzle to derive these values; using the recurrence Equation <span class="math inline">\(\ref{eq:recurrence}\)</span> we start off from the first row (the base case) and then calculate our way down, reusing <span class="math inline">\(S_n\)</span> from the previous row as <span class="math inline">\(S_{n - 1}\)</span>. <a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
 <p>Anyway, the values of <span class="math inline">\(S_n\)</span> sure look familiar — especially if we use base 2.</p>
 <table>
 <thead>
 <tr class="header">
-<th align="center"><span class="math inline">\(n\)</span></th>
-<th align="right">binary(<span class="math inline">\(S_n\)</span>)</th>
+<th style="text-align: center;"><span class="math inline">\(n\)</span></th>
+<th style="text-align: right;">binary(<span class="math inline">\(S_n\)</span>)</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="center">0</td>
-<td align="right"><span class="math inline">\(0_2\)</span></td>
+<td style="text-align: center;">0</td>
+<td style="text-align: right;"><span class="math inline">\(0_2\)</span></td>
 </tr>
 <tr class="even">
-<td align="center">1</td>
-<td align="right"><span class="math inline">\(1_2\)</span></td>
+<td style="text-align: center;">1</td>
+<td style="text-align: right;"><span class="math inline">\(1_2\)</span></td>
 </tr>
 <tr class="odd">
-<td align="center">2</td>
-<td align="right"><span class="math inline">\(11_2\)</span></td>
+<td style="text-align: center;">2</td>
+<td style="text-align: right;"><span class="math inline">\(11_2\)</span></td>
 </tr>
 <tr class="even">
-<td align="center">3</td>
-<td align="right"><span class="math inline">\(111_2\)</span></td>
+<td style="text-align: center;">3</td>
+<td style="text-align: right;"><span class="math inline">\(111_2\)</span></td>
 </tr>
 <tr class="odd">
-<td align="center">4</td>
-<td align="right"><span class="math inline">\(1111_2\)</span></td>
+<td style="text-align: center;">4</td>
+<td style="text-align: right;"><span class="math inline">\(1111_2\)</span></td>
 </tr>
 <tr class="even">
-<td align="center">5</td>
-<td align="right"><span class="math inline">\(11111_2\)</span></td>
+<td style="text-align: center;">5</td>
+<td style="text-align: right;"><span class="math inline">\(11111_2\)</span></td>
 </tr>
 <tr class="odd">
-<td align="center">6</td>
-<td align="right"><span class="math inline">\(111111_2\)</span></td>
+<td style="text-align: center;">6</td>
+<td style="text-align: right;"><span class="math inline">\(111111_2\)</span></td>
 </tr>
 <tr class="even">
-<td align="center">7</td>
-<td align="right"><span class="math inline">\(1111111_2\)</span></td>
+<td style="text-align: center;">7</td>
+<td style="text-align: right;"><span class="math inline">\(1111111_2\)</span></td>
 </tr>
 <tr class="odd">
-<td align="center">8</td>
-<td align="right"><span class="math inline">\(11111111_2\)</span></td>
+<td style="text-align: center;">8</td>
+<td style="text-align: right;"><span class="math inline">\(11111111_2\)</span></td>
 </tr>
 </tbody>
 </table>
@@ -277,8 +277,8 @@ S_0 = 0
 <p>except it is no longer a recurrence as there is no need to define a base case. We’ll call it a <em>solution</em> to the recurrence.</p>
 <h1 id="proving-the-solution">Proving the Solution</h1>
 <p>Although the empirical evidence looks very good, we have not formally proved that the solution (Equation <span class="math inline">\(\ref{eq:solution}\)</span>) holds for <em>all</em> <span class="math inline">\(n\)</span>. It’s one thing to say that something is true for all <em>observed</em> cases (scientific experiment), and quite another to say that something is true for <em>all</em> cases (mathematical proof).</p>
-<p>Can we prove it? Yes! Fortunately for us, Equation <span class="math inline">\(\ref{eq:recurrence}\)</span> lends itself to proof by <a href="https://en.wikipedia.org/wiki/Mathematical_induction">induction</a>. Induction requires you to first prove some number <span class="math inline">\(k_0\)</span> as a starting point (the base case) using some proposition <span class="math inline">\(P\)</span>. Then you prove that <span class="math inline">\(P\)</span> holds for <span class="math inline">\(k + 1\)</span> (the next number); i.e., show that going from <span class="math inline">\(k\)</span> to <span class="math inline">\(k + 1\)</span> does not change <span class="math inline">\(P\)</span>. This is the <em>inductive step</em>. In this way, we prove the “totality” of <span class="math inline">\(P\)</span> as it applies to all numbers in the range <span class="math inline">\([k_0, k_{m}]\)</span> and we are done. <a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a></p>
-<p>Here we want to prove that Equation <span class="math inline">\(\ref{eq:solution}\)</span> holds for all <span class="math inline">\(n\)</span> (all natural numbers). <a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a> For this proof let’s rewrite Equation <span class="math inline">\(\ref{eq:solution}\)</span> to use <span class="math inline">\(k\)</span> instead of <span class="math inline">\(n\)</span>:</p>
+<p>Can we prove it? Yes! Fortunately for us, Equation <span class="math inline">\(\ref{eq:recurrence}\)</span> lends itself to proof by <a href="https://en.wikipedia.org/wiki/Mathematical_induction">induction</a>. Induction requires you to first prove some number <span class="math inline">\(k_0\)</span> as a starting point (the base case) using some proposition <span class="math inline">\(P\)</span>. Then you prove that <span class="math inline">\(P\)</span> holds for <span class="math inline">\(k + 1\)</span> (the next number); i.e., show that going from <span class="math inline">\(k\)</span> to <span class="math inline">\(k + 1\)</span> does not change <span class="math inline">\(P\)</span>. This is the <em>inductive step</em>. In this way, we prove the “totality” of <span class="math inline">\(P\)</span> as it applies to all numbers in the range <span class="math inline">\([k_0, k_{m}]\)</span> and we are done. <a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a></p>
+<p>Here we want to prove that Equation <span class="math inline">\(\ref{eq:solution}\)</span> holds for all <span class="math inline">\(n\)</span> (all natural numbers). <a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a> For this proof let’s rewrite Equation <span class="math inline">\(\ref{eq:solution}\)</span> to use <span class="math inline">\(k\)</span> instead of <span class="math inline">\(n\)</span>:</p>
 <p><span class="math display">\[
 \begin{equation} \label{eq:proposition}
   S_k = 2^k - 1 \quad \text{for } k \geq 0.
@@ -312,7 +312,7 @@ S_0 = 0
   &amp;= 2^{k + 1} - 1 \label{eq:induct3}.
   \end{align}
 \]</span></p>
-<p>And now we can see that Equation <span class="math inline">\(\ref{eq:induct3}\)</span> (our “evolved” proposition <span class="math inline">\(P\)</span>, if you will) is the same as our solution (Equation <span class="math inline">\(\ref{eq:solution}\)</span>), even though we increased <span class="math inline">\(k\)</span> to <span class="math inline">\(k + 1\)</span>! This is because simple substitution allows us to replace “<span class="math inline">\(k + 1\)</span>” with “<span class="math inline">\(n\)</span>”. We have completed our proof by induction. <a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a></p>
+<p>And now we can see that Equation <span class="math inline">\(\ref{eq:induct3}\)</span> (our “evolved” proposition <span class="math inline">\(P\)</span>, if you will) is the same as our solution (Equation <span class="math inline">\(\ref{eq:solution}\)</span>), even though we increased <span class="math inline">\(k\)</span> to <span class="math inline">\(k + 1\)</span>! This is because simple substitution allows us to replace “<span class="math inline">\(k + 1\)</span>” with “<span class="math inline">\(n\)</span>”. We have completed our proof by induction. <a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a></p>
 <h1 id="alternate-recurrence-and-solution">Alternate Recurrence and Solution</h1>
 <p>The book goes on to offer an alternate recurrence to Equation <span class="math inline">\(\ref{eq:recurrence}\)</span>, by adding 1 to both sides:</p>
 <p><span class="math display">\[
@@ -355,17 +355,17 @@ W_n = (S_n) + 1 = 2^n
 <h1 id="conclusion">Conclusion</h1>
 <p>I thoroughly enjoyed figuring this stuff out because possibly for the first time in my life I used my programming experience (recurrence/recursion, memoization) to help myself understand mathematics — not the other way around. The other way around was never enjoyable — calculating what <code>i</code> was in some <span class="math inline">\(n\)</span>th iteration of a <code>for</code>-loop never really excited me.</p>
 <p>I hope this explanation helps you better understand the first few pages of <em>Concrete Mathematics</em>; I had to read that part three times over to really “get it” (never having learned what induction is). And henceforth, I will never look at a string of consecutive 1’s in binary the same way again. 😃</p>
-<div class="footnotes">
+<section class="footnotes">
 <hr />
 <ol>
-<li id="fn1"><p>In computer science, this process of avoiding the recalculation of previously known values is called <em>memoization</em> and is useful in generating the first N values of a recursive algorithm in <span class="math inline">\(O(N)\)</span> (linear) time.<a href="#fnref1">↩</a></p></li>
-<li id="fn2"><p>Note that if <span class="math inline">\(k_0 = 0\)</span>, then <span class="math inline">\([k_0, k_{m}]\)</span> is the set of all natural numbers (zero plus the positive integers).<a href="#fnref2">↩</a></p></li>
-<li id="fn3"><p>There is no need to prove the recurrence (Equation <span class="math inline">\(\ref{eq:recurrence}\)</span>) as we have already proved it in the process of deriving it.<a href="#fnref3">↩</a></p></li>
+<li id="fn1"><p>In computer science, this process of avoiding the recalculation of previously known values is called <em>memoization</em> and is useful in generating the first N values of a recursive algorithm in <span class="math inline">\(O(N)\)</span> (linear) time.<a href="#fnref1" class="footnote-back">↩</a></p></li>
+<li id="fn2"><p>Note that if <span class="math inline">\(k_0 = 0\)</span>, then <span class="math inline">\([k_0, k_{m}]\)</span> is the set of all natural numbers (zero plus the positive integers).<a href="#fnref2" class="footnote-back">↩</a></p></li>
+<li id="fn3"><p>There is no need to prove the recurrence (Equation <span class="math inline">\(\ref{eq:recurrence}\)</span>) as we have already proved it in the process of deriving it.<a href="#fnref3" class="footnote-back">↩</a></p></li>
 <li id="fn4"><p>In <em>Concrete Mathematics</em> 2 ed. p. 3 (where the book uses <span class="math inline">\(T_n\)</span> instead of <span class="math inline">\(S_n\)</span>), the proof is simply a one-liner: <span class="math display">\[
 T_n = 2(T_{n - 1}) + 1 = 2(2^{n - 1} - 1) + 1 = 2^n - 1.
-\]</span> But I find it a bit too terse for my tastes.<a href="#fnref4">↩</a></p></li>
+\]</span> But I find it a bit too terse for my tastes.<a href="#fnref4" class="footnote-back">↩</a></p></li>
 </ol>
-</div>
+</section>
 ]]></summary>
 </entry>
 <entry>
@@ -389,8 +389,8 @@ T_n = 2(T_{n - 1}) + 1 = 2(2^{n - 1} - 1) + 1 = 2^n - 1.
 \mathrm{F}_{n} = \mathrm{F}_{n - 2} + \mathrm{F}_{n - 1}.
 \end{align}
 \]</span></p>
-<p>That is, each Fibonacci number <span class="math inline">\(\mathrm{F}_{n}\)</span> is the sum of the previous two Fibonacci numbers, except the very first two numbers which are defined to be 0 and 1. <a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a></p>
-<p>From the definition above, it appears that computing <span class="math inline">\(\mathrm{F}_{n}\)</span> requires one to always compute <span class="math inline">\(\mathrm{F}_{n - 2}\)</span> and <span class="math inline">\(\mathrm{F}_{n - 1}\)</span>. <strong>This is false:</strong> enter the “doubling method”. <a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> <a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a></p>
+<p>That is, each Fibonacci number <span class="math inline">\(\mathrm{F}_{n}\)</span> is the sum of the previous two Fibonacci numbers, except the very first two numbers which are defined to be 0 and 1. <a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
+<p>From the definition above, it appears that computing <span class="math inline">\(\mathrm{F}_{n}\)</span> requires one to always compute <span class="math inline">\(\mathrm{F}_{n - 2}\)</span> and <span class="math inline">\(\mathrm{F}_{n - 1}\)</span>. <strong>This is false:</strong> enter the “doubling method”. <a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a> <a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a></p>
 <h1 id="the-genesis-of-the-doubling-method">The Genesis of the Doubling Method</h1>
 <p>The doubling method uses a couple of mathematical formulas derived from matrix multiplication as it applies to calculating Fibonacci numbers; it can be seen as an improvement over the matrix multiplication method, although it does not use matrix multplication itself. The matrix multiplication method uses the following formula:</p>
 <p><span class="math display">\[
@@ -514,56 +514,31 @@ T_n = 2(T_{n - 1}) + 1 = 2(2^{n - 1} - 1) + 1 = 2^n - 1.
 <div class="raw-link sourceCode">
 <table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href= "/code/2017-04-14-computing-fibonacci-numbers/fibonacci-doubling.py" mimetype=text/plain >fibonacci-doubling.py</a></code></pre></td></tr></tbody></table>
 </div>
-<div class="sourceCode" input="code/2017-04-14-computing-fibonacci-numbers/fibonacci-doubling.py"><table class="sourceCode numberLines python"><tr class="sourceCode"><td class="lineNumbers"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-</pre></td><td class="sourceCode"><pre><code class="sourceCode python"><span class="kw">def</span> fibonacci_doubling(n):
-    <span class="co">&quot;&quot;&quot; Calculate the Nth Fibonacci number using the doubling method. &quot;&quot;&quot;</span>
-    <span class="cf">return</span> _fibonacci_doubling(n)[<span class="dv">0</span>]
-
-
-<span class="kw">def</span> _fibonacci_doubling(n):
-    <span class="co">&quot;&quot;&quot; Calculate Nth Fibonacci number using the doubling method. Return the</span>
-<span class="co">    tuple (F(n), F(n+1)).&quot;&quot;&quot;</span>
-    <span class="cf">if</span> n <span class="op">==</span> <span class="dv">0</span>:
-        <span class="cf">return</span> (<span class="dv">0</span>, <span class="dv">1</span>)
-    <span class="cf">else</span>:
-        a, b <span class="op">=</span> _fibonacci_doubling(n <span class="op">&gt;&gt;</span> <span class="dv">1</span>)
-        c <span class="op">=</span> a <span class="op">*</span> ((b <span class="op">&lt;&lt;</span> <span class="dv">1</span>) <span class="op">-</span> a)
-        d <span class="op">=</span> a <span class="op">*</span> a <span class="op">+</span> b <span class="op">*</span> b
-        <span class="cf">if</span> n <span class="op">&amp;</span> <span class="dv">1</span>:
-            <span class="cf">return</span> (d, c <span class="op">+</span> d)
-        <span class="cf">else</span>:
-            <span class="cf">return</span> (c, d)
-
-
-<span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">&quot;__main__&quot;</span>:
-    <span class="cf">for</span> n <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">20</span>):
-        <span class="bu">print</span>(fibonacci_doubling(n))
-    <span class="co"># As a demonstration of this algorithm&#39;s speed, here is a large n.</span>
-    <span class="bu">print</span>(fibonacci_doubling(<span class="dv">10000</span>))</code></pre></td></tr></table></div>
+<div class="sourceCode" id="cb1" data-input="code/2017-04-14-computing-fibonacci-numbers/fibonacci-doubling.py"><pre class="sourceCode numberSource numberLines python"><code class="sourceCode python"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">def</span> fibonacci_doubling(n):</a>
+<a class="sourceLine" id="cb1-2" title="2">    <span class="co">&quot;&quot;&quot; Calculate the Nth Fibonacci number using the doubling method. &quot;&quot;&quot;</span></a>
+<a class="sourceLine" id="cb1-3" title="3">    <span class="cf">return</span> _fibonacci_doubling(n)[<span class="dv">0</span>]</a>
+<a class="sourceLine" id="cb1-4" title="4"></a>
+<a class="sourceLine" id="cb1-5" title="5"></a>
+<a class="sourceLine" id="cb1-6" title="6"><span class="kw">def</span> _fibonacci_doubling(n):</a>
+<a class="sourceLine" id="cb1-7" title="7">    <span class="co">&quot;&quot;&quot; Calculate Nth Fibonacci number using the doubling method. Return the</span></a>
+<a class="sourceLine" id="cb1-8" title="8"><span class="co">    tuple (F(n), F(n+1)).&quot;&quot;&quot;</span></a>
+<a class="sourceLine" id="cb1-9" title="9">    <span class="cf">if</span> n <span class="op">==</span> <span class="dv">0</span>:</a>
+<a class="sourceLine" id="cb1-10" title="10">        <span class="cf">return</span> (<span class="dv">0</span>, <span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb1-11" title="11">    <span class="cf">else</span>:</a>
+<a class="sourceLine" id="cb1-12" title="12">        a, b <span class="op">=</span> _fibonacci_doubling(n <span class="op">&gt;&gt;</span> <span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb1-13" title="13">        c <span class="op">=</span> a <span class="op">*</span> ((b <span class="op">&lt;&lt;</span> <span class="dv">1</span>) <span class="op">-</span> a)</a>
+<a class="sourceLine" id="cb1-14" title="14">        d <span class="op">=</span> a <span class="op">*</span> a <span class="op">+</span> b <span class="op">*</span> b</a>
+<a class="sourceLine" id="cb1-15" title="15">        <span class="cf">if</span> n <span class="op">&amp;</span> <span class="dv">1</span>:</a>
+<a class="sourceLine" id="cb1-16" title="16">            <span class="cf">return</span> (d, c <span class="op">+</span> d)</a>
+<a class="sourceLine" id="cb1-17" title="17">        <span class="cf">else</span>:</a>
+<a class="sourceLine" id="cb1-18" title="18">            <span class="cf">return</span> (c, d)</a>
+<a class="sourceLine" id="cb1-19" title="19"></a>
+<a class="sourceLine" id="cb1-20" title="20"></a>
+<a class="sourceLine" id="cb1-21" title="21"><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">&quot;__main__&quot;</span>:</a>
+<a class="sourceLine" id="cb1-22" title="22">    <span class="cf">for</span> n <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">20</span>):</a>
+<a class="sourceLine" id="cb1-23" title="23">        <span class="bu">print</span>(fibonacci_doubling(n))</a>
+<a class="sourceLine" id="cb1-24" title="24">    <span class="co"># As a demonstration of this algorithm&#39;s speed, here is a large n.</span></a>
+<a class="sourceLine" id="cb1-25" title="25">    <span class="bu">print</span>(fibonacci_doubling(<span class="dv">10000</span>))</a></code></pre></div>
 </div>
 <p>Line 12 is where we do the halving. We use the right-shift operator to do this. Lines 13 and 14 are our doubling identities (I use the left-shift operator here because it feels more natural to me). The if-condition on line 15 returns <span class="math inline">\(\mathrm{F}_{2m + 1}\)</span> if <span class="math inline">\(n\)</span> was odd, and <span class="math inline">\(\mathrm{F}_{2m}\)</span> otherwise.</p>
 <p>For comparison, here is an iterative version. On the one hand it avoids Python’s recursion limit, but the downside is a small loss of elegance (we have to loop twice — first to build up the halving/doubling points, and again for the main loop).</p>
@@ -571,58 +546,38 @@ T_n = 2(T_{n - 1}) + 1 = 2(2^{n - 1} - 1) + 1 = 2^n - 1.
 <div class="raw-link sourceCode">
 <table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href= "/code/2017-04-14-computing-fibonacci-numbers/fibonacci-doubling-iter.py" mimetype=text/plain >fibonacci-doubling-iter.py</a></code></pre></td></tr></tbody></table>
 </div>
-<div class="sourceCode" input="code/2017-04-14-computing-fibonacci-numbers/fibonacci-doubling-iter.py"><table class="sourceCode numberLines python"><tr class="sourceCode"><td class="lineNumbers"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-</pre></td><td class="sourceCode"><pre><code class="sourceCode python"><span class="kw">def</span> fibonacci_doubling_iter(n):
-    <span class="co">&quot;&quot;&quot; Calculate Nth Fibonacci number using the doubling method, using</span>
-<span class="co">    iteration. &quot;&quot;&quot;</span>
-    ns <span class="op">=</span> []
-    <span class="cf">while</span> n:
-        ns.extend([n])
-        n <span class="op">&gt;&gt;=</span> <span class="dv">1</span>
-
-    a, b <span class="op">=</span> <span class="dv">0</span>, <span class="dv">1</span>
-
-    <span class="cf">while</span> ns:
-        n <span class="op">=</span> ns.pop()
-        c <span class="op">=</span> a <span class="op">*</span> ((b <span class="op">&lt;&lt;</span> <span class="dv">1</span>) <span class="op">-</span> a)
-        d <span class="op">=</span> a <span class="op">*</span> a <span class="op">+</span> b <span class="op">*</span> b
-        <span class="cf">if</span> n <span class="op">&amp;</span> <span class="dv">1</span>:
-            a, b <span class="op">=</span> d, c <span class="op">+</span> d
-        <span class="cf">else</span>:
-            a, b <span class="op">=</span> c, d
-
-    <span class="cf">return</span> a</code></pre></td></tr></table></div>
+<div class="sourceCode" id="cb2" data-input="code/2017-04-14-computing-fibonacci-numbers/fibonacci-doubling-iter.py"><pre class="sourceCode numberSource numberLines python"><code class="sourceCode python"><a class="sourceLine" id="cb2-1" title="1"><span class="kw">def</span> fibonacci_doubling_iter(n):</a>
+<a class="sourceLine" id="cb2-2" title="2">    <span class="co">&quot;&quot;&quot; Calculate Nth Fibonacci number using the doubling method, using</span></a>
+<a class="sourceLine" id="cb2-3" title="3"><span class="co">    iteration. &quot;&quot;&quot;</span></a>
+<a class="sourceLine" id="cb2-4" title="4">    ns <span class="op">=</span> []</a>
+<a class="sourceLine" id="cb2-5" title="5">    <span class="cf">while</span> n:</a>
+<a class="sourceLine" id="cb2-6" title="6">        ns.extend([n])</a>
+<a class="sourceLine" id="cb2-7" title="7">        n <span class="op">&gt;&gt;=</span> <span class="dv">1</span></a>
+<a class="sourceLine" id="cb2-8" title="8"></a>
+<a class="sourceLine" id="cb2-9" title="9">    a, b <span class="op">=</span> <span class="dv">0</span>, <span class="dv">1</span></a>
+<a class="sourceLine" id="cb2-10" title="10"></a>
+<a class="sourceLine" id="cb2-11" title="11">    <span class="cf">while</span> ns:</a>
+<a class="sourceLine" id="cb2-12" title="12">        n <span class="op">=</span> ns.pop()</a>
+<a class="sourceLine" id="cb2-13" title="13">        c <span class="op">=</span> a <span class="op">*</span> ((b <span class="op">&lt;&lt;</span> <span class="dv">1</span>) <span class="op">-</span> a)</a>
+<a class="sourceLine" id="cb2-14" title="14">        d <span class="op">=</span> a <span class="op">*</span> a <span class="op">+</span> b <span class="op">*</span> b</a>
+<a class="sourceLine" id="cb2-15" title="15">        <span class="cf">if</span> n <span class="op">&amp;</span> <span class="dv">1</span>:</a>
+<a class="sourceLine" id="cb2-16" title="16">            a, b <span class="op">=</span> d, c <span class="op">+</span> d</a>
+<a class="sourceLine" id="cb2-17" title="17">        <span class="cf">else</span>:</a>
+<a class="sourceLine" id="cb2-18" title="18">            a, b <span class="op">=</span> c, d</a>
+<a class="sourceLine" id="cb2-19" title="19"></a>
+<a class="sourceLine" id="cb2-20" title="20">    <span class="cf">return</span> a</a></code></pre></div>
 </div>
 <h1 id="conclusion">Conclusion</h1>
-<p>I hope you enjoyed reading about this method of calculationg Fibonacci numbers as much as I enjoyed learning the math behind it. This algorithm can be sped up if it uses a faster multiplication algorithm as <code>a</code> and <code>b</code> get very large (e.g., Karatsuba multiplication). <a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a> Time complexity is <span class="math inline">\(\Theta(\log{n})\)</span>; it reminds me of the binary search algorithm, in how the problem space is halved repeatedly. Neat!</p>
-<div class="footnotes">
+<p>I hope you enjoyed reading about this method of calculationg Fibonacci numbers as much as I enjoyed learning the math behind it. This algorithm can be sped up if it uses a faster multiplication algorithm as <code>a</code> and <code>b</code> get very large (e.g., Karatsuba multiplication). <a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a> Time complexity is <span class="math inline">\(\Theta(\log{n})\)</span>; it reminds me of the binary search algorithm, in how the problem space is halved repeatedly. Neat!</p>
+<section class="footnotes">
 <hr />
 <ol>
-<li id="fn1"><p>We can choose to define the first two terms as 1 and 1 instead, but this distinction is needlessly arbitrary.<a href="#fnref1">↩</a></p></li>
-<li id="fn2"><p>There is actually a known formula for our purposes, where <span class="math display">\[ \mathrm{F}_{n} = \frac{\varphi^n - (-\varphi)^{-n}}{2\varphi - 1}\]</span> and <span class="math inline">\(\varphi = \frac{1 + \sqrt{5}}{2} \approx 1.6180339887\cdots\)</span> (the golden ratio). Unfortunately this requires arbitrary-precision floating point calculations.<a href="#fnref2">↩</a></p></li>
-<li id="fn3"><p>For more discussion, see <a href="https://www.nayuki.io/page/fast-fibonacci-algorithms" class="uri">https://www.nayuki.io/page/fast-fibonacci-algorithms</a>.<a href="#fnref3">↩</a></p></li>
-<li id="fn4"><p>Python already uses Karatsuba multiplication natively for large integers.<a href="#fnref4">↩</a></p></li>
+<li id="fn1"><p>We can choose to define the first two terms as 1 and 1 instead, but this distinction is needlessly arbitrary.<a href="#fnref1" class="footnote-back">↩</a></p></li>
+<li id="fn2"><p>There is actually a known formula for our purposes, where <span class="math display">\[ \mathrm{F}_{n} = \frac{\varphi^n - (-\varphi)^{-n}}{2\varphi - 1}\]</span> and <span class="math inline">\(\varphi = \frac{1 + \sqrt{5}}{2} \approx 1.6180339887\cdots\)</span> (the golden ratio). Unfortunately this requires arbitrary-precision floating point calculations.<a href="#fnref2" class="footnote-back">↩</a></p></li>
+<li id="fn3"><p>For more discussion, see <a href="https://www.nayuki.io/page/fast-fibonacci-algorithms" class="uri">https://www.nayuki.io/page/fast-fibonacci-algorithms</a>.<a href="#fnref3" class="footnote-back">↩</a></p></li>
+<li id="fn4"><p>Python already uses Karatsuba multiplication natively for large integers.<a href="#fnref4" class="footnote-back">↩</a></p></li>
 </ol>
-</div>
+</section>
 ]]></summary>
 </entry>
 <entry>
@@ -639,7 +594,7 @@ T_n = 2(T_{n - 1}) + 1 = 2(2^{n - 1} - 1) + 1 = 2^n - 1.
 
 <p>Yesterday I made a minimal working example of calling C from Haskell, where I call a simple C function to compute the greatest common denominator, or “GCD”. The Haskell portion only serves as a wrapper around the C function. This post is a brief look at the whole setup.</p>
 <h1 id="the-setup">The Setup</h1>
-<p>I used <code>ghc</code> 8.0.1, and <code>gcc</code> 5.4.0. <a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a></p>
+<p>I used <code>ghc</code> 8.0.1, and <code>gcc</code> 5.4.0. <a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
 <h2 id="folder-structure">Folder Structure</h2>
 <pre><code>2017-04-02-calling-c-from-haskell
 ├── build.sh
@@ -657,94 +612,60 @@ T_n = 2(T_{n - 1}) + 1 = 2(2^{n - 1} - 1) + 1 = 2^n - 1.
 <div class="raw-link sourceCode">
 <table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>■</pre></td><td class="sourceCode"><pre><code><a class="raw" href= "/code/2017-04-02-calling-c-from-haskell/c/gcd.h" mimetype=text/plain >gcd.h</a></code></pre></td></tr></tbody></table>
 </div>
-<div class="sourceCode" input="code/2017-04-02-calling-c-from-haskell/c/gcd.h"><table class="sourceCode numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
-</pre></td><td class="sourceCode"><pre><code class="sourceCode">int gcd(int m, int r);</code></pre></td></tr></table></div>
+<div class="sourceCode" id="cb2" data-input="code/2017-04-02-calling-c-from-haskell/c/gcd.h"><pre class="sourceCode numberSource numberLines"><code class="sourceCode"><a class="sourceLine" id="cb2-1" title="1">int gcd(int m, int r);</a></code></pre></div>
 </div>
 <div class="code-and-raw lineCntMax100">
 <div class="raw-link sourceCode">
 <table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href= "/code/2017-04-02-calling-c-from-haskell/c/gcd.c" mimetype=text/plain >gcd.c</a></code></pre></td></tr></tbody></table>
 </div>
-<div class="sourceCode" input="code/2017-04-02-calling-c-from-haskell/c/gcd.c"><table class="sourceCode numberLines c"><tr class="sourceCode"><td class="lineNumbers"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-</pre></td><td class="sourceCode"><pre><code class="sourceCode c"><span class="pp">#include </span><span class="im">&quot;gcd.h&quot;</span>
-
-<span class="co">/* Find greatest common divisor. */</span>
-<span class="dt">int</span> gcd(<span class="dt">int</span> m, <span class="dt">int</span> r)
-{
-	<span class="cf">if</span> (r == <span class="dv">0</span>)
-		<span class="cf">return</span> m;
-
-	<span class="cf">return</span> gcd(r, m % r);
-}</code></pre></td></tr></table></div>
+<div class="sourceCode" id="cb3" data-input="code/2017-04-02-calling-c-from-haskell/c/gcd.c"><pre class="sourceCode numberSource numberLines c"><code class="sourceCode c"><a class="sourceLine" id="cb3-1" title="1"><span class="pp">#include </span><span class="im">&quot;gcd.h&quot;</span></a>
+<a class="sourceLine" id="cb3-2" title="2"></a>
+<a class="sourceLine" id="cb3-3" title="3"><span class="co">/* Find greatest common divisor. */</span></a>
+<a class="sourceLine" id="cb3-4" title="4"><span class="dt">int</span> gcd(<span class="dt">int</span> m, <span class="dt">int</span> r)</a>
+<a class="sourceLine" id="cb3-5" title="5">{</a>
+<a class="sourceLine" id="cb3-6" title="6">	<span class="cf">if</span> (r == <span class="dv">0</span>)</a>
+<a class="sourceLine" id="cb3-7" title="7">		<span class="cf">return</span> m;</a>
+<a class="sourceLine" id="cb3-8" title="8"></a>
+<a class="sourceLine" id="cb3-9" title="9">	<span class="cf">return</span> gcd(r, m % r);</a>
+<a class="sourceLine" id="cb3-10" title="10">}</a></code></pre></div>
 </div>
 <div class="code-and-raw lineCntMax100">
 <div class="raw-link sourceCode">
 <table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href= "/code/2017-04-02-calling-c-from-haskell/hs/GCD.hs" mimetype=text/plain >GCD.hs</a></code></pre></td></tr></tbody></table>
 </div>
-<div class="sourceCode" input="code/2017-04-02-calling-c-from-haskell/hs/GCD.hs"><table class="sourceCode numberLines haskell"><tr class="sourceCode"><td class="lineNumbers"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-</pre></td><td class="sourceCode"><pre><code class="sourceCode haskell"><span class="kw">module</span> <span class="dt">GCD</span> <span class="kw">where</span>
-
-<span class="kw">import </span><span class="dt">Foreign</span>
-<span class="kw">import </span><span class="dt">Foreign.C.Types</span>
-
-foreign <span class="kw">import </span>ccall &quot;gcd&quot;
-<span class="ot">  c_gcd ::</span> <span class="dt">CInt</span> <span class="ot">-&gt;</span> <span class="dt">CInt</span> <span class="ot">-&gt;</span> <span class="dt">CInt</span>
-
-<span class="ot">f_gcd ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span>
-f_gcd a b <span class="fu">=</span> fromIntegral <span class="fu">$</span> c_gcd (fromIntegral a) (fromIntegral b)</code></pre></td></tr></table></div>
+<div class="sourceCode" id="cb4" data-input="code/2017-04-02-calling-c-from-haskell/hs/GCD.hs"><pre class="sourceCode numberSource numberLines haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb4-1" title="1"><span class="kw">module</span> <span class="dt">GCD</span> <span class="kw">where</span></a>
+<a class="sourceLine" id="cb4-2" title="2"></a>
+<a class="sourceLine" id="cb4-3" title="3"><span class="kw">import</span> <span class="dt">Foreign</span></a>
+<a class="sourceLine" id="cb4-4" title="4"><span class="kw">import</span> <span class="dt">Foreign.C.Types</span></a>
+<a class="sourceLine" id="cb4-5" title="5"></a>
+<a class="sourceLine" id="cb4-6" title="6">foreign <span class="kw">import</span> ccall &quot;gcd&quot;</a>
+<a class="sourceLine" id="cb4-7" title="7"><span class="ot">  c_gcd ::</span> <span class="dt">CInt</span> <span class="ot">-&gt;</span> <span class="dt">CInt</span> <span class="ot">-&gt;</span> <span class="dt">CInt</span></a>
+<a class="sourceLine" id="cb4-8" title="8"></a>
+<a class="sourceLine" id="cb4-9" title="9"><span class="ot">f_gcd ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span></a>
+<a class="sourceLine" id="cb4-10" title="10">f_gcd a b <span class="fu">=</span> <span class="fu">fromIntegral</span> <span class="fu">$</span> c_gcd (<span class="fu">fromIntegral</span> a) (<span class="fu">fromIntegral</span> b)</a></code></pre></div>
 </div>
 <div class="code-and-raw lineCntMax10">
 <div class="raw-link sourceCode">
 <table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>■</pre></td><td class="sourceCode"><pre><code><a class="raw" href= "/code/2017-04-02-calling-c-from-haskell/hs/ffi.hs" mimetype=text/plain >ffi.hs</a></code></pre></td></tr></tbody></table>
 </div>
-<div class="sourceCode" input="code/2017-04-02-calling-c-from-haskell/hs/ffi.hs"><table class="sourceCode numberLines haskell"><tr class="sourceCode"><td class="lineNumbers"><pre>1
-2
-3
-4
-</pre></td><td class="sourceCode"><pre><code class="sourceCode haskell"><span class="kw">import </span><span class="dt">GCD</span>
-
-<span class="ot">main ::</span> <span class="dt">IO</span> ()
-main <span class="fu">=</span> mapM_ (print <span class="fu">.</span> uncurry f_gcd) [(<span class="dv">8</span>, <span class="dv">12</span>), (<span class="dv">30</span>, <span class="dv">105</span>), (<span class="dv">24</span>, <span class="dv">108</span>)]</code></pre></td></tr></table></div>
+<div class="sourceCode" id="cb5" data-input="code/2017-04-02-calling-c-from-haskell/hs/ffi.hs"><pre class="sourceCode numberSource numberLines haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb5-1" title="1"><span class="kw">import</span> <span class="dt">GCD</span></a>
+<a class="sourceLine" id="cb5-2" title="2"></a>
+<a class="sourceLine" id="cb5-3" title="3"><span class="ot">main ::</span> <span class="dt">IO</span> ()</a>
+<a class="sourceLine" id="cb5-4" title="4">main <span class="fu">=</span> <span class="fu">mapM_</span> (<span class="fu">print</span> <span class="fu">.</span> <span class="fu">uncurry</span> f_gcd) [(<span class="dv">8</span>, <span class="dv">12</span>), (<span class="dv">30</span>, <span class="dv">105</span>), (<span class="dv">24</span>, <span class="dv">108</span>)]</a></code></pre></div>
 </div>
 <div class="code-and-raw lineCntMax10">
 <div class="raw-link sourceCode">
 <table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>■</pre></td><td class="sourceCode"><pre><code><a class="raw" href= "/code/2017-04-02-calling-c-from-haskell/build.sh" mimetype=text/plain >build.sh</a></code></pre></td></tr></tbody></table>
 </div>
-<div class="sourceCode" input="code/2017-04-02-calling-c-from-haskell/build.sh"><table class="sourceCode numberLines bash"><tr class="sourceCode"><td class="lineNumbers"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-</pre></td><td class="sourceCode"><pre><code class="sourceCode bash"><span class="co">#!/usr/bin/env bash</span>
-
-<span class="bu">pushd</span> c
-<span class="fu">gcc</span> -c -o gcd.o gcd.c
-<span class="bu">popd</span>
-
-<span class="bu">pushd</span> hs
-<span class="ex">ghc</span> --make ffi.hs ../c/gcd.o
-<span class="bu">popd</span></code></pre></td></tr></table></div>
+<div class="sourceCode" id="cb6" data-input="code/2017-04-02-calling-c-from-haskell/build.sh"><pre class="sourceCode numberSource numberLines bash"><code class="sourceCode bash"><a class="sourceLine" id="cb6-1" title="1"><span class="co">#!/usr/bin/env bash</span></a>
+<a class="sourceLine" id="cb6-2" title="2"></a>
+<a class="sourceLine" id="cb6-3" title="3"><span class="bu">pushd</span> c</a>
+<a class="sourceLine" id="cb6-4" title="4"><span class="fu">gcc</span> -c -o gcd.o gcd.c</a>
+<a class="sourceLine" id="cb6-5" title="5"><span class="bu">popd</span></a>
+<a class="sourceLine" id="cb6-6" title="6"></a>
+<a class="sourceLine" id="cb6-7" title="7"><span class="bu">pushd</span> hs</a>
+<a class="sourceLine" id="cb6-8" title="8"><span class="ex">ghc</span> --make ffi.hs ../c/gcd.o</a>
+<a class="sourceLine" id="cb6-9" title="9"><span class="bu">popd</span></a></code></pre></div>
 </div>
 <h1 id="discussion">Discussion</h1>
 <p>To compile the example, run the <code>build.sh</code> script. Here is the expected output of the built executable:</p>
@@ -800,12 +721,12 @@ gcd_other.c:(.text+0x0): multiple definition of `gcd&#39;
 collect2: error: ld returned 1 exit status
 `cc&#39; failed in phase `Linker&#39;. (Exit code: 1)
 </code></pre>
-<div class="footnotes">
+<section class="footnotes">
 <hr />
 <ol>
-<li id="fn1"><p>The version of gcc should not matter at all – actually, any decent C compiler should work.<a href="#fnref1">↩</a></p></li>
+<li id="fn1"><p>The version of gcc should not matter at all – actually, any decent C compiler should work.<a href="#fnref1" class="footnote-back">↩</a></p></li>
 </ol>
-</div>
+</section>
 ]]></summary>
 </entry>
 <entry>
@@ -1049,14 +970,10 @@ n) No number
 <div class="raw-link sourceCode">
 <table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>■</pre></td><td class="sourceCode"><pre><code><a class="raw" href= "/code/2016-09-24-parking-lot-problem-revisited/naive.hs" mimetype=text/plain >naive.hs</a></code></pre></td></tr></tbody></table>
 </div>
-<div class="sourceCode" input="code/2016-09-24-parking-lot-problem-revisited/naive.hs"><table class="sourceCode numberLines haskell"><tr class="sourceCode"><td class="lineNumbers"><pre>1
-2
-3
-4
-</pre></td><td class="sourceCode"><pre><code class="sourceCode haskell"><span class="kw">import </span><span class="dt">Data.List</span> ((\\))
-
-<span class="ot">minfreeNaive ::</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> <span class="dt">Int</span>
-minfreeNaive xs <span class="fu">=</span> head ([<span class="dv">0</span><span class="fu">..</span>] \\ xs)</code></pre></td></tr></table></div>
+<div class="sourceCode" id="cb1" data-input="code/2016-09-24-parking-lot-problem-revisited/naive.hs"><pre class="sourceCode numberSource numberLines haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">import</span> <span class="dt">Data.List</span> ((\\))</a>
+<a class="sourceLine" id="cb1-2" title="2"></a>
+<a class="sourceLine" id="cb1-3" title="3"><span class="ot">minfreeNaive ::</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> <span class="dt">Int</span></a>
+<a class="sourceLine" id="cb1-4" title="4">minfreeNaive xs <span class="fu">=</span> <span class="fu">head</span> ([<span class="dv">0</span><span class="fu">..</span>] \\ xs)</a></code></pre></div>
 </div>
 <p>The worst case of <strong>minfreeNaive</strong> is <span class="math inline">\(\Theta(n^2)\)</span>, because it translates into imperative pseudocode as follows:</p>
 <pre><code># Algorithm P1
@@ -1090,7 +1007,7 @@ minfreeNaive(xs)
 <p><span class="math display">\[
 \frac{n(n + 1)}{2} = \frac{n^2 + n}{2}.
 \]</span></p>
-<p>In Big-O notation, the above reduces to just <span class="math inline">\(n^2\)</span> because of the first term <span class="math inline">\(n^2\)</span> in <span class="math inline">\(n^2 + n\)</span>. <a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> As a side note, the above equation has a colorful history in mathematics, <a href="https://en.wikipedia.org/wiki/Carl_Friedrich_Gauss#Anecdotes">anecdotally attributed to Gauss</a>.</p>
+<p>In Big-O notation, the above reduces to just <span class="math inline">\(n^2\)</span> because of the first term <span class="math inline">\(n^2\)</span> in <span class="math inline">\(n^2 + n\)</span>. <a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> As a side note, the above equation has a colorful history in mathematics, <a href="https://en.wikipedia.org/wiki/Carl_Friedrich_Gauss#Anecdotes">anecdotally attributed to Gauss</a>.</p>
 <h1 id="interlude-key-insight-of-the-problem">Interlude: Key insight of the problem</h1>
 <p>Bird says the following:</p>
 <blockquote>
@@ -1101,52 +1018,33 @@ minfreeNaive(xs)
 <blockquote>
 <p>For any <strong>n</strong> cars parked, we can consider the spots numbered <code>[0..(n-1)]</code>; if all of those spots are full, we can assign spot <strong>n</strong> itself.</p>
 </blockquote>
-<p>(This statement may seem elementary, but it plays a crucial role in the divide-and-conquer approach discussed later.) Now, since <code>length [0..(n-1)]</code> coincidentally happens to be just <strong>n</strong>, the total number of spots taken into consideration for this problem is <strong>n + 1</strong> — parking spots <code>[0..(n-1)]</code> and spot <code>n</code> itself. And so we can reduce the free set to just <code>[0..(n-1)] ++ [n]</code>, or the equivalent <code>[0 .. length xs]</code> and ignore all other possible free spots. <a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> To restate, our answer to the original problem statement lies somewhere in this range <code>[0 .. length xs]</code>, which we will call <strong>reducedFrees</strong>.</p>
-<p>Now let’s look at the second sentence. It describes the set <code>filter (&lt;n) xs</code>, which we will call <strong>reducedXs</strong>. <a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a> The set <strong>reducedXs</strong> is found by removing all elements in <strong>xs</strong> that are too big for our problem size of <strong>n + 1</strong> spots — i.e., beyond the range in <strong>reducedFrees</strong>.</p>
+<p>(This statement may seem elementary, but it plays a crucial role in the divide-and-conquer approach discussed later.) Now, since <code>length [0..(n-1)]</code> coincidentally happens to be just <strong>n</strong>, the total number of spots taken into consideration for this problem is <strong>n + 1</strong> — parking spots <code>[0..(n-1)]</code> and spot <code>n</code> itself. And so we can reduce the free set to just <code>[0..(n-1)] ++ [n]</code>, or the equivalent <code>[0 .. length xs]</code> and ignore all other possible free spots. <a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a> To restate, our answer to the original problem statement lies somewhere in this range <code>[0 .. length xs]</code>, which we will call <strong>reducedFrees</strong>.</p>
+<p>Now let’s look at the second sentence. It describes the set <code>filter (&lt;n) xs</code>, which we will call <strong>reducedXs</strong>. <a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a> The set <strong>reducedXs</strong> is found by removing all elements in <strong>xs</strong> that are too big for our problem size of <strong>n + 1</strong> spots — i.e., beyond the range in <strong>reducedFrees</strong>.</p>
 <h1 id="improved-array-based-solution">Improved array-based solution</h1>
 <p>Using the insight gained above, we can restate the problem as follows:</p>
 <div class="code-and-raw lineCntMax100">
 <div class="raw-link sourceCode">
 <table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href= "/code/2016-09-24-parking-lot-problem-revisited/array1.hs" mimetype=text/plain >array1.hs</a></code></pre></td></tr></tbody></table>
 </div>
-<div class="sourceCode" input="code/2016-09-24-parking-lot-problem-revisited/array1.hs"><table class="sourceCode numberLines haskell"><tr class="sourceCode"><td class="lineNumbers"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-</pre></td><td class="sourceCode"><pre><code class="sourceCode haskell"><span class="kw">import </span><span class="dt">Data.Array</span> (<span class="dt">Array</span>, accumArray, elems)
-
-<span class="ot">minfreeArray1 ::</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> <span class="dt">Int</span>
-minfreeArray1 <span class="fu">=</span> search <span class="fu">.</span> checklist
-
-<span class="co">-- Look for first False value (empty space).</span>
-<span class="ot">search ::</span> <span class="dt">Array</span> <span class="dt">Int</span> <span class="dt">Bool</span> <span class="ot">-&gt;</span> <span class="dt">Int</span>
-search <span class="fu">=</span> length <span class="fu">.</span> takeWhile id <span class="fu">.</span> elems
-
-<span class="co">-- Convert a list of parked spaces into an ordered list of Boolean values in the</span>
-<span class="co">-- range *reducedXs*.</span>
-<span class="ot">checklist ::</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> <span class="dt">Array</span> <span class="dt">Int</span> <span class="dt">Bool</span>
-checklist xs <span class="fu">=</span> accumArray
-  (<span class="fu">||</span>) <span class="co">-- accumulating function</span>
-  <span class="dt">False</span> <span class="co">-- initial value</span>
-  (<span class="dv">0</span>, n) <span class="co">-- bounds of the array</span>
-  (zip (filter (<span class="fu">&lt;</span>n) xs) (repeat <span class="dt">True</span>)) <span class="co">-- association list of `(index, value)&#39; pairs</span>
-  <span class="kw">where</span>
-  n <span class="fu">=</span> length xs</code></pre></td></tr></table></div>
+<div class="sourceCode" id="cb3" data-input="code/2016-09-24-parking-lot-problem-revisited/array1.hs"><pre class="sourceCode numberSource numberLines haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb3-1" title="1"><span class="kw">import</span> <span class="dt">Data.Array</span> (<span class="dt">Array</span>, accumArray, elems)</a>
+<a class="sourceLine" id="cb3-2" title="2"></a>
+<a class="sourceLine" id="cb3-3" title="3"><span class="ot">minfreeArray1 ::</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> <span class="dt">Int</span></a>
+<a class="sourceLine" id="cb3-4" title="4">minfreeArray1 <span class="fu">=</span> search <span class="fu">.</span> checklist</a>
+<a class="sourceLine" id="cb3-5" title="5"></a>
+<a class="sourceLine" id="cb3-6" title="6"><span class="co">-- Look for first False value (empty space).</span></a>
+<a class="sourceLine" id="cb3-7" title="7"><span class="ot">search ::</span> <span class="dt">Array</span> <span class="dt">Int</span> <span class="dt">Bool</span> <span class="ot">-&gt;</span> <span class="dt">Int</span></a>
+<a class="sourceLine" id="cb3-8" title="8">search <span class="fu">=</span> <span class="fu">length</span> <span class="fu">.</span> <span class="fu">takeWhile</span> <span class="fu">id</span> <span class="fu">.</span> elems</a>
+<a class="sourceLine" id="cb3-9" title="9"></a>
+<a class="sourceLine" id="cb3-10" title="10"><span class="co">-- Convert a list of parked spaces into an ordered list of Boolean values in the</span></a>
+<a class="sourceLine" id="cb3-11" title="11"><span class="co">-- range *reducedXs*.</span></a>
+<a class="sourceLine" id="cb3-12" title="12"><span class="ot">checklist ::</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> <span class="dt">Array</span> <span class="dt">Int</span> <span class="dt">Bool</span></a>
+<a class="sourceLine" id="cb3-13" title="13">checklist xs <span class="fu">=</span> accumArray</a>
+<a class="sourceLine" id="cb3-14" title="14">  (<span class="fu">||</span>) <span class="co">-- accumulating function</span></a>
+<a class="sourceLine" id="cb3-15" title="15">  <span class="dt">False</span> <span class="co">-- initial value</span></a>
+<a class="sourceLine" id="cb3-16" title="16">  (<span class="dv">0</span>, n) <span class="co">-- bounds of the array</span></a>
+<a class="sourceLine" id="cb3-17" title="17">  (<span class="fu">zip</span> (<span class="fu">filter</span> (<span class="fu">&lt;</span>n) xs) (<span class="fu">repeat</span> <span class="dt">True</span>)) <span class="co">-- association list of `(index, value)&#39; pairs</span></a>
+<a class="sourceLine" id="cb3-18" title="18">  <span class="kw">where</span></a>
+<a class="sourceLine" id="cb3-19" title="19">  n <span class="fu">=</span> <span class="fu">length</span> xs</a></code></pre></div>
 </div>
 <p>.</p>
 <p>Bird says “[t]he function <em>search</em> takes an array of Booleans, converts the array into a list of Booleans and returns the length of the longest initial segment consisting of <em>True</em> entries. This number will be the position of the first <em>False</em> entry.” This is true, and we’ll soon see why this is the case.</p>
@@ -1172,12 +1070,12 @@ checklist xs <span class="fu">=</span> accumArray
 <p>Bird uses the library function <code>Data.Array.accumArray</code> to populate <code>checklist</code>. <code>accumArray</code> takes a list of index-value pairs, and if there are multiple pairs with the same index, combines the values of those pairs using the accumulating function. A common use case of <code>accumArray</code> is to use it to create a histogram of values, by using <code>(+)</code> as the accumulating function (so that all values at a particular index are summed together). In the <code>checklist</code> implementation by Bird, the accumulating function is <code>(||)</code> (logical OR function) to account for the possibility of duplicate numbers in <code>xs</code>. E.g., if <code>xs = [1, 2, 1]</code>, then the ordered pairs are <code>[(0, False), (1, True), (2, True), (1, True)]</code>, and <code>checklist</code> evaluates to <code>[False, True, True]</code>, because the <code>True</code> value in the two instances of <code>(1, True)</code> are simply OR-ed together by <code>(||)</code>.</p>
 <h2 id="using-accumarray-to-sort-numbers">Using <code>accumArray</code> to sort numbers</h2>
 <p>Bird mentions that you can use <code>accumArray</code> to sort positive integers. The code is as follows:</p>
-<div class="sourceCode" rundoc-language="haskell" rundoc-results="session"><pre class="sourceCode haskell rundoc-block"><code class="sourceCode haskell"><span class="kw">import </span><span class="dt">Data.Array</span> (<span class="dt">Array</span>, accumArray)
-
-<span class="ot">countlist ::</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> <span class="dt">Array</span> <span class="dt">Int</span> <span class="dt">Int</span>
-countlist xs <span class="fu">=</span> accumArray (<span class="fu">+</span>) <span class="dv">0</span> (<span class="dv">0</span>, n) (zip xs (repeat <span class="dv">1</span>))
-
-sort xs <span class="fu">=</span> concat [ replicate k x <span class="fu">|</span> (x, k) <span class="ot">&lt;-</span> assocs <span class="fu">$</span> countlist xs ]</code></pre></div>
+<div class="sourceCode" id="cb7" data-results="session"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb7-1" title="1"><span class="kw">import</span> <span class="dt">Data.Array</span> (<span class="dt">Array</span>, accumArray)</a>
+<a class="sourceLine" id="cb7-2" title="2"></a>
+<a class="sourceLine" id="cb7-3" title="3"><span class="ot">countlist ::</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> <span class="dt">Array</span> <span class="dt">Int</span> <span class="dt">Int</span></a>
+<a class="sourceLine" id="cb7-4" title="4">countlist xs <span class="fu">=</span> accumArray (<span class="fu">+</span>) <span class="dv">0</span> (<span class="dv">0</span>, n) (<span class="fu">zip</span> xs (<span class="fu">repeat</span> <span class="dv">1</span>))</a>
+<a class="sourceLine" id="cb7-5" title="5"></a>
+<a class="sourceLine" id="cb7-6" title="6"><span class="fu">sort</span> xs <span class="fu">=</span> <span class="fu">concat</span> [ <span class="fu">replicate</span> k x <span class="fu">|</span> (x, k) <span class="ot">&lt;-</span> assocs <span class="fu">$</span> countlist xs ]</a></code></pre></div>
 <p>. (Bird defines <code>sort</code> without the use of <code>assocs</code> which gives a list of tuples of the form <code>(index, element-at-index)</code>, but that is in error.) The way it works is, <code>countlist</code> essentially builds a histogram of numbers we want to sort. So, given <code>[0, 6, 2, 0, 0]</code>, we get <code>[(0,3),(2,1),(6,1)]</code>. We then use <code>replicate</code> in <code>sort</code> to “unpack” each element of the histogram. Continuing with the example, <code>(0,3)</code> becomes <code>[0, 0, 0]</code>, <code>(2,1)</code> becomes <code>[2]</code>, and so on. Since the result looks like <code>[[0,0,0],[2],[6]]</code> we have to <code>concat</code> it to get <code>[0,0,0,2,6]</code>, our sorted list.</p>
 <h2 id="sorting-for-free">Sorting for “free”</h2>
 <p>It should be reiterated here that ultimately we want to have an ordered list of Booleans that preserves the occupied parking spot information in the original list of “taken” spots. The way in which <code>checklist</code> performs the conversion of unordered numbers into a nice list of Booleans in the range <code>[0..n]</code> is virtually identical in design to the algorithm described by Jon Bentley in the very first chapter of his book <em>Programming Pearls</em> (2nd Ed., 2000). There Bentley used a bitmap to represent a Boolean array because of strict memory requirements — but otherwise the spirit of the data structure remains the same.</p>
@@ -1187,74 +1085,44 @@ sort xs <span class="fu">=</span> concat [ replicate k x <span class="fu">|</spa
 <div class="raw-link sourceCode">
 <table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href= "/code/2016-09-24-parking-lot-problem-revisited/array2.hs" mimetype=text/plain >array2.hs</a></code></pre></td></tr></tbody></table>
 </div>
-<div class="sourceCode" input="code/2016-09-24-parking-lot-problem-revisited/array2.hs"><table class="sourceCode numberLines haskell"><tr class="sourceCode"><td class="lineNumbers"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-</pre></td><td class="sourceCode"><pre><code class="sourceCode haskell"><span class="kw">import </span><span class="dt">Data.Array</span> (<span class="dt">Array</span>, elems)
-<span class="kw">import </span><span class="dt">Data.Array.ST</span> (runSTArray, newArray, writeArray)
-
-<span class="ot">minfreeArray2 ::</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> <span class="dt">Int</span>
-minfreeArray2 <span class="fu">=</span> search <span class="fu">.</span> checklist
-
-<span class="ot">search ::</span> <span class="dt">Array</span> <span class="dt">Int</span> <span class="dt">Bool</span> <span class="ot">-&gt;</span> <span class="dt">Int</span>
-search <span class="fu">=</span> length <span class="fu">.</span> takeWhile id <span class="fu">.</span> elems
-
-<span class="ot">checklist ::</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> <span class="dt">Array</span> <span class="dt">Int</span> <span class="dt">Bool</span>
-checklist xs <span class="fu">=</span> runSTArray <span class="fu">$</span> <span class="kw">do</span>
-  a <span class="ot">&lt;-</span> newArray (<span class="dv">0</span>, n) <span class="dt">False</span>
-  sequence [writeArray a x <span class="dt">True</span> <span class="fu">|</span> x <span class="ot">&lt;-</span> xs, x <span class="fu">&lt;</span> n]
-  return a
-  <span class="kw">where</span>
-  n <span class="fu">=</span> length xs</code></pre></td></tr></table></div>
+<div class="sourceCode" id="cb8" data-input="code/2016-09-24-parking-lot-problem-revisited/array2.hs"><pre class="sourceCode numberSource numberLines haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb8-1" title="1"><span class="kw">import</span> <span class="dt">Data.Array</span> (<span class="dt">Array</span>, elems)</a>
+<a class="sourceLine" id="cb8-2" title="2"><span class="kw">import</span> <span class="dt">Data.Array.ST</span> (runSTArray, newArray, writeArray)</a>
+<a class="sourceLine" id="cb8-3" title="3"></a>
+<a class="sourceLine" id="cb8-4" title="4"><span class="ot">minfreeArray2 ::</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> <span class="dt">Int</span></a>
+<a class="sourceLine" id="cb8-5" title="5">minfreeArray2 <span class="fu">=</span> search <span class="fu">.</span> checklist</a>
+<a class="sourceLine" id="cb8-6" title="6"></a>
+<a class="sourceLine" id="cb8-7" title="7"><span class="ot">search ::</span> <span class="dt">Array</span> <span class="dt">Int</span> <span class="dt">Bool</span> <span class="ot">-&gt;</span> <span class="dt">Int</span></a>
+<a class="sourceLine" id="cb8-8" title="8">search <span class="fu">=</span> <span class="fu">length</span> <span class="fu">.</span> <span class="fu">takeWhile</span> <span class="fu">id</span> <span class="fu">.</span> elems</a>
+<a class="sourceLine" id="cb8-9" title="9"></a>
+<a class="sourceLine" id="cb8-10" title="10"><span class="ot">checklist ::</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> <span class="dt">Array</span> <span class="dt">Int</span> <span class="dt">Bool</span></a>
+<a class="sourceLine" id="cb8-11" title="11">checklist xs <span class="fu">=</span> runSTArray <span class="fu">$</span> <span class="kw">do</span></a>
+<a class="sourceLine" id="cb8-12" title="12">  a <span class="ot">&lt;-</span> newArray (<span class="dv">0</span>, n) <span class="dt">False</span></a>
+<a class="sourceLine" id="cb8-13" title="13">  <span class="fu">sequence</span> [writeArray a x <span class="dt">True</span> <span class="fu">|</span> x <span class="ot">&lt;-</span> xs, x <span class="fu">&lt;</span> n]</a>
+<a class="sourceLine" id="cb8-14" title="14">  <span class="fu">return</span> a</a>
+<a class="sourceLine" id="cb8-15" title="15">  <span class="kw">where</span></a>
+<a class="sourceLine" id="cb8-16" title="16">  n <span class="fu">=</span> <span class="fu">length</span> xs</a></code></pre></div>
 </div>
 <p>. The use of the ST monad here reduces memory overhead, and according to Bird it is the most efficient approach using an imperative style on top of arrays.</p>
 <h1 id="divide-and-conquer-via-recursion">Divide and Conquer via Recursion</h1>
-<p>Ah, recursion. Bird describes the following divide-and-conquer algorithm as a faster alternative to <code>accumArray</code>. <a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a></p>
+<p>Ah, recursion. Bird describes the following divide-and-conquer algorithm as a faster alternative to <code>accumArray</code>. <a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a></p>
 <div class="code-and-raw lineCntMax100">
 <div class="raw-link sourceCode">
 <table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href= "/code/2016-09-24-parking-lot-problem-revisited/divideAndConquer.hs" mimetype=text/plain >divideAndConquer.hs</a></code></pre></td></tr></tbody></table>
 </div>
-<div class="sourceCode" input="code/2016-09-24-parking-lot-problem-revisited/divideAndConquer.hs"><table class="sourceCode numberLines haskell"><tr class="sourceCode"><td class="lineNumbers"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-</pre></td><td class="sourceCode"><pre><code class="sourceCode haskell"><span class="kw">import </span><span class="dt">Data.List</span> (partition)
-
-<span class="ot">minfreeRecurse ::</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> <span class="dt">Int</span>
-minfreeRecurse xs <span class="fu">=</span> minfrom <span class="dv">0</span> (length xs, xs)
-
-<span class="ot">minfrom ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> (<span class="dt">Int</span>, [<span class="dt">Int</span>]) <span class="ot">-&gt;</span> <span class="dt">Int</span>
-minfrom a (n, xs)
-  <span class="fu">|</span> (n <span class="fu">==</span> <span class="dv">0</span>) <span class="fu">=</span> a
-  <span class="fu">|</span> (m <span class="fu">==</span> b <span class="fu">-</span> a) <span class="fu">=</span> minfrom b (n <span class="fu">-</span> m, bs)
-  <span class="fu">|</span> otherwise <span class="fu">=</span> minfrom a (m, as)
-  <span class="kw">where</span>
-  (as, bs) <span class="fu">=</span> partition (<span class="fu">&lt;</span>b) xs
-  b <span class="fu">=</span> a <span class="fu">+</span> (div n <span class="dv">2</span>) <span class="fu">+</span> <span class="dv">1</span>
-  m <span class="fu">=</span> length as</code></pre></td></tr></table></div>
+<div class="sourceCode" id="cb9" data-input="code/2016-09-24-parking-lot-problem-revisited/divideAndConquer.hs"><pre class="sourceCode numberSource numberLines haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb9-1" title="1"><span class="kw">import</span> <span class="dt">Data.List</span> (partition)</a>
+<a class="sourceLine" id="cb9-2" title="2"></a>
+<a class="sourceLine" id="cb9-3" title="3"><span class="ot">minfreeRecurse ::</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> <span class="dt">Int</span></a>
+<a class="sourceLine" id="cb9-4" title="4">minfreeRecurse xs <span class="fu">=</span> minfrom <span class="dv">0</span> (<span class="fu">length</span> xs, xs)</a>
+<a class="sourceLine" id="cb9-5" title="5"></a>
+<a class="sourceLine" id="cb9-6" title="6"><span class="ot">minfrom ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> (<span class="dt">Int</span>, [<span class="dt">Int</span>]) <span class="ot">-&gt;</span> <span class="dt">Int</span></a>
+<a class="sourceLine" id="cb9-7" title="7">minfrom a (n, xs)</a>
+<a class="sourceLine" id="cb9-8" title="8">  <span class="fu">|</span> (n <span class="fu">==</span> <span class="dv">0</span>) <span class="fu">=</span> a</a>
+<a class="sourceLine" id="cb9-9" title="9">  <span class="fu">|</span> (m <span class="fu">==</span> b <span class="fu">-</span> a) <span class="fu">=</span> minfrom b (n <span class="fu">-</span> m, bs)</a>
+<a class="sourceLine" id="cb9-10" title="10">  <span class="fu">|</span> <span class="fu">otherwise</span> <span class="fu">=</span> minfrom a (m, as)</a>
+<a class="sourceLine" id="cb9-11" title="11">  <span class="kw">where</span></a>
+<a class="sourceLine" id="cb9-12" title="12">  (as, bs) <span class="fu">=</span> partition (<span class="fu">&lt;</span>b) xs</a>
+<a class="sourceLine" id="cb9-13" title="13">  b <span class="fu">=</span> a <span class="fu">+</span> (<span class="fu">div</span> n <span class="dv">2</span>) <span class="fu">+</span> <span class="dv">1</span></a>
+<a class="sourceLine" id="cb9-14" title="14">  m <span class="fu">=</span> <span class="fu">length</span> as</a></code></pre></div>
 </div>
 <p>The overall idea is that we can define the problem <code>minimum of ([0..] \\ xs)</code> by dividing up <code>xs</code> into 2 halves, and then look into the correct sub-part for the solution. Notice that we are partitioning the <code>xs</code> (soley the list of parked spots), and <em>not</em> the parking lot itself.</p>
 <p>For example, we can divide up <code>xs</code> into <code>as</code> and <code>bs</code>, where <code>(as, bs) = partition (&lt;b) xs</code>. (The <code>partition</code> library function simply splits up a given list into 2 subsets, those that satisfy the given condition, and those that do not.) Deciding which partition to look at is simple: look in the upper partition if the lower partition (containing the smaller-numbered parking spots) is full.</p>
@@ -1267,25 +1135,25 @@ minfrom a (n, xs)
 <p>We want minimal size difference between <code>as</code> and <code>bs</code> because otherwise we might end up calling <code>minfrom</code> many times; we want it so that whether we use <code>as</code> or <code>bs</code> (in whichever sequence), we deal with smaller and smaller lists of parked cars. The only way to do this is to divide the list of cars by half each time. This is where we get <code>div n 2</code>. This is, more or less, the spirit of binary search.</p>
 <p>The requirement of the second condition is more subtle — we want to avoid taking a zero-length partition for <code>as</code>, because our main conditional <code>m == b - a</code> relies on the fact that this distance, <code>b - a</code>, is nonzero. This is because it must ask the question, “do the parking spots in the first partition fill up all spots in the range that it can cover?”, and this question loses its meaning if we give it an empty partition. Seen another way, the statement <code>partition (&lt;b) xs</code>, and the act of choosing those <code>xs</code> that are <code>b</code> or bigger <em>if the first partition is completely full</em>, is the recursive analogue of the Fullness Theorem. Whereas the Fullness Theorem did not really help much in the iterative array-based solution, it plays a key role in this recursive solution, because it correctly describes how to partition <code>xs</code> with minimum fuss. The phrase “otherwise assign spot <strong>n</strong> itself” in that Theorem translates to choosing the non-full, bigger partition, because it starts with spot <strong>n</strong> — the only twist here is that instead of assigning spot <strong>n</strong> directly, we re-assign ourselves a new problem of looking for parking spots <em>starting</em> with spot <strong>n</strong>. To be clear, this partitioning scheme merely discards consecutive runs of parked cars, about <code>div n 2</code> spots at a time.</p>
 <p>For demonstrative purposes, let’s consider what would happen if we ignored what we just said and really did define <code>b</code> as</p>
-<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell">b <span class="fu">=</span> a <span class="fu">+</span> (div n <span class="dv">2</span>)</code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb10-1" title="1">b <span class="fu">=</span> a <span class="fu">+</span> (<span class="fu">div</span> n <span class="dv">2</span>)</a></code></pre></div>
 <p>for the case of <code>xs = [0]</code> and <code>n = 1</code>; we would start off with</p>
-<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell">minfrom <span class="dv">0</span> (<span class="dv">1</span>, [<span class="dv">0</span>])</code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb11-1" title="1">minfrom <span class="dv">0</span> (<span class="dv">1</span>, [<span class="dv">0</span>])</a></code></pre></div>
 <p>and</p>
 <p><span class="math display">\[
 b = 0 + (\mathrm{div}\;1\,2) = 0 + 0 = 0,
 \]</span></p>
 <p>such that</p>
-<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell">partition (<span class="fu">&lt;</span><span class="dv">0</span>) [<span class="dv">0</span>] <span class="co">-- ([], [0])</span>
-<span class="co">-- as = []</span>
-<span class="co">-- m = 0</span>
-<span class="co">-- bs = [0]</span>
-<span class="co">-- n = 1</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb12-1" title="1">partition (<span class="fu">&lt;</span><span class="dv">0</span>) [<span class="dv">0</span>] <span class="co">-- ([], [0])</span></a>
+<a class="sourceLine" id="cb12-2" title="2"><span class="co">-- as = []</span></a>
+<a class="sourceLine" id="cb12-3" title="3"><span class="co">-- m = 0</span></a>
+<a class="sourceLine" id="cb12-4" title="4"><span class="co">-- bs = [0]</span></a>
+<a class="sourceLine" id="cb12-5" title="5"><span class="co">-- n = 1</span></a></code></pre></div>
 <p>and since</p>
-<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell">(m <span class="fu">==</span> b <span class="fu">-</span> a) <span class="co">-- (0 == 0 - 0) true!</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb13-1" title="1">(m <span class="fu">==</span> b <span class="fu">-</span> a) <span class="co">-- (0 == 0 - 0) true!</span></a></code></pre></div>
 <p>we would in turn execute</p>
-<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell">minfrom b (n <span class="fu">-</span> m, bs) <span class="co">-- minfrom 0 (1, [0])</span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb14-1" title="1">minfrom b (n <span class="fu">-</span> m, bs) <span class="co">-- minfrom 0 (1, [0])</span></a></code></pre></div>
 <p>, resulting in an infinite loop! Thus the correct way to choose <code>b</code> is with</p>
-<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell">b <span class="fu">=</span> a <span class="fu">+</span> (div n <span class="dv">2</span>) <span class="fu">+</span> <span class="dv">1</span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb15-1" title="1">b <span class="fu">=</span> a <span class="fu">+</span> (<span class="fu">div</span> n <span class="dv">2</span>) <span class="fu">+</span> <span class="dv">1</span></a></code></pre></div>
 <h2 id="running-time">Running time</h2>
 <p>Bird gives the running time as <span class="math inline">\(\Theta(n)\)</span>. He offers this cryptic phrase:</p>
 <blockquote>
@@ -1296,15 +1164,15 @@ b = 0 + (\mathrm{div}\;1\,2) = 0 + 0 = 0,
 <p>In my sister post, I also described a similar problem, dubbed the Parking Load problem. At the time, I was quite surprised at how the answer was much simpler and easier to calculate. From the insight I gained from the Fullness Theorem, I think it is clear why that is the case. Indeed, the Parking Load problem is just a slight wrinkle of the Fullness Theorem, where <code>n</code> (number of parked cars) is known, but <code>b</code> (the endpoint of the “partition”), if you will, is unknown. The problem is to simply compute <span class="math inline">\(b + 1 - n\)</span>. (We have to add 1 to <code>b</code> because we use 0-based indexing.) I love it when you can explain something in a new way — don’t you?</p>
 <h1 id="conclusion">Conclusion</h1>
 <p>I think this lays to rest (for now) the intricacies of the Parking Lot problem, or as Bird puts it, finding the smallest free number. Still, I like my parking lot analogy better because I believe it’s important to talk about problems in a way that can be related to the real world.</p>
-<div class="footnotes">
+<section class="footnotes">
 <hr />
 <ol>
-<li id="fn1"><p>Big-O only cares about growth of the algorithm; the <span class="math inline">\(n^2\)</span> will come to dominate the growth rate as <span class="math inline">\(n\)</span> gets bigger.<a href="#fnref1">↩</a></p></li>
-<li id="fn2"><p>It is for this reason, apart from looping indefinitely, that justifies the <strong>break</strong> condition for the outer loop in Algorithm P1.<a href="#fnref2">↩</a></p></li>
-<li id="fn3"><p>Bird wrote (&lt;=n) as the filter condition, but this is in error. The simpler <code>(&lt;n)</code> does the job just as well.<a href="#fnref3">↩</a></p></li>
-<li id="fn4"><p>According to Bird, it is 20% faster than the array-based algorithm.<a href="#fnref4">↩</a></p></li>
+<li id="fn1"><p>Big-O only cares about growth of the algorithm; the <span class="math inline">\(n^2\)</span> will come to dominate the growth rate as <span class="math inline">\(n\)</span> gets bigger.<a href="#fnref1" class="footnote-back">↩</a></p></li>
+<li id="fn2"><p>It is for this reason, apart from looping indefinitely, that justifies the <strong>break</strong> condition for the outer loop in Algorithm P1.<a href="#fnref2" class="footnote-back">↩</a></p></li>
+<li id="fn3"><p>Bird wrote (&lt;=n) as the filter condition, but this is in error. The simpler <code>(&lt;n)</code> does the job just as well.<a href="#fnref3" class="footnote-back">↩</a></p></li>
+<li id="fn4"><p>According to Bird, it is 20% faster than the array-based algorithm.<a href="#fnref4" class="footnote-back">↩</a></p></li>
 </ol>
-</div>
+</section>
 ]]></summary>
 </entry>
 <entry>

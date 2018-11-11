@@ -5,9 +5,9 @@
 		<title>Linus's Blog - Emacs: Using a Unix Filter</title>
 		<link rel="stylesheet" href="../css/base.css">
 		<link rel="stylesheet" href="../css/syntax.css">
-		<link href="http://fonts.googleapis.com/css?family=Merriweather:300,300italic,700italic,700" rel="stylesheet" type="text/css">
+		<link href="https://fonts.googleapis.com/css?family=Merriweather:300,300italic,700italic,700" rel="stylesheet" type="text/css">
 		<link rel="shortcut icon" type="image/png" href="../favicon.png">
-		<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+		<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 		<script src="../misc.js"></script>
 		<!-- https://github.com/mreid/markreidname-hakyll/blob/master/_templates/mathjax.html -->
 <script type="text/x-mathjax-config">
@@ -23,7 +23,7 @@
 		"HTML-CSS": { availableFonts: ["TeX"] }
 	});
 </script>
-<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"> </script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"> </script>
 
 	</head>
 	<body>
@@ -48,10 +48,8 @@
 
 <p>In Vim, you can easily call an external text utility on a region of text, then replace that selected region with the output of the text utility. This is very useful for doing bulk transformations quickly.</p>
 <p>I coded up a very stupid commenting program called <a href="https://github.com/listx/nox"><code>nox</code></a> that comments/uncomments text. Here is how you’d use it straight from the terminal:</p>
-<div class="sourceCode"><table class="sourceCode bash numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
-2
-</pre></td><td class="sourceCode"><pre><code class="sourceCode bash">$ <span class="bu">echo</span> <span class="st">&quot;hi&quot;</span> <span class="kw">|</span> <span class="ex">nox</span> -l c
-<span class="ex">//hi</span></code></pre></td></tr></table></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource bash numberLines"><code class="sourceCode bash"><a class="sourceLine" id="cb1-1" title="1">$ <span class="bu">echo</span> <span class="st">&quot;hi&quot;</span> <span class="kw">|</span> <span class="ex">nox</span> -l c</a>
+<a class="sourceLine" id="cb1-2" title="2"><span class="ex">//hi</span></a></code></pre></div>
 <p>By default nox comments text, and the <code>-l c</code> option sets it to C-styled comments, <code>//</code>.</p>
 <h2 id="emacs">Emacs</h2>
 <p>I use <a href="http://gitorious.org/evil/pages/Home">evil-mode</a> with Emacs. Here is my relevant <code>.emacs</code> to set up <code>nox</code> correctly:</p>
@@ -59,102 +57,54 @@
 <div class="raw-link sourceCode">
 <table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/emacs-unix-filter.el" mimetype="text/plain">emacs-unix-filter.el</a></code></pre></td></tr></tbody></table>
 </div>
-<div class="sourceCode" input="code/emacs-unix-filter.el"><table class="sourceCode numberLines commonlisp"><tr class="sourceCode"><td class="lineNumbers"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-34
-35
-36
-37
-38
-39
-40
-41
-42
-43
-44
-45
-46
-47
-48
-</pre></td><td class="sourceCode"><pre><code class="sourceCode commonlisp">(<span class="kw">defun</span><span class="fu"> my-addrem-comment-region </span>(b e f)
-	<span class="st">&quot;Use the `nox' command to comment the current region.&quot;</span>
-	(interactive)
-	(shell-command-on-region
-	<span class="co">; beginning and end of buffer</span>
-	b e
-	<span class="co">; command and parameters</span>
-	(concat
-		(<span class="kw">if</span> f
-			<span class="st">&quot;~/prog/nox/src/nox -l &quot;</span>
-			<span class="st">&quot;~/prog/nox/src/nox -u -l &quot;</span>)
-			(<span class="kw">case</span> (with-current-buffer (current-buffer) major-mode)
-				('c-mode <span class="st">&quot;c&quot;</span>)
-				('emacs-lisp-mode <span class="st">&quot;emacslisp&quot;</span>)
-				('haskell-mode <span class="st">&quot;haskell&quot;</span>)
-				('LilyPond-mode <span class="st">&quot;tex&quot;</span>)
-				('plain-tex-mode <span class="st">&quot;tex&quot;</span>)
-				(<span class="kw">t</span> <span class="st">&quot;shell&quot;</span>))<span class="co">; default to shell</span>
-		)
-	<span class="co">; output buffer</span>
-	(current-buffer)
-	<span class="co">; replace?</span>
-	<span class="kw">t</span>
-	<span class="co">; name of the error buffer</span>
-	<span class="st">&quot;*nox Error Buffer*&quot;</span>
-	<span class="co">; show error buffer?</span>
-	<span class="kw">t</span>
-	)
-)
-(<span class="kw">defun</span><span class="fu"> my-addrem-comment </span>(f)
-	(<span class="kw">if</span> (use-region-p)
-		(<span class="kw">progn</span>
-			(my-addrem-comment-region (region-beginning) (region-end) f)
-			(evil-visual-char)
-			(evil-exit-visual-state)
-		)
-		(my-addrem-comment-region
-			(line-beginning-position) (line-beginning-position <span class="dv">2</span>) f)
-	)
-)
-(define-key evil-visual-state-map <span class="st">&quot;,c&quot;</span>
-	(<span class="kw">lambda</span> () (interactive) (my-addrem-comment <span class="kw">t</span>))) <span class="co">; add comment</span>
-(define-key evil-visual-state-map <span class="st">&quot;,C&quot;</span> (<span class="kw">lambda</span> () (interactive)
-	(my-addrem-comment <span class="kw">nil</span>))) <span class="co">; remove comment</span>
-(define-key evil-normal-state-map <span class="st">&quot;,c&quot;</span>
-	(<span class="kw">lambda</span> () (interactive) (my-addrem-comment <span class="kw">t</span>))) <span class="co">; add comment</span>
-(define-key evil-normal-state-map <span class="st">&quot;,C&quot;</span>
-	(<span class="kw">lambda</span> () (interactive) (my-addrem-comment <span class="kw">nil</span>))) <span class="co">; remove comment</span></code></pre></td></tr></table></div>
+<div class="sourceCode" id="cb2" data-input="code/emacs-unix-filter.el"><pre class="sourceCode numberSource numberLines commonlisp"><code class="sourceCode commonlisp"><a class="sourceLine" id="cb2-1" title="1">(<span class="kw">defun</span><span class="fu"> my-addrem-comment-region </span>(b e f)</a>
+<a class="sourceLine" id="cb2-2" title="2">	<span class="st">&quot;Use the `nox' command to comment the current region.&quot;</span></a>
+<a class="sourceLine" id="cb2-3" title="3">	(interactive)</a>
+<a class="sourceLine" id="cb2-4" title="4">	(shell-command-on-region</a>
+<a class="sourceLine" id="cb2-5" title="5">	<span class="co">; beginning and end of buffer</span></a>
+<a class="sourceLine" id="cb2-6" title="6">	b e</a>
+<a class="sourceLine" id="cb2-7" title="7">	<span class="co">; command and parameters</span></a>
+<a class="sourceLine" id="cb2-8" title="8">	(concat</a>
+<a class="sourceLine" id="cb2-9" title="9">		(<span class="kw">if</span> f</a>
+<a class="sourceLine" id="cb2-10" title="10">			<span class="st">&quot;~/prog/nox/src/nox -l &quot;</span></a>
+<a class="sourceLine" id="cb2-11" title="11">			<span class="st">&quot;~/prog/nox/src/nox -u -l &quot;</span>)</a>
+<a class="sourceLine" id="cb2-12" title="12">			(<span class="kw">case</span> (with-current-buffer (current-buffer) major-mode)</a>
+<a class="sourceLine" id="cb2-13" title="13">				('c-mode <span class="st">&quot;c&quot;</span>)</a>
+<a class="sourceLine" id="cb2-14" title="14">				('emacs-lisp-mode <span class="st">&quot;emacslisp&quot;</span>)</a>
+<a class="sourceLine" id="cb2-15" title="15">				('haskell-mode <span class="st">&quot;haskell&quot;</span>)</a>
+<a class="sourceLine" id="cb2-16" title="16">				('LilyPond-mode <span class="st">&quot;tex&quot;</span>)</a>
+<a class="sourceLine" id="cb2-17" title="17">				('plain-tex-mode <span class="st">&quot;tex&quot;</span>)</a>
+<a class="sourceLine" id="cb2-18" title="18">				(<span class="kw">t</span> <span class="st">&quot;shell&quot;</span>))<span class="co">; default to shell</span></a>
+<a class="sourceLine" id="cb2-19" title="19">		)</a>
+<a class="sourceLine" id="cb2-20" title="20">	<span class="co">; output buffer</span></a>
+<a class="sourceLine" id="cb2-21" title="21">	(current-buffer)</a>
+<a class="sourceLine" id="cb2-22" title="22">	<span class="co">; replace?</span></a>
+<a class="sourceLine" id="cb2-23" title="23">	<span class="kw">t</span></a>
+<a class="sourceLine" id="cb2-24" title="24">	<span class="co">; name of the error buffer</span></a>
+<a class="sourceLine" id="cb2-25" title="25">	<span class="st">&quot;*nox Error Buffer*&quot;</span></a>
+<a class="sourceLine" id="cb2-26" title="26">	<span class="co">; show error buffer?</span></a>
+<a class="sourceLine" id="cb2-27" title="27">	<span class="kw">t</span></a>
+<a class="sourceLine" id="cb2-28" title="28">	)</a>
+<a class="sourceLine" id="cb2-29" title="29">)</a>
+<a class="sourceLine" id="cb2-30" title="30">(<span class="kw">defun</span><span class="fu"> my-addrem-comment </span>(f)</a>
+<a class="sourceLine" id="cb2-31" title="31">	(<span class="kw">if</span> (use-region-p)</a>
+<a class="sourceLine" id="cb2-32" title="32">		(<span class="kw">progn</span></a>
+<a class="sourceLine" id="cb2-33" title="33">			(my-addrem-comment-region (region-beginning) (region-end) f)</a>
+<a class="sourceLine" id="cb2-34" title="34">			(evil-visual-char)</a>
+<a class="sourceLine" id="cb2-35" title="35">			(evil-exit-visual-state)</a>
+<a class="sourceLine" id="cb2-36" title="36">		)</a>
+<a class="sourceLine" id="cb2-37" title="37">		(my-addrem-comment-region</a>
+<a class="sourceLine" id="cb2-38" title="38">			(line-beginning-position) (line-beginning-position <span class="dv">2</span>) f)</a>
+<a class="sourceLine" id="cb2-39" title="39">	)</a>
+<a class="sourceLine" id="cb2-40" title="40">)</a>
+<a class="sourceLine" id="cb2-41" title="41">(define-key evil-visual-state-map <span class="st">&quot;,c&quot;</span></a>
+<a class="sourceLine" id="cb2-42" title="42">	(<span class="kw">lambda</span> () (interactive) (my-addrem-comment <span class="kw">t</span>))) <span class="co">; add comment</span></a>
+<a class="sourceLine" id="cb2-43" title="43">(define-key evil-visual-state-map <span class="st">&quot;,C&quot;</span> (<span class="kw">lambda</span> () (interactive)</a>
+<a class="sourceLine" id="cb2-44" title="44">	(my-addrem-comment <span class="kw">nil</span>))) <span class="co">; remove comment</span></a>
+<a class="sourceLine" id="cb2-45" title="45">(define-key evil-normal-state-map <span class="st">&quot;,c&quot;</span></a>
+<a class="sourceLine" id="cb2-46" title="46">	(<span class="kw">lambda</span> () (interactive) (my-addrem-comment <span class="kw">t</span>))) <span class="co">; add comment</span></a>
+<a class="sourceLine" id="cb2-47" title="47">(define-key evil-normal-state-map <span class="st">&quot;,C&quot;</span></a>
+<a class="sourceLine" id="cb2-48" title="48">	(<span class="kw">lambda</span> () (interactive) (my-addrem-comment <span class="kw">nil</span>))) <span class="co">; remove comment</span></a></code></pre></div>
 </div>
 <p>This is certainly not the most beautiful code, but it works.</p>
 <h3 id="references">References</h3>
@@ -169,7 +119,7 @@
 			<a href="https://github.com/listx/listx_blog">Site</a>
 			<a href="https://github.com/listx/listx.github.io">generated</a>
 			with
-			<a href="http://jaspervdj.be/hakyll">Hakyll</a>
+			<a href="https://jaspervdj.be/hakyll">Hakyll</a>
 			and
 			<a href="http://sebastiaanvisser.github.com/clay">Clay</a>.
 			<br>

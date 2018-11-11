@@ -5,9 +5,9 @@
 		<title>Linus's Blog - Programming Puzzle: Game Button Sequence Recognizer</title>
 		<link rel="stylesheet" href="../css/base.css">
 		<link rel="stylesheet" href="../css/syntax.css">
-		<link href="http://fonts.googleapis.com/css?family=Merriweather:300,300italic,700italic,700" rel="stylesheet" type="text/css">
+		<link href="https://fonts.googleapis.com/css?family=Merriweather:300,300italic,700italic,700" rel="stylesheet" type="text/css">
 		<link rel="shortcut icon" type="image/png" href="../favicon.png">
-		<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+		<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 		<script src="../misc.js"></script>
 		<!-- https://github.com/mreid/markreidname-hakyll/blob/master/_templates/mathjax.html -->
 <script type="text/x-mathjax-config">
@@ -23,7 +23,7 @@
 		"HTML-CSS": { availableFonts: ["TeX"] }
 	});
 </script>
-<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"> </script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"> </script>
 
 	</head>
 	<body>
@@ -67,84 +67,45 @@ on_button(&quot;punch&quot;)     # [&quot;uppercut&quot;, &quot;uppercut_2&quot;
 <div class="raw-link sourceCode">
 <table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/toy/game-button-seq/interview_ver.hs" mimetype="text/plain">interview_ver.hs</a></code></pre></td></tr></tbody></table>
 </div>
-<div class="sourceCode" input="code/toy/game-button-seq/interview_ver.hs"><table class="sourceCode numberLines haskell"><tr class="sourceCode"><td class="lineNumbers"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-34
-35
-36
-37
-38
-39
-</pre></td><td class="sourceCode"><pre><code class="sourceCode haskell"><span class="kw">import </span><span class="dt">Data.List</span>
-
-<span class="kw">type</span> <span class="dt">ButtonSeqDB</span> <span class="fu">=</span> [(<span class="dt">ButtonSeq</span>, <span class="dt">Name</span>)]
-<span class="kw">type</span> <span class="dt">ButtonSeq</span> <span class="fu">=</span> [<span class="dt">String</span>]
-<span class="kw">type</span> <span class="dt">Name</span> <span class="fu">=</span> <span class="dt">String</span>
-
-<span class="co">-- Default DB of button sequences.</span>
-<span class="ot">buttonSeqDB ::</span> <span class="dt">ButtonSeqDB</span>
-buttonSeqDB <span class="fu">=</span>
-  [ ([<span class="st">&quot;down&quot;</span>, <span class="st">&quot;forward&quot;</span>, <span class="st">&quot;punch&quot;</span>], <span class="st">&quot;hadoken&quot;</span>)
-  , ([<span class="st">&quot;forward&quot;</span>, <span class="st">&quot;punch&quot;</span>], <span class="st">&quot;charger&quot;</span>)
-  , ([<span class="st">&quot;up&quot;</span>, <span class="st">&quot;punch&quot;</span>], <span class="st">&quot;uppercut&quot;</span>)
-  ]
-
-<span class="ot">register ::</span> <span class="dt">ButtonSeq</span> <span class="ot">-&gt;</span> <span class="dt">Name</span> <span class="ot">-&gt;</span> <span class="dt">ButtonSeqDB</span> <span class="ot">-&gt;</span> <span class="dt">ButtonSeqDB</span>
-register sequence name db
-  <span class="fu">|</span> null sequence <span class="fu">=</span> db
-  <span class="fu">|</span> alreadyExists <span class="fu">=</span> db
-  <span class="fu">|</span> otherwise <span class="fu">=</span> (sequence, name) <span class="fu">:</span> db
-  <span class="kw">where</span>
-  alreadyExists <span class="fu">=</span> elem (sequence, name) db
-
-<span class="ot">onButtons ::</span> <span class="dt">ButtonSeq</span> <span class="ot">-&gt;</span> <span class="dt">ButtonSeqDB</span> <span class="ot">-&gt;</span> [<span class="dt">Name</span>]
-onButtons buttonHist db <span class="fu">=</span> map snd
-  <span class="fu">.</span> fst
-  <span class="fu">.</span> foldl step ([], db)
-  <span class="fu">$</span> reverse buttonHist
-  <span class="kw">where</span>
-  step acc<span class="fu">@</span>(foundSoFar, dbRem) button
-    <span class="fu">|</span> null remaining <span class="fu">=</span> acc
-    <span class="fu">|</span> otherwise <span class="fu">=</span>
-      ( foundSoFar <span class="fu">++</span> entriesComplete
-      , dbRem'
-      )
-    <span class="kw">where</span>
-    remaining <span class="fu">=</span> filter ((<span class="fu">==</span>button) <span class="fu">.</span> last <span class="fu">.</span> fst)
-      <span class="fu">$</span> filter (not <span class="fu">.</span> null <span class="fu">.</span> fst) dbRem
-    dbRem' <span class="fu">=</span> map (\(a, b) <span class="ot">-&gt;</span> (init a, b)) remaining
-    entriesComplete <span class="fu">=</span> filter (null <span class="fu">.</span> fst) dbRem'</code></pre></td></tr></table></div>
+<div class="sourceCode" id="cb2" data-input="code/toy/game-button-seq/interview_ver.hs"><pre class="sourceCode numberSource numberLines haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb2-1" title="1"><span class="kw">import</span> <span class="dt">Data.List</span></a>
+<a class="sourceLine" id="cb2-2" title="2"></a>
+<a class="sourceLine" id="cb2-3" title="3"><span class="kw">type</span> <span class="dt">ButtonSeqDB</span> <span class="fu">=</span> [(<span class="dt">ButtonSeq</span>, <span class="dt">Name</span>)]</a>
+<a class="sourceLine" id="cb2-4" title="4"><span class="kw">type</span> <span class="dt">ButtonSeq</span> <span class="fu">=</span> [<span class="dt">String</span>]</a>
+<a class="sourceLine" id="cb2-5" title="5"><span class="kw">type</span> <span class="dt">Name</span> <span class="fu">=</span> <span class="dt">String</span></a>
+<a class="sourceLine" id="cb2-6" title="6"></a>
+<a class="sourceLine" id="cb2-7" title="7"><span class="co">-- Default DB of button sequences.</span></a>
+<a class="sourceLine" id="cb2-8" title="8"><span class="ot">buttonSeqDB ::</span> <span class="dt">ButtonSeqDB</span></a>
+<a class="sourceLine" id="cb2-9" title="9">buttonSeqDB <span class="fu">=</span></a>
+<a class="sourceLine" id="cb2-10" title="10">  [ ([<span class="st">&quot;down&quot;</span>, <span class="st">&quot;forward&quot;</span>, <span class="st">&quot;punch&quot;</span>], <span class="st">&quot;hadoken&quot;</span>)</a>
+<a class="sourceLine" id="cb2-11" title="11">  , ([<span class="st">&quot;forward&quot;</span>, <span class="st">&quot;punch&quot;</span>], <span class="st">&quot;charger&quot;</span>)</a>
+<a class="sourceLine" id="cb2-12" title="12">  , ([<span class="st">&quot;up&quot;</span>, <span class="st">&quot;punch&quot;</span>], <span class="st">&quot;uppercut&quot;</span>)</a>
+<a class="sourceLine" id="cb2-13" title="13">  ]</a>
+<a class="sourceLine" id="cb2-14" title="14"></a>
+<a class="sourceLine" id="cb2-15" title="15"><span class="ot">register ::</span> <span class="dt">ButtonSeq</span> <span class="ot">-&gt;</span> <span class="dt">Name</span> <span class="ot">-&gt;</span> <span class="dt">ButtonSeqDB</span> <span class="ot">-&gt;</span> <span class="dt">ButtonSeqDB</span></a>
+<a class="sourceLine" id="cb2-16" title="16">register <span class="fu">sequence</span> name db</a>
+<a class="sourceLine" id="cb2-17" title="17">  <span class="fu">|</span> <span class="fu">null</span> <span class="fu">sequence</span> <span class="fu">=</span> db</a>
+<a class="sourceLine" id="cb2-18" title="18">  <span class="fu">|</span> alreadyExists <span class="fu">=</span> db</a>
+<a class="sourceLine" id="cb2-19" title="19">  <span class="fu">|</span> <span class="fu">otherwise</span> <span class="fu">=</span> (<span class="fu">sequence</span>, name) <span class="fu">:</span> db</a>
+<a class="sourceLine" id="cb2-20" title="20">  <span class="kw">where</span></a>
+<a class="sourceLine" id="cb2-21" title="21">  alreadyExists <span class="fu">=</span> <span class="fu">elem</span> (<span class="fu">sequence</span>, name) db</a>
+<a class="sourceLine" id="cb2-22" title="22"></a>
+<a class="sourceLine" id="cb2-23" title="23"><span class="ot">onButtons ::</span> <span class="dt">ButtonSeq</span> <span class="ot">-&gt;</span> <span class="dt">ButtonSeqDB</span> <span class="ot">-&gt;</span> [<span class="dt">Name</span>]</a>
+<a class="sourceLine" id="cb2-24" title="24">onButtons buttonHist db <span class="fu">=</span> <span class="fu">map</span> <span class="fu">snd</span></a>
+<a class="sourceLine" id="cb2-25" title="25">  <span class="fu">.</span> <span class="fu">fst</span></a>
+<a class="sourceLine" id="cb2-26" title="26">  <span class="fu">.</span> <span class="fu">foldl</span> step ([], db)</a>
+<a class="sourceLine" id="cb2-27" title="27">  <span class="fu">$</span> <span class="fu">reverse</span> buttonHist</a>
+<a class="sourceLine" id="cb2-28" title="28">  <span class="kw">where</span></a>
+<a class="sourceLine" id="cb2-29" title="29">  step acc<span class="fu">@</span>(foundSoFar, dbRem) button</a>
+<a class="sourceLine" id="cb2-30" title="30">    <span class="fu">|</span> <span class="fu">null</span> remaining <span class="fu">=</span> acc</a>
+<a class="sourceLine" id="cb2-31" title="31">    <span class="fu">|</span> <span class="fu">otherwise</span> <span class="fu">=</span></a>
+<a class="sourceLine" id="cb2-32" title="32">      ( foundSoFar <span class="fu">++</span> entriesComplete</a>
+<a class="sourceLine" id="cb2-33" title="33">      , dbRem'</a>
+<a class="sourceLine" id="cb2-34" title="34">      )</a>
+<a class="sourceLine" id="cb2-35" title="35">    <span class="kw">where</span></a>
+<a class="sourceLine" id="cb2-36" title="36">    remaining <span class="fu">=</span> <span class="fu">filter</span> ((<span class="fu">==</span>button) <span class="fu">.</span> <span class="fu">last</span> <span class="fu">.</span> <span class="fu">fst</span>)</a>
+<a class="sourceLine" id="cb2-37" title="37">      <span class="fu">$</span> <span class="fu">filter</span> (<span class="fu">not</span> <span class="fu">.</span> <span class="fu">null</span> <span class="fu">.</span> <span class="fu">fst</span>) dbRem</a>
+<a class="sourceLine" id="cb2-38" title="38">    dbRem' <span class="fu">=</span> <span class="fu">map</span> (\(a, b) <span class="ot">-&gt;</span> (<span class="fu">init</span> a, b)) remaining</a>
+<a class="sourceLine" id="cb2-39" title="39">    entriesComplete <span class="fu">=</span> <span class="fu">filter</span> (<span class="fu">null</span> <span class="fu">.</span> <span class="fu">fst</span>) dbRem'</a></code></pre></div>
 </div>
 <p>. I have to admit, the <code>step</code> function in <code>onButtons</code> is essentially unreadable. But it does work:</p>
 <pre><code>$ ghci code/toy/game-button-seq/interview_ver.hs
@@ -169,194 +130,103 @@ Ok, modules loaded: Main.
 <div class="raw-link sourceCode">
 <table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/toy/game-button-seq/hash_ver.rb" mimetype="text/plain">hash_ver.rb</a></code></pre></td></tr></tbody></table>
 </div>
-<div class="sourceCode" input="code/toy/game-button-seq/hash_ver.rb"><table class="sourceCode numberLines ruby"><tr class="sourceCode"><td class="lineNumbers"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-34
-35
-36
-37
-38
-39
-40
-41
-42
-</pre></td><td class="sourceCode"><pre><code class="sourceCode ruby"><span class="kw">module</span> <span class="dt">GameButtonSeq</span>
-  <span class="co"># button_seq = [&quot;down&quot;, &quot;forward&quot;, &quot;punch&quot;]</span>
-  <span class="co"># name = &quot;hadoken&quot;</span>
-  <span class="co"># button_seq_db = a hash of {sequence =&gt; name}, but a sequence can have</span>
-  <span class="co"># multiple names if that sequence already exists.</span>
-  <span class="kw">def</span> <span class="dt">GameButtonSeq</span>.register(button_seq, name, button_seq_db)
-    <span class="co"># If the sequence already exists, simply add the new name to the old name,</span>
-    <span class="co"># and store it as a list of names.</span>
-    <span class="kw">if</span> button_seq_db.key?(button_seq)
-      button_seq_db[button_seq] = [name] + button_seq_db[button_seq]
-    <span class="kw">else</span>
-      button_seq_db[button_seq] = [name]
-    <span class="kw">end</span>
-
-    button_seq_db
-  <span class="kw">end</span>
-
-  <span class="kw">def</span> <span class="dt">GameButtonSeq</span>.on_buttons(button_seq, button_seq_db)
-    found = []
-    <span class="co"># We search the entire button_seq_db hash for the full length of N buttons</span>
-    <span class="co"># first, then N - 1 buttons, then N - 2 buttons, until the search input</span>
-    <span class="co"># becomes 0. Meanwhile, we collect any and all matches that come our way.</span>
-    <span class="co"># The point is to search based on the *last* input button, as this is the</span>
-    <span class="co"># &quot;current&quot; button that should &quot;finish&quot; whatever combination/move we were</span>
-    <span class="co"># trying to do.</span>
-    <span class="kw">while</span> button_seq.size &gt; <span class="dv">0</span>
-      <span class="kw">if</span> button_seq_db.key?(button_seq)
-        found &lt;&lt; button_seq_db[button_seq]
-      <span class="kw">end</span>
-      <span class="co"># Discard oldest button press, and search again. Even if we have a match,</span>
-      <span class="co"># it's important to search for other matches, too.</span>
-      button_seq.shift
-    <span class="kw">end</span>
-
-    <span class="co"># Clean up, so that we get [&quot;foo&quot;, &quot;bar&quot;] instead of [[&quot;foo&quot;], [&quot;bar&quot;]].</span>
-    found.flatten
-  <span class="kw">end</span>
-
-  <span class="kw">def</span> <span class="dt">GameButtonSeq</span>.add_hist(button_hist, button_name)
-    button_hist + [button_name]
-  <span class="kw">end</span>
-<span class="kw">end</span></code></pre></td></tr></table></div>
+<div class="sourceCode" id="cb4" data-input="code/toy/game-button-seq/hash_ver.rb"><pre class="sourceCode numberSource numberLines ruby"><code class="sourceCode ruby"><a class="sourceLine" id="cb4-1" title="1"><span class="kw">module</span> <span class="dt">GameButtonSeq</span></a>
+<a class="sourceLine" id="cb4-2" title="2">  <span class="co"># button_seq = [&quot;down&quot;, &quot;forward&quot;, &quot;punch&quot;]</span></a>
+<a class="sourceLine" id="cb4-3" title="3">  <span class="co"># name = &quot;hadoken&quot;</span></a>
+<a class="sourceLine" id="cb4-4" title="4">  <span class="co"># button_seq_db = a hash of {sequence =&gt; name}, but a sequence can have</span></a>
+<a class="sourceLine" id="cb4-5" title="5">  <span class="co"># multiple names if that sequence already exists.</span></a>
+<a class="sourceLine" id="cb4-6" title="6">  <span class="kw">def</span> <span class="dt">GameButtonSeq</span>.register(button_seq, name, button_seq_db)</a>
+<a class="sourceLine" id="cb4-7" title="7">    <span class="co"># If the sequence already exists, simply add the new name to the old name,</span></a>
+<a class="sourceLine" id="cb4-8" title="8">    <span class="co"># and store it as a list of names.</span></a>
+<a class="sourceLine" id="cb4-9" title="9">    <span class="kw">if</span> button_seq_db.key?(button_seq)</a>
+<a class="sourceLine" id="cb4-10" title="10">      button_seq_db[button_seq] = [name] + button_seq_db[button_seq]</a>
+<a class="sourceLine" id="cb4-11" title="11">    <span class="kw">else</span></a>
+<a class="sourceLine" id="cb4-12" title="12">      button_seq_db[button_seq] = [name]</a>
+<a class="sourceLine" id="cb4-13" title="13">    <span class="kw">end</span></a>
+<a class="sourceLine" id="cb4-14" title="14"></a>
+<a class="sourceLine" id="cb4-15" title="15">    button_seq_db</a>
+<a class="sourceLine" id="cb4-16" title="16">  <span class="kw">end</span></a>
+<a class="sourceLine" id="cb4-17" title="17"></a>
+<a class="sourceLine" id="cb4-18" title="18">  <span class="kw">def</span> <span class="dt">GameButtonSeq</span>.on_buttons(button_seq, button_seq_db)</a>
+<a class="sourceLine" id="cb4-19" title="19">    found = []</a>
+<a class="sourceLine" id="cb4-20" title="20">    <span class="co"># We search the entire button_seq_db hash for the full length of N buttons</span></a>
+<a class="sourceLine" id="cb4-21" title="21">    <span class="co"># first, then N - 1 buttons, then N - 2 buttons, until the search input</span></a>
+<a class="sourceLine" id="cb4-22" title="22">    <span class="co"># becomes 0. Meanwhile, we collect any and all matches that come our way.</span></a>
+<a class="sourceLine" id="cb4-23" title="23">    <span class="co"># The point is to search based on the *last* input button, as this is the</span></a>
+<a class="sourceLine" id="cb4-24" title="24">    <span class="co"># &quot;current&quot; button that should &quot;finish&quot; whatever combination/move we were</span></a>
+<a class="sourceLine" id="cb4-25" title="25">    <span class="co"># trying to do.</span></a>
+<a class="sourceLine" id="cb4-26" title="26">    <span class="kw">while</span> button_seq.size &gt; <span class="dv">0</span></a>
+<a class="sourceLine" id="cb4-27" title="27">      <span class="kw">if</span> button_seq_db.key?(button_seq)</a>
+<a class="sourceLine" id="cb4-28" title="28">        found &lt;&lt; button_seq_db[button_seq]</a>
+<a class="sourceLine" id="cb4-29" title="29">      <span class="kw">end</span></a>
+<a class="sourceLine" id="cb4-30" title="30">      <span class="co"># Discard oldest button press, and search again. Even if we have a match,</span></a>
+<a class="sourceLine" id="cb4-31" title="31">      <span class="co"># it's important to search for other matches, too.</span></a>
+<a class="sourceLine" id="cb4-32" title="32">      button_seq.shift</a>
+<a class="sourceLine" id="cb4-33" title="33">    <span class="kw">end</span></a>
+<a class="sourceLine" id="cb4-34" title="34"></a>
+<a class="sourceLine" id="cb4-35" title="35">    <span class="co"># Clean up, so that we get [&quot;foo&quot;, &quot;bar&quot;] instead of [[&quot;foo&quot;], [&quot;bar&quot;]].</span></a>
+<a class="sourceLine" id="cb4-36" title="36">    found.flatten</a>
+<a class="sourceLine" id="cb4-37" title="37">  <span class="kw">end</span></a>
+<a class="sourceLine" id="cb4-38" title="38"></a>
+<a class="sourceLine" id="cb4-39" title="39">  <span class="kw">def</span> <span class="dt">GameButtonSeq</span>.add_hist(button_hist, button_name)</a>
+<a class="sourceLine" id="cb4-40" title="40">    button_hist + [button_name]</a>
+<a class="sourceLine" id="cb4-41" title="41">  <span class="kw">end</span></a>
+<a class="sourceLine" id="cb4-42" title="42"><span class="kw">end</span></a></code></pre></div>
 </div>
 <p>And here is the test suite for it. You can run it with <code>ruby test_hash_ver.rb</code>.</p>
 <div class="code-and-raw lineCntMax100">
 <div class="raw-link sourceCode">
 <table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/toy/game-button-seq/test_hash_ver.rb" mimetype="text/plain">test_hash_ver.rb</a></code></pre></td></tr></tbody></table>
 </div>
-<div class="sourceCode" input="code/toy/game-button-seq/test_hash_ver.rb"><table class="sourceCode numberLines ruby"><tr class="sourceCode"><td class="lineNumbers"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-34
-35
-36
-37
-38
-39
-40
-41
-42
-43
-44
-45
-46
-47
-48
-49
-</pre></td><td class="sourceCode"><pre><code class="sourceCode ruby">require <span class="st">'minitest/autorun'</span>
-require_relative <span class="st">'./hash_ver.rb'</span>
-
-<span class="kw">class</span> <span class="dt">TestPuz</span> &lt; <span class="dt">Minitest</span>::<span class="dt">Test</span>
-
-  <span class="kw">def</span> setup
-    <span class="ot">@db</span> = <span class="dt">GameButtonSeq</span>.register([<span class="st">&quot;down&quot;</span>, <span class="st">&quot;forward&quot;</span>, <span class="st">&quot;punch&quot;</span>], <span class="st">&quot;hadoken&quot;</span>, {})
-    <span class="ot">@db</span> = <span class="dt">GameButtonSeq</span>.register([<span class="st">&quot;forward&quot;</span>, <span class="st">&quot;punch&quot;</span>], <span class="st">&quot;charger&quot;</span>, <span class="ot">@db</span>)
-    <span class="ot">@db</span> = <span class="dt">GameButtonSeq</span>.register([<span class="st">&quot;up&quot;</span>, <span class="st">&quot;punch&quot;</span>], <span class="st">&quot;uppercut&quot;</span>, <span class="ot">@db</span>)
-
-    <span class="co"># Aside: We can easily limit the size of button_hist[] by forcefully always</span>
-    <span class="co"># saving only the last N key presses, with N determined by the longest</span>
-    <span class="co"># button sequence.</span>
-    <span class="ot">@button_hist</span> = []
-
-    <span class="ot">@button_hist</span> = <span class="dt">GameButtonSeq</span>.add_hist(<span class="ot">@button_hist</span>, <span class="st">&quot;down&quot;</span>)
-    <span class="ot">@button_hist</span> = <span class="dt">GameButtonSeq</span>.add_hist(<span class="ot">@button_hist</span>, <span class="st">&quot;down&quot;</span>)
-    <span class="ot">@button_hist</span> = <span class="dt">GameButtonSeq</span>.add_hist(<span class="ot">@button_hist</span>, <span class="st">&quot;down&quot;</span>)
-    <span class="ot">@button_hist</span> = <span class="dt">GameButtonSeq</span>.add_hist(<span class="ot">@button_hist</span>, <span class="st">&quot;forward&quot;</span>)
-    <span class="ot">@button_hist</span> = <span class="dt">GameButtonSeq</span>.add_hist(<span class="ot">@button_hist</span>, <span class="st">&quot;punch&quot;</span>)
-  <span class="kw">end</span>
-
-  <span class="kw">def</span> test_button_seq_multiple_names_entered
-    db2 = <span class="dt">GameButtonSeq</span>.register([<span class="st">&quot;up&quot;</span>, <span class="st">&quot;punch&quot;</span>], <span class="st">&quot;uppercut_2&quot;</span>, <span class="ot">@db</span>)
-    button_hist2 = <span class="dt">GameButtonSeq</span>.add_hist(<span class="ot">@button_hist</span>, <span class="st">&quot;up&quot;</span>)
-    button_hist2 = <span class="dt">GameButtonSeq</span>.add_hist(button_hist2, <span class="st">&quot;punch&quot;</span>)
-    assert_equal [<span class="st">&quot;uppercut_2&quot;</span>, <span class="st">&quot;uppercut&quot;</span>],
-      <span class="dt">GameButtonSeq</span>.on_buttons(button_hist2, db2)
-  <span class="kw">end</span>
-
-  <span class="kw">def</span> test_button_seq_no_sequence_found
-    <span class="co"># Add an unrecognized button.</span>
-    button_hist2 = <span class="dt">GameButtonSeq</span>.add_hist(<span class="ot">@button_hist</span>, <span class="st">&quot;back&quot;</span>)
-    assert_equal [],
-      <span class="dt">GameButtonSeq</span>.on_buttons(button_hist2, <span class="ot">@db</span>)
-  <span class="kw">end</span>
-
-  <span class="kw">def</span> test_button_seq_one_sequence_found
-    button_hist2 = <span class="dt">GameButtonSeq</span>.add_hist(<span class="ot">@button_hist</span>, <span class="st">&quot;up&quot;</span>)
-    button_hist2 = <span class="dt">GameButtonSeq</span>.add_hist(button_hist2, <span class="st">&quot;punch&quot;</span>)
-    assert_equal [<span class="st">&quot;uppercut&quot;</span>],
-      <span class="dt">GameButtonSeq</span>.on_buttons(button_hist2, <span class="ot">@db</span>)
-  <span class="kw">end</span>
-
-  <span class="kw">def</span> test_button_seq_multiple_sequences_found
-    assert_equal [<span class="st">&quot;hadoken&quot;</span>, <span class="st">&quot;charger&quot;</span>],
-      <span class="dt">GameButtonSeq</span>.on_buttons(<span class="ot">@button_hist</span>, <span class="ot">@db</span>)
-  <span class="kw">end</span>
-<span class="kw">end</span></code></pre></td></tr></table></div>
+<div class="sourceCode" id="cb5" data-input="code/toy/game-button-seq/test_hash_ver.rb"><pre class="sourceCode numberSource numberLines ruby"><code class="sourceCode ruby"><a class="sourceLine" id="cb5-1" title="1">require <span class="st">'minitest/autorun'</span></a>
+<a class="sourceLine" id="cb5-2" title="2">require_relative <span class="st">'./hash_ver.rb'</span></a>
+<a class="sourceLine" id="cb5-3" title="3"></a>
+<a class="sourceLine" id="cb5-4" title="4"><span class="kw">class</span> <span class="dt">TestPuz</span> &lt; <span class="dt">Minitest</span>::<span class="dt">Test</span></a>
+<a class="sourceLine" id="cb5-5" title="5"></a>
+<a class="sourceLine" id="cb5-6" title="6">  <span class="kw">def</span> setup</a>
+<a class="sourceLine" id="cb5-7" title="7">    <span class="ot">@db</span> = <span class="dt">GameButtonSeq</span>.register([<span class="st">&quot;down&quot;</span>, <span class="st">&quot;forward&quot;</span>, <span class="st">&quot;punch&quot;</span>], <span class="st">&quot;hadoken&quot;</span>, {})</a>
+<a class="sourceLine" id="cb5-8" title="8">    <span class="ot">@db</span> = <span class="dt">GameButtonSeq</span>.register([<span class="st">&quot;forward&quot;</span>, <span class="st">&quot;punch&quot;</span>], <span class="st">&quot;charger&quot;</span>, <span class="ot">@db</span>)</a>
+<a class="sourceLine" id="cb5-9" title="9">    <span class="ot">@db</span> = <span class="dt">GameButtonSeq</span>.register([<span class="st">&quot;up&quot;</span>, <span class="st">&quot;punch&quot;</span>], <span class="st">&quot;uppercut&quot;</span>, <span class="ot">@db</span>)</a>
+<a class="sourceLine" id="cb5-10" title="10"></a>
+<a class="sourceLine" id="cb5-11" title="11">    <span class="co"># Aside: We can easily limit the size of button_hist[] by forcefully always</span></a>
+<a class="sourceLine" id="cb5-12" title="12">    <span class="co"># saving only the last N key presses, with N determined by the longest</span></a>
+<a class="sourceLine" id="cb5-13" title="13">    <span class="co"># button sequence.</span></a>
+<a class="sourceLine" id="cb5-14" title="14">    <span class="ot">@button_hist</span> = []</a>
+<a class="sourceLine" id="cb5-15" title="15"></a>
+<a class="sourceLine" id="cb5-16" title="16">    <span class="ot">@button_hist</span> = <span class="dt">GameButtonSeq</span>.add_hist(<span class="ot">@button_hist</span>, <span class="st">&quot;down&quot;</span>)</a>
+<a class="sourceLine" id="cb5-17" title="17">    <span class="ot">@button_hist</span> = <span class="dt">GameButtonSeq</span>.add_hist(<span class="ot">@button_hist</span>, <span class="st">&quot;down&quot;</span>)</a>
+<a class="sourceLine" id="cb5-18" title="18">    <span class="ot">@button_hist</span> = <span class="dt">GameButtonSeq</span>.add_hist(<span class="ot">@button_hist</span>, <span class="st">&quot;down&quot;</span>)</a>
+<a class="sourceLine" id="cb5-19" title="19">    <span class="ot">@button_hist</span> = <span class="dt">GameButtonSeq</span>.add_hist(<span class="ot">@button_hist</span>, <span class="st">&quot;forward&quot;</span>)</a>
+<a class="sourceLine" id="cb5-20" title="20">    <span class="ot">@button_hist</span> = <span class="dt">GameButtonSeq</span>.add_hist(<span class="ot">@button_hist</span>, <span class="st">&quot;punch&quot;</span>)</a>
+<a class="sourceLine" id="cb5-21" title="21">  <span class="kw">end</span></a>
+<a class="sourceLine" id="cb5-22" title="22"></a>
+<a class="sourceLine" id="cb5-23" title="23">  <span class="kw">def</span> test_button_seq_multiple_names_entered</a>
+<a class="sourceLine" id="cb5-24" title="24">    db2 = <span class="dt">GameButtonSeq</span>.register([<span class="st">&quot;up&quot;</span>, <span class="st">&quot;punch&quot;</span>], <span class="st">&quot;uppercut_2&quot;</span>, <span class="ot">@db</span>)</a>
+<a class="sourceLine" id="cb5-25" title="25">    button_hist2 = <span class="dt">GameButtonSeq</span>.add_hist(<span class="ot">@button_hist</span>, <span class="st">&quot;up&quot;</span>)</a>
+<a class="sourceLine" id="cb5-26" title="26">    button_hist2 = <span class="dt">GameButtonSeq</span>.add_hist(button_hist2, <span class="st">&quot;punch&quot;</span>)</a>
+<a class="sourceLine" id="cb5-27" title="27">    assert_equal [<span class="st">&quot;uppercut_2&quot;</span>, <span class="st">&quot;uppercut&quot;</span>],</a>
+<a class="sourceLine" id="cb5-28" title="28">      <span class="dt">GameButtonSeq</span>.on_buttons(button_hist2, db2)</a>
+<a class="sourceLine" id="cb5-29" title="29">  <span class="kw">end</span></a>
+<a class="sourceLine" id="cb5-30" title="30"></a>
+<a class="sourceLine" id="cb5-31" title="31">  <span class="kw">def</span> test_button_seq_no_sequence_found</a>
+<a class="sourceLine" id="cb5-32" title="32">    <span class="co"># Add an unrecognized button.</span></a>
+<a class="sourceLine" id="cb5-33" title="33">    button_hist2 = <span class="dt">GameButtonSeq</span>.add_hist(<span class="ot">@button_hist</span>, <span class="st">&quot;back&quot;</span>)</a>
+<a class="sourceLine" id="cb5-34" title="34">    assert_equal [],</a>
+<a class="sourceLine" id="cb5-35" title="35">      <span class="dt">GameButtonSeq</span>.on_buttons(button_hist2, <span class="ot">@db</span>)</a>
+<a class="sourceLine" id="cb5-36" title="36">  <span class="kw">end</span></a>
+<a class="sourceLine" id="cb5-37" title="37"></a>
+<a class="sourceLine" id="cb5-38" title="38">  <span class="kw">def</span> test_button_seq_one_sequence_found</a>
+<a class="sourceLine" id="cb5-39" title="39">    button_hist2 = <span class="dt">GameButtonSeq</span>.add_hist(<span class="ot">@button_hist</span>, <span class="st">&quot;up&quot;</span>)</a>
+<a class="sourceLine" id="cb5-40" title="40">    button_hist2 = <span class="dt">GameButtonSeq</span>.add_hist(button_hist2, <span class="st">&quot;punch&quot;</span>)</a>
+<a class="sourceLine" id="cb5-41" title="41">    assert_equal [<span class="st">&quot;uppercut&quot;</span>],</a>
+<a class="sourceLine" id="cb5-42" title="42">      <span class="dt">GameButtonSeq</span>.on_buttons(button_hist2, <span class="ot">@db</span>)</a>
+<a class="sourceLine" id="cb5-43" title="43">  <span class="kw">end</span></a>
+<a class="sourceLine" id="cb5-44" title="44"></a>
+<a class="sourceLine" id="cb5-45" title="45">  <span class="kw">def</span> test_button_seq_multiple_sequences_found</a>
+<a class="sourceLine" id="cb5-46" title="46">    assert_equal [<span class="st">&quot;hadoken&quot;</span>, <span class="st">&quot;charger&quot;</span>],</a>
+<a class="sourceLine" id="cb5-47" title="47">      <span class="dt">GameButtonSeq</span>.on_buttons(<span class="ot">@button_hist</span>, <span class="ot">@db</span>)</a>
+<a class="sourceLine" id="cb5-48" title="48">  <span class="kw">end</span></a>
+<a class="sourceLine" id="cb5-49" title="49"><span class="kw">end</span></a></code></pre></div>
 </div>
 <h3 id="analysis-1">Analysis</h3>
 <p>The key insight was when I realized that you could indeed use a hash even though we have the requirement that multiple, identical button sequences can have different names. The trick is to simply store the value as not a single name, but an array of possible names. This is reflected in the <code>GameButtonSeq.register</code> method.</p>
@@ -367,188 +237,100 @@ require_relative <span class="st">'./hash_ver.rb'</span>
 <div class="raw-link sourceCode">
 <table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/toy/game-button-seq/GameButtonSeq.hs" mimetype="text/plain">GameButtonSeq.hs</a></code></pre></td></tr></tbody></table>
 </div>
-<div class="sourceCode" input="code/toy/game-button-seq/GameButtonSeq.hs"><table class="sourceCode numberLines haskell"><tr class="sourceCode"><td class="lineNumbers"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-</pre></td><td class="sourceCode"><pre><code class="sourceCode haskell"><span class="kw">module</span> <span class="dt">GameButtonSeq</span> <span class="kw">where</span>
-
-<span class="kw">import qualified</span> <span class="dt">Data.Map</span> <span class="kw">as</span> <span class="dt">M</span>
-<span class="kw">import </span><span class="dt">Data.Maybe</span>
-
-<span class="co">-- The database stores a list of Name values, because multiple sequences can</span>
-<span class="co">-- have the same name, in which case we store just one instance of the sequence,</span>
-<span class="co">-- but a list of multiple Name values.</span>
-<span class="kw">type</span> <span class="dt">ButtonSeqDB</span> <span class="fu">=</span> <span class="dt">M.Map</span> <span class="dt">ButtonSeq</span> [<span class="dt">Name</span>]
-<span class="kw">type</span> <span class="dt">ButtonSeq</span> <span class="fu">=</span> [<span class="dt">String</span>]
-<span class="kw">type</span> <span class="dt">Name</span> <span class="fu">=</span> <span class="dt">String</span>
-
-<span class="co">-- If a button sequence is already given some set of names, add the current</span>
-<span class="co">-- given name into that list of names..</span>
-<span class="ot">register ::</span> (<span class="dt">ButtonSeq</span>, <span class="dt">Name</span>) <span class="ot">-&gt;</span> <span class="dt">ButtonSeqDB</span> <span class="ot">-&gt;</span> <span class="dt">ButtonSeqDB</span>
-register (buttonSeq, name) db <span class="fu">=</span> <span class="kw">case</span> M.lookup buttonSeq db <span class="kw">of</span>
-  <span class="dt">Just</span> names <span class="ot">-&gt;</span> M.insert buttonSeq (name<span class="fu">:</span>names) db
-  <span class="dt">Nothing</span> <span class="ot">-&gt;</span> M.insert buttonSeq [name] db
-
-<span class="co">-- Input `buttonSeq` is a list of buttons pressed, from oldest to newest, so</span>
-<span class="co">-- that the head of the list contains the oldest button.</span>
-<span class="ot">onButtons ::</span> <span class="dt">ButtonSeq</span> <span class="ot">-&gt;</span> <span class="dt">ButtonSeqDB</span> <span class="ot">-&gt;</span> [<span class="dt">Name</span>]
-onButtons buttonHist db <span class="fu">=</span> concatMap extractNames buttonHists
-  <span class="kw">where</span>
-  buttonHists <span class="fu">=</span> take (length buttonHist) <span class="fu">$</span> iterate tail buttonHist
-  extractNames bHist <span class="fu">=</span> <span class="kw">case</span> M.lookup bHist db <span class="kw">of</span>
-    <span class="dt">Just</span> names <span class="ot">-&gt;</span> names
-    <span class="dt">Nothing</span> <span class="ot">-&gt;</span> []
-
-<span class="ot">onButtons2 ::</span> <span class="dt">ButtonSeq</span> <span class="ot">-&gt;</span> <span class="dt">ButtonSeqDB</span> <span class="ot">-&gt;</span> [<span class="dt">Name</span>]
-onButtons2 buttonHist db <span class="fu">=</span> concat <span class="fu">$</span> mapMaybe (flip M.lookup db) buttonHists
-  <span class="kw">where</span>
-  buttonHists <span class="fu">=</span> take (length buttonHist) <span class="fu">$</span> iterate tail buttonHist</code></pre></td></tr></table></div>
+<div class="sourceCode" id="cb6" data-input="code/toy/game-button-seq/GameButtonSeq.hs"><pre class="sourceCode numberSource numberLines haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb6-1" title="1"><span class="kw">module</span> <span class="dt">GameButtonSeq</span> <span class="kw">where</span></a>
+<a class="sourceLine" id="cb6-2" title="2"></a>
+<a class="sourceLine" id="cb6-3" title="3"><span class="kw">import</span> <span class="kw">qualified</span> <span class="dt">Data.Map</span> <span class="kw">as</span> <span class="dt">M</span></a>
+<a class="sourceLine" id="cb6-4" title="4"><span class="kw">import</span> <span class="dt">Data.Maybe</span></a>
+<a class="sourceLine" id="cb6-5" title="5"></a>
+<a class="sourceLine" id="cb6-6" title="6"><span class="co">-- The database stores a list of Name values, because multiple sequences can</span></a>
+<a class="sourceLine" id="cb6-7" title="7"><span class="co">-- have the same name, in which case we store just one instance of the sequence,</span></a>
+<a class="sourceLine" id="cb6-8" title="8"><span class="co">-- but a list of multiple Name values.</span></a>
+<a class="sourceLine" id="cb6-9" title="9"><span class="kw">type</span> <span class="dt">ButtonSeqDB</span> <span class="fu">=</span> <span class="dt">M.Map</span> <span class="dt">ButtonSeq</span> [<span class="dt">Name</span>]</a>
+<a class="sourceLine" id="cb6-10" title="10"><span class="kw">type</span> <span class="dt">ButtonSeq</span> <span class="fu">=</span> [<span class="dt">String</span>]</a>
+<a class="sourceLine" id="cb6-11" title="11"><span class="kw">type</span> <span class="dt">Name</span> <span class="fu">=</span> <span class="dt">String</span></a>
+<a class="sourceLine" id="cb6-12" title="12"></a>
+<a class="sourceLine" id="cb6-13" title="13"><span class="co">-- If a button sequence is already given some set of names, add the current</span></a>
+<a class="sourceLine" id="cb6-14" title="14"><span class="co">-- given name into that list of names..</span></a>
+<a class="sourceLine" id="cb6-15" title="15"><span class="ot">register ::</span> (<span class="dt">ButtonSeq</span>, <span class="dt">Name</span>) <span class="ot">-&gt;</span> <span class="dt">ButtonSeqDB</span> <span class="ot">-&gt;</span> <span class="dt">ButtonSeqDB</span></a>
+<a class="sourceLine" id="cb6-16" title="16">register (buttonSeq, name) db <span class="fu">=</span> <span class="kw">case</span> M.lookup buttonSeq db <span class="kw">of</span></a>
+<a class="sourceLine" id="cb6-17" title="17">  <span class="dt">Just</span> names <span class="ot">-&gt;</span> M.insert buttonSeq (name<span class="fu">:</span>names) db</a>
+<a class="sourceLine" id="cb6-18" title="18">  <span class="dt">Nothing</span> <span class="ot">-&gt;</span> M.insert buttonSeq [name] db</a>
+<a class="sourceLine" id="cb6-19" title="19"></a>
+<a class="sourceLine" id="cb6-20" title="20"><span class="co">-- Input `buttonSeq` is a list of buttons pressed, from oldest to newest, so</span></a>
+<a class="sourceLine" id="cb6-21" title="21"><span class="co">-- that the head of the list contains the oldest button.</span></a>
+<a class="sourceLine" id="cb6-22" title="22"><span class="ot">onButtons ::</span> <span class="dt">ButtonSeq</span> <span class="ot">-&gt;</span> <span class="dt">ButtonSeqDB</span> <span class="ot">-&gt;</span> [<span class="dt">Name</span>]</a>
+<a class="sourceLine" id="cb6-23" title="23">onButtons buttonHist db <span class="fu">=</span> <span class="fu">concatMap</span> extractNames buttonHists</a>
+<a class="sourceLine" id="cb6-24" title="24">  <span class="kw">where</span></a>
+<a class="sourceLine" id="cb6-25" title="25">  buttonHists <span class="fu">=</span> <span class="fu">take</span> (<span class="fu">length</span> buttonHist) <span class="fu">$</span> <span class="fu">iterate</span> <span class="fu">tail</span> buttonHist</a>
+<a class="sourceLine" id="cb6-26" title="26">  extractNames bHist <span class="fu">=</span> <span class="kw">case</span> M.lookup bHist db <span class="kw">of</span></a>
+<a class="sourceLine" id="cb6-27" title="27">    <span class="dt">Just</span> names <span class="ot">-&gt;</span> names</a>
+<a class="sourceLine" id="cb6-28" title="28">    <span class="dt">Nothing</span> <span class="ot">-&gt;</span> []</a>
+<a class="sourceLine" id="cb6-29" title="29"></a>
+<a class="sourceLine" id="cb6-30" title="30"><span class="ot">onButtons2 ::</span> <span class="dt">ButtonSeq</span> <span class="ot">-&gt;</span> <span class="dt">ButtonSeqDB</span> <span class="ot">-&gt;</span> [<span class="dt">Name</span>]</a>
+<a class="sourceLine" id="cb6-31" title="31">onButtons2 buttonHist db <span class="fu">=</span> <span class="fu">concat</span> <span class="fu">$</span> mapMaybe (<span class="fu">flip</span> M.lookup db) buttonHists</a>
+<a class="sourceLine" id="cb6-32" title="32">  <span class="kw">where</span></a>
+<a class="sourceLine" id="cb6-33" title="33">  buttonHists <span class="fu">=</span> <span class="fu">take</span> (<span class="fu">length</span> buttonHist) <span class="fu">$</span> <span class="fu">iterate</span> <span class="fu">tail</span> buttonHist</a></code></pre></div>
 </div>
 <p>The file is named <code>GameButtonSeq</code> because of Haskell naming conventions for files containing module code. And here is the test for it.</p>
 <div class="code-and-raw lineCntMax100">
 <div class="raw-link sourceCode">
 <table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/toy/game-button-seq/test_hash_ver.hs" mimetype="text/plain">test_hash_ver.hs</a></code></pre></td></tr></tbody></table>
 </div>
-<div class="sourceCode" input="code/toy/game-button-seq/test_hash_ver.hs"><table class="sourceCode numberLines haskell"><tr class="sourceCode"><td class="lineNumbers"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-34
-35
-36
-37
-38
-39
-40
-41
-42
-43
-44
-45
-46
-47
-48
-49
-50
-51
-52
-53
-54
-55
-</pre></td><td class="sourceCode"><pre><code class="sourceCode haskell"><span class="kw">module</span> <span class="dt">Main</span> <span class="kw">where</span>
-
-<span class="kw">import qualified</span> <span class="dt">Data.Map</span> <span class="kw">as</span> <span class="dt">M</span>
-<span class="kw">import </span><span class="dt">Test.Tasty</span>
-<span class="kw">import </span><span class="dt">Test.Tasty.HUnit</span>
-<span class="kw">import </span><span class="dt">Test.Tasty.QuickCheck</span> <span class="kw">as</span> <span class="dt">QC</span>
-
-<span class="kw">import </span><span class="dt">GameButtonSeq</span>
-
-<span class="ot">main ::</span> <span class="dt">IO</span> ()
-main <span class="fu">=</span> defaultMain tests
-
-<span class="ot">tests ::</span> <span class="dt">TestTree</span>
-tests <span class="fu">=</span> testGroup <span class="st">&quot;Tests&quot;</span> [qcProps, unitTests]
-
-<span class="ot">qcProps ::</span> <span class="dt">TestTree</span>
-qcProps <span class="fu">=</span> testGroup <span class="st">&quot;(checked by QuickCheck)&quot;</span>
-  [ QC.testProperty <span class="st">&quot;GameButtonSeq (empty DB cannot produce matches)&quot;</span> <span class="fu">$</span>
-    \buttonHist <span class="ot">-&gt;</span> onButtons (<span class="ot">buttonHist ::</span> <span class="dt">ButtonSeq</span>) M.empty <span class="fu">==</span> []
-  ]
-
-<span class="ot">unitTests ::</span> <span class="dt">TestTree</span>
-unitTests <span class="fu">=</span> testGroup <span class="st">&quot;Unit tests&quot;</span>
-  [ testCase <span class="st">&quot;GameButtonSeq (entry of multiple sequences with same name)&quot;</span> <span class="fu">$</span>
-    (onButtons [<span class="st">&quot;up&quot;</span>, <span class="st">&quot;punch&quot;</span>]
-    <span class="fu">$</span> register ([<span class="st">&quot;up&quot;</span>, <span class="st">&quot;punch&quot;</span>], <span class="st">&quot;uppercut_2&quot;</span>) buttonSeqDB)
-      <span class="fu">@?=</span>
-      [<span class="st">&quot;uppercut_2&quot;</span>, <span class="st">&quot;uppercut&quot;</span>]
-  , testCase <span class="st">&quot;GameButtonSeq (no sequence found)&quot;</span> <span class="fu">$</span>
-    onButtons
-      [<span class="st">&quot;down&quot;</span>, <span class="st">&quot;down&quot;</span>, <span class="st">&quot;forward&quot;</span>, <span class="st">&quot;punch&quot;</span>, <span class="st">&quot;down&quot;</span>]
-      buttonSeqDB
-      <span class="fu">@?=</span>
-      []
-  , testCase <span class="st">&quot;GameButtonSeq (one sequences found)&quot;</span> <span class="fu">$</span>
-    onButtons
-      [<span class="st">&quot;down&quot;</span>, <span class="st">&quot;down&quot;</span>, <span class="st">&quot;up&quot;</span>, <span class="st">&quot;punch&quot;</span>]
-      buttonSeqDB
-      <span class="fu">@?=</span>
-      [<span class="st">&quot;uppercut&quot;</span>]
-  , testCase <span class="st">&quot;GameButtonSeq (multiple sequences found)&quot;</span> <span class="fu">$</span>
-    onButtons
-      [<span class="st">&quot;down&quot;</span>, <span class="st">&quot;down&quot;</span>, <span class="st">&quot;forward&quot;</span>, <span class="st">&quot;punch&quot;</span>]
-      buttonSeqDB
-      <span class="fu">@?=</span>
-      [<span class="st">&quot;hadoken&quot;</span>, <span class="st">&quot;charger&quot;</span>]
-  ]
-  <span class="kw">where</span>
-  <span class="co">-- Default DB of button sequences.</span>
-<span class="ot">  buttonSeqDB ::</span> <span class="dt">M.Map</span> <span class="dt">ButtonSeq</span> [<span class="dt">Name</span>]
-  buttonSeqDB <span class="fu">=</span> M.fromList
-    [ ([<span class="st">&quot;down&quot;</span>, <span class="st">&quot;forward&quot;</span>, <span class="st">&quot;punch&quot;</span>], [<span class="st">&quot;hadoken&quot;</span>])
-    , ([<span class="st">&quot;forward&quot;</span>, <span class="st">&quot;punch&quot;</span>], [<span class="st">&quot;charger&quot;</span>])
-    , ([<span class="st">&quot;up&quot;</span>, <span class="st">&quot;punch&quot;</span>], [<span class="st">&quot;uppercut&quot;</span>])
-    ]</code></pre></td></tr></table></div>
+<div class="sourceCode" id="cb7" data-input="code/toy/game-button-seq/test_hash_ver.hs"><pre class="sourceCode numberSource numberLines haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb7-1" title="1"><span class="kw">module</span> <span class="dt">Main</span> <span class="kw">where</span></a>
+<a class="sourceLine" id="cb7-2" title="2"></a>
+<a class="sourceLine" id="cb7-3" title="3"><span class="kw">import</span> <span class="kw">qualified</span> <span class="dt">Data.Map</span> <span class="kw">as</span> <span class="dt">M</span></a>
+<a class="sourceLine" id="cb7-4" title="4"><span class="kw">import</span> <span class="dt">Test.Tasty</span></a>
+<a class="sourceLine" id="cb7-5" title="5"><span class="kw">import</span> <span class="dt">Test.Tasty.HUnit</span></a>
+<a class="sourceLine" id="cb7-6" title="6"><span class="kw">import</span> <span class="dt">Test.Tasty.QuickCheck</span> <span class="kw">as</span> <span class="dt">QC</span></a>
+<a class="sourceLine" id="cb7-7" title="7"></a>
+<a class="sourceLine" id="cb7-8" title="8"><span class="kw">import</span> <span class="dt">GameButtonSeq</span></a>
+<a class="sourceLine" id="cb7-9" title="9"></a>
+<a class="sourceLine" id="cb7-10" title="10"><span class="ot">main ::</span> <span class="dt">IO</span> ()</a>
+<a class="sourceLine" id="cb7-11" title="11">main <span class="fu">=</span> defaultMain tests</a>
+<a class="sourceLine" id="cb7-12" title="12"></a>
+<a class="sourceLine" id="cb7-13" title="13"><span class="ot">tests ::</span> <span class="dt">TestTree</span></a>
+<a class="sourceLine" id="cb7-14" title="14">tests <span class="fu">=</span> testGroup <span class="st">&quot;Tests&quot;</span> [qcProps, unitTests]</a>
+<a class="sourceLine" id="cb7-15" title="15"></a>
+<a class="sourceLine" id="cb7-16" title="16"><span class="ot">qcProps ::</span> <span class="dt">TestTree</span></a>
+<a class="sourceLine" id="cb7-17" title="17">qcProps <span class="fu">=</span> testGroup <span class="st">&quot;(checked by QuickCheck)&quot;</span></a>
+<a class="sourceLine" id="cb7-18" title="18">  [ QC.testProperty <span class="st">&quot;GameButtonSeq (empty DB cannot produce matches)&quot;</span> <span class="fu">$</span></a>
+<a class="sourceLine" id="cb7-19" title="19">    \buttonHist <span class="ot">-&gt;</span> onButtons (<span class="ot">buttonHist ::</span> <span class="dt">ButtonSeq</span>) M.empty <span class="fu">==</span> []</a>
+<a class="sourceLine" id="cb7-20" title="20">  ]</a>
+<a class="sourceLine" id="cb7-21" title="21"></a>
+<a class="sourceLine" id="cb7-22" title="22"><span class="ot">unitTests ::</span> <span class="dt">TestTree</span></a>
+<a class="sourceLine" id="cb7-23" title="23">unitTests <span class="fu">=</span> testGroup <span class="st">&quot;Unit tests&quot;</span></a>
+<a class="sourceLine" id="cb7-24" title="24">  [ testCase <span class="st">&quot;GameButtonSeq (entry of multiple sequences with same name)&quot;</span> <span class="fu">$</span></a>
+<a class="sourceLine" id="cb7-25" title="25">    (onButtons [<span class="st">&quot;up&quot;</span>, <span class="st">&quot;punch&quot;</span>]</a>
+<a class="sourceLine" id="cb7-26" title="26">    <span class="fu">$</span> register ([<span class="st">&quot;up&quot;</span>, <span class="st">&quot;punch&quot;</span>], <span class="st">&quot;uppercut_2&quot;</span>) buttonSeqDB)</a>
+<a class="sourceLine" id="cb7-27" title="27">      <span class="fu">@?=</span></a>
+<a class="sourceLine" id="cb7-28" title="28">      [<span class="st">&quot;uppercut_2&quot;</span>, <span class="st">&quot;uppercut&quot;</span>]</a>
+<a class="sourceLine" id="cb7-29" title="29">  , testCase <span class="st">&quot;GameButtonSeq (no sequence found)&quot;</span> <span class="fu">$</span></a>
+<a class="sourceLine" id="cb7-30" title="30">    onButtons</a>
+<a class="sourceLine" id="cb7-31" title="31">      [<span class="st">&quot;down&quot;</span>, <span class="st">&quot;down&quot;</span>, <span class="st">&quot;forward&quot;</span>, <span class="st">&quot;punch&quot;</span>, <span class="st">&quot;down&quot;</span>]</a>
+<a class="sourceLine" id="cb7-32" title="32">      buttonSeqDB</a>
+<a class="sourceLine" id="cb7-33" title="33">      <span class="fu">@?=</span></a>
+<a class="sourceLine" id="cb7-34" title="34">      []</a>
+<a class="sourceLine" id="cb7-35" title="35">  , testCase <span class="st">&quot;GameButtonSeq (one sequences found)&quot;</span> <span class="fu">$</span></a>
+<a class="sourceLine" id="cb7-36" title="36">    onButtons</a>
+<a class="sourceLine" id="cb7-37" title="37">      [<span class="st">&quot;down&quot;</span>, <span class="st">&quot;down&quot;</span>, <span class="st">&quot;up&quot;</span>, <span class="st">&quot;punch&quot;</span>]</a>
+<a class="sourceLine" id="cb7-38" title="38">      buttonSeqDB</a>
+<a class="sourceLine" id="cb7-39" title="39">      <span class="fu">@?=</span></a>
+<a class="sourceLine" id="cb7-40" title="40">      [<span class="st">&quot;uppercut&quot;</span>]</a>
+<a class="sourceLine" id="cb7-41" title="41">  , testCase <span class="st">&quot;GameButtonSeq (multiple sequences found)&quot;</span> <span class="fu">$</span></a>
+<a class="sourceLine" id="cb7-42" title="42">    onButtons</a>
+<a class="sourceLine" id="cb7-43" title="43">      [<span class="st">&quot;down&quot;</span>, <span class="st">&quot;down&quot;</span>, <span class="st">&quot;forward&quot;</span>, <span class="st">&quot;punch&quot;</span>]</a>
+<a class="sourceLine" id="cb7-44" title="44">      buttonSeqDB</a>
+<a class="sourceLine" id="cb7-45" title="45">      <span class="fu">@?=</span></a>
+<a class="sourceLine" id="cb7-46" title="46">      [<span class="st">&quot;hadoken&quot;</span>, <span class="st">&quot;charger&quot;</span>]</a>
+<a class="sourceLine" id="cb7-47" title="47">  ]</a>
+<a class="sourceLine" id="cb7-48" title="48">  <span class="kw">where</span></a>
+<a class="sourceLine" id="cb7-49" title="49">  <span class="co">-- Default DB of button sequences.</span></a>
+<a class="sourceLine" id="cb7-50" title="50"><span class="ot">  buttonSeqDB ::</span> <span class="dt">M.Map</span> <span class="dt">ButtonSeq</span> [<span class="dt">Name</span>]</a>
+<a class="sourceLine" id="cb7-51" title="51">  buttonSeqDB <span class="fu">=</span> M.fromList</a>
+<a class="sourceLine" id="cb7-52" title="52">    [ ([<span class="st">&quot;down&quot;</span>, <span class="st">&quot;forward&quot;</span>, <span class="st">&quot;punch&quot;</span>], [<span class="st">&quot;hadoken&quot;</span>])</a>
+<a class="sourceLine" id="cb7-53" title="53">    , ([<span class="st">&quot;forward&quot;</span>, <span class="st">&quot;punch&quot;</span>], [<span class="st">&quot;charger&quot;</span>])</a>
+<a class="sourceLine" id="cb7-54" title="54">    , ([<span class="st">&quot;up&quot;</span>, <span class="st">&quot;punch&quot;</span>], [<span class="st">&quot;uppercut&quot;</span>])</a>
+<a class="sourceLine" id="cb7-55" title="55">    ]</a></code></pre></div>
 </div>
 <h3 id="analysis-2">Analysis</h3>
 <p>This Haskell version uses the standard <code>Data.Map</code> module, which provides an efficient, basic hash data structure. What we first do is expand <code>buttonHist</code> to all of the cases we are interested in — namely, all of the subsequences of concern. E.g., given a list like <code>[&quot;up&quot;, &quot;down&quot;, &quot;right&quot;, &quot;left&quot;]</code>, <code>buttonHists</code> becomes:</p>
@@ -562,14 +344,14 @@ unitTests <span class="fu">=</span> testGroup <span class="st">&quot;Unit tests&
 <p>The <code>onButtons2</code> is an alternate version which uses <code>mapMaybe</code> to reduce it down to just two lines of code.</p>
 <h2 id="conclusion">Conclusion</h2>
 <p>I cringe as I look back at the half-baked code I wrote during the interview. Even the working, compilable version that I wrote after the interview remains ugly and hard to reason about. I can picture my interviewer being grossed out by my ugly, hacky version wondering if I even know what hashes are…</p>
-<p>The moral of the story is to think carefully about the most obvious data structure to use, before embarking on writing a solution — no matter how trivial it seems. For myself, I was nervous and did not realize how simple the problem actually was until the day after when I rewrote the solution in Ruby. It was so simple and straightforward that I even wrote some test cases for it<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a>.</p>
+<p>The moral of the story is to think carefully about the most obvious data structure to use, before embarking on writing a solution — no matter how trivial it seems. For myself, I was nervous and did not realize how simple the problem actually was until the day after when I rewrote the solution in Ruby. It was so simple and straightforward that I even wrote some test cases for it<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>.</p>
 <p>I hope you had some fun writing out your own solutions. Happy hacking!</p>
-<div class="footnotes">
+<section class="footnotes">
 <hr />
 <ol>
-<li id="fn1"><p>You can test the Haskell hash version in this blog post if you clone this blog’s repo and then build it with Cabal (I’ve listed the program as an executable with all the constraints in the <code>blog.cabal</code> file in the repo root folder). For the Ruby version, simply do <code>ruby path/to/test_hash_ver.rb</code> and Ruby will run the tests inside.<a href="#fnref1">↩</a></p></li>
+<li id="fn1"><p>You can test the Haskell hash version in this blog post if you clone this blog’s repo and then build it with Cabal (I’ve listed the program as an executable with all the constraints in the <code>blog.cabal</code> file in the repo root folder). For the Ruby version, simply do <code>ruby path/to/test_hash_ver.rb</code> and Ruby will run the tests inside.<a href="#fnref1" class="footnote-back">↩</a></p></li>
 </ol>
-</div>
+</section>
 
 		</div>
 		<div id="footer">
@@ -577,7 +359,7 @@ unitTests <span class="fu">=</span> testGroup <span class="st">&quot;Unit tests&
 			<a href="https://github.com/listx/listx_blog">Site</a>
 			<a href="https://github.com/listx/listx.github.io">generated</a>
 			with
-			<a href="http://jaspervdj.be/hakyll">Hakyll</a>
+			<a href="https://jaspervdj.be/hakyll">Hakyll</a>
 			and
 			<a href="http://sebastiaanvisser.github.com/clay">Clay</a>.
 			<br>

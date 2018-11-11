@@ -5,9 +5,9 @@
 		<title>Linus's Blog - Tig Tips</title>
 		<link rel="stylesheet" href="../css/base.css">
 		<link rel="stylesheet" href="../css/syntax.css">
-		<link href="http://fonts.googleapis.com/css?family=Merriweather:300,300italic,700italic,700" rel="stylesheet" type="text/css">
+		<link href="https://fonts.googleapis.com/css?family=Merriweather:300,300italic,700italic,700" rel="stylesheet" type="text/css">
 		<link rel="shortcut icon" type="image/png" href="../favicon.png">
-		<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+		<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 		<script src="../misc.js"></script>
 		<!-- https://github.com/mreid/markreidname-hakyll/blob/master/_templates/mathjax.html -->
 <script type="text/x-mathjax-config">
@@ -23,7 +23,7 @@
 		"HTML-CSS": { availableFonts: ["TeX"] }
 	});
 </script>
-<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"> </script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"> </script>
 
 	</head>
 	<body>
@@ -48,9 +48,9 @@
 
 <p>I love <a href="https://github.com/jonas/tig">tig</a>. Still, I think the defaults aren’t the best for most developers. Here are two easy customizations to make the default view better.</p>
 <p>First, put</p>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="bu">alias</span> tig=<span class="st">'tig -n 1000'</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb1-1" title="1"><span class="bu">alias</span> tig=<span class="st">'tig -n 1000'</span></a></code></pre></div>
 <p>in your <code>~/.bashrc</code> to reduce tig’s startup time (especially on large repositories). There’s rarely a need to go back more than 1000 commits from your current HEAD position in an interactive, GUI-driven manner. And if you really need to see everything, do</p>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ \<span class="ex">tig</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb2-1" title="1">$ \<span class="ex">tig</span></a></code></pre></div>
 <p>on the terminal to bypass the shell alias.</p>
 <p>Second, put the following in your <code>~/.tigrc</code> file:</p>
 <pre><code>set main-view = date author id:width=10 commit-title:yes,graph,refs
@@ -64,7 +64,7 @@
 			<a href="https://github.com/listx/listx_blog">Site</a>
 			<a href="https://github.com/listx/listx.github.io">generated</a>
 			with
-			<a href="http://jaspervdj.be/hakyll">Hakyll</a>
+			<a href="https://jaspervdj.be/hakyll">Hakyll</a>
 			and
 			<a href="http://sebastiaanvisser.github.com/clay">Clay</a>.
 			<br>

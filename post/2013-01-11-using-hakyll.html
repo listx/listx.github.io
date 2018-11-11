@@ -5,9 +5,9 @@
 		<title>Linus's Blog - Using Hakyll with GitHub Pages</title>
 		<link rel="stylesheet" href="../css/base.css">
 		<link rel="stylesheet" href="../css/syntax.css">
-		<link href="http://fonts.googleapis.com/css?family=Merriweather:300,300italic,700italic,700" rel="stylesheet" type="text/css">
+		<link href="https://fonts.googleapis.com/css?family=Merriweather:300,300italic,700italic,700" rel="stylesheet" type="text/css">
 		<link rel="shortcut icon" type="image/png" href="../favicon.png">
-		<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+		<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 		<script src="../misc.js"></script>
 		<!-- https://github.com/mreid/markreidname-hakyll/blob/master/_templates/mathjax.html -->
 <script type="text/x-mathjax-config">
@@ -23,7 +23,7 @@
 		"HTML-CSS": { availableFonts: ["TeX"] }
 	});
 </script>
-<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"> </script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"> </script>
 
 	</head>
 	<body>
@@ -63,63 +63,40 @@
 <p>Now we need to install <code>hsenv</code>. <code>hsenv</code> is neat because it allows you to have a sandboxed cabal/haskell/ghc environment on a per-shell-session basis. The biggest dependency is <code>pandoc</code>, which actually fails to install using plain <code>cabal</code>; not to worry, because [extra] already has the <code>haskell-pandoc</code> package.</p>
 <pre><code>sudo pacman -S haskell-pandoc</code></pre>
 <p>Now we install <code>hsenv</code>. We use the forked version from <a href="https://github.com/tmhedberg/hsenv">tmhedberg’s repo</a> because the <a href="https://github.com/Paczesiowa/hsenv">original maintainer’s repo</a> has been suffering from bitrot for a few months now (the original maintainer has disappeared).</p>
-<div class="sourceCode"><table class="sourceCode bash numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
-2
-3
-</pre></td><td class="sourceCode"><pre><code class="sourceCode bash"><span class="fu">git</span> clone --depth 1 git://github.com/tmhedberg/hsenv.git
-<span class="bu">cd</span> hsenv
-<span class="ex">cabal</span> install</code></pre></td></tr></table></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource bash numberLines"><code class="sourceCode bash"><a class="sourceLine" id="cb3-1" title="1"><span class="fu">git</span> clone --depth 1 git://github.com/tmhedberg/hsenv.git</a>
+<a class="sourceLine" id="cb3-2" title="2"><span class="bu">cd</span> hsenv</a>
+<a class="sourceLine" id="cb3-3" title="3"><span class="ex">cabal</span> install</a></code></pre></div>
 <h2 id="download-hakyll-and-install-it-with-hsenv-for-your-new-blog">Download hakyll and install it with hsenv for your new blog</h2>
 <p>Now we need to get the latest <code>hakyll</code>. I decided to check out the <code>hakyll4</code> branch because from what I can tell this version allows you to do painless syntax highlighting with <code>pandoc</code>. You could just use the regular <code>master</code> branch (hakyll 3.x) but syntax highlighting support on code blocks is a pain; plus, you’re going to have to migrate to hakyll 4 later anyway, so just use <code>hakyll4</code>.</p>
 <pre><code>git clone --depth 1 -b hakyll4 http://github.com/jaspervdj/hakyll.git</code></pre>
 <p>The hakyll4 repo has several working sample blog sites. Now go into the just-cloned hakyll repo, and copy the contents of the <code>data/example</code> folder to your new blog’s directory.</p>
 <pre><code>cp ~/hakyll/data/example ~/myblog</code></pre>
 <p>Now go to your <code>myblog</code> folder and instantiate a <code>hsenv</code> sandbox, and then install <code>hakyll</code> into this sandbox.</p>
-<div class="sourceCode"><table class="sourceCode bash numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
-2
-3
-4
-5
-6
-</pre></td><td class="sourceCode"><pre><code class="sourceCode bash"><span class="bu">cd</span> ~/myblog
-<span class="ex">~/.cabal/bin/hsenv</span>
-<span class="bu">source</span> .hsenv_myblog/bin/activate
-<span class="bu">cd</span> ~/hakyll
-<span class="ex">cabal</span> install
-<span class="bu">cd</span> ~/myblog</code></pre></td></tr></table></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource bash numberLines"><code class="sourceCode bash"><a class="sourceLine" id="cb6-1" title="1"><span class="bu">cd</span> ~/myblog</a>
+<a class="sourceLine" id="cb6-2" title="2"><span class="ex">~/.cabal/bin/hsenv</span></a>
+<a class="sourceLine" id="cb6-3" title="3"><span class="bu">source</span> .hsenv_myblog/bin/activate</a>
+<a class="sourceLine" id="cb6-4" title="4"><span class="bu">cd</span> ~/hakyll</a>
+<a class="sourceLine" id="cb6-5" title="5"><span class="ex">cabal</span> install</a>
+<a class="sourceLine" id="cb6-6" title="6"><span class="bu">cd</span> ~/myblog</a></code></pre></div>
 <p>The <code>hsenv</code> basically changes your shell’s path parameters and also installs everything into the <code>.hsenv_myblog</code> folder, thus giving your shell a different “vision”, so to speak, of what packages are installed. We use the sandbox environment inside <code>hsenv</code> whenever we want to generate our blog’s static generator binary (remember, <code>hakyll</code> is just a library; we need to write a static site generator program that makes use of it to generate the static html/css).</p>
 <p>To deactivate the sandbox, invoke <code>deactivate_hsenv</code> or just close your shell. Just remember to call <code>source .hsenv_myblog/bin/activate</code> when you want to make changes to your blog or edit your blog’s binary. A sample creating/edition session would look something like this:</p>
-<div class="sourceCode"><table class="sourceCode bash numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
-2
-3
-4
-5
-6
-7
-8
-</pre></td><td class="sourceCode"><pre><code class="sourceCode bash"><span class="bu">cd</span> ~/myblog
-<span class="bu">source</span> .hsenv_myblog/bin/activate
-<span class="co"># edit some files, including site.hs, the static generator binary</span>
-<span class="co"># compile site.hs</span>
-<span class="ex">./site</span> rebuild
-<span class="ex">./site</span> preview
-<span class="ex">...</span>
-<span class="ex">deactivate_hsenv</span></code></pre></td></tr></table></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource bash numberLines"><code class="sourceCode bash"><a class="sourceLine" id="cb7-1" title="1"><span class="bu">cd</span> ~/myblog</a>
+<a class="sourceLine" id="cb7-2" title="2"><span class="bu">source</span> .hsenv_myblog/bin/activate</a>
+<a class="sourceLine" id="cb7-3" title="3"><span class="co"># edit some files, including site.hs, the static generator binary</span></a>
+<a class="sourceLine" id="cb7-4" title="4"><span class="co"># compile site.hs</span></a>
+<a class="sourceLine" id="cb7-5" title="5"><span class="ex">./site</span> rebuild</a>
+<a class="sourceLine" id="cb7-6" title="6"><span class="ex">./site</span> preview</a>
+<a class="sourceLine" id="cb7-7" title="7"><span class="ex">...</span></a>
+<a class="sourceLine" id="cb7-8" title="8"><span class="ex">deactivate_hsenv</span></a></code></pre></div>
 <p>Your static site will be available at <code>~/myblog/_site</code>.</p>
 <h2 id="create-and-upload-your-site-to-github">Create and upload your site to GitHub</h2>
 <p>At your GitHub site/account, create a repo named <code>username.github.io</code>. Now link it up with your static site:</p>
-<div class="sourceCode"><table class="sourceCode bash numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
-2
-3
-4
-5
-6
-</pre></td><td class="sourceCode"><pre><code class="sourceCode bash"><span class="bu">cd</span> ~/myblog/_site
-<span class="fu">git</span> init
-<span class="fu">git</span> add *.html <span class="co"># add css, etc.</span>
-<span class="fu">git</span> commit -m <span class="st">&quot;initial import&quot;</span>
-<span class="fu">git</span> remote add origin https://github.com/username/username.github.io.git
-<span class="fu">git</span> push -u origin master</code></pre></td></tr></table></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource bash numberLines"><code class="sourceCode bash"><a class="sourceLine" id="cb8-1" title="1"><span class="bu">cd</span> ~/myblog/_site</a>
+<a class="sourceLine" id="cb8-2" title="2"><span class="fu">git</span> init</a>
+<a class="sourceLine" id="cb8-3" title="3"><span class="fu">git</span> add *.html <span class="co"># add css, etc.</span></a>
+<a class="sourceLine" id="cb8-4" title="4"><span class="fu">git</span> commit -m <span class="st">&quot;initial import&quot;</span></a>
+<a class="sourceLine" id="cb8-5" title="5"><span class="fu">git</span> remote add origin https://github.com/username/username.github.io.git</a>
+<a class="sourceLine" id="cb8-6" title="6"><span class="fu">git</span> push -u origin master</a></code></pre></div>
 <h2 id="source">Source</h2>
 <p>This site’s source code is available <a href="https://github.com/listx/listx_blog">here</a>. This site’s static code is available <a href="https://github.com/listx/listx.github.io">here</a>.</p>
 
@@ -129,7 +106,7 @@
 			<a href="https://github.com/listx/listx_blog">Site</a>
 			<a href="https://github.com/listx/listx.github.io">generated</a>
 			with
-			<a href="http://jaspervdj.be/hakyll">Hakyll</a>
+			<a href="https://jaspervdj.be/hakyll">Hakyll</a>
 			and
 			<a href="http://sebastiaanvisser.github.com/clay">Clay</a>.
 			<br>

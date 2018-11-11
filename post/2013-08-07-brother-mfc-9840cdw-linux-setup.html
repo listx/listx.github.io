@@ -5,9 +5,9 @@
 		<title>Linus's Blog - Brother MFC-9840CDW: Setup on Arch Linux</title>
 		<link rel="stylesheet" href="../css/base.css">
 		<link rel="stylesheet" href="../css/syntax.css">
-		<link href="http://fonts.googleapis.com/css?family=Merriweather:300,300italic,700italic,700" rel="stylesheet" type="text/css">
+		<link href="https://fonts.googleapis.com/css?family=Merriweather:300,300italic,700italic,700" rel="stylesheet" type="text/css">
 		<link rel="shortcut icon" type="image/png" href="../favicon.png">
-		<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+		<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 		<script src="../misc.js"></script>
 		<!-- https://github.com/mreid/markreidname-hakyll/blob/master/_templates/mathjax.html -->
 <script type="text/x-mathjax-config">
@@ -23,7 +23,7 @@
 		"HTML-CSS": { availableFonts: ["TeX"] }
 	});
 </script>
-<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"> </script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"> </script>
 
 	</head>
 	<body>
@@ -55,13 +55,10 @@
 <li><code>brother-lpr-drivers-common</code></li>
 </ul>
 <p>Then, enable the <code>cups</code> daemon with <code>systemd</code>, and then start it:</p>
-<div class="sourceCode"><table class="sourceCode numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
-2
-</pre></td><td class="sourceCode"><pre><code class="sourceCode">sudo systemctl enable cups.service
-sudo systemctl start cups.service</code></pre></td></tr></table></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource numberLines"><code class="sourceCode"><a class="sourceLine" id="cb1-1" title="1">sudo systemctl enable cups.service</a>
+<a class="sourceLine" id="cb1-2" title="2">sudo systemctl start cups.service</a></code></pre></div>
 <p>Now go into your favorite web browser, and go to <code>http://localhost:631</code>, to find the CUPS web admin interface. From here, just add a new printer using the web form buttons. When adding the printer, use the LPR/LPD protocol, as follows:</p>
-<div class="sourceCode"><table class="sourceCode numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
-</pre></td><td class="sourceCode"><pre><code class="sourceCode">lpd://IP_ADDRESS_OF_PRINTER/BINARY_P1</code></pre></td></tr></table></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource numberLines"><code class="sourceCode"><a class="sourceLine" id="cb2-1" title="1">lpd://IP_ADDRESS_OF_PRINTER/BINARY_P1</a></code></pre></div>
 <p>and use the appropriate IP address that your printer has on the network. For the driver, select the CUPS driver for the MFC-9840CDW model (the various Brother drivers will only appear after installing the Brother driver packages from the AUR).</p>
 <p>Done!</p>
 
@@ -71,7 +68,7 @@ sudo systemctl start cups.service</code></pre></td></tr></table></div>
 			<a href="https://github.com/listx/listx_blog">Site</a>
 			<a href="https://github.com/listx/listx.github.io">generated</a>
 			with
-			<a href="http://jaspervdj.be/hakyll">Hakyll</a>
+			<a href="https://jaspervdj.be/hakyll">Hakyll</a>
 			and
 			<a href="http://sebastiaanvisser.github.com/clay">Clay</a>.
 			<br>

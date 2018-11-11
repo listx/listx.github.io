@@ -5,9 +5,9 @@
 		<title>Linus's Blog - Functors for Newbies</title>
 		<link rel="stylesheet" href="../css/base.css">
 		<link rel="stylesheet" href="../css/syntax.css">
-		<link href="http://fonts.googleapis.com/css?family=Merriweather:300,300italic,700italic,700" rel="stylesheet" type="text/css">
+		<link href="https://fonts.googleapis.com/css?family=Merriweather:300,300italic,700italic,700" rel="stylesheet" type="text/css">
 		<link rel="shortcut icon" type="image/png" href="../favicon.png">
-		<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+		<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 		<script src="../misc.js"></script>
 		<!-- https://github.com/mreid/markreidname-hakyll/blob/master/_templates/mathjax.html -->
 <script type="text/x-mathjax-config">
@@ -23,7 +23,7 @@
 		"HTML-CSS": { availableFonts: ["TeX"] }
 	});
 </script>
-<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"> </script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"> </script>
 
 	</head>
 	<body>
@@ -50,71 +50,50 @@
 <h2 id="what-is-a-functor">What is a Functor?</h2>
 <p>In Haskell, there is a <strong>Functor</strong> type class. If a type is an instance of the <strong>Functor</strong> class, it is essentially a container type that adds <em>context</em> to any value.</p>
 <p>The <strong>Functor</strong> class is defined as follows:</p>
-<div class="sourceCode"><table class="sourceCode numberLines haskell"><tr class="sourceCode"><td class="lineNumbers"><pre>1
-2
-</pre></td><td class="sourceCode"><pre><code class="sourceCode haskell"><span class="kw">class</span> <span class="dt">Functor</span> f <span class="kw">where</span>
-<span class="ot">	fmap ::</span> (a <span class="ot">-&gt;</span> b) <span class="ot">-&gt;</span> f a <span class="ot">-&gt;</span> f b</code></pre></td></tr></table></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource numberLines haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">class</span> <span class="dt">Functor</span> f <span class="kw">where</span></a>
+<a class="sourceLine" id="cb1-2" title="2"><span class="ot">	fmap ::</span> (a <span class="ot">-&gt;</span> b) <span class="ot">-&gt;</span> f a <span class="ot">-&gt;</span> f b</a></code></pre></div>
 <p>. That looks a bit weird, so I will rewrite it:</p>
-<div class="sourceCode"><table class="sourceCode numberLines haskell"><tr class="sourceCode"><td class="lineNumbers"><pre>1
-2
-</pre></td><td class="sourceCode"><pre><code class="sourceCode haskell"><span class="kw">class</span> <span class="dt">Functor</span> box <span class="kw">where</span>
-<span class="ot">	fmap ::</span> (apples <span class="ot">-&gt;</span> oranges) <span class="ot">-&gt;</span> box apples <span class="ot">-&gt;</span> box oranges</code></pre></td></tr></table></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource numberLines haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb2-1" title="1"><span class="kw">class</span> <span class="dt">Functor</span> box <span class="kw">where</span></a>
+<a class="sourceLine" id="cb2-2" title="2"><span class="ot">	fmap ::</span> (apples <span class="ot">-&gt;</span> oranges) <span class="ot">-&gt;</span> box apples <span class="ot">-&gt;</span> box oranges</a></code></pre></div>
 <p>. So, for a container type to be a real <strong>Functor</strong>, it has to be able to take in a function, and be able to modify the value contained inside itself <em>without changing the context</em>. This is <em>extremely useful</em>. Let’s look at some functors.</p>
 <h3 id="the-list-functor">The List Functor</h3>
 <p>Imagine you have a list with some numbers in it: <code>xs = [1, 2, 3]</code>. Also imagine you already wrote this function below:</p>
-<div class="sourceCode"><table class="sourceCode numberLines haskell"><tr class="sourceCode"><td class="lineNumbers"><pre>1
-2
-3
-4
-</pre></td><td class="sourceCode"><pre><code class="sourceCode haskell"><span class="ot">makeStatement ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">String</span>
-makeStatement a
-	<span class="fu">|</span> odd a <span class="fu">=</span> <span class="st">&quot;Yuck.&quot;</span>
-	<span class="fu">|</span> otherwise <span class="fu">=</span> <span class="st">&quot;Yay!&quot;</span></code></pre></td></tr></table></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource numberLines haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb3-1" title="1"><span class="ot">makeStatement ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">String</span></a>
+<a class="sourceLine" id="cb3-2" title="2">makeStatement a</a>
+<a class="sourceLine" id="cb3-3" title="3">	<span class="fu">|</span> <span class="fu">odd</span> a <span class="fu">=</span> <span class="st">&quot;Yuck.&quot;</span></a>
+<a class="sourceLine" id="cb3-4" title="4">	<span class="fu">|</span> <span class="fu">otherwise</span> <span class="fu">=</span> <span class="st">&quot;Yay!&quot;</span></a></code></pre></div>
 <p>. Now, you’d like to use <code>makeStatement</code> on the list <code>xs</code>, which has a type <code>[Int]</code>, so that every <code>Int</code> inside the list gets transformed according to <code>makeStatement</code>. Thankfully, <strong>List</strong> already has an instance of the <strong>Functor</strong> class, so we can do it like this:</p>
-<div class="sourceCode"><table class="sourceCode numberLines haskell"><tr class="sourceCode"><td class="lineNumbers"><pre>1
-2
-</pre></td><td class="sourceCode"><pre><code class="sourceCode haskell"><span class="ot">myFunc ::</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> [<span class="dt">String</span>]
-myFunc xs <span class="fu">=</span> fmap makeStatement xs</code></pre></td></tr></table></div>
-<p>. Though, since <strong>List</strong> defines <code>fmap</code> with a shorter-named <code>map</code>, we can just use <code>map</code> instead of <code>fmap</code> to save ourselves a keystroke.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> While we’re at it, we might as well drop the <code>xs</code> because it’s redundant.</p>
-<div class="sourceCode"><table class="sourceCode numberLines haskell"><tr class="sourceCode"><td class="lineNumbers"><pre>1
-2
-</pre></td><td class="sourceCode"><pre><code class="sourceCode haskell"><span class="ot">myFunc ::</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> [<span class="dt">String</span>]
-myFunc <span class="fu">=</span> map makeStatement</code></pre></td></tr></table></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource numberLines haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb4-1" title="1"><span class="ot">myFunc ::</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> [<span class="dt">String</span>]</a>
+<a class="sourceLine" id="cb4-2" title="2">myFunc xs <span class="fu">=</span> <span class="fu">fmap</span> makeStatement xs</a></code></pre></div>
+<p>. Though, since <strong>List</strong> defines <code>fmap</code> with a shorter-named <code>map</code>, we can just use <code>map</code> instead of <code>fmap</code> to save ourselves a keystroke.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> While we’re at it, we might as well drop the <code>xs</code> because it’s redundant.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource numberLines haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb5-1" title="1"><span class="ot">myFunc ::</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> [<span class="dt">String</span>]</a>
+<a class="sourceLine" id="cb5-2" title="2">myFunc <span class="fu">=</span> <span class="fu">map</span> makeStatement</a></code></pre></div>
 <p>This is immensely useful. Without the <strong>Functor</strong> class, you’d have to use pattern matching to manually extract the values contained in the list first before applying functions on them. Imagine a sophisticated, recursive binary tree with millions of elements — as long as the container type has an instance for <strong>Functor</strong>, you can just use a one-liner <code>fmap</code> to universally apply the function at hand to every single element inside the tree (and rest assured that the <em>context</em> for all the individual values and their interrelationships remain untouched — a win win!).</p>
 <p>For empty lists, You can still pass along a function with <code>fmap</code> into them, but nothing will happen because they are empty (that is, there are no values inside to modify with the function).</p>
-<div class="sourceCode"><table class="sourceCode numberLines haskell"><tr class="sourceCode"><td class="lineNumbers"><pre>1
-</pre></td><td class="sourceCode"><pre><code class="sourceCode haskell">map makeStatement [] <span class="co">-- same as []</span></code></pre></td></tr></table></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource numberLines haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb6-1" title="1"><span class="fu">map</span> makeStatement [] <span class="co">-- same as []</span></a></code></pre></div>
 <h3 id="the-maybe-functor">The Maybe Functor</h3>
 <p>Let’s look at the <strong>Maybe</strong> type just to prove that they are also functors.</p>
 <p><strong>Maybe</strong> is a container, except that it can only contain just 1 element (unlike <strong>List</strong> which can hold multiple elements). <strong>Maybe</strong> has two constructors: <code>Just</code> and <code>Nothing</code>; you can use <code>Just</code> to put a value into the <strong>Maybe</strong> type, like how you can use the <code>(:[])</code> function to put a single item into a list. Alternatively, you can use <code>Nothing</code> to denote the empty <strong>Maybe</strong> container (like <code>[]</code> for lists).</p>
-<div class="sourceCode"><table class="sourceCode numberLines haskell"><tr class="sourceCode"><td class="lineNumbers"><pre>1
-2
-3
-4
-5
-</pre></td><td class="sourceCode"><pre><code class="sourceCode haskell"><span class="ot">x ::</span> <span class="dt">Maybe</span> <span class="dt">Int</span>
-x <span class="fu">=</span> <span class="dt">Just</span> <span class="dv">10</span>
-
-<span class="ot">bigX ::</span> <span class="dt">Maybe</span> <span class="dt">Int</span>
-bigX <span class="fu">=</span> fmap (<span class="fu">*</span><span class="dv">2</span>) x <span class="co">-- returns Just 20</span></code></pre></td></tr></table></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource numberLines haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb7-1" title="1"><span class="ot">x ::</span> <span class="dt">Maybe</span> <span class="dt">Int</span></a>
+<a class="sourceLine" id="cb7-2" title="2">x <span class="fu">=</span> <span class="dt">Just</span> <span class="dv">10</span></a>
+<a class="sourceLine" id="cb7-3" title="3"></a>
+<a class="sourceLine" id="cb7-4" title="4"><span class="ot">bigX ::</span> <span class="dt">Maybe</span> <span class="dt">Int</span></a>
+<a class="sourceLine" id="cb7-5" title="5">bigX <span class="fu">=</span> <span class="fu">fmap</span> (<span class="fu">*</span><span class="dv">2</span>) x <span class="co">-- returns Just 20</span></a></code></pre></div>
 <p>Again, using <code>fmap</code> on an empty container will return the empty container as-is:</p>
-<div class="sourceCode"><table class="sourceCode numberLines haskell"><tr class="sourceCode"><td class="lineNumbers"><pre>1
-</pre></td><td class="sourceCode"><pre><code class="sourceCode haskell">fmap (<span class="fu">*</span><span class="dv">2</span>) <span class="dt">Nothing</span> <span class="co">-- same as Nothing</span></code></pre></td></tr></table></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource numberLines haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb8-1" title="1"><span class="fu">fmap</span> (<span class="fu">*</span><span class="dv">2</span>) <span class="dt">Nothing</span> <span class="co">-- same as Nothing</span></a></code></pre></div>
 <h3 id="the-tuple-functor">The Tuple Functor?</h3>
 <p>You might be wondering — what about tuples? Well, because tuples hold <em>different</em> types in a single container, it is impossible to implement <code>fmap</code> for it. Recall the type signature required for <code>fmap</code>:</p>
-<div class="sourceCode"><table class="sourceCode numberLines haskell"><tr class="sourceCode"><td class="lineNumbers"><pre>1
-2
-</pre></td><td class="sourceCode"><pre><code class="sourceCode haskell"><span class="kw">class</span> <span class="dt">Functor</span> box <span class="kw">where</span>
-<span class="ot">	fmap ::</span> (apples <span class="ot">-&gt;</span> oranges) <span class="ot">-&gt;</span> box apples <span class="ot">-&gt;</span> box oranges</code></pre></td></tr></table></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode numberSource numberLines haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb9-1" title="1"><span class="kw">class</span> <span class="dt">Functor</span> box <span class="kw">where</span></a>
+<a class="sourceLine" id="cb9-2" title="2"><span class="ot">	fmap ::</span> (apples <span class="ot">-&gt;</span> oranges) <span class="ot">-&gt;</span> box apples <span class="ot">-&gt;</span> box oranges</a></code></pre></div>
 <p>. Notice that the container must contain a single type <code>apples</code> — tuples by their nature have arbitrary numbers of <em>different</em> types (they have apples <em>and</em> oranges in them already). This is the reason why we don’t (and can’t) have an <code>fmap</code> function for tuples.</p>
 <h2 id="conclusion">Conclusion</h2>
 <p>Functors are awesome. If you ever define your own custom container type, be sure to make an instance for <strong>Functor</strong> to make life easy for everyone.</p>
-<div class="footnotes">
+<section class="footnotes">
 <hr />
 <ol>
-<li id="fn1"><p>I imagine other types’ <code>fmap</code> implementation will have longer names, which would encourage you to just use the universal, 4-letter <code>fmap</code> function instead.<a href="#fnref1">↩</a></p></li>
+<li id="fn1"><p>I imagine other types’ <code>fmap</code> implementation will have longer names, which would encourage you to just use the universal, 4-letter <code>fmap</code> function instead.<a href="#fnref1" class="footnote-back">↩</a></p></li>
 </ol>
-</div>
+</section>
 
 		</div>
 		<div id="footer">
@@ -122,7 +101,7 @@ bigX <span class="fu">=</span> fmap (<span class="fu">*</span><span class="dv">2
 			<a href="https://github.com/listx/listx_blog">Site</a>
 			<a href="https://github.com/listx/listx.github.io">generated</a>
 			with
-			<a href="http://jaspervdj.be/hakyll">Hakyll</a>
+			<a href="https://jaspervdj.be/hakyll">Hakyll</a>
 			and
 			<a href="http://sebastiaanvisser.github.com/clay">Clay</a>.
 			<br>

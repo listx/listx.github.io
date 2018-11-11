@@ -5,9 +5,9 @@
 		<title>Linus's Blog - Find Lines with 80+ Columns in Multiple Files</title>
 		<link rel="stylesheet" href="../css/base.css">
 		<link rel="stylesheet" href="../css/syntax.css">
-		<link href="http://fonts.googleapis.com/css?family=Merriweather:300,300italic,700italic,700" rel="stylesheet" type="text/css">
+		<link href="https://fonts.googleapis.com/css?family=Merriweather:300,300italic,700italic,700" rel="stylesheet" type="text/css">
 		<link rel="shortcut icon" type="image/png" href="../favicon.png">
-		<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+		<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 		<script src="../misc.js"></script>
 		<!-- https://github.com/mreid/markreidname-hakyll/blob/master/_templates/mathjax.html -->
 <script type="text/x-mathjax-config">
@@ -23,7 +23,7 @@
 		"HTML-CSS": { availableFonts: ["TeX"] }
 	});
 </script>
-<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"> </script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"> </script>
 
 	</head>
 	<body>
@@ -46,23 +46,22 @@
 	<a href="../tag/linux.html">linux</a>, <a href="../tag/programming.html">programming</a>
 </div>
 
-<p>It’s nice to follow the 80-columns-per-line rule<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a>, but what if you have some lingering project that has yet to conform?</p>
+<p>It’s nice to follow the 80-columns-per-line rule<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>, but what if you have some lingering project that has yet to conform?</p>
 <p>Just go to that project’s sources directory and do</p>
 <div class="code-and-raw lineCntMax10">
 <div class="raw-link sourceCode">
 <table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/find-80-cols.sh" mimetype="text/plain">find-80-cols.sh</a></code></pre></td></tr></tbody></table>
 </div>
-<div class="sourceCode" input="code/find-80-cols.sh"><table class="sourceCode numberLines bash"><tr class="sourceCode"><td class="lineNumbers"><pre>1
-</pre></td><td class="sourceCode"><pre><code class="sourceCode bash"><span class="fu">find</span> . -type f -exec sh -c <span class="st">&quot;expand -t 8 {} | grep -n </span><span class="dt">\&quot;</span><span class="st">.\{81\}</span><span class="dt">\&quot;</span><span class="st">&quot;</span> <span class="dt">\;</span> -print</code></pre></td></tr></table></div>
+<div class="sourceCode" id="cb1" data-input="code/find-80-cols.sh"><pre class="sourceCode numberSource numberLines bash"><code class="sourceCode bash"><a class="sourceLine" id="cb1-1" title="1"><span class="fu">find</span> . -type f -exec sh -c <span class="st">&quot;expand -t 8 {} | grep -n </span><span class="dt">\&quot;</span><span class="st">.\{81\}</span><span class="dt">\&quot;</span><span class="st">&quot;</span> <span class="dt">\;</span> -print</a></code></pre></div>
 </div>
 <p>.</p>
 <p>The call to <code>expand</code> is necessary because different people use different widths for tabs. That is, we are trying to find files with 80+ <em>columns</em> (as they appear to humans), not 80+ <em>characters</em> (as they appear to the computer).</p>
-<div class="footnotes">
+<section class="footnotes">
 <hr />
 <ol>
-<li id="fn1"><p>See the <a href="https://www.kernel.org/doc/Documentation/CodingStyle">Linux Kernel Coding Style</a>, “Chapter 2: Breaking long lines and strings”.<a href="#fnref1">↩</a></p></li>
+<li id="fn1"><p>See the <a href="https://www.kernel.org/doc/Documentation/CodingStyle">Linux Kernel Coding Style</a>, “Chapter 2: Breaking long lines and strings”.<a href="#fnref1" class="footnote-back">↩</a></p></li>
 </ol>
-</div>
+</section>
 
 		</div>
 		<div id="footer">
@@ -70,7 +69,7 @@
 			<a href="https://github.com/listx/listx_blog">Site</a>
 			<a href="https://github.com/listx/listx.github.io">generated</a>
 			with
-			<a href="http://jaspervdj.be/hakyll">Hakyll</a>
+			<a href="https://jaspervdj.be/hakyll">Hakyll</a>
 			and
 			<a href="http://sebastiaanvisser.github.com/clay">Clay</a>.
 			<br>

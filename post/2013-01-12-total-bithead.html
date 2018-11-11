@@ -5,9 +5,9 @@
 		<title>Linus's Blog - Using the Total Bithead with ALSA on Arch Linux</title>
 		<link rel="stylesheet" href="../css/base.css">
 		<link rel="stylesheet" href="../css/syntax.css">
-		<link href="http://fonts.googleapis.com/css?family=Merriweather:300,300italic,700italic,700" rel="stylesheet" type="text/css">
+		<link href="https://fonts.googleapis.com/css?family=Merriweather:300,300italic,700italic,700" rel="stylesheet" type="text/css">
 		<link rel="shortcut icon" type="image/png" href="../favicon.png">
-		<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+		<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 		<script src="../misc.js"></script>
 		<!-- https://github.com/mreid/markreidname-hakyll/blob/master/_templates/mathjax.html -->
 <script type="text/x-mathjax-config">
@@ -23,7 +23,7 @@
 		"HTML-CSS": { availableFonts: ["TeX"] }
 	});
 </script>
-<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"> </script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"> </script>
 
 	</head>
 	<body>
@@ -53,28 +53,17 @@
 <div class="raw-link sourceCode">
 <table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/switch_audio.sh" mimetype="text/plain">switch_audio.sh</a></code></pre></td></tr></tbody></table>
 </div>
-<div class="sourceCode" input="code/switch_audio.sh"><table class="sourceCode numberLines bash"><tr class="sourceCode"><td class="lineNumbers"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-</pre></td><td class="sourceCode"><pre><code class="sourceCode bash"><span class="co">#!/bin/zsh</span>
-
-<span class="kw">if [[</span> <span class="ot">-e</span> /proc/asound/card1<span class="kw"> ]]</span>; <span class="kw">then</span>
-	<span class="fu">ln</span> -sf ~/syscfg/alsa/cfg-total-bithead ~/.asoundrc
-<span class="kw">else</span>
-	<span class="kw">case</span> <span class="va">$HOST</span><span class="kw"> in</span>
-	k0<span class="kw">)</span> <span class="fu">ln</span> -sf ~/syscfg/alsa/cfg-k0 ~/.asoundrc <span class="kw">;;</span>
-	<span class="ex">k1</span>) <span class="fu">ln</span> -sf ~/syscfg/alsa/cfg-k1 ~/.asoundrc <span class="kw">;;</span>
-	<span class="ex">*</span>) <span class="bu">echo</span> <span class="st">&quot;Unknown host </span><span class="dt">\`</span><span class="va">$HOST</span><span class="st">'&quot;</span> <span class="kw">;;</span>
-	<span class="kw">esac</span>
-<span class="kw">fi</span></code></pre></td></tr></table></div>
+<div class="sourceCode" id="cb1" data-input="code/switch_audio.sh"><pre class="sourceCode numberSource numberLines bash"><code class="sourceCode bash"><a class="sourceLine" id="cb1-1" title="1"><span class="co">#!/bin/zsh</span></a>
+<a class="sourceLine" id="cb1-2" title="2"></a>
+<a class="sourceLine" id="cb1-3" title="3"><span class="kw">if [[</span> <span class="ot">-e</span> /proc/asound/card1<span class="kw"> ]]</span>; <span class="kw">then</span></a>
+<a class="sourceLine" id="cb1-4" title="4">	<span class="fu">ln</span> -sf ~/syscfg/alsa/cfg-total-bithead ~/.asoundrc</a>
+<a class="sourceLine" id="cb1-5" title="5"><span class="kw">else</span></a>
+<a class="sourceLine" id="cb1-6" title="6">	<span class="kw">case</span> <span class="va">$HOST</span><span class="kw"> in</span></a>
+<a class="sourceLine" id="cb1-7" title="7">	k0<span class="kw">)</span> <span class="fu">ln</span> -sf ~/syscfg/alsa/cfg-k0 ~/.asoundrc <span class="kw">;;</span></a>
+<a class="sourceLine" id="cb1-8" title="8">	<span class="ex">k1</span>) <span class="fu">ln</span> -sf ~/syscfg/alsa/cfg-k1 ~/.asoundrc <span class="kw">;;</span></a>
+<a class="sourceLine" id="cb1-9" title="9">	<span class="ex">*</span>) <span class="bu">echo</span> <span class="st">&quot;Unknown host </span><span class="dt">\`</span><span class="va">$HOST</span><span class="st">'&quot;</span> <span class="kw">;;</span></a>
+<a class="sourceLine" id="cb1-10" title="10">	<span class="kw">esac</span></a>
+<a class="sourceLine" id="cb1-11" title="11"><span class="kw">fi</span></a></code></pre></div>
 </div>
 <p>where k0 is my desktop and k1 is my laptop. <code>cfg-k0</code> looks like this:</p>
 <pre><code># use `aplay -l | awk '/^card/{print$3}' | sort | uniq' for card names
@@ -97,7 +86,7 @@ defaults.ctl.!device 0</code></pre>
 			<a href="https://github.com/listx/listx_blog">Site</a>
 			<a href="https://github.com/listx/listx.github.io">generated</a>
 			with
-			<a href="http://jaspervdj.be/hakyll">Hakyll</a>
+			<a href="https://jaspervdj.be/hakyll">Hakyll</a>
 			and
 			<a href="http://sebastiaanvisser.github.com/clay">Clay</a>.
 			<br>

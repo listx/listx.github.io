@@ -5,9 +5,9 @@
 		<title>Linus's Blog - Software Development Philosophy</title>
 		<link rel="stylesheet" href="../css/base.css">
 		<link rel="stylesheet" href="../css/syntax.css">
-		<link href="http://fonts.googleapis.com/css?family=Merriweather:300,300italic,700italic,700" rel="stylesheet" type="text/css">
+		<link href="https://fonts.googleapis.com/css?family=Merriweather:300,300italic,700italic,700" rel="stylesheet" type="text/css">
 		<link rel="shortcut icon" type="image/png" href="../favicon.png">
-		<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+		<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 		<script src="../misc.js"></script>
 		<!-- https://github.com/mreid/markreidname-hakyll/blob/master/_templates/mathjax.html -->
 <script type="text/x-mathjax-config">
@@ -23,7 +23,7 @@
 		"HTML-CSS": { availableFonts: ["TeX"] }
 	});
 </script>
-<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"> </script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"> </script>
 
 	</head>
 	<body>
@@ -80,7 +80,7 @@
 <h2 id="non-modularity">Non-modularity</h2>
 <p>A common mistake is when people do not make things modular and just copy/paste large files making minor changes between each one. For example, let’s say that there exists 3 different developer environments — “development”, “staging”, and “production” — and that each one shares about 90% of the configuration values, with the other 10% changing depending on the environment. You should not write 3 separate files; instead, you should keep in source control 1 file with all of the various values, and have some other process automatically generate the individual environment-specific configuration file. This way, you don’t have to edit 3 files when you make some global change that affects all environments.</p>
 <h2 id="lack-of-testing">Lack of testing</h2>
-<p>In the ideal world, every program ships with a contract, telling the user that the program will do X, Y, and Z, in such and such a way under such and such conditions. This contract would be the source of truth about a program’s intended behavior at runtime. Alas, such “contracts” do not exist, at least at the program-behavior-at-runtime level. <a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> While excellent documentation, commit history, and even community-driven “best practices” all attempt to define how a program behaves and what to expect, they still bow down to the test suite. This is because tests, by their very nature, are written expressly to keep in line the behavior of a program over its lifetime.</p>
+<p>In the ideal world, every program ships with a contract, telling the user that the program will do X, Y, and Z, in such and such a way under such and such conditions. This contract would be the source of truth about a program’s intended behavior at runtime. Alas, such “contracts” do not exist, at least at the program-behavior-at-runtime level. <a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> While excellent documentation, commit history, and even community-driven “best practices” all attempt to define how a program behaves and what to expect, they still bow down to the test suite. This is because tests, by their very nature, are written expressly to keep in line the behavior of a program over its lifetime.</p>
 <p>Not all projects can have the traditional test suite covering every corner case (e.g., the Linux Kernel is one such project). But most projects can. At the very least, you should have some standard practice or system of ensuring that your program is stable and behaves as intended.</p>
 <h1 id="accuracy-is-more-important-than-performance">4: Accuracy is more important than performance</h1>
 <p>Ultimately, software is written to perform some <strong>task</strong>. If your software does not perform that task, it is useless. Your code should care foremost about correctness (being free from bugs).</p>
@@ -92,12 +92,12 @@
 <p>All projects require new code — and this is how projects grow. Growth has to be done in moderation and with great care — this is how software must evolve. We can analogize software growth as mutation over time, with each commit as a particular “mutation”. We choose the best ones (thanks to distributed VCS branching/merging!) one at a time, easing growing pains. Commits with far-reaching changes are the worst type of mutations and should be avoided; an exception is if you have changes that delete more code than add code — these are golden if they can be vetted and proven to work, as they can cut bloat and slim down the codebase.</p>
 <h1 id="conclusion">Conclusion</h1>
 <p>In the real world, it’s hard to cross all your t’s and dot your i’s — I am no exception with regard to my own projects at home and at work. If I had to pick only one rule from the five above, it would be the first (treat version control seriously). Maybe I am biased because I love Git. Still, it’s hard to argue against having version control; the rest of the guidelines above can be argued against under particular circumstances, but version control remains sacrosanct. Version control is king!</p>
-<div class="footnotes">
+<section class="footnotes">
 <hr />
 <ol>
-<li id="fn1"><p>This is one reason why I love purity in Haskell so much — pure functions guarantee their inputs and outputs! It’s like coding with little mini-contracts everywhere!<a href="#fnref1">↩</a></p></li>
+<li id="fn1"><p>This is one reason why I love purity in Haskell so much — pure functions guarantee their inputs and outputs! It’s like coding with little mini-contracts everywhere!<a href="#fnref1" class="footnote-back">↩</a></p></li>
 </ol>
-</div>
+</section>
 
 		</div>
 		<div id="footer">
@@ -105,7 +105,7 @@
 			<a href="https://github.com/listx/listx_blog">Site</a>
 			<a href="https://github.com/listx/listx.github.io">generated</a>
 			with
-			<a href="http://jaspervdj.be/hakyll">Hakyll</a>
+			<a href="https://jaspervdj.be/hakyll">Hakyll</a>
 			and
 			<a href="http://sebastiaanvisser.github.com/clay">Clay</a>.
 			<br>

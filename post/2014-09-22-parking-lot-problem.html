@@ -5,9 +5,9 @@
 		<title>Linus's Blog - The Parking Lot Problem: A Successor to FizzBuzz?</title>
 		<link rel="stylesheet" href="../css/base.css">
 		<link rel="stylesheet" href="../css/syntax.css">
-		<link href="http://fonts.googleapis.com/css?family=Merriweather:300,300italic,700italic,700" rel="stylesheet" type="text/css">
+		<link href="https://fonts.googleapis.com/css?family=Merriweather:300,300italic,700italic,700" rel="stylesheet" type="text/css">
 		<link rel="shortcut icon" type="image/png" href="../favicon.png">
-		<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+		<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 		<script src="../misc.js"></script>
 		<!-- https://github.com/mreid/markreidname-hakyll/blob/master/_templates/mathjax.html -->
 <script type="text/x-mathjax-config">
@@ -23,7 +23,7 @@
 		"HTML-CSS": { availableFonts: ["TeX"] }
 	});
 </script>
-<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"> </script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"> </script>
 
 	</head>
 	<body>
@@ -72,7 +72,7 @@
 <p>Conceptually, the problem is very simple. Consider the infinite set <code>N</code>, which includes all natural numbers, starting from <code>0</code>. Then obviously, we can start with <code>N</code> itself, and remove every number in <code>N</code> that is also present in <code>T</code>. Then, when we are done (<code>T</code> is empty), we can look at <code>N</code> and retrieve the lowest number.</p>
 <h3 id="sorting">Sorting</h3>
 <p>Intuitively, we are really only interested in the first consecutive group of cars parked next to each other. Essentially, what you do is walk along from the very first parking space, <code>0</code>, and see if it is occupied. If it is occupied, you move on to the next space — if it is not occupied, you can stop because you found your answer!</p>
-<p>There is no way to solve the problem without first sorting <code>T</code>.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> You can solve the problem without sorting only in the edge case where <code>T</code>’s lowest number is greater than <code>0</code> — i.e., if the car most closely parked to the entrance is not on <code>0</code>, then you do not need to bother sorting <code>T</code>, because the answer is simply <code>0</code>. And, finding the lowest number in a given set is always a <span class="math inline">\(O(n)\)</span> operation because you need to loop through the entire set just once, keeping track of the lowest number found.</p>
+<p>There is no way to solve the problem without first sorting <code>T</code>.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> You can solve the problem without sorting only in the edge case where <code>T</code>’s lowest number is greater than <code>0</code> — i.e., if the car most closely parked to the entrance is not on <code>0</code>, then you do not need to bother sorting <code>T</code>, because the answer is simply <code>0</code>. And, finding the lowest number in a given set is always a <span class="math inline">\(O(n)\)</span> operation because you need to loop through the entire set just once, keeping track of the lowest number found.</p>
 <p>In the more common case (as seen in real life), the parking space closest to the driver (the most desirable parking space) is already taken; and what’s more, the group of spaces closest to the driver is already taken. In this case, we have to proceed from space <code>0</code>, and incrementally observe every subsequent space, until we arrive at an empty parking space. The insight here is that we are treating the multitude of consecutively parked cars as one giant car parked across multiple spaces, and are just trying to find the total number of spaces this car occupies.</p>
 <h2 id="ruby">Ruby</h2>
 <p>I think it is time for some actual code. While I could explain how the Ruby version works, I feel that I have already expounded upon the problem enough above, so that the code here should make intuitive sense.</p>
@@ -80,32 +80,19 @@
 <div class="raw-link sourceCode">
 <table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/toy/parking-space.rb" mimetype="text/plain">parking-space.rb</a></code></pre></td></tr></tbody></table>
 </div>
-<div class="sourceCode" input="code/toy/parking-space.rb"><table class="sourceCode numberLines ruby"><tr class="sourceCode"><td class="lineNumbers"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-</pre></td><td class="sourceCode"><pre><code class="sourceCode ruby"><span class="kw">def</span> get_parking_space(t)
-	t_sorted = t.sort
-
-	i = <span class="dv">0</span>
-	<span class="kw">while</span> i &lt; t_sorted.size
-		<span class="kw">if</span> i &lt; t_sorted[i]
-			<span class="kw">break</span>
-		<span class="kw">end</span>
-		i += <span class="dv">1</span>
-	<span class="kw">end</span>
-
-	<span class="kw">return</span> i
-<span class="kw">end</span></code></pre></td></tr></table></div>
+<div class="sourceCode" id="cb2" data-input="code/toy/parking-space.rb"><pre class="sourceCode numberSource numberLines ruby"><code class="sourceCode ruby"><a class="sourceLine" id="cb2-1" title="1"><span class="kw">def</span> get_parking_space(t)</a>
+<a class="sourceLine" id="cb2-2" title="2">	t_sorted = t.sort</a>
+<a class="sourceLine" id="cb2-3" title="3"></a>
+<a class="sourceLine" id="cb2-4" title="4">	i = <span class="dv">0</span></a>
+<a class="sourceLine" id="cb2-5" title="5">	<span class="kw">while</span> i &lt; t_sorted.size</a>
+<a class="sourceLine" id="cb2-6" title="6">		<span class="kw">if</span> i &lt; t_sorted[i]</a>
+<a class="sourceLine" id="cb2-7" title="7">			<span class="kw">break</span></a>
+<a class="sourceLine" id="cb2-8" title="8">		<span class="kw">end</span></a>
+<a class="sourceLine" id="cb2-9" title="9">		i += <span class="dv">1</span></a>
+<a class="sourceLine" id="cb2-10" title="10">	<span class="kw">end</span></a>
+<a class="sourceLine" id="cb2-11" title="11"></a>
+<a class="sourceLine" id="cb2-12" title="12">	<span class="kw">return</span> i</a>
+<a class="sourceLine" id="cb2-13" title="13"><span class="kw">end</span></a></code></pre></div>
 </div>
 <h2 id="haskell">Haskell</h2>
 <p>The Haskell version is a direct translation of the Ruby version, as an iterative approach works just fine. The only drawback is that we use <code>Int</code> instead of the arbitrarily large <code>Integer</code> type for succinctness (we can use <code>Integer</code>, but some built-in functions like <code>sort</code> only work on <code>Int</code>).</p>
@@ -113,28 +100,17 @@
 <div class="raw-link sourceCode">
 <table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/toy/parking-space.hs" mimetype="text/plain">parking-space.hs</a></code></pre></td></tr></tbody></table>
 </div>
-<div class="sourceCode" input="code/toy/parking-space.hs"><table class="sourceCode numberLines haskell"><tr class="sourceCode"><td class="lineNumbers"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-</pre></td><td class="sourceCode"><pre><code class="sourceCode haskell"><span class="kw">import </span><span class="dt">Data.List</span>
-
-<span class="ot">getParkingSpace ::</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> <span class="dt">Int</span>
-getParkingSpace ts
-  <span class="fu">|</span> null ts <span class="fu">=</span> <span class="dv">0</span>
-  <span class="fu">|</span> otherwise <span class="fu">=</span> loop <span class="dv">0</span> <span class="fu">$</span> sort ts
-  <span class="kw">where</span>
-  loop i xs
-    <span class="fu">|</span> i <span class="fu">==</span> length xs <span class="fu">=</span> i
-    <span class="fu">|</span> i <span class="fu">&lt;</span> xs <span class="fu">!!</span> i <span class="fu">=</span> i
-    <span class="fu">|</span> otherwise <span class="fu">=</span> loop (i <span class="fu">+</span> <span class="dv">1</span>) xs</code></pre></td></tr></table></div>
+<div class="sourceCode" id="cb3" data-input="code/toy/parking-space.hs"><pre class="sourceCode numberSource numberLines haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb3-1" title="1"><span class="kw">import</span> <span class="dt">Data.List</span></a>
+<a class="sourceLine" id="cb3-2" title="2"></a>
+<a class="sourceLine" id="cb3-3" title="3"><span class="ot">getParkingSpace ::</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> <span class="dt">Int</span></a>
+<a class="sourceLine" id="cb3-4" title="4">getParkingSpace ts</a>
+<a class="sourceLine" id="cb3-5" title="5">  <span class="fu">|</span> <span class="fu">null</span> ts <span class="fu">=</span> <span class="dv">0</span></a>
+<a class="sourceLine" id="cb3-6" title="6">  <span class="fu">|</span> <span class="fu">otherwise</span> <span class="fu">=</span> loop <span class="dv">0</span> <span class="fu">$</span> <span class="fu">sort</span> ts</a>
+<a class="sourceLine" id="cb3-7" title="7">  <span class="kw">where</span></a>
+<a class="sourceLine" id="cb3-8" title="8">  loop i xs</a>
+<a class="sourceLine" id="cb3-9" title="9">    <span class="fu">|</span> i <span class="fu">==</span> <span class="fu">length</span> xs <span class="fu">=</span> i</a>
+<a class="sourceLine" id="cb3-10" title="10">    <span class="fu">|</span> i <span class="fu">&lt;</span> xs <span class="fu">!!</span> i <span class="fu">=</span> i</a>
+<a class="sourceLine" id="cb3-11" title="11">    <span class="fu">|</span> <span class="fu">otherwise</span> <span class="fu">=</span> loop (i <span class="fu">+</span> <span class="dv">1</span>) xs</a></code></pre></div>
 </div>
 <h3 id="functional-solution">Functional solution</h3>
 <p>Michele Alzetta kindly sent me another solution, which has a much stronger “Haskell” flavor. I’ve made some slight adjustments; here it is:</p>
@@ -142,24 +118,17 @@ getParkingSpace ts
 <div class="raw-link sourceCode">
 <table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/toy/parking-space2.hs" mimetype="text/plain">parking-space2.hs</a></code></pre></td></tr></tbody></table>
 </div>
-<div class="sourceCode" input="code/toy/parking-space2.hs"><table class="sourceCode numberLines haskell"><tr class="sourceCode"><td class="lineNumbers"><pre>1
-2
-3
-4
-5
-6
-7
-</pre></td><td class="sourceCode"><pre><code class="sourceCode haskell"><span class="kw">import </span><span class="dt">Data.List</span>
-<span class="kw">import </span><span class="dt">Data.Maybe</span>
-
-<span class="ot">getParkingSpace' ::</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> <span class="dt">Int</span>
-getParkingSpace' ts <span class="fu">=</span> fromMaybe
-  (length ts)
-  (elemIndex <span class="dt">False</span> <span class="fu">.</span> zipWith (<span class="fu">==</span>) [<span class="dv">0</span><span class="fu">..</span>] <span class="fu">$</span> sort ts)</code></pre></td></tr></table></div>
+<div class="sourceCode" id="cb4" data-input="code/toy/parking-space2.hs"><pre class="sourceCode numberSource numberLines haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb4-1" title="1"><span class="kw">import</span> <span class="dt">Data.List</span></a>
+<a class="sourceLine" id="cb4-2" title="2"><span class="kw">import</span> <span class="dt">Data.Maybe</span></a>
+<a class="sourceLine" id="cb4-3" title="3"></a>
+<a class="sourceLine" id="cb4-4" title="4"><span class="ot">getParkingSpace' ::</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> <span class="dt">Int</span></a>
+<a class="sourceLine" id="cb4-5" title="5">getParkingSpace' ts <span class="fu">=</span> fromMaybe</a>
+<a class="sourceLine" id="cb4-6" title="6">  (<span class="fu">length</span> ts)</a>
+<a class="sourceLine" id="cb4-7" title="7">  (elemIndex <span class="dt">False</span> <span class="fu">.</span> <span class="fu">zipWith</span> (<span class="fu">==</span>) [<span class="dv">0</span><span class="fu">..</span>] <span class="fu">$</span> <span class="fu">sort</span> ts)</a></code></pre></div>
 </div>
 <p>. The advantage of this version is that it only evaluates <code>length ts</code> (the input list) as a last resort, thanks to <code>fromMaybe</code>. It also uses standard Prelude functions like <code>elemIndex</code> and <code>zipWith</code> for easier understanding. Thanks Michele!</p>
 <h2 id="low-level-interlude">Low-Level Interlude</h2>
-<p>Did you realize that the basic concept here is the same as finding the least significant bit (LSB)? I.e., if the parking lot is one giant computer word, and a <code>1</code> bit represents an available parking space, then we are simply trying to find the LSB (the index of the bit being the same thing as the parking space number). This is such a common scenario, that there are native hardware instructions for this on most all CPUs. The canonical name for this operation is <a href="http://en.wikipedia.org/wiki/Find_first_set"><em>find first set</em></a> or <em>find first one</em>.<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> In Linux, you can do <code>man ffs</code> to learn about how to use it in your C program.</p>
+<p>Did you realize that the basic concept here is the same as finding the least significant bit (LSB)? I.e., if the parking lot is one giant computer word, and a <code>1</code> bit represents an available parking space, then we are simply trying to find the LSB (the index of the bit being the same thing as the parking space number). This is such a common scenario, that there are native hardware instructions for this on most all CPUs. The canonical name for this operation is <a href="http://en.wikipedia.org/wiki/Find_first_set"><em>find first set</em></a> or <em>find first one</em>.<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a> In Linux, you can do <code>man ffs</code> to learn about how to use it in your C program.</p>
 <p>Of course, the parking lot in our problem is of infinite size, which makes the size of <code>T</code> arbitrarily large; alas, we cannot use <code>ffs</code> here.</p>
 <h1 id="the-parking-load-problem">The Parking Load Problem</h1>
 <p>An interesting related problem is what I call the <em>Parking Load</em> problem. The scenario is the same as in the <em>Parking Lot</em> problem, but with the following twist: if the last (most far away) parked car determines the bounds of the parking lot (i.e., it is no longer considered infinitely large), then how many parking spaces are available?</p>
@@ -181,20 +150,13 @@ getParkingSpace' ts <span class="fu">=</span> fromMaybe
 <div class="raw-link sourceCode">
 <table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/toy/parking-spaces.rb" mimetype="text/plain">parking-spaces.rb</a></code></pre></td></tr></tbody></table>
 </div>
-<div class="sourceCode" input="code/toy/parking-spaces.rb"><table class="sourceCode numberLines ruby"><tr class="sourceCode"><td class="lineNumbers"><pre>1
-2
-3
-4
-5
-6
-7
-</pre></td><td class="sourceCode"><pre><code class="sourceCode ruby"><span class="kw">def</span> get_parking_spaces(t)
-	<span class="kw">if</span> t.empty?
-		<span class="kw">return</span> <span class="st">&quot;N/A&quot;</span>
-	<span class="kw">else</span>
-		<span class="kw">return</span> (t.max - t.size) + <span class="dv">1</span>
-	<span class="kw">end</span>
-<span class="kw">end</span></code></pre></td></tr></table></div>
+<div class="sourceCode" id="cb6" data-input="code/toy/parking-spaces.rb"><pre class="sourceCode numberSource numberLines ruby"><code class="sourceCode ruby"><a class="sourceLine" id="cb6-1" title="1"><span class="kw">def</span> get_parking_spaces(t)</a>
+<a class="sourceLine" id="cb6-2" title="2">	<span class="kw">if</span> t.empty?</a>
+<a class="sourceLine" id="cb6-3" title="3">		<span class="kw">return</span> <span class="st">&quot;N/A&quot;</span></a>
+<a class="sourceLine" id="cb6-4" title="4">	<span class="kw">else</span></a>
+<a class="sourceLine" id="cb6-5" title="5">		<span class="kw">return</span> (t.max - t.size) + <span class="dv">1</span></a>
+<a class="sourceLine" id="cb6-6" title="6">	<span class="kw">end</span></a>
+<a class="sourceLine" id="cb6-7" title="7"><span class="kw">end</span></a></code></pre></div>
 </div>
 <h2 id="haskell-1">Haskell</h2>
 <p>The Haskell version is not much different.</p>
@@ -202,14 +164,10 @@ getParkingSpace' ts <span class="fu">=</span> fromMaybe
 <div class="raw-link sourceCode">
 <table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/toy/parking-spaces.hs" mimetype="text/plain">parking-spaces.hs</a></code></pre></td></tr></tbody></table>
 </div>
-<div class="sourceCode" input="code/toy/parking-spaces.hs"><table class="sourceCode numberLines haskell"><tr class="sourceCode"><td class="lineNumbers"><pre>1
-2
-3
-4
-</pre></td><td class="sourceCode"><pre><code class="sourceCode haskell"><span class="ot">getParkingSpaces ::</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> <span class="dt">Either</span> <span class="dt">String</span> <span class="dt">Int</span>
-getParkingSpaces t
-  <span class="fu">|</span> null t <span class="fu">=</span> <span class="dt">Left</span> <span class="st">&quot;N/A&quot;</span>
-  <span class="fu">|</span> otherwise <span class="fu">=</span> <span class="dt">Right</span> <span class="fu">$</span> (maximum t) <span class="fu">-</span> (length t) <span class="fu">+</span> <span class="dv">1</span></code></pre></td></tr></table></div>
+<div class="sourceCode" id="cb7" data-input="code/toy/parking-spaces.hs"><pre class="sourceCode numberSource numberLines haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb7-1" title="1"><span class="ot">getParkingSpaces ::</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> <span class="dt">Either</span> <span class="dt">String</span> <span class="dt">Int</span></a>
+<a class="sourceLine" id="cb7-2" title="2">getParkingSpaces t</a>
+<a class="sourceLine" id="cb7-3" title="3">  <span class="fu">|</span> <span class="fu">null</span> t <span class="fu">=</span> <span class="dt">Left</span> <span class="st">&quot;N/A&quot;</span></a>
+<a class="sourceLine" id="cb7-4" title="4">  <span class="fu">|</span> <span class="fu">otherwise</span> <span class="fu">=</span> <span class="dt">Right</span> <span class="fu">$</span> (<span class="fu">maximum</span> t) <span class="fu">-</span> (<span class="fu">length</span> t) <span class="fu">+</span> <span class="dv">1</span></a></code></pre></div>
 </div>
 <h2 id="a-successor-to-fizzbuzz">A Successor to FizzBuzz?</h2>
 <p>For some reason, I get a strong feeling that these problems are much more interesting than <a href="http://en.wikipedia.org/wiki/Fizz_buzz">FizzBuzz</a>. The fact that we talk about an <em>infinitely large</em> parking lot will probably throw a lot of newbies and naive thinkers off the right track. You have to be especially careful about edge cases, such as the empty list in the second Haskell version. I believe that good coders have a keen sense of edge cases, because correct algorithms must withstand them without blowing up. Just review the Haskell solutions and notice all of the edge cases that we have to look out for!</p>
@@ -217,16 +175,16 @@ getParkingSpaces t
 <p>I hope you enjoyed reading about these problems. Maybe you can quiz your friend about it, and see how they respond!</p>
 <p>Happy hacking!</p>
 <h2 id="update-january-2015">Update: January 2015</h2>
-<p>I applied for a job at <a href="http://periscope.io">Periscope</a>, and during the process Tom O’Neill pointed out that the Parking Lot Problem can be solved without sorting using sparse bitsets.<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a> The idea is pretty simple — each bit represents a parking space, and if it is set to 1, we treat it as occupied, and if it is 0, we treat it as empty. If there are 1,000,000 parking spaces, then we would need 1,000,000 bits. But this is where “sparseness” comes in; if there are a ton of 0’s — say, 50,000 of them — in one spot, we can easily encode that information in fewer bits; the traditional approach is to use run-length encoding (RLE) to do this. E.g., you could write the number “50,000”, and then enclose it in special OP-codes that you reserve to declare that the “50,000” here means something special (in our case, that these 50,000 bits are all zeroes).</p>
+<p>I applied for a job at <a href="http://periscope.io">Periscope</a>, and during the process Tom O’Neill pointed out that the Parking Lot Problem can be solved without sorting using sparse bitsets.<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a> The idea is pretty simple — each bit represents a parking space, and if it is set to 1, we treat it as occupied, and if it is 0, we treat it as empty. If there are 1,000,000 parking spaces, then we would need 1,000,000 bits. But this is where “sparseness” comes in; if there are a ton of 0’s — say, 50,000 of them — in one spot, we can easily encode that information in fewer bits; the traditional approach is to use run-length encoding (RLE) to do this. E.g., you could write the number “50,000”, and then enclose it in special OP-codes that you reserve to declare that the “50,000” here means something special (in our case, that these 50,000 bits are all zeroes).</p>
 <p>Another approach is to use an octree (a tree that always has 8 child nodes), or “Bzets” as coined by the late <a href="http://www.cs.ucla.edu/news/news-archive/2012/2012">Robert Uzgalis</a>, who passed away in 2012. An excellent set of slides are available online if you Google them, but I’ve also uploaded them to my site <a href="http://linusarver.com/upload/grid/file/attachment/fyle/54b437416c30006ac5000000/Bzets.pdf">here</a>. Essentially, the idea is to have a tree with 3 possible values for the child nodes: <code>0 1 T</code>. A <code>0</code> means that you can stop recursing down the tree, as all child nodes, recursively are all set to <code>0</code>. A <code>1</code>, similarly, means you can stop because all child nodes are set to <code>1</code>. A <code>T</code> just means that you have to walk down to the child nodes, because if you gather up all the child nodes’ bits, they are mixed with <code>0</code>s and <code>1</code>s. You can imagine how compact some representations can become. In fact, Uzgalis calls bzets as having logarithmic compression! A <a href="https://github.com/Bovinedragon/Binary-Bzet">project on Github exists</a> that seems to be from one of the 3 UCLA student teams charged with implementing a version of bzets.</p>
-<div class="footnotes">
+<section class="footnotes">
 <hr />
 <ol>
-<li id="fn1"><p>You can, for example, loop from <code>0</code> to infinity and then see if this number exists in <code>T</code> — but this is probably the worst way to solve the problem, at least from a computational perspective. E.g., if it takes <span class="math inline">\(O(n)\)</span> to search through <code>T</code> to see if some integer <code>i</code> exists in it, then this algorithm has <span class="math inline">\(O(n^2)\)</span> complexity because you need to run the search for every single integer in <code>T</code>.<a href="#fnref1">↩</a></p></li>
-<li id="fn2"><p>A closely related operation is <a href="http://en.wikipedia.org/wiki/Two's_complement">two’s complement</a> arithmetic. You can read about it from the <a href="http://en.wikipedia.org/wiki/Find_first_set">“Find first set”</a> article on Wikipedia.<a href="#fnref2">↩</a></p></li>
-<li id="fn3"><p>No, I did not get the job. But I did get a free lesson in interviewing over Skype. And I also had a very pleasant conversation about sparse bitsets, and this alone made the whole thing worthwhile.<a href="#fnref3">↩</a></p></li>
+<li id="fn1"><p>You can, for example, loop from <code>0</code> to infinity and then see if this number exists in <code>T</code> — but this is probably the worst way to solve the problem, at least from a computational perspective. E.g., if it takes <span class="math inline">\(O(n)\)</span> to search through <code>T</code> to see if some integer <code>i</code> exists in it, then this algorithm has <span class="math inline">\(O(n^2)\)</span> complexity because you need to run the search for every single integer in <code>T</code>.<a href="#fnref1" class="footnote-back">↩</a></p></li>
+<li id="fn2"><p>A closely related operation is <a href="http://en.wikipedia.org/wiki/Two's_complement">two’s complement</a> arithmetic. You can read about it from the <a href="http://en.wikipedia.org/wiki/Find_first_set">“Find first set”</a> article on Wikipedia.<a href="#fnref2" class="footnote-back">↩</a></p></li>
+<li id="fn3"><p>No, I did not get the job. But I did get a free lesson in interviewing over Skype. And I also had a very pleasant conversation about sparse bitsets, and this alone made the whole thing worthwhile.<a href="#fnref3" class="footnote-back">↩</a></p></li>
 </ol>
-</div>
+</section>
 
 		</div>
 		<div id="footer">
@@ -234,7 +192,7 @@ getParkingSpaces t
 			<a href="https://github.com/listx/listx_blog">Site</a>
 			<a href="https://github.com/listx/listx.github.io">generated</a>
 			with
-			<a href="http://jaspervdj.be/hakyll">Hakyll</a>
+			<a href="https://jaspervdj.be/hakyll">Hakyll</a>
 			and
 			<a href="http://sebastiaanvisser.github.com/clay">Clay</a>.
 			<br>
