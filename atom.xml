@@ -8,8 +8,37 @@
         <name>Linus Arver</name>
         <email></email>
     </author>
-    <updated>2017-11-11T00:00:00Z</updated>
+    <updated>2018-11-11T00:00:00Z</updated>
     <entry>
+    <title>Status Update</title>
+    <link href="http://funloop.org/post/2018-11-11-status-update.html" />
+    <id>http://funloop.org/post/2018-11-11-status-update.html</id>
+    <published>2018-11-11T00:00:00Z</published>
+    <updated>2018-11-11T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="info center">
+	<code class="date">2018-11-11</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2018-11-11-status-update.org" title="History">*</a>
+	<br>
+	<a href="/tag/status.html">status</a>
+</div>
+
+<p>It’s been a year since my last blog post. Many things have happened since that time.</p>
+<p>Below are some of the more interesting items.</p>
+<h1 id="imvu-to-google">IMVU to Google</h1>
+<p>I got laid off at <a href="https://imvu.com">IMVU</a> in September 2017. It was a difficult time for me as I had become good friends with the people there. After almost 2 months of searching for jobs, I somehow managed to land a job at Google! My title is Release Engineer. I’ve been there almost a year now and I am still happy and excited to work there.</p>
+<h1 id="golang">Golang</h1>
+<p>I started learning Golang a few months ago, because, I felt that this is the best time to learn it (while I’m employed by Google). I haven’t really done any of the advanced things yet, but I like how the language tries really hard to keep the syntax simple. It’s a lot like C in that regard.</p>
+<p>The only pain point in Go for me is the packaging/installation system. The whole opintionated $GOPATH thing just feels a bit clunky because of the shared folder namespace with other projects. But I guess that’s unavoidable in any language’s ecosystem.</p>
+<h1 id="git-book">Git Book</h1>
+<p>I started writing a short (informal) book on Git. I am using LuaTeX to write it; I started in March 2018 but have yet to cross the 1/2 way mark. Hopefully I’ll get it done before March 2019 rolls around.</p>
+<h1 id="haskell-book">Haskell book</h1>
+<p>Back in <a href="./2016-01-04-status-update.html">2016’s status update</a> I said that I still planned to finish the Haskell book I was working on. That project is definitely dead. One reason is that due to the rising popularity of the language, I feel that other people have already said what I had meant to say in my book.</p>
+<h1 id="shen-rust-erlang-idris-factor">Shen, Rust, Erlang, Idris, Factor</h1>
+<p>I’ve grown interested in these languages because well, I feel like they are important. My hope is to find some interesting problems that can be solved idiomatically in each language. That might take years, but, it is my hope that in the future I’ll be able to write about these languages.</p>
+<h1 id="https-for-this-site">HTTPS for this site</h1>
+<p>Apparently HTTPS support for custom domains on Github have been a thing since earlier this year. I never got around to it but thanks to <a href="https://medium.com/@goelanirudh/add-https-to-your-namecheap-domain-hosted-on-github-pages-d66fd96308b5">this post</a> I finally enabled it.</p>
+]]></summary>
+</entry>
+<entry>
     <title>Useful Manpages</title>
     <link href="http://funloop.org/post/2017-11-11-useful-manpages.html" />
     <id>http://funloop.org/post/2017-11-11-useful-manpages.html</id>
@@ -1173,31 +1202,6 @@ b = 0 + (\mathrm{div}\;1\,2) = 0 + 0 = 0,
 <li id="fn4"><p>According to Bird, it is 20% faster than the array-based algorithm.<a href="#fnref4" class="footnote-back">↩</a></p></li>
 </ol>
 </section>
-]]></summary>
-</entry>
-<entry>
-    <title>TexLive 2016 with Docker</title>
-    <link href="http://funloop.org/post/2016-08-28-texlive-with-docker.html" />
-    <id>http://funloop.org/post/2016-08-28-texlive-with-docker.html</id>
-    <published>2016-08-28T00:00:00Z</published>
-    <updated>2016-08-28T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="info center">
-	<code class="date">2016-08-28</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2016-08-28-texlive-with-docker.org" title="History">*</a>
-	<br>
-	<a href="/tag/linux.html">linux</a>, <a href="/tag/tex.html">tex</a>, <a href="/tag/docker.html">docker</a>
-</div>
-
-<h1 id="motivation">Motivation</h1>
-<p>When I first started using TeX, my main OS was Arch Linux. This was fine until I switched to NixOS a couple years ago — I found that NixOS’s packaging of <a href="https://en.wikipedia.org/wiki/TeX_Live">TexLive</a> was not as current as Arch Linux.</p>
-<p>This is still the case today.</p>
-<p>As much as I love using NixOS, creating a Nix package of a very large project like TexLive is no joke.</p>
-<h1 id="enter-docker">Enter Docker</h1>
-<p>Containerization makes sense for small, do-one-thing-well services like webservers and such, but it makes even more sense for big, complicated <em>collections</em> of packages like TexLive. There are hundreds (thousands?) of components in TexLive: individual TeX packages, fonts, typesetting engines, etc. Thankfully, Arch Linux maintainers do a great of keeping up with upstream packages, and TexLive is no exception!</p>
-<p>I’ve created a <a href="https://github.com/listx/texlive-docker">new Github project</a> (simply called <code>texlive-docker</code>) to house the Dockerfiles I use to create TexLive images — all built on top of Arch Linux as the base image. The project uses <a href="https://travis-ci.org/listx/texlive-docker">TravisCI</a> to upload images to <a href="https://hub.docker.com/r/listx/texlive/tags/">Docker Hub</a>.</p>
-<p>Be sure to have a look at the <a href="https://github.com/listx/texlive-docker/blob/master/README.md">README</a> for suggestions on usage.</p>
-<h1 id="closing-thoughts">Closing Thoughts</h1>
-<p>If you have any suggestions for improvement (please bear in mind that we want to keep the images as simple as possible), please let me know in the Github issue tracker.</p>
-<p>Happy TeX-ing!</p>
 ]]></summary>
 </entry>
 
