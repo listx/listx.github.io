@@ -106,73 +106,120 @@ alias gdfc=&quot;git diff --cached&quot;
 <a class="sourceLine" id="cb2-46" title="46">	fi</a>
 <a class="sourceLine" id="cb2-47" title="47">}</a></code></pre></div>
 </div>
-i 2016-07-17-git-diff-improved/vertical\<sub>label</sub>
-i 2016-07-17-git-diff-improved/git\<sub>find</sub>\<sub>repo</sub>
+<div class="code-and-raw lineCntMax100">
+<div class="raw-link sourceCode">
+<table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/2016-07-17-git-diff-improved/vertical_label" mimetype="text/plain">vertical_label</a></code></pre></td></tr></tbody></table>
+</div>
+<div class="sourceCode" id="cb3" data-input="code/2016-07-17-git-diff-improved/vertical_label"><pre class="sourceCode numberSource numberLines"><code class="sourceCode"><a class="sourceLine" id="cb3-1" title="1">#!/usr/bin/env zsh</a>
+<a class="sourceLine" id="cb3-2" title="2"></a>
+<a class="sourceLine" id="cb3-3" title="3">vertical_label()</a>
+<a class="sourceLine" id="cb3-4" title="4">{</a>
+<a class="sourceLine" id="cb3-5" title="5">	c=$3</a>
+<a class="sourceLine" id="cb3-6" title="6">	ce=&quot;\x1b[0m&quot;</a>
+<a class="sourceLine" id="cb3-7" title="7">	label=$2</a>
+<a class="sourceLine" id="cb3-8" title="8">	i=1</a>
+<a class="sourceLine" id="cb3-9" title="9">	# The `s/^/x/' marks each line's beginning with a non-whitespace character</a>
+<a class="sourceLine" id="cb3-10" title="10">	# `x' so that when we pipe it to the `read' zsh builtin, we read all leading</a>
+<a class="sourceLine" id="cb3-11" title="11">	# indentation as well (otherwise we lose it). The `s/\t/ /g' standardizes</a>
+<a class="sourceLine" id="cb3-12" title="12">	# all tab characters to four spaces; this is purely for visual aesthetics.</a>
+<a class="sourceLine" id="cb3-13" title="13">	eval $1 | sed  's/^/x/ ; s/\t/    /g ; s/%/%%%%/g' | while read -r line; do</a>
+<a class="sourceLine" id="cb3-14" title="14">		case $label[$i] in</a>
+<a class="sourceLine" id="cb3-15" title="15">		&quot; &quot;) printf &quot;  &quot; ;;</a>
+<a class="sourceLine" id="cb3-16" title="16">		&quot;-&quot;) printf &quot; $c\u2503$ce&quot; ;;</a>
+<a class="sourceLine" id="cb3-17" title="17">		*) printf &quot; $c$label[$i]$ce&quot; ;;</a>
+<a class="sourceLine" id="cb3-18" title="18">		esac</a>
+<a class="sourceLine" id="cb3-19" title="19">		line_without_x=$line[2,-1]</a>
+<a class="sourceLine" id="cb3-20" title="20">		printf &quot;  ${line_without_x//\\/\\\\\\\\}\n&quot;</a>
+<a class="sourceLine" id="cb3-21" title="21">		((i+=1))</a>
+<a class="sourceLine" id="cb3-22" title="22">		if (( i &gt; $#label )); then</a>
+<a class="sourceLine" id="cb3-23" title="23">			i=1</a>
+<a class="sourceLine" id="cb3-24" title="24">		fi</a>
+<a class="sourceLine" id="cb3-25" title="25">	done</a>
+<a class="sourceLine" id="cb3-26" title="26">}</a></code></pre></div>
+</div>
+<div class="code-and-raw lineCntMax100">
+<div class="raw-link sourceCode">
+<table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/2016-07-17-git-diff-improved/git_find_repo" mimetype="text/plain">git_find_repo</a></code></pre></td></tr></tbody></table>
+</div>
+<div class="sourceCode" id="cb4" data-input="code/2016-07-17-git-diff-improved/git_find_repo"><pre class="sourceCode numberSource numberLines"><code class="sourceCode"><a class="sourceLine" id="cb4-1" title="1">#!/usr/bin/env zsh</a>
+<a class="sourceLine" id="cb4-2" title="2"></a>
+<a class="sourceLine" id="cb4-3" title="3">git_find_repo()</a>
+<a class="sourceLine" id="cb4-4" title="4">{</a>
+<a class="sourceLine" id="cb4-5" title="5">	while [[ ! -d .git ]]; do</a>
+<a class="sourceLine" id="cb4-6" title="6">		cd ..</a>
+<a class="sourceLine" id="cb4-7" title="7">		if [[ $PWD == / ]]; then</a>
+<a class="sourceLine" id="cb4-8" title="8">			echo &quot;error: .git folder not found&quot;</a>
+<a class="sourceLine" id="cb4-9" title="9">			return</a>
+<a class="sourceLine" id="cb4-10" title="10">		fi</a>
+<a class="sourceLine" id="cb4-11" title="11">	done</a>
+<a class="sourceLine" id="cb4-12" title="12">	echo ${PWD##*/}</a>
+<a class="sourceLine" id="cb4-13" title="13">}</a></code></pre></div>
+</div>
 <p>I use Zsh as my shell, so I wrote the above in Zsh. I simply drop these files inside my autoloaded directory, which is defined like this:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode zsh"><code class="sourceCode zsh"><a class="sourceLine" id="cb3-1" title="1"><span class="ot">fpath=(</span>~/.zsh/func <span class="ot">$fpath)</span> <span class="co"># add ~/.zsh/func to $fpath</span></a>
-<a class="sourceLine" id="cb3-2" title="2"><span class="kw">autoload</span> -U ~/.zsh/func/*<span class="kw">(</span>:t<span class="kw">)</span> <span class="co"># load all functions in ~/.zsh/func</span></a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode zsh"><code class="sourceCode zsh"><a class="sourceLine" id="cb5-1" title="1"><span class="ot">fpath=(</span>~/.zsh/func <span class="ot">$fpath)</span> <span class="co"># add ~/.zsh/func to $fpath</span></a>
+<a class="sourceLine" id="cb5-2" title="2"><span class="kw">autoload</span> -U ~/.zsh/func/*<span class="kw">(</span>:t<span class="kw">)</span> <span class="co"># load all functions in ~/.zsh/func</span></a></code></pre></div>
 <p>Here is some sample output (used in the course of writing this blog post):</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode diff"><code class="sourceCode diff"><a class="sourceLine" id="cb4-1" title="1">   -- blog --</a>
-<a class="sourceLine" id="cb4-2" title="2">T  diff --git a/post/2016-07-17-git-diff-improved.org b/post/2016-07-17-git-diff-improved.org</a>
-<a class="sourceLine" id="cb4-3" title="3">R  index 631bcf4..9f6fbac 100644</a>
-<a class="sourceLine" id="cb4-4" title="4">E  --- a/post/2016-07-17-git-diff-improved.org</a>
-<a class="sourceLine" id="cb4-5" title="5">E  +++ b/post/2016-07-17-git-diff-improved.org</a>
-<a class="sourceLine" id="cb4-6" title="6">   @@ -7,7 +7,7 @@ tags: programming</a>
-<a class="sourceLine" id="cb4-7" title="7">┃</a>
-<a class="sourceLine" id="cb4-8" title="8">┃   * Motivation</a>
-<a class="sourceLine" id="cb4-9" title="9">┃</a>
-<a class="sourceLine" id="cb4-10" title="10">┃  -Like most people, I use git every day.</a>
-<a class="sourceLine" id="cb4-11" title="11">┃  +Like most people, I use git daily.</a>
-<a class="sourceLine" id="cb4-12" title="12">┃   For many years, I used to have these two aliases:</a>
-<a class="sourceLine" id="cb4-13" title="13">┃</a>
-<a class="sourceLine" id="cb4-14" title="14">┃   #+begin_src shell</a>
-<a class="sourceLine" id="cb4-15" title="15">┃  @@ -15,9 +15,9 @@ alias gdf=&quot;git diff&quot;</a>
-<a class="sourceLine" id="cb4-16" title="16">┃   alias gdfc=&quot;git diff --cached&quot;</a>
-<a class="sourceLine" id="cb4-17" title="17">┃   #+end_src</a>
-<a class="sourceLine" id="cb4-18" title="18">┃</a>
-<a class="sourceLine" id="cb4-19" title="19">┃  -Last year, I started working professionally as a developer, and I began to work on many different repos at the same time.</a>
-<a class="sourceLine" id="cb4-20" title="20">┃  +Last year I started working professionally as a developer and I began to work on many different repos at the same time.</a>
-<a class="sourceLine" id="cb4-21" title="21">┃   Oftentimes I would do either a ~git diff~ or ~git diff --cached~, then come back to it 10 minutes later but then forget whether the diff had a ~--cached~ flag or not.</a>
-<a class="sourceLine" id="cb4-22" title="22">┃  -So, I needed to script some more git helpers functions!</a>
-<a class="sourceLine" id="cb4-23" title="23">┃  +I needed to script some more git helpers functions!</a>
-<a class="sourceLine" id="cb4-24" title="24">┃</a>
-<a class="sourceLine" id="cb4-25" title="25">┃   * Implementation</a>
-<a class="sourceLine" id="cb4-26" title="26">┃</a>
-<a class="sourceLine" id="cb4-27" title="27">┃  @@ -41,9 +41,11 @@ autoload -U ~/.zsh/func/*(:t) # load all functions in ~/.zsh/func</a>
-<a class="sourceLine" id="cb4-28" title="28">┃   Here is some sample output:</a>
-<a class="sourceLine" id="cb4-29" title="29">┃</a>
-<a class="sourceLine" id="cb4-30" title="30">┃   #+begin_src diff</a>
-<a class="sourceLine" id="cb4-31" title="31">   + foo</a>
-<a class="sourceLine" id="cb4-32" title="32">T   #+end_src</a>
-<a class="sourceLine" id="cb4-33" title="33">R</a>
-<a class="sourceLine" id="cb4-34" title="34">E   #+begin_src diff</a>
-<a class="sourceLine" id="cb4-35" title="35">E  +</a>
-<a class="sourceLine" id="cb4-36" title="36">    + bar</a>
-<a class="sourceLine" id="cb4-37" title="37">┃    #+end_src</a>
-<a class="sourceLine" id="cb4-38" title="38">┃</a>
-<a class="sourceLine" id="cb4-39" title="39">┃   * Conclusion</a>
-<a class="sourceLine" id="cb4-40" title="40">   -- blog --</a></code></pre></div>
-<div class="sourceCode" id="cb5"><pre class="sourceCode diff"><code class="sourceCode diff"><a class="sourceLine" id="cb5-1" title="1">   -- blog --</a>
-<a class="sourceLine" id="cb5-2" title="2">I  diff --git a/post/2016-07-17-git-diff-improved.org b/post/2016-07-17-git-diff-improved.org</a>
-<a class="sourceLine" id="cb5-3" title="3">N  index dc2fca4..631bcf4 100644</a>
-<a class="sourceLine" id="cb5-4" title="4">D  --- a/post/2016-07-17-git-diff-improved.org</a>
-<a class="sourceLine" id="cb5-5" title="5">E  +++ b/post/2016-07-17-git-diff-improved.org</a>
-<a class="sourceLine" id="cb5-6" title="6">X  @@ -38,6 +38,14 @@ fpath=(~/.zsh/func $fpath) # add ~/.zsh/func to $fpath</a>
-<a class="sourceLine" id="cb5-7" title="7">    autoload -U ~/.zsh/func/*(:t) # load all functions in ~/.zsh/func</a>
-<a class="sourceLine" id="cb5-8" title="8">┃   #+end_src</a>
-<a class="sourceLine" id="cb5-9" title="9">┃</a>
-<a class="sourceLine" id="cb5-10" title="10">┃  +Here is some sample output:</a>
-<a class="sourceLine" id="cb5-11" title="11">┃  +</a>
-<a class="sourceLine" id="cb5-12" title="12">┃  +#+begin_src diff</a>
-<a class="sourceLine" id="cb5-13" title="13">┃  +#+end_src</a>
-<a class="sourceLine" id="cb5-14" title="14">┃  +</a>
-<a class="sourceLine" id="cb5-15" title="15">┃  +#+begin_src diff</a>
-<a class="sourceLine" id="cb5-16" title="16">┃  +#+end_src</a>
-<a class="sourceLine" id="cb5-17" title="17">┃  +</a>
-<a class="sourceLine" id="cb5-18" title="18">┃   * Conclusion</a>
-<a class="sourceLine" id="cb5-19" title="19">┃</a>
-<a class="sourceLine" id="cb5-20" title="20">┃   I've been a happy ~gdf~ user for some months now.</a>
-<a class="sourceLine" id="cb5-21" title="21">   -- blog --</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode diff"><code class="sourceCode diff"><a class="sourceLine" id="cb6-1" title="1">   -- blog --</a>
+<a class="sourceLine" id="cb6-2" title="2">T  diff --git a/post/2016-07-17-git-diff-improved.org b/post/2016-07-17-git-diff-improved.org</a>
+<a class="sourceLine" id="cb6-3" title="3">R  index 631bcf4..9f6fbac 100644</a>
+<a class="sourceLine" id="cb6-4" title="4">E  --- a/post/2016-07-17-git-diff-improved.org</a>
+<a class="sourceLine" id="cb6-5" title="5">E  +++ b/post/2016-07-17-git-diff-improved.org</a>
+<a class="sourceLine" id="cb6-6" title="6">   @@ -7,7 +7,7 @@ tags: programming</a>
+<a class="sourceLine" id="cb6-7" title="7">┃</a>
+<a class="sourceLine" id="cb6-8" title="8">┃   * Motivation</a>
+<a class="sourceLine" id="cb6-9" title="9">┃</a>
+<a class="sourceLine" id="cb6-10" title="10">┃  -Like most people, I use git every day.</a>
+<a class="sourceLine" id="cb6-11" title="11">┃  +Like most people, I use git daily.</a>
+<a class="sourceLine" id="cb6-12" title="12">┃   For many years, I used to have these two aliases:</a>
+<a class="sourceLine" id="cb6-13" title="13">┃</a>
+<a class="sourceLine" id="cb6-14" title="14">┃   #+begin_src shell</a>
+<a class="sourceLine" id="cb6-15" title="15">┃  @@ -15,9 +15,9 @@ alias gdf=&quot;git diff&quot;</a>
+<a class="sourceLine" id="cb6-16" title="16">┃   alias gdfc=&quot;git diff --cached&quot;</a>
+<a class="sourceLine" id="cb6-17" title="17">┃   #+end_src</a>
+<a class="sourceLine" id="cb6-18" title="18">┃</a>
+<a class="sourceLine" id="cb6-19" title="19">┃  -Last year, I started working professionally as a developer, and I began to work on many different repos at the same time.</a>
+<a class="sourceLine" id="cb6-20" title="20">┃  +Last year I started working professionally as a developer and I began to work on many different repos at the same time.</a>
+<a class="sourceLine" id="cb6-21" title="21">┃   Oftentimes I would do either a ~git diff~ or ~git diff --cached~, then come back to it 10 minutes later but then forget whether the diff had a ~--cached~ flag or not.</a>
+<a class="sourceLine" id="cb6-22" title="22">┃  -So, I needed to script some more git helpers functions!</a>
+<a class="sourceLine" id="cb6-23" title="23">┃  +I needed to script some more git helpers functions!</a>
+<a class="sourceLine" id="cb6-24" title="24">┃</a>
+<a class="sourceLine" id="cb6-25" title="25">┃   * Implementation</a>
+<a class="sourceLine" id="cb6-26" title="26">┃</a>
+<a class="sourceLine" id="cb6-27" title="27">┃  @@ -41,9 +41,11 @@ autoload -U ~/.zsh/func/*(:t) # load all functions in ~/.zsh/func</a>
+<a class="sourceLine" id="cb6-28" title="28">┃   Here is some sample output:</a>
+<a class="sourceLine" id="cb6-29" title="29">┃</a>
+<a class="sourceLine" id="cb6-30" title="30">┃   #+begin_src diff</a>
+<a class="sourceLine" id="cb6-31" title="31">   + foo</a>
+<a class="sourceLine" id="cb6-32" title="32">T   #+end_src</a>
+<a class="sourceLine" id="cb6-33" title="33">R</a>
+<a class="sourceLine" id="cb6-34" title="34">E   #+begin_src diff</a>
+<a class="sourceLine" id="cb6-35" title="35">E  +</a>
+<a class="sourceLine" id="cb6-36" title="36">    + bar</a>
+<a class="sourceLine" id="cb6-37" title="37">┃    #+end_src</a>
+<a class="sourceLine" id="cb6-38" title="38">┃</a>
+<a class="sourceLine" id="cb6-39" title="39">┃   * Conclusion</a>
+<a class="sourceLine" id="cb6-40" title="40">   -- blog --</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode diff"><code class="sourceCode diff"><a class="sourceLine" id="cb7-1" title="1">   -- blog --</a>
+<a class="sourceLine" id="cb7-2" title="2">I  diff --git a/post/2016-07-17-git-diff-improved.org b/post/2016-07-17-git-diff-improved.org</a>
+<a class="sourceLine" id="cb7-3" title="3">N  index dc2fca4..631bcf4 100644</a>
+<a class="sourceLine" id="cb7-4" title="4">D  --- a/post/2016-07-17-git-diff-improved.org</a>
+<a class="sourceLine" id="cb7-5" title="5">E  +++ b/post/2016-07-17-git-diff-improved.org</a>
+<a class="sourceLine" id="cb7-6" title="6">X  @@ -38,6 +38,14 @@ fpath=(~/.zsh/func $fpath) # add ~/.zsh/func to $fpath</a>
+<a class="sourceLine" id="cb7-7" title="7">    autoload -U ~/.zsh/func/*(:t) # load all functions in ~/.zsh/func</a>
+<a class="sourceLine" id="cb7-8" title="8">┃   #+end_src</a>
+<a class="sourceLine" id="cb7-9" title="9">┃</a>
+<a class="sourceLine" id="cb7-10" title="10">┃  +Here is some sample output:</a>
+<a class="sourceLine" id="cb7-11" title="11">┃  +</a>
+<a class="sourceLine" id="cb7-12" title="12">┃  +#+begin_src diff</a>
+<a class="sourceLine" id="cb7-13" title="13">┃  +#+end_src</a>
+<a class="sourceLine" id="cb7-14" title="14">┃  +</a>
+<a class="sourceLine" id="cb7-15" title="15">┃  +#+begin_src diff</a>
+<a class="sourceLine" id="cb7-16" title="16">┃  +#+end_src</a>
+<a class="sourceLine" id="cb7-17" title="17">┃  +</a>
+<a class="sourceLine" id="cb7-18" title="18">┃   * Conclusion</a>
+<a class="sourceLine" id="cb7-19" title="19">┃</a>
+<a class="sourceLine" id="cb7-20" title="20">┃   I've been a happy ~gdf~ user for some months now.</a>
+<a class="sourceLine" id="cb7-21" title="21">   -- blog --</a></code></pre></div>
 <h1 id="conclusion">Conclusion</h1>
 <p>I’ve been a happy <code>gdf</code> user for some months now. The only “downside” is that because of the vertical ribbon (and the repo name at the top/bottom), the output is no longer readable by <code>patch</code> (or copy-pastable into a diff-reading utility/service). But, this is a minor grievance at best as one can easily invoke the low-level <code>git diff</code> or <code>git diff --cached</code> directly to get the raw (<code>patch</code>-able) output.</p>
 <p>Happy hacking!</p>
