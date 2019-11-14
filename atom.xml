@@ -8,8 +8,121 @@
         <name>Linus Arver</name>
         <email></email>
     </author>
-    <updated>2019-11-11T00:00:00Z</updated>
+    <updated>2019-11-13T00:00:00Z</updated>
     <entry>
+    <title>The Esrille Nisse: Three Years Later</title>
+    <link href="http://funloop.org/post/2019-11-13-esrille-nisse-three-years-later.html" />
+    <id>http://funloop.org/post/2019-11-13-esrille-nisse-three-years-later.html</id>
+    <published>2019-11-13T00:00:00Z</published>
+    <updated>2019-11-13T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="info center">
+	<code class="date">2019-11-13</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2019-11-13-esrille-nisse-three-years-later.org" title="History">*</a>
+	<br>
+	<a href="/tag/hardware.html">hardware</a>, <a href="/tag/esrille.html">esrille</a>, <a href="/tag/cherry%20mx.html">cherry mx</a>
+</div>
+
+<p>Over three years ago, I wrote <a href="./2016-04-14-esrille-nisse-keyboard.html">a post</a> describing the Esrille Nisse keyboard. This post is a reflection on the keyboard, more than 3 years later.</p>
+<h1 id="layout">Layout</h1>
+<p>Ultimately I settled on a different layout than the one described in the old blog post. This was a result of many hands-on trial-and-error sessions over a period of weeks which turned into many months. In my old post I described writing a program to help find the optimal layout. This proved very difficult in practice, because encoding the optimization rules turned out to be non-trivial. One aspect that was particularly difficult was that the actualy physical shape of my own fingers played a part (some fingers were not as versatile as others, for example the pinky finger, and so the key-distance for certain fingers had to have different “weights”, and this was too much to translate into code).</p>
+<p>Anyway, I read <a href="https://norvig.com/mayzner.html">this post by Peter Norvig</a> forwards and backwards, and used the values there to guide the design of my layout. One big realization after actual usage was that I could not let go of the QWERTY <code>hjkl</code> keys on the home row. There was just so much muscle memory built into these four keys (the only other key I could not let go of was the spacebar key that I used my left thumb for), that I had to “fix” them on the layout first. I then focused on getting the commonly-used keys right.</p>
+<p>All that being said, here is my current layout.</p>
+<pre><code>      LEFT-SIDE     RIGHT-SIDE
+    ---------------------------
+    □ □ □ □ □ □     □ □ □ □ □ □
+    □ □ 0 □ □         □ □ 0 □ 1
+□ □ □ y o p z 1     2 f d t r □ □ □
+2 / a i e u w ;     &quot; h j k l n 4 : &lt;--- Home row
+  3 . x q v &#39;         b m g c s 3
+      8 5 6 7 4     5 , 6 7 8 &lt;--------- Thumb row
+
+
+Left-side legend
+0) Escape
+1) PgDn
+2) Enter
+3) Shift
+4) Control
+5) Super (Windows key)
+6) Space
+7) Caps Lock (remapped with xmodmap to Hyper key)
+8) Right Alt (aka &quot;AltGr&quot; for US International Layout)
+
+Right-side legend
+0) Tab
+1) Delete
+2) PgUp
+3) Shift
+4) Backspace
+5) FN2
+6) FN
+7) Alt
+8) Right Alt (aka &quot;AltGr&quot; for US International Layout)
+</code></pre>
+<p>The main thing to note is the reduced number of keys that are mapped at all. I like this aspect a lot (not having to move my fingers around much at all) — I never have to reach for a particular key because everything is just so close.</p>
+<p>I also dedicated a key just for the colon symbol (as a “Shift + semicolon” macro), because it comes up often enough in programming.</p>
+<p>I should also note that the function keys (F1-F12) are situated on the topmost row, left-to-right. I just didn’t bother adding them to the legend because of symbol space constraints.</p>
+<p>FN layer.</p>
+<pre><code>      LEFT-SIDE     RIGHT-SIDE
+    ---------------------------
+    □ □ □ □ □ □     □ □ □ □ □ □
+    □ □ a □ □         □ □ □ □ □
+□ □ □ 7 8 9 □ □     □ □ \ _ = □ □ □
+□ □ 0 4 5 6 □ b     b - { ( ) } a : &lt;--- Home row
+  c . 1 2 3 `         □ [ &lt; &gt; ] c
+      □ □ □ □ □     □ □ □ □ □ &lt;--------- Thumb row
+
+Left-side legend
+a) ~/ (a macro that inserts the string &quot;~/&quot;)
+b) End
+c) Shift
+
+Right-side legend
+a) Backspace
+b) Home
+c) Shift
+</code></pre>
+<p>The FN layer has the majority of the punctuation keys I need. You might notice that some symbols like <code>!@#$&amp;*^</code> are not in here. This is because the numeral keys on the left side are actually the same numeral keys on the top row (<strong>not</strong> the Numpad) of a typical QWERTY layout. This means that I can just press FN+Shift to get these keys. This is the main trick that allowed me to reduce the number of keys used overall.</p>
+<p>The “~/” macro in the left side is particularly useful as well.</p>
+<p>FN2 layer.</p>
+<pre><code>      LEFT-SIDE     RIGHT-SIDE
+    ---------------------------
+    □ □ □ □ □ □     □ □ □ □ □ □
+    □ □ □ □ □         □ □ □ □ □
+□ □ □ □ □ □ □ □     □ □ □ □ □ □ □ □
+□ □ □ □ □ □ □ □     □ a b c d □ □ □ &lt;--- Home row
+  □ □ □ □ □ □         □ □ □ □ e □
+      □ □ □ □ □     □ □ □ □ □ &lt;--------- Thumb row
+
+
+Right-side legend
+a) Left Arrow
+b) Down Arrow
+c) Up Arrow
+d) Right Arrow
+e) Shift + Insert macro (for pasting X primary buffer)
+</code></pre>
+<p>This layer is mostly empty, but it is used surprisingly frequently. I really like how the arrow keys line up with my <code>hjkl</code> keys in the main layer.</p>
+<p>For the latest changes to my layout, check out <a href="https://github.com/listx/new-keyboard">this repo</a>.</p>
+<h1 id="typing-speed">Typing Speed</h1>
+<p>It took me roughly 3 months of everyday use to get somewhat familiar with the layout, and probably another month or two to reach upwards of 60wpm.</p>
+<p>It was painstakingly slow at first (it felt a lot like learning how to type all over again), but still “fun” because I noticed that I was getting better with time.</p>
+<p>I think these days (after having used this keyboard every day for both my home and work PCs (yes, I have two of these!)) I can go higher than 60wpm.</p>
+<p>Suffice it to say that there is never a time when I think “oh, I wish I could type faster” on this layout. My speed on this keyboard is about on par as with my old typing speed on QWERTY.</p>
+<p>My typing speed on the old QWERTY layout hasn’t really changed. I still have to use it for when I use the keyboard on laptops. And surprisingly, my brain knows to “switch” to QWERTY when I’m typing on there — granted, this instinct took some time to kick in.</p>
+<h1 id="was-it-worth-it">Was it worth it?</h1>
+<p>Yes.</p>
+<p>The biggest thing I love about this layout is that I don’t have to move my right hand around when reaching for the typical “hard” keys on QWERTY (such as `[]{}`). I rarely (if ever) have typos when typing punctuation keys. The numeral keys being just underneath my left hand in a different layer is nice, too.</p>
+<p>There are some “downsides” though in everyday life:</p>
+<ul>
+<li>it’s hard to play games because the key mappings are usually designed for QWERTY;</li>
+<li>when I make typos using this layout, they look rather unusual from a “QWERTY” perspective (as a contrived example, I might type “yen” instead of “yes” because the “n” and “s” keys are next to each other on my layout)</li>
+</ul>
+<p>I don’t really play games that much though, and when I do I am usually on the separate gaming PC that just use a regular QWERTY layout so it’s not really a negative.</p>
+<p>I guess the biggest downside of all is that the keyboard form factor on the Nisse is one-of-a-kind on the planet. If Esrille goes under, I would be worried about taking very good care of my keyboards in case one of the components breaks for whatever reason. I imagine that at that point, I would have to just create my own keyboard or make do with a shabby imitation using ErgoDox or some other form factor. I sincerely hope that that day never comes…!</p>
+<p>Happy hacking!</p>
+]]></summary>
+</entry>
+<entry>
     <title>Status Update</title>
     <link href="http://funloop.org/post/2019-11-11-status-update.html" />
     <id>http://funloop.org/post/2019-11-11-status-update.html</id>
@@ -874,130 +987,6 @@ collect2: error: ld returned 1 exit status
 <h1 id="conclusion">Conclusion</h1>
 <p>Now you know how to shell out from Latex!</p>
 <p>Happy hacking!</p>
-]]></summary>
-</entry>
-<entry>
-    <title>My Esrille Layout: The ZQ Layout</title>
-    <link href="http://funloop.org/post/2016-10-01-my-esrille-layout.html" />
-    <id>http://funloop.org/post/2016-10-01-my-esrille-layout.html</id>
-    <published>2016-10-01T00:00:00Z</published>
-    <updated>2016-10-01T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="info center">
-	<code class="date">2016-10-01</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2016-10-01-my-esrille-layout.org" title="History">*</a>
-	<br>
-	<a href="/tag/programming.html">programming</a>, <a href="/tag/c.html">c</a>, <a href="/tag/hardware.html">hardware</a>
-</div>
-
-<h1 id="the-zq-keyoard-layout">The ZQ Keyoard Layout</h1>
-<p>I’ve spent quite some time on keyboards in my previous posts, and this post is no different. After several months of tweaking my <a href="./2016-04-14-esrille-nisse-keyboard.html">original layout</a>, I have more or less settled on the final design. You can get the sources at my repo <a href="https://github.com/listx/new-keyboard">here</a>.</p>
-<p>Is for the name “ZQ”, it was originally chosen from the way these keys were arranged; the location of these keys have since changed, but the name has stuck.</p>
-<h2 id="base-layer">Base Layer</h2>
-<pre><code>    □ □ □ □ □ □     □ □ □ □ □ □
-    ! # * □ □         □ □ / ~ $
-□ □ ; y o p v 1     1 m f t r _ □ □
-□ 2 a i e u w 3     2 h j k l n 3 □ &lt;--- Home row
-  4 z x q &#39; &quot;         b d g c s 4
-      5 6 7 8 9     5 , 6 7 8 &lt;--------- Thumb row
-
-Left-side legend
-
-1) PageUp
-2) Escape
-3) Tab
-4) Shift
-5) Insert
-6) Super (Windows key)
-7) Space
-8) Caps Lock (remapped with xmodmap to Hyper key)
-9) Control
-
-Right-side legend
-
-1) PageDown
-2) Return
-3) Delete
-4) Shift
-5) FN2
-6) FN
-7) Alt
-8) Right Alt (aka &quot;AltGr&quot; for US International Layout)
-</code></pre>
-<h2 id="fn-layer">FN Layer</h2>
-<pre><code>    □ □ □ □ □ □     □ □ □ □ □ □
-    □ □ □ □ □         □ □ □ □ □
-□ □ ? 7 8 9 = a     a ` \ . : &amp; □ □
-□ □ - 4 5 6 + ^     @ b { ( ) } □ □ &lt;--- Home row
-  □ 0 1 2 3 %         | [ &lt; &gt; ] □
-      □ □ b □ □     □ □ □ □ □ &lt;--------- Thumb row
-
-Left-side legend
-
-a) Home
-b) Space
-
-Right-side legend
-
-a) End
-b) Backspace
-</code></pre>
-<h2 id="fn2-layer">FN2 Layer</h2>
-<pre><code>    □ □ □ □ □ □     □ □ □ □ □ □
-    □ □ □ □ □         □ □ □ □ □
-□ □ l g h i □ □     □ □ □ □ □ □ □ □
-□ □ k d e f □ □     □ a b c d □ □ □ &lt;--- Home row
-  □ j a b c □         □ □ □ □ □ □
-      □ □ □ □ □     □ □ □ □ □ &lt;--------- Thumb row
-
-Left-side legend
-
-a) F1
-b) F2
-c) F3
-d) F4
-e) F5
-f) F6
-g) F7
-h) F8
-i) F9
-j) F10
-k) F11
-l) F12
-
-Right-side legend
-
-a) Left Arrow
-b) Down Arrow
-c) Up Arrow
-d) Right Arrow
-</code></pre>
-<h2 id="keycap-arrangement">Keycap Arrangement</h2>
-<p>I have not covered this topic before, but I think it is worth mentioning. On the underside of each keycap, there is a number; presumably for the row that the keycap is designed for. I’ve rearranged the default keycap placement to better reflect how I use my keys. The biggest change from the default Esrille setup is that I vertically flip the thumb row keys, so that they are “upside-down”. I find this arrangement more comfortable for my thumbs.</p>
-<pre><code>    n n n n n n     n n n n n n
-    n n n n n         n n n n n
-n 3 3 3 3 3 3 n     n 3 3 3 3 3 3 n
-3 3 2 2 2 2 2 n     n 2 2 2 2 2 3 3 &lt;--- Home row
-  1 2 1 1 1 2         2 1 1 1 2 1
-      1 1 1 1 1     1 1 1 1 1 &lt;--------- Thumb row*
-
-Legend
-
-n) No number
-1) Row 1
-2) Row 2
-3) Row 3
-
-*The thumb row keycaps are flipped upside-down for better comfort.
-</code></pre>
-<h1 id="typing-speed">Typing Speed</h1>
-<p>After some time, I realized that the end goal was to design a layout that was not more “optimal” in the sense of mechanical efficiency, but rather to design something more <em>comfortable</em> to use. I can readily say that even at this early stage, I tend to like this layout more over Qwerty because my hands stay put as I type. The only time I move my wrists from their default position is when I need to reach the six keys up top in the base layer (<code>!#*/~$</code>).</p>
-<p>It may turn out that this new layout does not really improve raw typing speed; but really I don’t care because home-row access to parentheses and the backspace key are too good to let go.</p>
-<h1 id="other-thoughts">Other Thoughts</h1>
-<p>The design has changed quite a bit in these past few months. After some initial trials, I realized that the arrangement recommended by my <a href="https://github.com/listx/keylo">program</a> was not really optimized the way I wanted it to be. For one, the corpus I fed into the program was not very good because it didn’t realy reflect my real-world use-case; I use Vim-style HJKL keys almost everywhere, and really to get a truly representative histogram of keypresses, I should have used a keylogger for some months to record my actual usage. As time was of the essence, I decided to just evolve the layout gradually, tweaking bits I found annoying.</p>
-<p>One hurdle was simply trying to avoid using the same finger in succession. In the current ZQ layout, the right index finger is charged with six keys: MHBFJD. It took a lot of trial and error to arrive at this combination.</p>
-<p>I also just kept the original Qwerty placement of the HJKL keys. The main reason is that I use these keys all the time, so much that they deserve their original home-row placement. And, actually they helped in reducing same-finger consecutiveness (J and K are rare letters in English).</p>
-<p>Another point of concern was the interaction of some key combinations like YN and &lt;Return&gt;. It is common to type either Y or N and press &lt;Return&gt; immediately after, when dealing with interactive torminal programs. The same goes for some UNIX-y combinations like <code>~/</code> for the home directory in the filesystem, or <code>*</code> and <code>/</code> for interactive search in vim(1) and less(1), respectvely. The current design of ZQ strives to make these combinations easy to type.</p>
-<p>Lastly, I paid a great deal of attention for certain common letter combinations — in particular, “gh”, “ch”, “sh”, “th”, and “wh”. Because I decided to keep HJKL keys on the home row, and because H was assigned to the right index finger, I had to make sure that I place the GCSTW keys either on the left side of the keyboard (as I did with “W”), or place them for the other fingers. This effort alone resulted in dictating where most of the keys ended up.</p>
-<p>After all that’s been said, time will tell if I truly do end up using this layout. I have a friend who uses Dvorak for work and Qwerty for gaming; perhaps I’ll end up in a similar boat.</p>
 ]]></summary>
 </entry>
 
