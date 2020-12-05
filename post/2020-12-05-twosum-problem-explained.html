@@ -77,7 +77,7 @@
 <h1 id="step-3">Step 3</h1>
 <p>This is the step that removes the largest element <code>b</code> in the list from consideration <em>for all future iterations</em>. How can this be correct?</p>
 <p>Well, let’s consider an example. If <strong>N</strong> is 50 but <code>a + b</code> is 85, we must look for a smaller sum. This much is obvious.</p>
-<p>We just used <code>a</code> and <code>b</code> to get to 85, but because we <strong>must</strong> get to a smaller sum, we would like to swap out either <code>a</code> or <code>b</code> (or both, eventually) with another number from the list. The question is, which one do we swap out?</p>
+<p>We just used <code>a</code> and <code>b</code> to get to 85, but because we <em>must</em> get to a smaller sum, we would like to swap out either <code>a</code> or <code>b</code> (or both, eventually) with another number from the list. The question is, which one do we swap out?</p>
 <p>We can’t replace <code>a</code> with the next bigger number (or any other number between <code>a</code> and <code>b</code>), because doing so will result in a sum that is at least as big as 85 (or bigger). So <code>a</code> has to stay — we can’t rule out other combinations of <code>a</code> with some number other than <code>b</code> (maybe <code>a</code> and its next-biggest neighbor, etc).</p>
 <p>That leaves us with <code>b</code>. We throw out <code>b</code> and replace it with the next biggest number, which is guaranteed to be less than or equal to the just-thrown-out <code>b</code>.</p>
 <p>In other words, <em>all pairs</em> of <code>b</code> and every other element in the list already sums up to 85 or some other <em>higher number</em>. So <code>b</code> is a red herring that’s leading us astray. We must throw it out.</p>
