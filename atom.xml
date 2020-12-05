@@ -52,7 +52,7 @@
 <p>The algorithm described above can be equivalently coded with pointers, so there is no material difference in “flavor”.</p>
 <p>Anyway, we just need to make sense of the critical Steps, namely Steps 3, 4, and 5, and that should be enough to quell any worries about correctness.</p>
 <h1 id="step-3">Step 3</h1>
-<p>This is the step that removes the largest element <code>b</code> in the list out of contention <em>for all future iterations</em>. How can this be correct?</p>
+<p>This is the step that removes the largest element <code>b</code> in the list from consideration <em>for all future iterations</em>. How can this be correct?</p>
 <p>Well, let’s consider an example. If <strong>N</strong> is 50 but <code>a + b</code> is 85, we have to look for a smaller number. We can’t replace <code>a</code> with the next bigger number (or any other number between <code>a</code> and <code>b</code>), because doing so will result in a sum that is at least as big as 85 (or bigger). And so, we throw out <code>b</code> and replace it with the next biggest number, which is guaranteed to be less than or equal to the just-thrown-out <code>b</code>.</p>
 <p>In other words, <em>all pairs</em> of <code>b</code> and every other element in the list already sums up to 85 or some other <em>higher number</em>. So <code>b</code> is a red herring that’s leading us astray. We must throw it out.</p>
 <h1 id="step-4">Step 4</h1>
