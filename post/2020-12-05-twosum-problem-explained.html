@@ -87,7 +87,7 @@
 <p>This Step’s analogy when using pointers is to consider the condition when the pointers “cross”. The pointers “crossing”, in and of itself, doesn’t seem particularly significant. However when we view this condition by looking at the dwindling size of the overall list (by chopping off the left and right ends in Steps 4 and 3), the point becomes obvious. We must stop when the list becomes too small to make Step 1 impossible to fulfill (namely, the construction of the pair <code>(a, b)</code>), due to the fact that there aren’t enough elements in the list (singleton or empty list).</p>
 <h1 id="pointer-method-in-pseudocode">2-pointer method, in pseudocode</h1>
 <p>For sake of completeness, here is the pseudocode for the same algorithm. You will see how using pointers (instead of deleting elements outright as described in Steps 3 and 4) doesn’t change the algorithm at all.</p>
-<pre><code># Partial implementation of Step 5. Early exit if list is too small.
+<pre><code># Partial implementation of Step 5. Early exit if list is too small to begin with.
 if length(numbers) &lt; 2:
   return error
 
