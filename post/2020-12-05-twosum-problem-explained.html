@@ -72,7 +72,7 @@
 <li>If the sum of <code>a + b</code> is smaller than <strong>N</strong>, delete <code>a</code> from the list. Go back to Step 1.</li>
 <li>If the list becomes smaller than 2 elements, stop (obviously, because there are no more pairs to consider). Optionally return an error.</li>
 </ol>
-<p>The algorithm described above can be equivalently coded with pointers, so there is no material difference in “flavor”.</p>
+<p>The algorithm described above can be equivalently coded with pointers, so there is no material difference to discuss in terms of implementation.</p>
 <p>Anyway, we just need to make sense of the critical Steps, namely Steps 3, 4, and 5, and that should be enough to quell any worries about correctness.</p>
 <h1 id="step-3">Step 3</h1>
 <p>This is the step that removes the largest element <code>b</code> in the list from consideration <em>for all future iterations</em>. How can this be correct?</p>
