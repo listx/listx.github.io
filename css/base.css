@@ -1,1 +1,538 @@
-html{margin:0px 0px 0px 0px;padding:0px 0px 0px 0px;background-color:#ffffff;color:#000000;overflow-y:scroll}html body{width:900px;margin:0px auto 0px auto}html body a{outline:none 1px #000000;font-weight:bold;text-decoration:none}html body a:link{color:#0033ff}html body a:visited{color:#007033}html body a:hover{text-decoration:underline}html body a.section-heading:hover{text-decoration:underline}html body a.section-heading{color:#000000}html body sup{vertical-align:top;font-size:small}html body hr{margin:0px 0px 0px 0px;height:1px}html body div.center{text-align:center}html body div#header{padding:0.5em 0px 0.5em 0px;text-align:center}html body div#content{background-color:#ffffff;padding-bottom:2em}html body div#content h1,html body div#content h2,html body div#content h3,html body div#content h4,html body div#content h5{margin:0px 0px 0px 0px;padding-left:12%;padding-right:12%;padding-bottom:0.5em;font-weight:normal}html body div#content h1 code,html body div#content h2 code,html body div#content h3 code,html body div#content h4 code,html body div#content h5 code{margin:0px 4px 0px 4px}html body div#content h1::before{content:"▣  ";position:relative}html body div#content h1.center{margin:0px 0px 0px 0px;padding-top:0.2em;padding-bottom:0.5em;font-size:30pt;font-weight:bold;padding-right:12%;text-align:center;text-decoration:none}html body div#content h1.center::before{content:none}html body div#content h2::before{content:"■  ";position:relative}html body div#content h3::before{content:"□  ";position:relative}html body div#content h4::before{content:"◆  ";position:relative}html body div#content h5::before{content:"◈  ";position:relative}html body div#content h6::before{content:"◇  ";position:relative}html body div#content table{margin:0px auto 0px auto;margin-bottom:1em;border-collapse:collapse}html body div#content table td{padding:0em 0.5em 0em 0.5em}html body div#content table td + td{border-left:solid 1px #000000}html body div#content table.ul{border-collapse:separate}html body div#content table.ul td{border-style:none}html body div#content div.info{padding-bottom:1em}html body div#content div.code-and-raw{background-image:-webkit-linear-gradient(right,#ffffff 0%,#ffffff 10%,#ffffff 90%,#ffffff 100%);background-image:-moz-linear-gradient(right,#ffffff 0%,#ffffff 10%,#ffffff 90%,#ffffff 100%);background-image:-ms-linear-gradient(right,#ffffff 0%,#ffffff 10%,#ffffff 90%,#ffffff 100%);background-image:-o-linear-gradient(right,#ffffff 0%,#ffffff 10%,#ffffff 90%,#ffffff 100%);background-image:linear-gradient(right,#ffffff 0%,#ffffff 10%,#ffffff 90%,#ffffff 100%);margin-bottom:1em}html body div#content div.code-and-raw table.sourceCode{margin-bottom:0px;padding-bottom:0.5em;border-style:none}html body div#content div.code-and-raw table.sourceCode tbody tr td pre code{background-image:none;font-weight:normal}html body div#content div.raw-link{color:#aaaaaa}html body div#content div.raw-link table.noPaddingBottom{padding-bottom:0em}html body div#content div.raw-link code{padding:0px 0px 0px 0px;padding-left:1em}html body div#content div.raw-link a{font-weight:bold}html body div#content div.raw-link a.raw{margin-left:0em}html body div#content div.raw-link a:visited{color:#0033ff}html body div#content div.lineCntMax100{margin-left:-0.58em}html body div#content div.lineCntMax1000{margin-left:-1.16em}html body div#content div.lineCntMax10000{margin-left:-2.32em}html body div#content div.sourceCode{padding-left:12%;padding-right:12%}html body div#content div.sourceCode pre code{padding-left:0}html body div#content ol{margin:0px 0px 0px 0px;padding-left:18%;padding-right:12%;padding-bottom:1em}html body div#content ol p{padding:0px 0px 0px 0px}html body div#content ul{margin:0px 0px 0px 0px;padding-left:18%;padding-right:12%;padding-bottom:1em}html body div#content ul ul{margin:0px 0px 0px 0px;padding-left:12%;padding-bottom:0px}html body div#content p{margin:0px 0px 0px 0px;padding-bottom:1em;padding-left:12%;padding-right:12%;text-align:justify}html body div#content p#taglist{padding-top:2em;padding-bottom:0px}html body div#content code{padding:0px 0.1em 0px 0.1em;font-weight:bold}html body div#content div.figure{display:table;margin:0px auto 0px auto}html body div#content div.footnotes{background-image:-webkit-linear-gradient(right,#ffffff 0%,#f0f0f0 10%,#f0f0f0 90%,#ffffff 100%);background-image:-moz-linear-gradient(right,#ffffff 0%,#f0f0f0 10%,#f0f0f0 90%,#ffffff 100%);background-image:-ms-linear-gradient(right,#ffffff 0%,#f0f0f0 10%,#f0f0f0 90%,#ffffff 100%);background-image:-o-linear-gradient(right,#ffffff 0%,#f0f0f0 10%,#f0f0f0 90%,#ffffff 100%);background-image:linear-gradient(right,#ffffff 0%,#f0f0f0 10%,#f0f0f0 90%,#ffffff 100%);padding-bottom:0px}html body div#content div.footnotes hr{display:none}html body div#content div.footnotes ol{padding-left:12%;padding-right:12%;padding-top:1em;padding-bottom:0em}html body div#content div.footnotes ol li{padding-left:0px}html body div#content div.footnotes ol li p{padding-bottom:1em}html body div#content blockquote{margin:0px 0px 0px 0px;padding:0px 0px 0px 0px;-moz-tab-size:4;-o-tab-size:4;tab-size:4;padding-left:6%;padding-right:12%;background-image:-webkit-linear-gradient(right,#ffffff 0%,#f0f0f0 10%,#f0f0f0 90%,#ffffff 100%);background-image:-moz-linear-gradient(right,#ffffff 0%,#f0f0f0 10%,#f0f0f0 90%,#ffffff 100%);background-image:-ms-linear-gradient(right,#ffffff 0%,#f0f0f0 10%,#f0f0f0 90%,#ffffff 100%);background-image:-o-linear-gradient(right,#ffffff 0%,#f0f0f0 10%,#f0f0f0 90%,#ffffff 100%);background-image:linear-gradient(right,#ffffff 0%,#f0f0f0 10%,#f0f0f0 90%,#ffffff 100%);margin-bottom:1em;padding-top:1em}html body div#content pre{margin:0px 0px 0px 0px;padding:0px 0px 0px 0px}html body div#content pre code{-moz-tab-size:4;-o-tab-size:4;tab-size:4;display:block;padding-left:15%;padding-right:12%;background-image:-webkit-linear-gradient(right,#ffffff 0%,#ffffff 10%,#ffffff 90%,#ffffff 100%);background-image:-moz-linear-gradient(right,#ffffff 0%,#ffffff 10%,#ffffff 90%,#ffffff 100%);background-image:-ms-linear-gradient(right,#ffffff 0%,#ffffff 10%,#ffffff 90%,#ffffff 100%);background-image:-o-linear-gradient(right,#ffffff 0%,#ffffff 10%,#ffffff 90%,#ffffff 100%);background-image:linear-gradient(right,#ffffff 0%,#ffffff 10%,#ffffff 90%,#ffffff 100%);border-radius:0px 0px 0px 0px;border-style:none;margin-bottom:1em;padding-top:1em;padding-bottom:1em;font-weight:normal}html body div#content table.sourceCode{-moz-tab-size:4;-o-tab-size:4;tab-size:4;margin:0px 0px 0px 0px;margin-bottom:1em;border-spacing:0px 1px}html body div#content table.gallery.sourceCode{padding-left:12%;padding-right:12%;margin-bottom:0em;font-size:small}html body div#content table.gallery.sourceCode tr{text-align:center}html body div#content table.gallery.sourceCode tr#header{font-size:medium;font-weight:bold;text-decoration:underline}html body div#content table.sourceCode.sourceCode{padding-left:12%;padding-bottom:0.5em}html body div#content table.sourceCode.sourceCode tr td.lineNumbers pre{margin:0px 0px 0px 0px;color:#aaaaaa;text-align:right}html body div#content table.sourceCode.sourceCode tr td.sourceCode{padding-left:0px}html body div#content table.sourceCode.sourceCode tr td.sourceCode pre{margin:0px 0px 0px 0px}html body div#content table.sourceCode.sourceCode tr td.sourceCode pre code{margin:0px 0px 0px 0px;padding:0px 0px 0px 1em}html body div#content table.posts-index{padding-left:12%;margin-bottom:0px;padding-bottom:1em}html body div#content table.posts-index thead tr th{border-style:none}html body div#content table.posts-index thead tr th.label{text-align:center}html body div#content table.posts-index thead tr th.title{padding-left:1em;text-align:left}html body div#content table.posts-index tr td{padding:0px 0.5em 0px 0.5em;border-style:none;vertical-align:text-top}html body div#content table.posts-index tr td.date{white-space:nowrap}html body div#content table.posts-index tr td.bytes{text-align:right;white-space:nowrap}html body div#content table.posts-index tr td code{font-weight:normal}html body div#footer{margin-top:1em;padding-bottom:1em;font-size:medium;text-align:center}
+
+html
+{
+  margin           : 0px 0px 0px 0px;
+  padding          : 0px 0px 0px 0px;
+  background-color : #ffffff;
+  color            : #000000;
+  overflow-y       : scroll;
+}
+
+html body
+{
+  font-family : "Source Serif Pro", serif;
+  width       : 900px;
+  margin      : 0px auto 0px auto;
+}
+
+html body a
+{
+  outline         : none 1px #000000;
+  font-weight     : bold;
+  text-decoration : none;
+}
+
+html body a:link
+{
+  color : #0033ff;
+}
+
+html body a:visited
+{
+  color : #007033;
+}
+
+html body a:hover
+{
+  text-decoration : underline;
+}
+
+html body a.section-heading:hover
+{
+  text-decoration : underline;
+}
+
+html body a.section-heading
+{
+  color : #000000;
+}
+
+html body sup
+{
+  vertical-align : top;
+  font-size      : small;
+}
+
+html body hr
+{
+  margin : 0px 0px 0px 0px;
+  height : 1px;
+}
+
+
+html body div.center
+{
+  text-align : center;
+}
+
+
+html body div#header
+{
+  padding    : 0.5em 0px 0.5em 0px;
+  text-align : center;
+}
+
+html body div#content
+{
+  background-color : #ffffff;
+  padding-bottom   : 2em;
+}
+
+html body div#content h1,
+html body div#content h2,
+html body div#content h3,
+html body div#content h4,
+html body div#content h5
+{
+  margin         : 0px 0px 0px 0px;
+  padding-left   : 12%;
+  padding-right  : 12%;
+  padding-bottom : 0.5em;
+  font-weight    : normal;
+}
+
+html body div#content h1 code,
+html body div#content h2 code,
+html body div#content h3 code,
+html body div#content h4 code,
+html body div#content h5 code
+{
+  margin : 0px 4px 0px 4px;
+}
+
+
+html body div#content h1::before
+{
+  content  : "▣  ";
+  position : relative;
+}
+
+html body div#content h1.center
+{
+  margin          : 0px 0px 0px 0px;
+  padding-top     : 0.2em;
+  padding-bottom  : 0.5em;
+  font-size       : 30pt;
+  font-weight     : bold;
+  padding-right   : 12%;
+  text-align      : center;
+  text-decoration : none;
+}
+
+html body div#content h1.center::before
+{
+  content : none;
+}
+
+
+html body div#content h2::before
+{
+  content  : "■  ";
+  position : relative;
+}
+
+
+html body div#content h3::before
+{
+  content  : "□  ";
+  position : relative;
+}
+
+
+html body div#content h4::before
+{
+  content  : "◆  ";
+  position : relative;
+}
+
+
+html body div#content h5::before
+{
+  content  : "◈  ";
+  position : relative;
+}
+
+
+html body div#content h6::before
+{
+  content  : "◇  ";
+  position : relative;
+}
+
+html body div#content table
+{
+  margin          : 0px auto 0px auto;
+  margin-bottom   : 1em;
+  border-collapse : collapse;
+}
+
+html body div#content table td
+{
+  padding : 0em 0.5em 0em 0.5em;
+}
+
+html body div#content table td + td
+{
+  border-left : solid 1px #000000;
+}
+
+
+html body div#content table.ul
+{
+  border-collapse : separate;
+}
+
+html body div#content table.ul td
+{
+  border-style : none;
+}
+
+
+html body div#content div.info
+{
+  padding-bottom : 1em;
+}
+
+html body div#content div.code-and-raw
+{
+  background-image : -webkit-linear-gradient(right,#ffffff 0%,#ffffff 10%,#ffffff 90%,#ffffff 100%);
+  background-image : -moz-linear-gradient(right,#ffffff 0%,#ffffff 10%,#ffffff 90%,#ffffff 100%);
+  background-image : -ms-linear-gradient(right,#ffffff 0%,#ffffff 10%,#ffffff 90%,#ffffff 100%);
+  background-image : -o-linear-gradient(right,#ffffff 0%,#ffffff 10%,#ffffff 90%,#ffffff 100%);
+  background-image : linear-gradient(right,#ffffff 0%,#ffffff 10%,#ffffff 90%,#ffffff 100%);
+  margin-bottom    : 1em;
+}
+
+
+html body div#content div.code-and-raw table.sourceCode
+{
+  margin-bottom  : 0px;
+  padding-bottom : 0.5em;
+  border-style   : none;
+}
+
+
+
+
+
+html body div#content div.code-and-raw table.sourceCode tbody tr td pre code
+{
+  background-image : none;
+  font-weight      : normal;
+}
+
+html body div#content div.raw-link
+{
+  color : #aaaaaa;
+}
+
+
+html body div#content div.raw-link table.noPaddingBottom
+{
+  padding-bottom : 0em;
+}
+
+html body div#content div.raw-link code
+{
+  padding      : 0px 0px 0px 0px;
+  padding-left : 1em;
+}
+
+html body div#content div.raw-link a
+{
+  font-weight : bold;
+}
+
+html body div#content div.raw-link a.raw
+{
+  margin-left : 0em;
+}
+
+html body div#content div.raw-link a:visited
+{
+  color : #0033ff;
+}
+
+html body div#content div.lineCntMax100
+{
+  margin-left : -0.58em;
+}
+
+html body div#content div.lineCntMax1000
+{
+  margin-left : -1.16em;
+}
+
+html body div#content div.lineCntMax10000
+{
+  margin-left : -2.32em;
+}
+
+html body div#content div.sourceCode
+{
+  padding-left  : 12%;
+  padding-right : 12%;
+}
+
+
+html body div#content div.sourceCode pre code
+{
+  padding-left : 0;
+}
+
+html body div#content ol
+{
+  margin         : 0px 0px 0px 0px;
+  padding-left   : 18%;
+  padding-right  : 12%;
+  padding-bottom : 1em;
+}
+
+html body div#content ol p
+{
+  padding : 0px 0px 0px 0px;
+}
+
+html body div#content ul
+{
+  margin         : 0px 0px 0px 0px;
+  padding-left   : 18%;
+  padding-right  : 12%;
+  padding-bottom : 1em;
+}
+
+html body div#content ul ul
+{
+  margin         : 0px 0px 0px 0px;
+  padding-left   : 12%;
+  padding-bottom : 0px;
+}
+
+html body div#content p
+{
+  margin         : 0px 0px 0px 0px;
+  padding-bottom : 1em;
+  padding-left   : 12%;
+  padding-right  : 12%;
+  text-align     : justify;
+}
+
+html body div#content p#taglist
+{
+  padding-top    : 2em;
+  padding-bottom : 0px;
+}
+
+html body div#content code
+{
+  padding     : 0px 0.1em 0px 0.1em;
+  font-weight : bold;
+}
+
+
+html body div#content div.figure
+{
+  display : table;
+  margin  : 0px auto 0px auto;
+}
+
+html body div#content div.footnotes
+{
+  background-image : -webkit-linear-gradient(right,#ffffff 0%,#f0f0f0 10%,#f0f0f0 90%,#ffffff 100%);
+  background-image : -moz-linear-gradient(right,#ffffff 0%,#f0f0f0 10%,#f0f0f0 90%,#ffffff 100%);
+  background-image : -ms-linear-gradient(right,#ffffff 0%,#f0f0f0 10%,#f0f0f0 90%,#ffffff 100%);
+  background-image : -o-linear-gradient(right,#ffffff 0%,#f0f0f0 10%,#f0f0f0 90%,#ffffff 100%);
+  background-image : linear-gradient(right,#ffffff 0%,#f0f0f0 10%,#f0f0f0 90%,#ffffff 100%);
+  padding-bottom   : 0px;
+}
+
+html body div#content div.footnotes hr
+{
+  display : none;
+}
+
+html body div#content div.footnotes ol
+{
+  padding-left   : 12%;
+  padding-right  : 12%;
+  padding-top    : 1em;
+  padding-bottom : 0em;
+}
+
+html body div#content div.footnotes ol li
+{
+  padding-left : 0px;
+}
+
+html body div#content div.footnotes ol li p
+{
+  padding-bottom : 1em;
+}
+
+html body div#content blockquote
+{
+  margin           : 0px 0px 0px 0px;
+  padding          : 0px 0px 0px 0px;
+  -moz-tab-size    : 4;
+  -o-tab-size      : 4;
+  tab-size         : 4;
+  padding-left     : 6%;
+  padding-right    : 12%;
+  background-image : -webkit-linear-gradient(right,#ffffff 0%,#f0f0f0 10%,#f0f0f0 90%,#ffffff 100%);
+  background-image : -moz-linear-gradient(right,#ffffff 0%,#f0f0f0 10%,#f0f0f0 90%,#ffffff 100%);
+  background-image : -ms-linear-gradient(right,#ffffff 0%,#f0f0f0 10%,#f0f0f0 90%,#ffffff 100%);
+  background-image : -o-linear-gradient(right,#ffffff 0%,#f0f0f0 10%,#f0f0f0 90%,#ffffff 100%);
+  background-image : linear-gradient(right,#ffffff 0%,#f0f0f0 10%,#f0f0f0 90%,#ffffff 100%);
+  margin-bottom    : 1em;
+  padding-top      : 1em;
+}
+
+html body div#content pre
+{
+  margin  : 0px 0px 0px 0px;
+  padding : 0px 0px 0px 0px;
+}
+
+html body div#content pre code
+{
+  -moz-tab-size    : 4;
+  -o-tab-size      : 4;
+  tab-size         : 4;
+  display          : block;
+  padding-left     : 15%;
+  padding-right    : 12%;
+  background-image : -webkit-linear-gradient(right,#ffffff 0%,#ffffff 10%,#ffffff 90%,#ffffff 100%);
+  background-image : -moz-linear-gradient(right,#ffffff 0%,#ffffff 10%,#ffffff 90%,#ffffff 100%);
+  background-image : -ms-linear-gradient(right,#ffffff 0%,#ffffff 10%,#ffffff 90%,#ffffff 100%);
+  background-image : -o-linear-gradient(right,#ffffff 0%,#ffffff 10%,#ffffff 90%,#ffffff 100%);
+  background-image : linear-gradient(right,#ffffff 0%,#ffffff 10%,#ffffff 90%,#ffffff 100%);
+  border-radius    : 0px 0px 0px 0px;
+  border-style     : none;
+  margin-bottom    : 1em;
+  padding-top      : 1em;
+  padding-bottom   : 1em;
+  font-weight      : normal;
+}
+
+
+html body div#content table.sourceCode
+{
+  -moz-tab-size  : 4;
+  -o-tab-size    : 4;
+  tab-size       : 4;
+  margin         : 0px 0px 0px 0px;
+  margin-bottom  : 1em;
+  border-spacing : 0px 1px;
+}
+
+html body div#content table.gallery.sourceCode
+{
+  padding-left  : 12%;
+  padding-right : 12%;
+  margin-bottom : 0em;
+  font-size     : small;
+}
+
+html body div#content table.gallery.sourceCode tr
+{
+  text-align : center;
+}
+
+html body div#content table.gallery.sourceCode tr#header
+{
+  font-size       : medium;
+  font-weight     : bold;
+  text-decoration : underline;
+}
+
+html body div#content table.sourceCode.sourceCode
+{
+  padding-left   : 12%;
+  padding-bottom : 0.5em;
+}
+
+
+
+
+html body div#content table.sourceCode.sourceCode tr td.lineNumbers pre
+{
+  margin     : 0px 0px 0px 0px;
+  color      : #aaaaaa;
+  text-align : right;
+}
+
+html body div#content table.sourceCode.sourceCode tr td.sourceCode
+{
+  padding-left : 0px;
+}
+
+html body div#content table.sourceCode.sourceCode tr td.sourceCode pre
+{
+  margin : 0px 0px 0px 0px;
+}
+
+html body div#content table.sourceCode.sourceCode tr td.sourceCode pre code
+{
+  margin  : 0px 0px 0px 0px;
+  padding : 0px 0px 0px 1em;
+}
+
+html body div#content table.posts-index
+{
+  padding-left   : 12%;
+  margin-bottom  : 0px;
+  padding-bottom : 1em;
+}
+
+
+
+html body div#content table.posts-index thead tr th
+{
+  border-style : none;
+}
+
+html body div#content table.posts-index thead tr th.label
+{
+  text-align : center;
+}
+
+html body div#content table.posts-index thead tr th.title
+{
+  padding-left : 1em;
+  text-align   : left;
+}
+
+
+html body div#content table.posts-index tr td
+{
+  padding        : 0px 0.5em 0px 0.5em;
+  border-style   : none;
+  vertical-align : text-top;
+}
+
+html body div#content table.posts-index tr td.date
+{
+  white-space : nowrap;
+}
+
+html body div#content table.posts-index tr td.bytes
+{
+  text-align  : right;
+  white-space : nowrap;
+}
+
+html body div#content table.posts-index tr td code
+{
+  font-weight : normal;
+}
+
+html body div#footer
+{
+  margin-top     : 1em;
+  padding-bottom : 1em;
+  font-size      : medium;
+  text-align     : center;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */
