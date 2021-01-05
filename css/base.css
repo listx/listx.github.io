@@ -311,7 +311,8 @@ html body div#content ul
 html body div#content ul ul
 {
   margin         : 0px 0px 0px 0px;
-  padding-left   : 12%;
+  padding-left   : 6%;
+  padding-right  : 12%;
   padding-bottom : 0px;
 }
 
