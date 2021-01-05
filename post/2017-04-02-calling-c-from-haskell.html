@@ -41,12 +41,12 @@
 			<div class="info center">
 	<code class="date">2017-04-02</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2017-04-02-calling-c-from-haskell.org" title="History">*</a>
 	<br>
-	<a href="../tag/programming.html">programming</a>, <a href="../tag/haskell.html">haskell</a>
+	<a title="All pages tagged 'programming'." href="../tag/programming.html">programming</a>, <a title="All pages tagged 'haskell'." href="../tag/haskell.html">haskell</a>
 </div>
 
 <p>Yesterday I made a minimal working example of calling C from Haskell, where I call a simple C function to compute the greatest common denominator, or “GCD”. The Haskell portion only serves as a wrapper around the C function. This post is a brief look at the whole setup.</p>
 <h1 id="the-setup">The Setup</h1>
-<p>I used <code>ghc</code> 8.0.1, and <code>gcc</code> 5.4.0. <a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
+<p>I used <code>ghc</code> 8.0.1, and <code>gcc</code> 5.4.0. <a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
 <h2 id="folder-structure">Folder Structure</h2>
 <pre><code>2017-04-02-calling-c-from-haskell
 ├── build.sh
@@ -64,60 +64,60 @@
 <div class="raw-link sourceCode">
 <table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/2017-04-02-calling-c-from-haskell/c/gcd.h" mimetype="text/plain">gcd.h</a></code></pre></td></tr></tbody></table>
 </div>
-<div class="sourceCode" id="cb2" data-input="code/2017-04-02-calling-c-from-haskell/c/gcd.h"><pre class="sourceCode numberSource numberLines"><code class="sourceCode"><a class="sourceLine" id="cb2-1" title="1">int gcd(int m, int r);</a></code></pre></div>
+<div class="sourceCode" id="cb2" data-input="code/2017-04-02-calling-c-from-haskell/c/gcd.h"><pre class="sourceCode numberSource numberLines"><code class="sourceCode"><span id="cb2-1"><a href="#cb2-1"></a>int gcd(int m, int r);</span></code></pre></div>
 </div>
 <div class="code-and-raw lineCntMax100">
 <div class="raw-link sourceCode">
 <table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/2017-04-02-calling-c-from-haskell/c/gcd.c" mimetype="text/plain">gcd.c</a></code></pre></td></tr></tbody></table>
 </div>
-<div class="sourceCode" id="cb3" data-input="code/2017-04-02-calling-c-from-haskell/c/gcd.c"><pre class="sourceCode numberSource numberLines c"><code class="sourceCode c"><a class="sourceLine" id="cb3-1" title="1"><span class="pp">#include </span><span class="im">&quot;gcd.h&quot;</span></a>
-<a class="sourceLine" id="cb3-2" title="2"></a>
-<a class="sourceLine" id="cb3-3" title="3"><span class="co">/* Find greatest common divisor. */</span></a>
-<a class="sourceLine" id="cb3-4" title="4"><span class="dt">int</span> gcd(<span class="dt">int</span> m, <span class="dt">int</span> r)</a>
-<a class="sourceLine" id="cb3-5" title="5">{</a>
-<a class="sourceLine" id="cb3-6" title="6">	<span class="cf">if</span> (r == <span class="dv">0</span>)</a>
-<a class="sourceLine" id="cb3-7" title="7">		<span class="cf">return</span> m;</a>
-<a class="sourceLine" id="cb3-8" title="8"></a>
-<a class="sourceLine" id="cb3-9" title="9">	<span class="cf">return</span> gcd(r, m % r);</a>
-<a class="sourceLine" id="cb3-10" title="10">}</a></code></pre></div>
+<div class="sourceCode" id="cb3" data-input="code/2017-04-02-calling-c-from-haskell/c/gcd.c"><pre class="sourceCode numberSource numberLines c"><code class="sourceCode c"><span id="cb3-1"><a href="#cb3-1"></a><span class="pp">#include </span><span class="im">&quot;gcd.h&quot;</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a></span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="co">/* Find greatest common divisor. */</span></span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="dt">int</span> gcd(<span class="dt">int</span> m, <span class="dt">int</span> r)</span>
+<span id="cb3-5"><a href="#cb3-5"></a>{</span>
+<span id="cb3-6"><a href="#cb3-6"></a>	<span class="cf">if</span> (r == <span class="dv">0</span>)</span>
+<span id="cb3-7"><a href="#cb3-7"></a>		<span class="cf">return</span> m;</span>
+<span id="cb3-8"><a href="#cb3-8"></a></span>
+<span id="cb3-9"><a href="#cb3-9"></a>	<span class="cf">return</span> gcd(r, m % r);</span>
+<span id="cb3-10"><a href="#cb3-10"></a>}</span></code></pre></div>
 </div>
 <div class="code-and-raw lineCntMax100">
 <div class="raw-link sourceCode">
 <table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/2017-04-02-calling-c-from-haskell/hs/GCD.hs" mimetype="text/plain">GCD.hs</a></code></pre></td></tr></tbody></table>
 </div>
-<div class="sourceCode" id="cb4" data-input="code/2017-04-02-calling-c-from-haskell/hs/GCD.hs"><pre class="sourceCode numberSource numberLines haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb4-1" title="1"><span class="kw">module</span> <span class="dt">GCD</span> <span class="kw">where</span></a>
-<a class="sourceLine" id="cb4-2" title="2"></a>
-<a class="sourceLine" id="cb4-3" title="3"><span class="kw">import</span> <span class="dt">Foreign</span></a>
-<a class="sourceLine" id="cb4-4" title="4"><span class="kw">import</span> <span class="dt">Foreign.C.Types</span></a>
-<a class="sourceLine" id="cb4-5" title="5"></a>
-<a class="sourceLine" id="cb4-6" title="6">foreign <span class="kw">import</span> ccall &quot;gcd&quot;</a>
-<a class="sourceLine" id="cb4-7" title="7"><span class="ot">  c_gcd ::</span> <span class="dt">CInt</span> <span class="ot">-&gt;</span> <span class="dt">CInt</span> <span class="ot">-&gt;</span> <span class="dt">CInt</span></a>
-<a class="sourceLine" id="cb4-8" title="8"></a>
-<a class="sourceLine" id="cb4-9" title="9"><span class="ot">f_gcd ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span></a>
-<a class="sourceLine" id="cb4-10" title="10">f_gcd a b <span class="fu">=</span> <span class="fu">fromIntegral</span> <span class="fu">$</span> c_gcd (<span class="fu">fromIntegral</span> a) (<span class="fu">fromIntegral</span> b)</a></code></pre></div>
+<div class="sourceCode" id="cb4" data-input="code/2017-04-02-calling-c-from-haskell/hs/GCD.hs"><pre class="sourceCode numberSource numberLines haskell"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">module</span> <span class="dt">GCD</span> <span class="kw">where</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a></span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="kw">import</span> <span class="dt">Foreign</span></span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="kw">import</span> <span class="dt">Foreign.C.Types</span></span>
+<span id="cb4-5"><a href="#cb4-5"></a></span>
+<span id="cb4-6"><a href="#cb4-6"></a>foreign <span class="kw">import</span> ccall &quot;gcd&quot;</span>
+<span id="cb4-7"><a href="#cb4-7"></a><span class="ot">  c_gcd ::</span> <span class="dt">CInt</span> <span class="ot">-&gt;</span> <span class="dt">CInt</span> <span class="ot">-&gt;</span> <span class="dt">CInt</span></span>
+<span id="cb4-8"><a href="#cb4-8"></a></span>
+<span id="cb4-9"><a href="#cb4-9"></a><span class="ot">f_gcd ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span></span>
+<span id="cb4-10"><a href="#cb4-10"></a>f_gcd a b <span class="ot">=</span> <span class="fu">fromIntegral</span> <span class="op">$</span> c_gcd (<span class="fu">fromIntegral</span> a) (<span class="fu">fromIntegral</span> b)</span></code></pre></div>
 </div>
 <div class="code-and-raw lineCntMax10">
 <div class="raw-link sourceCode">
 <table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/2017-04-02-calling-c-from-haskell/hs/ffi.hs" mimetype="text/plain">ffi.hs</a></code></pre></td></tr></tbody></table>
 </div>
-<div class="sourceCode" id="cb5" data-input="code/2017-04-02-calling-c-from-haskell/hs/ffi.hs"><pre class="sourceCode numberSource numberLines haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb5-1" title="1"><span class="kw">import</span> <span class="dt">GCD</span></a>
-<a class="sourceLine" id="cb5-2" title="2"></a>
-<a class="sourceLine" id="cb5-3" title="3"><span class="ot">main ::</span> <span class="dt">IO</span> ()</a>
-<a class="sourceLine" id="cb5-4" title="4">main <span class="fu">=</span> <span class="fu">mapM_</span> (<span class="fu">print</span> <span class="fu">.</span> <span class="fu">uncurry</span> f_gcd) [(<span class="dv">8</span>, <span class="dv">12</span>), (<span class="dv">30</span>, <span class="dv">105</span>), (<span class="dv">24</span>, <span class="dv">108</span>)]</a></code></pre></div>
+<div class="sourceCode" id="cb5" data-input="code/2017-04-02-calling-c-from-haskell/hs/ffi.hs"><pre class="sourceCode numberSource numberLines haskell"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">import</span> <span class="dt">GCD</span></span>
+<span id="cb5-2"><a href="#cb5-2"></a></span>
+<span id="cb5-3"><a href="#cb5-3"></a><span class="ot">main ::</span> <span class="dt">IO</span> ()</span>
+<span id="cb5-4"><a href="#cb5-4"></a>main <span class="ot">=</span> <span class="fu">mapM_</span> (<span class="fu">print</span> <span class="op">.</span> <span class="fu">uncurry</span> f_gcd) [(<span class="dv">8</span>, <span class="dv">12</span>), (<span class="dv">30</span>, <span class="dv">105</span>), (<span class="dv">24</span>, <span class="dv">108</span>)]</span></code></pre></div>
 </div>
 <div class="code-and-raw lineCntMax10">
 <div class="raw-link sourceCode">
 <table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/2017-04-02-calling-c-from-haskell/build.sh" mimetype="text/plain">build.sh</a></code></pre></td></tr></tbody></table>
 </div>
-<div class="sourceCode" id="cb6" data-input="code/2017-04-02-calling-c-from-haskell/build.sh"><pre class="sourceCode numberSource numberLines bash"><code class="sourceCode bash"><a class="sourceLine" id="cb6-1" title="1"><span class="co">#!/usr/bin/env bash</span></a>
-<a class="sourceLine" id="cb6-2" title="2"></a>
-<a class="sourceLine" id="cb6-3" title="3"><span class="bu">pushd</span> c</a>
-<a class="sourceLine" id="cb6-4" title="4"><span class="fu">gcc</span> -c -o gcd.o gcd.c</a>
-<a class="sourceLine" id="cb6-5" title="5"><span class="bu">popd</span></a>
-<a class="sourceLine" id="cb6-6" title="6"></a>
-<a class="sourceLine" id="cb6-7" title="7"><span class="bu">pushd</span> hs</a>
-<a class="sourceLine" id="cb6-8" title="8"><span class="ex">ghc</span> --make ffi.hs ../c/gcd.o</a>
-<a class="sourceLine" id="cb6-9" title="9"><span class="bu">popd</span></a></code></pre></div>
+<div class="sourceCode" id="cb6" data-input="code/2017-04-02-calling-c-from-haskell/build.sh"><pre class="sourceCode numberSource numberLines bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1"></a><span class="co">#!/usr/bin/env bash</span></span>
+<span id="cb6-2"><a href="#cb6-2"></a></span>
+<span id="cb6-3"><a href="#cb6-3"></a><span class="bu">pushd</span> c</span>
+<span id="cb6-4"><a href="#cb6-4"></a><span class="fu">gcc</span> -c -o gcd.o gcd.c</span>
+<span id="cb6-5"><a href="#cb6-5"></a><span class="bu">popd</span></span>
+<span id="cb6-6"><a href="#cb6-6"></a></span>
+<span id="cb6-7"><a href="#cb6-7"></a><span class="bu">pushd</span> hs</span>
+<span id="cb6-8"><a href="#cb6-8"></a><span class="ex">ghc</span> --make ffi.hs ../c/gcd.o</span>
+<span id="cb6-9"><a href="#cb6-9"></a><span class="bu">popd</span></span></code></pre></div>
 </div>
 <h1 id="discussion">Discussion</h1>
 <p>To compile the example, run the <code>build.sh</code> script. Here is the expected output of the built executable:</p>
@@ -161,7 +161,7 @@ collect2: error: ld returned 1 exit status
 `cc' failed in phase `Linker'. (Exit code: 1)
 </code></pre>
 <ul>
-<li>In <code>GCD.hs</code> you can see the line <code>foreign import ccall &quot;gcd.h gcd&quot;﻿</code>. Instinctively I thought that the <code>gcd.h</code> in <code>﻿&quot;gcd.h gcd&quot;﻿</code> served as a kind of disambiguator, for where the <code>gcd()</code> function came from. So then I defined another function named <code>gcd()</code> in a different C header file (<code>gcd_other.h</code>), compiled it separately, but got a “multple definition” error:</li>
+<li>In <code>GCD.hs</code> you can see the line <code>foreign import ccall "gcd.h gcd"﻿</code>. Instinctively I thought that the <code>gcd.h</code> in <code>﻿"gcd.h gcd"﻿</code> served as a kind of disambiguator, for where the <code>gcd()</code> function came from. So then I defined another function named <code>gcd()</code> in a different C header file (<code>gcd_other.h</code>), compiled it separately, but got a “multple definition” error:</li>
 </ul>
 <pre><code> $ ghc --make ffi.hs ../c/gcd.o ../c/gcd_other.o
 [1 of 2] Compiling GCD              ( GCD.hs, GCD.o )
@@ -173,10 +173,10 @@ gcd_other.c:(.text+0x0): multiple definition of `gcd'
 collect2: error: ld returned 1 exit status
 `cc' failed in phase `Linker'. (Exit code: 1)
 </code></pre>
-<section class="footnotes">
+<section class="footnotes" role="doc-endnotes">
 <hr />
 <ol>
-<li id="fn1"><p>The version of gcc should not matter at all – actually, any decent C compiler should work.<a href="#fnref1" class="footnote-back">↩</a></p></li>
+<li id="fn1" role="doc-endnote"><p>The version of gcc should not matter at all – actually, any decent C compiler should work.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 

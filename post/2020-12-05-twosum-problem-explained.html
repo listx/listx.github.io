@@ -41,7 +41,7 @@
 			<div class="info center">
 	<code class="date">2020-12-05</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2020-12-05-twosum-problem-explained.org" title="History">*</a>
 	<br>
-	<a href="../tag/algorithms.html">algorithms</a>, <a href="../tag/math.html">math</a>
+	<a title="All pages tagged 'algorithms'." href="../tag/algorithms.html">algorithms</a>, <a title="All pages tagged 'math'." href="../tag/math.html">math</a>
 </div>
 
 <p>Just over three years ago, I watched <a href="https://youtu.be/XKu_SEDAykw">this video</a> that goes over the so-called “Two Sum” problem for the first time. The problem statement is as follows:</p>
@@ -52,13 +52,13 @@
 <p>And to be really honest I never bothered to convince myself that the 2-pointer approach is correct. Until today. This post is about the correctness behind the 2-pointer method, because I have yet to see a clear explanation about this topic.</p>
 <h1 id="brute-force-approach">Brute force approach</h1>
 <p>First let’s look at the brute-force solution. The brute-force solution looks at every single possible pair of numbers by using a double-for-loop. This is a very common pattern (nested looping) whenever one wants to consider all possible combinations, where each for-loop corresponds to a single “dimension” we want to exhaustively pore over. In this case there are 2 dimensions because there are 2 numbers we need to look at, so we must use 2 for-loops.</p>
-<p>Here is the basic pseudocode <a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>:</p>
+<p>Here is the basic pseudocode <a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>:</p>
 <pre><code>for i in numbers:
   for j in numbers:
     if i + j == N:
       return i, j
 </code></pre>
-<p>I think even beginner programmers can see that the brute force approach works. We just look at every possible 2-number combination to see if they will add up to <strong>N</strong>, and if so, we stop the search. Simple! <a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a></p>
+<p>I think even beginner programmers can see that the brute force approach works. We just look at every possible 2-number combination to see if they will add up to <strong>N</strong>, and if so, we stop the search. Simple! <a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
 <h1 id="pointer-method">2-pointer method</h1>
 <p>The 2-pointer method boils down to the following observation:</p>
 <blockquote>
@@ -122,11 +122,11 @@ return numbers[a_idx], numbers[b_idx]
 <p>I think the beauty of this problem is that it’s so simple, and yet it is also a very cool way of looking at the problem of <em>search</em>. Steps 3 and 4 are essentially very aggressive (and correct!) eliminations of bad search paths. There’s just something refreshing about eliminating entire branches of a search tree to speed things up.</p>
 <p>If you compare the 2-pointer method with the brute force approach, it is in essence doing the same logical thing, with fewer steps. Whereas the brute force approach performs a pairwise comparison across all possible combinations, the 2-pointer method preemptively discards many combinations by removing elements outright from future consideration. That’s the kind of power you need to go from <span class="math inline">\(O(n^2)\)</span> to <span class="math inline">\(O(n)\)</span>!</p>
 <p>Hope this helps!</p>
-<section class="footnotes">
+<section class="footnotes" role="doc-endnotes">
 <hr />
 <ol>
-<li id="fn1"><p>Of course, this pseudocode ignores edge-cases, but I didn’t want to clutter the code listing with non-essential ideas.<a href="#fnref1" class="footnote-back">↩</a></p></li>
-<li id="fn2"><p>As an added benefit, the brute-force approach works even if the input list is not sorted.<a href="#fnref2" class="footnote-back">↩</a></p></li>
+<li id="fn1" role="doc-endnote"><p>Of course, this pseudocode ignores edge-cases, but I didn’t want to clutter the code listing with non-essential ideas.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2" role="doc-endnote"><p>As an added benefit, the brute-force approach works even if the input list is not sorted.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 

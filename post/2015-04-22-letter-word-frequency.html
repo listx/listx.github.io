@@ -41,11 +41,11 @@
 			<div class="info center">
 	<code class="date">2015-04-22</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2015-04-22-letter-word-frequency.org" title="History">*</a>
 	<br>
-	<a href="../tag/programming.html">programming</a>, <a href="../tag/haskell.html">haskell</a>, <a href="../tag/ruby.html">ruby</a>
+	<a title="All pages tagged 'programming'." href="../tag/programming.html">programming</a>, <a title="All pages tagged 'haskell'." href="../tag/haskell.html">haskell</a>, <a title="All pages tagged 'ruby'." href="../tag/ruby.html">ruby</a>
 </div>
 
 <h2 id="motivation">Motivation</h2>
-<p>I recently purchased an ErgoDox keyboard<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>, and I’ve been thinking about creating my own keyboard layout in the spirit of the Dvorak Simplified Keyboard layout (DSK). One of the guiding principles of DSK was putting an emphasis on reducing finger travel by identifying the most commonly occurring letters of the English language, and placing them on the home row of the keyboard. Now, the Dvorak layout was patented in 1936 according to Wikipedia, with subsequent adjustments culminating in the present form of DSK.</p>
+<p>I recently purchased an ErgoDox keyboard<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>, and I’ve been thinking about creating my own keyboard layout in the spirit of the Dvorak Simplified Keyboard layout (DSK). One of the guiding principles of DSK was putting an emphasis on reducing finger travel by identifying the most commonly occurring letters of the English language, and placing them on the home row of the keyboard. Now, the Dvorak layout was patented in 1936 according to Wikipedia, with subsequent adjustments culminating in the present form of DSK.</p>
 <p>I want to find out for myself what letters are the most common. Sure, I could blindly trust an online source like Wikipedia, but it just feels like an easy problem to solve. Also, I am not sure if Dvorak considered <em>word</em> frequency as well as <em>letter</em> frequency. Ideally, one should use the data of both word and letter frequency to determine what is the most commonly typed “letter” on a US ASCII keyboard for English writers.</p>
 <h2 id="the-problems">The Problems</h2>
 <h3 id="letter-frequency">Letter Frequency</h3>
@@ -59,116 +59,116 @@
 <div class="raw-link sourceCode">
 <table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/toy/text-freq/text_freq.rb" mimetype="text/plain">text_freq.rb</a></code></pre></td></tr></tbody></table>
 </div>
-<div class="sourceCode" id="cb1" data-input="code/toy/text-freq/text_freq.rb"><pre class="sourceCode numberSource numberLines ruby"><code class="sourceCode ruby"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">module</span> <span class="dt">TextFreq</span></a>
-<a class="sourceLine" id="cb1-2" title="2">  <span class="co"># Given a string, count every occurrence of letters a-z (case insensitively).</span></a>
-<a class="sourceLine" id="cb1-3" title="3">  <span class="kw">def</span> <span class="dt">TextFreq</span>.freq_l(src)</a>
-<a class="sourceLine" id="cb1-4" title="4">    <span class="co"># Construct the array to hold the running totals (occurrences) of each</span></a>
-<a class="sourceLine" id="cb1-5" title="5">    <span class="co"># letter. There are 26 letters in the alphabet, so we can just have an array</span></a>
-<a class="sourceLine" id="cb1-6" title="6">    <span class="co"># of 26 integers.</span></a>
-<a class="sourceLine" id="cb1-7" title="7">    occs = <span class="dt">Array</span>.new(<span class="dv">26</span>, <span class="dv">0</span>)</a>
-<a class="sourceLine" id="cb1-8" title="8"></a>
-<a class="sourceLine" id="cb1-9" title="9">    <span class="co"># Count occurrences of each letter.</span></a>
-<a class="sourceLine" id="cb1-10" title="10">    src.each_char <span class="kw">do</span> |c|</a>
-<a class="sourceLine" id="cb1-11" title="11">      <span class="kw">if</span> !char_to_idx(c.downcase).nil?</a>
-<a class="sourceLine" id="cb1-12" title="12">        occs[char_to_idx(c.downcase)] += <span class="dv">1</span></a>
-<a class="sourceLine" id="cb1-13" title="13">      <span class="kw">end</span></a>
-<a class="sourceLine" id="cb1-14" title="14">    <span class="kw">end</span></a>
-<a class="sourceLine" id="cb1-15" title="15"></a>
-<a class="sourceLine" id="cb1-16" title="16">    occs</a>
-<a class="sourceLine" id="cb1-17" title="17">  <span class="kw">end</span></a>
-<a class="sourceLine" id="cb1-18" title="18"></a>
-<a class="sourceLine" id="cb1-19" title="19">  <span class="co"># Simply check if the given character belongs to the range of lowercase ASCII</span></a>
-<a class="sourceLine" id="cb1-20" title="20">  <span class="co"># characters that make up the alphabet. &quot;a&quot; is 97, and &quot;z&quot; is 122; the numbers</span></a>
-<a class="sourceLine" id="cb1-21" title="21">  <span class="co"># for bounds-checking &quot;c&quot; come from these two (offset by 1 to account for the</span></a>
-<a class="sourceLine" id="cb1-22" title="22">  <span class="co"># exclusive comparison).</span></a>
-<a class="sourceLine" id="cb1-23" title="23">  <span class="kw">def</span> <span class="dt">TextFreq</span>.char_to_idx(c)</a>
-<a class="sourceLine" id="cb1-24" title="24">    <span class="dv">96</span> &lt; c.ord &amp;&amp; c.ord &lt; <span class="dv">123</span> ? c.ord - <span class="dv">97</span> : <span class="dv">nil</span></a>
-<a class="sourceLine" id="cb1-25" title="25">  <span class="kw">end</span></a>
-<a class="sourceLine" id="cb1-26" title="26"></a>
-<a class="sourceLine" id="cb1-27" title="27">  <span class="co"># Given a string, count every occurrence of a particular word. We define a</span></a>
-<a class="sourceLine" id="cb1-28" title="28">  <span class="co"># &quot;word&quot; as a sequence of charactes that</span></a>
-<a class="sourceLine" id="cb1-29" title="29">  <span class="co">#   - does not have any punctuation characters at the beginning or end, and</span></a>
-<a class="sourceLine" id="cb1-30" title="30">  <span class="co">#   - does not have any numbers in it</span></a>
-<a class="sourceLine" id="cb1-31" title="31">  <span class="co"># . We take into account that text files from Project Gutenberg use a double</span></a>
-<a class="sourceLine" id="cb1-32" title="32">  <span class="co"># dash for an em dash to separate two words.</span></a>
-<a class="sourceLine" id="cb1-33" title="33">  <span class="kw">def</span> <span class="dt">TextFreq</span>.freq_w(src)</a>
-<a class="sourceLine" id="cb1-34" title="34">    occs = {}</a>
-<a class="sourceLine" id="cb1-35" title="35">    words = src.split(<span class="ot">/\W*\s\W*/</span>).map <span class="kw">do</span> |w|</a>
-<a class="sourceLine" id="cb1-36" title="36">        w.empty? ? <span class="dv">nil</span> : w.downcase</a>
-<a class="sourceLine" id="cb1-37" title="37">      <span class="kw">end</span>.compact</a>
-<a class="sourceLine" id="cb1-38" title="38">    words.each <span class="kw">do</span> |w|</a>
-<a class="sourceLine" id="cb1-39" title="39">      <span class="co"># Guard against cases like &quot;*&quot; for bullet points and such.</span></a>
-<a class="sourceLine" id="cb1-40" title="40">      <span class="kw">if</span> w =~ <span class="ot">/\w/</span></a>
-<a class="sourceLine" id="cb1-41" title="41">        <span class="kw">if</span> w =~ <span class="ot">/--/</span></a>
-<a class="sourceLine" id="cb1-42" title="42">          w.split(<span class="st">&quot;--&quot;</span>).each <span class="kw">do</span> |y|</a>
-<a class="sourceLine" id="cb1-43" title="43">            count_word(occs, lstrip_punc(y))</a>
-<a class="sourceLine" id="cb1-44" title="44">          <span class="kw">end</span></a>
-<a class="sourceLine" id="cb1-45" title="45">        <span class="kw">else</span></a>
-<a class="sourceLine" id="cb1-46" title="46">          count_word(occs, lstrip_punc(w))</a>
-<a class="sourceLine" id="cb1-47" title="47">        <span class="kw">end</span></a>
-<a class="sourceLine" id="cb1-48" title="48">      <span class="kw">end</span></a>
-<a class="sourceLine" id="cb1-49" title="49">    <span class="kw">end</span></a>
-<a class="sourceLine" id="cb1-50" title="50"></a>
-<a class="sourceLine" id="cb1-51" title="51">    occs</a>
-<a class="sourceLine" id="cb1-52" title="52">  <span class="kw">end</span></a>
-<a class="sourceLine" id="cb1-53" title="53"></a>
-<a class="sourceLine" id="cb1-54" title="54">  <span class="co"># Add 1 to the hash for an existing key (word); otherwise, store a new</span></a>
-<a class="sourceLine" id="cb1-55" title="55">  <span class="co"># instance of that word.</span></a>
-<a class="sourceLine" id="cb1-56" title="56">  <span class="kw">def</span> <span class="dt">TextFreq</span>.count_word(hash, w)</a>
-<a class="sourceLine" id="cb1-57" title="57">    hash.key?(w) ? hash[w] += <span class="dv">1</span> : hash.store(w, <span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb1-58" title="58">    hash</a>
-<a class="sourceLine" id="cb1-59" title="59">  <span class="kw">end</span></a>
-<a class="sourceLine" id="cb1-60" title="60"></a>
-<a class="sourceLine" id="cb1-61" title="61">  <span class="co"># Remove leading punctuation.</span></a>
-<a class="sourceLine" id="cb1-62" title="62">  <span class="kw">def</span> <span class="dt">TextFreq</span>.lstrip_punc(w)</a>
-<a class="sourceLine" id="cb1-63" title="63">    w.match(<span class="ot">/\w.*/</span>)[<span class="dv">0</span>]</a>
-<a class="sourceLine" id="cb1-64" title="64">  <span class="kw">end</span></a>
-<a class="sourceLine" id="cb1-65" title="65"></a>
-<a class="sourceLine" id="cb1-66" title="66">  <span class="co"># Display the frequencies of letters and or words. For letters, we are only</span></a>
-<a class="sourceLine" id="cb1-67" title="67">  <span class="co"># concerned about 26 different values, so we print all of them out. However</span></a>
-<a class="sourceLine" id="cb1-68" title="68">  <span class="co"># for words, depending on the corpus there might be thousands, or even</span></a>
-<a class="sourceLine" id="cb1-69" title="69">  <span class="co"># millions, of different words; thus, we only display the top 100 most common</span></a>
-<a class="sourceLine" id="cb1-70" title="70">  <span class="co"># words.</span></a>
-<a class="sourceLine" id="cb1-71" title="71">  <span class="kw">def</span> <span class="dt">TextFreq</span>.disp_freq(occs)</a>
-<a class="sourceLine" id="cb1-72" title="72">    <span class="kw">if</span> occs.is_a?(<span class="dt">Array</span>)</a>
-<a class="sourceLine" id="cb1-73" title="73">      sum = occs.inject(<span class="dv">0</span>, :+)</a>
-<a class="sourceLine" id="cb1-74" title="74">      occs.zip((<span class="st">&quot;a&quot;</span>..<span class="st">&quot;z&quot;</span>).to_a).sort.reverse.each <span class="kw">do</span> |cnt, c|</a>
-<a class="sourceLine" id="cb1-75" title="75">        puts <span class="st">&quot;</span><span class="ot">#{</span>c<span class="ot">}</span><span class="st"> = &quot;</span>\</a>
-<a class="sourceLine" id="cb1-76" title="76">          + <span class="st">&quot;%.2f%%&quot;</span> % (cnt/sum.to_f * <span class="fl">100.0</span>)\</a>
-<a class="sourceLine" id="cb1-77" title="77">          + <span class="st">&quot; (</span><span class="ot">#{</span>cnt<span class="ot">}</span><span class="st"> occurrences)&quot;</span></a>
-<a class="sourceLine" id="cb1-78" title="78">      <span class="kw">end</span></a>
-<a class="sourceLine" id="cb1-79" title="79">    <span class="kw">else</span></a>
-<a class="sourceLine" id="cb1-80" title="80">      sum = occs.values.inject(<span class="dv">0</span>, :+)</a>
-<a class="sourceLine" id="cb1-81" title="81">      occs.sort_by {|w, cnt| cnt}.reverse.take(<span class="dv">100</span>).each <span class="kw">do</span> |w, cnt|</a>
-<a class="sourceLine" id="cb1-82" title="82">        puts <span class="st">&quot;</span><span class="ot">#{</span>w<span class="ot">}</span><span class="st"> = &quot;</span>\</a>
-<a class="sourceLine" id="cb1-83" title="83">          + <span class="st">&quot;%.2f%%&quot;</span> % (cnt/sum.to_f * <span class="fl">100.0</span>)\</a>
-<a class="sourceLine" id="cb1-84" title="84">          + <span class="st">&quot; (</span><span class="ot">#{</span>cnt<span class="ot">}</span><span class="st"> occurrences)&quot;</span></a>
-<a class="sourceLine" id="cb1-85" title="85">      <span class="kw">end</span></a>
-<a class="sourceLine" id="cb1-86" title="86">    <span class="kw">end</span></a>
-<a class="sourceLine" id="cb1-87" title="87">  <span class="kw">end</span></a>
-<a class="sourceLine" id="cb1-88" title="88"><span class="kw">end</span></a></code></pre></div>
+<div class="sourceCode" id="cb1" data-input="code/toy/text-freq/text_freq.rb"><pre class="sourceCode numberSource numberLines ruby"><code class="sourceCode ruby"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">module</span> <span class="dt">TextFreq</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a>  <span class="co"># Given a string, count every occurrence of letters a-z (case insensitively).</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a>  <span class="kw">def</span> <span class="dt">TextFreq</span>.freq_l(src)</span>
+<span id="cb1-4"><a href="#cb1-4"></a>    <span class="co"># Construct the array to hold the running totals (occurrences) of each</span></span>
+<span id="cb1-5"><a href="#cb1-5"></a>    <span class="co"># letter. There are 26 letters in the alphabet, so we can just have an array</span></span>
+<span id="cb1-6"><a href="#cb1-6"></a>    <span class="co"># of 26 integers.</span></span>
+<span id="cb1-7"><a href="#cb1-7"></a>    occs = <span class="dt">Array</span>.new(<span class="dv">26</span>, <span class="dv">0</span>)</span>
+<span id="cb1-8"><a href="#cb1-8"></a></span>
+<span id="cb1-9"><a href="#cb1-9"></a>    <span class="co"># Count occurrences of each letter.</span></span>
+<span id="cb1-10"><a href="#cb1-10"></a>    src.each_char <span class="kw">do</span> |c|</span>
+<span id="cb1-11"><a href="#cb1-11"></a>      <span class="kw">if</span> !char_to_idx(c.downcase).nil?</span>
+<span id="cb1-12"><a href="#cb1-12"></a>        occs[char_to_idx(c.downcase)] += <span class="dv">1</span></span>
+<span id="cb1-13"><a href="#cb1-13"></a>      <span class="kw">end</span></span>
+<span id="cb1-14"><a href="#cb1-14"></a>    <span class="kw">end</span></span>
+<span id="cb1-15"><a href="#cb1-15"></a></span>
+<span id="cb1-16"><a href="#cb1-16"></a>    occs</span>
+<span id="cb1-17"><a href="#cb1-17"></a>  <span class="kw">end</span></span>
+<span id="cb1-18"><a href="#cb1-18"></a></span>
+<span id="cb1-19"><a href="#cb1-19"></a>  <span class="co"># Simply check if the given character belongs to the range of lowercase ASCII</span></span>
+<span id="cb1-20"><a href="#cb1-20"></a>  <span class="co"># characters that make up the alphabet. &quot;a&quot; is 97, and &quot;z&quot; is 122; the numbers</span></span>
+<span id="cb1-21"><a href="#cb1-21"></a>  <span class="co"># for bounds-checking &quot;c&quot; come from these two (offset by 1 to account for the</span></span>
+<span id="cb1-22"><a href="#cb1-22"></a>  <span class="co"># exclusive comparison).</span></span>
+<span id="cb1-23"><a href="#cb1-23"></a>  <span class="kw">def</span> <span class="dt">TextFreq</span>.char_to_idx(c)</span>
+<span id="cb1-24"><a href="#cb1-24"></a>    <span class="dv">96</span> &lt; c.ord &amp;&amp; c.ord &lt; <span class="dv">123</span> ? c.ord - <span class="dv">97</span> : <span class="dv">nil</span></span>
+<span id="cb1-25"><a href="#cb1-25"></a>  <span class="kw">end</span></span>
+<span id="cb1-26"><a href="#cb1-26"></a></span>
+<span id="cb1-27"><a href="#cb1-27"></a>  <span class="co"># Given a string, count every occurrence of a particular word. We define a</span></span>
+<span id="cb1-28"><a href="#cb1-28"></a>  <span class="co"># &quot;word&quot; as a sequence of charactes that</span></span>
+<span id="cb1-29"><a href="#cb1-29"></a>  <span class="co">#   - does not have any punctuation characters at the beginning or end, and</span></span>
+<span id="cb1-30"><a href="#cb1-30"></a>  <span class="co">#   - does not have any numbers in it</span></span>
+<span id="cb1-31"><a href="#cb1-31"></a>  <span class="co"># . We take into account that text files from Project Gutenberg use a double</span></span>
+<span id="cb1-32"><a href="#cb1-32"></a>  <span class="co"># dash for an em dash to separate two words.</span></span>
+<span id="cb1-33"><a href="#cb1-33"></a>  <span class="kw">def</span> <span class="dt">TextFreq</span>.freq_w(src)</span>
+<span id="cb1-34"><a href="#cb1-34"></a>    occs = {}</span>
+<span id="cb1-35"><a href="#cb1-35"></a>    words = src.split(<span class="ot">/\W*\s\W*/</span>).map <span class="kw">do</span> |w|</span>
+<span id="cb1-36"><a href="#cb1-36"></a>        w.empty? ? <span class="dv">nil</span> : w.downcase</span>
+<span id="cb1-37"><a href="#cb1-37"></a>      <span class="kw">end</span>.compact</span>
+<span id="cb1-38"><a href="#cb1-38"></a>    words.each <span class="kw">do</span> |w|</span>
+<span id="cb1-39"><a href="#cb1-39"></a>      <span class="co"># Guard against cases like &quot;*&quot; for bullet points and such.</span></span>
+<span id="cb1-40"><a href="#cb1-40"></a>      <span class="kw">if</span> w =~ <span class="ot">/\w/</span></span>
+<span id="cb1-41"><a href="#cb1-41"></a>        <span class="kw">if</span> w =~ <span class="ot">/--/</span></span>
+<span id="cb1-42"><a href="#cb1-42"></a>          w.split(<span class="st">&quot;--&quot;</span>).each <span class="kw">do</span> |y|</span>
+<span id="cb1-43"><a href="#cb1-43"></a>            count_word(occs, lstrip_punc(y))</span>
+<span id="cb1-44"><a href="#cb1-44"></a>          <span class="kw">end</span></span>
+<span id="cb1-45"><a href="#cb1-45"></a>        <span class="kw">else</span></span>
+<span id="cb1-46"><a href="#cb1-46"></a>          count_word(occs, lstrip_punc(w))</span>
+<span id="cb1-47"><a href="#cb1-47"></a>        <span class="kw">end</span></span>
+<span id="cb1-48"><a href="#cb1-48"></a>      <span class="kw">end</span></span>
+<span id="cb1-49"><a href="#cb1-49"></a>    <span class="kw">end</span></span>
+<span id="cb1-50"><a href="#cb1-50"></a></span>
+<span id="cb1-51"><a href="#cb1-51"></a>    occs</span>
+<span id="cb1-52"><a href="#cb1-52"></a>  <span class="kw">end</span></span>
+<span id="cb1-53"><a href="#cb1-53"></a></span>
+<span id="cb1-54"><a href="#cb1-54"></a>  <span class="co"># Add 1 to the hash for an existing key (word); otherwise, store a new</span></span>
+<span id="cb1-55"><a href="#cb1-55"></a>  <span class="co"># instance of that word.</span></span>
+<span id="cb1-56"><a href="#cb1-56"></a>  <span class="kw">def</span> <span class="dt">TextFreq</span>.count_word(hash, w)</span>
+<span id="cb1-57"><a href="#cb1-57"></a>    hash.key?(w) ? hash[w] += <span class="dv">1</span> : hash.store(w, <span class="dv">1</span>)</span>
+<span id="cb1-58"><a href="#cb1-58"></a>    hash</span>
+<span id="cb1-59"><a href="#cb1-59"></a>  <span class="kw">end</span></span>
+<span id="cb1-60"><a href="#cb1-60"></a></span>
+<span id="cb1-61"><a href="#cb1-61"></a>  <span class="co"># Remove leading punctuation.</span></span>
+<span id="cb1-62"><a href="#cb1-62"></a>  <span class="kw">def</span> <span class="dt">TextFreq</span>.lstrip_punc(w)</span>
+<span id="cb1-63"><a href="#cb1-63"></a>    w.match(<span class="ot">/\w.*/</span>)[<span class="dv">0</span>]</span>
+<span id="cb1-64"><a href="#cb1-64"></a>  <span class="kw">end</span></span>
+<span id="cb1-65"><a href="#cb1-65"></a></span>
+<span id="cb1-66"><a href="#cb1-66"></a>  <span class="co"># Display the frequencies of letters and or words. For letters, we are only</span></span>
+<span id="cb1-67"><a href="#cb1-67"></a>  <span class="co"># concerned about 26 different values, so we print all of them out. However</span></span>
+<span id="cb1-68"><a href="#cb1-68"></a>  <span class="co"># for words, depending on the corpus there might be thousands, or even</span></span>
+<span id="cb1-69"><a href="#cb1-69"></a>  <span class="co"># millions, of different words; thus, we only display the top 100 most common</span></span>
+<span id="cb1-70"><a href="#cb1-70"></a>  <span class="co"># words.</span></span>
+<span id="cb1-71"><a href="#cb1-71"></a>  <span class="kw">def</span> <span class="dt">TextFreq</span>.disp_freq(occs)</span>
+<span id="cb1-72"><a href="#cb1-72"></a>    <span class="kw">if</span> occs.is_a?(<span class="dt">Array</span>)</span>
+<span id="cb1-73"><a href="#cb1-73"></a>      sum = occs.inject(<span class="dv">0</span>, :+)</span>
+<span id="cb1-74"><a href="#cb1-74"></a>      occs.zip((<span class="st">&quot;a&quot;</span>..<span class="st">&quot;z&quot;</span>).to_a).sort.reverse.each <span class="kw">do</span> |cnt, c|</span>
+<span id="cb1-75"><a href="#cb1-75"></a>        puts <span class="st">&quot;</span><span class="ot">#{</span>c<span class="ot">}</span><span class="st"> = &quot;</span>\</span>
+<span id="cb1-76"><a href="#cb1-76"></a>          + <span class="st">&quot;%.2f%%&quot;</span> % (cnt/sum.to_f * <span class="fl">100.0</span>)\</span>
+<span id="cb1-77"><a href="#cb1-77"></a>          + <span class="st">&quot; (</span><span class="ot">#{</span>cnt<span class="ot">}</span><span class="st"> occurrences)&quot;</span></span>
+<span id="cb1-78"><a href="#cb1-78"></a>      <span class="kw">end</span></span>
+<span id="cb1-79"><a href="#cb1-79"></a>    <span class="kw">else</span></span>
+<span id="cb1-80"><a href="#cb1-80"></a>      sum = occs.values.inject(<span class="dv">0</span>, :+)</span>
+<span id="cb1-81"><a href="#cb1-81"></a>      occs.sort_by {|w, cnt| cnt}.reverse.take(<span class="dv">100</span>).each <span class="kw">do</span> |w, cnt|</span>
+<span id="cb1-82"><a href="#cb1-82"></a>        puts <span class="st">&quot;</span><span class="ot">#{</span>w<span class="ot">}</span><span class="st"> = &quot;</span>\</span>
+<span id="cb1-83"><a href="#cb1-83"></a>          + <span class="st">&quot;%.2f%%&quot;</span> % (cnt/sum.to_f * <span class="fl">100.0</span>)\</span>
+<span id="cb1-84"><a href="#cb1-84"></a>          + <span class="st">&quot; (</span><span class="ot">#{</span>cnt<span class="ot">}</span><span class="st"> occurrences)&quot;</span></span>
+<span id="cb1-85"><a href="#cb1-85"></a>      <span class="kw">end</span></span>
+<span id="cb1-86"><a href="#cb1-86"></a>    <span class="kw">end</span></span>
+<span id="cb1-87"><a href="#cb1-87"></a>  <span class="kw">end</span></span>
+<span id="cb1-88"><a href="#cb1-88"></a><span class="kw">end</span></span></code></pre></div>
 </div>
 <div class="code-and-raw lineCntMax100">
 <div class="raw-link sourceCode">
 <table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/toy/text-freq/analyze.rb" mimetype="text/plain">analyze.rb</a></code></pre></td></tr></tbody></table>
 </div>
-<div class="sourceCode" id="cb2" data-input="code/toy/text-freq/analyze.rb"><pre class="sourceCode numberSource numberLines ruby"><code class="sourceCode ruby"><a class="sourceLine" id="cb2-1" title="1"><span class="kw">#!/usr/bin/env ruby</span></a>
-<a class="sourceLine" id="cb2-2" title="2"></a>
-<a class="sourceLine" id="cb2-3" title="3">require_relative <span class="st">'./text_freq'</span></a>
-<a class="sourceLine" id="cb2-4" title="4"></a>
-<a class="sourceLine" id="cb2-5" title="5">fname = <span class="dt">ARGV</span>[<span class="dv">0</span>]</a>
-<a class="sourceLine" id="cb2-6" title="6">file = <span class="dt">File</span>.open(fname, <span class="st">'r:utf-8'</span>)</a>
-<a class="sourceLine" id="cb2-7" title="7">corpus = file.read</a>
-<a class="sourceLine" id="cb2-8" title="8"></a>
-<a class="sourceLine" id="cb2-9" title="9">occs_l = <span class="dt">TextFreq</span>.freq_l(corpus)</a>
-<a class="sourceLine" id="cb2-10" title="10"><span class="dt">TextFreq</span>.disp_freq(occs_l)</a>
-<a class="sourceLine" id="cb2-11" title="11"></a>
-<a class="sourceLine" id="cb2-12" title="12">puts <span class="st">&quot;-&quot;</span> * <span class="dv">80</span></a>
-<a class="sourceLine" id="cb2-13" title="13"></a>
-<a class="sourceLine" id="cb2-14" title="14">occs_w = <span class="dt">TextFreq</span>.freq_w(corpus)</a>
-<a class="sourceLine" id="cb2-15" title="15"><span class="dt">TextFreq</span>.disp_freq(occs_w)</a>
-<a class="sourceLine" id="cb2-16" title="16"></a>
-<a class="sourceLine" id="cb2-17" title="17">file.close</a></code></pre></div>
+<div class="sourceCode" id="cb2" data-input="code/toy/text-freq/analyze.rb"><pre class="sourceCode numberSource numberLines ruby"><code class="sourceCode ruby"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">#!/usr/bin/env ruby</span></span>
+<span id="cb2-2"><a href="#cb2-2"></a></span>
+<span id="cb2-3"><a href="#cb2-3"></a>require_relative <span class="st">'./text_freq'</span></span>
+<span id="cb2-4"><a href="#cb2-4"></a></span>
+<span id="cb2-5"><a href="#cb2-5"></a>fname = <span class="dt">ARGV</span>[<span class="dv">0</span>]</span>
+<span id="cb2-6"><a href="#cb2-6"></a>file = <span class="dt">File</span>.open(fname, <span class="st">'r:utf-8'</span>)</span>
+<span id="cb2-7"><a href="#cb2-7"></a>corpus = file.read</span>
+<span id="cb2-8"><a href="#cb2-8"></a></span>
+<span id="cb2-9"><a href="#cb2-9"></a>occs_l = <span class="dt">TextFreq</span>.freq_l(corpus)</span>
+<span id="cb2-10"><a href="#cb2-10"></a><span class="dt">TextFreq</span>.disp_freq(occs_l)</span>
+<span id="cb2-11"><a href="#cb2-11"></a></span>
+<span id="cb2-12"><a href="#cb2-12"></a>puts <span class="st">&quot;-&quot;</span> * <span class="dv">80</span></span>
+<span id="cb2-13"><a href="#cb2-13"></a></span>
+<span id="cb2-14"><a href="#cb2-14"></a>occs_w = <span class="dt">TextFreq</span>.freq_w(corpus)</span>
+<span id="cb2-15"><a href="#cb2-15"></a><span class="dt">TextFreq</span>.disp_freq(occs_w)</span>
+<span id="cb2-16"><a href="#cb2-16"></a></span>
+<span id="cb2-17"><a href="#cb2-17"></a>file.close</span></code></pre></div>
 </div>
 <p>And here is the output (<code>pg2701.txt</code> is <em>Moby Dick</em>):</p>
 <pre class="example"><code>$ ./analyze.rb ~/pg2701.txt
@@ -310,140 +310,140 @@ thou = 0.12% (267 occurrences)
 <div class="raw-link sourceCode">
 <table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/toy/text-freq/TextFreq.hs" mimetype="text/plain">TextFreq.hs</a></code></pre></td></tr></tbody></table>
 </div>
-<div class="sourceCode" id="cb4" data-input="code/toy/text-freq/TextFreq.hs"><pre class="sourceCode numberSource numberLines haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb4-1" title="1"><span class="kw">module</span> <span class="dt">TextFreq</span> <span class="kw">where</span></a>
-<a class="sourceLine" id="cb4-2" title="2"></a>
-<a class="sourceLine" id="cb4-3" title="3"><span class="kw">import</span> <span class="dt">Data.Char</span></a>
-<a class="sourceLine" id="cb4-4" title="4"><span class="kw">import</span> <span class="dt">Data.List</span></a>
-<a class="sourceLine" id="cb4-5" title="5"><span class="kw">import</span> <span class="kw">qualified</span> <span class="dt">Data.Map.Strict</span> <span class="kw">as</span> <span class="dt">M</span></a>
-<a class="sourceLine" id="cb4-6" title="6"><span class="kw">import</span> <span class="dt">Data.Ord</span> (comparing)</a>
-<a class="sourceLine" id="cb4-7" title="7"><span class="kw">import</span> <span class="kw">qualified</span> <span class="dt">Data.Text.Lazy</span> <span class="kw">as</span> <span class="dt">T</span></a>
-<a class="sourceLine" id="cb4-8" title="8"><span class="kw">import</span> <span class="dt">Data.Word</span></a>
-<a class="sourceLine" id="cb4-9" title="9"><span class="kw">import</span> <span class="kw">qualified</span> <span class="dt">Text.Printf</span> <span class="kw">as</span> <span class="dt">TP</span></a>
-<a class="sourceLine" id="cb4-10" title="10"></a>
-<a class="sourceLine" id="cb4-11" title="11"><span class="kw">type</span> <span class="dt">LHash</span> <span class="fu">=</span> <span class="dt">M.Map</span> <span class="dt">Char</span> <span class="dt">Word64</span></a>
-<a class="sourceLine" id="cb4-12" title="12"></a>
-<a class="sourceLine" id="cb4-13" title="13"><span class="kw">type</span> <span class="dt">WProto</span> <span class="fu">=</span> <span class="dt">T.Text</span></a>
-<a class="sourceLine" id="cb4-14" title="14"><span class="kw">type</span> <span class="dt">WHash</span> <span class="fu">=</span> <span class="dt">M.Map</span> <span class="dt">WProto</span> <span class="dt">Word64</span></a>
-<a class="sourceLine" id="cb4-15" title="15"><span class="kw">data</span> <span class="dt">WFSM</span></a>
-<a class="sourceLine" id="cb4-16" title="16">  <span class="fu">=</span> <span class="dt">WordIn</span></a>
-<a class="sourceLine" id="cb4-17" title="17">  <span class="fu">|</span> <span class="dt">WordOutMaybe</span></a>
-<a class="sourceLine" id="cb4-18" title="18">  <span class="fu">|</span> <span class="dt">WordOut</span></a>
-<a class="sourceLine" id="cb4-19" title="19">  <span class="kw">deriving</span> (<span class="dt">Eq</span>)</a>
-<a class="sourceLine" id="cb4-20" title="20"><span class="kw">data</span> <span class="dt">WBuild</span> <span class="fu">=</span> <span class="dt">WBuild</span> <span class="dt">WFSM</span> <span class="dt">WProto</span> <span class="dt">WHash</span></a>
-<a class="sourceLine" id="cb4-21" title="21"></a>
-<a class="sourceLine" id="cb4-22" title="22"><span class="ot">freqL ::</span> <span class="dt">T.Text</span> <span class="ot">-&gt;</span> <span class="dt">LHash</span></a>
-<a class="sourceLine" id="cb4-23" title="23">freqL <span class="fu">=</span> T.foldl step occs</a>
-<a class="sourceLine" id="cb4-24" title="24">  <span class="kw">where</span></a>
-<a class="sourceLine" id="cb4-25" title="25">  occs <span class="fu">=</span> M.empty</a>
-<a class="sourceLine" id="cb4-26" title="26">  step lhash c</a>
-<a class="sourceLine" id="cb4-27" title="27">    <span class="co">-- | isAlpha c = M.insertWith (+) (toLower c) 1 lhash -- this picks up non-ASCII 'word' letters, even korean/japanese!</span></a>
-<a class="sourceLine" id="cb4-28" title="28">    <span class="fu">|</span> <span class="fu">elem</span> c ([<span class="ch">'a'</span><span class="fu">..</span><span class="ch">'z'</span>] <span class="fu">++</span> [<span class="ch">'A'</span><span class="fu">..</span><span class="ch">'Z'</span>]) <span class="fu">=</span> M.insertWith (<span class="fu">+</span>) (<span class="fu">toLower</span> c) <span class="dv">1</span> lhash</a>
-<a class="sourceLine" id="cb4-29" title="29">    <span class="fu">|</span> <span class="fu">elem</span> c (<span class="fu">concat</span> puncKeys) <span class="fu">=</span> <span class="kw">case</span> <span class="fu">lookup</span> c puncTuples <span class="kw">of</span></a>
-<a class="sourceLine" id="cb4-30" title="30">      <span class="dt">Just</span> pkey <span class="ot">-&gt;</span> M.insertWith (<span class="fu">+</span>) pkey <span class="dv">1</span> lhash</a>
-<a class="sourceLine" id="cb4-31" title="31">      <span class="dt">Nothing</span> <span class="ot">-&gt;</span> lhash</a>
-<a class="sourceLine" id="cb4-32" title="32">    <span class="fu">|</span> <span class="fu">otherwise</span> <span class="fu">=</span> lhash</a>
-<a class="sourceLine" id="cb4-33" title="33">  puncKeys <span class="fu">=</span></a>
-<a class="sourceLine" id="cb4-34" title="34">    [ <span class="st">&quot;`~&quot;</span></a>
-<a class="sourceLine" id="cb4-35" title="35">    , <span class="st">&quot;-_&quot;</span></a>
-<a class="sourceLine" id="cb4-36" title="36">    , <span class="st">&quot;=+&quot;</span></a>
-<a class="sourceLine" id="cb4-37" title="37">    , <span class="st">&quot;[{&quot;</span></a>
-<a class="sourceLine" id="cb4-38" title="38">    , <span class="st">&quot;}]&quot;</span></a>
-<a class="sourceLine" id="cb4-39" title="39">    , <span class="st">&quot;\\|&quot;</span></a>
-<a class="sourceLine" id="cb4-40" title="40">    , <span class="st">&quot;;:&quot;</span></a>
-<a class="sourceLine" id="cb4-41" title="41">    , <span class="st">&quot;'\&quot;&quot;</span></a>
-<a class="sourceLine" id="cb4-42" title="42">    , <span class="st">&quot;,&lt;&quot;</span></a>
-<a class="sourceLine" id="cb4-43" title="43">    , <span class="st">&quot;.&gt;&quot;</span></a>
-<a class="sourceLine" id="cb4-44" title="44">    , <span class="st">&quot;/?&quot;</span></a>
-<a class="sourceLine" id="cb4-45" title="45">    ]</a>
-<a class="sourceLine" id="cb4-46" title="46">  puncTuples <span class="fu">=</span> <span class="fu">concatMap</span> (\keyPair <span class="ot">-&gt;</span> [(<span class="fu">head</span> keyPair, <span class="fu">head</span> keyPair), (<span class="fu">last</span> keyPair, <span class="fu">head</span> keyPair)]) puncKeys</a>
-<a class="sourceLine" id="cb4-47" title="47"></a>
-<a class="sourceLine" id="cb4-48" title="48"><span class="ot">freqW ::</span> <span class="dt">T.Text</span> <span class="ot">-&gt;</span> <span class="dt">WHash</span></a>
-<a class="sourceLine" id="cb4-49" title="49">freqW <span class="fu">=</span> (\(<span class="dt">WBuild</span> _ _ whash) <span class="ot">-&gt;</span> whash) <span class="fu">.</span> T.foldl step occs</a>
-<a class="sourceLine" id="cb4-50" title="50">  <span class="kw">where</span></a>
-<a class="sourceLine" id="cb4-51" title="51">  <span class="co">-- Use WordOut as the initial state for WFSM, because we're starting from</span></a>
-<a class="sourceLine" id="cb4-52" title="52">  <span class="co">-- nothing!</span></a>
-<a class="sourceLine" id="cb4-53" title="53"><span class="ot">  occs ::</span> <span class="dt">WBuild</span></a>
-<a class="sourceLine" id="cb4-54" title="54">  occs <span class="fu">=</span> <span class="dt">WBuild</span> <span class="dt">WordOut</span> T.empty M.empty</a>
-<a class="sourceLine" id="cb4-55" title="55">  step wb<span class="fu">@</span>(<span class="dt">WBuild</span> wfsm wproto whash) c</a>
-<a class="sourceLine" id="cb4-56" title="56">    <span class="co">-- Letter.</span></a>
-<a class="sourceLine" id="cb4-57" title="57">    <span class="fu">|</span> <span class="fu">isAlpha</span> c <span class="fu">=</span> <span class="kw">case</span> wfsm <span class="kw">of</span></a>
-<a class="sourceLine" id="cb4-58" title="58">      <span class="co">-- This is when we first encounter a letter.</span></a>
-<a class="sourceLine" id="cb4-59" title="59">      <span class="dt">WordOut</span> <span class="ot">-&gt;</span> <span class="dt">WBuild</span> <span class="dt">WordIn</span> (T.singleton c') whash</a>
-<a class="sourceLine" id="cb4-60" title="60">      _ <span class="ot">-&gt;</span> <span class="dt">WBuild</span> <span class="dt">WordIn</span> (T.snoc wproto c') whash</a>
-<a class="sourceLine" id="cb4-61" title="61">    <span class="co">-- Apostrophe. We ignore all leading apostrophes and only store</span></a>
-<a class="sourceLine" id="cb4-62" title="62">    <span class="co">-- apostrophes at the end of a word, such as &quot;goin'&quot;.</span></a>
-<a class="sourceLine" id="cb4-63" title="63">    <span class="fu">|</span> c <span class="fu">==</span> <span class="ch">'\''</span> <span class="fu">=</span> <span class="kw">case</span> wfsm <span class="kw">of</span></a>
-<a class="sourceLine" id="cb4-64" title="64">      <span class="co">-- This is when we encounter an apostrophe either at the middle or</span></a>
-<a class="sourceLine" id="cb4-65" title="65">      <span class="co">-- end of a word.</span></a>
-<a class="sourceLine" id="cb4-66" title="66">      <span class="dt">WordIn</span> <span class="ot">-&gt;</span> <span class="dt">WBuild</span> <span class="dt">WordOutMaybe</span> (T.snoc wproto c') whash</a>
-<a class="sourceLine" id="cb4-67" title="67">      <span class="co">-- E.g., &quot;goin''&quot; (a contracted &quot;goin''&quot; ending with a nested inner</span></a>
-<a class="sourceLine" id="cb4-68" title="68">      <span class="co">-- quote). We store it as &quot;goin'&quot;.</span></a>
-<a class="sourceLine" id="cb4-69" title="69">      <span class="dt">WordOutMaybe</span> <span class="ot">-&gt;</span> <span class="dt">WBuild</span> <span class="dt">WordOut</span> T.empty</a>
-<a class="sourceLine" id="cb4-70" title="70">        <span class="fu">$</span> M.insertWith (<span class="fu">+</span>) wproto <span class="dv">1</span> whash</a>
-<a class="sourceLine" id="cb4-71" title="71">      <span class="co">-- Already out of a word area, such as a space character. We do</span></a>
-<a class="sourceLine" id="cb4-72" title="72">      <span class="co">-- nothing.</span></a>
-<a class="sourceLine" id="cb4-73" title="73">      <span class="dt">WordOut</span> <span class="ot">-&gt;</span> wb</a>
-<a class="sourceLine" id="cb4-74" title="74">    <span class="co">-- If we're looking at neither a letter nor an apostrophe.</span></a>
-<a class="sourceLine" id="cb4-75" title="75">    <span class="fu">|</span> <span class="fu">otherwise</span> <span class="fu">=</span> <span class="kw">case</span> wfsm <span class="kw">of</span></a>
-<a class="sourceLine" id="cb4-76" title="76">      <span class="co">-- A series of nonsense chars; ignore.</span></a>
-<a class="sourceLine" id="cb4-77" title="77">      <span class="dt">WordOut</span> <span class="ot">-&gt;</span> wb</a>
-<a class="sourceLine" id="cb4-78" title="78">      <span class="co">-- End of a word.</span></a>
-<a class="sourceLine" id="cb4-79" title="79">      _ <span class="ot">-&gt;</span> <span class="dt">WBuild</span> <span class="dt">WordOut</span> T.empty</a>
-<a class="sourceLine" id="cb4-80" title="80">        <span class="fu">$</span> M.insertWith (<span class="fu">+</span>) wproto <span class="dv">1</span> whash</a>
-<a class="sourceLine" id="cb4-81" title="81">    <span class="kw">where</span></a>
-<a class="sourceLine" id="cb4-82" title="82">    c' <span class="fu">=</span> <span class="fu">toLower</span> c</a>
-<a class="sourceLine" id="cb4-83" title="83"></a>
-<a class="sourceLine" id="cb4-84" title="84"><span class="ot">dispFreqL ::</span> <span class="dt">LHash</span> <span class="ot">-&gt;</span> <span class="dt">IO</span> ()</a>
-<a class="sourceLine" id="cb4-85" title="85">dispFreqL lhash <span class="fu">=</span> <span class="fu">mapM_</span> f <span class="fu">.</span> <span class="fu">reverse</span> <span class="fu">.</span> sortBy (comparing <span class="fu">snd</span>) <span class="fu">$</span> M.toList lhash</a>
-<a class="sourceLine" id="cb4-86" title="86">  <span class="kw">where</span></a>
-<a class="sourceLine" id="cb4-87" title="87"><span class="ot">  total ::</span> <span class="dt">Word64</span></a>
-<a class="sourceLine" id="cb4-88" title="88">  total <span class="fu">=</span> <span class="fu">sum</span> <span class="fu">$</span> M.elems lhash</a>
-<a class="sourceLine" id="cb4-89" title="89"><span class="ot">  f ::</span> (<span class="dt">Char</span>, <span class="dt">Word64</span>) <span class="ot">-&gt;</span> <span class="dt">IO</span> ()</a>
-<a class="sourceLine" id="cb4-90" title="90">  f (c, n) <span class="fu">=</span> <span class="fu">putStrLn</span> <span class="fu">$</span> msg1 <span class="fu">++</span> msg2 <span class="fu">++</span> msg3</a>
-<a class="sourceLine" id="cb4-91" title="91">    <span class="kw">where</span></a>
-<a class="sourceLine" id="cb4-92" title="92"><span class="ot">    perc ::</span> <span class="dt">Double</span></a>
-<a class="sourceLine" id="cb4-93" title="93">    perc</a>
-<a class="sourceLine" id="cb4-94" title="94">      <span class="fu">|</span> total <span class="fu">==</span> <span class="dv">0</span> <span class="fu">=</span> <span class="dv">0</span></a>
-<a class="sourceLine" id="cb4-95" title="95">      <span class="fu">|</span> <span class="fu">otherwise</span> <span class="fu">=</span> (<span class="fu">fromIntegral</span> n) <span class="fu">/</span> (<span class="fu">fromIntegral</span> total) <span class="fu">*</span> <span class="dv">100</span></a>
-<a class="sourceLine" id="cb4-96" title="96">    msg1 <span class="fu">=</span> [c] <span class="fu">++</span> <span class="st">&quot; = &quot;</span></a>
-<a class="sourceLine" id="cb4-97" title="97">    msg2 <span class="fu">=</span> TP.printf <span class="st">&quot;%.2f%%&quot;</span> perc</a>
-<a class="sourceLine" id="cb4-98" title="98">    msg3 <span class="fu">=</span> <span class="st">&quot; (&quot;</span> <span class="fu">++</span> <span class="fu">show</span> n <span class="fu">++</span> <span class="st">&quot; occurrences)&quot;</span></a>
-<a class="sourceLine" id="cb4-99" title="99"></a>
-<a class="sourceLine" id="cb4-100" title="100"><span class="ot">dispFreqW ::</span> <span class="dt">WHash</span> <span class="ot">-&gt;</span> <span class="dt">IO</span> ()</a>
-<a class="sourceLine" id="cb4-101" title="101">dispFreqW whash <span class="fu">=</span> <span class="fu">mapM_</span> f <span class="fu">.</span> <span class="fu">take</span> <span class="dv">100</span> <span class="fu">.</span> <span class="fu">reverse</span> <span class="fu">.</span> sortBy (comparing <span class="fu">snd</span>) <span class="fu">$</span> M.toList whash</a>
-<a class="sourceLine" id="cb4-102" title="102">  <span class="kw">where</span></a>
-<a class="sourceLine" id="cb4-103" title="103"><span class="ot">  total ::</span> <span class="dt">Word64</span></a>
-<a class="sourceLine" id="cb4-104" title="104">  total <span class="fu">=</span> <span class="fu">sum</span> <span class="fu">$</span> M.elems whash</a>
-<a class="sourceLine" id="cb4-105" title="105"><span class="ot">  f ::</span> (<span class="dt">WProto</span>, <span class="dt">Word64</span>) <span class="ot">-&gt;</span> <span class="dt">IO</span> ()</a>
-<a class="sourceLine" id="cb4-106" title="106">  f (w, n) <span class="fu">=</span> <span class="fu">putStrLn</span> <span class="fu">$</span> msg1 <span class="fu">++</span> msg2 <span class="fu">++</span> msg3</a>
-<a class="sourceLine" id="cb4-107" title="107">    <span class="kw">where</span></a>
-<a class="sourceLine" id="cb4-108" title="108"><span class="ot">    perc ::</span> <span class="dt">Double</span></a>
-<a class="sourceLine" id="cb4-109" title="109">    perc</a>
-<a class="sourceLine" id="cb4-110" title="110">      <span class="fu">|</span> total <span class="fu">==</span> <span class="dv">0</span> <span class="fu">=</span> <span class="dv">0</span></a>
-<a class="sourceLine" id="cb4-111" title="111">      <span class="fu">|</span> <span class="fu">otherwise</span> <span class="fu">=</span> (<span class="fu">fromIntegral</span> n) <span class="fu">/</span> (<span class="fu">fromIntegral</span> total) <span class="fu">*</span> <span class="dv">100</span></a>
-<a class="sourceLine" id="cb4-112" title="112">    msg1 <span class="fu">=</span> T.unpack w <span class="fu">++</span> <span class="st">&quot; = &quot;</span></a>
-<a class="sourceLine" id="cb4-113" title="113">    msg2 <span class="fu">=</span> TP.printf <span class="st">&quot;%.2f%%&quot;</span> perc</a>
-<a class="sourceLine" id="cb4-114" title="114">    msg3 <span class="fu">=</span> <span class="st">&quot; (&quot;</span> <span class="fu">++</span> <span class="fu">show</span> n <span class="fu">++</span> <span class="st">&quot; occurrences)&quot;</span></a></code></pre></div>
+<div class="sourceCode" id="cb4" data-input="code/toy/text-freq/TextFreq.hs"><pre class="sourceCode numberSource numberLines haskell"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">module</span> <span class="dt">TextFreq</span> <span class="kw">where</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a></span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="kw">import</span> <span class="dt">Data.Char</span></span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="kw">import</span> <span class="dt">Data.List</span></span>
+<span id="cb4-5"><a href="#cb4-5"></a><span class="kw">import</span> <span class="kw">qualified</span> <span class="dt">Data.Map.Strict</span> <span class="kw">as</span> <span class="dt">M</span></span>
+<span id="cb4-6"><a href="#cb4-6"></a><span class="kw">import</span> <span class="dt">Data.Ord</span> (comparing)</span>
+<span id="cb4-7"><a href="#cb4-7"></a><span class="kw">import</span> <span class="kw">qualified</span> <span class="dt">Data.Text.Lazy</span> <span class="kw">as</span> <span class="dt">T</span></span>
+<span id="cb4-8"><a href="#cb4-8"></a><span class="kw">import</span> <span class="dt">Data.Word</span></span>
+<span id="cb4-9"><a href="#cb4-9"></a><span class="kw">import</span> <span class="kw">qualified</span> <span class="dt">Text.Printf</span> <span class="kw">as</span> <span class="dt">TP</span></span>
+<span id="cb4-10"><a href="#cb4-10"></a></span>
+<span id="cb4-11"><a href="#cb4-11"></a><span class="kw">type</span> <span class="dt">LHash</span> <span class="ot">=</span> <span class="dt">M.Map</span> <span class="dt">Char</span> <span class="dt">Word64</span></span>
+<span id="cb4-12"><a href="#cb4-12"></a></span>
+<span id="cb4-13"><a href="#cb4-13"></a><span class="kw">type</span> <span class="dt">WProto</span> <span class="ot">=</span> <span class="dt">T.Text</span></span>
+<span id="cb4-14"><a href="#cb4-14"></a><span class="kw">type</span> <span class="dt">WHash</span> <span class="ot">=</span> <span class="dt">M.Map</span> <span class="dt">WProto</span> <span class="dt">Word64</span></span>
+<span id="cb4-15"><a href="#cb4-15"></a><span class="kw">data</span> <span class="dt">WFSM</span></span>
+<span id="cb4-16"><a href="#cb4-16"></a>  <span class="ot">=</span> <span class="dt">WordIn</span></span>
+<span id="cb4-17"><a href="#cb4-17"></a>  <span class="op">|</span> <span class="dt">WordOutMaybe</span></span>
+<span id="cb4-18"><a href="#cb4-18"></a>  <span class="op">|</span> <span class="dt">WordOut</span></span>
+<span id="cb4-19"><a href="#cb4-19"></a>  <span class="kw">deriving</span> (<span class="dt">Eq</span>)</span>
+<span id="cb4-20"><a href="#cb4-20"></a><span class="kw">data</span> <span class="dt">WBuild</span> <span class="ot">=</span> <span class="dt">WBuild</span> <span class="dt">WFSM</span> <span class="dt">WProto</span> <span class="dt">WHash</span></span>
+<span id="cb4-21"><a href="#cb4-21"></a></span>
+<span id="cb4-22"><a href="#cb4-22"></a><span class="ot">freqL ::</span> <span class="dt">T.Text</span> <span class="ot">-&gt;</span> <span class="dt">LHash</span></span>
+<span id="cb4-23"><a href="#cb4-23"></a>freqL <span class="ot">=</span> T.foldl step occs</span>
+<span id="cb4-24"><a href="#cb4-24"></a>  <span class="kw">where</span></span>
+<span id="cb4-25"><a href="#cb4-25"></a>  occs <span class="ot">=</span> M.empty</span>
+<span id="cb4-26"><a href="#cb4-26"></a>  step lhash c</span>
+<span id="cb4-27"><a href="#cb4-27"></a>    <span class="co">-- | isAlpha c = M.insertWith (+) (toLower c) 1 lhash -- this picks up non-ASCII 'word' letters, even korean/japanese!</span></span>
+<span id="cb4-28"><a href="#cb4-28"></a>    <span class="op">|</span> <span class="fu">elem</span> c ([<span class="ch">'a'</span><span class="op">..</span><span class="ch">'z'</span>] <span class="op">++</span> [<span class="ch">'A'</span><span class="op">..</span><span class="ch">'Z'</span>]) <span class="ot">=</span> M.insertWith (<span class="op">+</span>) (<span class="fu">toLower</span> c) <span class="dv">1</span> lhash</span>
+<span id="cb4-29"><a href="#cb4-29"></a>    <span class="op">|</span> <span class="fu">elem</span> c (<span class="fu">concat</span> puncKeys) <span class="ot">=</span> <span class="kw">case</span> <span class="fu">lookup</span> c puncTuples <span class="kw">of</span></span>
+<span id="cb4-30"><a href="#cb4-30"></a>      <span class="dt">Just</span> pkey <span class="ot">-&gt;</span> M.insertWith (<span class="op">+</span>) pkey <span class="dv">1</span> lhash</span>
+<span id="cb4-31"><a href="#cb4-31"></a>      <span class="dt">Nothing</span> <span class="ot">-&gt;</span> lhash</span>
+<span id="cb4-32"><a href="#cb4-32"></a>    <span class="op">|</span> <span class="fu">otherwise</span> <span class="ot">=</span> lhash</span>
+<span id="cb4-33"><a href="#cb4-33"></a>  puncKeys <span class="ot">=</span></span>
+<span id="cb4-34"><a href="#cb4-34"></a>    [ <span class="st">&quot;`~&quot;</span></span>
+<span id="cb4-35"><a href="#cb4-35"></a>    , <span class="st">&quot;-_&quot;</span></span>
+<span id="cb4-36"><a href="#cb4-36"></a>    , <span class="st">&quot;=+&quot;</span></span>
+<span id="cb4-37"><a href="#cb4-37"></a>    , <span class="st">&quot;[{&quot;</span></span>
+<span id="cb4-38"><a href="#cb4-38"></a>    , <span class="st">&quot;}]&quot;</span></span>
+<span id="cb4-39"><a href="#cb4-39"></a>    , <span class="st">&quot;\\|&quot;</span></span>
+<span id="cb4-40"><a href="#cb4-40"></a>    , <span class="st">&quot;;:&quot;</span></span>
+<span id="cb4-41"><a href="#cb4-41"></a>    , <span class="st">&quot;'\&quot;&quot;</span></span>
+<span id="cb4-42"><a href="#cb4-42"></a>    , <span class="st">&quot;,&lt;&quot;</span></span>
+<span id="cb4-43"><a href="#cb4-43"></a>    , <span class="st">&quot;.&gt;&quot;</span></span>
+<span id="cb4-44"><a href="#cb4-44"></a>    , <span class="st">&quot;/?&quot;</span></span>
+<span id="cb4-45"><a href="#cb4-45"></a>    ]</span>
+<span id="cb4-46"><a href="#cb4-46"></a>  puncTuples <span class="ot">=</span> <span class="fu">concatMap</span> (\keyPair <span class="ot">-&gt;</span> [(<span class="fu">head</span> keyPair, <span class="fu">head</span> keyPair), (<span class="fu">last</span> keyPair, <span class="fu">head</span> keyPair)]) puncKeys</span>
+<span id="cb4-47"><a href="#cb4-47"></a></span>
+<span id="cb4-48"><a href="#cb4-48"></a><span class="ot">freqW ::</span> <span class="dt">T.Text</span> <span class="ot">-&gt;</span> <span class="dt">WHash</span></span>
+<span id="cb4-49"><a href="#cb4-49"></a>freqW <span class="ot">=</span> (\(<span class="dt">WBuild</span> _ _ whash) <span class="ot">-&gt;</span> whash) <span class="op">.</span> T.foldl step occs</span>
+<span id="cb4-50"><a href="#cb4-50"></a>  <span class="kw">where</span></span>
+<span id="cb4-51"><a href="#cb4-51"></a>  <span class="co">-- Use WordOut as the initial state for WFSM, because we're starting from</span></span>
+<span id="cb4-52"><a href="#cb4-52"></a>  <span class="co">-- nothing!</span></span>
+<span id="cb4-53"><a href="#cb4-53"></a><span class="ot">  occs ::</span> <span class="dt">WBuild</span></span>
+<span id="cb4-54"><a href="#cb4-54"></a>  occs <span class="ot">=</span> <span class="dt">WBuild</span> <span class="dt">WordOut</span> T.empty M.empty</span>
+<span id="cb4-55"><a href="#cb4-55"></a>  step wb<span class="op">@</span>(<span class="dt">WBuild</span> wfsm wproto whash) c</span>
+<span id="cb4-56"><a href="#cb4-56"></a>    <span class="co">-- Letter.</span></span>
+<span id="cb4-57"><a href="#cb4-57"></a>    <span class="op">|</span> <span class="fu">isAlpha</span> c <span class="ot">=</span> <span class="kw">case</span> wfsm <span class="kw">of</span></span>
+<span id="cb4-58"><a href="#cb4-58"></a>      <span class="co">-- This is when we first encounter a letter.</span></span>
+<span id="cb4-59"><a href="#cb4-59"></a>      <span class="dt">WordOut</span> <span class="ot">-&gt;</span> <span class="dt">WBuild</span> <span class="dt">WordIn</span> (T.singleton c') whash</span>
+<span id="cb4-60"><a href="#cb4-60"></a>      _ <span class="ot">-&gt;</span> <span class="dt">WBuild</span> <span class="dt">WordIn</span> (T.snoc wproto c') whash</span>
+<span id="cb4-61"><a href="#cb4-61"></a>    <span class="co">-- Apostrophe. We ignore all leading apostrophes and only store</span></span>
+<span id="cb4-62"><a href="#cb4-62"></a>    <span class="co">-- apostrophes at the end of a word, such as &quot;goin'&quot;.</span></span>
+<span id="cb4-63"><a href="#cb4-63"></a>    <span class="op">|</span> c <span class="op">==</span> <span class="ch">'\''</span> <span class="ot">=</span> <span class="kw">case</span> wfsm <span class="kw">of</span></span>
+<span id="cb4-64"><a href="#cb4-64"></a>      <span class="co">-- This is when we encounter an apostrophe either at the middle or</span></span>
+<span id="cb4-65"><a href="#cb4-65"></a>      <span class="co">-- end of a word.</span></span>
+<span id="cb4-66"><a href="#cb4-66"></a>      <span class="dt">WordIn</span> <span class="ot">-&gt;</span> <span class="dt">WBuild</span> <span class="dt">WordOutMaybe</span> (T.snoc wproto c') whash</span>
+<span id="cb4-67"><a href="#cb4-67"></a>      <span class="co">-- E.g., &quot;goin''&quot; (a contracted &quot;goin''&quot; ending with a nested inner</span></span>
+<span id="cb4-68"><a href="#cb4-68"></a>      <span class="co">-- quote). We store it as &quot;goin'&quot;.</span></span>
+<span id="cb4-69"><a href="#cb4-69"></a>      <span class="dt">WordOutMaybe</span> <span class="ot">-&gt;</span> <span class="dt">WBuild</span> <span class="dt">WordOut</span> T.empty</span>
+<span id="cb4-70"><a href="#cb4-70"></a>        <span class="op">$</span> M.insertWith (<span class="op">+</span>) wproto <span class="dv">1</span> whash</span>
+<span id="cb4-71"><a href="#cb4-71"></a>      <span class="co">-- Already out of a word area, such as a space character. We do</span></span>
+<span id="cb4-72"><a href="#cb4-72"></a>      <span class="co">-- nothing.</span></span>
+<span id="cb4-73"><a href="#cb4-73"></a>      <span class="dt">WordOut</span> <span class="ot">-&gt;</span> wb</span>
+<span id="cb4-74"><a href="#cb4-74"></a>    <span class="co">-- If we're looking at neither a letter nor an apostrophe.</span></span>
+<span id="cb4-75"><a href="#cb4-75"></a>    <span class="op">|</span> <span class="fu">otherwise</span> <span class="ot">=</span> <span class="kw">case</span> wfsm <span class="kw">of</span></span>
+<span id="cb4-76"><a href="#cb4-76"></a>      <span class="co">-- A series of nonsense chars; ignore.</span></span>
+<span id="cb4-77"><a href="#cb4-77"></a>      <span class="dt">WordOut</span> <span class="ot">-&gt;</span> wb</span>
+<span id="cb4-78"><a href="#cb4-78"></a>      <span class="co">-- End of a word.</span></span>
+<span id="cb4-79"><a href="#cb4-79"></a>      _ <span class="ot">-&gt;</span> <span class="dt">WBuild</span> <span class="dt">WordOut</span> T.empty</span>
+<span id="cb4-80"><a href="#cb4-80"></a>        <span class="op">$</span> M.insertWith (<span class="op">+</span>) wproto <span class="dv">1</span> whash</span>
+<span id="cb4-81"><a href="#cb4-81"></a>    <span class="kw">where</span></span>
+<span id="cb4-82"><a href="#cb4-82"></a>    c' <span class="ot">=</span> <span class="fu">toLower</span> c</span>
+<span id="cb4-83"><a href="#cb4-83"></a></span>
+<span id="cb4-84"><a href="#cb4-84"></a><span class="ot">dispFreqL ::</span> <span class="dt">LHash</span> <span class="ot">-&gt;</span> <span class="dt">IO</span> ()</span>
+<span id="cb4-85"><a href="#cb4-85"></a>dispFreqL lhash <span class="ot">=</span> <span class="fu">mapM_</span> f <span class="op">.</span> <span class="fu">reverse</span> <span class="op">.</span> sortBy (comparing <span class="fu">snd</span>) <span class="op">$</span> M.toList lhash</span>
+<span id="cb4-86"><a href="#cb4-86"></a>  <span class="kw">where</span></span>
+<span id="cb4-87"><a href="#cb4-87"></a><span class="ot">  total ::</span> <span class="dt">Word64</span></span>
+<span id="cb4-88"><a href="#cb4-88"></a>  total <span class="ot">=</span> <span class="fu">sum</span> <span class="op">$</span> M.elems lhash</span>
+<span id="cb4-89"><a href="#cb4-89"></a><span class="ot">  f ::</span> (<span class="dt">Char</span>, <span class="dt">Word64</span>) <span class="ot">-&gt;</span> <span class="dt">IO</span> ()</span>
+<span id="cb4-90"><a href="#cb4-90"></a>  f (c, n) <span class="ot">=</span> <span class="fu">putStrLn</span> <span class="op">$</span> msg1 <span class="op">++</span> msg2 <span class="op">++</span> msg3</span>
+<span id="cb4-91"><a href="#cb4-91"></a>    <span class="kw">where</span></span>
+<span id="cb4-92"><a href="#cb4-92"></a><span class="ot">    perc ::</span> <span class="dt">Double</span></span>
+<span id="cb4-93"><a href="#cb4-93"></a>    perc</span>
+<span id="cb4-94"><a href="#cb4-94"></a>      <span class="op">|</span> total <span class="op">==</span> <span class="dv">0</span> <span class="ot">=</span> <span class="dv">0</span></span>
+<span id="cb4-95"><a href="#cb4-95"></a>      <span class="op">|</span> <span class="fu">otherwise</span> <span class="ot">=</span> (<span class="fu">fromIntegral</span> n) <span class="op">/</span> (<span class="fu">fromIntegral</span> total) <span class="op">*</span> <span class="dv">100</span></span>
+<span id="cb4-96"><a href="#cb4-96"></a>    msg1 <span class="ot">=</span> [c] <span class="op">++</span> <span class="st">&quot; = &quot;</span></span>
+<span id="cb4-97"><a href="#cb4-97"></a>    msg2 <span class="ot">=</span> TP.printf <span class="st">&quot;%.2f%%&quot;</span> perc</span>
+<span id="cb4-98"><a href="#cb4-98"></a>    msg3 <span class="ot">=</span> <span class="st">&quot; (&quot;</span> <span class="op">++</span> <span class="fu">show</span> n <span class="op">++</span> <span class="st">&quot; occurrences)&quot;</span></span>
+<span id="cb4-99"><a href="#cb4-99"></a></span>
+<span id="cb4-100"><a href="#cb4-100"></a><span class="ot">dispFreqW ::</span> <span class="dt">WHash</span> <span class="ot">-&gt;</span> <span class="dt">IO</span> ()</span>
+<span id="cb4-101"><a href="#cb4-101"></a>dispFreqW whash <span class="ot">=</span> <span class="fu">mapM_</span> f <span class="op">.</span> <span class="fu">take</span> <span class="dv">100</span> <span class="op">.</span> <span class="fu">reverse</span> <span class="op">.</span> sortBy (comparing <span class="fu">snd</span>) <span class="op">$</span> M.toList whash</span>
+<span id="cb4-102"><a href="#cb4-102"></a>  <span class="kw">where</span></span>
+<span id="cb4-103"><a href="#cb4-103"></a><span class="ot">  total ::</span> <span class="dt">Word64</span></span>
+<span id="cb4-104"><a href="#cb4-104"></a>  total <span class="ot">=</span> <span class="fu">sum</span> <span class="op">$</span> M.elems whash</span>
+<span id="cb4-105"><a href="#cb4-105"></a><span class="ot">  f ::</span> (<span class="dt">WProto</span>, <span class="dt">Word64</span>) <span class="ot">-&gt;</span> <span class="dt">IO</span> ()</span>
+<span id="cb4-106"><a href="#cb4-106"></a>  f (w, n) <span class="ot">=</span> <span class="fu">putStrLn</span> <span class="op">$</span> msg1 <span class="op">++</span> msg2 <span class="op">++</span> msg3</span>
+<span id="cb4-107"><a href="#cb4-107"></a>    <span class="kw">where</span></span>
+<span id="cb4-108"><a href="#cb4-108"></a><span class="ot">    perc ::</span> <span class="dt">Double</span></span>
+<span id="cb4-109"><a href="#cb4-109"></a>    perc</span>
+<span id="cb4-110"><a href="#cb4-110"></a>      <span class="op">|</span> total <span class="op">==</span> <span class="dv">0</span> <span class="ot">=</span> <span class="dv">0</span></span>
+<span id="cb4-111"><a href="#cb4-111"></a>      <span class="op">|</span> <span class="fu">otherwise</span> <span class="ot">=</span> (<span class="fu">fromIntegral</span> n) <span class="op">/</span> (<span class="fu">fromIntegral</span> total) <span class="op">*</span> <span class="dv">100</span></span>
+<span id="cb4-112"><a href="#cb4-112"></a>    msg1 <span class="ot">=</span> T.unpack w <span class="op">++</span> <span class="st">&quot; = &quot;</span></span>
+<span id="cb4-113"><a href="#cb4-113"></a>    msg2 <span class="ot">=</span> TP.printf <span class="st">&quot;%.2f%%&quot;</span> perc</span>
+<span id="cb4-114"><a href="#cb4-114"></a>    msg3 <span class="ot">=</span> <span class="st">&quot; (&quot;</span> <span class="op">++</span> <span class="fu">show</span> n <span class="op">++</span> <span class="st">&quot; occurrences)&quot;</span></span></code></pre></div>
 </div>
 <div class="code-and-raw lineCntMax100">
 <div class="raw-link sourceCode">
 <table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/toy/text-freq/analyze.hs" mimetype="text/plain">analyze.hs</a></code></pre></td></tr></tbody></table>
 </div>
-<div class="sourceCode" id="cb5" data-input="code/toy/text-freq/analyze.hs"><pre class="sourceCode numberSource numberLines haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb5-1" title="1"><span class="kw">module</span> <span class="dt">Main</span> <span class="kw">where</span></a>
-<a class="sourceLine" id="cb5-2" title="2"></a>
-<a class="sourceLine" id="cb5-3" title="3"><span class="kw">import</span> <span class="dt">Control.Monad</span></a>
-<a class="sourceLine" id="cb5-4" title="4"><span class="kw">import</span> <span class="kw">qualified</span> <span class="dt">Data.Text.Lazy</span> <span class="kw">as</span> <span class="dt">T</span></a>
-<a class="sourceLine" id="cb5-5" title="5"><span class="kw">import</span> <span class="kw">qualified</span> <span class="dt">Data.Text.Lazy.IO</span> <span class="kw">as</span> <span class="dt">T</span></a>
-<a class="sourceLine" id="cb5-6" title="6"></a>
-<a class="sourceLine" id="cb5-7" title="7"><span class="kw">import</span> <span class="dt">TextFreq</span></a>
-<a class="sourceLine" id="cb5-8" title="8"></a>
-<a class="sourceLine" id="cb5-9" title="9"><span class="ot">main ::</span> <span class="dt">IO</span> ()</a>
-<a class="sourceLine" id="cb5-10" title="10">main <span class="fu">=</span> <span class="kw">do</span></a>
-<a class="sourceLine" id="cb5-11" title="11">  fileList <span class="ot">&lt;-</span> T.getContents</a>
-<a class="sourceLine" id="cb5-12" title="12">  src <span class="ot">&lt;-</span> liftM T.concat <span class="fu">.</span> <span class="fu">mapM</span> (T.readFile <span class="fu">.</span> T.unpack) <span class="fu">$</span> T.lines fileList</a>
-<a class="sourceLine" id="cb5-13" title="13">  dispFreqL <span class="fu">$</span> freqL src</a>
-<a class="sourceLine" id="cb5-14" title="14">  <span class="fu">putStrLn</span> <span class="fu">$</span> <span class="fu">replicate</span> <span class="dv">80</span> <span class="ch">'-'</span></a>
-<a class="sourceLine" id="cb5-15" title="15">  dispFreqW <span class="fu">$</span> freqW src</a></code></pre></div>
+<div class="sourceCode" id="cb5" data-input="code/toy/text-freq/analyze.hs"><pre class="sourceCode numberSource numberLines haskell"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">module</span> <span class="dt">Main</span> <span class="kw">where</span></span>
+<span id="cb5-2"><a href="#cb5-2"></a></span>
+<span id="cb5-3"><a href="#cb5-3"></a><span class="kw">import</span> <span class="dt">Control.Monad</span></span>
+<span id="cb5-4"><a href="#cb5-4"></a><span class="kw">import</span> <span class="kw">qualified</span> <span class="dt">Data.Text.Lazy</span> <span class="kw">as</span> <span class="dt">T</span></span>
+<span id="cb5-5"><a href="#cb5-5"></a><span class="kw">import</span> <span class="kw">qualified</span> <span class="dt">Data.Text.Lazy.IO</span> <span class="kw">as</span> <span class="dt">T</span></span>
+<span id="cb5-6"><a href="#cb5-6"></a></span>
+<span id="cb5-7"><a href="#cb5-7"></a><span class="kw">import</span> <span class="dt">TextFreq</span></span>
+<span id="cb5-8"><a href="#cb5-8"></a></span>
+<span id="cb5-9"><a href="#cb5-9"></a><span class="ot">main ::</span> <span class="dt">IO</span> ()</span>
+<span id="cb5-10"><a href="#cb5-10"></a>main <span class="ot">=</span> <span class="kw">do</span></span>
+<span id="cb5-11"><a href="#cb5-11"></a>  fileList <span class="ot">&lt;-</span> T.getContents</span>
+<span id="cb5-12"><a href="#cb5-12"></a>  src <span class="ot">&lt;-</span> liftM T.concat <span class="op">.</span> <span class="fu">mapM</span> (T.readFile <span class="op">.</span> T.unpack) <span class="op">$</span> T.lines fileList</span>
+<span id="cb5-13"><a href="#cb5-13"></a>  dispFreqL <span class="op">$</span> freqL src</span>
+<span id="cb5-14"><a href="#cb5-14"></a>  <span class="fu">putStrLn</span> <span class="op">$</span> <span class="fu">replicate</span> <span class="dv">80</span> <span class="ch">'-'</span></span>
+<span id="cb5-15"><a href="#cb5-15"></a>  dispFreqW <span class="op">$</span> freqW src</span></code></pre></div>
 </div>
 <p>Here is the same run against our copy of <em>Moby Dick</em>:</p>
 <pre class="example"><code>$ ./analyze ~/pg2701.txt
@@ -922,10 +922,10 @@ eût = 0.11% (130 occurrences)
 <h2 id="conclusion">Conclusion</h2>
 <p>I hope you’ve had some fun working on these letter and word frequency problems. The word frequency problem, if you really want to do it correctly, should be handled by a parser using a robust library. By writing these programs, I learned that the <em>input</em> of a program (Unicode? ASCII only?) is just as important as its output.</p>
 <p>Happy hacking!</p>
-<section class="footnotes">
+<section class="footnotes" role="doc-endnotes">
 <hr />
 <ol>
-<li id="fn1"><p>After I receive, assemble, and acclimate myself to it, I will post a review.<a href="#fnref1" class="footnote-back">↩</a></p></li>
+<li id="fn1" role="doc-endnote"><p>After I receive, assemble, and acclimate myself to it, I will post a review.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 

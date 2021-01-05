@@ -41,7 +41,7 @@
 			<div class="info center">
 	<code class="date">2015-05-04</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2015-05-04-puzzle-srm-485-afraid-of-even.org" title="History">*</a>
 	<br>
-	<a href="../tag/programming.html">programming</a>, <a href="../tag/math.html">math</a>, <a href="../tag/haskell.html">haskell</a>, <a href="../tag/ruby.html">ruby</a>
+	<a title="All pages tagged 'programming'." href="../tag/programming.html">programming</a>, <a title="All pages tagged 'math'." href="../tag/math.html">math</a>, <a title="All pages tagged 'haskell'." href="../tag/haskell.html">haskell</a>, <a title="All pages tagged 'ruby'." href="../tag/ruby.html">ruby</a>
 </div>
 
 <h1 id="introduction">Introduction</h1>
@@ -409,45 +409,45 @@ U(AP) = \{1, 2, 3, 4, 5\}
 <div class="raw-link sourceCode">
 <table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/toy/srm485-afraid-of-even/pseudocode.txt" mimetype="text/plain">pseudocode.txt</a></code></pre></td></tr></tbody></table>
 </div>
-<div class="sourceCode" id="cb1" data-input="code/toy/srm485-afraid-of-even/pseudocode.txt"><pre class="sourceCode numberSource numberLines"><code class="sourceCode"><a class="sourceLine" id="cb1-1" title="1"># Convert MP into a possible AP.</a>
-<a class="sourceLine" id="cb1-2" title="2">def unmutate(MP)</a>
-<a class="sourceLine" id="cb1-3" title="3">	if length(MP) &lt; 4</a>
-<a class="sourceLine" id="cb1-4" title="4">		return NULL (we need at least 4 values to calculate an AP)</a>
-<a class="sourceLine" id="cb1-5" title="5">	elsif every term in MP are the same</a>
-<a class="sourceLine" id="cb1-6" title="6">		return MP (no change)</a>
-<a class="sourceLine" id="cb1-7" title="7">	elsif MP is already an arithmetic sequence (MP = AP)</a>
-<a class="sourceLine" id="cb1-8" title="8">		return MP (no change)</a>
-<a class="sourceLine" id="cb1-9" title="9">	else</a>
-<a class="sourceLine" id="cb1-10" title="10">		1) Assume every 0th, 2nd, 4th, etc. term is &quot;honest&quot; and that the rest are</a>
-<a class="sourceLine" id="cb1-11" title="11">		&quot;fake&quot;; construct a tentative AP (call it BP) with the honest terms by</a>
-<a class="sourceLine" id="cb1-12" title="12">		taking the difference between these honest terms to find the rate of change</a>
-<a class="sourceLine" id="cb1-13" title="13">		*m*, and see if mutate(BP) = MP --- if so, then return BP.</a>
-<a class="sourceLine" id="cb1-14" title="14"></a>
-<a class="sourceLine" id="cb1-15" title="15">		2) Otherwise, every 1st, 3rd, 5th, etc. term is &quot;honest&quot; --- so</a>
-<a class="sourceLine" id="cb1-16" title="16">		reconstruct BP, and check if mutate(AP) = MP (i.e., check that the</a>
-<a class="sourceLine" id="cb1-17" title="17">		dishonest terms from mutate(BP) are the same as those in the given MP).</a>
-<a class="sourceLine" id="cb1-18" title="18">		If the check fails, then we know that the input was not a true MP ---</a>
-<a class="sourceLine" id="cb1-19" title="19">		the original AP was not an arithmetic progression to begin with!</a>
-<a class="sourceLine" id="cb1-20" title="20">	end</a>
-<a class="sourceLine" id="cb1-21" title="21">end</a>
-<a class="sourceLine" id="cb1-22" title="22"></a>
-<a class="sourceLine" id="cb1-23" title="23"># Convert AP into MP</a>
-<a class="sourceLine" id="cb1-24" title="24">def mutate(AP)</a>
-<a class="sourceLine" id="cb1-25" title="25">	MP = []</a>
-<a class="sourceLine" id="cb1-26" title="26">	for every term 'a' in AP:</a>
-<a class="sourceLine" id="cb1-27" title="27">		MP.insert(make_odd(a))</a>
-<a class="sourceLine" id="cb1-28" title="28">	end</a>
-<a class="sourceLine" id="cb1-29" title="29">end</a>
-<a class="sourceLine" id="cb1-30" title="30"></a>
-<a class="sourceLine" id="cb1-31" title="31"># Divide an integer n by 2 until it becomes odd. The edge case is when n is 0,</a>
-<a class="sourceLine" id="cb1-32" title="32"># because dividing by 2 repeatedly does not change its parity.</a>
-<a class="sourceLine" id="cb1-33" title="33">def make_odd(n)</a>
-<a class="sourceLine" id="cb1-34" title="34">	if n is odd or n is 0</a>
-<a class="sourceLine" id="cb1-35" title="35">		return n</a>
-<a class="sourceLine" id="cb1-36" title="36">	else</a>
-<a class="sourceLine" id="cb1-37" title="37">		return (make_odd(n/2))</a>
-<a class="sourceLine" id="cb1-38" title="38">	end</a>
-<a class="sourceLine" id="cb1-39" title="39">end</a></code></pre></div>
+<div class="sourceCode" id="cb1" data-input="code/toy/srm485-afraid-of-even/pseudocode.txt"><pre class="sourceCode numberSource numberLines"><code class="sourceCode"><span id="cb1-1"><a href="#cb1-1"></a># Convert MP into a possible AP.</span>
+<span id="cb1-2"><a href="#cb1-2"></a>def unmutate(MP)</span>
+<span id="cb1-3"><a href="#cb1-3"></a>	if length(MP) &lt; 4</span>
+<span id="cb1-4"><a href="#cb1-4"></a>		return NULL (we need at least 4 values to calculate an AP)</span>
+<span id="cb1-5"><a href="#cb1-5"></a>	elsif every term in MP are the same</span>
+<span id="cb1-6"><a href="#cb1-6"></a>		return MP (no change)</span>
+<span id="cb1-7"><a href="#cb1-7"></a>	elsif MP is already an arithmetic sequence (MP = AP)</span>
+<span id="cb1-8"><a href="#cb1-8"></a>		return MP (no change)</span>
+<span id="cb1-9"><a href="#cb1-9"></a>	else</span>
+<span id="cb1-10"><a href="#cb1-10"></a>		1) Assume every 0th, 2nd, 4th, etc. term is &quot;honest&quot; and that the rest are</span>
+<span id="cb1-11"><a href="#cb1-11"></a>		&quot;fake&quot;; construct a tentative AP (call it BP) with the honest terms by</span>
+<span id="cb1-12"><a href="#cb1-12"></a>		taking the difference between these honest terms to find the rate of change</span>
+<span id="cb1-13"><a href="#cb1-13"></a>		*m*, and see if mutate(BP) = MP --- if so, then return BP.</span>
+<span id="cb1-14"><a href="#cb1-14"></a></span>
+<span id="cb1-15"><a href="#cb1-15"></a>		2) Otherwise, every 1st, 3rd, 5th, etc. term is &quot;honest&quot; --- so</span>
+<span id="cb1-16"><a href="#cb1-16"></a>		reconstruct BP, and check if mutate(AP) = MP (i.e., check that the</span>
+<span id="cb1-17"><a href="#cb1-17"></a>		dishonest terms from mutate(BP) are the same as those in the given MP).</span>
+<span id="cb1-18"><a href="#cb1-18"></a>		If the check fails, then we know that the input was not a true MP ---</span>
+<span id="cb1-19"><a href="#cb1-19"></a>		the original AP was not an arithmetic progression to begin with!</span>
+<span id="cb1-20"><a href="#cb1-20"></a>	end</span>
+<span id="cb1-21"><a href="#cb1-21"></a>end</span>
+<span id="cb1-22"><a href="#cb1-22"></a></span>
+<span id="cb1-23"><a href="#cb1-23"></a># Convert AP into MP</span>
+<span id="cb1-24"><a href="#cb1-24"></a>def mutate(AP)</span>
+<span id="cb1-25"><a href="#cb1-25"></a>	MP = []</span>
+<span id="cb1-26"><a href="#cb1-26"></a>	for every term 'a' in AP:</span>
+<span id="cb1-27"><a href="#cb1-27"></a>		MP.insert(make_odd(a))</span>
+<span id="cb1-28"><a href="#cb1-28"></a>	end</span>
+<span id="cb1-29"><a href="#cb1-29"></a>end</span>
+<span id="cb1-30"><a href="#cb1-30"></a></span>
+<span id="cb1-31"><a href="#cb1-31"></a># Divide an integer n by 2 until it becomes odd. The edge case is when n is 0,</span>
+<span id="cb1-32"><a href="#cb1-32"></a># because dividing by 2 repeatedly does not change its parity.</span>
+<span id="cb1-33"><a href="#cb1-33"></a>def make_odd(n)</span>
+<span id="cb1-34"><a href="#cb1-34"></a>	if n is odd or n is 0</span>
+<span id="cb1-35"><a href="#cb1-35"></a>		return n</span>
+<span id="cb1-36"><a href="#cb1-36"></a>	else</span>
+<span id="cb1-37"><a href="#cb1-37"></a>		return (make_odd(n/2))</span>
+<span id="cb1-38"><a href="#cb1-38"></a>	end</span>
+<span id="cb1-39"><a href="#cb1-39"></a>end</span></code></pre></div>
 </div>
 <p>The interesting point is in line 18; thanks to our math work, we can even declare that a given mutated sequence was somehow either tampered with, or that the original sequence was not an arithmetic progression! We can make these assertions because we’ve exhausted all possible cases of arithmetic sequences and their mutations — and if things don’t fit the way we expect them to, then the only conclusion is that the given sequence <span class="math inline">\(MP\)</span> was not a byproduct of mutating an <em>arithmetic sequence</em>, but some other kind of sequence. Behold the power of math!</p>
 <p>The other thing is that in line 34 we allow <span class="math inline">\(0\)</span> as a possible value in <span class="math inline">\(AP\)</span>. This means that after a mutation, we might still have an even number (<span class="math inline">\(0\)</span>) in <span class="math inline">\(MP\)</span>! Although this sounds like it would break all of the mathematic discussion we’ve had so far, it does not — the proof is in the Haskell code below. The short answer is that a <span class="math inline">\(0\)</span> is harmless because it shares the same quality — immutability — with all other originally odd terms in <span class="math inline">\(AP\)</span>; thus, treating it as an “odd” number does not change our logic.</p>
@@ -456,157 +456,157 @@ U(AP) = \{1, 2, 3, 4, 5\}
 <div class="raw-link sourceCode">
 <table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/toy/srm485-afraid-of-even/Unmutate.hs" mimetype="text/plain">Unmutate.hs</a></code></pre></td></tr></tbody></table>
 </div>
-<div class="sourceCode" id="cb2" data-input="code/toy/srm485-afraid-of-even/Unmutate.hs"><pre class="sourceCode numberSource numberLines haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb2-1" title="1"><span class="kw">module</span> <span class="dt">Unmutate</span> <span class="kw">where</span></a>
-<a class="sourceLine" id="cb2-2" title="2"></a>
-<a class="sourceLine" id="cb2-3" title="3"><span class="co">-- Convert mutated numbers back into an arithmetic progression (if possible).</span></a>
-<a class="sourceLine" id="cb2-4" title="4"><span class="ot">unmutate ::</span> <span class="dt">Integral</span> a <span class="ot">=&gt;</span> [a] <span class="ot">-&gt;</span> <span class="dt">Maybe</span> [a]</a>
-<a class="sourceLine" id="cb2-5" title="5">unmutate ts</a>
-<a class="sourceLine" id="cb2-6" title="6">  <span class="co">-- The input must be at least 4 terms!</span></a>
-<a class="sourceLine" id="cb2-7" title="7">  <span class="fu">|</span> <span class="fu">length</span> ts <span class="fu">&lt;</span> <span class="dv">4</span> <span class="fu">=</span> <span class="dt">Nothing</span></a>
-<a class="sourceLine" id="cb2-8" title="8">  <span class="fu">|</span> <span class="fu">all</span> (<span class="fu">==</span>t) ts <span class="fu">=</span> <span class="dt">Just</span> ts</a>
-<a class="sourceLine" id="cb2-9" title="9">  <span class="fu">|</span> isArithmetic ts <span class="fu">=</span> <span class="dt">Just</span> ts</a>
-<a class="sourceLine" id="cb2-10" title="10">  <span class="fu">|</span> mutate bp1 <span class="fu">==</span> ts <span class="fu">=</span> <span class="dt">Just</span> bp1</a>
-<a class="sourceLine" id="cb2-11" title="11">  <span class="fu">|</span> mutate bp2 <span class="fu">==</span> ts <span class="fu">=</span> <span class="dt">Just</span> bp2</a>
-<a class="sourceLine" id="cb2-12" title="12">  <span class="co">-- Could optionally raise an error saying ts was not derived from an</span></a>
-<a class="sourceLine" id="cb2-13" title="13">  <span class="co">-- arithmetic progression in the first place!</span></a>
-<a class="sourceLine" id="cb2-14" title="14">  <span class="fu">|</span> <span class="fu">otherwise</span> <span class="fu">=</span> <span class="dt">Nothing</span></a>
-<a class="sourceLine" id="cb2-15" title="15">  <span class="kw">where</span></a>
-<a class="sourceLine" id="cb2-16" title="16">  t <span class="fu">=</span> <span class="fu">head</span> ts</a>
-<a class="sourceLine" id="cb2-17" title="17">  <span class="co">-- O_F, O, O_F, O...</span></a>
-<a class="sourceLine" id="cb2-18" title="18">  bp1Terms <span class="fu">=</span> everyNth0 <span class="dv">2</span> ts</a>
-<a class="sourceLine" id="cb2-19" title="19">  bp1 <span class="fu">=</span> makeBP (<span class="fu">length</span> ts) <span class="dt">False</span> bp1Terms</a>
-<a class="sourceLine" id="cb2-20" title="20">  <span class="co">-- O, O_F, O, O_F...</span></a>
-<a class="sourceLine" id="cb2-21" title="21">  bp2Terms <span class="fu">=</span> everyNth <span class="dv">2</span> ts</a>
-<a class="sourceLine" id="cb2-22" title="22">  bp2 <span class="fu">=</span> makeBP (<span class="fu">length</span> ts) <span class="dt">True</span> bp2Terms</a>
-<a class="sourceLine" id="cb2-23" title="23"></a>
-<a class="sourceLine" id="cb2-24" title="24"><span class="co">-- Create a tentative arithmetic progression &quot;BP&quot; from the given arguments. The</span></a>
-<a class="sourceLine" id="cb2-25" title="25"><span class="co">-- `makeFirstTerm` boolean determines whether we are dealing with a &quot;O_F, O,</span></a>
-<a class="sourceLine" id="cb2-26" title="26"><span class="co">-- O_F, O...&quot; or a &quot;O, O_F, O, O_F&quot; pattern.</span></a>
-<a class="sourceLine" id="cb2-27" title="27"><span class="ot">makeBP ::</span> <span class="dt">Integral</span> a <span class="ot">=&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Bool</span> <span class="ot">-&gt;</span> [a] <span class="ot">-&gt;</span> [a]</a>
-<a class="sourceLine" id="cb2-28" title="28">makeBP len makeFirstTerm originals</a>
-<a class="sourceLine" id="cb2-29" title="29">  <span class="fu">|</span> <span class="fu">length</span> originals <span class="fu">&lt;</span> <span class="dv">2</span> <span class="fu">=</span> []</a>
-<a class="sourceLine" id="cb2-30" title="30">  <span class="fu">|</span> makeFirstTerm <span class="fu">=</span> (o0 <span class="fu">-</span> m) <span class="fu">:</span> <span class="fu">init</span> bp</a>
-<a class="sourceLine" id="cb2-31" title="31">  <span class="fu">|</span> <span class="fu">otherwise</span> <span class="fu">=</span> bp</a>
-<a class="sourceLine" id="cb2-32" title="32">  <span class="kw">where</span></a>
-<a class="sourceLine" id="cb2-33" title="33">  o0 <span class="fu">=</span> originals<span class="fu">!!</span><span class="dv">0</span></a>
-<a class="sourceLine" id="cb2-34" title="34">  o1 <span class="fu">=</span> originals<span class="fu">!!</span><span class="dv">1</span></a>
-<a class="sourceLine" id="cb2-35" title="35">  m <span class="fu">=</span> <span class="fu">div</span> (o1 <span class="fu">-</span> o0) <span class="dv">2</span></a>
-<a class="sourceLine" id="cb2-36" title="36">  bp <span class="fu">=</span> <span class="fu">reverse</span></a>
-<a class="sourceLine" id="cb2-37" title="37">    <span class="fu">.</span> <span class="fu">foldl</span> (\acc n <span class="ot">-&gt;</span> (m<span class="fu">*</span>n <span class="fu">+</span> o0)<span class="fu">:</span>acc) []</a>
-<a class="sourceLine" id="cb2-38" title="38">    <span class="fu">$</span> <span class="fu">take</span> len [<span class="dv">0</span><span class="fu">..</span>]</a>
-<a class="sourceLine" id="cb2-39" title="39"></a>
-<a class="sourceLine" id="cb2-40" title="40"><span class="ot">isArithmetic ::</span> <span class="dt">Integral</span> a <span class="ot">=&gt;</span> [a] <span class="ot">-&gt;</span> <span class="dt">Bool</span></a>
-<a class="sourceLine" id="cb2-41" title="41">isArithmetic ts</a>
-<a class="sourceLine" id="cb2-42" title="42">  <span class="co">-- A progression (before we even get to whether it is arithmetic) must have</span></a>
-<a class="sourceLine" id="cb2-43" title="43">  <span class="co">-- at least 2 terms in it.</span></a>
-<a class="sourceLine" id="cb2-44" title="44">  <span class="fu">|</span> <span class="fu">length</span> ts <span class="fu">&lt;</span> <span class="dv">2</span> <span class="fu">=</span> <span class="dt">False</span></a>
-<a class="sourceLine" id="cb2-45" title="45">  <span class="fu">|</span> <span class="fu">otherwise</span> <span class="fu">=</span> <span class="fu">all</span> (<span class="fu">==</span>m) <span class="fu">$</span> <span class="fu">zipWith</span> (<span class="fu">-</span>) (<span class="fu">tail</span> ts) (<span class="fu">init</span> ts)</a>
-<a class="sourceLine" id="cb2-46" title="46">  <span class="kw">where</span></a>
-<a class="sourceLine" id="cb2-47" title="47">  t0 <span class="fu">=</span> ts<span class="fu">!!</span><span class="dv">0</span></a>
-<a class="sourceLine" id="cb2-48" title="48">  t1 <span class="fu">=</span> ts<span class="fu">!!</span><span class="dv">1</span></a>
-<a class="sourceLine" id="cb2-49" title="49">  m <span class="fu">=</span> t1 <span class="fu">-</span> t0</a>
-<a class="sourceLine" id="cb2-50" title="50"></a>
-<a class="sourceLine" id="cb2-51" title="51"><span class="ot">mutate ::</span> <span class="dt">Integral</span> a <span class="ot">=&gt;</span> [a] <span class="ot">-&gt;</span> [a]</a>
-<a class="sourceLine" id="cb2-52" title="52">mutate <span class="fu">=</span> <span class="fu">map</span> makeOdd</a>
-<a class="sourceLine" id="cb2-53" title="53">  <span class="kw">where</span></a>
-<a class="sourceLine" id="cb2-54" title="54"><span class="ot">  makeOdd ::</span> <span class="dt">Integral</span> a <span class="ot">=&gt;</span> a <span class="ot">-&gt;</span> a</a>
-<a class="sourceLine" id="cb2-55" title="55">  makeOdd n</a>
-<a class="sourceLine" id="cb2-56" title="56">    <span class="co">-- 0 cannot be turned into an odd number! Keep it as is.</span></a>
-<a class="sourceLine" id="cb2-57" title="57">    <span class="fu">|</span> n <span class="fu">==</span> <span class="dv">0</span> <span class="fu">=</span> <span class="dv">0</span></a>
-<a class="sourceLine" id="cb2-58" title="58">    <span class="fu">|</span> <span class="fu">odd</span> n <span class="fu">=</span> n</a>
-<a class="sourceLine" id="cb2-59" title="59">    <span class="fu">|</span> <span class="fu">otherwise</span> <span class="fu">=</span> makeOdd <span class="fu">$</span> <span class="fu">div</span> n <span class="dv">2</span></a>
-<a class="sourceLine" id="cb2-60" title="60"></a>
-<a class="sourceLine" id="cb2-61" title="61"><span class="co">-- Given a list of 'a's, return the elements at indices [0n, 1n, 2n, 3n, ...].</span></a>
-<a class="sourceLine" id="cb2-62" title="62"><span class="co">-- E.g., given a list [0..] and n = 2, we get [0, 2, 4, 6..]. From</span></a>
-<a class="sourceLine" id="cb2-63" title="63"><span class="co">-- http://stackoverflow.com/a/2028758/437583.</span></a>
-<a class="sourceLine" id="cb2-64" title="64"><span class="ot">everyNth0 ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> [a] <span class="ot">-&gt;</span> [a]</a>
-<a class="sourceLine" id="cb2-65" title="65">everyNth0 _ [] <span class="fu">=</span> []</a>
-<a class="sourceLine" id="cb2-66" title="66">everyNth0 n as <span class="fu">=</span> <span class="fu">head</span> as <span class="fu">:</span> everyNth0 n (<span class="fu">drop</span> n as)</a>
-<a class="sourceLine" id="cb2-67" title="67"></a>
-<a class="sourceLine" id="cb2-68" title="68"><span class="co">-- Same as `everyNth0`, but start at the nth element. E.g., given a list [0..]</span></a>
-<a class="sourceLine" id="cb2-69" title="69"><span class="co">-- and n = 2, we get [1, 3, 5, 7..].</span></a>
-<a class="sourceLine" id="cb2-70" title="70"><span class="ot">everyNth ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> [a] <span class="ot">-&gt;</span> [a]</a>
-<a class="sourceLine" id="cb2-71" title="71">everyNth n <span class="fu">=</span> everyNth0 n <span class="fu">.</span> <span class="fu">drop</span> (n <span class="fu">-</span> <span class="dv">1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2" data-input="code/toy/srm485-afraid-of-even/Unmutate.hs"><pre class="sourceCode numberSource numberLines haskell"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">module</span> <span class="dt">Unmutate</span> <span class="kw">where</span></span>
+<span id="cb2-2"><a href="#cb2-2"></a></span>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="co">-- Convert mutated numbers back into an arithmetic progression (if possible).</span></span>
+<span id="cb2-4"><a href="#cb2-4"></a><span class="ot">unmutate ::</span> <span class="dt">Integral</span> a <span class="ot">=&gt;</span> [a] <span class="ot">-&gt;</span> <span class="dt">Maybe</span> [a]</span>
+<span id="cb2-5"><a href="#cb2-5"></a>unmutate ts</span>
+<span id="cb2-6"><a href="#cb2-6"></a>  <span class="co">-- The input must be at least 4 terms!</span></span>
+<span id="cb2-7"><a href="#cb2-7"></a>  <span class="op">|</span> <span class="fu">length</span> ts <span class="op">&lt;</span> <span class="dv">4</span> <span class="ot">=</span> <span class="dt">Nothing</span></span>
+<span id="cb2-8"><a href="#cb2-8"></a>  <span class="op">|</span> <span class="fu">all</span> (<span class="op">==</span>t) ts <span class="ot">=</span> <span class="dt">Just</span> ts</span>
+<span id="cb2-9"><a href="#cb2-9"></a>  <span class="op">|</span> isArithmetic ts <span class="ot">=</span> <span class="dt">Just</span> ts</span>
+<span id="cb2-10"><a href="#cb2-10"></a>  <span class="op">|</span> mutate bp1 <span class="op">==</span> ts <span class="ot">=</span> <span class="dt">Just</span> bp1</span>
+<span id="cb2-11"><a href="#cb2-11"></a>  <span class="op">|</span> mutate bp2 <span class="op">==</span> ts <span class="ot">=</span> <span class="dt">Just</span> bp2</span>
+<span id="cb2-12"><a href="#cb2-12"></a>  <span class="co">-- Could optionally raise an error saying ts was not derived from an</span></span>
+<span id="cb2-13"><a href="#cb2-13"></a>  <span class="co">-- arithmetic progression in the first place!</span></span>
+<span id="cb2-14"><a href="#cb2-14"></a>  <span class="op">|</span> <span class="fu">otherwise</span> <span class="ot">=</span> <span class="dt">Nothing</span></span>
+<span id="cb2-15"><a href="#cb2-15"></a>  <span class="kw">where</span></span>
+<span id="cb2-16"><a href="#cb2-16"></a>  t <span class="ot">=</span> <span class="fu">head</span> ts</span>
+<span id="cb2-17"><a href="#cb2-17"></a>  <span class="co">-- O_F, O, O_F, O...</span></span>
+<span id="cb2-18"><a href="#cb2-18"></a>  bp1Terms <span class="ot">=</span> everyNth0 <span class="dv">2</span> ts</span>
+<span id="cb2-19"><a href="#cb2-19"></a>  bp1 <span class="ot">=</span> makeBP (<span class="fu">length</span> ts) <span class="dt">False</span> bp1Terms</span>
+<span id="cb2-20"><a href="#cb2-20"></a>  <span class="co">-- O, O_F, O, O_F...</span></span>
+<span id="cb2-21"><a href="#cb2-21"></a>  bp2Terms <span class="ot">=</span> everyNth <span class="dv">2</span> ts</span>
+<span id="cb2-22"><a href="#cb2-22"></a>  bp2 <span class="ot">=</span> makeBP (<span class="fu">length</span> ts) <span class="dt">True</span> bp2Terms</span>
+<span id="cb2-23"><a href="#cb2-23"></a></span>
+<span id="cb2-24"><a href="#cb2-24"></a><span class="co">-- Create a tentative arithmetic progression &quot;BP&quot; from the given arguments. The</span></span>
+<span id="cb2-25"><a href="#cb2-25"></a><span class="co">-- `makeFirstTerm` boolean determines whether we are dealing with a &quot;O_F, O,</span></span>
+<span id="cb2-26"><a href="#cb2-26"></a><span class="co">-- O_F, O...&quot; or a &quot;O, O_F, O, O_F&quot; pattern.</span></span>
+<span id="cb2-27"><a href="#cb2-27"></a><span class="ot">makeBP ::</span> <span class="dt">Integral</span> a <span class="ot">=&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Bool</span> <span class="ot">-&gt;</span> [a] <span class="ot">-&gt;</span> [a]</span>
+<span id="cb2-28"><a href="#cb2-28"></a>makeBP len makeFirstTerm originals</span>
+<span id="cb2-29"><a href="#cb2-29"></a>  <span class="op">|</span> <span class="fu">length</span> originals <span class="op">&lt;</span> <span class="dv">2</span> <span class="ot">=</span> []</span>
+<span id="cb2-30"><a href="#cb2-30"></a>  <span class="op">|</span> makeFirstTerm <span class="ot">=</span> (o0 <span class="op">-</span> m) <span class="op">:</span> <span class="fu">init</span> bp</span>
+<span id="cb2-31"><a href="#cb2-31"></a>  <span class="op">|</span> <span class="fu">otherwise</span> <span class="ot">=</span> bp</span>
+<span id="cb2-32"><a href="#cb2-32"></a>  <span class="kw">where</span></span>
+<span id="cb2-33"><a href="#cb2-33"></a>  o0 <span class="ot">=</span> originals<span class="op">!!</span><span class="dv">0</span></span>
+<span id="cb2-34"><a href="#cb2-34"></a>  o1 <span class="ot">=</span> originals<span class="op">!!</span><span class="dv">1</span></span>
+<span id="cb2-35"><a href="#cb2-35"></a>  m <span class="ot">=</span> <span class="fu">div</span> (o1 <span class="op">-</span> o0) <span class="dv">2</span></span>
+<span id="cb2-36"><a href="#cb2-36"></a>  bp <span class="ot">=</span> <span class="fu">reverse</span></span>
+<span id="cb2-37"><a href="#cb2-37"></a>    <span class="op">.</span> <span class="fu">foldl</span> (\acc n <span class="ot">-&gt;</span> (m<span class="op">*</span>n <span class="op">+</span> o0)<span class="op">:</span>acc) []</span>
+<span id="cb2-38"><a href="#cb2-38"></a>    <span class="op">$</span> <span class="fu">take</span> len [<span class="dv">0</span><span class="op">..</span>]</span>
+<span id="cb2-39"><a href="#cb2-39"></a></span>
+<span id="cb2-40"><a href="#cb2-40"></a><span class="ot">isArithmetic ::</span> <span class="dt">Integral</span> a <span class="ot">=&gt;</span> [a] <span class="ot">-&gt;</span> <span class="dt">Bool</span></span>
+<span id="cb2-41"><a href="#cb2-41"></a>isArithmetic ts</span>
+<span id="cb2-42"><a href="#cb2-42"></a>  <span class="co">-- A progression (before we even get to whether it is arithmetic) must have</span></span>
+<span id="cb2-43"><a href="#cb2-43"></a>  <span class="co">-- at least 2 terms in it.</span></span>
+<span id="cb2-44"><a href="#cb2-44"></a>  <span class="op">|</span> <span class="fu">length</span> ts <span class="op">&lt;</span> <span class="dv">2</span> <span class="ot">=</span> <span class="dt">False</span></span>
+<span id="cb2-45"><a href="#cb2-45"></a>  <span class="op">|</span> <span class="fu">otherwise</span> <span class="ot">=</span> <span class="fu">all</span> (<span class="op">==</span>m) <span class="op">$</span> <span class="fu">zipWith</span> (<span class="op">-</span>) (<span class="fu">tail</span> ts) (<span class="fu">init</span> ts)</span>
+<span id="cb2-46"><a href="#cb2-46"></a>  <span class="kw">where</span></span>
+<span id="cb2-47"><a href="#cb2-47"></a>  t0 <span class="ot">=</span> ts<span class="op">!!</span><span class="dv">0</span></span>
+<span id="cb2-48"><a href="#cb2-48"></a>  t1 <span class="ot">=</span> ts<span class="op">!!</span><span class="dv">1</span></span>
+<span id="cb2-49"><a href="#cb2-49"></a>  m <span class="ot">=</span> t1 <span class="op">-</span> t0</span>
+<span id="cb2-50"><a href="#cb2-50"></a></span>
+<span id="cb2-51"><a href="#cb2-51"></a><span class="ot">mutate ::</span> <span class="dt">Integral</span> a <span class="ot">=&gt;</span> [a] <span class="ot">-&gt;</span> [a]</span>
+<span id="cb2-52"><a href="#cb2-52"></a>mutate <span class="ot">=</span> <span class="fu">map</span> makeOdd</span>
+<span id="cb2-53"><a href="#cb2-53"></a>  <span class="kw">where</span></span>
+<span id="cb2-54"><a href="#cb2-54"></a><span class="ot">  makeOdd ::</span> <span class="dt">Integral</span> a <span class="ot">=&gt;</span> a <span class="ot">-&gt;</span> a</span>
+<span id="cb2-55"><a href="#cb2-55"></a>  makeOdd n</span>
+<span id="cb2-56"><a href="#cb2-56"></a>    <span class="co">-- 0 cannot be turned into an odd number! Keep it as is.</span></span>
+<span id="cb2-57"><a href="#cb2-57"></a>    <span class="op">|</span> n <span class="op">==</span> <span class="dv">0</span> <span class="ot">=</span> <span class="dv">0</span></span>
+<span id="cb2-58"><a href="#cb2-58"></a>    <span class="op">|</span> <span class="fu">odd</span> n <span class="ot">=</span> n</span>
+<span id="cb2-59"><a href="#cb2-59"></a>    <span class="op">|</span> <span class="fu">otherwise</span> <span class="ot">=</span> makeOdd <span class="op">$</span> <span class="fu">div</span> n <span class="dv">2</span></span>
+<span id="cb2-60"><a href="#cb2-60"></a></span>
+<span id="cb2-61"><a href="#cb2-61"></a><span class="co">-- Given a list of 'a's, return the elements at indices [0n, 1n, 2n, 3n, ...].</span></span>
+<span id="cb2-62"><a href="#cb2-62"></a><span class="co">-- E.g., given a list [0..] and n = 2, we get [0, 2, 4, 6..]. From</span></span>
+<span id="cb2-63"><a href="#cb2-63"></a><span class="co">-- http://stackoverflow.com/a/2028758/437583.</span></span>
+<span id="cb2-64"><a href="#cb2-64"></a><span class="ot">everyNth0 ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> [a] <span class="ot">-&gt;</span> [a]</span>
+<span id="cb2-65"><a href="#cb2-65"></a>everyNth0 _ [] <span class="ot">=</span> []</span>
+<span id="cb2-66"><a href="#cb2-66"></a>everyNth0 n as <span class="ot">=</span> <span class="fu">head</span> as <span class="op">:</span> everyNth0 n (<span class="fu">drop</span> n as)</span>
+<span id="cb2-67"><a href="#cb2-67"></a></span>
+<span id="cb2-68"><a href="#cb2-68"></a><span class="co">-- Same as `everyNth0`, but start at the nth element. E.g., given a list [0..]</span></span>
+<span id="cb2-69"><a href="#cb2-69"></a><span class="co">-- and n = 2, we get [1, 3, 5, 7..].</span></span>
+<span id="cb2-70"><a href="#cb2-70"></a><span class="ot">everyNth ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> [a] <span class="ot">-&gt;</span> [a]</span>
+<span id="cb2-71"><a href="#cb2-71"></a>everyNth n <span class="ot">=</span> everyNth0 n <span class="op">.</span> <span class="fu">drop</span> (n <span class="op">-</span> <span class="dv">1</span>)</span></code></pre></div>
 </div>
 <div class="code-and-raw lineCntMax100">
 <div class="raw-link sourceCode">
 <table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/toy/srm485-afraid-of-even/test-unmutate.hs" mimetype="text/plain">test-unmutate.hs</a></code></pre></td></tr></tbody></table>
 </div>
-<div class="sourceCode" id="cb3" data-input="code/toy/srm485-afraid-of-even/test-unmutate.hs"><pre class="sourceCode numberSource numberLines haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb3-1" title="1"><span class="kw">module</span> <span class="dt">Main</span> <span class="kw">where</span></a>
-<a class="sourceLine" id="cb3-2" title="2"></a>
-<a class="sourceLine" id="cb3-3" title="3"><span class="kw">import</span> <span class="dt">Data.Maybe</span></a>
-<a class="sourceLine" id="cb3-4" title="4"><span class="kw">import</span> <span class="dt">Test.Tasty</span></a>
-<a class="sourceLine" id="cb3-5" title="5"><span class="kw">import</span> <span class="dt">Test.Tasty.HUnit</span></a>
-<a class="sourceLine" id="cb3-6" title="6"><span class="kw">import</span> <span class="dt">Test.Tasty.QuickCheck</span> <span class="kw">as</span> <span class="dt">QC</span></a>
-<a class="sourceLine" id="cb3-7" title="7"></a>
-<a class="sourceLine" id="cb3-8" title="8"><span class="kw">import</span> <span class="dt">Unmutate</span></a>
-<a class="sourceLine" id="cb3-9" title="9"></a>
-<a class="sourceLine" id="cb3-10" title="10"><span class="ot">main ::</span> <span class="dt">IO</span> ()</a>
-<a class="sourceLine" id="cb3-11" title="11">main <span class="fu">=</span> defaultMain tests</a>
-<a class="sourceLine" id="cb3-12" title="12"></a>
-<a class="sourceLine" id="cb3-13" title="13"><span class="ot">tests ::</span> <span class="dt">TestTree</span></a>
-<a class="sourceLine" id="cb3-14" title="14">tests <span class="fu">=</span> testGroup <span class="st">&quot;Tests&quot;</span> [qcProps, unitTests]</a>
-<a class="sourceLine" id="cb3-15" title="15"></a>
-<a class="sourceLine" id="cb3-16" title="16"><span class="kw">data</span> <span class="dt">AP</span> <span class="fu">=</span> <span class="dt">AP</span> [<span class="dt">Integer</span>]</a>
-<a class="sourceLine" id="cb3-17" title="17">  <span class="kw">deriving</span> (<span class="dt">Eq</span>, <span class="dt">Show</span>)</a>
-<a class="sourceLine" id="cb3-18" title="18"></a>
-<a class="sourceLine" id="cb3-19" title="19"><span class="co">-- Generate a random arithmetic progression.</span></a>
-<a class="sourceLine" id="cb3-20" title="20"><span class="kw">instance</span> <span class="dt">Arbitrary</span> <span class="dt">AP</span> <span class="kw">where</span></a>
-<a class="sourceLine" id="cb3-21" title="21">  arbitrary <span class="fu">=</span> <span class="kw">do</span></a>
-<a class="sourceLine" id="cb3-22" title="22">    <span class="co">-- Choose random m (change between terms).</span></a>
-<a class="sourceLine" id="cb3-23" title="23">    m <span class="ot">&lt;- arbitrary ::</span> <span class="dt">Gen</span> <span class="dt">Int</span></a>
-<a class="sourceLine" id="cb3-24" title="24">    <span class="co">-- Choose random first term. It's important that we make it into an</span></a>
-<a class="sourceLine" id="cb3-25" title="25">    <span class="co">-- Integer type, because if we use Int we might end up with integer</span></a>
-<a class="sourceLine" id="cb3-26" title="26">    <span class="co">-- overflow if m is too large.</span></a>
-<a class="sourceLine" id="cb3-27" title="27">    t <span class="ot">&lt;- arbitrary ::</span> <span class="dt">Gen</span> <span class="dt">Integer</span></a>
-<a class="sourceLine" id="cb3-28" title="28">    <span class="co">-- Choose random length of 4 to 50.</span></a>
-<a class="sourceLine" id="cb3-29" title="29">    len <span class="ot">&lt;-</span> choose (<span class="dv">4</span>, <span class="dv">50</span>)</a>
-<a class="sourceLine" id="cb3-30" title="30">    <span class="fu">return</span></a>
-<a class="sourceLine" id="cb3-31" title="31">      <span class="fu">.</span> <span class="dt">AP</span></a>
-<a class="sourceLine" id="cb3-32" title="32">      <span class="fu">.</span> <span class="fu">foldl</span> (\acc n <span class="ot">-&gt;</span> ((<span class="fu">fromIntegral</span> m)<span class="fu">*</span>n <span class="fu">+</span> t)<span class="fu">:</span>acc) []</a>
-<a class="sourceLine" id="cb3-33" title="33">      <span class="fu">$</span> <span class="fu">take</span> len [<span class="dv">0</span><span class="fu">..</span>]</a>
-<a class="sourceLine" id="cb3-34" title="34"></a>
-<a class="sourceLine" id="cb3-35" title="35"><span class="ot">qcProps ::</span> <span class="dt">TestTree</span></a>
-<a class="sourceLine" id="cb3-36" title="36">qcProps <span class="fu">=</span> testGroup <span class="st">&quot;(checked by QuickCheck)&quot;</span></a>
-<a class="sourceLine" id="cb3-37" title="37">  [ QC.testProperty <span class="st">&quot;Unmutate (U(M(AP)) results in calculable (isJust))&quot;</span></a>
-<a class="sourceLine" id="cb3-38" title="38">    (\(<span class="dt">AP</span> ts) <span class="ot">-&gt;</span> isJust <span class="fu">.</span> unmutate <span class="fu">$</span> mutate ts)</a>
-<a class="sourceLine" id="cb3-39" title="39">  , QC.testProperty <span class="st">&quot;Unmutate (U(M(AP)) results in a nonempty list)&quot;</span></a>
-<a class="sourceLine" id="cb3-40" title="40">    (\(<span class="dt">AP</span> ts) <span class="ot">-&gt;</span> <span class="fu">not</span></a>
-<a class="sourceLine" id="cb3-41" title="41">      <span class="fu">.</span> <span class="fu">null</span></a>
-<a class="sourceLine" id="cb3-42" title="42">      <span class="fu">.</span> fromJust</a>
-<a class="sourceLine" id="cb3-43" title="43">      <span class="fu">.</span> unmutate</a>
-<a class="sourceLine" id="cb3-44" title="44">      <span class="fu">$</span> mutate ts)</a>
-<a class="sourceLine" id="cb3-45" title="45">  , QC.testProperty <span class="st">&quot;Unmutate (U(M(AP)) results in an arithmetic progression)&quot;</span></a>
-<a class="sourceLine" id="cb3-46" title="46">    (\(<span class="dt">AP</span> ts) <span class="ot">-&gt;</span> isArithmetic</a>
-<a class="sourceLine" id="cb3-47" title="47">      <span class="fu">.</span> fromJust</a>
-<a class="sourceLine" id="cb3-48" title="48">      <span class="fu">.</span> unmutate</a>
-<a class="sourceLine" id="cb3-49" title="49">      <span class="fu">$</span> mutate ts)</a>
-<a class="sourceLine" id="cb3-50" title="50">  ]</a>
-<a class="sourceLine" id="cb3-51" title="51"></a>
-<a class="sourceLine" id="cb3-52" title="52"><span class="ot">unitTests ::</span> <span class="dt">TestTree</span></a>
-<a class="sourceLine" id="cb3-53" title="53">unitTests <span class="fu">=</span> testGroup <span class="st">&quot;Unit tests&quot;</span></a>
-<a class="sourceLine" id="cb3-54" title="54">  [ testCase <span class="st">&quot;Unmutate (empty list is not calculable)&quot;</span></a>
-<a class="sourceLine" id="cb3-55" title="55">    <span class="fu">$</span> unmutate ([]<span class="ot">::</span>[<span class="dt">Int</span>])</a>
-<a class="sourceLine" id="cb3-56" title="56">    <span class="fu">@?=</span> <span class="dt">Nothing</span></a>
-<a class="sourceLine" id="cb3-57" title="57">  , testCase <span class="st">&quot;Unmutate (AP is all odd, so AP == MP)&quot;</span></a>
-<a class="sourceLine" id="cb3-58" title="58">    <span class="fu">$</span> unmutate [<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">9</span><span class="ot"> ::</span> <span class="dt">Int</span>]</a>
-<a class="sourceLine" id="cb3-59" title="59">    <span class="fu">@?=</span> <span class="dt">Just</span> [<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">9</span><span class="ot"> ::</span> <span class="dt">Int</span>]</a>
-<a class="sourceLine" id="cb3-60" title="60">  , testCase <span class="st">&quot;Unmutate (m = 0, so all elements in mp are the same)&quot;</span></a>
-<a class="sourceLine" id="cb3-61" title="61">    <span class="fu">$</span> unmutate [<span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">5</span><span class="ot"> ::</span> <span class="dt">Int</span>]</a>
-<a class="sourceLine" id="cb3-62" title="62">    <span class="fu">@?=</span> <span class="dt">Just</span> [<span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">5</span><span class="ot"> ::</span> <span class="dt">Int</span>]</a>
-<a class="sourceLine" id="cb3-63" title="63">  , testCase <span class="st">&quot;Unmutate (known case 1)&quot;</span></a>
-<a class="sourceLine" id="cb3-64" title="64">    <span class="fu">$</span> unmutate [<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">1</span>, <span class="dv">5</span><span class="ot"> ::</span> <span class="dt">Int</span>]</a>
-<a class="sourceLine" id="cb3-65" title="65">    <span class="fu">@?=</span> <span class="dt">Just</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span><span class="ot"> ::</span> <span class="dt">Int</span>]</a>
-<a class="sourceLine" id="cb3-66" title="66">  , testCase <span class="st">&quot;Unmutate (known case 2)&quot;</span></a>
-<a class="sourceLine" id="cb3-67" title="67">    <span class="fu">$</span> unmutate [<span class="dv">7</span>, <span class="dv">47</span>, <span class="dv">5</span>, <span class="dv">113</span>, <span class="dv">73</span>, <span class="dv">179</span>, <span class="dv">53</span><span class="ot"> ::</span> <span class="dt">Int</span>]</a>
-<a class="sourceLine" id="cb3-68" title="68">    <span class="fu">@?=</span> <span class="dt">Just</span> [<span class="dv">14</span>, <span class="dv">47</span>, <span class="dv">80</span>, <span class="dv">113</span>, <span class="dv">146</span>, <span class="dv">179</span>, <span class="dv">212</span><span class="ot"> ::</span> <span class="dt">Int</span>]</a>
-<a class="sourceLine" id="cb3-69" title="69">  , testCase <span class="st">&quot;Unmutate (known case 3)&quot;</span></a>
-<a class="sourceLine" id="cb3-70" title="70">    <span class="fu">$</span> unmutate [<span class="dv">749</span>, <span class="dv">999</span>, <span class="dv">125</span>, <span class="dv">1</span><span class="ot"> ::</span> <span class="dt">Int</span>]</a>
-<a class="sourceLine" id="cb3-71" title="71">    <span class="fu">@?=</span> <span class="dt">Just</span> [<span class="dv">1498</span>, <span class="dv">999</span>, <span class="dv">500</span>, <span class="dv">1</span><span class="ot"> ::</span> <span class="dt">Int</span>]</a>
-<a class="sourceLine" id="cb3-72" title="72">  , testCase <span class="st">&quot;Unmutate (known case 4)&quot;</span></a>
-<a class="sourceLine" id="cb3-73" title="73">    <span class="fu">$</span> unmutate [<span class="fu">-</span><span class="dv">11</span>, <span class="dv">0</span>, <span class="dv">11</span>, <span class="dv">11</span>, <span class="dv">33</span>, <span class="dv">11</span><span class="ot"> ::</span> <span class="dt">Int</span>]</a>
-<a class="sourceLine" id="cb3-74" title="74">    <span class="fu">@?=</span> <span class="dt">Just</span> [<span class="fu">-</span><span class="dv">11</span>, <span class="dv">0</span>, <span class="dv">11</span>, <span class="dv">22</span>, <span class="dv">33</span>, <span class="dv">44</span><span class="ot"> ::</span> <span class="dt">Int</span>]</a>
-<a class="sourceLine" id="cb3-75" title="75">  ]</a></code></pre></div>
+<div class="sourceCode" id="cb3" data-input="code/toy/srm485-afraid-of-even/test-unmutate.hs"><pre class="sourceCode numberSource numberLines haskell"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">module</span> <span class="dt">Main</span> <span class="kw">where</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a></span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="kw">import</span> <span class="dt">Data.Maybe</span></span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="kw">import</span> <span class="dt">Test.Tasty</span></span>
+<span id="cb3-5"><a href="#cb3-5"></a><span class="kw">import</span> <span class="dt">Test.Tasty.HUnit</span></span>
+<span id="cb3-6"><a href="#cb3-6"></a><span class="kw">import</span> <span class="dt">Test.Tasty.QuickCheck</span> <span class="kw">as</span> <span class="dt">QC</span></span>
+<span id="cb3-7"><a href="#cb3-7"></a></span>
+<span id="cb3-8"><a href="#cb3-8"></a><span class="kw">import</span> <span class="dt">Unmutate</span></span>
+<span id="cb3-9"><a href="#cb3-9"></a></span>
+<span id="cb3-10"><a href="#cb3-10"></a><span class="ot">main ::</span> <span class="dt">IO</span> ()</span>
+<span id="cb3-11"><a href="#cb3-11"></a>main <span class="ot">=</span> defaultMain tests</span>
+<span id="cb3-12"><a href="#cb3-12"></a></span>
+<span id="cb3-13"><a href="#cb3-13"></a><span class="ot">tests ::</span> <span class="dt">TestTree</span></span>
+<span id="cb3-14"><a href="#cb3-14"></a>tests <span class="ot">=</span> testGroup <span class="st">&quot;Tests&quot;</span> [qcProps, unitTests]</span>
+<span id="cb3-15"><a href="#cb3-15"></a></span>
+<span id="cb3-16"><a href="#cb3-16"></a><span class="kw">data</span> <span class="dt">AP</span> <span class="ot">=</span> <span class="dt">AP</span> [<span class="dt">Integer</span>]</span>
+<span id="cb3-17"><a href="#cb3-17"></a>  <span class="kw">deriving</span> (<span class="dt">Eq</span>, <span class="dt">Show</span>)</span>
+<span id="cb3-18"><a href="#cb3-18"></a></span>
+<span id="cb3-19"><a href="#cb3-19"></a><span class="co">-- Generate a random arithmetic progression.</span></span>
+<span id="cb3-20"><a href="#cb3-20"></a><span class="kw">instance</span> <span class="dt">Arbitrary</span> <span class="dt">AP</span> <span class="kw">where</span></span>
+<span id="cb3-21"><a href="#cb3-21"></a>  arbitrary <span class="ot">=</span> <span class="kw">do</span></span>
+<span id="cb3-22"><a href="#cb3-22"></a>    <span class="co">-- Choose random m (change between terms).</span></span>
+<span id="cb3-23"><a href="#cb3-23"></a>    m <span class="ot">&lt;- arbitrary ::</span> <span class="dt">Gen</span> <span class="dt">Int</span></span>
+<span id="cb3-24"><a href="#cb3-24"></a>    <span class="co">-- Choose random first term. It's important that we make it into an</span></span>
+<span id="cb3-25"><a href="#cb3-25"></a>    <span class="co">-- Integer type, because if we use Int we might end up with integer</span></span>
+<span id="cb3-26"><a href="#cb3-26"></a>    <span class="co">-- overflow if m is too large.</span></span>
+<span id="cb3-27"><a href="#cb3-27"></a>    t <span class="ot">&lt;- arbitrary ::</span> <span class="dt">Gen</span> <span class="dt">Integer</span></span>
+<span id="cb3-28"><a href="#cb3-28"></a>    <span class="co">-- Choose random length of 4 to 50.</span></span>
+<span id="cb3-29"><a href="#cb3-29"></a>    len <span class="ot">&lt;-</span> choose (<span class="dv">4</span>, <span class="dv">50</span>)</span>
+<span id="cb3-30"><a href="#cb3-30"></a>    <span class="fu">return</span></span>
+<span id="cb3-31"><a href="#cb3-31"></a>      <span class="op">.</span> <span class="dt">AP</span></span>
+<span id="cb3-32"><a href="#cb3-32"></a>      <span class="op">.</span> <span class="fu">foldl</span> (\acc n <span class="ot">-&gt;</span> ((<span class="fu">fromIntegral</span> m)<span class="op">*</span>n <span class="op">+</span> t)<span class="op">:</span>acc) []</span>
+<span id="cb3-33"><a href="#cb3-33"></a>      <span class="op">$</span> <span class="fu">take</span> len [<span class="dv">0</span><span class="op">..</span>]</span>
+<span id="cb3-34"><a href="#cb3-34"></a></span>
+<span id="cb3-35"><a href="#cb3-35"></a><span class="ot">qcProps ::</span> <span class="dt">TestTree</span></span>
+<span id="cb3-36"><a href="#cb3-36"></a>qcProps <span class="ot">=</span> testGroup <span class="st">&quot;(checked by QuickCheck)&quot;</span></span>
+<span id="cb3-37"><a href="#cb3-37"></a>  [ QC.testProperty <span class="st">&quot;Unmutate (U(M(AP)) results in calculable (isJust))&quot;</span></span>
+<span id="cb3-38"><a href="#cb3-38"></a>    (\(<span class="dt">AP</span> ts) <span class="ot">-&gt;</span> isJust <span class="op">.</span> unmutate <span class="op">$</span> mutate ts)</span>
+<span id="cb3-39"><a href="#cb3-39"></a>  , QC.testProperty <span class="st">&quot;Unmutate (U(M(AP)) results in a nonempty list)&quot;</span></span>
+<span id="cb3-40"><a href="#cb3-40"></a>    (\(<span class="dt">AP</span> ts) <span class="ot">-&gt;</span> <span class="fu">not</span></span>
+<span id="cb3-41"><a href="#cb3-41"></a>      <span class="op">.</span> <span class="fu">null</span></span>
+<span id="cb3-42"><a href="#cb3-42"></a>      <span class="op">.</span> fromJust</span>
+<span id="cb3-43"><a href="#cb3-43"></a>      <span class="op">.</span> unmutate</span>
+<span id="cb3-44"><a href="#cb3-44"></a>      <span class="op">$</span> mutate ts)</span>
+<span id="cb3-45"><a href="#cb3-45"></a>  , QC.testProperty <span class="st">&quot;Unmutate (U(M(AP)) results in an arithmetic progression)&quot;</span></span>
+<span id="cb3-46"><a href="#cb3-46"></a>    (\(<span class="dt">AP</span> ts) <span class="ot">-&gt;</span> isArithmetic</span>
+<span id="cb3-47"><a href="#cb3-47"></a>      <span class="op">.</span> fromJust</span>
+<span id="cb3-48"><a href="#cb3-48"></a>      <span class="op">.</span> unmutate</span>
+<span id="cb3-49"><a href="#cb3-49"></a>      <span class="op">$</span> mutate ts)</span>
+<span id="cb3-50"><a href="#cb3-50"></a>  ]</span>
+<span id="cb3-51"><a href="#cb3-51"></a></span>
+<span id="cb3-52"><a href="#cb3-52"></a><span class="ot">unitTests ::</span> <span class="dt">TestTree</span></span>
+<span id="cb3-53"><a href="#cb3-53"></a>unitTests <span class="ot">=</span> testGroup <span class="st">&quot;Unit tests&quot;</span></span>
+<span id="cb3-54"><a href="#cb3-54"></a>  [ testCase <span class="st">&quot;Unmutate (empty list is not calculable)&quot;</span></span>
+<span id="cb3-55"><a href="#cb3-55"></a>    <span class="op">$</span> unmutate ([]<span class="ot">::</span>[<span class="dt">Int</span>])</span>
+<span id="cb3-56"><a href="#cb3-56"></a>    <span class="op">@?=</span> <span class="dt">Nothing</span></span>
+<span id="cb3-57"><a href="#cb3-57"></a>  , testCase <span class="st">&quot;Unmutate (AP is all odd, so AP == MP)&quot;</span></span>
+<span id="cb3-58"><a href="#cb3-58"></a>    <span class="op">$</span> unmutate [<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">9</span><span class="ot"> ::</span> <span class="dt">Int</span>]</span>
+<span id="cb3-59"><a href="#cb3-59"></a>    <span class="op">@?=</span> <span class="dt">Just</span> [<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">9</span><span class="ot"> ::</span> <span class="dt">Int</span>]</span>
+<span id="cb3-60"><a href="#cb3-60"></a>  , testCase <span class="st">&quot;Unmutate (m = 0, so all elements in mp are the same)&quot;</span></span>
+<span id="cb3-61"><a href="#cb3-61"></a>    <span class="op">$</span> unmutate [<span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">5</span><span class="ot"> ::</span> <span class="dt">Int</span>]</span>
+<span id="cb3-62"><a href="#cb3-62"></a>    <span class="op">@?=</span> <span class="dt">Just</span> [<span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">5</span><span class="ot"> ::</span> <span class="dt">Int</span>]</span>
+<span id="cb3-63"><a href="#cb3-63"></a>  , testCase <span class="st">&quot;Unmutate (known case 1)&quot;</span></span>
+<span id="cb3-64"><a href="#cb3-64"></a>    <span class="op">$</span> unmutate [<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">1</span>, <span class="dv">5</span><span class="ot"> ::</span> <span class="dt">Int</span>]</span>
+<span id="cb3-65"><a href="#cb3-65"></a>    <span class="op">@?=</span> <span class="dt">Just</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span><span class="ot"> ::</span> <span class="dt">Int</span>]</span>
+<span id="cb3-66"><a href="#cb3-66"></a>  , testCase <span class="st">&quot;Unmutate (known case 2)&quot;</span></span>
+<span id="cb3-67"><a href="#cb3-67"></a>    <span class="op">$</span> unmutate [<span class="dv">7</span>, <span class="dv">47</span>, <span class="dv">5</span>, <span class="dv">113</span>, <span class="dv">73</span>, <span class="dv">179</span>, <span class="dv">53</span><span class="ot"> ::</span> <span class="dt">Int</span>]</span>
+<span id="cb3-68"><a href="#cb3-68"></a>    <span class="op">@?=</span> <span class="dt">Just</span> [<span class="dv">14</span>, <span class="dv">47</span>, <span class="dv">80</span>, <span class="dv">113</span>, <span class="dv">146</span>, <span class="dv">179</span>, <span class="dv">212</span><span class="ot"> ::</span> <span class="dt">Int</span>]</span>
+<span id="cb3-69"><a href="#cb3-69"></a>  , testCase <span class="st">&quot;Unmutate (known case 3)&quot;</span></span>
+<span id="cb3-70"><a href="#cb3-70"></a>    <span class="op">$</span> unmutate [<span class="dv">749</span>, <span class="dv">999</span>, <span class="dv">125</span>, <span class="dv">1</span><span class="ot"> ::</span> <span class="dt">Int</span>]</span>
+<span id="cb3-71"><a href="#cb3-71"></a>    <span class="op">@?=</span> <span class="dt">Just</span> [<span class="dv">1498</span>, <span class="dv">999</span>, <span class="dv">500</span>, <span class="dv">1</span><span class="ot"> ::</span> <span class="dt">Int</span>]</span>
+<span id="cb3-72"><a href="#cb3-72"></a>  , testCase <span class="st">&quot;Unmutate (known case 4)&quot;</span></span>
+<span id="cb3-73"><a href="#cb3-73"></a>    <span class="op">$</span> unmutate [<span class="op">-</span><span class="dv">11</span>, <span class="dv">0</span>, <span class="dv">11</span>, <span class="dv">11</span>, <span class="dv">33</span>, <span class="dv">11</span><span class="ot"> ::</span> <span class="dt">Int</span>]</span>
+<span id="cb3-74"><a href="#cb3-74"></a>    <span class="op">@?=</span> <span class="dt">Just</span> [<span class="op">-</span><span class="dv">11</span>, <span class="dv">0</span>, <span class="dv">11</span>, <span class="dv">22</span>, <span class="dv">33</span>, <span class="dv">44</span><span class="ot"> ::</span> <span class="dt">Int</span>]</span>
+<span id="cb3-75"><a href="#cb3-75"></a>  ]</span></code></pre></div>
 </div>
 <p>As you can see, most of the real work involves identifying the <strong>original, immutable numbers</strong> we can work with as-is (<span class="math inline">\(\mathrm{O}\)</span>) (as opposed to the ones we have to ignore (<span class="math inline">\(\mathrm{O_F}\)</span>)) to construct our tentative sister arithmetic progression <span class="math inline">\(BP\)</span>.</p>
 <h1 id="ruby-version">Ruby version</h1>
@@ -614,145 +614,145 @@ U(AP) = \{1, 2, 3, 4, 5\}
 <div class="raw-link sourceCode">
 <table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/toy/srm485-afraid-of-even/unmutate.rb" mimetype="text/plain">unmutate.rb</a></code></pre></td></tr></tbody></table>
 </div>
-<div class="sourceCode" id="cb4" data-input="code/toy/srm485-afraid-of-even/unmutate.rb"><pre class="sourceCode numberSource numberLines ruby"><code class="sourceCode ruby"><a class="sourceLine" id="cb4-1" title="1"><span class="kw">module</span> <span class="dt">Unmutate</span></a>
-<a class="sourceLine" id="cb4-2" title="2">  <span class="kw">def</span> <span class="dt">Unmutate</span>.unmutate(ts)</a>
-<a class="sourceLine" id="cb4-3" title="3">    <span class="kw">if</span> ts.size &lt; <span class="dv">4</span></a>
-<a class="sourceLine" id="cb4-4" title="4">      <span class="kw">return</span> <span class="dv">nil</span></a>
-<a class="sourceLine" id="cb4-5" title="5">    <span class="kw">end</span></a>
-<a class="sourceLine" id="cb4-6" title="6"></a>
-<a class="sourceLine" id="cb4-7" title="7">    bp1_terms = every_nth0(<span class="dv">2</span>, ts)</a>
-<a class="sourceLine" id="cb4-8" title="8">    bp1 = make_BP(ts.size, <span class="dv">false</span>, bp1_terms)</a>
-<a class="sourceLine" id="cb4-9" title="9">    bp2_terms = every_nth(<span class="dv">2</span>, ts)</a>
-<a class="sourceLine" id="cb4-10" title="10">    bp2 = make_BP(ts.size, <span class="dv">true</span>, bp2_terms)</a>
-<a class="sourceLine" id="cb4-11" title="11"></a>
-<a class="sourceLine" id="cb4-12" title="12">    <span class="kw">if</span> ts.uniq.size == <span class="dv">1</span></a>
-<a class="sourceLine" id="cb4-13" title="13">      ts</a>
-<a class="sourceLine" id="cb4-14" title="14">    <span class="kw">elsif</span> <span class="dt">Unmutate</span>.arithmetic?(ts)</a>
-<a class="sourceLine" id="cb4-15" title="15">      ts</a>
-<a class="sourceLine" id="cb4-16" title="16">    <span class="kw">elsif</span> <span class="dt">Unmutate</span>.mutate(bp1) == ts</a>
-<a class="sourceLine" id="cb4-17" title="17">      bp1</a>
-<a class="sourceLine" id="cb4-18" title="18">    <span class="kw">elsif</span> <span class="dt">Unmutate</span>.mutate(bp2) == ts</a>
-<a class="sourceLine" id="cb4-19" title="19">      bp2</a>
-<a class="sourceLine" id="cb4-20" title="20">    <span class="kw">else</span></a>
-<a class="sourceLine" id="cb4-21" title="21">      <span class="dv">nil</span></a>
-<a class="sourceLine" id="cb4-22" title="22">    <span class="kw">end</span></a>
-<a class="sourceLine" id="cb4-23" title="23">  <span class="kw">end</span></a>
-<a class="sourceLine" id="cb4-24" title="24"></a>
-<a class="sourceLine" id="cb4-25" title="25">  <span class="kw">def</span> <span class="dt">Unmutate</span>.make_BP(len, make_first_term, originals)</a>
-<a class="sourceLine" id="cb4-26" title="26">    <span class="kw">if</span> originals.size &lt; <span class="dv">2</span></a>
-<a class="sourceLine" id="cb4-27" title="27">      <span class="kw">return</span> []</a>
-<a class="sourceLine" id="cb4-28" title="28">    <span class="kw">end</span></a>
-<a class="sourceLine" id="cb4-29" title="29"></a>
-<a class="sourceLine" id="cb4-30" title="30">    o0 = originals[<span class="dv">0</span>]</a>
-<a class="sourceLine" id="cb4-31" title="31">    o1 = originals[<span class="dv">1</span>]</a>
-<a class="sourceLine" id="cb4-32" title="32">    m = (o1 - o0) / <span class="dv">2</span></a>
-<a class="sourceLine" id="cb4-33" title="33">    bp = []</a>
-<a class="sourceLine" id="cb4-34" title="34"></a>
-<a class="sourceLine" id="cb4-35" title="35">    <span class="kw">for</span> n <span class="kw">in</span> (<span class="dv">0</span>..(len - <span class="dv">1</span>)) <span class="kw">do</span></a>
-<a class="sourceLine" id="cb4-36" title="36">      bp &lt;&lt; m*n + o0</a>
-<a class="sourceLine" id="cb4-37" title="37">    <span class="kw">end</span></a>
-<a class="sourceLine" id="cb4-38" title="38"></a>
-<a class="sourceLine" id="cb4-39" title="39">    <span class="kw">if</span> make_first_term</a>
-<a class="sourceLine" id="cb4-40" title="40">      [o0 - m] + bp.take(len - <span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb4-41" title="41">    <span class="kw">else</span></a>
-<a class="sourceLine" id="cb4-42" title="42">      bp</a>
-<a class="sourceLine" id="cb4-43" title="43">    <span class="kw">end</span></a>
-<a class="sourceLine" id="cb4-44" title="44">  <span class="kw">end</span></a>
-<a class="sourceLine" id="cb4-45" title="45"></a>
-<a class="sourceLine" id="cb4-46" title="46">  <span class="kw">def</span> <span class="dt">Unmutate</span>.mutate(ts)</a>
-<a class="sourceLine" id="cb4-47" title="47">    ts.map{|t| make_odd t}</a>
-<a class="sourceLine" id="cb4-48" title="48">  <span class="kw">end</span></a>
-<a class="sourceLine" id="cb4-49" title="49"></a>
-<a class="sourceLine" id="cb4-50" title="50">  <span class="kw">def</span> <span class="dt">Unmutate</span>.arithmetic?(ts)</a>
-<a class="sourceLine" id="cb4-51" title="51">    <span class="kw">if</span> ts.size &lt; <span class="dv">2</span></a>
-<a class="sourceLine" id="cb4-52" title="52">      <span class="kw">return</span> <span class="dv">false</span></a>
-<a class="sourceLine" id="cb4-53" title="53">    <span class="kw">end</span></a>
-<a class="sourceLine" id="cb4-54" title="54"></a>
-<a class="sourceLine" id="cb4-55" title="55">    m = ts[<span class="dv">1</span>] - ts[<span class="dv">0</span>]</a>
-<a class="sourceLine" id="cb4-56" title="56">    ms = ts.drop(<span class="dv">1</span>).zip(ts.take(ts.size - <span class="dv">1</span>))</a>
-<a class="sourceLine" id="cb4-57" title="57"></a>
-<a class="sourceLine" id="cb4-58" title="58">    ms.each <span class="kw">do</span> |t1, t0|</a>
-<a class="sourceLine" id="cb4-59" title="59">      <span class="kw">if</span> (t1 - t0) != m</a>
-<a class="sourceLine" id="cb4-60" title="60">        <span class="kw">return</span> <span class="dv">false</span></a>
-<a class="sourceLine" id="cb4-61" title="61">      <span class="kw">end</span></a>
-<a class="sourceLine" id="cb4-62" title="62">    <span class="kw">end</span></a>
-<a class="sourceLine" id="cb4-63" title="63"></a>
-<a class="sourceLine" id="cb4-64" title="64">    <span class="dv">true</span></a>
-<a class="sourceLine" id="cb4-65" title="65">  <span class="kw">end</span></a>
-<a class="sourceLine" id="cb4-66" title="66"><span class="kw">end</span></a>
-<a class="sourceLine" id="cb4-67" title="67"></a>
-<a class="sourceLine" id="cb4-68" title="68"><span class="kw">def</span> make_odd(t)</a>
-<a class="sourceLine" id="cb4-69" title="69">  <span class="kw">if</span> t.odd? || t == <span class="dv">0</span></a>
-<a class="sourceLine" id="cb4-70" title="70">    t</a>
-<a class="sourceLine" id="cb4-71" title="71">  <span class="kw">else</span></a>
-<a class="sourceLine" id="cb4-72" title="72">    make_odd(t/<span class="dv">2</span>)</a>
-<a class="sourceLine" id="cb4-73" title="73">  <span class="kw">end</span></a>
-<a class="sourceLine" id="cb4-74" title="74"><span class="kw">end</span></a>
-<a class="sourceLine" id="cb4-75" title="75"></a>
-<a class="sourceLine" id="cb4-76" title="76"><span class="kw">def</span> every_nth0(n, ts)</a>
-<a class="sourceLine" id="cb4-77" title="77">  arr = []</a>
-<a class="sourceLine" id="cb4-78" title="78">  <span class="kw">for</span> i <span class="kw">in</span> (<span class="dv">0</span>..(ts.size - <span class="dv">1</span>)) <span class="kw">do</span></a>
-<a class="sourceLine" id="cb4-79" title="79">    <span class="kw">if</span> i % n == <span class="dv">0</span></a>
-<a class="sourceLine" id="cb4-80" title="80">      arr &lt;&lt; ts[i]</a>
-<a class="sourceLine" id="cb4-81" title="81">    <span class="kw">end</span></a>
-<a class="sourceLine" id="cb4-82" title="82">  <span class="kw">end</span></a>
-<a class="sourceLine" id="cb4-83" title="83">  arr</a>
-<a class="sourceLine" id="cb4-84" title="84"><span class="kw">end</span></a>
-<a class="sourceLine" id="cb4-85" title="85"></a>
-<a class="sourceLine" id="cb4-86" title="86"><span class="kw">def</span> every_nth(n, ts)</a>
-<a class="sourceLine" id="cb4-87" title="87">  arr = []</a>
-<a class="sourceLine" id="cb4-88" title="88">  <span class="kw">for</span> i <span class="kw">in</span> (<span class="dv">0</span>..(ts.size - <span class="dv">1</span>)) <span class="kw">do</span></a>
-<a class="sourceLine" id="cb4-89" title="89">    <span class="kw">if</span> (i + <span class="dv">1</span>) % n == <span class="dv">0</span></a>
-<a class="sourceLine" id="cb4-90" title="90">      arr &lt;&lt; ts[i]</a>
-<a class="sourceLine" id="cb4-91" title="91">    <span class="kw">end</span></a>
-<a class="sourceLine" id="cb4-92" title="92">  <span class="kw">end</span></a>
-<a class="sourceLine" id="cb4-93" title="93">  arr</a>
-<a class="sourceLine" id="cb4-94" title="94"><span class="kw">end</span></a></code></pre></div>
+<div class="sourceCode" id="cb4" data-input="code/toy/srm485-afraid-of-even/unmutate.rb"><pre class="sourceCode numberSource numberLines ruby"><code class="sourceCode ruby"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">module</span> <span class="dt">Unmutate</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a>  <span class="kw">def</span> <span class="dt">Unmutate</span>.unmutate(ts)</span>
+<span id="cb4-3"><a href="#cb4-3"></a>    <span class="kw">if</span> ts.size &lt; <span class="dv">4</span></span>
+<span id="cb4-4"><a href="#cb4-4"></a>      <span class="kw">return</span> <span class="dv">nil</span></span>
+<span id="cb4-5"><a href="#cb4-5"></a>    <span class="kw">end</span></span>
+<span id="cb4-6"><a href="#cb4-6"></a></span>
+<span id="cb4-7"><a href="#cb4-7"></a>    bp1_terms = every_nth0(<span class="dv">2</span>, ts)</span>
+<span id="cb4-8"><a href="#cb4-8"></a>    bp1 = make_BP(ts.size, <span class="dv">false</span>, bp1_terms)</span>
+<span id="cb4-9"><a href="#cb4-9"></a>    bp2_terms = every_nth(<span class="dv">2</span>, ts)</span>
+<span id="cb4-10"><a href="#cb4-10"></a>    bp2 = make_BP(ts.size, <span class="dv">true</span>, bp2_terms)</span>
+<span id="cb4-11"><a href="#cb4-11"></a></span>
+<span id="cb4-12"><a href="#cb4-12"></a>    <span class="kw">if</span> ts.uniq.size == <span class="dv">1</span></span>
+<span id="cb4-13"><a href="#cb4-13"></a>      ts</span>
+<span id="cb4-14"><a href="#cb4-14"></a>    <span class="kw">elsif</span> <span class="dt">Unmutate</span>.arithmetic?(ts)</span>
+<span id="cb4-15"><a href="#cb4-15"></a>      ts</span>
+<span id="cb4-16"><a href="#cb4-16"></a>    <span class="kw">elsif</span> <span class="dt">Unmutate</span>.mutate(bp1) == ts</span>
+<span id="cb4-17"><a href="#cb4-17"></a>      bp1</span>
+<span id="cb4-18"><a href="#cb4-18"></a>    <span class="kw">elsif</span> <span class="dt">Unmutate</span>.mutate(bp2) == ts</span>
+<span id="cb4-19"><a href="#cb4-19"></a>      bp2</span>
+<span id="cb4-20"><a href="#cb4-20"></a>    <span class="kw">else</span></span>
+<span id="cb4-21"><a href="#cb4-21"></a>      <span class="dv">nil</span></span>
+<span id="cb4-22"><a href="#cb4-22"></a>    <span class="kw">end</span></span>
+<span id="cb4-23"><a href="#cb4-23"></a>  <span class="kw">end</span></span>
+<span id="cb4-24"><a href="#cb4-24"></a></span>
+<span id="cb4-25"><a href="#cb4-25"></a>  <span class="kw">def</span> <span class="dt">Unmutate</span>.make_BP(len, make_first_term, originals)</span>
+<span id="cb4-26"><a href="#cb4-26"></a>    <span class="kw">if</span> originals.size &lt; <span class="dv">2</span></span>
+<span id="cb4-27"><a href="#cb4-27"></a>      <span class="kw">return</span> []</span>
+<span id="cb4-28"><a href="#cb4-28"></a>    <span class="kw">end</span></span>
+<span id="cb4-29"><a href="#cb4-29"></a></span>
+<span id="cb4-30"><a href="#cb4-30"></a>    o0 = originals[<span class="dv">0</span>]</span>
+<span id="cb4-31"><a href="#cb4-31"></a>    o1 = originals[<span class="dv">1</span>]</span>
+<span id="cb4-32"><a href="#cb4-32"></a>    m = (o1 - o0) / <span class="dv">2</span></span>
+<span id="cb4-33"><a href="#cb4-33"></a>    bp = []</span>
+<span id="cb4-34"><a href="#cb4-34"></a></span>
+<span id="cb4-35"><a href="#cb4-35"></a>    <span class="kw">for</span> n <span class="kw">in</span> (<span class="dv">0</span>..(len - <span class="dv">1</span>)) <span class="kw">do</span></span>
+<span id="cb4-36"><a href="#cb4-36"></a>      bp &lt;&lt; m*n + o0</span>
+<span id="cb4-37"><a href="#cb4-37"></a>    <span class="kw">end</span></span>
+<span id="cb4-38"><a href="#cb4-38"></a></span>
+<span id="cb4-39"><a href="#cb4-39"></a>    <span class="kw">if</span> make_first_term</span>
+<span id="cb4-40"><a href="#cb4-40"></a>      [o0 - m] + bp.take(len - <span class="dv">1</span>)</span>
+<span id="cb4-41"><a href="#cb4-41"></a>    <span class="kw">else</span></span>
+<span id="cb4-42"><a href="#cb4-42"></a>      bp</span>
+<span id="cb4-43"><a href="#cb4-43"></a>    <span class="kw">end</span></span>
+<span id="cb4-44"><a href="#cb4-44"></a>  <span class="kw">end</span></span>
+<span id="cb4-45"><a href="#cb4-45"></a></span>
+<span id="cb4-46"><a href="#cb4-46"></a>  <span class="kw">def</span> <span class="dt">Unmutate</span>.mutate(ts)</span>
+<span id="cb4-47"><a href="#cb4-47"></a>    ts.map{|t| make_odd t}</span>
+<span id="cb4-48"><a href="#cb4-48"></a>  <span class="kw">end</span></span>
+<span id="cb4-49"><a href="#cb4-49"></a></span>
+<span id="cb4-50"><a href="#cb4-50"></a>  <span class="kw">def</span> <span class="dt">Unmutate</span>.arithmetic?(ts)</span>
+<span id="cb4-51"><a href="#cb4-51"></a>    <span class="kw">if</span> ts.size &lt; <span class="dv">2</span></span>
+<span id="cb4-52"><a href="#cb4-52"></a>      <span class="kw">return</span> <span class="dv">false</span></span>
+<span id="cb4-53"><a href="#cb4-53"></a>    <span class="kw">end</span></span>
+<span id="cb4-54"><a href="#cb4-54"></a></span>
+<span id="cb4-55"><a href="#cb4-55"></a>    m = ts[<span class="dv">1</span>] - ts[<span class="dv">0</span>]</span>
+<span id="cb4-56"><a href="#cb4-56"></a>    ms = ts.drop(<span class="dv">1</span>).zip(ts.take(ts.size - <span class="dv">1</span>))</span>
+<span id="cb4-57"><a href="#cb4-57"></a></span>
+<span id="cb4-58"><a href="#cb4-58"></a>    ms.each <span class="kw">do</span> |t1, t0|</span>
+<span id="cb4-59"><a href="#cb4-59"></a>      <span class="kw">if</span> (t1 - t0) != m</span>
+<span id="cb4-60"><a href="#cb4-60"></a>        <span class="kw">return</span> <span class="dv">false</span></span>
+<span id="cb4-61"><a href="#cb4-61"></a>      <span class="kw">end</span></span>
+<span id="cb4-62"><a href="#cb4-62"></a>    <span class="kw">end</span></span>
+<span id="cb4-63"><a href="#cb4-63"></a></span>
+<span id="cb4-64"><a href="#cb4-64"></a>    <span class="dv">true</span></span>
+<span id="cb4-65"><a href="#cb4-65"></a>  <span class="kw">end</span></span>
+<span id="cb4-66"><a href="#cb4-66"></a><span class="kw">end</span></span>
+<span id="cb4-67"><a href="#cb4-67"></a></span>
+<span id="cb4-68"><a href="#cb4-68"></a><span class="kw">def</span> make_odd(t)</span>
+<span id="cb4-69"><a href="#cb4-69"></a>  <span class="kw">if</span> t.odd? || t == <span class="dv">0</span></span>
+<span id="cb4-70"><a href="#cb4-70"></a>    t</span>
+<span id="cb4-71"><a href="#cb4-71"></a>  <span class="kw">else</span></span>
+<span id="cb4-72"><a href="#cb4-72"></a>    make_odd(t/<span class="dv">2</span>)</span>
+<span id="cb4-73"><a href="#cb4-73"></a>  <span class="kw">end</span></span>
+<span id="cb4-74"><a href="#cb4-74"></a><span class="kw">end</span></span>
+<span id="cb4-75"><a href="#cb4-75"></a></span>
+<span id="cb4-76"><a href="#cb4-76"></a><span class="kw">def</span> every_nth0(n, ts)</span>
+<span id="cb4-77"><a href="#cb4-77"></a>  arr = []</span>
+<span id="cb4-78"><a href="#cb4-78"></a>  <span class="kw">for</span> i <span class="kw">in</span> (<span class="dv">0</span>..(ts.size - <span class="dv">1</span>)) <span class="kw">do</span></span>
+<span id="cb4-79"><a href="#cb4-79"></a>    <span class="kw">if</span> i % n == <span class="dv">0</span></span>
+<span id="cb4-80"><a href="#cb4-80"></a>      arr &lt;&lt; ts[i]</span>
+<span id="cb4-81"><a href="#cb4-81"></a>    <span class="kw">end</span></span>
+<span id="cb4-82"><a href="#cb4-82"></a>  <span class="kw">end</span></span>
+<span id="cb4-83"><a href="#cb4-83"></a>  arr</span>
+<span id="cb4-84"><a href="#cb4-84"></a><span class="kw">end</span></span>
+<span id="cb4-85"><a href="#cb4-85"></a></span>
+<span id="cb4-86"><a href="#cb4-86"></a><span class="kw">def</span> every_nth(n, ts)</span>
+<span id="cb4-87"><a href="#cb4-87"></a>  arr = []</span>
+<span id="cb4-88"><a href="#cb4-88"></a>  <span class="kw">for</span> i <span class="kw">in</span> (<span class="dv">0</span>..(ts.size - <span class="dv">1</span>)) <span class="kw">do</span></span>
+<span id="cb4-89"><a href="#cb4-89"></a>    <span class="kw">if</span> (i + <span class="dv">1</span>) % n == <span class="dv">0</span></span>
+<span id="cb4-90"><a href="#cb4-90"></a>      arr &lt;&lt; ts[i]</span>
+<span id="cb4-91"><a href="#cb4-91"></a>    <span class="kw">end</span></span>
+<span id="cb4-92"><a href="#cb4-92"></a>  <span class="kw">end</span></span>
+<span id="cb4-93"><a href="#cb4-93"></a>  arr</span>
+<span id="cb4-94"><a href="#cb4-94"></a><span class="kw">end</span></span></code></pre></div>
 </div>
 <div class="code-and-raw lineCntMax100">
 <div class="raw-link sourceCode">
 <table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/toy/srm485-afraid-of-even/test-unmutate.rb" mimetype="text/plain">test-unmutate.rb</a></code></pre></td></tr></tbody></table>
 </div>
-<div class="sourceCode" id="cb5" data-input="code/toy/srm485-afraid-of-even/test-unmutate.rb"><pre class="sourceCode numberSource numberLines ruby"><code class="sourceCode ruby"><a class="sourceLine" id="cb5-1" title="1"><span class="co"># Usage: ruby test-unmutate.rb</span></a>
-<a class="sourceLine" id="cb5-2" title="2"></a>
-<a class="sourceLine" id="cb5-3" title="3">require <span class="st">'minitest/autorun'</span></a>
-<a class="sourceLine" id="cb5-4" title="4">require_relative <span class="st">'./unmutate.rb'</span></a>
-<a class="sourceLine" id="cb5-5" title="5"></a>
-<a class="sourceLine" id="cb5-6" title="6"><span class="kw">class</span> <span class="dt">TestUnmutate</span> &lt; <span class="dt">Minitest</span>::<span class="dt">Test</span></a>
-<a class="sourceLine" id="cb5-7" title="7">  <span class="kw">def</span> test_empty_list_incalculable</a>
-<a class="sourceLine" id="cb5-8" title="8">    assert_equal <span class="dv">nil</span>, <span class="dt">Unmutate</span>.unmutate([])</a>
-<a class="sourceLine" id="cb5-9" title="9">  <span class="kw">end</span></a>
-<a class="sourceLine" id="cb5-10" title="10"></a>
-<a class="sourceLine" id="cb5-11" title="11">  <span class="kw">def</span> test_all_odd_no_change</a>
-<a class="sourceLine" id="cb5-12" title="12">    assert_equal [<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">9</span>],</a>
-<a class="sourceLine" id="cb5-13" title="13">      <span class="dt">Unmutate</span>.unmutate([<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">9</span>])</a>
-<a class="sourceLine" id="cb5-14" title="14">  <span class="kw">end</span></a>
-<a class="sourceLine" id="cb5-15" title="15"></a>
-<a class="sourceLine" id="cb5-16" title="16">  <span class="kw">def</span> test_m_is<span class="dt">_0</span></a>
-<a class="sourceLine" id="cb5-17" title="17">    assert_equal [<span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">5</span>],</a>
-<a class="sourceLine" id="cb5-18" title="18">      <span class="dt">Unmutate</span>.unmutate([<span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">5</span>])</a>
-<a class="sourceLine" id="cb5-19" title="19">  <span class="kw">end</span></a>
-<a class="sourceLine" id="cb5-20" title="20"></a>
-<a class="sourceLine" id="cb5-21" title="21">  <span class="kw">def</span> test_known_<span class="kw">case</span><span class="dt">_1</span></a>
-<a class="sourceLine" id="cb5-22" title="22">    assert_equal [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>],</a>
-<a class="sourceLine" id="cb5-23" title="23">      <span class="dt">Unmutate</span>.unmutate([<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">1</span>, <span class="dv">5</span>])</a>
-<a class="sourceLine" id="cb5-24" title="24">  <span class="kw">end</span></a>
-<a class="sourceLine" id="cb5-25" title="25"></a>
-<a class="sourceLine" id="cb5-26" title="26">  <span class="kw">def</span> test_known_<span class="kw">case</span><span class="dt">_2</span></a>
-<a class="sourceLine" id="cb5-27" title="27">    assert_equal [<span class="dv">14</span>, <span class="dv">47</span>, <span class="dv">80</span>, <span class="dv">113</span>, <span class="dv">146</span>, <span class="dv">179</span>, <span class="dv">212</span>],</a>
-<a class="sourceLine" id="cb5-28" title="28">      <span class="dt">Unmutate</span>.unmutate([<span class="dv">7</span>, <span class="dv">47</span>, <span class="dv">5</span>, <span class="dv">113</span>, <span class="dv">73</span>, <span class="dv">179</span>, <span class="dv">53</span>])</a>
-<a class="sourceLine" id="cb5-29" title="29">  <span class="kw">end</span></a>
-<a class="sourceLine" id="cb5-30" title="30"></a>
-<a class="sourceLine" id="cb5-31" title="31">  <span class="kw">def</span> test_known_<span class="kw">case</span><span class="dt">_3</span></a>
-<a class="sourceLine" id="cb5-32" title="32">    assert_equal [<span class="dv">1498</span>, <span class="dv">999</span>, <span class="dv">500</span>, <span class="dv">1</span>],</a>
-<a class="sourceLine" id="cb5-33" title="33">      <span class="dt">Unmutate</span>.unmutate([<span class="dv">749</span>, <span class="dv">999</span>, <span class="dv">125</span>, <span class="dv">1</span>])</a>
-<a class="sourceLine" id="cb5-34" title="34">  <span class="kw">end</span></a>
-<a class="sourceLine" id="cb5-35" title="35"></a>
-<a class="sourceLine" id="cb5-36" title="36">  <span class="kw">def</span> test_known_<span class="kw">case</span><span class="dt">_4</span></a>
-<a class="sourceLine" id="cb5-37" title="37">    assert_equal [-<span class="dv">11</span>, <span class="dv">0</span>, <span class="dv">11</span>, <span class="dv">22</span>, <span class="dv">33</span>, <span class="dv">44</span>],</a>
-<a class="sourceLine" id="cb5-38" title="38">      <span class="dt">Unmutate</span>.unmutate([-<span class="dv">11</span>, <span class="dv">0</span>, <span class="dv">11</span>, <span class="dv">11</span>, <span class="dv">33</span>, <span class="dv">11</span>])</a>
-<a class="sourceLine" id="cb5-39" title="39">  <span class="kw">end</span></a>
-<a class="sourceLine" id="cb5-40" title="40"><span class="kw">end</span></a></code></pre></div>
+<div class="sourceCode" id="cb5" data-input="code/toy/srm485-afraid-of-even/test-unmutate.rb"><pre class="sourceCode numberSource numberLines ruby"><code class="sourceCode ruby"><span id="cb5-1"><a href="#cb5-1"></a><span class="co"># Usage: ruby test-unmutate.rb</span></span>
+<span id="cb5-2"><a href="#cb5-2"></a></span>
+<span id="cb5-3"><a href="#cb5-3"></a>require <span class="st">'minitest/autorun'</span></span>
+<span id="cb5-4"><a href="#cb5-4"></a>require_relative <span class="st">'./unmutate.rb'</span></span>
+<span id="cb5-5"><a href="#cb5-5"></a></span>
+<span id="cb5-6"><a href="#cb5-6"></a><span class="kw">class</span> <span class="dt">TestUnmutate</span> &lt; <span class="dt">Minitest</span>::<span class="dt">Test</span></span>
+<span id="cb5-7"><a href="#cb5-7"></a>  <span class="kw">def</span> test_empty_list_incalculable</span>
+<span id="cb5-8"><a href="#cb5-8"></a>    assert_equal <span class="dv">nil</span>, <span class="dt">Unmutate</span>.unmutate([])</span>
+<span id="cb5-9"><a href="#cb5-9"></a>  <span class="kw">end</span></span>
+<span id="cb5-10"><a href="#cb5-10"></a></span>
+<span id="cb5-11"><a href="#cb5-11"></a>  <span class="kw">def</span> test_all_odd_no_change</span>
+<span id="cb5-12"><a href="#cb5-12"></a>    assert_equal [<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">9</span>],</span>
+<span id="cb5-13"><a href="#cb5-13"></a>      <span class="dt">Unmutate</span>.unmutate([<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">9</span>])</span>
+<span id="cb5-14"><a href="#cb5-14"></a>  <span class="kw">end</span></span>
+<span id="cb5-15"><a href="#cb5-15"></a></span>
+<span id="cb5-16"><a href="#cb5-16"></a>  <span class="kw">def</span> test_m_is_0</span>
+<span id="cb5-17"><a href="#cb5-17"></a>    assert_equal [<span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">5</span>],</span>
+<span id="cb5-18"><a href="#cb5-18"></a>      <span class="dt">Unmutate</span>.unmutate([<span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">5</span>])</span>
+<span id="cb5-19"><a href="#cb5-19"></a>  <span class="kw">end</span></span>
+<span id="cb5-20"><a href="#cb5-20"></a></span>
+<span id="cb5-21"><a href="#cb5-21"></a>  <span class="kw">def</span> test_known_case_1</span>
+<span id="cb5-22"><a href="#cb5-22"></a>    assert_equal [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>],</span>
+<span id="cb5-23"><a href="#cb5-23"></a>      <span class="dt">Unmutate</span>.unmutate([<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">1</span>, <span class="dv">5</span>])</span>
+<span id="cb5-24"><a href="#cb5-24"></a>  <span class="kw">end</span></span>
+<span id="cb5-25"><a href="#cb5-25"></a></span>
+<span id="cb5-26"><a href="#cb5-26"></a>  <span class="kw">def</span> test_known_case_2</span>
+<span id="cb5-27"><a href="#cb5-27"></a>    assert_equal [<span class="dv">14</span>, <span class="dv">47</span>, <span class="dv">80</span>, <span class="dv">113</span>, <span class="dv">146</span>, <span class="dv">179</span>, <span class="dv">212</span>],</span>
+<span id="cb5-28"><a href="#cb5-28"></a>      <span class="dt">Unmutate</span>.unmutate([<span class="dv">7</span>, <span class="dv">47</span>, <span class="dv">5</span>, <span class="dv">113</span>, <span class="dv">73</span>, <span class="dv">179</span>, <span class="dv">53</span>])</span>
+<span id="cb5-29"><a href="#cb5-29"></a>  <span class="kw">end</span></span>
+<span id="cb5-30"><a href="#cb5-30"></a></span>
+<span id="cb5-31"><a href="#cb5-31"></a>  <span class="kw">def</span> test_known_case_3</span>
+<span id="cb5-32"><a href="#cb5-32"></a>    assert_equal [<span class="dv">1498</span>, <span class="dv">999</span>, <span class="dv">500</span>, <span class="dv">1</span>],</span>
+<span id="cb5-33"><a href="#cb5-33"></a>      <span class="dt">Unmutate</span>.unmutate([<span class="dv">749</span>, <span class="dv">999</span>, <span class="dv">125</span>, <span class="dv">1</span>])</span>
+<span id="cb5-34"><a href="#cb5-34"></a>  <span class="kw">end</span></span>
+<span id="cb5-35"><a href="#cb5-35"></a></span>
+<span id="cb5-36"><a href="#cb5-36"></a>  <span class="kw">def</span> test_known_case_4</span>
+<span id="cb5-37"><a href="#cb5-37"></a>    assert_equal [-<span class="dv">11</span>, <span class="dv">0</span>, <span class="dv">11</span>, <span class="dv">22</span>, <span class="dv">33</span>, <span class="dv">44</span>],</span>
+<span id="cb5-38"><a href="#cb5-38"></a>      <span class="dt">Unmutate</span>.unmutate([-<span class="dv">11</span>, <span class="dv">0</span>, <span class="dv">11</span>, <span class="dv">11</span>, <span class="dv">33</span>, <span class="dv">11</span>])</span>
+<span id="cb5-39"><a href="#cb5-39"></a>  <span class="kw">end</span></span>
+<span id="cb5-40"><a href="#cb5-40"></a><span class="kw">end</span></span></code></pre></div>
 </div>
 <p>This Ruby version is essentially a port of the Haskell version. The problem at hand is so mathematical that it makes sense to simply preserve the clean Haskell definitions.</p>
 <h1 id="conclusion">Conclusion</h1>

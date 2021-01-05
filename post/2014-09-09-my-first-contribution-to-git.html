@@ -41,7 +41,7 @@
 			<div class="info center">
 	<code class="date">2014-09-09</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2014-09-09-my-first-contribution-to-git.org" title="History">*</a>
 	<br>
-	<a href="../tag/programming.html">programming</a>, <a href="../tag/git.html">git</a>
+	<a title="All pages tagged 'programming'." href="../tag/programming.html">programming</a>, <a title="All pages tagged 'git'." href="../tag/git.html">git</a>
 </div>
 
 <p>I am happy to say that my <a href="https://marc.info/?l=git&amp;m=140700284616433&amp;w=2">first</a> <a href="https://marc.info/?l=git&amp;m=140751902721342&amp;w=2">patches</a> were <a href="https://github.com/git/git/commit/4645b014c5c82a3b75337">recently merged</a> into the master Git branch! Now, I am by no means a C or Git expert, so the patches only dealt with changes to the documentation. I did not know anyone involved with Git in real life; nor did I have any experience submitting patches to a big project like Git. So, how did I do it?</p>
@@ -58,16 +58,16 @@
 <p>After re-reading everything for the eighth time, I sent an email to the official mailing list with <code>git send-email</code>. I checked <code>git blame</code> for the lines I touched to CC everyone that could be directly affected by my changes. After a few days, I got a response back — from the principal maintainer of Git, Junio Hamano, no less!</p>
 <h1 id="the-response">The Response?</h1>
 <p>He was very polite, and true to his duty as maintainer, very thorough. You can see the discussion that took place over at the <a href="https://marc.info/?l=git&amp;m=140700284616433&amp;w=2">mailing list archive</a>. I sent off my second version of my 7-commit patch series after a few days, and waited.</p>
-<p>And waited. I waited two weeks, but alas, my new patch series was not getting any further feedback. I was concerned that my changes were simply forgotten. A nagging thought annoyed me — “What if I miss the current merge window<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>?” In mild desperation, I sent an email directly to Junio to remind him about my patches. Still no response. A couple more weeks passed, and I almost forgot about my patches…</p>
+<p>And waited. I waited two weeks, but alas, my new patch series was not getting any further feedback. I was concerned that my changes were simply forgotten. A nagging thought annoyed me — “What if I miss the current merge window<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>?” In mild desperation, I sent an email directly to Junio to remind him about my patches. Still no response. A couple more weeks passed, and I almost forgot about my patches…</p>
 <p>Until today! I got an email from <code>tip4commit.com</code> telling me that I was given some miniscule fraction of a bitcoin for my contribution to the Git project. It felt like some strange sort of scam, but even if it was, whoever wrote that automated emailing script did their homework on the Github API because lo and behold, my patches were indeed merged into the mainline!</p>
 <h1 id="conclusion">Conclusion</h1>
 <p>Well, as they say, if you don’t know how to code but still want to contribute to an open source project, you should work on the documentation! I assume that I did not get any feedback after the initial code review because the maintainer, Junio, was busy with other matters. If I think about it now, he does get tons of patches and needs to do countless merges, containing countless commits, to make a new release of Git.</p>
 <p>So, when contributing to open source, try working on the documentation first. Improving the documentation not only benefits all newcomers to the project, but also helps you understand the project better — a win win! And, be patient with your patches — especially if the project you are contributing to has a busy schedule.</p>
 <p>Happy hacking!</p>
-<section class="footnotes">
+<section class="footnotes" role="doc-endnotes">
 <hr />
 <ol>
-<li id="fn1"><p>This is the period of time when the maintainer of a project accepts patches for the next release.<a href="#fnref1" class="footnote-back">↩</a></p></li>
+<li id="fn1" role="doc-endnote"><p>This is the period of time when the maintainer of a project accepts patches for the next release.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 

@@ -41,10 +41,10 @@
 			<div class="info center">
 	<code class="date">2014-05-02</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2014-05-02-linus-haskell-coding-style.org" title="History">*</a>
 	<br>
-	<a href="../tag/haskell.html">haskell</a>, <a href="../tag/programming.html">programming</a>
+	<a title="All pages tagged 'haskell'." href="../tag/haskell.html">haskell</a>, <a title="All pages tagged 'programming'." href="../tag/programming.html">programming</a>
 </div>
 
-<p>Haskell is my favorite programming language. However, unlike mainstream languages (C, Java, Ruby, etc.), there are no known “coding styles” for it. C has the venerable Linux Kernel Coding Style <a href="https://www.kernel.org/doc/Documentation/CodingStyle">LKCS</a>, among many others. I really like LKCS because it is designed to be as readable as possible, and is actually pretty simple (no fancy indentation/brace rules). I just wish there was something like LKCS for Haskell, mainly because every time I open up Haskell code somebody else wrote, it is plagued with gargantuan amounts of indentation. It really has gotten out of hand. So, I hereby propose some rules to reduce the level of indentation, whether you use tabs or spaces.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
+<p>Haskell is my favorite programming language. However, unlike mainstream languages (C, Java, Ruby, etc.), there are no known “coding styles” for it. C has the venerable Linux Kernel Coding Style <a href="https://www.kernel.org/doc/Documentation/CodingStyle">LKCS</a>, among many others. I really like LKCS because it is designed to be as readable as possible, and is actually pretty simple (no fancy indentation/brace rules). I just wish there was something like LKCS for Haskell, mainly because every time I open up Haskell code somebody else wrote, it is plagued with gargantuan amounts of indentation. It really has gotten out of hand. So, I hereby propose some rules to reduce the level of indentation, whether you use tabs or spaces.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
 <p>NOTE: I use 4-character-wide tabs for Haskell; your browser may not render this correctly, but bear with me.</p>
 <h1 id="chapter-1-indentation">Chapter 1: Indentation</h1>
 <h2 id="wherever-possible-use-minimal-hanging-indentation">Wherever possible, use minimal hanging indentation</h2>
@@ -161,10 +161,10 @@ import MyModule.Two
     $ abcd z
 </code></pre>
 <p>, with each function on its own line, with the function composition operator <code>.</code> as the leading character, similar to how the comma <code>,</code> is the leading character for breaking up long lists.</p>
-<section class="footnotes">
+<section class="footnotes" role="doc-endnotes">
 <hr />
 <ol>
-<li id="fn1"><p>I prefer tabs for indentation, and spaces for alignment (which does happen once in a blue moon).<a href="#fnref1" class="footnote-back">↩</a></p></li>
+<li id="fn1" role="doc-endnote"><p>I prefer tabs for indentation, and spaces for alignment (which does happen once in a blue moon).<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 

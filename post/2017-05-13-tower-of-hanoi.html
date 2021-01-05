@@ -41,7 +41,7 @@
 			<div class="info center">
 	<code class="date">2017-05-13</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2017-05-13-tower-of-hanoi.org" title="History">*</a>
 	<br>
-	<a href="../tag/math.html">math</a>
+	<a title="All pages tagged 'math'." href="../tag/math.html">math</a>
 </div>
 
 <p>In the very first chapter of the book <a href="https://en.wikipedia.org/wiki/Concrete_Mathematics"><em>Concrete Mathematics</em> 2ed</a> there is a discussion about the <a href="https://en.wikipedia.org/wiki/Tower_of_Hanoi">Tower of Hanoi</a>. This post is a distillation of that discussion.</p>
@@ -117,7 +117,7 @@ S_0 = 0
 </tr>
 </tbody>
 </table>
-<p>We don’t have to actually simulate the puzzle to derive these values; using the recurrence Equation <span class="math inline">\(\ref{eq:recurrence}\)</span> we start off from the first row (the base case) and then calculate our way down, reusing <span class="math inline">\(S_n\)</span> from the previous row as <span class="math inline">\(S_{n - 1}\)</span>. <a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
+<p>We don’t have to actually simulate the puzzle to derive these values; using the recurrence Equation <span class="math inline">\(\ref{eq:recurrence}\)</span> we start off from the first row (the base case) and then calculate our way down, reusing <span class="math inline">\(S_n\)</span> from the previous row as <span class="math inline">\(S_{n - 1}\)</span>. <a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
 <p>Anyway, the values of <span class="math inline">\(S_n\)</span> sure look familiar — especially if we use base 2.</p>
 <table>
 <thead>
@@ -174,8 +174,8 @@ S_0 = 0
 <p>except it is no longer a recurrence as there is no need to define a base case. We’ll call it a <em>solution</em> to the recurrence.</p>
 <h1 id="proving-the-solution">Proving the Solution</h1>
 <p>Although the empirical evidence looks very good, we have not formally proved that the solution (Equation <span class="math inline">\(\ref{eq:solution}\)</span>) holds for <em>all</em> <span class="math inline">\(n\)</span>. It’s one thing to say that something is true for all <em>observed</em> cases (scientific experiment), and quite another to say that something is true for <em>all</em> cases (mathematical proof).</p>
-<p>Can we prove it? Yes! Fortunately for us, Equation <span class="math inline">\(\ref{eq:recurrence}\)</span> lends itself to proof by <a href="https://en.wikipedia.org/wiki/Mathematical_induction">induction</a>. Induction requires you to first prove some number <span class="math inline">\(k_0\)</span> as a starting point (the base case) using some proposition <span class="math inline">\(P\)</span>. Then you prove that <span class="math inline">\(P\)</span> holds for <span class="math inline">\(k + 1\)</span> (the next number); i.e., show that going from <span class="math inline">\(k\)</span> to <span class="math inline">\(k + 1\)</span> does not change <span class="math inline">\(P\)</span>. This is the <em>inductive step</em>. In this way, we prove the “totality” of <span class="math inline">\(P\)</span> as it applies to all numbers in the range <span class="math inline">\([k_0, k_{m}]\)</span> and we are done. <a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a></p>
-<p>Here we want to prove that Equation <span class="math inline">\(\ref{eq:solution}\)</span> holds for all <span class="math inline">\(n\)</span> (all natural numbers). <a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a> For this proof let’s rewrite Equation <span class="math inline">\(\ref{eq:solution}\)</span> to use <span class="math inline">\(k\)</span> instead of <span class="math inline">\(n\)</span>:</p>
+<p>Can we prove it? Yes! Fortunately for us, Equation <span class="math inline">\(\ref{eq:recurrence}\)</span> lends itself to proof by <a href="https://en.wikipedia.org/wiki/Mathematical_induction">induction</a>. Induction requires you to first prove some number <span class="math inline">\(k_0\)</span> as a starting point (the base case) using some proposition <span class="math inline">\(P\)</span>. Then you prove that <span class="math inline">\(P\)</span> holds for <span class="math inline">\(k + 1\)</span> (the next number); i.e., show that going from <span class="math inline">\(k\)</span> to <span class="math inline">\(k + 1\)</span> does not change <span class="math inline">\(P\)</span>. This is the <em>inductive step</em>. In this way, we prove the “totality” of <span class="math inline">\(P\)</span> as it applies to all numbers in the range <span class="math inline">\([k_0, k_{m}]\)</span> and we are done. <a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+<p>Here we want to prove that Equation <span class="math inline">\(\ref{eq:solution}\)</span> holds for all <span class="math inline">\(n\)</span> (all natural numbers). <a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> For this proof let’s rewrite Equation <span class="math inline">\(\ref{eq:solution}\)</span> to use <span class="math inline">\(k\)</span> instead of <span class="math inline">\(n\)</span>:</p>
 <p><span class="math display">\[
 \begin{equation} \label{eq:proposition}
   S_k = 2^k - 1 \quad \text{for } k \geq 0.
@@ -209,7 +209,7 @@ S_0 = 0
   &amp;= 2^{k + 1} - 1 \label{eq:induct3}.
   \end{align}
 \]</span></p>
-<p>And now we can see that Equation <span class="math inline">\(\ref{eq:induct3}\)</span> (our “evolved” proposition <span class="math inline">\(P\)</span>, if you will) is the same as our solution (Equation <span class="math inline">\(\ref{eq:solution}\)</span>), even though we increased <span class="math inline">\(k\)</span> to <span class="math inline">\(k + 1\)</span>! This is because simple substitution allows us to replace “<span class="math inline">\(k + 1\)</span>” with “<span class="math inline">\(n\)</span>”. We have completed our proof by induction. <a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a></p>
+<p>And now we can see that Equation <span class="math inline">\(\ref{eq:induct3}\)</span> (our “evolved” proposition <span class="math inline">\(P\)</span>, if you will) is the same as our solution (Equation <span class="math inline">\(\ref{eq:solution}\)</span>), even though we increased <span class="math inline">\(k\)</span> to <span class="math inline">\(k + 1\)</span>! This is because simple substitution allows us to replace “<span class="math inline">\(k + 1\)</span>” with “<span class="math inline">\(n\)</span>”. We have completed our proof by induction. <a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p>
 <h1 id="alternate-recurrence-and-solution">Alternate Recurrence and Solution</h1>
 <p>The book goes on to offer an alternate recurrence to Equation <span class="math inline">\(\ref{eq:recurrence}\)</span>, by adding 1 to both sides:</p>
 <p><span class="math display">\[
@@ -252,15 +252,15 @@ W_n = (S_n) + 1 = 2^n
 <h1 id="conclusion">Conclusion</h1>
 <p>I thoroughly enjoyed figuring this stuff out because possibly for the first time in my life I used my programming experience (recurrence/recursion, memoization) to help myself understand mathematics — not the other way around. The other way around was never enjoyable — calculating what <code>i</code> was in some <span class="math inline">\(n\)</span>th iteration of a <code>for</code>-loop never really excited me.</p>
 <p>I hope this explanation helps you better understand the first few pages of <em>Concrete Mathematics</em>; I had to read that part three times over to really “get it” (never having learned what induction is). And henceforth, I will never look at a string of consecutive 1’s in binary the same way again. 😃</p>
-<section class="footnotes">
+<section class="footnotes" role="doc-endnotes">
 <hr />
 <ol>
-<li id="fn1"><p>In computer science, this process of avoiding the recalculation of previously known values is called <em>memoization</em> and is useful in generating the first N values of a recursive algorithm in <span class="math inline">\(O(N)\)</span> (linear) time.<a href="#fnref1" class="footnote-back">↩</a></p></li>
-<li id="fn2"><p>Note that if <span class="math inline">\(k_0 = 0\)</span>, then <span class="math inline">\([k_0, k_{m}]\)</span> is the set of all natural numbers (zero plus the positive integers).<a href="#fnref2" class="footnote-back">↩</a></p></li>
-<li id="fn3"><p>There is no need to prove the recurrence (Equation <span class="math inline">\(\ref{eq:recurrence}\)</span>) as we have already proved it in the process of deriving it.<a href="#fnref3" class="footnote-back">↩</a></p></li>
-<li id="fn4"><p>In <em>Concrete Mathematics</em> 2 ed. p. 3 (where the book uses <span class="math inline">\(T_n\)</span> instead of <span class="math inline">\(S_n\)</span>), the proof is simply a one-liner: <span class="math display">\[
+<li id="fn1" role="doc-endnote"><p>In computer science, this process of avoiding the recalculation of previously known values is called <em>memoization</em> and is useful in generating the first N values of a recursive algorithm in <span class="math inline">\(O(N)\)</span> (linear) time.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2" role="doc-endnote"><p>Note that if <span class="math inline">\(k_0 = 0\)</span>, then <span class="math inline">\([k_0, k_{m}]\)</span> is the set of all natural numbers (zero plus the positive integers).<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3" role="doc-endnote"><p>There is no need to prove the recurrence (Equation <span class="math inline">\(\ref{eq:recurrence}\)</span>) as we have already proved it in the process of deriving it.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4" role="doc-endnote"><p>In <em>Concrete Mathematics</em> 2 ed. p. 3 (where the book uses <span class="math inline">\(T_n\)</span> instead of <span class="math inline">\(S_n\)</span>), the proof is simply a one-liner: <span class="math display">\[
 T_n = 2(T_{n - 1}) + 1 = 2(2^{n - 1} - 1) + 1 = 2^n - 1.
-\]</span> But I find it a bit too terse for my tastes.<a href="#fnref4" class="footnote-back">↩</a></p></li>
+\]</span> But I find it a bit too terse for my tastes.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 

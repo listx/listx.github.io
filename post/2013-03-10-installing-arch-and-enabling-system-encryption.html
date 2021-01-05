@@ -41,7 +41,7 @@
 			<div class="info center">
 	<code class="date">2013-03-10</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2013-03-10-installing-arch-and-enabling-system-encryption.org" title="History">*</a>
 	<br>
-	<a href="../tag/linux.html">linux</a>, <a href="../tag/arch.html">arch</a>
+	<a title="All pages tagged 'linux'." href="../tag/linux.html">linux</a>, <a title="All pages tagged 'arch'." href="../tag/arch.html">arch</a>
 </div>
 
 <p>The following list of commands is what you need to execute in order to set up Arch Linux with system-level encryption. The setup is 1 hard drive with 1 100MiB <code>/boot</code> partition, with the rest as a single LVM partition that will contain the <code>/</code> root, <code>/home</code>, and <code>swap</code> partitions. This LVM partition will be encrypted so that when the system boots, it will require a password to unlock the <code>/</code>, <code>/home</code>, and <code>swap</code> partitions to boot up the system. The <code>/boot</code> partition will remain unencrypted for the sake of simplicity.</p>
@@ -58,210 +58,210 @@
 <div class="raw-link sourceCode">
 <table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/arch-setup.sh" mimetype="text/plain">arch-setup.sh</a></code></pre></td></tr></tbody></table>
 </div>
-<div class="sourceCode" id="cb3" data-input="code/arch-setup.sh"><pre class="sourceCode numberSource numberLines bash"><code class="sourceCode bash"><a class="sourceLine" id="cb3-1" title="1"><span class="co"># Put in the Arch Linux live CD and run the following commands...</span></a>
-<a class="sourceLine" id="cb3-2" title="2"></a>
-<a class="sourceLine" id="cb3-3" title="3"><span class="co"># Set up 2 partitions; the first one is the boot 100MB partition (be sure</span></a>
-<a class="sourceLine" id="cb3-4" title="4"><span class="co"># to toggle the BOOT flag on it), and the second will be the LVM partition.</span></a>
-<a class="sourceLine" id="cb3-5" title="5"><span class="co"># Be sure to select 8E for the LVM partition! You can use</span></a>
-<a class="sourceLine" id="cb3-6" title="6"><span class="co"># /dev/disk/by-uuid/XXXX for more fine-grained control; use &quot;blkid -o list&quot;</span></a>
-<a class="sourceLine" id="cb3-7" title="7"><span class="co"># to find out which drives are given which UUIDs.</span></a>
-<a class="sourceLine" id="cb3-8" title="8"></a>
-<a class="sourceLine" id="cb3-9" title="9"><span class="ex">cfdisk</span> /dev/sda</a>
-<a class="sourceLine" id="cb3-10" title="10"></a>
-<a class="sourceLine" id="cb3-11" title="11"><span class="co"># Now set up encryption on the LVM partition (the 2nd partition, so it's</span></a>
-<a class="sourceLine" id="cb3-12" title="12"><span class="co"># /dev/sda2). It is recommended to use aes-xts-plain64 if the partition is</span></a>
-<a class="sourceLine" id="cb3-13" title="13"><span class="co"># larger than 2 TB, I think.</span></a>
-<a class="sourceLine" id="cb3-14" title="14"></a>
-<a class="sourceLine" id="cb3-15" title="15"><span class="ex">cryptsetup</span> -c aes-xts-plain -y -s 512 luksFormat /dev/sda2</a>
-<a class="sourceLine" id="cb3-16" title="16"></a>
-<a class="sourceLine" id="cb3-17" title="17"><span class="co"># Decrypt the encrypted partition with LUKS. We need to decrypt it first</span></a>
-<a class="sourceLine" id="cb3-18" title="18"><span class="co"># before setting up LVM volumes and filesystems on it. This will create</span></a>
-<a class="sourceLine" id="cb3-19" title="19"><span class="co"># an entry under /dev/mapper/luks.</span></a>
-<a class="sourceLine" id="cb3-20" title="20"></a>
-<a class="sourceLine" id="cb3-21" title="21"><span class="ex">cryptsetup</span> luksOpen /dev/sda2 luks</a>
-<a class="sourceLine" id="cb3-22" title="22"></a>
-<a class="sourceLine" id="cb3-23" title="23"><span class="co"># Set up LVM. We call our volume group &quot;vg0&quot;. To be honest I am not sure if</span></a>
-<a class="sourceLine" id="cb3-24" title="24"><span class="co"># the &quot;--contiguous y&quot; option for swap matters because we are encrypting it</span></a>
-<a class="sourceLine" id="cb3-25" title="25"><span class="co"># (doesn't block encryption encrypt data randomly on the disk?), but that's</span></a>
-<a class="sourceLine" id="cb3-26" title="26"><span class="co"># what I found online and that's what I'll use here. The &quot;+100%FREE&quot; option</span></a>
-<a class="sourceLine" id="cb3-27" title="27"><span class="co"># is a very handy option that tells LVM to fill up all remaining free space,</span></a>
-<a class="sourceLine" id="cb3-28" title="28"><span class="co"># in this case, for the &quot;home&quot; logical volume.</span></a>
-<a class="sourceLine" id="cb3-29" title="29"><span class="co"># Read more about LVM on your favorite online wiki.</span></a>
-<a class="sourceLine" id="cb3-30" title="30"></a>
-<a class="sourceLine" id="cb3-31" title="31"><span class="ex">pvcreate</span> /dev/mapper/luks</a>
-<a class="sourceLine" id="cb3-32" title="32"><span class="ex">vgcreate</span> vg0 /dev/mapper/luks</a>
-<a class="sourceLine" id="cb3-33" title="33"><span class="ex">lvcreate</span> --size 40G vg0 --name root</a>
-<a class="sourceLine" id="cb3-34" title="34"><span class="ex">lvcreate</span> --size 2G --contiguous y vg0 --name swap</a>
-<a class="sourceLine" id="cb3-35" title="35"><span class="ex">lvcreate</span> -l +100%FREE vg0 --name home</a>
-<a class="sourceLine" id="cb3-36" title="36"></a>
-<a class="sourceLine" id="cb3-37" title="37"><span class="co"># Initialize filesystems. Btrfs is still experimental, so I choose ext4</span></a>
-<a class="sourceLine" id="cb3-38" title="38"><span class="co"># here. The vg0-root, vg0-home, and vg0-swap volumes should</span></a>
-<a class="sourceLine" id="cb3-39" title="39"><span class="co"># appear under /dev/mapper as you create them with the lvcreate command.</span></a>
-<a class="sourceLine" id="cb3-40" title="40"></a>
-<a class="sourceLine" id="cb3-41" title="41"><span class="ex">mkfs.ext4</span> /dev/sda1 <span class="co"># the boot partition</span></a>
-<a class="sourceLine" id="cb3-42" title="42"><span class="ex">mkfs.ext4</span> /dev/mapper/vg0-root</a>
-<a class="sourceLine" id="cb3-43" title="43"><span class="ex">mkfs.ext4</span> /dev/mapper/vg0-home</a>
-<a class="sourceLine" id="cb3-44" title="44"><span class="ex">mkswap</span> /dev/mapper/vg0-swap</a>
-<a class="sourceLine" id="cb3-45" title="45"></a>
-<a class="sourceLine" id="cb3-46" title="46"><span class="co"># Mount the logical volumes. Why? Because we need to install Arch Linux onto</span></a>
-<a class="sourceLine" id="cb3-47" title="47"><span class="co"># it! You probably don't need to mount the &quot;home&quot; volume but it couldn't</span></a>
-<a class="sourceLine" id="cb3-48" title="48"><span class="co"># hurt. Besides, it's nice to test that all volumes can be mounted OK anyway.</span></a>
-<a class="sourceLine" id="cb3-49" title="49"><span class="co">#</span></a>
-<a class="sourceLine" id="cb3-50" title="50"><span class="co"># </span><span class="al">NOTE</span><span class="co">: Mount order is important! YOU MUST FIRST MOUNT THE ROOT PARTITION into</span></a>
-<a class="sourceLine" id="cb3-51" title="51"><span class="co"># /mnt before creating more directories such as /mnt/boot, /mnt/home, etc. to</span></a>
-<a class="sourceLine" id="cb3-52" title="52"><span class="co"># mount the /boot, /home, and any other partitions.</span></a>
-<a class="sourceLine" id="cb3-53" title="53"></a>
-<a class="sourceLine" id="cb3-54" title="54"><span class="fu">mount</span> /dev/mapper/vg0-root /mnt <span class="co"># /mnt is our system's &quot;/&quot; root   directory</span></a>
-<a class="sourceLine" id="cb3-55" title="55"></a>
-<a class="sourceLine" id="cb3-56" title="56"><span class="fu">mkdir</span> /mnt/boot</a>
-<a class="sourceLine" id="cb3-57" title="57"><span class="fu">mount</span> /dev/sda1 /mnt/boot</a>
-<a class="sourceLine" id="cb3-58" title="58"></a>
-<a class="sourceLine" id="cb3-59" title="59"><span class="fu">mkdir</span> /mnt/home</a>
-<a class="sourceLine" id="cb3-60" title="60"><span class="fu">mount</span> /dev/mapper/vg0-home /mnt/home</a>
-<a class="sourceLine" id="cb3-61" title="61"></a>
-<a class="sourceLine" id="cb3-62" title="62"><span class="ex">swapon</span> /dev/mapper/vg0-swap</a>
-<a class="sourceLine" id="cb3-63" title="63"></a>
-<a class="sourceLine" id="cb3-64" title="64"><span class="co"># Set up package download mirrors. The kernel mirror is generally a good one</span></a>
-<a class="sourceLine" id="cb3-65" title="65"><span class="co"># if you live in the US. Google &quot;arch linux mirror status&quot; to find the</span></a>
-<a class="sourceLine" id="cb3-66" title="66"><span class="co"># fastest mirrors.</span></a>
-<a class="sourceLine" id="cb3-67" title="67"></a>
-<a class="sourceLine" id="cb3-68" title="68"><span class="ex">vi</span> /etc/pacman.d/mirrorlist</a>
-<a class="sourceLine" id="cb3-69" title="69"></a>
-<a class="sourceLine" id="cb3-70" title="70"><span class="co"># Download and install the core minimum packages to get a working Linux</span></a>
-<a class="sourceLine" id="cb3-71" title="71"><span class="co"># terminal (console) environment. Ah, simplicity!</span></a>
-<a class="sourceLine" id="cb3-72" title="72"></a>
-<a class="sourceLine" id="cb3-73" title="73"><span class="ex">pacstrap</span> -i /mnt base base-devel</a>
-<a class="sourceLine" id="cb3-74" title="74"></a>
-<a class="sourceLine" id="cb3-75" title="75"><span class="co"># Generate and inspect the filesystem tables needed when the system first</span></a>
-<a class="sourceLine" id="cb3-76" title="76"><span class="co"># starts. The file should contain four &quot;partitions&quot; (I put them in quotes</span></a>
-<a class="sourceLine" id="cb3-77" title="77"><span class="co"># because remember, we are using only 2 real partitions; 1st one is /boot and</span></a>
-<a class="sourceLine" id="cb3-78" title="78"><span class="co"># the 2nd one is our LVM containing /, /home, and swap).</span></a>
-<a class="sourceLine" id="cb3-79" title="79"></a>
-<a class="sourceLine" id="cb3-80" title="80"><span class="ex">genfstab</span> -U -p /mnt <span class="op">&gt;&gt;</span> /mnt/etc/fstab</a>
-<a class="sourceLine" id="cb3-81" title="81"><span class="ex">vi</span> /mnt/etc/fstab</a>
-<a class="sourceLine" id="cb3-82" title="82"></a>
-<a class="sourceLine" id="cb3-83" title="83"><span class="co"># Make the system pretend that /mnt is /. This is called &quot;chrooting&quot;. We need</span></a>
-<a class="sourceLine" id="cb3-84" title="84"><span class="co"># to do this because some of the commands like locale-gen, systemctl, etc.</span></a>
-<a class="sourceLine" id="cb3-85" title="85"><span class="co"># read configuration files from /etc, for example, and right now our /etc is</span></a>
-<a class="sourceLine" id="cb3-86" title="86"><span class="co"># the /etc used by the Arch Linux live CD, not our newly-installed system's</span></a>
-<a class="sourceLine" id="cb3-87" title="87"><span class="co"># root directory, /mnt.</span></a>
-<a class="sourceLine" id="cb3-88" title="88"></a>
-<a class="sourceLine" id="cb3-89" title="89"><span class="ex">arch-chroot</span> /mnt /bin/bash</a>
-<a class="sourceLine" id="cb3-90" title="90"></a>
-<a class="sourceLine" id="cb3-91" title="91"><span class="co"># Choose and generate locale; programs supporting internationalization (aka</span></a>
-<a class="sourceLine" id="cb3-92" title="92"><span class="co"># &quot;i18n&quot;) will use the language you pick to generate the proper text used in</span></a>
-<a class="sourceLine" id="cb3-93" title="93"><span class="co"># menus, error messages, etc. Just choose &quot;en_US.UTF-8 UTF-8&quot; if you live in</span></a>
-<a class="sourceLine" id="cb3-94" title="94"><span class="co"># the US.</span></a>
-<a class="sourceLine" id="cb3-95" title="95"></a>
-<a class="sourceLine" id="cb3-96" title="96"><span class="ex">vi</span> /etc/locale.gen</a>
-<a class="sourceLine" id="cb3-97" title="97"><span class="ex">locale-gen</span></a>
-<a class="sourceLine" id="cb3-98" title="98"><span class="bu">echo</span> LANG=en_US.UTF-8 <span class="op">&gt;</span> /etc/locale.conf</a>
-<a class="sourceLine" id="cb3-99" title="99"></a>
-<a class="sourceLine" id="cb3-100" title="100"><span class="co"># Choose default font used by the virtual console (the terminal screen you</span></a>
-<a class="sourceLine" id="cb3-101" title="101"><span class="co"># will see when you first boot up your new Arch Linux system).</span></a>
-<a class="sourceLine" id="cb3-102" title="102"></a>
-<a class="sourceLine" id="cb3-103" title="103"><span class="fu">setfont</span> Lat2-Terminus16</a>
-<a class="sourceLine" id="cb3-104" title="104"><span class="bu">echo</span> FONT=Lat2-Terminus16 <span class="op">&gt;</span> /etc/vconsole.conf</a>
-<a class="sourceLine" id="cb3-105" title="105"></a>
-<a class="sourceLine" id="cb3-106" title="106"><span class="co"># Choose timezone. Here, we tell hwclock that we want the hardware clock on</span></a>
-<a class="sourceLine" id="cb3-107" title="107"><span class="co"># the motherboard to be set to UTC, which will then be interpreted as UTC</span></a>
-<a class="sourceLine" id="cb3-108" title="108"><span class="co"># time by the kernel and re-adjusted to the timezone you chose when you</span></a>
-<a class="sourceLine" id="cb3-109" title="109"><span class="co"># actually use the system. This is nice because UTC is the &quot;master&quot; time the</span></a>
-<a class="sourceLine" id="cb3-110" title="110"><span class="co"># world uses anyway, so it makes sense to tell your motherboard to use it.</span></a>
-<a class="sourceLine" id="cb3-111" title="111"></a>
-<a class="sourceLine" id="cb3-112" title="112"><span class="fu">ln</span> -s /usr/share/zoneinfo/America/Los_Angeles /etc/localtime</a>
-<a class="sourceLine" id="cb3-113" title="113"><span class="ex">hwclock</span> --systohc --utc</a>
-<a class="sourceLine" id="cb3-114" title="114"></a>
-<a class="sourceLine" id="cb3-115" title="115"><span class="co"># Choose your computer's name. Keep it simple, without spaces. I use &quot;k0&quot;.</span></a>
-<a class="sourceLine" id="cb3-116" title="116"></a>
-<a class="sourceLine" id="cb3-117" title="117"><span class="bu">echo</span> MYHOSTNAME <span class="op">&gt;</span> /etc/hostname</a>
-<a class="sourceLine" id="cb3-118" title="118"></a>
-<a class="sourceLine" id="cb3-119" title="119"><span class="co"># Enable DHCPCD... aka &quot;acquire dynamic ip address from your router/switch&quot;.  Be</span></a>
-<a class="sourceLine" id="cb3-120" title="120"><span class="co"># sure to choose the right device name (typically eth0 or eth1 (eth2, if you</span></a>
-<a class="sourceLine" id="cb3-121" title="121"><span class="co"># have 3 ethernet ports)); you can find out the correct device name with `ip</span></a>
-<a class="sourceLine" id="cb3-122" title="122"><span class="co"># link` (look for the device under the first entry, `lo`.). If you choose the</span></a>
-<a class="sourceLine" id="cb3-123" title="123"><span class="co"># wrong &quot;eth&quot; number, just go to /etc/systemd/system/multi-user.target.wants/</span></a>
-<a class="sourceLine" id="cb3-124" title="124"><span class="co"># and rename the symlink; e.g., rename</span></a>
-<a class="sourceLine" id="cb3-125" title="125"><span class="co"># /etc/systemd/system/multi-user.target.wants/dhcpcd@eth0.service to</span></a>
-<a class="sourceLine" id="cb3-126" title="126"><span class="co"># /etc/systemd/system/multi-user.target.wants/dhcpcd@eth1.service.</span></a>
-<a class="sourceLine" id="cb3-127" title="127"></a>
-<a class="sourceLine" id="cb3-128" title="128"><span class="ex">systemctl</span> enable dhcpcd@DEVICENAME.service</a>
-<a class="sourceLine" id="cb3-129" title="129"></a>
-<a class="sourceLine" id="cb3-130" title="130"><span class="co"># Disable unused package repos. You will want to disable the [testing] repo</span></a>
-<a class="sourceLine" id="cb3-131" title="131"><span class="co"># unless you want to test unstable packages and engage in the package</span></a>
-<a class="sourceLine" id="cb3-132" title="132"><span class="co"># debugging/development process. For Haskellers, be sure to add the</span></a>
-<a class="sourceLine" id="cb3-133" title="133"><span class="co"># [haskell-core] repo (see</span></a>
-<a class="sourceLine" id="cb3-134" title="134"><span class="co"># https://wiki.archlinux.org/index.php/Haskell_Package_Guidelines).</span></a>
-<a class="sourceLine" id="cb3-135" title="135"></a>
-<a class="sourceLine" id="cb3-136" title="136"><span class="ex">vi</span> /etc/pacman.conf</a>
-<a class="sourceLine" id="cb3-137" title="137"></a>
-<a class="sourceLine" id="cb3-138" title="138"><span class="co"># Set up the root user (&quot;administrator&quot; for you Windows people) password.</span></a>
-<a class="sourceLine" id="cb3-139" title="139"></a>
-<a class="sourceLine" id="cb3-140" title="140"><span class="fu">passwd</span></a>
-<a class="sourceLine" id="cb3-141" title="141"></a>
-<a class="sourceLine" id="cb3-142" title="142"><span class="co"># Install zsh, because you will like it better any other shell out there.</span></a>
-<a class="sourceLine" id="cb3-143" title="143"></a>
-<a class="sourceLine" id="cb3-144" title="144"><span class="ex">pacman</span> -S zsh</a>
-<a class="sourceLine" id="cb3-145" title="145"></a>
-<a class="sourceLine" id="cb3-146" title="146"><span class="co"># Add your regular user, and set up your password. This is your normal</span></a>
-<a class="sourceLine" id="cb3-147" title="147"><span class="co"># username. We use the &quot;-s /bin/zsh&quot; option to tell useradd that we want to</span></a>
-<a class="sourceLine" id="cb3-148" title="148"><span class="co"># log in with zsh.</span></a>
-<a class="sourceLine" id="cb3-149" title="149"><span class="co">#</span></a>
-<a class="sourceLine" id="cb3-150" title="150"><span class="co"># If you want, you can add a new group that will only have your username as its</span></a>
-<a class="sourceLine" id="cb3-151" title="151"><span class="co"># only &quot;member&quot;, with `groupadd -g 1000 MYGROUPNAME`, and then you can use this</span></a>
-<a class="sourceLine" id="cb3-152" title="152"><span class="co"># group name for the `-g` flag's argument in the `useradd` command below. I like</span></a>
-<a class="sourceLine" id="cb3-153" title="153"><span class="co"># to have 1-character usernames for my machines to keep things simple and short,</span></a>
-<a class="sourceLine" id="cb3-154" title="154"><span class="co"># as I will be the exclusive user of the system anyway, so I also use the same</span></a>
-<a class="sourceLine" id="cb3-155" title="155"><span class="co"># character for my group as well, so that, in particular, the `ls` command's</span></a>
-<a class="sourceLine" id="cb3-156" title="156"><span class="co"># full listing of my files looks very succinct, as I like to live in the</span></a>
-<a class="sourceLine" id="cb3-157" title="157"><span class="co"># terminal and use `ls` daily.</span></a>
-<a class="sourceLine" id="cb3-158" title="158"></a>
-<a class="sourceLine" id="cb3-159" title="159"><span class="ex">useradd</span> -m -g users -G wheel,storage,power -s /bin/zsh MYUSERNAME</a>
-<a class="sourceLine" id="cb3-160" title="160"><span class="fu">passwd</span> MYUSERNAME</a>
-<a class="sourceLine" id="cb3-161" title="161"></a>
-<a class="sourceLine" id="cb3-162" title="162"><span class="co"># VERY IMPORTANT: Add in the filesystem type that /root partition (LVM) is</span></a>
-<a class="sourceLine" id="cb3-163" title="163"><span class="co"># using (for this tutorial, it is &quot;ext4&quot;) into the MODULES variable and also</span></a>
-<a class="sourceLine" id="cb3-164" title="164"><span class="co"># add 'encrypt' and 'lvm2' into HOOKS.</span></a>
-<a class="sourceLine" id="cb3-165" title="165"></a>
-<a class="sourceLine" id="cb3-166" title="166"><span class="ex">vi</span> /etc/mkinitcpio.conf</a>
-<a class="sourceLine" id="cb3-167" title="167"></a>
-<a class="sourceLine" id="cb3-168" title="168"><span class="co"># Re-generate the linux image to take into account the LVM and encrypt</span></a>
-<a class="sourceLine" id="cb3-169" title="169"><span class="co"># flags we added into /etc/mkinitcpio.conf. I say &quot;re-generate&quot; because this</span></a>
-<a class="sourceLine" id="cb3-170" title="170"><span class="co"># is our second time doing this (the first time was when we installed the</span></a>
-<a class="sourceLine" id="cb3-171" title="171"><span class="co"># linux package with the pacstrap command above).</span></a>
-<a class="sourceLine" id="cb3-172" title="172"></a>
-<a class="sourceLine" id="cb3-173" title="173"><span class="ex">mkinitcpio</span> -p linux</a>
-<a class="sourceLine" id="cb3-174" title="174"></a>
-<a class="sourceLine" id="cb3-175" title="175"><span class="co"># Install boot loader. I like SYSLINUX because of the saner/easier-looking boot</span></a>
-<a class="sourceLine" id="cb3-176" title="176"><span class="co"># configuration file, compared to GRUB 2. Be sure to add in (as a single line)</span></a>
-<a class="sourceLine" id="cb3-177" title="177"><span class="co">#     &quot;APPEND cryptdevice=/dev/disk/by-uuid/xxxxxxxxxx:luks</span></a>
-<a class="sourceLine" id="cb3-178" title="178"><span class="co">#           root=/dev/mapper/vg0-root resume=/dev/mapper/vg0-swap ro&quot;</span></a>
-<a class="sourceLine" id="cb3-179" title="179"><span class="co"># under the &quot;LABEL arch&quot; entries, so that SYSLINUX tells the kernel to look for</span></a>
-<a class="sourceLine" id="cb3-180" title="180"><span class="co"># the encrypted LVM partition. Otherwise, your system won't boot! Don't forget</span></a>
-<a class="sourceLine" id="cb3-181" title="181"><span class="co"># to actually look up the UUID of your LVM partition (/dev/sda2 in this</span></a>
-<a class="sourceLine" id="cb3-182" title="182"><span class="co"># tutorial). To easily add in the long UUID of the disk, just concatenate it</span></a>
-<a class="sourceLine" id="cb3-183" title="183"><span class="co"># into the syslinux.cfg file with `blkid -o list &gt;&gt;</span></a>
-<a class="sourceLine" id="cb3-184" title="184"><span class="co"># /boot/syslinux/syslinux.cfg`, and edit as needed.</span></a>
-<a class="sourceLine" id="cb3-185" title="185"><span class="co">#</span></a>
-<a class="sourceLine" id="cb3-186" title="186"><span class="co"># You don't need to tell the kernel about your vg0-home volume because that will</span></a>
-<a class="sourceLine" id="cb3-187" title="187"><span class="co"># get mounted by /etc/fstab when it is read later in the boot process.</span></a>
-<a class="sourceLine" id="cb3-188" title="188"></a>
-<a class="sourceLine" id="cb3-189" title="189"><span class="ex">pacman</span> -S syslinux</a>
-<a class="sourceLine" id="cb3-190" title="190"><span class="ex">syslinux-install_update</span> -i -a -m</a>
-<a class="sourceLine" id="cb3-191" title="191"><span class="ex">vi</span> /boot/syslinux/syslinux.cfg</a>
-<a class="sourceLine" id="cb3-192" title="192"></a>
-<a class="sourceLine" id="cb3-193" title="193"><span class="co"># Exit chroot environment.</span></a>
-<a class="sourceLine" id="cb3-194" title="194"></a>
-<a class="sourceLine" id="cb3-195" title="195"><span class="bu">exit</span></a>
-<a class="sourceLine" id="cb3-196" title="196"></a>
-<a class="sourceLine" id="cb3-197" title="197"><span class="co"># Unmount volumes, and reboot. Remove your Arch Linux live CD when your</span></a>
-<a class="sourceLine" id="cb3-198" title="198"><span class="co"># computer powers on again.</span></a>
-<a class="sourceLine" id="cb3-199" title="199"></a>
-<a class="sourceLine" id="cb3-200" title="200"><span class="fu">umount</span> /mnt/boot</a>
-<a class="sourceLine" id="cb3-201" title="201"><span class="fu">umount</span> /mnt/home</a>
-<a class="sourceLine" id="cb3-202" title="202"><span class="fu">umount</span> /mnt</a>
-<a class="sourceLine" id="cb3-203" title="203"><span class="ex">swapoff</span></a>
-<a class="sourceLine" id="cb3-204" title="204"><span class="ex">reboot</span></a></code></pre></div>
+<div class="sourceCode" id="cb3" data-input="code/arch-setup.sh"><pre class="sourceCode numberSource numberLines bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1"></a><span class="co"># Put in the Arch Linux live CD and run the following commands...</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a></span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="co"># Set up 2 partitions; the first one is the boot 100MB partition (be sure</span></span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="co"># to toggle the BOOT flag on it), and the second will be the LVM partition.</span></span>
+<span id="cb3-5"><a href="#cb3-5"></a><span class="co"># Be sure to select 8E for the LVM partition! You can use</span></span>
+<span id="cb3-6"><a href="#cb3-6"></a><span class="co"># /dev/disk/by-uuid/XXXX for more fine-grained control; use &quot;blkid -o list&quot;</span></span>
+<span id="cb3-7"><a href="#cb3-7"></a><span class="co"># to find out which drives are given which UUIDs.</span></span>
+<span id="cb3-8"><a href="#cb3-8"></a></span>
+<span id="cb3-9"><a href="#cb3-9"></a><span class="ex">cfdisk</span> /dev/sda</span>
+<span id="cb3-10"><a href="#cb3-10"></a></span>
+<span id="cb3-11"><a href="#cb3-11"></a><span class="co"># Now set up encryption on the LVM partition (the 2nd partition, so it's</span></span>
+<span id="cb3-12"><a href="#cb3-12"></a><span class="co"># /dev/sda2). It is recommended to use aes-xts-plain64 if the partition is</span></span>
+<span id="cb3-13"><a href="#cb3-13"></a><span class="co"># larger than 2 TB, I think.</span></span>
+<span id="cb3-14"><a href="#cb3-14"></a></span>
+<span id="cb3-15"><a href="#cb3-15"></a><span class="ex">cryptsetup</span> -c aes-xts-plain -y -s 512 luksFormat /dev/sda2</span>
+<span id="cb3-16"><a href="#cb3-16"></a></span>
+<span id="cb3-17"><a href="#cb3-17"></a><span class="co"># Decrypt the encrypted partition with LUKS. We need to decrypt it first</span></span>
+<span id="cb3-18"><a href="#cb3-18"></a><span class="co"># before setting up LVM volumes and filesystems on it. This will create</span></span>
+<span id="cb3-19"><a href="#cb3-19"></a><span class="co"># an entry under /dev/mapper/luks.</span></span>
+<span id="cb3-20"><a href="#cb3-20"></a></span>
+<span id="cb3-21"><a href="#cb3-21"></a><span class="ex">cryptsetup</span> luksOpen /dev/sda2 luks</span>
+<span id="cb3-22"><a href="#cb3-22"></a></span>
+<span id="cb3-23"><a href="#cb3-23"></a><span class="co"># Set up LVM. We call our volume group &quot;vg0&quot;. To be honest I am not sure if</span></span>
+<span id="cb3-24"><a href="#cb3-24"></a><span class="co"># the &quot;--contiguous y&quot; option for swap matters because we are encrypting it</span></span>
+<span id="cb3-25"><a href="#cb3-25"></a><span class="co"># (doesn't block encryption encrypt data randomly on the disk?), but that's</span></span>
+<span id="cb3-26"><a href="#cb3-26"></a><span class="co"># what I found online and that's what I'll use here. The &quot;+100%FREE&quot; option</span></span>
+<span id="cb3-27"><a href="#cb3-27"></a><span class="co"># is a very handy option that tells LVM to fill up all remaining free space,</span></span>
+<span id="cb3-28"><a href="#cb3-28"></a><span class="co"># in this case, for the &quot;home&quot; logical volume.</span></span>
+<span id="cb3-29"><a href="#cb3-29"></a><span class="co"># Read more about LVM on your favorite online wiki.</span></span>
+<span id="cb3-30"><a href="#cb3-30"></a></span>
+<span id="cb3-31"><a href="#cb3-31"></a><span class="ex">pvcreate</span> /dev/mapper/luks</span>
+<span id="cb3-32"><a href="#cb3-32"></a><span class="ex">vgcreate</span> vg0 /dev/mapper/luks</span>
+<span id="cb3-33"><a href="#cb3-33"></a><span class="ex">lvcreate</span> --size 40G vg0 --name root</span>
+<span id="cb3-34"><a href="#cb3-34"></a><span class="ex">lvcreate</span> --size 2G --contiguous y vg0 --name swap</span>
+<span id="cb3-35"><a href="#cb3-35"></a><span class="ex">lvcreate</span> -l +100%FREE vg0 --name home</span>
+<span id="cb3-36"><a href="#cb3-36"></a></span>
+<span id="cb3-37"><a href="#cb3-37"></a><span class="co"># Initialize filesystems. Btrfs is still experimental, so I choose ext4</span></span>
+<span id="cb3-38"><a href="#cb3-38"></a><span class="co"># here. The vg0-root, vg0-home, and vg0-swap volumes should</span></span>
+<span id="cb3-39"><a href="#cb3-39"></a><span class="co"># appear under /dev/mapper as you create them with the lvcreate command.</span></span>
+<span id="cb3-40"><a href="#cb3-40"></a></span>
+<span id="cb3-41"><a href="#cb3-41"></a><span class="ex">mkfs.ext4</span> /dev/sda1 # the boot partition</span>
+<span id="cb3-42"><a href="#cb3-42"></a><span class="ex">mkfs.ext4</span> /dev/mapper/vg0-root</span>
+<span id="cb3-43"><a href="#cb3-43"></a><span class="ex">mkfs.ext4</span> /dev/mapper/vg0-home</span>
+<span id="cb3-44"><a href="#cb3-44"></a><span class="ex">mkswap</span> /dev/mapper/vg0-swap</span>
+<span id="cb3-45"><a href="#cb3-45"></a></span>
+<span id="cb3-46"><a href="#cb3-46"></a><span class="co"># Mount the logical volumes. Why? Because we need to install Arch Linux onto</span></span>
+<span id="cb3-47"><a href="#cb3-47"></a><span class="co"># it! You probably don't need to mount the &quot;home&quot; volume but it couldn't</span></span>
+<span id="cb3-48"><a href="#cb3-48"></a><span class="co"># hurt. Besides, it's nice to test that all volumes can be mounted OK anyway.</span></span>
+<span id="cb3-49"><a href="#cb3-49"></a><span class="co">#</span></span>
+<span id="cb3-50"><a href="#cb3-50"></a><span class="co"># </span><span class="al">NOTE</span><span class="co">: Mount order is important! YOU MUST FIRST MOUNT THE ROOT PARTITION into</span></span>
+<span id="cb3-51"><a href="#cb3-51"></a><span class="co"># /mnt before creating more directories such as /mnt/boot, /mnt/home, etc. to</span></span>
+<span id="cb3-52"><a href="#cb3-52"></a><span class="co"># mount the /boot, /home, and any other partitions.</span></span>
+<span id="cb3-53"><a href="#cb3-53"></a></span>
+<span id="cb3-54"><a href="#cb3-54"></a><span class="fu">mount</span> /dev/mapper/vg0-root /mnt <span class="co"># /mnt is our system's &quot;/&quot; root   directory</span></span>
+<span id="cb3-55"><a href="#cb3-55"></a></span>
+<span id="cb3-56"><a href="#cb3-56"></a><span class="fu">mkdir</span> /mnt/boot</span>
+<span id="cb3-57"><a href="#cb3-57"></a><span class="fu">mount</span> /dev/sda1 /mnt/boot</span>
+<span id="cb3-58"><a href="#cb3-58"></a></span>
+<span id="cb3-59"><a href="#cb3-59"></a><span class="fu">mkdir</span> /mnt/home</span>
+<span id="cb3-60"><a href="#cb3-60"></a><span class="fu">mount</span> /dev/mapper/vg0-home /mnt/home</span>
+<span id="cb3-61"><a href="#cb3-61"></a></span>
+<span id="cb3-62"><a href="#cb3-62"></a><span class="ex">swapon</span> /dev/mapper/vg0-swap</span>
+<span id="cb3-63"><a href="#cb3-63"></a></span>
+<span id="cb3-64"><a href="#cb3-64"></a><span class="co"># Set up package download mirrors. The kernel mirror is generally a good one</span></span>
+<span id="cb3-65"><a href="#cb3-65"></a><span class="co"># if you live in the US. Google &quot;arch linux mirror status&quot; to find the</span></span>
+<span id="cb3-66"><a href="#cb3-66"></a><span class="co"># fastest mirrors.</span></span>
+<span id="cb3-67"><a href="#cb3-67"></a></span>
+<span id="cb3-68"><a href="#cb3-68"></a><span class="ex">vi</span> /etc/pacman.d/mirrorlist</span>
+<span id="cb3-69"><a href="#cb3-69"></a></span>
+<span id="cb3-70"><a href="#cb3-70"></a><span class="co"># Download and install the core minimum packages to get a working Linux</span></span>
+<span id="cb3-71"><a href="#cb3-71"></a><span class="co"># terminal (console) environment. Ah, simplicity!</span></span>
+<span id="cb3-72"><a href="#cb3-72"></a></span>
+<span id="cb3-73"><a href="#cb3-73"></a><span class="ex">pacstrap</span> -i /mnt base base-devel</span>
+<span id="cb3-74"><a href="#cb3-74"></a></span>
+<span id="cb3-75"><a href="#cb3-75"></a><span class="co"># Generate and inspect the filesystem tables needed when the system first</span></span>
+<span id="cb3-76"><a href="#cb3-76"></a><span class="co"># starts. The file should contain four &quot;partitions&quot; (I put them in quotes</span></span>
+<span id="cb3-77"><a href="#cb3-77"></a><span class="co"># because remember, we are using only 2 real partitions; 1st one is /boot and</span></span>
+<span id="cb3-78"><a href="#cb3-78"></a><span class="co"># the 2nd one is our LVM containing /, /home, and swap).</span></span>
+<span id="cb3-79"><a href="#cb3-79"></a></span>
+<span id="cb3-80"><a href="#cb3-80"></a><span class="ex">genfstab</span> -U -p /mnt <span class="op">&gt;&gt;</span> /mnt/etc/fstab</span>
+<span id="cb3-81"><a href="#cb3-81"></a><span class="ex">vi</span> /mnt/etc/fstab</span>
+<span id="cb3-82"><a href="#cb3-82"></a></span>
+<span id="cb3-83"><a href="#cb3-83"></a><span class="co"># Make the system pretend that /mnt is /. This is called &quot;chrooting&quot;. We need</span></span>
+<span id="cb3-84"><a href="#cb3-84"></a><span class="co"># to do this because some of the commands like locale-gen, systemctl, etc.</span></span>
+<span id="cb3-85"><a href="#cb3-85"></a><span class="co"># read configuration files from /etc, for example, and right now our /etc is</span></span>
+<span id="cb3-86"><a href="#cb3-86"></a><span class="co"># the /etc used by the Arch Linux live CD, not our newly-installed system's</span></span>
+<span id="cb3-87"><a href="#cb3-87"></a><span class="co"># root directory, /mnt.</span></span>
+<span id="cb3-88"><a href="#cb3-88"></a></span>
+<span id="cb3-89"><a href="#cb3-89"></a><span class="ex">arch-chroot</span> /mnt /bin/bash</span>
+<span id="cb3-90"><a href="#cb3-90"></a></span>
+<span id="cb3-91"><a href="#cb3-91"></a><span class="co"># Choose and generate locale; programs supporting internationalization (aka</span></span>
+<span id="cb3-92"><a href="#cb3-92"></a><span class="co"># &quot;i18n&quot;) will use the language you pick to generate the proper text used in</span></span>
+<span id="cb3-93"><a href="#cb3-93"></a><span class="co"># menus, error messages, etc. Just choose &quot;en_US.UTF-8 UTF-8&quot; if you live in</span></span>
+<span id="cb3-94"><a href="#cb3-94"></a><span class="co"># the US.</span></span>
+<span id="cb3-95"><a href="#cb3-95"></a></span>
+<span id="cb3-96"><a href="#cb3-96"></a><span class="ex">vi</span> /etc/locale.gen</span>
+<span id="cb3-97"><a href="#cb3-97"></a><span class="ex">locale-gen</span></span>
+<span id="cb3-98"><a href="#cb3-98"></a><span class="bu">echo</span> LANG=en_US.UTF-8 <span class="op">&gt;</span> /etc/locale.conf</span>
+<span id="cb3-99"><a href="#cb3-99"></a></span>
+<span id="cb3-100"><a href="#cb3-100"></a><span class="co"># Choose default font used by the virtual console (the terminal screen you</span></span>
+<span id="cb3-101"><a href="#cb3-101"></a><span class="co"># will see when you first boot up your new Arch Linux system).</span></span>
+<span id="cb3-102"><a href="#cb3-102"></a></span>
+<span id="cb3-103"><a href="#cb3-103"></a><span class="fu">setfont</span> Lat2-Terminus16</span>
+<span id="cb3-104"><a href="#cb3-104"></a><span class="bu">echo</span> FONT=Lat2-Terminus16 <span class="op">&gt;</span> /etc/vconsole.conf</span>
+<span id="cb3-105"><a href="#cb3-105"></a></span>
+<span id="cb3-106"><a href="#cb3-106"></a><span class="co"># Choose timezone. Here, we tell hwclock that we want the hardware clock on</span></span>
+<span id="cb3-107"><a href="#cb3-107"></a><span class="co"># the motherboard to be set to UTC, which will then be interpreted as UTC</span></span>
+<span id="cb3-108"><a href="#cb3-108"></a><span class="co"># time by the kernel and re-adjusted to the timezone you chose when you</span></span>
+<span id="cb3-109"><a href="#cb3-109"></a><span class="co"># actually use the system. This is nice because UTC is the &quot;master&quot; time the</span></span>
+<span id="cb3-110"><a href="#cb3-110"></a><span class="co"># world uses anyway, so it makes sense to tell your motherboard to use it.</span></span>
+<span id="cb3-111"><a href="#cb3-111"></a></span>
+<span id="cb3-112"><a href="#cb3-112"></a><span class="fu">ln</span> -s /usr/share/zoneinfo/America/Los_Angeles /etc/localtime</span>
+<span id="cb3-113"><a href="#cb3-113"></a><span class="ex">hwclock</span> --systohc --utc</span>
+<span id="cb3-114"><a href="#cb3-114"></a></span>
+<span id="cb3-115"><a href="#cb3-115"></a><span class="co"># Choose your computer's name. Keep it simple, without spaces. I use &quot;k0&quot;.</span></span>
+<span id="cb3-116"><a href="#cb3-116"></a></span>
+<span id="cb3-117"><a href="#cb3-117"></a><span class="bu">echo</span> MYHOSTNAME <span class="op">&gt;</span> /etc/hostname</span>
+<span id="cb3-118"><a href="#cb3-118"></a></span>
+<span id="cb3-119"><a href="#cb3-119"></a><span class="co"># Enable DHCPCD... aka &quot;acquire dynamic ip address from your router/switch&quot;.  Be</span></span>
+<span id="cb3-120"><a href="#cb3-120"></a><span class="co"># sure to choose the right device name (typically eth0 or eth1 (eth2, if you</span></span>
+<span id="cb3-121"><a href="#cb3-121"></a><span class="co"># have 3 ethernet ports)); you can find out the correct device name with `ip</span></span>
+<span id="cb3-122"><a href="#cb3-122"></a><span class="co"># link` (look for the device under the first entry, `lo`.). If you choose the</span></span>
+<span id="cb3-123"><a href="#cb3-123"></a><span class="co"># wrong &quot;eth&quot; number, just go to /etc/systemd/system/multi-user.target.wants/</span></span>
+<span id="cb3-124"><a href="#cb3-124"></a><span class="co"># and rename the symlink; e.g., rename</span></span>
+<span id="cb3-125"><a href="#cb3-125"></a><span class="co"># /etc/systemd/system/multi-user.target.wants/dhcpcd@eth0.service to</span></span>
+<span id="cb3-126"><a href="#cb3-126"></a><span class="co"># /etc/systemd/system/multi-user.target.wants/dhcpcd@eth1.service.</span></span>
+<span id="cb3-127"><a href="#cb3-127"></a></span>
+<span id="cb3-128"><a href="#cb3-128"></a><span class="ex">systemctl</span> enable dhcpcd@DEVICENAME.service</span>
+<span id="cb3-129"><a href="#cb3-129"></a></span>
+<span id="cb3-130"><a href="#cb3-130"></a><span class="co"># Disable unused package repos. You will want to disable the [testing] repo</span></span>
+<span id="cb3-131"><a href="#cb3-131"></a><span class="co"># unless you want to test unstable packages and engage in the package</span></span>
+<span id="cb3-132"><a href="#cb3-132"></a><span class="co"># debugging/development process. For Haskellers, be sure to add the</span></span>
+<span id="cb3-133"><a href="#cb3-133"></a><span class="co"># [haskell-core] repo (see</span></span>
+<span id="cb3-134"><a href="#cb3-134"></a><span class="co"># https://wiki.archlinux.org/index.php/Haskell_Package_Guidelines).</span></span>
+<span id="cb3-135"><a href="#cb3-135"></a></span>
+<span id="cb3-136"><a href="#cb3-136"></a><span class="ex">vi</span> /etc/pacman.conf</span>
+<span id="cb3-137"><a href="#cb3-137"></a></span>
+<span id="cb3-138"><a href="#cb3-138"></a><span class="co"># Set up the root user (&quot;administrator&quot; for you Windows people) password.</span></span>
+<span id="cb3-139"><a href="#cb3-139"></a></span>
+<span id="cb3-140"><a href="#cb3-140"></a><span class="fu">passwd</span></span>
+<span id="cb3-141"><a href="#cb3-141"></a></span>
+<span id="cb3-142"><a href="#cb3-142"></a><span class="co"># Install zsh, because you will like it better any other shell out there.</span></span>
+<span id="cb3-143"><a href="#cb3-143"></a></span>
+<span id="cb3-144"><a href="#cb3-144"></a><span class="ex">pacman</span> -S zsh</span>
+<span id="cb3-145"><a href="#cb3-145"></a></span>
+<span id="cb3-146"><a href="#cb3-146"></a><span class="co"># Add your regular user, and set up your password. This is your normal</span></span>
+<span id="cb3-147"><a href="#cb3-147"></a><span class="co"># username. We use the &quot;-s /bin/zsh&quot; option to tell useradd that we want to</span></span>
+<span id="cb3-148"><a href="#cb3-148"></a><span class="co"># log in with zsh.</span></span>
+<span id="cb3-149"><a href="#cb3-149"></a><span class="co">#</span></span>
+<span id="cb3-150"><a href="#cb3-150"></a><span class="co"># If you want, you can add a new group that will only have your username as its</span></span>
+<span id="cb3-151"><a href="#cb3-151"></a><span class="co"># only &quot;member&quot;, with `groupadd -g 1000 MYGROUPNAME`, and then you can use this</span></span>
+<span id="cb3-152"><a href="#cb3-152"></a><span class="co"># group name for the `-g` flag's argument in the `useradd` command below. I like</span></span>
+<span id="cb3-153"><a href="#cb3-153"></a><span class="co"># to have 1-character usernames for my machines to keep things simple and short,</span></span>
+<span id="cb3-154"><a href="#cb3-154"></a><span class="co"># as I will be the exclusive user of the system anyway, so I also use the same</span></span>
+<span id="cb3-155"><a href="#cb3-155"></a><span class="co"># character for my group as well, so that, in particular, the `ls` command's</span></span>
+<span id="cb3-156"><a href="#cb3-156"></a><span class="co"># full listing of my files looks very succinct, as I like to live in the</span></span>
+<span id="cb3-157"><a href="#cb3-157"></a><span class="co"># terminal and use `ls` daily.</span></span>
+<span id="cb3-158"><a href="#cb3-158"></a></span>
+<span id="cb3-159"><a href="#cb3-159"></a><span class="ex">useradd</span> -m -g users -G wheel,storage,power -s /bin/zsh MYUSERNAME</span>
+<span id="cb3-160"><a href="#cb3-160"></a><span class="fu">passwd</span> MYUSERNAME</span>
+<span id="cb3-161"><a href="#cb3-161"></a></span>
+<span id="cb3-162"><a href="#cb3-162"></a><span class="co"># VERY IMPORTANT: Add in the filesystem type that /root partition (LVM) is</span></span>
+<span id="cb3-163"><a href="#cb3-163"></a><span class="co"># using (for this tutorial, it is &quot;ext4&quot;) into the MODULES variable and also</span></span>
+<span id="cb3-164"><a href="#cb3-164"></a><span class="co"># add 'encrypt' and 'lvm2' into HOOKS.</span></span>
+<span id="cb3-165"><a href="#cb3-165"></a></span>
+<span id="cb3-166"><a href="#cb3-166"></a><span class="ex">vi</span> /etc/mkinitcpio.conf</span>
+<span id="cb3-167"><a href="#cb3-167"></a></span>
+<span id="cb3-168"><a href="#cb3-168"></a><span class="co"># Re-generate the linux image to take into account the LVM and encrypt</span></span>
+<span id="cb3-169"><a href="#cb3-169"></a><span class="co"># flags we added into /etc/mkinitcpio.conf. I say &quot;re-generate&quot; because this</span></span>
+<span id="cb3-170"><a href="#cb3-170"></a><span class="co"># is our second time doing this (the first time was when we installed the</span></span>
+<span id="cb3-171"><a href="#cb3-171"></a><span class="co"># linux package with the pacstrap command above).</span></span>
+<span id="cb3-172"><a href="#cb3-172"></a></span>
+<span id="cb3-173"><a href="#cb3-173"></a><span class="ex">mkinitcpio</span> -p linux</span>
+<span id="cb3-174"><a href="#cb3-174"></a></span>
+<span id="cb3-175"><a href="#cb3-175"></a><span class="co"># Install boot loader. I like SYSLINUX because of the saner/easier-looking boot</span></span>
+<span id="cb3-176"><a href="#cb3-176"></a><span class="co"># configuration file, compared to GRUB 2. Be sure to add in (as a single line)</span></span>
+<span id="cb3-177"><a href="#cb3-177"></a><span class="co">#     &quot;APPEND cryptdevice=/dev/disk/by-uuid/xxxxxxxxxx:luks</span></span>
+<span id="cb3-178"><a href="#cb3-178"></a><span class="co">#           root=/dev/mapper/vg0-root resume=/dev/mapper/vg0-swap ro&quot;</span></span>
+<span id="cb3-179"><a href="#cb3-179"></a><span class="co"># under the &quot;LABEL arch&quot; entries, so that SYSLINUX tells the kernel to look for</span></span>
+<span id="cb3-180"><a href="#cb3-180"></a><span class="co"># the encrypted LVM partition. Otherwise, your system won't boot! Don't forget</span></span>
+<span id="cb3-181"><a href="#cb3-181"></a><span class="co"># to actually look up the UUID of your LVM partition (/dev/sda2 in this</span></span>
+<span id="cb3-182"><a href="#cb3-182"></a><span class="co"># tutorial). To easily add in the long UUID of the disk, just concatenate it</span></span>
+<span id="cb3-183"><a href="#cb3-183"></a><span class="co"># into the syslinux.cfg file with `blkid -o list &gt;&gt;</span></span>
+<span id="cb3-184"><a href="#cb3-184"></a><span class="co"># /boot/syslinux/syslinux.cfg`, and edit as needed.</span></span>
+<span id="cb3-185"><a href="#cb3-185"></a><span class="co">#</span></span>
+<span id="cb3-186"><a href="#cb3-186"></a><span class="co"># You don't need to tell the kernel about your vg0-home volume because that will</span></span>
+<span id="cb3-187"><a href="#cb3-187"></a><span class="co"># get mounted by /etc/fstab when it is read later in the boot process.</span></span>
+<span id="cb3-188"><a href="#cb3-188"></a></span>
+<span id="cb3-189"><a href="#cb3-189"></a><span class="ex">pacman</span> -S syslinux</span>
+<span id="cb3-190"><a href="#cb3-190"></a><span class="ex">syslinux-install_update</span> -i -a -m</span>
+<span id="cb3-191"><a href="#cb3-191"></a><span class="ex">vi</span> /boot/syslinux/syslinux.cfg</span>
+<span id="cb3-192"><a href="#cb3-192"></a></span>
+<span id="cb3-193"><a href="#cb3-193"></a><span class="co"># Exit chroot environment.</span></span>
+<span id="cb3-194"><a href="#cb3-194"></a></span>
+<span id="cb3-195"><a href="#cb3-195"></a><span class="bu">exit</span></span>
+<span id="cb3-196"><a href="#cb3-196"></a></span>
+<span id="cb3-197"><a href="#cb3-197"></a><span class="co"># Unmount volumes, and reboot. Remove your Arch Linux live CD when your</span></span>
+<span id="cb3-198"><a href="#cb3-198"></a><span class="co"># computer powers on again.</span></span>
+<span id="cb3-199"><a href="#cb3-199"></a></span>
+<span id="cb3-200"><a href="#cb3-200"></a><span class="fu">umount</span> /mnt/boot</span>
+<span id="cb3-201"><a href="#cb3-201"></a><span class="fu">umount</span> /mnt/home</span>
+<span id="cb3-202"><a href="#cb3-202"></a><span class="fu">umount</span> /mnt</span>
+<span id="cb3-203"><a href="#cb3-203"></a><span class="ex">swapoff</span></span>
+<span id="cb3-204"><a href="#cb3-204"></a><span class="ex">reboot</span></span></code></pre></div>
 </div>
 
 		</div>

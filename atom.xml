@@ -18,11 +18,11 @@
     <summary type="html"><![CDATA[<div class="info center">
 	<code class="date">2021-01-05</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2021-01-05-mpd-and-replaygain.org" title="History">*</a>
 	<br>
-	<a href="/tag/linux.html">linux</a>, <a href="/tag/audio.html">audio</a>
+	<a title="All pages tagged &#39;linux&#39;." href="/tag/linux.html">linux</a>, <a title="All pages tagged &#39;audio&#39;." href="/tag/audio.html">audio</a>
 </div>
 
-<p>Something like ~10 years ago, there was no easy way to apply <a href="https://en.wikipedia.org/wiki/ReplayGain">ReplayGain</a> to various audio files with different formats (e.g., flac vs mp3). Over the holiday break I discovered <a href="https://github.com/desbma/r128gain">r128gain</a> which is exactly the tool I wanted for many years. Unfortunately neither <a href="https://cmus.github.io/">cmus</a> nor <a href="https://mpv.io/">mpv</a> currently support the <code>R128_TRACK_GAIN</code> tag that r128gain uses (at least for <code>*.opus</code> files).<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
-<p>On the bright side, I discovered that <a href="https://www.musicpd.org/">MPD (Music Player Daemon)</a> supports <code>R128_TRACK_GAIN</code>.<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a> MPD is easy to start up and the basic minimal configuration was <a href="https://raw.githubusercontent.com/listx/syscfg/e0f95dd04a4cd7247ca4e0fe3f02eccd78660d24/mpd/mpd.conf">small enough</a>:</p>
+<p>Something like ~10 years ago, there was no easy way to apply <a href="https://en.wikipedia.org/wiki/ReplayGain">ReplayGain</a> to various audio files with different formats (e.g., flac vs mp3). Over the holiday break I discovered <a href="https://github.com/desbma/r128gain">r128gain</a> which is exactly the tool I wanted for many years. Unfortunately neither <a href="https://cmus.github.io/">cmus</a> nor <a href="https://mpv.io/">mpv</a> currently support the <code>R128_TRACK_GAIN</code> tag that r128gain uses (at least for <code>*.opus</code> files).<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+<p>On the bright side, I discovered that <a href="https://www.musicpd.org/">MPD (Music Player Daemon)</a> supports <code>R128_TRACK_GAIN</code>.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> MPD is easy to start up and the basic minimal configuration was <a href="https://raw.githubusercontent.com/listx/syscfg/e0f95dd04a4cd7247ca4e0fe3f02eccd78660d24/mpd/mpd.conf">small enough</a>:</p>
 <pre><code>music_directory     &quot;~/Music&quot;
 # Automatically prune new/deleted files in the music_directory.
 auto_update         &quot;yes&quot;
@@ -40,11 +40,11 @@ replaygain          &quot;track&quot;
 </code></pre>
 <p>As far as actually controlling MPD, I settled on <a href="https://github.com/boysetsfrog/vimpc">vimpc</a> — because Vi-like keybindings are too good to pass up.</p>
 <p>Cheers!</p>
-<section class="footnotes">
+<section class="footnotes" role="doc-endnotes">
 <hr />
 <ol>
-<li id="fn1"><p>To be precise, cmus has a commit in master that <a href="https://github.com/cmus/cmus/commit/174b93ee1c3a290751513ac557b39dea8e31c7f9">adds support</a>, and mpv has an <a href="https://github.com/mpv-player/mpv/issues/5079">open issue</a> for it. And I’m too lazy to compile cmus from source.<a href="#fnref1" class="footnote-back">↩</a></p></li>
-<li id="fn2"><p>I had actually used MPD back in the day, but switched to cmus because it was simpler. And because cross-format ReplayGain tagging software was not available, MPD’s support for ReplayGain wasn’t very meaningful for me.<a href="#fnref2" class="footnote-back">↩</a></p></li>
+<li id="fn1" role="doc-endnote"><p>To be precise, cmus has a commit in master that <a href="https://github.com/cmus/cmus/commit/174b93ee1c3a290751513ac557b39dea8e31c7f9">adds support</a>, and mpv has an <a href="https://github.com/mpv-player/mpv/issues/5079">open issue</a> for it. And I’m too lazy to compile cmus from source.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2" role="doc-endnote"><p>I had actually used MPD back in the day, but switched to cmus because it was simpler. And because cross-format ReplayGain tagging software was not available, MPD’s support for ReplayGain wasn’t very meaningful for me.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 ]]></summary>
@@ -58,12 +58,12 @@ replaygain          &quot;track&quot;
     <summary type="html"><![CDATA[<div class="info center">
 	<code class="date">2021-01-04</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2021-01-04-thoughts-on-baduk.org" title="History">*</a>
 	<br>
-	<a href="/tag/baduk.html">baduk</a>
+	<a title="All pages tagged &#39;baduk&#39;." href="/tag/baduk.html">baduk</a>
 </div>
 
 <h1 id="my-history-with-baduk">My history with Baduk</h1>
-<p>I’ve started playing Baduk more during the pandemic, and I thought I should write about this fascinating game.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
-<p>When I was a child growing up in Korea, I remember seeing newspapers with pictures of Baduk positions with professional commentary. Unfortunately, no one in my immediate family had any interest in the game, so my initial curiosity of the game came and went.<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a></p>
+<p>I’ve started playing Baduk more during the pandemic, and I thought I should write about this fascinating game.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+<p>When I was a child growing up in Korea, I remember seeing newspapers with pictures of Baduk positions with professional commentary. Unfortunately, no one in my immediate family had any interest in the game, so my initial curiosity of the game came and went.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
 <p>Later in the United States, I picked up chess during high school. Chess had the advantage that there were many more people who already know how to play the game. And also, carrying around a lightweight board with some pieces wasn’t difficult at all. I recall whipping out my chess board for a quick game during lunch, recess, and any other time I could find an opponent.</p>
 <p>I took a step back from chess during college and later years. I started to lose interest after I kept playing the same openings.</p>
 <p>Around 2016 I re-learned how to play Baduk. One reason I picked it up again was that at this time, Baduk was still played best by humans (a computer AI had not yet defeated a master human player on an even game). This was just before the great “AlphaGo” match with Lee Sedol, and at the time most people believed that AI supremacy in this game was still another decade away.</p>
@@ -74,17 +74,17 @@ replaygain          &quot;track&quot;
 <p>Speaking of openings, because the Baduk board has 4 symmetrical corners, there are actually 4 areas of openings in each game. You can have 4 different “openings” in each game. In chess there is only 1 “center” of the board where the vast majority of opening theory takes place.</p>
 <p>The handicap system is far more elegant in Baduk as well. In chess, the handicap is usually to remove a pawn (or two), but this drastically alters the nature of the game. Not so for Baduk! The weaker player gets up to 9 extra stones on the board before the start of the game. This way you can play with opponents at different levels without getting completely crushed from the very beginning.</p>
 <p>Perhaps the best part of the game is that each game is decided by a score (where the score is the amount of “territory” you control). A win is technically a win, sure, but the “wins” can be judged against each other by their score.</p>
-<p>Finally, the game is more forgiving in terms of errors. In chess if you lose your queen (without adequate compensation), the game is pretty much over. In baduk, even if you lose a sizable group, you can still come back. Actually, the bigger your group of stones, the harder it is to get them captured outright, and so there is a natural, automatic tendency for your strongest “pieces”, if you will, to resist capture.<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a> Brilliant!</p>
+<p>Finally, the game is more forgiving in terms of errors. In chess if you lose your queen (without adequate compensation), the game is pretty much over. In baduk, even if you lose a sizable group, you can still come back. Actually, the bigger your group of stones, the harder it is to get them captured outright, and so there is a natural, automatic tendency for your strongest “pieces”, if you will, to resist capture.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> Brilliant!</p>
 <h1 id="conclusion">Conclusion</h1>
-<p>If you haven’t learned the game yet, I strongly recommend this game! I used the book <a href="https://www.amazon.com/Go-Complete-Introduction-Beginner-Elementary/dp/4906574505">“Go: A Complete Introduction to the Game”</a> to get a nice overview.<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a></p>
+<p>If you haven’t learned the game yet, I strongly recommend this game! I used the book <a href="https://www.amazon.com/Go-Complete-Introduction-Beginner-Elementary/dp/4906574505">“Go: A Complete Introduction to the Game”</a> to get a nice overview.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p>
 <p>Have fun!</p>
-<section class="footnotes">
+<section class="footnotes" role="doc-endnotes">
 <hr />
 <ol>
-<li id="fn1"><p>I use the Korean word “Baduk” (바둑) because the usual Japanese loanword “Go” overlaps with the name “Go” of the Go programming language.<a href="#fnref1" class="footnote-back">↩</a></p></li>
-<li id="fn2"><p>Years later I learned that my uncle is an amateur 5-dan.<a href="#fnref2" class="footnote-back">↩</a></p></li>
-<li id="fn3"><p>In Baduk as long as a group gets 2 “eyes”, it becomes uncapturable — and the bigger the group, the easier it is to make such eyes.<a href="#fnref3" class="footnote-back">↩</a></p></li>
-<li id="fn4"><p>The author of this book is Cho Chikun, one of the top players of the 20th century.<a href="#fnref4" class="footnote-back">↩</a></p></li>
+<li id="fn1" role="doc-endnote"><p>I use the Korean word “Baduk” (바둑) because the usual Japanese loanword “Go” overlaps with the name “Go” of the Go programming language.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2" role="doc-endnote"><p>Years later I learned that my uncle is an amateur 5-dan.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3" role="doc-endnote"><p>In Baduk as long as a group gets 2 “eyes”, it becomes uncapturable — and the bigger the group, the easier it is to make such eyes.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4" role="doc-endnote"><p>The author of this book is Cho Chikun, one of the top players of the 20th century.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 ]]></summary>
@@ -98,7 +98,7 @@ replaygain          &quot;track&quot;
     <summary type="html"><![CDATA[<div class="info center">
 	<code class="date">2020-12-05</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2020-12-05-twosum-problem-explained.org" title="History">*</a>
 	<br>
-	<a href="/tag/algorithms.html">algorithms</a>, <a href="/tag/math.html">math</a>
+	<a title="All pages tagged &#39;algorithms&#39;." href="/tag/algorithms.html">algorithms</a>, <a title="All pages tagged &#39;math&#39;." href="/tag/math.html">math</a>
 </div>
 
 <p>Just over three years ago, I watched <a href="https://youtu.be/XKu_SEDAykw">this video</a> that goes over the so-called “Two Sum” problem for the first time. The problem statement is as follows:</p>
@@ -109,13 +109,13 @@ replaygain          &quot;track&quot;
 <p>And to be really honest I never bothered to convince myself that the 2-pointer approach is correct. Until today. This post is about the correctness behind the 2-pointer method, because I have yet to see a clear explanation about this topic.</p>
 <h1 id="brute-force-approach">Brute force approach</h1>
 <p>First let’s look at the brute-force solution. The brute-force solution looks at every single possible pair of numbers by using a double-for-loop. This is a very common pattern (nested looping) whenever one wants to consider all possible combinations, where each for-loop corresponds to a single “dimension” we want to exhaustively pore over. In this case there are 2 dimensions because there are 2 numbers we need to look at, so we must use 2 for-loops.</p>
-<p>Here is the basic pseudocode <a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>:</p>
+<p>Here is the basic pseudocode <a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>:</p>
 <pre><code>for i in numbers:
   for j in numbers:
     if i + j == N:
       return i, j
 </code></pre>
-<p>I think even beginner programmers can see that the brute force approach works. We just look at every possible 2-number combination to see if they will add up to <strong>N</strong>, and if so, we stop the search. Simple! <a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a></p>
+<p>I think even beginner programmers can see that the brute force approach works. We just look at every possible 2-number combination to see if they will add up to <strong>N</strong>, and if so, we stop the search. Simple! <a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
 <h1 id="pointer-method">2-pointer method</h1>
 <p>The 2-pointer method boils down to the following observation:</p>
 <blockquote>
@@ -179,11 +179,11 @@ return numbers[a_idx], numbers[b_idx]
 <p>I think the beauty of this problem is that it’s so simple, and yet it is also a very cool way of looking at the problem of <em>search</em>. Steps 3 and 4 are essentially very aggressive (and correct!) eliminations of bad search paths. There’s just something refreshing about eliminating entire branches of a search tree to speed things up.</p>
 <p>If you compare the 2-pointer method with the brute force approach, it is in essence doing the same logical thing, with fewer steps. Whereas the brute force approach performs a pairwise comparison across all possible combinations, the 2-pointer method preemptively discards many combinations by removing elements outright from future consideration. That’s the kind of power you need to go from <span class="math inline">\(O(n^2)\)</span> to <span class="math inline">\(O(n)\)</span>!</p>
 <p>Hope this helps!</p>
-<section class="footnotes">
+<section class="footnotes" role="doc-endnotes">
 <hr />
 <ol>
-<li id="fn1"><p>Of course, this pseudocode ignores edge-cases, but I didn’t want to clutter the code listing with non-essential ideas.<a href="#fnref1" class="footnote-back">↩</a></p></li>
-<li id="fn2"><p>As an added benefit, the brute-force approach works even if the input list is not sorted.<a href="#fnref2" class="footnote-back">↩</a></p></li>
+<li id="fn1" role="doc-endnote"><p>Of course, this pseudocode ignores edge-cases, but I didn’t want to clutter the code listing with non-essential ideas.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2" role="doc-endnote"><p>As an added benefit, the brute-force approach works even if the input list is not sorted.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 ]]></summary>
@@ -197,7 +197,7 @@ return numbers[a_idx], numbers[b_idx]
     <summary type="html"><![CDATA[<div class="info center">
 	<code class="date">2019-11-13</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2019-11-13-esrille-nisse-three-years-later.org" title="History">*</a>
 	<br>
-	<a href="/tag/hardware.html">hardware</a>, <a href="/tag/esrille.html">esrille</a>, <a href="/tag/cherry%20mx.html">cherry mx</a>
+	<a title="All pages tagged &#39;hardware&#39;." href="/tag/hardware.html">hardware</a>, <a title="All pages tagged &#39;esrille&#39;." href="/tag/esrille.html">esrille</a>, <a title="All pages tagged &#39;cherry mx&#39;." href="/tag/cherry%20mx.html">cherry mx</a>
 </div>
 
 <p>Over three years ago, I wrote <a href="./2016-04-14-esrille-nisse-keyboard.html">a post</a> describing the Esrille Nisse keyboard. This post is a reflection on the keyboard, more than 3 years later.</p>
@@ -310,7 +310,7 @@ e) Shift + Insert macro (for pasting X primary buffer)
     <summary type="html"><![CDATA[<div class="info center">
 	<code class="date">2019-11-11</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2019-11-11-status-update.org" title="History">*</a>
 	<br>
-	<a href="/tag/status.html">status</a>
+	<a title="All pages tagged &#39;status&#39;." href="/tag/status.html">status</a>
 </div>
 
 <p>It’s been another year since my last blog post!</p>
@@ -333,7 +333,7 @@ e) Shift + Insert macro (for pasting X primary buffer)
     <summary type="html"><![CDATA[<div class="info center">
 	<code class="date">2018-11-11</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2018-11-11-status-update.org" title="History">*</a>
 	<br>
-	<a href="/tag/status.html">status</a>
+	<a title="All pages tagged &#39;status&#39;." href="/tag/status.html">status</a>
 </div>
 
 <p>It’s been a year since my last blog post. Many things have happened since that time.</p>
@@ -362,7 +362,7 @@ e) Shift + Insert macro (for pasting X primary buffer)
     <summary type="html"><![CDATA[<div class="info center">
 	<code class="date">2017-11-11</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2017-11-11-useful-manpages.org" title="History">*</a>
 	<br>
-	<a href="/tag/linux.html">linux</a>, <a href="/tag/git.html">git</a>
+	<a title="All pages tagged &#39;linux&#39;." href="/tag/linux.html">linux</a>, <a title="All pages tagged &#39;git&#39;." href="/tag/git.html">git</a>
 </div>
 
 <p>A while ago I discovered that <a href="https://www.reddit.com/r/linux/comments/74msho/til_there_is_a_manpage_for_the_ascii_character_set/">there is a manpage for the ASCII character set</a>. It got a bunch of upvotes, and since then I wondered what other manpages were worth knowing about. Below is a small table of manpages that I found interesting.</p>
@@ -488,7 +488,7 @@ e) Shift + Insert macro (for pasting X primary buffer)
     <summary type="html"><![CDATA[<div class="info center">
 	<code class="date">2017-05-13</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2017-05-13-tower-of-hanoi.org" title="History">*</a>
 	<br>
-	<a href="/tag/math.html">math</a>
+	<a title="All pages tagged &#39;math&#39;." href="/tag/math.html">math</a>
 </div>
 
 <p>In the very first chapter of the book <a href="https://en.wikipedia.org/wiki/Concrete_Mathematics"><em>Concrete Mathematics</em> 2ed</a> there is a discussion about the <a href="https://en.wikipedia.org/wiki/Tower_of_Hanoi">Tower of Hanoi</a>. This post is a distillation of that discussion.</p>
@@ -564,7 +564,7 @@ S_0 = 0
 </tr>
 </tbody>
 </table>
-<p>We don’t have to actually simulate the puzzle to derive these values; using the recurrence Equation <span class="math inline">\(\ref{eq:recurrence}\)</span> we start off from the first row (the base case) and then calculate our way down, reusing <span class="math inline">\(S_n\)</span> from the previous row as <span class="math inline">\(S_{n - 1}\)</span>. <a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
+<p>We don’t have to actually simulate the puzzle to derive these values; using the recurrence Equation <span class="math inline">\(\ref{eq:recurrence}\)</span> we start off from the first row (the base case) and then calculate our way down, reusing <span class="math inline">\(S_n\)</span> from the previous row as <span class="math inline">\(S_{n - 1}\)</span>. <a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
 <p>Anyway, the values of <span class="math inline">\(S_n\)</span> sure look familiar — especially if we use base 2.</p>
 <table>
 <thead>
@@ -621,8 +621,8 @@ S_0 = 0
 <p>except it is no longer a recurrence as there is no need to define a base case. We’ll call it a <em>solution</em> to the recurrence.</p>
 <h1 id="proving-the-solution">Proving the Solution</h1>
 <p>Although the empirical evidence looks very good, we have not formally proved that the solution (Equation <span class="math inline">\(\ref{eq:solution}\)</span>) holds for <em>all</em> <span class="math inline">\(n\)</span>. It’s one thing to say that something is true for all <em>observed</em> cases (scientific experiment), and quite another to say that something is true for <em>all</em> cases (mathematical proof).</p>
-<p>Can we prove it? Yes! Fortunately for us, Equation <span class="math inline">\(\ref{eq:recurrence}\)</span> lends itself to proof by <a href="https://en.wikipedia.org/wiki/Mathematical_induction">induction</a>. Induction requires you to first prove some number <span class="math inline">\(k_0\)</span> as a starting point (the base case) using some proposition <span class="math inline">\(P\)</span>. Then you prove that <span class="math inline">\(P\)</span> holds for <span class="math inline">\(k + 1\)</span> (the next number); i.e., show that going from <span class="math inline">\(k\)</span> to <span class="math inline">\(k + 1\)</span> does not change <span class="math inline">\(P\)</span>. This is the <em>inductive step</em>. In this way, we prove the “totality” of <span class="math inline">\(P\)</span> as it applies to all numbers in the range <span class="math inline">\([k_0, k_{m}]\)</span> and we are done. <a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a></p>
-<p>Here we want to prove that Equation <span class="math inline">\(\ref{eq:solution}\)</span> holds for all <span class="math inline">\(n\)</span> (all natural numbers). <a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a> For this proof let’s rewrite Equation <span class="math inline">\(\ref{eq:solution}\)</span> to use <span class="math inline">\(k\)</span> instead of <span class="math inline">\(n\)</span>:</p>
+<p>Can we prove it? Yes! Fortunately for us, Equation <span class="math inline">\(\ref{eq:recurrence}\)</span> lends itself to proof by <a href="https://en.wikipedia.org/wiki/Mathematical_induction">induction</a>. Induction requires you to first prove some number <span class="math inline">\(k_0\)</span> as a starting point (the base case) using some proposition <span class="math inline">\(P\)</span>. Then you prove that <span class="math inline">\(P\)</span> holds for <span class="math inline">\(k + 1\)</span> (the next number); i.e., show that going from <span class="math inline">\(k\)</span> to <span class="math inline">\(k + 1\)</span> does not change <span class="math inline">\(P\)</span>. This is the <em>inductive step</em>. In this way, we prove the “totality” of <span class="math inline">\(P\)</span> as it applies to all numbers in the range <span class="math inline">\([k_0, k_{m}]\)</span> and we are done. <a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+<p>Here we want to prove that Equation <span class="math inline">\(\ref{eq:solution}\)</span> holds for all <span class="math inline">\(n\)</span> (all natural numbers). <a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> For this proof let’s rewrite Equation <span class="math inline">\(\ref{eq:solution}\)</span> to use <span class="math inline">\(k\)</span> instead of <span class="math inline">\(n\)</span>:</p>
 <p><span class="math display">\[
 \begin{equation} \label{eq:proposition}
   S_k = 2^k - 1 \quad \text{for } k \geq 0.
@@ -656,7 +656,7 @@ S_0 = 0
   &amp;= 2^{k + 1} - 1 \label{eq:induct3}.
   \end{align}
 \]</span></p>
-<p>And now we can see that Equation <span class="math inline">\(\ref{eq:induct3}\)</span> (our “evolved” proposition <span class="math inline">\(P\)</span>, if you will) is the same as our solution (Equation <span class="math inline">\(\ref{eq:solution}\)</span>), even though we increased <span class="math inline">\(k\)</span> to <span class="math inline">\(k + 1\)</span>! This is because simple substitution allows us to replace “<span class="math inline">\(k + 1\)</span>” with “<span class="math inline">\(n\)</span>”. We have completed our proof by induction. <a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a></p>
+<p>And now we can see that Equation <span class="math inline">\(\ref{eq:induct3}\)</span> (our “evolved” proposition <span class="math inline">\(P\)</span>, if you will) is the same as our solution (Equation <span class="math inline">\(\ref{eq:solution}\)</span>), even though we increased <span class="math inline">\(k\)</span> to <span class="math inline">\(k + 1\)</span>! This is because simple substitution allows us to replace “<span class="math inline">\(k + 1\)</span>” with “<span class="math inline">\(n\)</span>”. We have completed our proof by induction. <a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p>
 <h1 id="alternate-recurrence-and-solution">Alternate Recurrence and Solution</h1>
 <p>The book goes on to offer an alternate recurrence to Equation <span class="math inline">\(\ref{eq:recurrence}\)</span>, by adding 1 to both sides:</p>
 <p><span class="math display">\[
@@ -699,15 +699,15 @@ W_n = (S_n) + 1 = 2^n
 <h1 id="conclusion">Conclusion</h1>
 <p>I thoroughly enjoyed figuring this stuff out because possibly for the first time in my life I used my programming experience (recurrence/recursion, memoization) to help myself understand mathematics — not the other way around. The other way around was never enjoyable — calculating what <code>i</code> was in some <span class="math inline">\(n\)</span>th iteration of a <code>for</code>-loop never really excited me.</p>
 <p>I hope this explanation helps you better understand the first few pages of <em>Concrete Mathematics</em>; I had to read that part three times over to really “get it” (never having learned what induction is). And henceforth, I will never look at a string of consecutive 1’s in binary the same way again. 😃</p>
-<section class="footnotes">
+<section class="footnotes" role="doc-endnotes">
 <hr />
 <ol>
-<li id="fn1"><p>In computer science, this process of avoiding the recalculation of previously known values is called <em>memoization</em> and is useful in generating the first N values of a recursive algorithm in <span class="math inline">\(O(N)\)</span> (linear) time.<a href="#fnref1" class="footnote-back">↩</a></p></li>
-<li id="fn2"><p>Note that if <span class="math inline">\(k_0 = 0\)</span>, then <span class="math inline">\([k_0, k_{m}]\)</span> is the set of all natural numbers (zero plus the positive integers).<a href="#fnref2" class="footnote-back">↩</a></p></li>
-<li id="fn3"><p>There is no need to prove the recurrence (Equation <span class="math inline">\(\ref{eq:recurrence}\)</span>) as we have already proved it in the process of deriving it.<a href="#fnref3" class="footnote-back">↩</a></p></li>
-<li id="fn4"><p>In <em>Concrete Mathematics</em> 2 ed. p. 3 (where the book uses <span class="math inline">\(T_n\)</span> instead of <span class="math inline">\(S_n\)</span>), the proof is simply a one-liner: <span class="math display">\[
+<li id="fn1" role="doc-endnote"><p>In computer science, this process of avoiding the recalculation of previously known values is called <em>memoization</em> and is useful in generating the first N values of a recursive algorithm in <span class="math inline">\(O(N)\)</span> (linear) time.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2" role="doc-endnote"><p>Note that if <span class="math inline">\(k_0 = 0\)</span>, then <span class="math inline">\([k_0, k_{m}]\)</span> is the set of all natural numbers (zero plus the positive integers).<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3" role="doc-endnote"><p>There is no need to prove the recurrence (Equation <span class="math inline">\(\ref{eq:recurrence}\)</span>) as we have already proved it in the process of deriving it.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4" role="doc-endnote"><p>In <em>Concrete Mathematics</em> 2 ed. p. 3 (where the book uses <span class="math inline">\(T_n\)</span> instead of <span class="math inline">\(S_n\)</span>), the proof is simply a one-liner: <span class="math display">\[
 T_n = 2(T_{n - 1}) + 1 = 2(2^{n - 1} - 1) + 1 = 2^n - 1.
-\]</span> But I find it a bit too terse for my tastes.<a href="#fnref4" class="footnote-back">↩</a></p></li>
+\]</span> But I find it a bit too terse for my tastes.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 ]]></summary>
@@ -721,7 +721,7 @@ T_n = 2(T_{n - 1}) + 1 = 2(2^{n - 1} - 1) + 1 = 2^n - 1.
     <summary type="html"><![CDATA[<div class="info center">
 	<code class="date">2017-04-14</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2017-04-14-computing-fibonacci-numbers.org" title="History">*</a>
 	<br>
-	<a href="/tag/math.html">math</a>, <a href="/tag/programming.html">programming</a>, <a href="/tag/python.html">python</a>
+	<a title="All pages tagged &#39;math&#39;." href="/tag/math.html">math</a>, <a title="All pages tagged &#39;programming&#39;." href="/tag/programming.html">programming</a>, <a title="All pages tagged &#39;python&#39;." href="/tag/python.html">python</a>
 </div>
 
 <h1 id="introduction">Introduction</h1>
@@ -733,8 +733,8 @@ T_n = 2(T_{n - 1}) + 1 = 2(2^{n - 1} - 1) + 1 = 2^n - 1.
 \mathrm{F}_{n} = \mathrm{F}_{n - 2} + \mathrm{F}_{n - 1}.
 \end{align}
 \]</span></p>
-<p>That is, each Fibonacci number <span class="math inline">\(\mathrm{F}_{n}\)</span> is the sum of the previous two Fibonacci numbers, except the very first two numbers which are defined to be 0 and 1. <a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
-<p>From the definition above, it appears that computing <span class="math inline">\(\mathrm{F}_{n}\)</span> requires one to always compute <span class="math inline">\(\mathrm{F}_{n - 2}\)</span> and <span class="math inline">\(\mathrm{F}_{n - 1}\)</span>. <strong>This is false:</strong> enter the “doubling method”. <a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a> <a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a></p>
+<p>That is, each Fibonacci number <span class="math inline">\(\mathrm{F}_{n}\)</span> is the sum of the previous two Fibonacci numbers, except the very first two numbers which are defined to be 0 and 1. <a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+<p>From the definition above, it appears that computing <span class="math inline">\(\mathrm{F}_{n}\)</span> requires one to always compute <span class="math inline">\(\mathrm{F}_{n - 2}\)</span> and <span class="math inline">\(\mathrm{F}_{n - 1}\)</span>. <strong>This is false:</strong> enter the “doubling method”. <a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> <a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
 <h1 id="the-genesis-of-the-doubling-method">The Genesis of the Doubling Method</h1>
 <p>The doubling method uses a couple of mathematical formulas derived from matrix multiplication as it applies to calculating Fibonacci numbers; it can be seen as an improvement over the matrix multiplication method, although it does not use matrix multplication itself. The matrix multiplication method uses the following formula:</p>
 <p><span class="math display">\[
@@ -858,31 +858,31 @@ T_n = 2(T_{n - 1}) + 1 = 2(2^{n - 1} - 1) + 1 = 2^n - 1.
 <div class="raw-link sourceCode">
 <table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href= "/code/2017-04-14-computing-fibonacci-numbers/fibonacci-doubling.py" mimetype=text/plain >fibonacci-doubling.py</a></code></pre></td></tr></tbody></table>
 </div>
-<div class="sourceCode" id="cb1" data-input="code/2017-04-14-computing-fibonacci-numbers/fibonacci-doubling.py"><pre class="sourceCode numberSource numberLines python"><code class="sourceCode python"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">def</span> fibonacci_doubling(n):</a>
-<a class="sourceLine" id="cb1-2" title="2">    <span class="co">&quot;&quot;&quot; Calculate the Nth Fibonacci number using the doubling method. &quot;&quot;&quot;</span></a>
-<a class="sourceLine" id="cb1-3" title="3">    <span class="cf">return</span> _fibonacci_doubling(n)[<span class="dv">0</span>]</a>
-<a class="sourceLine" id="cb1-4" title="4"></a>
-<a class="sourceLine" id="cb1-5" title="5"></a>
-<a class="sourceLine" id="cb1-6" title="6"><span class="kw">def</span> _fibonacci_doubling(n):</a>
-<a class="sourceLine" id="cb1-7" title="7">    <span class="co">&quot;&quot;&quot; Calculate Nth Fibonacci number using the doubling method. Return the</span></a>
-<a class="sourceLine" id="cb1-8" title="8"><span class="co">    tuple (F(n), F(n+1)).&quot;&quot;&quot;</span></a>
-<a class="sourceLine" id="cb1-9" title="9">    <span class="cf">if</span> n <span class="op">==</span> <span class="dv">0</span>:</a>
-<a class="sourceLine" id="cb1-10" title="10">        <span class="cf">return</span> (<span class="dv">0</span>, <span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb1-11" title="11">    <span class="cf">else</span>:</a>
-<a class="sourceLine" id="cb1-12" title="12">        a, b <span class="op">=</span> _fibonacci_doubling(n <span class="op">&gt;&gt;</span> <span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb1-13" title="13">        c <span class="op">=</span> a <span class="op">*</span> ((b <span class="op">&lt;&lt;</span> <span class="dv">1</span>) <span class="op">-</span> a)</a>
-<a class="sourceLine" id="cb1-14" title="14">        d <span class="op">=</span> a <span class="op">*</span> a <span class="op">+</span> b <span class="op">*</span> b</a>
-<a class="sourceLine" id="cb1-15" title="15">        <span class="cf">if</span> n <span class="op">&amp;</span> <span class="dv">1</span>:</a>
-<a class="sourceLine" id="cb1-16" title="16">            <span class="cf">return</span> (d, c <span class="op">+</span> d)</a>
-<a class="sourceLine" id="cb1-17" title="17">        <span class="cf">else</span>:</a>
-<a class="sourceLine" id="cb1-18" title="18">            <span class="cf">return</span> (c, d)</a>
-<a class="sourceLine" id="cb1-19" title="19"></a>
-<a class="sourceLine" id="cb1-20" title="20"></a>
-<a class="sourceLine" id="cb1-21" title="21"><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">&quot;__main__&quot;</span>:</a>
-<a class="sourceLine" id="cb1-22" title="22">    <span class="cf">for</span> n <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">20</span>):</a>
-<a class="sourceLine" id="cb1-23" title="23">        <span class="bu">print</span>(fibonacci_doubling(n))</a>
-<a class="sourceLine" id="cb1-24" title="24">    <span class="co"># As a demonstration of this algorithm&#39;s speed, here is a large n.</span></a>
-<a class="sourceLine" id="cb1-25" title="25">    <span class="bu">print</span>(fibonacci_doubling(<span class="dv">10000</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb1" data-input="code/2017-04-14-computing-fibonacci-numbers/fibonacci-doubling.py"><pre class="sourceCode numberSource numberLines python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">def</span> fibonacci_doubling(n):</span>
+<span id="cb1-2"><a href="#cb1-2"></a>    <span class="co">&quot;&quot;&quot; Calculate the Nth Fibonacci number using the doubling method. &quot;&quot;&quot;</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a>    <span class="cf">return</span> _fibonacci_doubling(n)[<span class="dv">0</span>]</span>
+<span id="cb1-4"><a href="#cb1-4"></a></span>
+<span id="cb1-5"><a href="#cb1-5"></a></span>
+<span id="cb1-6"><a href="#cb1-6"></a><span class="kw">def</span> _fibonacci_doubling(n):</span>
+<span id="cb1-7"><a href="#cb1-7"></a>    <span class="co">&quot;&quot;&quot; Calculate Nth Fibonacci number using the doubling method. Return the</span></span>
+<span id="cb1-8"><a href="#cb1-8"></a><span class="co">    tuple (F(n), F(n+1)).&quot;&quot;&quot;</span></span>
+<span id="cb1-9"><a href="#cb1-9"></a>    <span class="cf">if</span> n <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb1-10"><a href="#cb1-10"></a>        <span class="cf">return</span> (<span class="dv">0</span>, <span class="dv">1</span>)</span>
+<span id="cb1-11"><a href="#cb1-11"></a>    <span class="cf">else</span>:</span>
+<span id="cb1-12"><a href="#cb1-12"></a>        a, b <span class="op">=</span> _fibonacci_doubling(n <span class="op">&gt;&gt;</span> <span class="dv">1</span>)</span>
+<span id="cb1-13"><a href="#cb1-13"></a>        c <span class="op">=</span> a <span class="op">*</span> ((b <span class="op">&lt;&lt;</span> <span class="dv">1</span>) <span class="op">-</span> a)</span>
+<span id="cb1-14"><a href="#cb1-14"></a>        d <span class="op">=</span> a <span class="op">*</span> a <span class="op">+</span> b <span class="op">*</span> b</span>
+<span id="cb1-15"><a href="#cb1-15"></a>        <span class="cf">if</span> n <span class="op">&amp;</span> <span class="dv">1</span>:</span>
+<span id="cb1-16"><a href="#cb1-16"></a>            <span class="cf">return</span> (d, c <span class="op">+</span> d)</span>
+<span id="cb1-17"><a href="#cb1-17"></a>        <span class="cf">else</span>:</span>
+<span id="cb1-18"><a href="#cb1-18"></a>            <span class="cf">return</span> (c, d)</span>
+<span id="cb1-19"><a href="#cb1-19"></a></span>
+<span id="cb1-20"><a href="#cb1-20"></a></span>
+<span id="cb1-21"><a href="#cb1-21"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">&quot;__main__&quot;</span>:</span>
+<span id="cb1-22"><a href="#cb1-22"></a>    <span class="cf">for</span> n <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">20</span>):</span>
+<span id="cb1-23"><a href="#cb1-23"></a>        <span class="bu">print</span>(fibonacci_doubling(n))</span>
+<span id="cb1-24"><a href="#cb1-24"></a>    <span class="co"># As a demonstration of this algorithm&#39;s speed, here is a large n.</span></span>
+<span id="cb1-25"><a href="#cb1-25"></a>    <span class="bu">print</span>(fibonacci_doubling(<span class="dv">10000</span>))</span></code></pre></div>
 </div>
 <p>Line 12 is where we do the halving. We use the right-shift operator to do this. Lines 13 and 14 are our doubling identities (I use the left-shift operator here because it feels more natural to me). The if-condition on line 15 returns <span class="math inline">\(\mathrm{F}_{2m + 1}\)</span> if <span class="math inline">\(n\)</span> was odd, and <span class="math inline">\(\mathrm{F}_{2m}\)</span> otherwise.</p>
 <p>For comparison, here is an iterative version. On the one hand it avoids Python’s recursion limit, but the downside is a small loss of elegance (we have to loop twice — first to build up the halving/doubling points, and again for the main loop).</p>
@@ -890,36 +890,36 @@ T_n = 2(T_{n - 1}) + 1 = 2(2^{n - 1} - 1) + 1 = 2^n - 1.
 <div class="raw-link sourceCode">
 <table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href= "/code/2017-04-14-computing-fibonacci-numbers/fibonacci-doubling-iter.py" mimetype=text/plain >fibonacci-doubling-iter.py</a></code></pre></td></tr></tbody></table>
 </div>
-<div class="sourceCode" id="cb2" data-input="code/2017-04-14-computing-fibonacci-numbers/fibonacci-doubling-iter.py"><pre class="sourceCode numberSource numberLines python"><code class="sourceCode python"><a class="sourceLine" id="cb2-1" title="1"><span class="kw">def</span> fibonacci_doubling_iter(n):</a>
-<a class="sourceLine" id="cb2-2" title="2">    <span class="co">&quot;&quot;&quot; Calculate Nth Fibonacci number using the doubling method, using</span></a>
-<a class="sourceLine" id="cb2-3" title="3"><span class="co">    iteration. &quot;&quot;&quot;</span></a>
-<a class="sourceLine" id="cb2-4" title="4">    ns <span class="op">=</span> []</a>
-<a class="sourceLine" id="cb2-5" title="5">    <span class="cf">while</span> n:</a>
-<a class="sourceLine" id="cb2-6" title="6">        ns.extend([n])</a>
-<a class="sourceLine" id="cb2-7" title="7">        n <span class="op">&gt;&gt;=</span> <span class="dv">1</span></a>
-<a class="sourceLine" id="cb2-8" title="8"></a>
-<a class="sourceLine" id="cb2-9" title="9">    a, b <span class="op">=</span> <span class="dv">0</span>, <span class="dv">1</span></a>
-<a class="sourceLine" id="cb2-10" title="10"></a>
-<a class="sourceLine" id="cb2-11" title="11">    <span class="cf">while</span> ns:</a>
-<a class="sourceLine" id="cb2-12" title="12">        n <span class="op">=</span> ns.pop()</a>
-<a class="sourceLine" id="cb2-13" title="13">        c <span class="op">=</span> a <span class="op">*</span> ((b <span class="op">&lt;&lt;</span> <span class="dv">1</span>) <span class="op">-</span> a)</a>
-<a class="sourceLine" id="cb2-14" title="14">        d <span class="op">=</span> a <span class="op">*</span> a <span class="op">+</span> b <span class="op">*</span> b</a>
-<a class="sourceLine" id="cb2-15" title="15">        <span class="cf">if</span> n <span class="op">&amp;</span> <span class="dv">1</span>:</a>
-<a class="sourceLine" id="cb2-16" title="16">            a, b <span class="op">=</span> d, c <span class="op">+</span> d</a>
-<a class="sourceLine" id="cb2-17" title="17">        <span class="cf">else</span>:</a>
-<a class="sourceLine" id="cb2-18" title="18">            a, b <span class="op">=</span> c, d</a>
-<a class="sourceLine" id="cb2-19" title="19"></a>
-<a class="sourceLine" id="cb2-20" title="20">    <span class="cf">return</span> a</a></code></pre></div>
+<div class="sourceCode" id="cb2" data-input="code/2017-04-14-computing-fibonacci-numbers/fibonacci-doubling-iter.py"><pre class="sourceCode numberSource numberLines python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">def</span> fibonacci_doubling_iter(n):</span>
+<span id="cb2-2"><a href="#cb2-2"></a>    <span class="co">&quot;&quot;&quot; Calculate Nth Fibonacci number using the doubling method, using</span></span>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="co">    iteration. &quot;&quot;&quot;</span></span>
+<span id="cb2-4"><a href="#cb2-4"></a>    ns <span class="op">=</span> []</span>
+<span id="cb2-5"><a href="#cb2-5"></a>    <span class="cf">while</span> n:</span>
+<span id="cb2-6"><a href="#cb2-6"></a>        ns.extend([n])</span>
+<span id="cb2-7"><a href="#cb2-7"></a>        n <span class="op">&gt;&gt;=</span> <span class="dv">1</span></span>
+<span id="cb2-8"><a href="#cb2-8"></a></span>
+<span id="cb2-9"><a href="#cb2-9"></a>    a, b <span class="op">=</span> <span class="dv">0</span>, <span class="dv">1</span></span>
+<span id="cb2-10"><a href="#cb2-10"></a></span>
+<span id="cb2-11"><a href="#cb2-11"></a>    <span class="cf">while</span> ns:</span>
+<span id="cb2-12"><a href="#cb2-12"></a>        n <span class="op">=</span> ns.pop()</span>
+<span id="cb2-13"><a href="#cb2-13"></a>        c <span class="op">=</span> a <span class="op">*</span> ((b <span class="op">&lt;&lt;</span> <span class="dv">1</span>) <span class="op">-</span> a)</span>
+<span id="cb2-14"><a href="#cb2-14"></a>        d <span class="op">=</span> a <span class="op">*</span> a <span class="op">+</span> b <span class="op">*</span> b</span>
+<span id="cb2-15"><a href="#cb2-15"></a>        <span class="cf">if</span> n <span class="op">&amp;</span> <span class="dv">1</span>:</span>
+<span id="cb2-16"><a href="#cb2-16"></a>            a, b <span class="op">=</span> d, c <span class="op">+</span> d</span>
+<span id="cb2-17"><a href="#cb2-17"></a>        <span class="cf">else</span>:</span>
+<span id="cb2-18"><a href="#cb2-18"></a>            a, b <span class="op">=</span> c, d</span>
+<span id="cb2-19"><a href="#cb2-19"></a></span>
+<span id="cb2-20"><a href="#cb2-20"></a>    <span class="cf">return</span> a</span></code></pre></div>
 </div>
 <h1 id="conclusion">Conclusion</h1>
-<p>I hope you enjoyed reading about this method of calculationg Fibonacci numbers as much as I enjoyed learning the math behind it. This algorithm can be sped up if it uses a faster multiplication algorithm as <code>a</code> and <code>b</code> get very large (e.g., Karatsuba multiplication). <a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a> Time complexity is <span class="math inline">\(\Theta(\log{n})\)</span>; it reminds me of the binary search algorithm, in how the problem space is halved repeatedly. Neat!</p>
-<section class="footnotes">
+<p>I hope you enjoyed reading about this method of calculationg Fibonacci numbers as much as I enjoyed learning the math behind it. This algorithm can be sped up if it uses a faster multiplication algorithm as <code>a</code> and <code>b</code> get very large (e.g., Karatsuba multiplication). <a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> Time complexity is <span class="math inline">\(\Theta(\log{n})\)</span>; it reminds me of the binary search algorithm, in how the problem space is halved repeatedly. Neat!</p>
+<section class="footnotes" role="doc-endnotes">
 <hr />
 <ol>
-<li id="fn1"><p>We can choose to define the first two terms as 1 and 1 instead, but this distinction is needlessly arbitrary.<a href="#fnref1" class="footnote-back">↩</a></p></li>
-<li id="fn2"><p>There is actually a known formula for our purposes, where <span class="math display">\[ \mathrm{F}_{n} = \frac{\varphi^n - (-\varphi)^{-n}}{2\varphi - 1}\]</span> and <span class="math inline">\(\varphi = \frac{1 + \sqrt{5}}{2} \approx 1.6180339887\cdots\)</span> (the golden ratio). Unfortunately this requires arbitrary-precision floating point calculations.<a href="#fnref2" class="footnote-back">↩</a></p></li>
-<li id="fn3"><p>For more discussion, see <a href="https://www.nayuki.io/page/fast-fibonacci-algorithms" class="uri">https://www.nayuki.io/page/fast-fibonacci-algorithms</a>.<a href="#fnref3" class="footnote-back">↩</a></p></li>
-<li id="fn4"><p>Python already uses Karatsuba multiplication natively for large integers.<a href="#fnref4" class="footnote-back">↩</a></p></li>
+<li id="fn1" role="doc-endnote"><p>We can choose to define the first two terms as 1 and 1 instead, but this distinction is needlessly arbitrary.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2" role="doc-endnote"><p>There is actually a known formula for our purposes, where <span class="math display">\[ \mathrm{F}_{n} = \frac{\varphi^n - (-\varphi)^{-n}}{2\varphi - 1}\]</span> and <span class="math inline">\(\varphi = \frac{1 + \sqrt{5}}{2} \approx 1.6180339887\cdots\)</span> (the golden ratio). Unfortunately this requires arbitrary-precision floating point calculations.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3" role="doc-endnote"><p>For more discussion, see <a href="https://www.nayuki.io/page/fast-fibonacci-algorithms">https://www.nayuki.io/page/fast-fibonacci-algorithms</a>.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4" role="doc-endnote"><p>Python already uses Karatsuba multiplication natively for large integers.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 ]]></summary>
@@ -933,12 +933,12 @@ T_n = 2(T_{n - 1}) + 1 = 2(2^{n - 1} - 1) + 1 = 2^n - 1.
     <summary type="html"><![CDATA[<div class="info center">
 	<code class="date">2017-04-02</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2017-04-02-calling-c-from-haskell.org" title="History">*</a>
 	<br>
-	<a href="/tag/programming.html">programming</a>, <a href="/tag/haskell.html">haskell</a>
+	<a title="All pages tagged &#39;programming&#39;." href="/tag/programming.html">programming</a>, <a title="All pages tagged &#39;haskell&#39;." href="/tag/haskell.html">haskell</a>
 </div>
 
 <p>Yesterday I made a minimal working example of calling C from Haskell, where I call a simple C function to compute the greatest common denominator, or “GCD”. The Haskell portion only serves as a wrapper around the C function. This post is a brief look at the whole setup.</p>
 <h1 id="the-setup">The Setup</h1>
-<p>I used <code>ghc</code> 8.0.1, and <code>gcc</code> 5.4.0. <a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
+<p>I used <code>ghc</code> 8.0.1, and <code>gcc</code> 5.4.0. <a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
 <h2 id="folder-structure">Folder Structure</h2>
 <pre><code>2017-04-02-calling-c-from-haskell
 ├── build.sh
@@ -956,60 +956,60 @@ T_n = 2(T_{n - 1}) + 1 = 2(2^{n - 1} - 1) + 1 = 2^n - 1.
 <div class="raw-link sourceCode">
 <table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>■</pre></td><td class="sourceCode"><pre><code><a class="raw" href= "/code/2017-04-02-calling-c-from-haskell/c/gcd.h" mimetype=text/plain >gcd.h</a></code></pre></td></tr></tbody></table>
 </div>
-<div class="sourceCode" id="cb2" data-input="code/2017-04-02-calling-c-from-haskell/c/gcd.h"><pre class="sourceCode numberSource numberLines"><code class="sourceCode"><a class="sourceLine" id="cb2-1" title="1">int gcd(int m, int r);</a></code></pre></div>
+<div class="sourceCode" id="cb2" data-input="code/2017-04-02-calling-c-from-haskell/c/gcd.h"><pre class="sourceCode numberSource numberLines"><code class="sourceCode"><span id="cb2-1"><a href="#cb2-1"></a>int gcd(int m, int r);</span></code></pre></div>
 </div>
 <div class="code-and-raw lineCntMax100">
 <div class="raw-link sourceCode">
 <table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href= "/code/2017-04-02-calling-c-from-haskell/c/gcd.c" mimetype=text/plain >gcd.c</a></code></pre></td></tr></tbody></table>
 </div>
-<div class="sourceCode" id="cb3" data-input="code/2017-04-02-calling-c-from-haskell/c/gcd.c"><pre class="sourceCode numberSource numberLines c"><code class="sourceCode c"><a class="sourceLine" id="cb3-1" title="1"><span class="pp">#include </span><span class="im">&quot;gcd.h&quot;</span></a>
-<a class="sourceLine" id="cb3-2" title="2"></a>
-<a class="sourceLine" id="cb3-3" title="3"><span class="co">/* Find greatest common divisor. */</span></a>
-<a class="sourceLine" id="cb3-4" title="4"><span class="dt">int</span> gcd(<span class="dt">int</span> m, <span class="dt">int</span> r)</a>
-<a class="sourceLine" id="cb3-5" title="5">{</a>
-<a class="sourceLine" id="cb3-6" title="6">	<span class="cf">if</span> (r == <span class="dv">0</span>)</a>
-<a class="sourceLine" id="cb3-7" title="7">		<span class="cf">return</span> m;</a>
-<a class="sourceLine" id="cb3-8" title="8"></a>
-<a class="sourceLine" id="cb3-9" title="9">	<span class="cf">return</span> gcd(r, m % r);</a>
-<a class="sourceLine" id="cb3-10" title="10">}</a></code></pre></div>
+<div class="sourceCode" id="cb3" data-input="code/2017-04-02-calling-c-from-haskell/c/gcd.c"><pre class="sourceCode numberSource numberLines c"><code class="sourceCode c"><span id="cb3-1"><a href="#cb3-1"></a><span class="pp">#include </span><span class="im">&quot;gcd.h&quot;</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a></span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="co">/* Find greatest common divisor. */</span></span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="dt">int</span> gcd(<span class="dt">int</span> m, <span class="dt">int</span> r)</span>
+<span id="cb3-5"><a href="#cb3-5"></a>{</span>
+<span id="cb3-6"><a href="#cb3-6"></a>	<span class="cf">if</span> (r == <span class="dv">0</span>)</span>
+<span id="cb3-7"><a href="#cb3-7"></a>		<span class="cf">return</span> m;</span>
+<span id="cb3-8"><a href="#cb3-8"></a></span>
+<span id="cb3-9"><a href="#cb3-9"></a>	<span class="cf">return</span> gcd(r, m % r);</span>
+<span id="cb3-10"><a href="#cb3-10"></a>}</span></code></pre></div>
 </div>
 <div class="code-and-raw lineCntMax100">
 <div class="raw-link sourceCode">
 <table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href= "/code/2017-04-02-calling-c-from-haskell/hs/GCD.hs" mimetype=text/plain >GCD.hs</a></code></pre></td></tr></tbody></table>
 </div>
-<div class="sourceCode" id="cb4" data-input="code/2017-04-02-calling-c-from-haskell/hs/GCD.hs"><pre class="sourceCode numberSource numberLines haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb4-1" title="1"><span class="kw">module</span> <span class="dt">GCD</span> <span class="kw">where</span></a>
-<a class="sourceLine" id="cb4-2" title="2"></a>
-<a class="sourceLine" id="cb4-3" title="3"><span class="kw">import</span> <span class="dt">Foreign</span></a>
-<a class="sourceLine" id="cb4-4" title="4"><span class="kw">import</span> <span class="dt">Foreign.C.Types</span></a>
-<a class="sourceLine" id="cb4-5" title="5"></a>
-<a class="sourceLine" id="cb4-6" title="6">foreign <span class="kw">import</span> ccall &quot;gcd&quot;</a>
-<a class="sourceLine" id="cb4-7" title="7"><span class="ot">  c_gcd ::</span> <span class="dt">CInt</span> <span class="ot">-&gt;</span> <span class="dt">CInt</span> <span class="ot">-&gt;</span> <span class="dt">CInt</span></a>
-<a class="sourceLine" id="cb4-8" title="8"></a>
-<a class="sourceLine" id="cb4-9" title="9"><span class="ot">f_gcd ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span></a>
-<a class="sourceLine" id="cb4-10" title="10">f_gcd a b <span class="fu">=</span> <span class="fu">fromIntegral</span> <span class="fu">$</span> c_gcd (<span class="fu">fromIntegral</span> a) (<span class="fu">fromIntegral</span> b)</a></code></pre></div>
+<div class="sourceCode" id="cb4" data-input="code/2017-04-02-calling-c-from-haskell/hs/GCD.hs"><pre class="sourceCode numberSource numberLines haskell"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">module</span> <span class="dt">GCD</span> <span class="kw">where</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a></span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="kw">import</span> <span class="dt">Foreign</span></span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="kw">import</span> <span class="dt">Foreign.C.Types</span></span>
+<span id="cb4-5"><a href="#cb4-5"></a></span>
+<span id="cb4-6"><a href="#cb4-6"></a>foreign <span class="kw">import</span> ccall &quot;gcd&quot;</span>
+<span id="cb4-7"><a href="#cb4-7"></a><span class="ot">  c_gcd ::</span> <span class="dt">CInt</span> <span class="ot">-&gt;</span> <span class="dt">CInt</span> <span class="ot">-&gt;</span> <span class="dt">CInt</span></span>
+<span id="cb4-8"><a href="#cb4-8"></a></span>
+<span id="cb4-9"><a href="#cb4-9"></a><span class="ot">f_gcd ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span></span>
+<span id="cb4-10"><a href="#cb4-10"></a>f_gcd a b <span class="ot">=</span> <span class="fu">fromIntegral</span> <span class="op">$</span> c_gcd (<span class="fu">fromIntegral</span> a) (<span class="fu">fromIntegral</span> b)</span></code></pre></div>
 </div>
 <div class="code-and-raw lineCntMax10">
 <div class="raw-link sourceCode">
 <table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>■</pre></td><td class="sourceCode"><pre><code><a class="raw" href= "/code/2017-04-02-calling-c-from-haskell/hs/ffi.hs" mimetype=text/plain >ffi.hs</a></code></pre></td></tr></tbody></table>
 </div>
-<div class="sourceCode" id="cb5" data-input="code/2017-04-02-calling-c-from-haskell/hs/ffi.hs"><pre class="sourceCode numberSource numberLines haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb5-1" title="1"><span class="kw">import</span> <span class="dt">GCD</span></a>
-<a class="sourceLine" id="cb5-2" title="2"></a>
-<a class="sourceLine" id="cb5-3" title="3"><span class="ot">main ::</span> <span class="dt">IO</span> ()</a>
-<a class="sourceLine" id="cb5-4" title="4">main <span class="fu">=</span> <span class="fu">mapM_</span> (<span class="fu">print</span> <span class="fu">.</span> <span class="fu">uncurry</span> f_gcd) [(<span class="dv">8</span>, <span class="dv">12</span>), (<span class="dv">30</span>, <span class="dv">105</span>), (<span class="dv">24</span>, <span class="dv">108</span>)]</a></code></pre></div>
+<div class="sourceCode" id="cb5" data-input="code/2017-04-02-calling-c-from-haskell/hs/ffi.hs"><pre class="sourceCode numberSource numberLines haskell"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">import</span> <span class="dt">GCD</span></span>
+<span id="cb5-2"><a href="#cb5-2"></a></span>
+<span id="cb5-3"><a href="#cb5-3"></a><span class="ot">main ::</span> <span class="dt">IO</span> ()</span>
+<span id="cb5-4"><a href="#cb5-4"></a>main <span class="ot">=</span> <span class="fu">mapM_</span> (<span class="fu">print</span> <span class="op">.</span> <span class="fu">uncurry</span> f_gcd) [(<span class="dv">8</span>, <span class="dv">12</span>), (<span class="dv">30</span>, <span class="dv">105</span>), (<span class="dv">24</span>, <span class="dv">108</span>)]</span></code></pre></div>
 </div>
 <div class="code-and-raw lineCntMax10">
 <div class="raw-link sourceCode">
 <table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>■</pre></td><td class="sourceCode"><pre><code><a class="raw" href= "/code/2017-04-02-calling-c-from-haskell/build.sh" mimetype=text/plain >build.sh</a></code></pre></td></tr></tbody></table>
 </div>
-<div class="sourceCode" id="cb6" data-input="code/2017-04-02-calling-c-from-haskell/build.sh"><pre class="sourceCode numberSource numberLines bash"><code class="sourceCode bash"><a class="sourceLine" id="cb6-1" title="1"><span class="co">#!/usr/bin/env bash</span></a>
-<a class="sourceLine" id="cb6-2" title="2"></a>
-<a class="sourceLine" id="cb6-3" title="3"><span class="bu">pushd</span> c</a>
-<a class="sourceLine" id="cb6-4" title="4"><span class="fu">gcc</span> -c -o gcd.o gcd.c</a>
-<a class="sourceLine" id="cb6-5" title="5"><span class="bu">popd</span></a>
-<a class="sourceLine" id="cb6-6" title="6"></a>
-<a class="sourceLine" id="cb6-7" title="7"><span class="bu">pushd</span> hs</a>
-<a class="sourceLine" id="cb6-8" title="8"><span class="ex">ghc</span> --make ffi.hs ../c/gcd.o</a>
-<a class="sourceLine" id="cb6-9" title="9"><span class="bu">popd</span></a></code></pre></div>
+<div class="sourceCode" id="cb6" data-input="code/2017-04-02-calling-c-from-haskell/build.sh"><pre class="sourceCode numberSource numberLines bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1"></a><span class="co">#!/usr/bin/env bash</span></span>
+<span id="cb6-2"><a href="#cb6-2"></a></span>
+<span id="cb6-3"><a href="#cb6-3"></a><span class="bu">pushd</span> c</span>
+<span id="cb6-4"><a href="#cb6-4"></a><span class="fu">gcc</span> -c -o gcd.o gcd.c</span>
+<span id="cb6-5"><a href="#cb6-5"></a><span class="bu">popd</span></span>
+<span id="cb6-6"><a href="#cb6-6"></a></span>
+<span id="cb6-7"><a href="#cb6-7"></a><span class="bu">pushd</span> hs</span>
+<span id="cb6-8"><a href="#cb6-8"></a><span class="ex">ghc</span> --make ffi.hs ../c/gcd.o</span>
+<span id="cb6-9"><a href="#cb6-9"></a><span class="bu">popd</span></span></code></pre></div>
 </div>
 <h1 id="discussion">Discussion</h1>
 <p>To compile the example, run the <code>build.sh</code> script. Here is the expected output of the built executable:</p>
@@ -1053,7 +1053,7 @@ collect2: error: ld returned 1 exit status
 `cc&#39; failed in phase `Linker&#39;. (Exit code: 1)
 </code></pre>
 <ul>
-<li>In <code>GCD.hs</code> you can see the line <code>foreign import ccall &quot;gcd.h gcd&quot;﻿</code>. Instinctively I thought that the <code>gcd.h</code> in <code>﻿&quot;gcd.h gcd&quot;﻿</code> served as a kind of disambiguator, for where the <code>gcd()</code> function came from. So then I defined another function named <code>gcd()</code> in a different C header file (<code>gcd_other.h</code>), compiled it separately, but got a “multple definition” error:</li>
+<li>In <code>GCD.hs</code> you can see the line <code>foreign import ccall "gcd.h gcd"﻿</code>. Instinctively I thought that the <code>gcd.h</code> in <code>﻿"gcd.h gcd"﻿</code> served as a kind of disambiguator, for where the <code>gcd()</code> function came from. So then I defined another function named <code>gcd()</code> in a different C header file (<code>gcd_other.h</code>), compiled it separately, but got a “multple definition” error:</li>
 </ul>
 <pre><code> $ ghc --make ffi.hs ../c/gcd.o ../c/gcd_other.o
 [1 of 2] Compiling GCD              ( GCD.hs, GCD.o )
@@ -1065,10 +1065,10 @@ gcd_other.c:(.text+0x0): multiple definition of `gcd&#39;
 collect2: error: ld returned 1 exit status
 `cc&#39; failed in phase `Linker&#39;. (Exit code: 1)
 </code></pre>
-<section class="footnotes">
+<section class="footnotes" role="doc-endnotes">
 <hr />
 <ol>
-<li id="fn1"><p>The version of gcc should not matter at all – actually, any decent C compiler should work.<a href="#fnref1" class="footnote-back">↩</a></p></li>
+<li id="fn1" role="doc-endnote"><p>The version of gcc should not matter at all – actually, any decent C compiler should work.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 ]]></summary>

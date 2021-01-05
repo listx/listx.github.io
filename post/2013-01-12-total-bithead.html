@@ -41,7 +41,7 @@
 			<div class="info center">
 	<code class="date">2013-01-12</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2013-01-12-total-bithead.org" title="History">*</a>
 	<br>
-	<a href="../tag/linux.html">linux</a>, <a href="../tag/sound.html">sound</a>, <a href="../tag/alsa.html">alsa</a>, <a href="../tag/arch.html">arch</a>, <a href="../tag/hardware.html">hardware</a>
+	<a title="All pages tagged 'linux'." href="../tag/linux.html">linux</a>, <a title="All pages tagged 'sound'." href="../tag/sound.html">sound</a>, <a title="All pages tagged 'alsa'." href="../tag/alsa.html">alsa</a>, <a title="All pages tagged 'arch'." href="../tag/arch.html">arch</a>, <a title="All pages tagged 'hardware'." href="../tag/hardware.html">hardware</a>
 </div>
 
 <p>So I got HeadRoom’s “Total Bithead” USB DAC (digital-to-analog converter) and micro amplifier. The problem is, when I plug it into my Linux desktop, mplayer/firefox still recognizes the onboard sound on my motherboard as the default device. After some searching, I found some resources to (1) use it as the default sound device and (2) enable mixing on it (different applications can simultaneously use the Total Bithead).</p>
@@ -51,17 +51,17 @@
 <div class="raw-link sourceCode">
 <table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/switch_audio.sh" mimetype="text/plain">switch_audio.sh</a></code></pre></td></tr></tbody></table>
 </div>
-<div class="sourceCode" id="cb1" data-input="code/switch_audio.sh"><pre class="sourceCode numberSource numberLines bash"><code class="sourceCode bash"><a class="sourceLine" id="cb1-1" title="1"><span class="co">#!/bin/zsh</span></a>
-<a class="sourceLine" id="cb1-2" title="2"></a>
-<a class="sourceLine" id="cb1-3" title="3"><span class="kw">if [[</span> <span class="ot">-e</span> /proc/asound/card1<span class="kw"> ]]</span>; <span class="kw">then</span></a>
-<a class="sourceLine" id="cb1-4" title="4">	<span class="fu">ln</span> -sf ~/syscfg/alsa/cfg-total-bithead ~/.asoundrc</a>
-<a class="sourceLine" id="cb1-5" title="5"><span class="kw">else</span></a>
-<a class="sourceLine" id="cb1-6" title="6">	<span class="kw">case</span> <span class="va">$HOST</span><span class="kw"> in</span></a>
-<a class="sourceLine" id="cb1-7" title="7">	k0<span class="kw">)</span> <span class="fu">ln</span> -sf ~/syscfg/alsa/cfg-k0 ~/.asoundrc <span class="kw">;;</span></a>
-<a class="sourceLine" id="cb1-8" title="8">	<span class="ex">k1</span>) <span class="fu">ln</span> -sf ~/syscfg/alsa/cfg-k1 ~/.asoundrc <span class="kw">;;</span></a>
-<a class="sourceLine" id="cb1-9" title="9">	<span class="ex">*</span>) <span class="bu">echo</span> <span class="st">&quot;Unknown host </span><span class="dt">\`</span><span class="va">$HOST</span><span class="st">'&quot;</span> <span class="kw">;;</span></a>
-<a class="sourceLine" id="cb1-10" title="10">	<span class="kw">esac</span></a>
-<a class="sourceLine" id="cb1-11" title="11"><span class="kw">fi</span></a></code></pre></div>
+<div class="sourceCode" id="cb1" data-input="code/switch_audio.sh"><pre class="sourceCode numberSource numberLines bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="co">#!/bin/zsh</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a></span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="kw">if [[</span> <span class="ot">-e</span> /proc/asound/card1<span class="kw"> ]]</span>; <span class="kw">then</span></span>
+<span id="cb1-4"><a href="#cb1-4"></a>	<span class="fu">ln</span> -sf ~/syscfg/alsa/cfg-total-bithead ~/.asoundrc</span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="kw">else</span></span>
+<span id="cb1-6"><a href="#cb1-6"></a>	<span class="kw">case</span> <span class="va">$HOST</span><span class="kw"> in</span></span>
+<span id="cb1-7"><a href="#cb1-7"></a>	k0<span class="kw">)</span> <span class="fu">ln</span> -sf ~/syscfg/alsa/cfg-k0 ~/.asoundrc <span class="kw">;;</span></span>
+<span id="cb1-8"><a href="#cb1-8"></a>	<span class="ex">k1</span>) <span class="fu">ln</span> -sf ~/syscfg/alsa/cfg-k1 ~/.asoundrc <span class="kw">;;</span></span>
+<span id="cb1-9"><a href="#cb1-9"></a>	<span class="ex">*</span>) <span class="bu">echo</span> <span class="st">&quot;Unknown host </span><span class="dt">\`</span><span class="va">$HOST</span><span class="st">'&quot;</span> <span class="kw">;;</span></span>
+<span id="cb1-10"><a href="#cb1-10"></a>	<span class="kw">esac</span></span>
+<span id="cb1-11"><a href="#cb1-11"></a><span class="kw">fi</span></span></code></pre></div>
 </div>
 <p>where k0 is my desktop and k1 is my laptop. <code>cfg-k0</code> looks like this:</p>
 <pre class="example"><code># use `aplay -l | awk '/^card/{print$3}' | sort | uniq' for card names

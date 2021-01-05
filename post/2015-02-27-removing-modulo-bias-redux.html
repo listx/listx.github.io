@@ -41,21 +41,21 @@
 			<div class="info center">
 	<code class="date">2015-02-27</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2015-02-27-removing-modulo-bias-redux.org" title="History">*</a>
 	<br>
-	<a href="../tag/programming.html">programming</a>, <a href="../tag/rng.html">rng</a>, <a href="../tag/c.html">c</a>
+	<a title="All pages tagged 'programming'." href="../tag/programming.html">programming</a>, <a title="All pages tagged 'rng'." href="../tag/rng.html">rng</a>, <a title="All pages tagged 'c'." href="../tag/c.html">c</a>
 </div>
 
 <p>In an earlier post, I discussed <a href="2013-07-12-generating-random-numbers-without-modulo-bias.html">how to remove modulo bias from your C code</a>. I would like to add a different version of removing modulo bias, inspired by the code from the <a href="http://www.pcg-random.org/">PCG family</a> of random number generators.</p>
 <h1 id="the-pcg-version">The PCG Version</h1>
 <p>In the <a href="http://www.pcg-random.org/download.html">official minimal C implementation</a> of PCG, there is a function called <code>pcg32_boundedrand_r</code>, which takes a <code>bound</code> variable. The code for that function is as follows:</p>
-<div class="sourceCode" id="cb1" data-org-language="C" data-startFrom><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><a class="sourceLine" id="cb1-1" title="1"><span class="dt">uint32_t</span> pcg32_boundedrand_r(pcg32_random_t* rng, <span class="dt">uint32_t</span> bound)</a>
-<a class="sourceLine" id="cb1-2" title="2">{</a>
-<a class="sourceLine" id="cb1-3" title="3">    <span class="dt">uint32_t</span> threshold = -bound % bound;</a>
-<a class="sourceLine" id="cb1-4" title="4">    <span class="cf">for</span> (;;) {</a>
-<a class="sourceLine" id="cb1-5" title="5">        <span class="dt">uint32_t</span> r = pcg32_random_r(rng);</a>
-<a class="sourceLine" id="cb1-6" title="6">        <span class="cf">if</span> (r &gt;= threshold)</a>
-<a class="sourceLine" id="cb1-7" title="7">            <span class="cf">return</span> r % bound;</a>
-<a class="sourceLine" id="cb1-8" title="8">    }</a>
-<a class="sourceLine" id="cb1-9" title="9">}</a></code></pre></div>
+<div class="sourceCode" id="cb1" data-org-language="C" data-startFrom><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1"></a><span class="dt">uint32_t</span> pcg32_boundedrand_r(pcg32_random_t* rng, <span class="dt">uint32_t</span> bound)</span>
+<span id="cb1-2"><a href="#cb1-2"></a>{</span>
+<span id="cb1-3"><a href="#cb1-3"></a>    <span class="dt">uint32_t</span> threshold = -bound % bound;</span>
+<span id="cb1-4"><a href="#cb1-4"></a>    <span class="cf">for</span> (;;) {</span>
+<span id="cb1-5"><a href="#cb1-5"></a>        <span class="dt">uint32_t</span> r = pcg32_random_r(rng);</span>
+<span id="cb1-6"><a href="#cb1-6"></a>        <span class="cf">if</span> (r &gt;= threshold)</span>
+<span id="cb1-7"><a href="#cb1-7"></a>            <span class="cf">return</span> r % bound;</span>
+<span id="cb1-8"><a href="#cb1-8"></a>    }</span>
+<span id="cb1-9"><a href="#cb1-9"></a>}</span></code></pre></div>
 <p>. If <code>bound</code> is 5, then the function will return a uniform range from 0 to 4. I.e., the return value <code>r</code> is such that <span class="math inline">\(0 \leq r &lt; bound\)</span>.</p>
 <h1 id="explanation-of-the-pcg-version">Explanation of the PCG Version</h1>
 <p>Although I generally prefer to explain code in the order they appear, top to bottom, for this case I would like to explain the <code>pcg32_boundedrand_r()</code> function by talking about the usual broken version found in the wild.</p>
@@ -70,13 +70,13 @@ return r % bound;
 <p>. So, <code>some_rng()</code> has 12 possible unique values, 0 through 11. If our bound was <code>4</code>, then doing <code>r % bound</code> is perfectly fine, because we can chop the RNG range into three equal parts of length 4 each, like this:</p>
 <pre class="example"><code>0 1 2 3 | 4 5 6 7 | 8 9 10 11
 </code></pre>
-<p>. If each of the 12 values 0 through 11 occurs uniformly<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>, then we can assume that each of the values occurs <span class="math inline">\(\frac{1}{12}\)</span> times. If we apply <code>% 4</code> to the values, then our output range looks like this:</p>
+<p>. If each of the 12 values 0 through 11 occurs uniformly<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>, then we can assume that each of the values occurs <span class="math inline">\(\frac{1}{12}\)</span> times. If we apply <code>% 4</code> to the values, then our output range looks like this:</p>
 <pre class="example"><code>0 1 2 3 | 0 1 2 3 | 0 1 2 3
 </code></pre>
 <p>. Can you see how the three subparts are the same? What’s more, 0 will occur <span class="math inline">\(\frac{3}{12} = \frac{1}{4}\)</span> times. The same goes for <code>1</code>, <code>2</code>, and <code>3</code>. Because all 4 possible values, 0 through 4, occur an equal <span class="math inline">\(\frac{1}{4}\)</span> times, there is <em>no modulo bias here</em>!</p>
 <h3 id="what-if-the-modulus-is-not-a-nice-number-with-respect-to">What if the modulus is not a nice number with respect to</h3>
 <p><code>RAND_MAX</code>?</p>
-<p>This is where the problem occurs. <code>RAND_MAX</code> is the highest value returned by our RNG, and thus defines the range of the possible values output by the RNG.<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a> Continuing with our example above, if instead of <code>bound = 4</code>, we used another value like 5, we will get this instead:</p>
+<p>This is where the problem occurs. <code>RAND_MAX</code> is the highest value returned by our RNG, and thus defines the range of the possible values output by the RNG.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> Continuing with our example above, if instead of <code>bound = 4</code>, we used another value like 5, we will get this instead:</p>
 <pre class="example"><code>0 1 2 3 4 | 5 6 7 8 9 | 10 11
 </code></pre>
 <p>— or essentially, these values are output if we just naively use <code>r % bound</code>:</p>
@@ -100,15 +100,15 @@ return r % bound;
 <p>. Can you see how all of the values 0 through 4 occur exactly 2 times? No more bias!</p>
 <h2 id="pcgs-approach">PCG’s approach</h2>
 <p>The approach in PCG is the same; here is the code again:</p>
-<div class="sourceCode" id="cb12" data-org-language="C" data-startFrom><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><a class="sourceLine" id="cb12-1" title="1"><span class="dt">uint32_t</span> pcg32_boundedrand_r(pcg32_random_t* rng, <span class="dt">uint32_t</span> bound)</a>
-<a class="sourceLine" id="cb12-2" title="2">{</a>
-<a class="sourceLine" id="cb12-3" title="3">    <span class="dt">uint32_t</span> threshold = -bound % bound;</a>
-<a class="sourceLine" id="cb12-4" title="4">    <span class="cf">for</span> (;;) {</a>
-<a class="sourceLine" id="cb12-5" title="5">        <span class="dt">uint32_t</span> r = pcg32_random_r(rng);</a>
-<a class="sourceLine" id="cb12-6" title="6">        <span class="cf">if</span> (r &gt;= threshold)</a>
-<a class="sourceLine" id="cb12-7" title="7">            <span class="cf">return</span> r % bound;</a>
-<a class="sourceLine" id="cb12-8" title="8">    }</a>
-<a class="sourceLine" id="cb12-9" title="9">}</a></code></pre></div>
+<div class="sourceCode" id="cb12" data-org-language="C" data-startFrom><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb12-1"><a href="#cb12-1"></a><span class="dt">uint32_t</span> pcg32_boundedrand_r(pcg32_random_t* rng, <span class="dt">uint32_t</span> bound)</span>
+<span id="cb12-2"><a href="#cb12-2"></a>{</span>
+<span id="cb12-3"><a href="#cb12-3"></a>    <span class="dt">uint32_t</span> threshold = -bound % bound;</span>
+<span id="cb12-4"><a href="#cb12-4"></a>    <span class="cf">for</span> (;;) {</span>
+<span id="cb12-5"><a href="#cb12-5"></a>        <span class="dt">uint32_t</span> r = pcg32_random_r(rng);</span>
+<span id="cb12-6"><a href="#cb12-6"></a>        <span class="cf">if</span> (r &gt;= threshold)</span>
+<span id="cb12-7"><a href="#cb12-7"></a>            <span class="cf">return</span> r % bound;</span>
+<span id="cb12-8"><a href="#cb12-8"></a>    }</span>
+<span id="cb12-9"><a href="#cb12-9"></a>}</span></code></pre></div>
 <p>. The <code>threshold</code> value is the initial range that must be discarded. So we can visualize it like this:</p>
 <pre class="example"><code>x x 2 3 4 | 0 1 2 3 4 | 0 1
 
@@ -129,7 +129,7 @@ x x 2 3 4 | 0 1 2 3 4 | 0 1
 <h3 id="how-is-threshold-calculated">How is <code>threshold</code> calculated?</h3>
 <p>The above high-level explanation should be sufficient for you, dear reader. But if you want to go down to the innards of C, to see how <code>pcg32_boundedrand_r</code> works, read on.</p>
 <p>The cornerstone of the PCG approach is to use a variable called <code>threshold</code>. The code to calculate <code>threshold</code> is somewhat complicated:</p>
-<div class="sourceCode" id="cb15" data-org-language="C"><pre class="sourceCode c"><code class="sourceCode c"><a class="sourceLine" id="cb15-1" title="1"><span class="dt">uint32_t</span> threshold = -bound % bound;</a></code></pre></div>
+<div class="sourceCode" id="cb15" data-org-language="C"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true"></a><span class="dt">uint32_t</span> threshold = -bound % bound;</span></code></pre></div>
 <p>. Now, let’s remind ourselves that the whole point of <code>threshold</code> is to be a minimum value that sets a cutoff of values to be discarded — if the generated value <code>r</code> is too low (lower than our threshold), then we discard it.</p>
 <p>Consider the following diagram, with <code>RAND_MAX</code> set to <code>11</code>, and <code>bound</code> set to 5:</p>
 <pre class="example"><code>0 1 2 3 4 | 5 6 7 8 9 | 10 11
@@ -184,21 +184,21 @@ R R R R R | _ _ R R R | R R
 <div class="raw-link sourceCode">
 <table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/rng/pcg-style.c" mimetype="text/plain">pcg-style.c</a></code></pre></td></tr></tbody></table>
 </div>
-<div class="sourceCode" id="cb23" data-input="code/rng/pcg-style.c"><pre class="sourceCode numberSource numberLines c"><code class="sourceCode c"><a class="sourceLine" id="cb23-1" title="1"><span class="co">/*</span></a>
-<a class="sourceLine" id="cb23-2" title="2"><span class="co"> * Uniformly return an integer from 0 to (bound - 1). We assume that rand()</span></a>
-<a class="sourceLine" id="cb23-3" title="3"><span class="co"> * returns a 32-bit unsigned integer, so we use uint32_t.</span></a>
-<a class="sourceLine" id="cb23-4" title="4"><span class="co"> */</span></a>
-<a class="sourceLine" id="cb23-5" title="5"><span class="dt">uint32_t</span> bound = some_arbitrary_bound;</a>
-<a class="sourceLine" id="cb23-6" title="6"><span class="dt">uint32_t</span> r;</a>
-<a class="sourceLine" id="cb23-7" title="7"><span class="dt">uint32_t</span> threshold = -bound % bound;</a>
-<a class="sourceLine" id="cb23-8" title="8"><span class="cf">while</span> (r = rand() &lt; threshold) {};</a>
-<a class="sourceLine" id="cb23-9" title="9"><span class="cf">return</span> r % bound;</a></code></pre></div>
+<div class="sourceCode" id="cb23" data-input="code/rng/pcg-style.c"><pre class="sourceCode numberSource numberLines c"><code class="sourceCode c"><span id="cb23-1"><a href="#cb23-1"></a><span class="co">/*</span></span>
+<span id="cb23-2"><a href="#cb23-2"></a><span class="co"> * Uniformly return an integer from 0 to (bound - 1). We assume that rand()</span></span>
+<span id="cb23-3"><a href="#cb23-3"></a><span class="co"> * returns a 32-bit unsigned integer, so we use uint32_t.</span></span>
+<span id="cb23-4"><a href="#cb23-4"></a><span class="co"> */</span></span>
+<span id="cb23-5"><a href="#cb23-5"></a><span class="dt">uint32_t</span> bound = some_arbitrary_bound;</span>
+<span id="cb23-6"><a href="#cb23-6"></a><span class="dt">uint32_t</span> r;</span>
+<span id="cb23-7"><a href="#cb23-7"></a><span class="dt">uint32_t</span> threshold = -bound % bound;</span>
+<span id="cb23-8"><a href="#cb23-8"></a><span class="cf">while</span> (r = rand() &lt; threshold) {};</span>
+<span id="cb23-9"><a href="#cb23-9"></a><span class="cf">return</span> r % bound;</span></code></pre></div>
 </div>
-<section class="footnotes">
+<section class="footnotes" role="doc-endnotes">
 <hr />
 <ol>
-<li id="fn1"><p>Any RNG worth their salt will return a uniformly distributed value, typically from 0 to <code>RAND_MAX</code>. In the example here, our <code>RAND_MAX</code> is 11.<a href="#fnref1" class="footnote-back">↩</a></p></li>
-<li id="fn2"><p>For a 32-bit unsigned integer RNG, <span class="math inline">\(2^{32} - 1\)</span> (all 1 bits set) is the highest value that can be returned. That is, our RNG returns a value from 0 (no bits set) to <code>RAND_MAX</code> (all bits set). This means that our RNG generates everything from all 0s to all 1s and everything in between.<a href="#fnref2" class="footnote-back">↩</a></p></li>
+<li id="fn1" role="doc-endnote"><p>Any RNG worth their salt will return a uniformly distributed value, typically from 0 to <code>RAND_MAX</code>. In the example here, our <code>RAND_MAX</code> is 11.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2" role="doc-endnote"><p>For a 32-bit unsigned integer RNG, <span class="math inline">\(2^{32} - 1\)</span> (all 1 bits set) is the highest value that can be returned. That is, our RNG returns a value from 0 (no bits set) to <code>RAND_MAX</code> (all bits set). This means that our RNG generates everything from all 0s to all 1s and everything in between.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 

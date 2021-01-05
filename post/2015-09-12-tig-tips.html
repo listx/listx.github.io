@@ -41,14 +41,14 @@
 			<div class="info center">
 	<code class="date">2015-09-12</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2015-09-12-tig-tips.org" title="History">*</a>
 	<br>
-	<a href="../tag/programming.html">programming</a>, <a href="../tag/linux.html">linux</a>, <a href="../tag/git.html">git</a>
+	<a title="All pages tagged 'programming'." href="../tag/programming.html">programming</a>, <a title="All pages tagged 'linux'." href="../tag/linux.html">linux</a>, <a title="All pages tagged 'git'." href="../tag/git.html">git</a>
 </div>
 
 <p>I love <a href="https://github.com/jonas/tig">tig</a>. Still, I think the defaults aren’t the best for most developers. Here are two easy customizations to make the default view better.</p>
 <p>First, put</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb1-1" title="1"><span class="bu">alias</span> tig=<span class="st">'tig -n 1000'</span></a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="bu">alias</span> tig=<span class="st">'tig -n 1000'</span></span></code></pre></div>
 <p>in your <code>~/.bashrc</code> to reduce tig’s startup time (especially on large repositories). There’s rarely a need to go back more than 1000 commits from your current HEAD position in an interactive, GUI-driven manner. And if you really need to see everything, do</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb2-1" title="1">$ \<span class="ex">tig</span></a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a>$ \<span class="ex">tig</span></span></code></pre></div>
 <p>on the terminal to bypass the shell alias.</p>
 <p>Second, put the following in your <code>~/.tigrc</code> file:</p>
 <pre><code>set main-view = date author id:width=10 commit-title:yes,graph,refs

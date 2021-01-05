@@ -41,15 +41,14 @@
 			<div class="info center">
 	<code class="date">2014-06-04</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2014-06-04-nvrm-api-mismatch.org" title="History">*</a>
 	<br>
-	<a href="../tag/arch.html">arch</a>, <a href="../tag/linux.html">linux</a>, <a href="../tag/nvidia.html">nvidia</a>
+	<a title="All pages tagged 'arch'." href="../tag/arch.html">arch</a>, <a title="All pages tagged 'linux'." href="../tag/linux.html">linux</a>, <a title="All pages tagged 'nvidia'." href="../tag/nvidia.html">nvidia</a>
 </div>
 
 <p>Sometimes when you do a system upgrade on Arch, Xorg will die on a reboot and you’ll get this kernel error (available with <code>dmesg</code>):</p>
-<pre class="example"><code>NVRM: API mismatch: the client has the version XXX.XX, but
-NVRM: this kernel module has the version YYY.YY.  Please
-NVRM: make sure that this kernel module and all NVIDIA driver
-NVRM: components have the same version.
-</code></pre>
+<div class="sourceCode" id="cb1" data-startFrom><pre class="sourceCode numberSource example numberLines"><code class="sourceCode"><span id="cb1-1"><a href="#cb1-1"></a>NVRM: API mismatch: the client has the version XXX.XX, but</span>
+<span id="cb1-2"><a href="#cb1-2"></a>NVRM: this kernel module has the version YYY.YY.  Please</span>
+<span id="cb1-3"><a href="#cb1-3"></a>NVRM: make sure that this kernel module and all NVIDIA driver</span>
+<span id="cb1-4"><a href="#cb1-4"></a>NVRM: components have the same version.</span></code></pre></div>
 <p>. This is usually the case when you upgrade your <code>linux</code> package, followed by upgrading your <code>nvidia</code> package. The problem is that the new kernel image references your older <code>nvidia</code> package (when it executed <code>mkinitcpio -p linux</code> before <code>nvidia</code> got upgraded). There are two possible solutions:</p>
 <ol>
 <li>Simply remake your kernel image against your newly upgraded <code>nvidia</code> package. Run <code>mkinitcpio -p linux</code> again, and reboot.</li>
