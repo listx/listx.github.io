@@ -32,14 +32,14 @@
 			&bull;
 			<a href="../about.html">About</a>
 			&bull;
-			<a href="../papers.html">Papers</a>
+			<a href="../etc.html">Etc</a>
 		</div>
 
 		<div id="content">
 			<h1 class="center" id="page-title">Brother MFC-9840CDW: Setup on Arch Linux, Redux</h1>
 
 			<div class="info center">
-	<code class="date">2013-12-09</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2013-12-09-brother-mfc-9840cdw-linux-setup-2.md" title="History">*</a>
+	<code class="date">2013-12-09</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2013-12-09-brother-mfc-9840cdw-linux-setup-2.org" title="History">*</a>
 	<br>
 	<a href="../tag/arch.html">arch</a>, <a href="../tag/linux.html">linux</a>, <a href="../tag/hardware.html">hardware</a>, <a href="../tag/printer.html">printer</a>
 </div>
@@ -48,7 +48,8 @@
 <p>My printouts had the wrong margins, so that one side on the right would always get chopped off by half an inch or so (I use US Letter paper). I felt that the culprit was probably an incorrect printer setting, and so I determined to fix it.</p>
 <p>Googling did not help, and so I tried to find all places where there could be a setting to change the default paper type. After some digging, I looked at the official Brother PPD file, which turned out to be just a plaintext file. In it, I found a section called “Media Selection” and there was a parameter called “DefaultPageSize”, and it was set to A4. So, I changed it to “Letter”. Here is <a href="../file/0001-brother-fixed-PPD-margins.patch">a patch</a> for the complete changes.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
 <p>I’ve now set up the CUPS printer address to the following:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource numberLines"><code class="sourceCode"><a class="sourceLine" id="cb1-1" title="1">http://IP_ADDRESS_OF_PRINTER/POSTSCRIPT_P1</a></code></pre></div>
+<pre class="example"><code>http://IP_ADDRESS_OF_PRINTER/POSTSCRIPT_P1
+</code></pre>
 <p>And for the driver, I just use my patched Brother PPD file. The margins are now correctly set to US Letter size (which is a shame, in a way, because this is the only way that the margins can be changed). There is a 1-2 minute delay when printing images, but I lack the knowledge to fix this new issue.</p>
 <p>Hope this helps!</p>
 <section class="footnotes">
@@ -60,6 +61,7 @@
 
 		</div>
 		<div id="footer">
+			<p id="fleuron">❦</p>
 			<p>Copyright (C) 2013-2021 Linus Arver. All rights reserved.</p>
 			<a href="https://github.com/listx/listx_blog">Site</a>
 			<a href="https://github.com/listx/listx.github.io">generated</a>

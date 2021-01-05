@@ -32,47 +32,48 @@
 			&bull;
 			<a href="../about.html">About</a>
 			&bull;
-			<a href="../papers.html">Papers</a>
+			<a href="../etc.html">Etc</a>
 		</div>
 
 		<div id="content">
 			<h1 class="center" id="page-title">The Parking Lot Problem: A Successor to FizzBuzz?</h1>
 
 			<div class="info center">
-	<code class="date">2014-09-22</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2014-09-22-parking-lot-problem.md" title="History">*</a>
+	<code class="date">2014-09-22</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2014-09-22-parking-lot-problem.org" title="History">*</a>
 	<br>
 	<a href="../tag/programming.html">programming</a>, <a href="../tag/ruby.html">ruby</a>, <a href="../tag/haskell.html">haskell</a>
 </div>
 
 <p>In one of my side projects, I encountered a pair of interesting problems, the first of which which I call the <em>Parking Lot</em> problem, and the sister problem the <em>Parking Load</em> problem. They are but toy problems, but to anyone outside of the programming field, they sound quite complicated!</p>
 <p>I’ve provided “Expected Output” sections for you to try out your own solutions against, so don’t be too aggressive with the scrollbar if you want to quiz yourself!</p>
-<h2 id="problem-statement">Problem Statement</h2>
-<p>Imagine an infinite parking lot, where each parking space is given a natural number, starting with 0, 1, 2, 3, … to infinity. The entire lot is a single row of spaces — so that space <code>0</code> is the one closest to the entrance. There are a finite number of cars randomly parked in the lot, as people come and go as they wish. A new car has just arrived outside the lot, and the driver asks you, <em>“Where is the closest open parking space?”</em></p>
+<h1 id="problem-statement">Problem Statement</h1>
+<p>Imagine an infinite parking lot, where each parking space is given a natural number, starting with 0, 1, 2, 3, … to infinity. The entire lot is a single row of spaces — so that space <code>0</code> is the one closest to the entrance. There are a finite number of cars randomly parked in the lot, as people come and go as they wish. A new car has just arrived outside the lot, and the driver asks you, “<em>Where is the closest open parking space?</em>”</p>
 <p>The only information you have is the <em>taken</em> spaces list (<code>T</code>), which lists all the occupied parking spaces. This list is sometimes sorted — sometimes, it is not!</p>
-<h2 id="expected-output">Expected Output</h2>
+<h1 id="expected-output">Expected Output</h1>
 <p>Here is a set of expected inputs and outputs for our problem:</p>
-<pre><code>Input -&gt; Output
+<pre class="example"><code>Input -&gt; Output
 [] -&gt; 0
 [0] -&gt; 1
 [0, 1] -&gt; 2
 [1] -&gt; 0
 [1,2,3] -&gt; 0
 [0,1,2,3] -&gt; 4
-[0,1,2,3,1000] -&gt; 4</code></pre>
+[0,1,2,3,1000] -&gt; 4
+</code></pre>
 <p>. You may notice that the input list is sorted (for readability), but recall that <code>T</code> <em>may or may not</em> be sorted! Try your own solution against these expected outputs!</p>
-<h2 id="some-preliminary-observations">Some Preliminary Observations</h2>
+<h1 id="some-preliminary-observations">Some Preliminary Observations</h1>
 <p>The most important thing here is <code>T</code>. If <code>T</code> is empty, then our parking lot is empty, so the answer is obviously <code>0</code>. In all other cases, we have to figure out the lowest number that is <em>absent</em> from <code>T</code>. Essentially, we can reduce the problem as follows:</p>
 <ul>
 <li>Find the lowest number not present in the set of integers <code>T</code>, where the lowest possible number is <code>0</code>.</li>
 </ul>
 <p>I used the metaphor of the parking spaces because it is more memorable, and more importantly, more familiar to the general public.</p>
-<h2 id="mathematical-approach">Mathematical Approach</h2>
+<h1 id="mathematical-approach">Mathematical Approach</h1>
 <p>Conceptually, the problem is very simple. Consider the infinite set <code>N</code>, which includes all natural numbers, starting from <code>0</code>. Then obviously, we can start with <code>N</code> itself, and remove every number in <code>N</code> that is also present in <code>T</code>. Then, when we are done (<code>T</code> is empty), we can look at <code>N</code> and retrieve the lowest number.</p>
-<h3 id="sorting">Sorting</h3>
+<h2 id="sorting">Sorting</h2>
 <p>Intuitively, we are really only interested in the first consecutive group of cars parked next to each other. Essentially, what you do is walk along from the very first parking space, <code>0</code>, and see if it is occupied. If it is occupied, you move on to the next space — if it is not occupied, you can stop because you found your answer!</p>
 <p>There is no way to solve the problem without first sorting <code>T</code>.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> You can solve the problem without sorting only in the edge case where <code>T</code>’s lowest number is greater than <code>0</code> — i.e., if the car most closely parked to the entrance is not on <code>0</code>, then you do not need to bother sorting <code>T</code>, because the answer is simply <code>0</code>. And, finding the lowest number in a given set is always a <span class="math inline">\(O(n)\)</span> operation because you need to loop through the entire set just once, keeping track of the lowest number found.</p>
 <p>In the more common case (as seen in real life), the parking space closest to the driver (the most desirable parking space) is already taken; and what’s more, the group of spaces closest to the driver is already taken. In this case, we have to proceed from space <code>0</code>, and incrementally observe every subsequent space, until we arrive at an empty parking space. The insight here is that we are treating the multitude of consecutively parked cars as one giant car parked across multiple spaces, and are just trying to find the total number of spaces this car occupies.</p>
-<h2 id="ruby">Ruby</h2>
+<h1 id="ruby">Ruby</h1>
 <p>I think it is time for some actual code. While I could explain how the Ruby version works, I feel that I have already expounded upon the problem enough above, so that the code here should make intuitive sense.</p>
 <div class="code-and-raw lineCntMax100">
 <div class="raw-link sourceCode">
@@ -92,7 +93,7 @@
 <a class="sourceLine" id="cb2-12" title="12">	<span class="kw">return</span> i</a>
 <a class="sourceLine" id="cb2-13" title="13"><span class="kw">end</span></a></code></pre></div>
 </div>
-<h2 id="haskell">Haskell</h2>
+<h1 id="haskell">Haskell</h1>
 <p>The Haskell version is a direct translation of the Ruby version, as an iterative approach works just fine. The only drawback is that we use <code>Int</code> instead of the arbitrarily large <code>Integer</code> type for succinctness (we can use <code>Integer</code>, but some built-in functions like <code>sort</code> only work on <code>Int</code>).</p>
 <div class="code-and-raw lineCntMax100">
 <div class="raw-link sourceCode">
@@ -110,7 +111,7 @@
 <a class="sourceLine" id="cb3-10" title="10">    <span class="fu">|</span> i <span class="fu">&lt;</span> xs <span class="fu">!!</span> i <span class="fu">=</span> i</a>
 <a class="sourceLine" id="cb3-11" title="11">    <span class="fu">|</span> <span class="fu">otherwise</span> <span class="fu">=</span> loop (i <span class="fu">+</span> <span class="dv">1</span>) xs</a></code></pre></div>
 </div>
-<h3 id="functional-solution">Functional solution</h3>
+<h2 id="functional-solution">Functional solution</h2>
 <p>Michele Alzetta kindly sent me another solution, which has a much stronger “Haskell” flavor. I’ve made some slight adjustments; here it is:</p>
 <div class="code-and-raw lineCntMax10">
 <div class="raw-link sourceCode">
@@ -125,7 +126,7 @@
 <a class="sourceLine" id="cb4-7" title="7">  (elemIndex <span class="dt">False</span> <span class="fu">.</span> <span class="fu">zipWith</span> (<span class="fu">==</span>) [<span class="dv">0</span><span class="fu">..</span>] <span class="fu">$</span> <span class="fu">sort</span> ts)</a></code></pre></div>
 </div>
 <p>. The advantage of this version is that it only evaluates <code>length ts</code> (the input list) as a last resort, thanks to <code>fromMaybe</code>. It also uses standard Prelude functions like <code>elemIndex</code> and <code>zipWith</code> for easier understanding. Thanks Michele!</p>
-<h2 id="low-level-interlude">Low-Level Interlude</h2>
+<h1 id="low-level-interlude">Low-Level Interlude</h1>
 <p>Did you realize that the basic concept here is the same as finding the least significant bit (LSB)? I.e., if the parking lot is one giant computer word, and a <code>1</code> bit represents an available parking space, then we are simply trying to find the LSB (the index of the bit being the same thing as the parking space number). This is such a common scenario, that there are native hardware instructions for this on most all CPUs. The canonical name for this operation is <a href="http://en.wikipedia.org/wiki/Find_first_set"><em>find first set</em></a> or <em>find first one</em>.<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a> In Linux, you can do <code>man ffs</code> to learn about how to use it in your C program.</p>
 <p>Of course, the parking lot in our problem is of infinite size, which makes the size of <code>T</code> arbitrarily large; alas, we cannot use <code>ffs</code> here.</p>
 <h1 id="the-parking-load-problem">The Parking Load Problem</h1>
@@ -134,13 +135,14 @@
 <p>If we talk in terms of our “Low-Level Interlude,” this is essentially the same as saying, “Count the number of <code>1</code> bits.” There are very clever ways of counting bits, but that is not our concern, and so I will present a naive solution in Ruby.</p>
 <h2 id="expected-output-1">Expected Output</h2>
 <p>Like in the previous problem, below are some expected outputs for you to test your own version against.</p>
-<pre><code>Input -&gt; Output
+<pre class="example"><code>Input -&gt; Output
 [] -&gt; &quot;N/A&quot;
 [0] -&gt; 0
 [0,1] -&gt; 0
 [0,1,3] -&gt; 1
 [999] -&gt; 999
-[1,5,999] -&gt; 997</code></pre>
+[1,5,999] -&gt; 997
+</code></pre>
 <p>We return “N/A” for the empty case because this condition does not make sense under the terms of the problem, which defines the bounds of the parking lot based on the car farthest away; if there are no cars to begin with, the problem cannot be posed.</p>
 <h2 id="ruby-1">Ruby</h2>
 <p>Without further ado, here is the Ruby solution.</p>
@@ -174,7 +176,7 @@
 <p>Happy hacking!</p>
 <h2 id="update-january-2015">Update: January 2015</h2>
 <p>I applied for a job at <a href="http://periscope.io">Periscope</a>, and during the process Tom O’Neill pointed out that the Parking Lot Problem can be solved without sorting using sparse bitsets.<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a> The idea is pretty simple — each bit represents a parking space, and if it is set to 1, we treat it as occupied, and if it is 0, we treat it as empty. If there are 1,000,000 parking spaces, then we would need 1,000,000 bits. But this is where “sparseness” comes in; if there are a ton of 0’s — say, 50,000 of them — in one spot, we can easily encode that information in fewer bits; the traditional approach is to use run-length encoding (RLE) to do this. E.g., you could write the number “50,000”, and then enclose it in special OP-codes that you reserve to declare that the “50,000” here means something special (in our case, that these 50,000 bits are all zeroes).</p>
-<p>Another approach is to use an octree (a tree that always has 8 child nodes), or “Bzets” as coined by the late <a href="http://www.cs.ucla.edu/news/news-archive/2012/2012">Robert Uzgalis</a>, who passed away in 2012. An excellent set of slides are available online if you Google them, but I’ve also uploaded them to my site <a href="http://linusarver.com/upload/grid/file/attachment/fyle/54b437416c30006ac5000000/Bzets.pdf">here</a>. Essentially, the idea is to have a tree with 3 possible values for the child nodes: <code>0 1 T</code>. A <code>0</code> means that you can stop recursing down the tree, as all child nodes, recursively are all set to <code>0</code>. A <code>1</code>, similarly, means you can stop because all child nodes are set to <code>1</code>. A <code>T</code> just means that you have to walk down to the child nodes, because if you gather up all the child nodes’ bits, they are mixed with <code>0</code>s and <code>1</code>s. You can imagine how compact some representations can become. In fact, Uzgalis calls bzets as having logarithmic compression! A <a href="https://github.com/Bovinedragon/Binary-Bzet">project on Github exists</a> that seems to be from one of the 3 UCLA student teams charged with implementing a version of bzets.</p>
+<p>Another approach is to use an octree (a tree that always has 8 child nodes), or “Bzets” as coined by the late <a href="http://www.cs.ucla.edu/news/news-archive/2012/2012">Robert Uzgalis</a>, who passed away in 2012. An excellent set of slides are available online if you Google them, but I’ve also uploaded them to my site <a href="http://linusarver.com/upload/grid/file/attachment/fyle/54b437416c30006ac5000000/Bzets.pdf">here</a>. Essentially, the idea is to have a tree with 3 possible values for the child nodes: <code>0 1 T</code>. A <code>0</code> means that you can stop recursing down the tree, as all child nodes, recursively are all set to <code>0</code>. A <code>1</code>, similarly, means you can stop because all child nodes are set to <code>1</code>. A <code>T</code> just means that you have to walk down to the child nodes, because if you gather up all the child nodes’ bits, they are mixed with <code>0</code> s and <code>1</code> s. You can imagine how compact some representations can become. In fact, Uzgalis calls bzets as having logarithmic compression! A <a href="https://github.com/Bovinedragon/Binary-Bzet">project on Github exists</a> that seems to be from one of the 3 UCLA student teams charged with implementing a version of bzets.</p>
 <section class="footnotes">
 <hr />
 <ol>
@@ -186,6 +188,7 @@
 
 		</div>
 		<div id="footer">
+			<p id="fleuron">❦</p>
 			<p>Copyright (C) 2013-2021 Linus Arver. All rights reserved.</p>
 			<a href="https://github.com/listx/listx_blog">Site</a>
 			<a href="https://github.com/listx/listx.github.io">generated</a>

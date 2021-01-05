@@ -32,34 +32,35 @@
 			&bull;
 			<a href="../about.html">About</a>
 			&bull;
-			<a href="../papers.html">Papers</a>
+			<a href="../etc.html">Etc</a>
 		</div>
 
 		<div id="content">
 			<h1 class="center" id="page-title">Programming Puzzle: Game Button Sequence Recognizer</h1>
 
 			<div class="info center">
-	<code class="date">2015-02-24</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2015-02-24-puzzle-game-button-recognizer.md" title="History">*</a>
+	<code class="date">2015-02-24</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2015-02-24-puzzle-game-button-recognizer.org" title="History">*</a>
 	<br>
 	<a href="../tag/programming.html">programming</a>, <a href="../tag/haskell.html">haskell</a>, <a href="../tag/ruby.html">ruby</a>
 </div>
 
 <p>So just yesterday, I did a live coding interview. Looking back, the problem I was presented with was very simple, but true to my usual nervous self, I over-analzyed the problem — completely missing the point and needlessly complicating things. In an effort to redeem myself, I thought about the problem again and even went out as to write tests for it, in both Ruby and Haskell. If you want to have a crack at the problem yourself, be conservative about scrolling down the page! Without further ado, I present the problem to you.</p>
-<h2 id="the-problem">The Problem</h2>
+<h1 id="the-problem">The Problem</h1>
 <p>You are a game engine API writer. You need to implement a mechanism that allows your developers to store and retrieve game moves based on the input to the game engine. The two functions for this mechanism should be named <code>register()</code> and <code>on_button()</code>.</p>
 <p><code>register()</code> should take a named button sequence, and store it into the database of all named sequences. A single named sequence might look like this: <code>([&quot;down&quot;, &quot;forward&quot;, &quot;punch&quot;], &quot;hadoken&quot;)</code>.</p>
 <p><code>on_button()</code> should take a single key, and then return all named sequences that match the ones in the database. E.g., <code>on_button(&quot;punch&quot;)</code> should return <code>&quot;hadoken&quot;</code> if the previous two inputs were <code>&quot;down&quot;</code> and <code>&quot;forward&quot;</code>.</p>
-<h3 id="some-constraints">Some Constraints</h3>
-<h4 id="multiple-sequences">Multiple Sequences</h4>
+<h2 id="some-constraints">Some Constraints</h2>
+<h3 id="multiple-sequences">Multiple Sequences</h3>
 <p>Because our API is flexible, we allow <em>multiple</em> named sequences with the <em>same sequence</em>. Thus, you can expect something like this:</p>
-<pre><code>register([&quot;up&quot;, &quot;punch&quot;], &quot;uppercut&quot;)
+<pre class="example"><code>register([&quot;up&quot;, &quot;punch&quot;], &quot;uppercut&quot;)
 register([&quot;up&quot;, &quot;punch&quot;], &quot;uppercut_2&quot;)
 on_button(&quot;up&quot;)        # no result
-on_button(&quot;punch&quot;)     # [&quot;uppercut&quot;, &quot;uppercut_2&quot;]</code></pre>
+on_button(&quot;punch&quot;)     # [&quot;uppercut&quot;, &quot;uppercut_2&quot;]
+</code></pre>
 <p>. You don’t have to worry about multiple named sequences with the same sequence and also the same name — we will worry about this “exact duplicate” situation in a later version of our API.</p>
-<h4 id="input-history">Input History</h4>
+<h3 id="input-history">Input History</h3>
 <p>You might have noticed that <code>on_button()</code> depends on the input history of whatever buttons were <em>previously</em> entered into the game. Because of this, you can alternatively write an <code>on_buttons()</code> function (plural with an “s”) that takes the history of buttons as input; this way you don’t have to silently depend on the global state of input history.</p>
-<h2 id="my-nervous-wreck-solution">My Nervous-Wreck Solution</h2>
+<h1 id="my-nervous-wreck-solution">My Nervous-Wreck Solution</h1>
 <p>I decided to use pure Haskell code in the actual interview. The code I wrote had the general idea, but it was a big failure because it performed a naive, custom search without any thought given to data structures. I actually went back and revised the code to make it compile and work <em>after</em> the interview was over; here it is in all its glory:</p>
 <div class="code-and-raw lineCntMax100">
 <div class="raw-link sourceCode">
@@ -106,7 +107,7 @@ on_button(&quot;punch&quot;)     # [&quot;uppercut&quot;, &quot;uppercut_2&quot;
 <a class="sourceLine" id="cb2-39" title="39">    entriesComplete <span class="fu">=</span> <span class="fu">filter</span> (<span class="fu">null</span> <span class="fu">.</span> <span class="fu">fst</span>) dbRem'</a></code></pre></div>
 </div>
 <p>. I have to admit, the <code>step</code> function in <code>onButtons</code> is essentially unreadable. But it does work:</p>
-<pre><code>$ ghci code/toy/game-button-seq/interview_ver.hs
+<pre class="example"><code>$ ghci code/toy/game-button-seq/interview_ver.hs
 GHCi, version 7.8.4: http://www.haskell.org/ghc/  :? for help
 Loading package ghc-prim ... linking ... done.
 Loading package integer-gmp ... linking ... done.
@@ -114,15 +115,16 @@ Loading package base ... linking ... done.
 [1 of 1] Compiling Main             ( code/toy/game-button-seq/interview_ver.hs, interpreted )
 Ok, modules loaded: Main.
 *Main&gt; onButtons [&quot;down&quot;, &quot;down&quot;, &quot;forward&quot;, &quot;punch&quot;] buttonSeqDB
-[&quot;charger&quot;,&quot;hadoken&quot;]</code></pre>
+[&quot;charger&quot;,&quot;hadoken&quot;]
+</code></pre>
 <p>.</p>
 <p>Anyway, I will explain the behavior of the code. The first thing to notice is that we feed into <code>step</code> the <em>reversed</em> list of <code>buttonHist</code>, so that we examine the button press history, from newest to oldest. So we look at the just-pressed-button, then the one before that, and the one before, etc, backwards up the history.</p>
 <p>As we look at each <code>button</code>, we use it to filter out all known sequences. This filtering is done in <code>remaining</code>, where we check the last button of every known sequence, and see if that matches the current button. That’s what the line <code>filter ((==button) . last . fst)</code> does; the sister line <code>filter (not . null . fst) dbRem</code> is just there to prevent calling <code>last</code> on an empty list.</p>
-<p>After we’re done checking, we modify the entire sequence database <code>db</code>, such that we only care about the first <span class="math inline">\(N - 1\)</span> buttons in the sequence. This way, on the next iteration, we can rest assured that checking against the “last” button in a sequence is not always the same button. In subsequent runs of <code>step</code>, we have <code>dbRem</code>‘s sequences slowly get reduced down to nothing as we keep chopping off all sequences’ last button. Keep in mind that we feed the filtered, matching entries of <code>db</code> back into subsequent runs of <code>step</code>, so that effectively we’re only working with matching sequences. Once we reach down to no buttons, we label these named sequences as <code>entriesComplete</code>, and append it into <code>foundSoFar</code>.</p>
-<h3 id="analysis">Analysis</h3>
+<p>After we’re done checking, we modify the entire sequence database <code>db</code>, such that we only care about the first <span class="math inline">\(N - 1\)</span> buttons in the sequence. This way, on the next iteration, we can rest assured that checking against the “last” button in a sequence is not always the same button. In subsequent runs of <code>step</code>, we have <code>dbRem</code>’s sequences slowly get reduced down to nothing as we keep chopping off all sequences’ last button. Keep in mind that we feed the filtered, matching entries of <code>db</code> back into subsequent runs of <code>step</code>, so that effectively we’re only working with matching sequences. Once we reach down to no buttons, we label these named sequences as <code>entriesComplete</code>, and append it into <code>foundSoFar</code>.</p>
+<h2 id="analysis">Analysis</h2>
 <p>Obviously, this code has many problems. First, it is virtually unreadable. Readability is important, and the code feels very counter-intuitive — it is marvelously complex when the problem statement sounds so simple.</p>
 <p>Second, the fact that we have to bring in and mutate <code>dbRem</code>, which is a copy of the original given <code>ButtonSeqDB</code> type, seems wasteful. We’re wasting a lot of CPU cycles here.</p>
-<h2 id="ruby-solution-using-hashes">Ruby Solution Using Hashes</h2>
+<h1 id="ruby-solution-using-hashes">Ruby Solution Using Hashes</h1>
 <p>So on the day after (that is, <em>today</em> as of the time of this writing), I thought about the problem again and realized we can use hashes. It is a very simple approach, with far less lines of code. I even wrote some tests for it. Here is the implementation below.</p>
 <div class="code-and-raw lineCntMax100">
 <div class="raw-link sourceCode">
@@ -226,10 +228,10 @@ Ok, modules loaded: Main.
 <a class="sourceLine" id="cb5-48" title="48">  <span class="kw">end</span></a>
 <a class="sourceLine" id="cb5-49" title="49"><span class="kw">end</span></a></code></pre></div>
 </div>
-<h3 id="analysis-1">Analysis</h3>
+<h2 id="analysis-1">Analysis</h2>
 <p>The key insight was when I realized that you could indeed use a hash even though we have the requirement that multiple, identical button sequences can have different names. The trick is to simply store the value as not a single name, but an array of possible names. This is reflected in the <code>GameButtonSeq.register</code> method.</p>
 <p>The heart of <code>on_buttons()</code> is a single <code>while</code> loop that checks the given button history against the database; we reduce the button sequence by 1 button on each iteration to check against shorter matches as well. That’s what the <code>button_seq.shift</code> is for.</p>
-<h2 id="haskell-solution-using-hashes">Haskell Solution Using Hashes</h2>
+<h1 id="haskell-solution-using-hashes">Haskell Solution Using Hashes</h1>
 <p>Inspired by the Ruby solution, I rewrote a Haskell version — with tests to boot! Here is the implementation.</p>
 <div class="code-and-raw lineCntMax100">
 <div class="raw-link sourceCode">
@@ -330,17 +332,18 @@ Ok, modules loaded: Main.
 <a class="sourceLine" id="cb7-54" title="54">    , ([<span class="st">&quot;up&quot;</span>, <span class="st">&quot;punch&quot;</span>], [<span class="st">&quot;uppercut&quot;</span>])</a>
 <a class="sourceLine" id="cb7-55" title="55">    ]</a></code></pre></div>
 </div>
-<h3 id="analysis-2">Analysis</h3>
+<h2 id="analysis-2">Analysis</h2>
 <p>This Haskell version uses the standard <code>Data.Map</code> module, which provides an efficient, basic hash data structure. What we first do is expand <code>buttonHist</code> to all of the cases we are interested in — namely, all of the subsequences of concern. E.g., given a list like <code>[&quot;up&quot;, &quot;down&quot;, &quot;right&quot;, &quot;left&quot;]</code>, <code>buttonHists</code> becomes:</p>
-<pre><code>[ [&quot;up&quot;, &quot;down&quot;, &quot;right&quot;, &quot;left&quot;]
+<pre class="example"><code>[ [&quot;up&quot;, &quot;down&quot;, &quot;right&quot;, &quot;left&quot;]
 ,       [&quot;down&quot;, &quot;right&quot;, &quot;left&quot;]
 ,               [&quot;right&quot;, &quot;left&quot;]
 ,                        [&quot;left&quot;]
-]</code></pre>
+]
+</code></pre>
 <p>(spaces added for readability). What we do is reduce the initial input list into all of the “sublist” combinations of <span class="math inline">\(N\)</span> buttons, <span class="math inline">\(N - 1\)</span> buttons, <span class="math inline">\(N - 2\)</span> buttons, etc.</p>
 <p>The next step is to simply look at each sublist with <code>concatMap</code>, calling <code>extractNames</code>; we treat each sublist as a key, and look for it in our <code>db</code> hash. We then simply concatenate the results.</p>
 <p>The <code>onButtons2</code> is an alternate version which uses <code>mapMaybe</code> to reduce it down to just two lines of code.</p>
-<h2 id="conclusion">Conclusion</h2>
+<h1 id="conclusion">Conclusion</h1>
 <p>I cringe as I look back at the half-baked code I wrote during the interview. Even the working, compilable version that I wrote after the interview remains ugly and hard to reason about. I can picture my interviewer being grossed out by my ugly, hacky version wondering if I even know what hashes are…</p>
 <p>The moral of the story is to think carefully about the most obvious data structure to use, before embarking on writing a solution — no matter how trivial it seems. For myself, I was nervous and did not realize how simple the problem actually was until the day after when I rewrote the solution in Ruby. It was so simple and straightforward that I even wrote some test cases for it<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>.</p>
 <p>I hope you had some fun writing out your own solutions. Happy hacking!</p>
@@ -353,6 +356,7 @@ Ok, modules loaded: Main.
 
 		</div>
 		<div id="footer">
+			<p id="fleuron">❦</p>
 			<p>Copyright (C) 2013-2021 Linus Arver. All rights reserved.</p>
 			<a href="https://github.com/listx/listx_blog">Site</a>
 			<a href="https://github.com/listx/listx.github.io">generated</a>

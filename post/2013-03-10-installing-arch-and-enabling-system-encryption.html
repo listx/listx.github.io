@@ -32,14 +32,14 @@
 			&bull;
 			<a href="../about.html">About</a>
 			&bull;
-			<a href="../papers.html">Papers</a>
+			<a href="../etc.html">Etc</a>
 		</div>
 
 		<div id="content">
 			<h1 class="center" id="page-title">Installing Arch Linux and Enabling System Encryption</h1>
 
 			<div class="info center">
-	<code class="date">2013-03-10</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2013-03-10-installing-arch-and-enabling-system-encryption.md" title="History">*</a>
+	<code class="date">2013-03-10</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2013-03-10-installing-arch-and-enabling-system-encryption.org" title="History">*</a>
 	<br>
 	<a href="../tag/linux.html">linux</a>, <a href="../tag/arch.html">arch</a>
 </div>
@@ -48,9 +48,11 @@
 <p>If you are wondering why the <code>/home</code> partition is mounted on <code>/mnt/home</code> in some of the commands, this is because the Arch Linux live CD environment will load up a temporary Linux system onto your RAM, and we use the <code>/mnt</code> directory (again all files/folders are temporarily in your RAM) to mount the hard drive partitions. You can always use a live CD anywhere to load up a barebone Linux system to your RAM and mount the hard drives on your computer for inspection, and in such a case you will again use the <code>/mnt</code> directory to mount your hard drives here.</p>
 <p>If you want to look up the manpages for these commands, use <code>ALT+F2</code>, <code>ALT+F3</code>, etc. to log into and switch between independent TTY screens.</p>
 <p>Be sure to wipe the drive with</p>
-<pre><code>dd if=/dev/urandom of=/dev/sdX</code></pre>
-<p>before doing anything. This way, your new Linux install will blend into the random noise data resulting from the command above, making it virtually impossible to detect which portions of the drive contain actual data. If the disk you want to wipe is a secondary device to an existing Linux installation, you can try using <a href="../code.html#floop"><code>floop</code></a> to generate a faster stream of pseudorandom bytes. With <code>floop</code>, you can just do</p>
-<pre><code>floop --threads 4 --thread-buf 0x200000 --count 0 | dd of=/dev/sdX</code></pre>
+<pre class="example"><code>dd if=/dev/urandom of=/dev/sdX
+</code></pre>
+<p>before doing anything. This way, your new Linux install will blend into the random noise data resulting from the command above, making it virtually impossible to detect which portions of the drive contain actual data. If the disk you want to wipe is a secondary device to an existing Linux installation, you can try using <a href="file:///code.html#floop"><code>floop</code></a> to generate a faster stream of pseudorandom bytes. With <code>floop</code>, you can just do</p>
+<pre class="example"><code>floop --threads 4 --thread-buf 0x200000 --count 0 | dd of=/dev/sdX
+</code></pre>
 <p>and it will be significantly faster than using <code>/dev/urandom</code>.</p>
 <div class="code-and-raw lineCntMax1000">
 <div class="raw-link sourceCode">
@@ -264,6 +266,7 @@
 
 		</div>
 		<div id="footer">
+			<p id="fleuron">❦</p>
 			<p>Copyright (C) 2013-2021 Linus Arver. All rights reserved.</p>
 			<a href="https://github.com/listx/listx_blog">Site</a>
 			<a href="https://github.com/listx/listx.github.io">generated</a>

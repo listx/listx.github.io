@@ -32,43 +32,45 @@
 			&bull;
 			<a href="../about.html">About</a>
 			&bull;
-			<a href="../papers.html">Papers</a>
+			<a href="../etc.html">Etc</a>
 		</div>
 
 		<div id="content">
 			<h1 class="center" id="page-title">Development Best Practices</h1>
 
 			<div class="info center">
-	<code class="date">2013-09-07</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2013-09-07-development-best-practices.md" title="History">*</a>
+	<code class="date">2013-09-07</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2013-09-07-development-best-practices.org" title="History">*</a>
 	<br>
 	<a href="../tag/programming.html">programming</a>
 </div>
 
 <p>This is a summary of the article <a href="http://arxiv.org/abs/1210.0530"><em>Best Practices for Scientific Computing</em> (Greg Wilson et. al, 2012)</a>. I think the points raised have importance in software development practices in general. A lot of the material resonated with me as a developer, and I recommend you read it or my condensed version (with my embedded comments) below.</p>
-<h2 id="write-programs-for-people-not-computers">Write Programs for People, Not Computers</h2>
-<h4 id="a-program-should-not-require-its-readers-to-hold-more-than-a-handful-of-facts-in-memory-at-once.">A program should not require its readers to hold more than a handful of facts in memory at once.</h4>
+<h1 id="write-programs-for-people-not-computers">Write Programs for People, Not Computers</h1>
+<h3 id="a-program-should-not-require-its-readers-to-hold-more-than-a-handful-of-facts-in-memory-at-once.">A program should not require its readers to hold more than a handful of facts in memory at once.</h3>
 <p>Instead of</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource numberLines"><code class="sourceCode"><a class="sourceLine" id="cb1-1" title="1">def rect_area(x1, y1, x2, y2):</a>
-<a class="sourceLine" id="cb1-2" title="2">	...calculation...</a></code></pre></div>
+<pre class="example"><code>def rect_area(x1, y1, x2, y2):
+    ...calculation...
+</code></pre>
 <p>write</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource numberLines"><code class="sourceCode"><a class="sourceLine" id="cb2-1" title="1">def rect_area(point1, point2):</a>
-<a class="sourceLine" id="cb2-2" title="2">	...calculation...</a></code></pre></div>
+<pre class="example"><code>def rect_area(point1, point2):
+    ...calculation...
+</code></pre>
 <p>. You should make function arguments less dependent on argument order, or remove argument ordering requirements completely.</p>
-<h4 id="names-should-be-consistent-distinctive-and-meaningful.">Names should be consistent, distinctive, and meaningful.</h4>
+<h3 id="names-should-be-consistent-distinctive-and-meaningful.">Names should be consistent, distinctive, and meaningful.</h3>
 <p>On a similar note, do not name variables “data” or “foo”. I think this also depends on static vs. dynamic typing.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
-<h4 id="code-style-and-formatting-should-be-consistent.">Code style and formatting should be consistent.</h4>
+<h3 id="code-style-and-formatting-should-be-consistent.">Code style and formatting should be consistent.</h3>
 <p>Be like the Linux Kernel project — use a single coding style.</p>
-<h4 id="all-aspects-of-software-development-should-be-broken-down-into-tasks-roughly-an-hour-long.">All aspects of software development should be broken down into tasks roughly an hour long.</h4>
+<h3 id="all-aspects-of-software-development-should-be-broken-down-into-tasks-roughly-an-hour-long.">All aspects of software development should be broken down into tasks roughly an hour long.</h3>
 <p>Our brains start to lose focus after 60-90 minutes of performing an intense activity.</p>
-<h2 id="automate-repetitive-tasks">Automate Repetitive Tasks</h2>
-<h4 id="rely-on-the-computer-to-repeat-tasks.">Rely on the computer to repeat tasks.</h4>
+<h1 id="automate-repetitive-tasks">Automate Repetitive Tasks</h1>
+<h3 id="rely-on-the-computer-to-repeat-tasks.">Rely on the computer to repeat tasks.</h3>
 <p>Write shell scripts if you need to.</p>
-<h4 id="save-recent-commands-in-a-file-for-re-use.">Save recent commands in a file for re-use.</h4>
+<h3 id="save-recent-commands-in-a-file-for-re-use.">Save recent commands in a file for re-use.</h3>
 <p>Take advantage of your shell’s ability to save history.</p>
-<h4 id="use-a-build-tool-to-automate-workflows.">Use a build tool to automate workflows.</h4>
+<h3 id="use-a-build-tool-to-automate-workflows.">Use a build tool to automate workflows.</h3>
 <p>You can use <em>GNU Make</em> not only to compile code, but to describe a dependency graph of your workflow (do X before Y).</p>
-<h2 id="use-the-computer-to-record-history">Use the Computer to Record History</h2>
-<h4 id="software-tools-should-be-used-to-track-computational-work-automatically-to-achieve-provenance.">Software tools should be used to track computational work automatically, to achieve provenance.</h4>
+<h1 id="use-the-computer-to-record-history">Use the Computer to Record History</h1>
+<h3 id="software-tools-should-be-used-to-track-computational-work-automatically-to-achieve-provenance.">Software tools should be used to track computational work automatically, to achieve provenance.</h3>
 <p>To reproduce your results, you should record everything needed to re-create the output<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>, and such record-keeping should be done automatically. In a software development context, the most immediate example is version control, which keeps all of the code necessary to recreate the desired program behavior. However, there are several other things which you should also keep track of in your development notebook:</p>
 <ul>
 <li>UUIDs and version numbers for raw data records (e.g., sample parameters/input for your program);</li>
@@ -77,68 +79,69 @@
 <li>the names and version numbers of programs (however small) used to generate those outputs.</li>
 </ul>
 <p>This is not entirely on point, but every Linux distribution keeps careful records of all packages (dependencies, version numbers, etc.), so that a user can reliably install and use that package if they want to. There is a lesson to be learned here.</p>
-<h2 id="make-incremental-changes">Make Incremental Changes</h2>
-<h4 id="work-in-small-steps-with-frequent-feedback-and-course-correction.">Work in small steps with frequent feedback and course correction.</h4>
+<h1 id="make-incremental-changes">Make Incremental Changes</h1>
+<h3 id="work-in-small-steps-with-frequent-feedback-and-course-correction.">Work in small steps with frequent feedback and course correction.</h3>
 <p>Do not plan months or years of work in advance. The goal is to produce working (but incomplete) code after each iteration.</p>
-<h2 id="use-version-control">Use Version Control</h2>
-<h4 id="use-a-version-control-system.">Use a version control system.</h4>
+<h1 id="use-version-control">Use Version Control</h1>
+<h3 id="use-a-version-control-system.">Use a version control system.</h3>
 <p>Again, note that version control gives you provenance for you program’s behavior <em>throughout its development history</em>, so that you can always reproduce the behavior at any given point in time. Version control gives you provenance for your program — it’s just that powerful.</p>
-<h4 id="everything-that-has-been-created-manually-should-be-put-in-version-control.">Everything that has been created manually should be put in version control.</h4>
+<h3 id="everything-that-has-been-created-manually-should-be-put-in-version-control.">Everything that has been created manually should be put in version control.</h3>
 <p>Large binary files should still be recorded (git-annex comes to mind). If you don’t want to use git-annex, just write down the SHA1 hash of the binary file, and commit this hash number into your version control. Add in a test suite that checks for the correct hashes of these binary files, and you’re all set!</p>
-<h2 id="dont-repeat-yourself-or-others">Don’t Repeat Yourself (or Others)</h2>
-<h4 id="every-piece-of-data-must-have-a-single-authoritative-representation-in-the-system.">Every piece of data must have a single authoritative representation in the system.</h4>
+<h1 id="dont-repeat-yourself-or-others">Don’t Repeat Yourself (or Others)</h1>
+<h3 id="every-piece-of-data-must-have-a-single-authoritative-representation-in-the-system.">Every piece of data must have a single authoritative representation in the system.</h3>
 <p>E.g., define the constant <code>pi</code> once in your program, and always use <code>pi</code> when you mean it. Likewise, you should try to refactor your variables so that they lead down to a single source.</p>
-<h4 id="at-small-scales-code-should-be-modularized-rather-than-copied-and-pasted.">At small scales, code should be modularized rather than copied and pasted.</h4>
+<h3 id="at-small-scales-code-should-be-modularized-rather-than-copied-and-pasted.">At small scales, code should be modularized rather than copied and pasted.</h3>
 <p>Modularized code can also be more easily repurposed for other projects.</p>
-<h4 id="at-large-scales-re-use-code-instead-of-rewriting-it.">At large scales, re-use code instead of rewriting it.</h4>
+<h3 id="at-large-scales-re-use-code-instead-of-rewriting-it.">At large scales, re-use code instead of rewriting it.</h3>
 <p>Use libraries for not-so-trivial problems outside of your comfort zone (e.g., 3D graphics).</p>
-<h2 id="plan-for-mistakes">Plan for Mistakes</h2>
-<h3 id="defensive-programming">Defensive Programming</h3>
-<h4 id="add-assertions-to-programs-to-check-their-operation.">Add assertions to programs to check their operation.</h4>
+<h1 id="plan-for-mistakes">Plan for Mistakes</h1>
+<h2 id="defensive-programming">Defensive Programming</h2>
+<h3 id="add-assertions-to-programs-to-check-their-operation.">Add assertions to programs to check their operation.</h3>
 <p>Assertions are great because they simplify debugging by making your program halt as soon as one of them gets triggered. Even better, they serve as <em>executable documentation</em>, which by their nature <em>never become obsolete</em>.</p>
-<h4 id="use-automated-testing.">Use automated testing.</h4>
+<h3 id="use-automated-testing.">Use automated testing.</h3>
 <p>At small scales (single functions, components) unit tests are handy. At larger scales, employ <em>integration testing</em>: tests that check multiple components working together. I personally recommend randomized stress testing, a la QuickCheck. <em>Regression testing</em> is the practice of running pre-existing tests after changes to the code in order to make sure that nothing has broken.</p>
 <p>Do not practice test-driven development (TDD), where you write tests before writing any new code, because a meta-study of its effectiveness done in 2010 did not find any significant impact on programmer productivity.<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a></p>
-<h4 id="use-an-off-the-shelf-testing-library.">Use an off-the-shelf testing library.</h4>
+<h3 id="use-an-off-the-shelf-testing-library.">Use an off-the-shelf testing library.</h3>
 <p>Use of a testing library encourages us to write testable code, which generally means cleaner functions and less spaghetti code. If you’re working with a legacy code base without tests, a great way to refactor it is to make parts of it testable.</p>
-<h3 id="use-a-variety-of-oracles">Use a Variety of Oracles</h3>
+<h2 id="use-a-variety-of-oracles">Use a Variety of Oracles</h2>
 <p>An oracle is something which tells a developer how a program should behave or what its output should be. Define generally expected program behavior and make sure your code conforms to it. All of this can be done in an automated way with a good testing suite, but you can also manually write down a spec (probably as part of the documentation) and make sure your program performs as advertised, in all situations.</p>
-<h3 id="turn-bugs-into-test-cases">Turn bugs into test cases</h3>
+<h2 id="turn-bugs-into-test-cases">Turn bugs into test cases</h2>
 <p>Write a test that will trigger the bug, and then fix your code to kill the bug. This is an easy and simple way to write a regression test.</p>
-<h3 id="use-a-debugger">Use a debugger</h3>
+<h2 id="use-a-debugger">Use a debugger</h2>
 <p>The more complex your code becomes, the more important it is to familiarize yourself with a debugger.</p>
-<h2 id="optimize-software-only-after-it-works-correctly">Optimize Software Only After it Works Correctly</h2>
-<h4 id="use-a-profiler-to-identify-bottlenecks-accurately.">Use a profiler to identify bottlenecks accurately.</h4>
+<h1 id="optimize-software-only-after-it-works-correctly">Optimize Software Only After it Works Correctly</h1>
+<h3 id="use-a-profiler-to-identify-bottlenecks-accurately.">Use a profiler to identify bottlenecks accurately.</h3>
 <p>You should only care about performance <em>after</em> you get working code.</p>
-<h4 id="write-code-in-the-highest-level-language-possible.">Write code in the highest-level language possible.</h4>
+<h3 id="write-code-in-the-highest-level-language-possible.">Write code in the highest-level language possible.</h3>
 <p>Research has confirmed that most programmers write roughly the same number of lines of code per unit time regardless of the language they use.<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a> Thus, you should try to write code in a high level language to save development time and increase productivity, and then fall back to a low level language to a speed boost where necessary.</p>
-<h2 id="document-design-and-purpose-not-mechanics">Document Design and Purpose, Not Mechanics</h2>
-<h4 id="document-interfaces-and-resons-not-implementations.">Document interfaces and resons, not implementations.</h4>
+<h1 id="document-design-and-purpose-not-mechanics">Document Design and Purpose, Not Mechanics</h1>
+<h3 id="document-interfaces-and-resons-not-implementations.">Document interfaces and reasons, not implementations.</h3>
 <p>It is more useful to explain why code is written a certain way, instead of explaining the mechanics behind the implementation, for the code will speak for itself in the case of the latter. If the code cannot speak for itself, then see the point below.</p>
-<h4 id="refactor-code-instead-of-explaining-how-it-works.">Refactor code instead of explaining how it works.</h4>
+<h3 id="refactor-code-instead-of-explaining-how-it-works.">Refactor code instead of explaining how it works.</h3>
 <p>Reorganize complex code so that it doesn’t even need an explanation.</p>
 <p>Literate programming might be a good approach to fuse documentation and code together, but I personally have no experience with LP.</p>
-<h2 id="collaborate">Collaborate</h2>
-<h4 id="use-pre-merge-code-reviews.">Use pre-merge code reviews.</h4>
+<h1 id="collaborate">Collaborate</h1>
+<h3 id="use-pre-merge-code-reviews.">Use pre-merge code reviews.</h3>
 <p>Code reviews are highly effective, but you should do it before the merge. Once code gets merged, there is little incentive to review it, because hey, nothing’s broken, right?</p>
-<h4 id="use-pair-programming-when-bringing-someone-new-up-to-speed-and-when-tackling-particularly-tricky-problems.">Use pair programming when bringing someone new up to speed and when tackling particularly tricky problems.</h4>
+<h3 id="use-pair-programming-when-bringing-someone-new-up-to-speed-and-when-tackling-particularly-tricky-problems.">Use pair programming when bringing someone new up to speed and when tackling particularly tricky problems.</h3>
 <p>Pair programming can be intrusive, so take it with a grain of salt.</p>
-<h4 id="use-an-issue-tracking-tool.">Use an issue tracking tool.</h4>
+<h3 id="use-an-issue-tracking-tool.">Use an issue tracking tool.</h3>
 <p>There are lots of free issue tracking tools available, not to mention sites like GitHub/Gitorious/BitBucket that integrate online collaboration, sharing, issue tracking, etc. all into one package.</p>
-<h2 id="conclusion">Conclusion</h2>
+<h1 id="conclusion">Conclusion</h1>
 <p>In my opinion, the holy trinity in software development is composed of (1) version control, (2) automated testing, and (3) documentation. If you have these three, you are already golden and the rest is icing on the cake.</p>
 <section class="footnotes">
 <hr />
 <ol>
 <li id="fn1"><p>In Haskell (static typing), people routinely name variables “a” or “b” with no fear of confusion, thanks to type signatures.<a href="#fnref1" class="footnote-back">↩</a></p></li>
 <li id="fn2"><p><em>Provenance</em> is term from archaeology and forensics.<a href="#fnref2" class="footnote-back">↩</a></p></li>
-<li id="fn3"><p>Burak Turhan, Lucas Layman, Madeline Diep, Hakan Erdogmus, and Forrest Shull. <em>How Effective is Test-Driven Development?</em> In Andy Oram and Greg Wilson, editiors, <em>Making Software: What Really Works, and Why We Believe It</em>, pp. 207-217. O’Reilly, 2010.<a href="#fnref3" class="footnote-back">↩</a></p></li>
+<li id="fn3"><p>Burak Turhan, Lucas Layman, Madeline Diep, Hakan Erdogmus, and Forrest Shull. <em>How Effective is Test-Driven Development?</em> In Andy Oram and Greg Wilson, editiors, <em>Making Software: What Really Works, and Why We Believe It</em>, pp. 207-217. O’Reilly, 2010.<a href="#fnref3" class="footnote-back">↩</a></p></li>
 <li id="fn4"><p>See Lutz Prechelt. <em>Two Comparisons of Programming Languages.</em> In Andy Oram and Greg Wilson, editiors, <em>Making Software: What Really Works, and Why We Believe It</em>. O’Reilly, 2010.<a href="#fnref4" class="footnote-back">↩</a></p></li>
 </ol>
 </section>
 
 		</div>
 		<div id="footer">
+			<p id="fleuron">❦</p>
 			<p>Copyright (C) 2013-2021 Linus Arver. All rights reserved.</p>
 			<a href="https://github.com/listx/listx_blog">Site</a>
 			<a href="https://github.com/listx/listx.github.io">generated</a>

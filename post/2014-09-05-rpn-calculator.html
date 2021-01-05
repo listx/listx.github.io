@@ -32,20 +32,20 @@
 			&bull;
 			<a href="../about.html">About</a>
 			&bull;
-			<a href="../papers.html">Papers</a>
+			<a href="../etc.html">Etc</a>
 		</div>
 
 		<div id="content">
 			<h1 class="center" id="page-title">Reverse Polish Notation (RPN) Calculator in Ruby and Haskell</h1>
 
 			<div class="info center">
-	<code class="date">2014-09-05</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2014-09-05-rpn-calculator.md" title="History">*</a>
+	<code class="date">2014-09-05</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2014-09-05-rpn-calculator.org" title="History">*</a>
 	<br>
 	<a href="../tag/programming.html">programming</a>, <a href="../tag/ruby.html">ruby</a>, <a href="../tag/haskell.html">haskell</a>
 </div>
 
 <p>A friend of mine is in DevBootCamp, an intensive coding school program designed to get students ready for real world job placement. Anyway, he was telling me how he was given an extra credit assignment: implement a RPN calculator which supports 3 functions — add, subtract, and multiply — on integer numbers. I.e., write a function <code>evaluate()</code> that when given a string such as <code>&quot;3 4 + 8 *&quot;</code> gives the result <code>56</code>. He gave me his Ruby solution; in response, I wrote my own Ruby version and decided soon thereafter to write an equivalent Haskell version, because, why not?</p>
-<h2 id="ruby">Ruby</h2>
+<h1 id="ruby">Ruby</h1>
 <p>First, the Ruby version:</p>
 <div class="code-and-raw lineCntMax100">
 <div class="raw-link sourceCode">
@@ -76,7 +76,7 @@
 </div>
 <p>Pretty straightforward, yes? The <code>terms</code> variable holds an array of numbers and operators. We use a calculator stack (aptly named, <code>stack</code>) to untangle the RPN in a stack-based way.</p>
 <p>In the <code>each</code> loop, the actions depend on what <code>term</code> looks like. If <code>term</code> is a number in string form, we convert it into a real number with <code>String#to_i</code>, and push it into <code>stack</code>. If <code>term</code> is one of the 3 recognized operators, we remove 2 terms <code>a</code> and <code>b</code> from <code>stack</code> and apply the necessary operation on it with Ruby’s magic <code>Object#send</code> method, and push the new term <code>c</code> back into <code>stack</code> for further operations (if any, in later iterations of the <code>while</code> loop). Otherwise, we reject the input as an invalid term.</p>
-<h2 id="haskell">Haskell</h2>
+<h1 id="haskell">Haskell</h1>
 <p>Here is the Haskell version:</p>
 <div class="code-and-raw lineCntMax100">
 <div class="raw-link sourceCode">
@@ -112,7 +112,7 @@
 <p>Probably the first thing to note is that we define a robust data type, <code>Term</code>, to encapsulate the values held in a given RPN string. We take advantage of Haskell’s functions-as-first-class-values ability, and define the <code>TermOp</code> constructor with it (i.e., it needs an arithmetic function <code>(Integer -&gt; Integer -&gt; Integer)</code> as an argument).</p>
 <p>The next thing to notice is that the <code>evaluate</code> function is composed of smaller helper functions, <code>mkTerm</code> and <code>evalTerms</code>. <code>mkTerm</code> simply converts a <code>String</code> type into an appropriate <code>Term</code> type. <code>evalTerms</code> takes a list of <code>Term</code> values, and reduces it as much as possible by applying the <code>modifyStack</code> function over it with <code>foldl</code> (Haskell’s version of a single-pass loop).</p>
 <p>When <code>modifyStack</code> encounters a <code>TermInt</code>, it pushes the number into the stack. When it encounters a <code>TermOp</code>, it applies that operator to the first 2 items in <code>stack</code>, and pushes this result back into <code>stack</code>. We use pattern matching with <code>(a:b:_)</code> to pull out the <code>a</code> and <code>b</code> values from the stack — the expression <code>(a:b:_)</code> means a value that matches either <span class="math inline">\([x_1, x_2]\)</span>, or <span class="math inline">\([x_1, x_2, ... , x_n]\)</span>, because the <code>_</code> operator matches anything, including the empty list <code>[]</code> used to finalize list creation. The <code>drop 2 stack</code> is necessary because Haskell’s types by default are immutable.</p>
-<h2 id="thoughts">Thoughts</h2>
+<h1 id="thoughts">Thoughts</h1>
 <p>I much prefer the Haskell version.</p>
 <p>The separation of concerns is a big win — we can easily create helper functions like <code>mkTerm</code> and <code>evalTerms</code> because of Haskell’s purity<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>. Haskell embraces the use of algebraic data types (i.e., <code>Term</code> here), and perhaps this preference lends itself to the use of helper functions that convert things from one type to another. Ruby does not have types, at least in the sense of Haskell types, so to artificially create such concepts and to implement them would be difficult.<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a> I mean, I really want to write equivalent <code>mkTerm</code> and <code>evalTerms</code> methods in Ruby, but my beginner skills prevent me from doing it in a simple, straightforward way. I know enough about coding to abandon “solutions” that require circuitous, complex design.</p>
 <p>I also like how all the functions are pure and thus easy to reason about with the type signatures. Refactoring code like this is a dream.</p>
@@ -127,6 +127,7 @@
 
 		</div>
 		<div id="footer">
+			<p id="fleuron">❦</p>
 			<p>Copyright (C) 2013-2021 Linus Arver. All rights reserved.</p>
 			<a href="https://github.com/listx/listx_blog">Site</a>
 			<a href="https://github.com/listx/listx.github.io">generated</a>

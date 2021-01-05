@@ -32,14 +32,14 @@
 			&bull;
 			<a href="../about.html">About</a>
 			&bull;
-			<a href="../papers.html">Papers</a>
+			<a href="../etc.html">Etc</a>
 		</div>
 
 		<div id="content">
 			<h1 class="center" id="page-title">Programming Puzzles: Letter and Word Frequency</h1>
 
 			<div class="info center">
-	<code class="date">2015-04-22</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2015-04-22-letter-word-frequency.md" title="History">*</a>
+	<code class="date">2015-04-22</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2015-04-22-letter-word-frequency.org" title="History">*</a>
 	<br>
 	<a href="../tag/programming.html">programming</a>, <a href="../tag/haskell.html">haskell</a>, <a href="../tag/ruby.html">ruby</a>
 </div>
@@ -171,7 +171,7 @@
 <a class="sourceLine" id="cb2-17" title="17">file.close</a></code></pre></div>
 </div>
 <p>And here is the output (<code>pg2701.txt</code> is <em>Moby Dick</em>):</p>
-<pre><code>$ ./analyze.rb ~/pg2701.txt
+<pre class="example"><code>$ ./analyze.rb ~/pg2701.txt
 e = 12.29% (118967 occurrences)
 t = 9.25% (89549 occurrences)
 a = 8.16% (78959 occurrences)
@@ -298,7 +298,8 @@ seemed = 0.13% (283 occurrences)
 last = 0.13% (276 occurrences)
 head = 0.13% (275 occurrences)
 see = 0.12% (268 occurrences)
-thou = 0.12% (267 occurrences)</code></pre>
+thou = 0.12% (267 occurrences)
+</code></pre>
 <p>. The file of course contains remarks and legalese from Project Gutenberg, so if you want more accuracy you would have to redact those parts before running this script.</p>
 <h3 id="letter-frequency-1">Letter Frequency</h3>
 <p>The <code>freq_l</code> method views letters in the limited US ASCII range and uses crude, C-like letter-to-integer equivalence via <code>char_to_idx</code>. We use a simple array of 26 integers, each one corresponding to a letter. But thanks to its stupidity, <code>freq_l</code> runs quite fast — chugging through Moby Dick in a few seconds on my Core i7-4770K 4GHz machine.</p>
@@ -445,7 +446,7 @@ thou = 0.12% (267 occurrences)</code></pre>
 <a class="sourceLine" id="cb5-15" title="15">  dispFreqW <span class="fu">$</span> freqW src</a></code></pre></div>
 </div>
 <p>Here is the same run against our copy of <em>Moby Dick</em>:</p>
-<pre><code>$ ./analyze ~/pg2701.txt
+<pre class="example"><code>$ ./analyze ~/pg2701.txt
 e = 12.29% (118967 occurrences)
 t = 9.25% (89549 occurrences)
 a = 8.16% (78959 occurrences)
@@ -572,7 +573,8 @@ must = 0.13% (293 occurrences)
 most = 0.13% (284 occurrences)
 seemed = 0.13% (283 occurrences)
 white = 0.13% (281 occurrences)
-last = 0.13% (278 occurrences)</code></pre>
+last = 0.13% (278 occurrences)
+</code></pre>
 <p>.</p>
 <h3 id="letter-frequency-2">Letter Frequency</h3>
 <p><code>freqL</code> handles letter frequency, and it is a simple <code>foldl</code> operation over the input, while using the <code>Map</code> data structure from the <code>Data.Map</code> library (which acts as a simple hash structure with keys and values). The de facto Haskell compiler GHC comes with the <code>base</code> library which includes the <code>Data.Char</code> module; unlike Ruby, we can simply ask whether a character is a letter with <code>isAlpha</code>, and then use <code>toLower</code> on it to convert it to lowercase. <code>freqL</code> owes its brevity to these standard library functions.</p>
@@ -583,9 +585,9 @@ last = 0.13% (278 occurrences)</code></pre>
 <p>Now, this mechanism isn’t without its warts. But still, I consider it somewhat elegant in its description of all possible states.</p>
 <h2 id="a-diff">A Diff</h2>
 <p>For fun, let’s look at the diff of the outputs of the Ruby and Haskell versions. Interestingly, the letter frequency outputs were identical. The word frequency outputs did have some significant changes, such as the word <em>whale</em> occurring 972 and 1108 times in the Ruby and Haskell versions, respectively. I’ve sorted the output by lines for saner diffing.</p>
-<pre><code>$ diff -u routW houtW
---- routW	2015-04-22 22:01:59.061404962 -0700
-+++ houtW	2015-04-22 22:02:57.679828155 -0700
+<pre class="example"><code>$ diff -u routW houtW
+--- routW   2015-04-22 22:01:59.061404962 -0700
++++ houtW   2015-04-22 22:02:57.679828155 -0700
 @@ -1,100 +1,100 @@
 -a = 2.20% (4760 occurrences)
 +a = 2.18% (4788 occurrences)
@@ -769,10 +771,11 @@ last = 0.13% (278 occurrences)</code></pre>
 +would = 0.20% (430 occurrences)
 +ye = 0.20% (431 occurrences)
 +yet = 0.16% (345 occurrences)
-+you = 0.43% (946 occurrences)</code></pre>
++you = 0.43% (946 occurrences)
+</code></pre>
 <h2 id="french">French?</h2>
 <p>Here is the Haskell version’s output on the first volume of <a href="http://www.gutenberg.org/cache/epub/17489/pg17489.txt"><em>Les Misérables</em></a> in the original French:</p>
-<pre><code>e = 14.68% (77528 occurrences)
+<pre class="example"><code>e = 14.68% (77528 occurrences)
 a = 8.12% (42892 occurrences)
 i = 7.65% (40424 occurrences)
 t = 7.62% (40270 occurrences)
@@ -912,8 +915,9 @@ moment = 0.12% (138 occurrences)
 dieu = 0.12% (137 occurrences)
 encore = 0.12% (134 occurrences)
 l'homme = 0.11% (130 occurrences)
-eût = 0.11% (130 occurrences)</code></pre>
-<p>. The most common French word in this book is <em>de</em>, meaning <em>of</em> in English. This is because the word for <em>the</em> is split into many different words, most notably <em>la</em> and <em>le</em>, not to mention <em>l’</em> as in <em>l’homme</em> (as you can see near the end of the list), due to the French language’s gender and vowel contraction rules (unlike English, contractions like <em>l’homme</em> in French are mandatory regardless of tone).</p>
+eût = 0.11% (130 occurrences)
+</code></pre>
+<p>. The most common French word in this book is <em>de</em>, meaning <em>of</em> in English. This is because the word for <em>the</em> is split into many different words, most notably <em>la</em> and <em>le</em>, not to mention /l’/ as in <em>l’homme</em> (as you can see near the end of the list), due to the French language’s gender and vowel contraction rules (unlike English, contractions like <em>l’homme</em> in French are mandatory regardless of tone).</p>
 <p>And, as a bit of trivia, it is interesting to note that <em>dieu</em> (God) edges out <em>l’homme</em> (man) by 7 occurrences in this text.</p>
 <h2 id="conclusion">Conclusion</h2>
 <p>I hope you’ve had some fun working on these letter and word frequency problems. The word frequency problem, if you really want to do it correctly, should be handled by a parser using a robust library. By writing these programs, I learned that the <em>input</em> of a program (Unicode? ASCII only?) is just as important as its output.</p>
@@ -927,6 +931,7 @@ eût = 0.11% (130 occurrences)</code></pre>
 
 		</div>
 		<div id="footer">
+			<p id="fleuron">❦</p>
 			<p>Copyright (C) 2013-2021 Linus Arver. All rights reserved.</p>
 			<a href="https://github.com/listx/listx_blog">Site</a>
 			<a href="https://github.com/listx/listx.github.io">generated</a>

@@ -32,24 +32,24 @@
 			&bull;
 			<a href="../about.html">About</a>
 			&bull;
-			<a href="../papers.html">Papers</a>
+			<a href="../etc.html">Etc</a>
 		</div>
 
 		<div id="content">
 			<h1 class="center" id="page-title">Emacs: Using a Unix Filter</h1>
 
 			<div class="info center">
-	<code class="date">2013-04-30</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2013-04-30-emacs-unix-filter.md" title="History">*</a>
+	<code class="date">2013-04-30</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2013-04-30-emacs-unix-filter.org" title="History">*</a>
 	<br>
 	<a href="../tag/emacs.html">emacs</a>
 </div>
 
 <p>In Vim, you can easily call an external text utility on a region of text, then replace that selected region with the output of the text utility. This is very useful for doing bulk transformations quickly.</p>
 <p>I coded up a very stupid commenting program called <a href="https://github.com/listx/nox"><code>nox</code></a> that comments/uncomments text. Here is how you’d use it straight from the terminal:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource bash numberLines"><code class="sourceCode bash"><a class="sourceLine" id="cb1-1" title="1">$ <span class="bu">echo</span> <span class="st">&quot;hi&quot;</span> <span class="kw">|</span> <span class="ex">nox</span> -l c</a>
+<div class="sourceCode" id="cb1" data-org-language="sh" data-startFrom><pre class="sourceCode numberSource bash numberLines"><code class="sourceCode bash"><a class="sourceLine" id="cb1-1" title="1">$ <span class="bu">echo</span> <span class="st">&quot;hi&quot;</span> <span class="kw">|</span> <span class="ex">nox</span> -l c</a>
 <a class="sourceLine" id="cb1-2" title="2"><span class="ex">//hi</span></a></code></pre></div>
 <p>By default nox comments text, and the <code>-l c</code> option sets it to C-styled comments, <code>//</code>.</p>
-<h2 id="emacs">Emacs</h2>
+<h1 id="emacs">Emacs</h1>
 <p>I use <a href="http://gitorious.org/evil/pages/Home">evil-mode</a> with Emacs. Here is my relevant <code>.emacs</code> to set up <code>nox</code> correctly:</p>
 <div class="code-and-raw lineCntMax100">
 <div class="raw-link sourceCode">
@@ -105,7 +105,7 @@
 <a class="sourceLine" id="cb2-48" title="48">	(<span class="kw">lambda</span> () (interactive) (my-addrem-comment <span class="kw">nil</span>))) <span class="co">; remove comment</span></a></code></pre></div>
 </div>
 <p>This is certainly not the most beautiful code, but it works.</p>
-<h3 id="references">References</h3>
+<h1 id="references">References</h1>
 <ul>
 <li><a href="http://stackoverflow.com/questions/206806/filtering-text-through-a-shell-command-in-emacs" class="uri">http://stackoverflow.com/questions/206806/filtering-text-through-a-shell-command-in-emacs</a></li>
 <li><a href="http://stackoverflow.com/questions/1548605/emacs-lisp-shell-command-on-region" class="uri">http://stackoverflow.com/questions/1548605/emacs-lisp-shell-command-on-region</a></li>
@@ -113,6 +113,7 @@
 
 		</div>
 		<div id="footer">
+			<p id="fleuron">❦</p>
 			<p>Copyright (C) 2013-2021 Linus Arver. All rights reserved.</p>
 			<a href="https://github.com/listx/listx_blog">Site</a>
 			<a href="https://github.com/listx/listx.github.io">generated</a>

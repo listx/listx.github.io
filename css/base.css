@@ -68,14 +68,15 @@ html body div.center
 
 html body div#header
 {
-  padding    : 0.5em 0px 0.5em 0px;
+  padding    : 1em 0em 1em 0em;
   text-align : center;
+  font-size  : 18pt;
 }
 
 html body div#content
 {
   background-color : #ffffff;
-  padding-bottom   : 2em;
+  padding-bottom   : 0px;
 }
 
 html body div#content h1,
@@ -110,7 +111,7 @@ html body div#content h1::before
 html body div#content h1.center
 {
   margin          : 0px 0px 0px 0px;
-  padding-top     : 0.2em;
+  padding-top     : 0em;
   padding-bottom  : 0.5em;
   font-size       : 30pt;
   font-weight     : bold;
@@ -253,6 +254,12 @@ html body div#content div.raw-link a:visited
   color : #0033ff;
 }
 
+html body div#content div.raw-link.sourceCode
+{
+  padding-left  : 12%;
+  padding-right : 12%;
+}
+
 html body div#content div.lineCntMax100
 {
   margin-left : -0.58em;
@@ -270,7 +277,7 @@ html body div#content div.lineCntMax10000
 
 html body div#content div.sourceCode
 {
-  padding-left  : 12%;
+  padding-left  : 15%;
   padding-right : 12%;
 }
 
@@ -411,7 +418,7 @@ html body div#content pre code
   margin-bottom    : 1em;
   padding-top      : 1em;
   padding-bottom   : 1em;
-  font-weight      : normal;
+  font-weight      : bold;
 }
 
 
@@ -526,12 +533,33 @@ html body div#content table.posts-index tr td code
   font-weight : normal;
 }
 
+
+
+html body div#content section.footnotes hr
+{
+  margin-bottom : 1em;
+  font-size     : small;
+}
+
+html body div#content section.footnotes ol
+{
+  padding-left  : 12%;
+  padding-right : 12%;
+}
+
 html body div#footer
 {
   margin-top     : 1em;
-  padding-bottom : 1em;
+  padding-bottom : 2em;
   font-size      : medium;
   text-align     : center;
+}
+
+
+html body div#footer p#fleuron
+{
+  font-size : 30pt;
+  margin    : 0px 0px 0px 0px;
 }
 
 
