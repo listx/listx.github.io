@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-    <title>Linus's Blog</title>
+    <title>Linus’s Blog</title>
     <link href="http://funloop.org/atom.xml" rel="self" />
     <link href="http://funloop.org" />
     <id>http://funloop.org/atom.xml</id>
