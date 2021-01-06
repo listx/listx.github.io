@@ -21,8 +21,11 @@
 	<a title="All pages tagged &#39;linux&#39;." href="/tag/linux.html">linux</a>, <a title="All pages tagged &#39;audio&#39;." href="/tag/audio.html">audio</a>
 </div>
 
-<p>Something like ~10 years ago, there was no easy way to apply <a href="https://en.wikipedia.org/wiki/ReplayGain">ReplayGain</a> to various audio files with different formats (e.g., flac vs mp3). Over the holiday break I discovered <a href="https://github.com/desbma/r128gain">r128gain</a> which is exactly the tool I wanted for many years. Unfortunately neither <a href="https://cmus.github.io/">cmus</a> nor <a href="https://mpv.io/">mpv</a> currently support the <code>R128_TRACK_GAIN</code> tag that r128gain uses (at least for <code>*.opus</code> files).<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
-<p>On the bright side, I discovered that <a href="https://www.musicpd.org/">MPD (Music Player Daemon)</a> supports <code>R128_TRACK_GAIN</code>.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> MPD is easy to start up and the basic minimal configuration was <a href="https://raw.githubusercontent.com/listx/syscfg/e0f95dd04a4cd7247ca4e0fe3f02eccd78660d24/mpd/mpd.conf">small enough</a>:</p>
+<p>Something like ~10 years ago, there was no easy way to apply <a href="https://en.wikipedia.org/wiki/ReplayGain">ReplayGain</a> to various audio files with different formats (e.g., flac vs mp3). Over the holiday break I discovered <a href="https://github.com/desbma/r128gain">r128gain</a> which is exactly the tool I wanted for many years. You just run</p>
+<pre><code>r128gain -r &lt;folder&gt;
+</code></pre>
+<p>and it will recursively tag all music files with ReplayGain information — in parallel, no less!</p>
+<p>The only downside is that neither <a href="https://cmus.github.io/">cmus</a> nor <a href="https://mpv.io/">mpv</a> currently support the <code>R128_TRACK_GAIN</code> tag that r128gain generates (at least for <code>*.opus</code> files).<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> However, I discovered that <a href="https://www.musicpd.org/">MPD (Music Player Daemon)</a> supports <code>R128_TRACK_GAIN</code>.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> MPD is easy to start up and the basic minimal configuration was <a href="https://raw.githubusercontent.com/listx/syscfg/e0f95dd04a4cd7247ca4e0fe3f02eccd78660d24/mpd/mpd.conf">small enough</a>:</p>
 <pre><code>music_directory     &quot;~/Music&quot;
 # Automatically prune new/deleted files in the music_directory.
 auto_update         &quot;yes&quot;
