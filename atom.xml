@@ -16,7 +16,7 @@
     <published>2021-01-05T00:00:00Z</published>
     <updated>2021-01-05T00:00:00Z</updated>
     <summary type="html"><![CDATA[<div class="info center">
-	<code class="date">2021-01-05</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2021-01-05-mpd-and-replaygain.org" title="History">*</a>
+	<a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2021-01-05-mpd-and-replaygain.org" title="History"><code class="date">2021-01-05</code></a>
 	<br>
 	<a title="All pages tagged &#39;linux&#39;." href="/tag/linux.html">linux</a>, <a title="All pages tagged &#39;audio&#39;." href="/tag/audio.html">audio</a>
 </div>
@@ -59,7 +59,7 @@ replaygain          &quot;track&quot;
     <published>2021-01-04T00:00:00Z</published>
     <updated>2021-01-04T00:00:00Z</updated>
     <summary type="html"><![CDATA[<div class="info center">
-	<code class="date">2021-01-04</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2021-01-04-thoughts-on-baduk.org" title="History">*</a>
+	<a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2021-01-04-thoughts-on-baduk.org" title="History"><code class="date">2021-01-04</code></a>
 	<br>
 	<a title="All pages tagged &#39;baduk&#39;." href="/tag/baduk.html">baduk</a>
 </div>
@@ -99,7 +99,7 @@ replaygain          &quot;track&quot;
     <published>2020-12-05T00:00:00Z</published>
     <updated>2020-12-05T00:00:00Z</updated>
     <summary type="html"><![CDATA[<div class="info center">
-	<code class="date">2020-12-05</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2020-12-05-twosum-problem-explained.org" title="History">*</a>
+	<a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2020-12-05-twosum-problem-explained.org" title="History"><code class="date">2020-12-05</code></a>
 	<br>
 	<a title="All pages tagged &#39;algorithms&#39;." href="/tag/algorithms.html">algorithms</a>, <a title="All pages tagged &#39;math&#39;." href="/tag/math.html">math</a>
 </div>
@@ -198,7 +198,7 @@ return numbers[a_idx], numbers[b_idx]
     <published>2019-11-13T00:00:00Z</published>
     <updated>2019-11-13T00:00:00Z</updated>
     <summary type="html"><![CDATA[<div class="info center">
-	<code class="date">2019-11-13</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2019-11-13-esrille-nisse-three-years-later.org" title="History">*</a>
+	<a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2019-11-13-esrille-nisse-three-years-later.org" title="History"><code class="date">2019-11-13</code></a>
 	<br>
 	<a title="All pages tagged &#39;hardware&#39;." href="/tag/hardware.html">hardware</a>, <a title="All pages tagged &#39;esrille&#39;." href="/tag/esrille.html">esrille</a>, <a title="All pages tagged &#39;cherry mx&#39;." href="/tag/cherry%20mx.html">cherry mx</a>
 </div>
@@ -311,7 +311,7 @@ e) Shift + Insert macro (for pasting X primary buffer)
     <published>2019-11-11T00:00:00Z</published>
     <updated>2019-11-11T00:00:00Z</updated>
     <summary type="html"><![CDATA[<div class="info center">
-	<code class="date">2019-11-11</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2019-11-11-status-update.org" title="History">*</a>
+	<a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2019-11-11-status-update.org" title="History"><code class="date">2019-11-11</code></a>
 	<br>
 	<a title="All pages tagged &#39;status&#39;." href="/tag/status.html">status</a>
 </div>
@@ -334,7 +334,7 @@ e) Shift + Insert macro (for pasting X primary buffer)
     <published>2018-11-11T00:00:00Z</published>
     <updated>2018-11-11T00:00:00Z</updated>
     <summary type="html"><![CDATA[<div class="info center">
-	<code class="date">2018-11-11</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2018-11-11-status-update.org" title="History">*</a>
+	<a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2018-11-11-status-update.org" title="History"><code class="date">2018-11-11</code></a>
 	<br>
 	<a title="All pages tagged &#39;status&#39;." href="/tag/status.html">status</a>
 </div>
@@ -363,7 +363,7 @@ e) Shift + Insert macro (for pasting X primary buffer)
     <published>2017-11-11T00:00:00Z</published>
     <updated>2017-11-11T00:00:00Z</updated>
     <summary type="html"><![CDATA[<div class="info center">
-	<code class="date">2017-11-11</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2017-11-11-useful-manpages.org" title="History">*</a>
+	<a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2017-11-11-useful-manpages.org" title="History"><code class="date">2017-11-11</code></a>
 	<br>
 	<a title="All pages tagged &#39;linux&#39;." href="/tag/linux.html">linux</a>, <a title="All pages tagged &#39;git&#39;." href="/tag/git.html">git</a>
 </div>
@@ -489,7 +489,7 @@ e) Shift + Insert macro (for pasting X primary buffer)
     <published>2017-05-13T00:00:00Z</published>
     <updated>2017-05-13T00:00:00Z</updated>
     <summary type="html"><![CDATA[<div class="info center">
-	<code class="date">2017-05-13</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2017-05-13-tower-of-hanoi.org" title="History">*</a>
+	<a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2017-05-13-tower-of-hanoi.org" title="History"><code class="date">2017-05-13</code></a>
 	<br>
 	<a title="All pages tagged &#39;math&#39;." href="/tag/math.html">math</a>
 </div>
@@ -722,7 +722,7 @@ T_n = 2(T_{n - 1}) + 1 = 2(2^{n - 1} - 1) + 1 = 2^n - 1.
     <published>2017-04-14T00:00:00Z</published>
     <updated>2017-04-14T00:00:00Z</updated>
     <summary type="html"><![CDATA[<div class="info center">
-	<code class="date">2017-04-14</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2017-04-14-computing-fibonacci-numbers.org" title="History">*</a>
+	<a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2017-04-14-computing-fibonacci-numbers.org" title="History"><code class="date">2017-04-14</code></a>
 	<br>
 	<a title="All pages tagged &#39;math&#39;." href="/tag/math.html">math</a>, <a title="All pages tagged &#39;programming&#39;." href="/tag/programming.html">programming</a>, <a title="All pages tagged &#39;python&#39;." href="/tag/python.html">python</a>
 </div>
@@ -934,7 +934,7 @@ T_n = 2(T_{n - 1}) + 1 = 2(2^{n - 1} - 1) + 1 = 2^n - 1.
     <published>2017-04-02T00:00:00Z</published>
     <updated>2017-04-02T00:00:00Z</updated>
     <summary type="html"><![CDATA[<div class="info center">
-	<code class="date">2017-04-02</code><a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2017-04-02-calling-c-from-haskell.org" title="History">*</a>
+	<a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2017-04-02-calling-c-from-haskell.org" title="History"><code class="date">2017-04-02</code></a>
 	<br>
 	<a title="All pages tagged &#39;programming&#39;." href="/tag/programming.html">programming</a>, <a title="All pages tagged &#39;haskell&#39;." href="/tag/haskell.html">haskell</a>
 </div>
