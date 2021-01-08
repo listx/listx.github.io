@@ -1,10 +1,4 @@
-Build profile: -w ghc-8.10.3 -O1
-In order, the following will be built (use -v for more details):
- - blog-0.1.0.0 (exe:base) (file css/base.hs changed)
-Preprocessing executable 'base' for blog-0.1.0.0..
-Building executable 'base' for blog-0.1.0.0..
-[1 of 1] Compiling Main             ( css/base.hs, /home/l/blog/dist-newstyle/build/x86_64-linux/ghc-8.10.3/blog-0.1.0.0/x/base/build/base/base-tmp/Main.o )
-Linking /home/l/blog/dist-newstyle/build/x86_64-linux/ghc-8.10.3/blog-0.1.0.0/x/base/build/base/base ...
+Up to date
 
 html
 {
@@ -17,6 +11,7 @@ html
 
 html body
 {
+  overflow-y  : scroll;
   font-family : "Source Serif Pro", serif;
   width       : 900px;
   margin      : 0px auto 0px auto;
@@ -69,6 +64,28 @@ html body hr
 
 
 html body div.center
+{
+  text-align : center;
+}
+
+
+html body div#sticky-title
+{
+  position         : sticky;
+  top              : 0;
+  z-index          : 1;
+  background-image : -webkit-linear-gradient(right,#ffffff 0%,#d0e8f2 10%,#d0e8f2 90%,#ffffff 100%);
+  background-image : -moz-linear-gradient(right,#ffffff 0%,#d0e8f2 10%,#d0e8f2 90%,#ffffff 100%);
+  background-image : -ms-linear-gradient(right,#ffffff 0%,#d0e8f2 10%,#d0e8f2 90%,#ffffff 100%);
+  background-image : -o-linear-gradient(right,#ffffff 0%,#d0e8f2 10%,#d0e8f2 90%,#ffffff 100%);
+  background-image : linear-gradient(right,#ffffff 0%,#d0e8f2 10%,#d0e8f2 90%,#ffffff 100%);
+  padding          : 0.5em 0px 0.5em 0px;
+  margin-bottom    : 1em;
+  padding-left     : 12%;
+  padding-right    : 12%;
+}
+
+html body div#sticky-title h1
 {
   text-align : center;
 }
@@ -206,6 +223,7 @@ html body div#content div.info
 {
   padding-bottom : 1em;
 }
+
 
 html body div#content div.code-and-raw
 {
@@ -413,11 +431,11 @@ html body div#content blockquote
   -moz-tab-size    : 4;
   -o-tab-size      : 4;
   tab-size         : 4;
-  background-image : -webkit-linear-gradient(right,#ffffff 0%,#efffef 10%,#efffef 90%,#ffffff 100%);
-  background-image : -moz-linear-gradient(right,#ffffff 0%,#efffef 10%,#efffef 90%,#ffffff 100%);
-  background-image : -ms-linear-gradient(right,#ffffff 0%,#efffef 10%,#efffef 90%,#ffffff 100%);
-  background-image : -o-linear-gradient(right,#ffffff 0%,#efffef 10%,#efffef 90%,#ffffff 100%);
-  background-image : linear-gradient(right,#ffffff 0%,#efffef 10%,#efffef 90%,#ffffff 100%);
+  background-image : -webkit-linear-gradient(right,#ffffff 0%,#ddffdd 10%,#ddffdd 90%,#ffffff 100%);
+  background-image : -moz-linear-gradient(right,#ffffff 0%,#ddffdd 10%,#ddffdd 90%,#ffffff 100%);
+  background-image : -ms-linear-gradient(right,#ffffff 0%,#ddffdd 10%,#ddffdd 90%,#ffffff 100%);
+  background-image : -o-linear-gradient(right,#ffffff 0%,#ddffdd 10%,#ddffdd 90%,#ffffff 100%);
+  background-image : linear-gradient(right,#ffffff 0%,#ddffdd 10%,#ddffdd 90%,#ffffff 100%);
   margin-bottom    : 1em;
   padding-top      : 1em;
 }
@@ -495,11 +513,23 @@ html body div#footer
   text-align     : center;
 }
 
-
-html body div#footer p#fleuron
+html body div#footer p
 {
-  font-size : 30pt;
-  margin    : 0px 0px 0px 0px;
+  padding-top : 1em;
+  margin      : 0px 0px 0px 0px;
+}
+
+
+html body div#footer img#brand-icon
+{
+  image-rendering        : optimizeSpeed;
+  image-rendering        : -moz-crisp-edges;
+  image-rendering        : -o-crisp-edges;
+  image-rendering        : -webkit-optimize-contrast;
+  image-rendering        : pixelated;
+  image-rendering        : optimize-contrast;
+  -ms-interpolation-mode : nearest-neighbor;
+  width                  : 39px;
 }
 
 
