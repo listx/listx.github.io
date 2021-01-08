@@ -25,7 +25,6 @@ html body
 html body a
 {
   outline         : none 1px #000000;
-  font-weight     : bold;
   text-decoration : none;
 }
 
