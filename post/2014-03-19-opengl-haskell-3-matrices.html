@@ -28,12 +28,14 @@
 	</head>
 	<body>
 		<div id="header">
-			<a href="../">Blog</a>
+			<a href="../">funloop.org</a>
 			&bull;
 			<a href="../about.html">About</a>
 			&bull;
 			<a href="../etc.html">Etc</a>
 		</div>
+
+		<hr>
 
 		<div id="content">
 			<h1 class="center" id="page-title">OpenGL from Haskell (#3: Matrices)</h1>
@@ -50,9 +52,6 @@
 <p>Also, I have fixed YPares’s original <code>lookAt</code> function which is actually <a href="https://github.com/YPares/Haskell-OpenGL3.1-Tutos/commit/7a027b927d061fbd26138cb7357c40c4cacbc927">broken as of commit 7a027b927d061fbd26138cb7357c40c4cacbc927</a>; you will need my version if you wish to pursue the later tutorials that actually test the validity of this function, such as the keyboard/mouse input tutorial #6 from <a href="http://www.opengl-tutorial.org">http://www.opengl-tutorial.org</a>.</p>
 <p>The code here is released into the Public Domain.</p>
 <div class="code-and-raw lineCntMax1000">
-<div class="raw-link sourceCode">
-<table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/opengl/matrices.hs" mimetype="text/plain">matrices.hs</a></code></pre></td></tr></tbody></table>
-</div>
 <div class="sourceCode" id="cb1" data-input="code/opengl/matrices.hs"><pre class="sourceCode numberSource numberLines haskell"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1"></a><span class="ot">{-# LANGUAGE PackageImports #-}</span></span>
 <span id="cb1-2"><a href="#cb1-2"></a><span class="ot">{-# LANGUAGE RecordWildCards #-}</span></span>
 <span id="cb1-3"><a href="#cb1-3"></a><span class="ot">{-# LANGUAGE RankNTypes #-}</span></span>
@@ -312,6 +311,9 @@
 <span id="cb1-257"><a href="#cb1-257"></a>  y <span class="ot">=</span> snoc up' (<span class="op">-</span>(dot up' eye))</span>
 <span id="cb1-258"><a href="#cb1-258"></a>  z <span class="ot">=</span> snoc (<span class="op">-</span>forward) (dot forward eye)</span>
 <span id="cb1-259"><a href="#cb1-259"></a>  h <span class="ot">=</span> <span class="dv">0</span> <span class="op">:.</span> <span class="dv">0</span> <span class="op">:.</span> <span class="dv">0</span> <span class="op">:.</span> <span class="dv">1</span> <span class="op">:.</span> ()</span></code></pre></div>
+<div class="raw-link sourceCode">
+<p> <a class="raw" href="../code/opengl/matrices.hs" mimetype="text/plain"><code>matrices.hs</code></a> </p>
+</div>
 </div>
 
 		</div>

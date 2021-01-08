@@ -28,12 +28,14 @@
 	</head>
 	<body>
 		<div id="header">
-			<a href="../">Blog</a>
+			<a href="../">funloop.org</a>
 			&bull;
 			<a href="../about.html">About</a>
 			&bull;
 			<a href="../etc.html">Etc</a>
 		</div>
+
+		<hr>
 
 		<div id="content">
 			<h1 class="center" id="page-title">Implementing Binary Search</h1>
@@ -63,9 +65,6 @@
 <p>The heading of this subsection might have already given you a hint as to what binary search entails. (Although, if you’ve read the <em>Binary Subdivision</em> section, you should have had a good idea anyhow.) Binary search takes the concept of bounds-checking, and applies it repeatedly, recursively, against <code>KEYS</code>. The only difference when I say “bounds-checking” in the context of binary search is that we do <em>not</em> care about the values of those bounds, but merely that they <em>are</em> the bounds. This is because we only concern ourselves with dividing the list of sorted numbers by <span class="math inline">\(\frac{1}{2}\)</span> every time and take the <em>middle</em> index <code>middle_index</code>, which is located as close as possible to the middle element (halfway between the two bounds). Indeed, the only way to get a valid <code>middle_index</code> value is if we know the bounds (the size of the list). We keep doing this recursively until <code>KEYS[mid] =</code> key=.</p>
 <p>The following is the pseudocode.</p>
 <div class="code-and-raw lineCntMax100">
-<div class="raw-link sourceCode">
-<table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/toy/binary-search-pseudo-0.txt" mimetype="text/plain">binary-search-pseudo-0.txt</a></code></pre></td></tr></tbody></table>
-</div>
 <div class="sourceCode" id="cb1" data-input="code/toy/binary-search-pseudo-0.txt"><pre class="sourceCode numberSource numberLines"><code class="sourceCode"><span id="cb1-1"><a href="#cb1-1"></a>KEYS = some random list of numbers</span>
 <span id="cb1-2"><a href="#cb1-2"></a>key = the number we're looking for in KEYS</span>
 <span id="cb1-3"><a href="#cb1-3"></a></span>
@@ -80,6 +79,9 @@
 <span id="cb1-12"><a href="#cb1-12"></a>	else</span>
 <span id="cb1-13"><a href="#cb1-13"></a>		return middle_index</span>
 <span id="cb1-14"><a href="#cb1-14"></a>	end</span></code></pre></div>
+<div class="raw-link sourceCode">
+<p> <a class="raw" href="../code/toy/binary-search-pseudo-0.txt" mimetype="text/plain"><code>binary-search-pseudo-0.txt</code></a> </p>
+</div>
 </div>
 <p>There are some obvious holes in the code above.</p>
 <p>First, we always assume that <code>KEYS</code> is made up of multiple elements, and that its halves <code>lower_keys</code> and <code>upper_keys</code> also have multiple elements in them. In the extreme case, <code>KEYS</code> might be an empty list, which would make the whole thing explode.</p>
@@ -90,9 +92,6 @@
 <p>instead of just <code>else</code> on line 12, but that is redundant. This is because we already test for the two other conditions of <code>key</code> being <em>lesser</em> or <em>greater</em> than <code>middle_index</code>. Therefore, we’ve excluded the two other conditions and are already only left with the third condition of <code>key =</code> KEYS[mid]= evaluating to TRUE — hence we write just <code>else</code> on line 12.</p>
 <p>Addressing the holes above, we get the next version.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
 <div class="code-and-raw lineCntMax100">
-<div class="raw-link sourceCode">
-<table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/toy/binary-search-pseudo-1.txt" mimetype="text/plain">binary-search-pseudo-1.txt</a></code></pre></td></tr></tbody></table>
-</div>
 <div class="sourceCode" id="cb3" data-input="code/toy/binary-search-pseudo-1.txt"><pre class="sourceCode numberSource numberLines"><code class="sourceCode"><span id="cb3-1"><a href="#cb3-1"></a>KEYS = some random list of numbers</span>
 <span id="cb3-2"><a href="#cb3-2"></a>first_index = 0</span>
 <span id="cb3-3"><a href="#cb3-3"></a>last_index = 999 (our KEYS is 1000 elements big)</span>
@@ -113,6 +112,9 @@
 <span id="cb3-18"><a href="#cb3-18"></a>	else</span>
 <span id="cb3-19"><a href="#cb3-19"></a>		return middle_index</span>
 <span id="cb3-20"><a href="#cb3-20"></a>	end</span></code></pre></div>
+<div class="raw-link sourceCode">
+<p> <a class="raw" href="../code/toy/binary-search-pseudo-1.txt" mimetype="text/plain"><code>binary-search-pseudo-1.txt</code></a> </p>
+</div>
 </div>
 <p>There are some obvious differences — mainly the fact that we concern ourselves primarily with the first and last index numbers of the list, and work with these indices instead of working with the entire list <code>KEYS</code> itself. The <code>get_below()</code> and <code>get_above()</code> functions are gone and have been replaced with the index bounds <code>first_index, middle_index</code> and <code>middle_index + 1, last_index</code>, respectively. As you can see, working with these index numbers directly avoids a lot of abstraction. Actually, the <code>list_size</code> abstraction can be further reduced in terms of indices, so that <code>list_size =</code> 0= can be rewritten as <code>first_index &gt; last_index</code>.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
 <h1 id="theoretical-performance">Theoretical Performance</h1>
@@ -123,9 +125,6 @@
 <p>I said at the beginning of the post that I would show a naive implementation in C, Ruby, and Haskell. I could have simply written a <code>binary_search()</code> function (and only that function) for all three languages — but instead I chose to write full standalone programs for all three that print out the same results. Because they are all standalone programs, you can easily tweak some settings (namely, the <code>KEYS_TOTAL</code> value), and see how it scales.<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a> All versions use the new <a href="http://www.pcg-random.org">PCG family</a> of pseudorandom number generators (RNGs), which have been created by Prof. Melissa E. O’Neill, author of the great paper <em>The Genuine Sieve of Eratosthenes</em>.<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a></p>
 <h2 id="c-version-linux">C Version (Linux)</h2>
 <div class="code-and-raw lineCntMax1000">
-<div class="raw-link sourceCode">
-<table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/toy/binary-search.c" mimetype="text/plain">binary-search.c</a></code></pre></td></tr></tbody></table>
-</div>
 <div class="sourceCode" id="cb4" data-input="code/toy/binary-search.c"><pre class="sourceCode numberSource numberLines c"><code class="sourceCode c"><span id="cb4-1"><a href="#cb4-1"></a><span class="co">/*</span></span>
 <span id="cb4-2"><a href="#cb4-2"></a><span class="co"> * LICENSE: PUBLIC DOMAIN</span></span>
 <span id="cb4-3"><a href="#cb4-3"></a><span class="co"> *</span></span>
@@ -285,6 +284,9 @@
 <span id="cb4-157"><a href="#cb4-157"></a>	free(keys);</span>
 <span id="cb4-158"><a href="#cb4-158"></a>	<span class="cf">return</span> <span class="dv">0</span>;</span>
 <span id="cb4-159"><a href="#cb4-159"></a>}</span></code></pre></div>
+<div class="raw-link sourceCode">
+<p> <a class="raw" href="../code/toy/binary-search.c" mimetype="text/plain"><code>binary-search.c</code></a> </p>
+</div>
 </div>
 <p>Overview:</p>
 <ul>
@@ -296,9 +298,6 @@
 <p>I’ve tried to keep the code simple. You may find it disturbing that we use the same type for <code>KEY_NOT_FOUND</code> as the actual valid key value (<code>mid</code>) itself. This kind of type overloading is common in C, and is what gives C its bare metal speed — at the cost of (probable) disaster, of course.</p>
 <h2 id="ruby-version">Ruby Version</h2>
 <div class="code-and-raw lineCntMax1000">
-<div class="raw-link sourceCode">
-<table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/toy/binary-search.rb" mimetype="text/plain">binary-search.rb</a></code></pre></td></tr></tbody></table>
-</div>
 <div class="sourceCode" id="cb5" data-input="code/toy/binary-search.rb"><pre class="sourceCode numberSource numberLines ruby"><code class="sourceCode ruby"><span id="cb5-1"><a href="#cb5-1"></a><span class="co"># LICENSE: PUBLIC DOMAIN</span></span>
 <span id="cb5-2"><a href="#cb5-2"></a></span>
 <span id="cb5-3"><a href="#cb5-3"></a><span class="co"># Interact with `irb -I . -r path/to/this/file'.</span></span>
@@ -414,13 +413,13 @@
 <span id="cb5-113"><a href="#cb5-113"></a>	<span class="kw">end</span></span>
 <span id="cb5-114"><a href="#cb5-114"></a><span class="kw">end</span></span>
 <span id="cb5-115"><a href="#cb5-115"></a>puts <span class="st">&quot;END RUBY VERSION&quot;</span></span></code></pre></div>
+<div class="raw-link sourceCode">
+<p> <a class="raw" href="../code/toy/binary-search.rb" mimetype="text/plain"><code>binary-search.rb</code></a> </p>
+</div>
 </div>
 <p>This version, like the Haskell version, tries to follow the C version as much as possible. One drawback of this version is that because Ruby does not support fixed-width integers, we have to make liberal use of the modulo operator <code>%</code> to emulate integer overflow. We could just do a bitwise AND (<code>&amp;</code>) with a mask, but that would risk increased verbosity.</p>
 <h2 id="haskell-version">Haskell Version</h2>
 <div class="code-and-raw lineCntMax1000">
-<div class="raw-link sourceCode">
-<table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/toy/binary-search.hs" mimetype="text/plain">binary-search.hs</a></code></pre></td></tr></tbody></table>
-</div>
 <div class="sourceCode" id="cb6" data-input="code/toy/binary-search.hs"><pre class="sourceCode numberSource numberLines haskell"><code class="sourceCode haskell"><span id="cb6-1"><a href="#cb6-1"></a><span class="ot">{-# LANGUAGE RecordWildCards #-}</span></span>
 <span id="cb6-2"><a href="#cb6-2"></a></span>
 <span id="cb6-3"><a href="#cb6-3"></a><span class="co">-- LICENSE: PUBLIC DOMAIN</span></span>
@@ -580,6 +579,9 @@
 <span id="cb6-157"><a href="#cb6-157"></a>    min' <span class="ot">=</span> <span class="dv">0</span></span>
 <span id="cb6-158"><a href="#cb6-158"></a>    max' <span class="ot">=</span> keys_total <span class="op">-</span> <span class="dv">1</span></span>
 <span id="cb6-159"><a href="#cb6-159"></a>    foundMid <span class="ot">=</span> binary_search keys key min' max'</span></code></pre></div>
+<div class="raw-link sourceCode">
+<p> <a class="raw" href="../code/toy/binary-search.hs" mimetype="text/plain"><code>binary-search.hs</code></a> </p>
+</div>
 </div>
 <p>It pained me not to make use of Haskell’s much faster, efficient <code>Array</code> data structure instead of plain lists (that are constructed with the square brackets <code>[]</code>). And, I have to admit that it is written in a strange style; I’ve preserved the names of the variables from C and Ruby where I could, even though mixing snake_case with camelCase results in utter ugliness. I also restrained myself from using the <code>State</code> monad for keeping track of <code>PCG32</code>’s state. For you non-Haskellers, that means that I manually passed around RNG state (as you can see with <code>rng0</code>, <code>rng1</code>, <code>rng2</code>, etc.) as arguments and return values, because I did not want to place another barrier against quickly grasping the code. Do you really want monad transformers in a “naive” implementation?<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a></p>
 <p>The most immediate effect to me when writing the Haskell version was just how stateful the <code>uniform32()</code> and <code>init_array()</code> functions were. The C/Ruby brethren perform lots of variable mutation in those parts, and are consequently difficult to understand from a <em>pure</em> (type system) perspective. All of the silent type promotions in C were blatantly exposed by the Glasgow Haskell Compiler (GHC), making it necessary for me to include all of those explicit <code>fromIntegral</code> type promotions myself in <code>pcg32_random_r</code> and <code>init_array</code>.</p>

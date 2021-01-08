@@ -1,4 +1,10 @@
-Up to date
+Build profile: -w ghc-8.10.3 -O1
+In order, the following will be built (use -v for more details):
+ - blog-0.1.0.0 (exe:base) (file css/base.hs changed)
+Preprocessing executable 'base' for blog-0.1.0.0..
+Building executable 'base' for blog-0.1.0.0..
+[1 of 1] Compiling Main             ( css/base.hs, /home/l/blog/dist-newstyle/build/x86_64-linux/ghc-8.10.3/blog-0.1.0.0/x/base/build/base/base-tmp/Main.o )
+Linking /home/l/blog/dist-newstyle/build/x86_64-linux/ghc-8.10.3/blog-0.1.0.0/x/base/build/base/base ...
 
 html
 {
@@ -56,8 +62,10 @@ html body sup
 
 html body hr
 {
-  margin : 0px 0px 0px 0px;
-  height : 1px;
+  font-size : small;
+  border    : solid 1px #000000;
+  margin    : 0px auto 1em auto;
+  width     : 76%;
 }
 
 
@@ -69,7 +77,7 @@ html body div.center
 
 html body div#header
 {
-  padding    : 1em 0em 1em 0em;
+  padding    : 0.5em 0em 0.5em 0em;
   text-align : center;
   font-size  : 18pt;
 }
@@ -124,6 +132,11 @@ html body div#content h1.center
 html body div#content h1.center::before
 {
   content : none;
+}
+
+html body div#content h1#page-title
+{
+  padding-bottom : 0px;
 }
 
 
@@ -197,95 +210,117 @@ html body div#content div.info
 
 html body div#content div.code-and-raw
 {
-  background-image : -webkit-linear-gradient(right,#ffffff 0%,#ffffff 10%,#ffffff 90%,#ffffff 100%);
-  background-image : -moz-linear-gradient(right,#ffffff 0%,#ffffff 10%,#ffffff 90%,#ffffff 100%);
-  background-image : -ms-linear-gradient(right,#ffffff 0%,#ffffff 10%,#ffffff 90%,#ffffff 100%);
-  background-image : -o-linear-gradient(right,#ffffff 0%,#ffffff 10%,#ffffff 90%,#ffffff 100%);
-  background-image : linear-gradient(right,#ffffff 0%,#ffffff 10%,#ffffff 90%,#ffffff 100%);
+  background-color : #ffffff;
   margin-bottom    : 1em;
+  padding-left     : 0px;
 }
 
 
-html body div#content div.code-and-raw table.sourceCode
+html body div#content div.code-and-raw div.sourceCode
 {
-  margin-bottom  : 0px;
-  padding-bottom : 0.5em;
-  border-style   : none;
+  background-image : -webkit-linear-gradient(right,#ffffff 0%,#f0f0f0 10%,#f0f0f0 90%,#ffffff 100%);
+  background-image : -moz-linear-gradient(right,#ffffff 0%,#f0f0f0 10%,#f0f0f0 90%,#ffffff 100%);
+  background-image : -ms-linear-gradient(right,#ffffff 0%,#f0f0f0 10%,#f0f0f0 90%,#ffffff 100%);
+  background-image : -o-linear-gradient(right,#ffffff 0%,#f0f0f0 10%,#f0f0f0 90%,#ffffff 100%);
+  background-image : linear-gradient(right,#ffffff 0%,#f0f0f0 10%,#f0f0f0 90%,#ffffff 100%);
 }
 
 
-
-
-
-html body div#content div.code-and-raw table.sourceCode tbody tr td pre code
+html body div#content div.code-and-raw div.sourceCode pre code
 {
   background-image : none;
-  font-weight      : normal;
+  margin-bottom    : 0px;
 }
 
-html body div#content div.raw-link
+html body div#content div.code-and-raw div.raw-link
 {
-  color : #aaaaaa;
+  background-image : -webkit-linear-gradient(right,#ffffff 0%,#e0e0e0 10%,#e0e0e0 90%,#ffffff 100%);
+  background-image : -moz-linear-gradient(right,#ffffff 0%,#e0e0e0 10%,#e0e0e0 90%,#ffffff 100%);
+  background-image : -ms-linear-gradient(right,#ffffff 0%,#e0e0e0 10%,#e0e0e0 90%,#ffffff 100%);
+  background-image : -o-linear-gradient(right,#ffffff 0%,#e0e0e0 10%,#e0e0e0 90%,#ffffff 100%);
+  background-image : linear-gradient(right,#ffffff 0%,#e0e0e0 10%,#e0e0e0 90%,#ffffff 100%);
 }
 
-
-html body div#content div.raw-link table.noPaddingBottom
+html body div#content div.code-and-raw div.raw-link hr
 {
-  padding-bottom : 0em;
+  border        : solid 1px #cccccc;
+  margin-bottom : 0px;
+  width         : 76%;
 }
 
-html body div#content div.raw-link code
+html body div#content div.code-and-raw div.raw-link p
 {
-  padding      : 0px 0px 0px 0px;
-  padding-left : 1em;
-}
-
-html body div#content div.raw-link a
-{
-  font-weight : bold;
-}
-
-html body div#content div.raw-link a.raw
-{
-  margin-left : 0em;
-}
-
-html body div#content div.raw-link a:visited
-{
-  color : #0033ff;
-}
-
-html body div#content div.raw-link.sourceCode
-{
+  padding       : 0.5em 0px 0.5em 0px;
   padding-left  : 12%;
   padding-right : 12%;
 }
 
-html body div#content div.lineCntMax100
+html body div#content div.code-and-raw div.raw-link p a
 {
-  margin-left : -0.58em;
+  font-weight : bold;
 }
 
-html body div#content div.lineCntMax1000
+html body div#content div.code-and-raw div.raw-link p a.raw
 {
-  margin-left : -1.16em;
+  margin-left : 0em;
 }
 
-html body div#content div.lineCntMax10000
+html body div#content div.code-and-raw div.raw-link p a:visited
 {
-  margin-left : -2.32em;
+  color : #0033ff;
 }
 
-html body div#content div.sourceCode
-{
-  padding-left  : 15%;
-  padding-right : 12%;
-}
 
+html body div#content div.sourceCode pre
+{
+  margin  : 0px 0px 0px 0px;
+  padding : 0px 0px 0px 0px;
+}
 
 html body div#content div.sourceCode pre code
 {
-  padding-left : 0;
+  -moz-tab-size    : 4;
+  -o-tab-size      : 4;
+  tab-size         : 4;
+  display          : block;
+  background-image : -webkit-linear-gradient(right,#ffffff 0%,#f0f0f0 10%,#f0f0f0 90%,#ffffff 100%);
+  background-image : -moz-linear-gradient(right,#ffffff 0%,#f0f0f0 10%,#f0f0f0 90%,#ffffff 100%);
+  background-image : -ms-linear-gradient(right,#ffffff 0%,#f0f0f0 10%,#f0f0f0 90%,#ffffff 100%);
+  background-image : -o-linear-gradient(right,#ffffff 0%,#f0f0f0 10%,#f0f0f0 90%,#ffffff 100%);
+  background-image : linear-gradient(right,#ffffff 0%,#f0f0f0 10%,#f0f0f0 90%,#ffffff 100%);
+  border-radius    : 0px 0px 0px 0px;
+  margin-bottom    : 1em;
+  padding-left     : 12%;
+  padding-right    : 12%;
+  padding-top      : 1em;
+  padding-bottom   : 1em;
+  font-weight      : normal;
+}
+
+html body div#content pre
+{
+  margin  : 0px 0px 0px 0px;
+  padding : 0px 0px 0px 0px;
+}
+
+html body div#content pre code
+{
+  -moz-tab-size    : 4;
+  -o-tab-size      : 4;
+  tab-size         : 4;
+  display          : block;
+  background-image : -webkit-linear-gradient(right,#ffffff 0%,#f0f0f0 10%,#f0f0f0 90%,#ffffff 100%);
+  background-image : -moz-linear-gradient(right,#ffffff 0%,#f0f0f0 10%,#f0f0f0 90%,#ffffff 100%);
+  background-image : -ms-linear-gradient(right,#ffffff 0%,#f0f0f0 10%,#f0f0f0 90%,#ffffff 100%);
+  background-image : -o-linear-gradient(right,#ffffff 0%,#f0f0f0 10%,#f0f0f0 90%,#ffffff 100%);
+  background-image : linear-gradient(right,#ffffff 0%,#f0f0f0 10%,#f0f0f0 90%,#ffffff 100%);
+  border-radius    : 0px 0px 0px 0px;
+  margin-bottom    : 1em;
+  padding-left     : 12%;
+  padding-right    : 12%;
+  padding-top      : 1em;
+  padding-bottom   : 1em;
+  font-weight      : normal;
 }
 
 html body div#content ol
@@ -324,12 +359,6 @@ html body div#content p
   padding-left   : 12%;
   padding-right  : 12%;
   text-align     : justify;
-}
-
-html body div#content p#taglist
-{
-  padding-top    : 2em;
-  padding-bottom : 0px;
 }
 
 html body div#content code
@@ -385,111 +414,20 @@ html body div#content blockquote
   -moz-tab-size    : 4;
   -o-tab-size      : 4;
   tab-size         : 4;
-  padding-left     : 6%;
-  padding-right    : 12%;
-  background-image : -webkit-linear-gradient(right,#ffffff 0%,#f0f0f0 10%,#f0f0f0 90%,#ffffff 100%);
-  background-image : -moz-linear-gradient(right,#ffffff 0%,#f0f0f0 10%,#f0f0f0 90%,#ffffff 100%);
-  background-image : -ms-linear-gradient(right,#ffffff 0%,#f0f0f0 10%,#f0f0f0 90%,#ffffff 100%);
-  background-image : -o-linear-gradient(right,#ffffff 0%,#f0f0f0 10%,#f0f0f0 90%,#ffffff 100%);
-  background-image : linear-gradient(right,#ffffff 0%,#f0f0f0 10%,#f0f0f0 90%,#ffffff 100%);
+  background-image : -webkit-linear-gradient(right,#ffffff 0%,#efffef 10%,#efffef 90%,#ffffff 100%);
+  background-image : -moz-linear-gradient(right,#ffffff 0%,#efffef 10%,#efffef 90%,#ffffff 100%);
+  background-image : -ms-linear-gradient(right,#ffffff 0%,#efffef 10%,#efffef 90%,#ffffff 100%);
+  background-image : -o-linear-gradient(right,#ffffff 0%,#efffef 10%,#efffef 90%,#ffffff 100%);
+  background-image : linear-gradient(right,#ffffff 0%,#efffef 10%,#efffef 90%,#ffffff 100%);
   margin-bottom    : 1em;
   padding-top      : 1em;
 }
 
-html body div#content pre
-{
-  margin  : 0px 0px 0px 0px;
-  padding : 0px 0px 0px 0px;
-}
-
-html body div#content pre code
-{
-  -moz-tab-size    : 4;
-  -o-tab-size      : 4;
-  tab-size         : 4;
-  display          : block;
-  padding-left     : 15%;
-  padding-right    : 12%;
-  background-image : -webkit-linear-gradient(right,#ffffff 0%,#ffffff 10%,#ffffff 90%,#ffffff 100%);
-  background-image : -moz-linear-gradient(right,#ffffff 0%,#ffffff 10%,#ffffff 90%,#ffffff 100%);
-  background-image : -ms-linear-gradient(right,#ffffff 0%,#ffffff 10%,#ffffff 90%,#ffffff 100%);
-  background-image : -o-linear-gradient(right,#ffffff 0%,#ffffff 10%,#ffffff 90%,#ffffff 100%);
-  background-image : linear-gradient(right,#ffffff 0%,#ffffff 10%,#ffffff 90%,#ffffff 100%);
-  border-radius    : 0px 0px 0px 0px;
-  border-style     : none;
-  margin-bottom    : 1em;
-  padding-top      : 1em;
-  padding-bottom   : 1em;
-  font-weight      : bold;
-}
-
-
-html body div#content table.sourceCode
-{
-  -moz-tab-size  : 4;
-  -o-tab-size    : 4;
-  tab-size       : 4;
-  margin         : 0px 0px 0px 0px;
-  margin-bottom  : 1em;
-  border-spacing : 0px 1px;
-}
-
-html body div#content table.gallery.sourceCode
-{
-  padding-left  : 12%;
-  padding-right : 12%;
-  margin-bottom : 0em;
-  font-size     : small;
-}
-
-html body div#content table.gallery.sourceCode tr
-{
-  text-align : center;
-}
-
-html body div#content table.gallery.sourceCode tr#header
-{
-  font-size       : medium;
-  font-weight     : bold;
-  text-decoration : underline;
-}
-
-html body div#content table.sourceCode.sourceCode
-{
-  padding-left   : 12%;
-  padding-bottom : 0.5em;
-}
-
-
-
-
-html body div#content table.sourceCode.sourceCode tr td.lineNumbers pre
-{
-  margin     : 0px 0px 0px 0px;
-  color      : #aaaaaa;
-  text-align : right;
-}
-
-html body div#content table.sourceCode.sourceCode tr td.sourceCode
-{
-  padding-left : 0px;
-}
-
-html body div#content table.sourceCode.sourceCode tr td.sourceCode pre
-{
-  margin : 0px 0px 0px 0px;
-}
-
-html body div#content table.sourceCode.sourceCode tr td.sourceCode pre code
-{
-  margin  : 0px 0px 0px 0px;
-  padding : 0px 0px 0px 1em;
-}
 
 html body div#content table.posts-index
 {
-  padding-left   : 12%;
-  margin-bottom  : 0px;
+  margin-left    : 12%;
+  margin-right   : 12%;
   padding-bottom : 1em;
 }
 
@@ -505,43 +443,44 @@ html body div#content table.posts-index thead tr th.label
   text-align : center;
 }
 
+html body div#content table.posts-index thead tr th.size
+{
+  padding-left : 0.5em;
+}
+
 html body div#content table.posts-index thead tr th.title
 {
-  padding-left : 1em;
+  padding-left : 0.5em;
   text-align   : left;
 }
 
 
-html body div#content table.posts-index tr td
+
+html body div#content table.posts-index tbody tr td
 {
-  padding        : 0px 0.5em 0px 0.5em;
   border-style   : none;
   vertical-align : text-top;
 }
 
-html body div#content table.posts-index tr td.date
+html body div#content table.posts-index tbody tr td.date
 {
+  padding     : 0px 0px 0px 0px;
   white-space : nowrap;
 }
 
-html body div#content table.posts-index tr td.bytes
+html body div#content table.posts-index tbody tr td.bytes
 {
-  text-align  : right;
-  white-space : nowrap;
+  padding-left : 1em;
+  text-align   : right;
+  white-space  : nowrap;
 }
 
-html body div#content table.posts-index tr td code
+html body div#content table.posts-index tbody tr td code
 {
   font-weight : normal;
 }
 
 
-
-html body div#content section.footnotes hr
-{
-  margin-bottom : 1em;
-  font-size     : small;
-}
 
 html body div#content section.footnotes ol
 {

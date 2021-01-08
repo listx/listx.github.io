@@ -28,12 +28,14 @@
 	</head>
 	<body>
 		<div id="header">
-			<a href="../">Blog</a>
+			<a href="../">funloop.org</a>
 			&bull;
 			<a href="../about.html">About</a>
 			&bull;
 			<a href="../etc.html">Etc</a>
 		</div>
+
+		<hr>
 
 		<div id="content">
 			<h1 class="center" id="page-title">Haskell: System.Random.MWC: High Quality Fixed Seeds</h1>
@@ -60,9 +62,6 @@
 <p>To solve my problem, I just take the current date, then feed it to the SHA-1 function to get <code>sha1Hash</code>; I then then repeatedly call SHA-1 against <code>sha1Hash</code> recursively. Meanwhile, each time I get a SHA-1 hash of 20 bytes, I append it to an empty string of bytes, <code>acc</code>. When <code>acc</code> is large enough to be split up into 256 <code>Word32</code> elements, I feed it to <code>initialize</code>. The result is that I get much better seed-vs-similar-seed randomness with MWC.</p>
 <p>Here is the code:</p>
 <div class="code-and-raw lineCntMax100">
-<div class="raw-link sourceCode">
-<table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/rng/mwc-seed.hs" mimetype="text/plain">mwc-seed.hs</a></code></pre></td></tr></tbody></table>
-</div>
 <div class="sourceCode" id="cb2" data-input="code/rng/mwc-seed.hs"><pre class="sourceCode numberSource numberLines haskell"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">import</span> <span class="dt">Data.Bits</span></span>
 <span id="cb2-2"><a href="#cb2-2"></a><span class="kw">import</span> <span class="kw">qualified</span> <span class="dt">Data.ByteString.Lazy</span> <span class="kw">as</span> <span class="dt">B</span></span>
 <span id="cb2-3"><a href="#cb2-3"></a><span class="kw">import</span> <span class="dt">Data.Digest.Pure.SHA</span></span>
@@ -116,6 +115,9 @@
 <span id="cb2-51"><a href="#cb2-51"></a></span>
 <span id="cb2-52"><a href="#cb2-52"></a><span class="ot">fromOctetsLE ::</span> [<span class="dt">Word8</span>] <span class="ot">-&gt;</span> <span class="dt">Word32</span></span>
 <span id="cb2-53"><a href="#cb2-53"></a>fromOctetsLE <span class="ot">=</span> fromOctetsBE <span class="op">.</span> <span class="fu">reverse</span></span></code></pre></div>
+<div class="raw-link sourceCode">
+<p> <a class="raw" href="../code/rng/mwc-seed.hs" mimetype="text/plain"><code>mwc-seed.hs</code></a> </p>
+</div>
 </div>
 <p>The neat <code>chop</code> function is by <a href="http://stackoverflow.com/a/5188922/437583">Dan Burton</a>. The octet conversion functions between <code>Word8</code> and <code>Word32</code> types are from <a href="http://www.haskell.org/pipermail/beginners/2010-October/005571.html">this message</a>.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
 <section class="footnotes" role="doc-endnotes">

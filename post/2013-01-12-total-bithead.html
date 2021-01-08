@@ -28,12 +28,14 @@
 	</head>
 	<body>
 		<div id="header">
-			<a href="../">Blog</a>
+			<a href="../">funloop.org</a>
 			&bull;
 			<a href="../about.html">About</a>
 			&bull;
 			<a href="../etc.html">Etc</a>
 		</div>
+
+		<hr>
 
 		<div id="content">
 			<h1 class="center" id="page-title">Using the Total Bithead with ALSA on Arch Linux</h1>
@@ -48,9 +50,6 @@
 <h1 id="the-setup">The Setup</h1>
 <p>We need to manually call a script every time the Total Bithead is connected. The script, called <code>switch_audio.sh</code>, looks like this:</p>
 <div class="code-and-raw lineCntMax100">
-<div class="raw-link sourceCode">
-<table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/switch_audio.sh" mimetype="text/plain">switch_audio.sh</a></code></pre></td></tr></tbody></table>
-</div>
 <div class="sourceCode" id="cb1" data-input="code/switch_audio.sh"><pre class="sourceCode numberSource numberLines bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="co">#!/bin/zsh</span></span>
 <span id="cb1-2"><a href="#cb1-2"></a></span>
 <span id="cb1-3"><a href="#cb1-3"></a><span class="kw">if [[</span> <span class="ot">-e</span> /proc/asound/card1<span class="kw"> ]]</span>; <span class="kw">then</span></span>
@@ -62,6 +61,9 @@
 <span id="cb1-9"><a href="#cb1-9"></a>	<span class="ex">*</span>) <span class="bu">echo</span> <span class="st">&quot;Unknown host </span><span class="dt">\`</span><span class="va">$HOST</span><span class="st">'&quot;</span> <span class="kw">;;</span></span>
 <span id="cb1-10"><a href="#cb1-10"></a>	<span class="kw">esac</span></span>
 <span id="cb1-11"><a href="#cb1-11"></a><span class="kw">fi</span></span></code></pre></div>
+<div class="raw-link sourceCode">
+<p> <a class="raw" href="../code/switch_audio.sh" mimetype="text/plain"><code>switch_audio.sh</code></a> </p>
+</div>
 </div>
 <p>where k0 is my desktop and k1 is my laptop. <code>cfg-k0</code> looks like this:</p>
 <pre class="example"><code># use `aplay -l | awk '/^card/{print$3}' | sort | uniq' for card names

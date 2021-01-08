@@ -28,12 +28,14 @@
 	</head>
 	<body>
 		<div id="header">
-			<a href="../">Blog</a>
+			<a href="../">funloop.org</a>
 			&bull;
 			<a href="../about.html">About</a>
 			&bull;
 			<a href="../etc.html">Etc</a>
 		</div>
+
+		<hr>
 
 		<div id="content">
 			<h1 class="center" id="page-title">Programming Puzzles: Letter and Word Frequency</h1>
@@ -56,9 +58,6 @@
 <p>Now, before you go on to read my solutions, I encourage you to write a solution on your own using your favorite programming language.</p>
 <h2 id="ruby-version">Ruby Version</h2>
 <div class="code-and-raw lineCntMax100">
-<div class="raw-link sourceCode">
-<table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/toy/text-freq/text_freq.rb" mimetype="text/plain">text_freq.rb</a></code></pre></td></tr></tbody></table>
-</div>
 <div class="sourceCode" id="cb1" data-input="code/toy/text-freq/text_freq.rb"><pre class="sourceCode numberSource numberLines ruby"><code class="sourceCode ruby"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">module</span> <span class="dt">TextFreq</span></span>
 <span id="cb1-2"><a href="#cb1-2"></a>  <span class="co"># Given a string, count every occurrence of letters a-z (case insensitively).</span></span>
 <span id="cb1-3"><a href="#cb1-3"></a>  <span class="kw">def</span> <span class="dt">TextFreq</span>.freq_l(src)</span>
@@ -147,11 +146,11 @@
 <span id="cb1-86"><a href="#cb1-86"></a>    <span class="kw">end</span></span>
 <span id="cb1-87"><a href="#cb1-87"></a>  <span class="kw">end</span></span>
 <span id="cb1-88"><a href="#cb1-88"></a><span class="kw">end</span></span></code></pre></div>
+<div class="raw-link sourceCode">
+<p> <a class="raw" href="../code/toy/text-freq/text_freq.rb" mimetype="text/plain"><code>text_freq.rb</code></a> </p>
+</div>
 </div>
 <div class="code-and-raw lineCntMax100">
-<div class="raw-link sourceCode">
-<table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/toy/text-freq/analyze.rb" mimetype="text/plain">analyze.rb</a></code></pre></td></tr></tbody></table>
-</div>
 <div class="sourceCode" id="cb2" data-input="code/toy/text-freq/analyze.rb"><pre class="sourceCode numberSource numberLines ruby"><code class="sourceCode ruby"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">#!/usr/bin/env ruby</span></span>
 <span id="cb2-2"><a href="#cb2-2"></a></span>
 <span id="cb2-3"><a href="#cb2-3"></a>require_relative <span class="st">'./text_freq'</span></span>
@@ -169,6 +168,9 @@
 <span id="cb2-15"><a href="#cb2-15"></a><span class="dt">TextFreq</span>.disp_freq(occs_w)</span>
 <span id="cb2-16"><a href="#cb2-16"></a></span>
 <span id="cb2-17"><a href="#cb2-17"></a>file.close</span></code></pre></div>
+<div class="raw-link sourceCode">
+<p> <a class="raw" href="../code/toy/text-freq/analyze.rb" mimetype="text/plain"><code>analyze.rb</code></a> </p>
+</div>
 </div>
 <p>And here is the output (<code>pg2701.txt</code> is <em>Moby Dick</em>):</p>
 <pre class="example"><code>$ ./analyze.rb ~/pg2701.txt
@@ -307,9 +309,6 @@ thou = 0.12% (267 occurrences)
 <p>The <code>freq_w</code> method relies almost entirely on a single regex, <code>/\W*\s\W*/</code>, to split the input into words. These words are further processed; we perform a basic sanity check with the <code>/\w/</code> regex to make sure we are not dealing with just numbers or punctuation, and we also take into account the em dash <code>--</code>. We use a basic hash structure to store the words as keys, and their counts as values.</p>
 <h2 id="haskell-version">Haskell Version</h2>
 <div class="code-and-raw lineCntMax1000">
-<div class="raw-link sourceCode">
-<table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/toy/text-freq/TextFreq.hs" mimetype="text/plain">TextFreq.hs</a></code></pre></td></tr></tbody></table>
-</div>
 <div class="sourceCode" id="cb4" data-input="code/toy/text-freq/TextFreq.hs"><pre class="sourceCode numberSource numberLines haskell"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">module</span> <span class="dt">TextFreq</span> <span class="kw">where</span></span>
 <span id="cb4-2"><a href="#cb4-2"></a></span>
 <span id="cb4-3"><a href="#cb4-3"></a><span class="kw">import</span> <span class="dt">Data.Char</span></span>
@@ -424,11 +423,11 @@ thou = 0.12% (267 occurrences)
 <span id="cb4-112"><a href="#cb4-112"></a>    msg1 <span class="ot">=</span> T.unpack w <span class="op">++</span> <span class="st">&quot; = &quot;</span></span>
 <span id="cb4-113"><a href="#cb4-113"></a>    msg2 <span class="ot">=</span> TP.printf <span class="st">&quot;%.2f%%&quot;</span> perc</span>
 <span id="cb4-114"><a href="#cb4-114"></a>    msg3 <span class="ot">=</span> <span class="st">&quot; (&quot;</span> <span class="op">++</span> <span class="fu">show</span> n <span class="op">++</span> <span class="st">&quot; occurrences)&quot;</span></span></code></pre></div>
+<div class="raw-link sourceCode">
+<p> <a class="raw" href="../code/toy/text-freq/TextFreq.hs" mimetype="text/plain"><code>TextFreq.hs</code></a> </p>
+</div>
 </div>
 <div class="code-and-raw lineCntMax100">
-<div class="raw-link sourceCode">
-<table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/toy/text-freq/analyze.hs" mimetype="text/plain">analyze.hs</a></code></pre></td></tr></tbody></table>
-</div>
 <div class="sourceCode" id="cb5" data-input="code/toy/text-freq/analyze.hs"><pre class="sourceCode numberSource numberLines haskell"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">module</span> <span class="dt">Main</span> <span class="kw">where</span></span>
 <span id="cb5-2"><a href="#cb5-2"></a></span>
 <span id="cb5-3"><a href="#cb5-3"></a><span class="kw">import</span> <span class="dt">Control.Monad</span></span>
@@ -444,6 +443,9 @@ thou = 0.12% (267 occurrences)
 <span id="cb5-13"><a href="#cb5-13"></a>  dispFreqL <span class="op">$</span> freqL src</span>
 <span id="cb5-14"><a href="#cb5-14"></a>  <span class="fu">putStrLn</span> <span class="op">$</span> <span class="fu">replicate</span> <span class="dv">80</span> <span class="ch">'-'</span></span>
 <span id="cb5-15"><a href="#cb5-15"></a>  dispFreqW <span class="op">$</span> freqW src</span></code></pre></div>
+<div class="raw-link sourceCode">
+<p> <a class="raw" href="../code/toy/text-freq/analyze.hs" mimetype="text/plain"><code>analyze.hs</code></a> </p>
+</div>
 </div>
 <p>Here is the same run against our copy of <em>Moby Dick</em>:</p>
 <pre class="example"><code>$ ./analyze ~/pg2701.txt

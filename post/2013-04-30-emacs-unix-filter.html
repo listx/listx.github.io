@@ -28,12 +28,14 @@
 	</head>
 	<body>
 		<div id="header">
-			<a href="../">Blog</a>
+			<a href="../">funloop.org</a>
 			&bull;
 			<a href="../about.html">About</a>
 			&bull;
 			<a href="../etc.html">Etc</a>
 		</div>
+
+		<hr>
 
 		<div id="content">
 			<h1 class="center" id="page-title">Emacs: Using a Unix Filter</h1>
@@ -52,9 +54,6 @@
 <h1 id="emacs">Emacs</h1>
 <p>I use <a href="http://gitorious.org/evil/pages/Home">evil-mode</a> with Emacs. Here is my relevant <code>.emacs</code> to set up <code>nox</code> correctly:</p>
 <div class="code-and-raw lineCntMax100">
-<div class="raw-link sourceCode">
-<table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/emacs-unix-filter.el" mimetype="text/plain">emacs-unix-filter.el</a></code></pre></td></tr></tbody></table>
-</div>
 <div class="sourceCode" id="cb2" data-input="code/emacs-unix-filter.el"><pre class="sourceCode numberSource numberLines commonlisp"><code class="sourceCode commonlisp"><span id="cb2-1"><a href="#cb2-1"></a>(<span class="kw">defun</span><span class="fu"> my-addrem-comment-region </span>(b e f)</span>
 <span id="cb2-2"><a href="#cb2-2"></a>	<span class="st">&quot;Use the `nox' command to comment the current region.&quot;</span></span>
 <span id="cb2-3"><a href="#cb2-3"></a>	(interactive)</span>
@@ -103,6 +102,9 @@
 <span id="cb2-46"><a href="#cb2-46"></a>	(<span class="kw">lambda</span> () (interactive) (my-addrem-comment <span class="kw">t</span>))) <span class="co">; add comment</span></span>
 <span id="cb2-47"><a href="#cb2-47"></a>(define-key evil-normal-state-map <span class="st">&quot;,C&quot;</span></span>
 <span id="cb2-48"><a href="#cb2-48"></a>	(<span class="kw">lambda</span> () (interactive) (my-addrem-comment <span class="kw">nil</span>))) <span class="co">; remove comment</span></span></code></pre></div>
+<div class="raw-link sourceCode">
+<p> <a class="raw" href="../code/emacs-unix-filter.el" mimetype="text/plain"><code>emacs-unix-filter.el</code></a> </p>
+</div>
 </div>
 <p>This is certainly not the most beautiful code, but it works.</p>
 <h1 id="references">References</h1>

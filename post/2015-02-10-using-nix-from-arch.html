@@ -28,12 +28,14 @@
 	</head>
 	<body>
 		<div id="header">
-			<a href="../">Blog</a>
+			<a href="../">funloop.org</a>
 			&bull;
 			<a href="../about.html">About</a>
 			&bull;
 			<a href="../etc.html">Etc</a>
 		</div>
+
+		<hr>
 
 		<div id="content">
 			<h1 class="center" id="page-title">Using the Nix Package Manager for Haskell Development from Arch Linux</h1>
@@ -97,9 +99,6 @@ alias nix='. /home/l/.nix-profile/etc/profile.d/nix.sh'
 </code></pre>
 <p>. This will create a Nix expression that can be used to build PPX with Nix. It’s like creating a PKGBUILD file. The next step is to create a <code>~/.nixpkgs/config.nix</code> file, as follows:</p>
 <div class="code-and-raw lineCntMax100">
-<div class="raw-link sourceCode">
-<table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/config.nix" mimetype="text/plain">config.nix</a></code></pre></td></tr></tbody></table>
-</div>
 <div class="sourceCode" id="cb10" data-input="code/config.nix"><pre class="sourceCode numberSource numberLines"><code class="sourceCode"><span id="cb10-1"><a href="#cb10-1"></a># Taken from</span>
 <span id="cb10-2"><a href="#cb10-2"></a># http://lists.science.uu.nl/pipermail/nix-dev/2015-January/015601.html.</span>
 <span id="cb10-3"><a href="#cb10-3"></a>{</span>
@@ -120,6 +119,9 @@ alias nix='. /home/l/.nix-profile/etc/profile.d/nix.sh'
 <span id="cb10-18"><a href="#cb10-18"></a>    };</span>
 <span id="cb10-19"><a href="#cb10-19"></a>  };</span>
 <span id="cb10-20"><a href="#cb10-20"></a>}</span></code></pre></div>
+<div class="raw-link sourceCode">
+<p> <a class="raw" href="../code/config.nix" mimetype="text/plain"><code>config.nix</code></a> </p>
+</div>
 </div>
 <p>. Now, invoke <code>cabal2nix --shell</code> for your other project that depends on PPX. When you invoke <code>nix-shell</code> for this other project, Nix should be able to resolve the dependency, based on the information you gave it in <code>~/.nixpkgs/config.nix</code>. That’s it!</p>
 <h1 id="conclusion">Conclusion</h1>

@@ -28,12 +28,14 @@
 	</head>
 	<body>
 		<div id="header">
-			<a href="../">Blog</a>
+			<a href="../">funloop.org</a>
 			&bull;
 			<a href="../about.html">About</a>
 			&bull;
 			<a href="../etc.html">Etc</a>
 		</div>
+
+		<hr>
 
 		<div id="content">
 			<h1 class="center" id="page-title">Generating Random Numbers without Modulo Bias, Redux</h1>
@@ -181,9 +183,6 @@ R R R R R | _ _ R R R | R R
 <h1 id="conclusion">Conclusion</h1>
 <p>I thoroughly enjoyed looking at the source code in PCG, only to discover an elegant solution around removing modulo bias. Unfortunately, I do not know the true origin of this approach; it is possible that the authors of the PCG code invented it, but I find this improbable. Meanwhile, I strongly recommend the following code for anyone using a low-level generator that does not come with a bounded version:</p>
 <div class="code-and-raw lineCntMax10">
-<div class="raw-link sourceCode">
-<table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/rng/pcg-style.c" mimetype="text/plain">pcg-style.c</a></code></pre></td></tr></tbody></table>
-</div>
 <div class="sourceCode" id="cb23" data-input="code/rng/pcg-style.c"><pre class="sourceCode numberSource numberLines c"><code class="sourceCode c"><span id="cb23-1"><a href="#cb23-1"></a><span class="co">/*</span></span>
 <span id="cb23-2"><a href="#cb23-2"></a><span class="co"> * Uniformly return an integer from 0 to (bound - 1). We assume that rand()</span></span>
 <span id="cb23-3"><a href="#cb23-3"></a><span class="co"> * returns a 32-bit unsigned integer, so we use uint32_t.</span></span>
@@ -193,6 +192,9 @@ R R R R R | _ _ R R R | R R
 <span id="cb23-7"><a href="#cb23-7"></a><span class="dt">uint32_t</span> threshold = -bound % bound;</span>
 <span id="cb23-8"><a href="#cb23-8"></a><span class="cf">while</span> (r = rand() &lt; threshold) {};</span>
 <span id="cb23-9"><a href="#cb23-9"></a><span class="cf">return</span> r % bound;</span></code></pre></div>
+<div class="raw-link sourceCode">
+<p> <a class="raw" href="../code/rng/pcg-style.c" mimetype="text/plain"><code>pcg-style.c</code></a> </p>
+</div>
 </div>
 <section class="footnotes" role="doc-endnotes">
 <hr />

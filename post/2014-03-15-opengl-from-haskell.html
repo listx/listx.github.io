@@ -28,12 +28,14 @@
 	</head>
 	<body>
 		<div id="header">
-			<a href="../">Blog</a>
+			<a href="../">funloop.org</a>
 			&bull;
 			<a href="../about.html">About</a>
 			&bull;
 			<a href="../etc.html">Etc</a>
 		</div>
+
+		<hr>
 
 		<div id="content">
 			<h1 class="center" id="page-title">OpenGL from Haskell</h1>
@@ -49,9 +51,6 @@
 <p>I went ahead and added type signatures for all top-level functions — something that many Haskell tutorial writers hate doing for some strange, unknown reason.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> Also, I ran the code through <code>ghc --make -Wall</code> and silenced all warnings.</p>
 <p>I hereby release it into the Public Domain. From what I can tell, YPares’s code doesn’t have a license… I think this should be OK.</p>
 <div class="code-and-raw lineCntMax1000">
-<div class="raw-link sourceCode">
-<table class="sourceCode numberLines noPaddingBottom"><tbody><tr class="sourceCode"><td class="lineNumbers"><pre>&nbsp;&nbsp;■</pre></td><td class="sourceCode"><pre><code><a class="raw" href="../code/opengl/triangle.hs" mimetype="text/plain">triangle.hs</a></code></pre></td></tr></tbody></table>
-</div>
 <div class="sourceCode" id="cb1" data-input="code/opengl/triangle.hs"><pre class="sourceCode numberSource numberLines haskell"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1"></a><span class="ot">{-# LANGUAGE PackageImports #-}</span></span>
 <span id="cb1-2"><a href="#cb1-2"></a><span class="ot">{-# LANGUAGE RecordWildCards #-}</span></span>
 <span id="cb1-3"><a href="#cb1-3"></a><span class="kw">module</span> <span class="dt">Main</span> <span class="kw">where</span></span>
@@ -251,6 +250,9 @@
 <span id="cb1-197"><a href="#cb1-197"></a>  bindBufferToAttrib vertexBufferId <span class="dv">0</span></span>
 <span id="cb1-198"><a href="#cb1-198"></a>  glDrawArrays gl_TRIANGLES <span class="dv">0</span> <span class="dv">3</span> <span class="co">-- for attrib array 0, draw 3 vertices</span></span>
 <span id="cb1-199"><a href="#cb1-199"></a>  glDisableVertexAttribArray <span class="dv">0</span> <span class="co">-- disable attrib array 0</span></span></code></pre></div>
+<div class="raw-link sourceCode">
+<p> <a class="raw" href="../code/opengl/triangle.hs" mimetype="text/plain"><code>triangle.hs</code></a> </p>
+</div>
 </div>
 <section class="footnotes" role="doc-endnotes">
 <hr />
