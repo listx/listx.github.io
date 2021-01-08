@@ -72,11 +72,11 @@ html body div#sticky-title
   position           : sticky;
   top                : 0;
   z-index            : 1;
-  background-image   : -webkit-linear-gradient(right,#ffffff 0%,#d0e8f2 10%,#d0e8f2 90%,#ffffff 100%);
-  background-image   : -moz-linear-gradient(right,#ffffff 0%,#d0e8f2 10%,#d0e8f2 90%,#ffffff 100%);
-  background-image   : -ms-linear-gradient(right,#ffffff 0%,#d0e8f2 10%,#d0e8f2 90%,#ffffff 100%);
-  background-image   : -o-linear-gradient(right,#ffffff 0%,#d0e8f2 10%,#d0e8f2 90%,#ffffff 100%);
-  background-image   : linear-gradient(right,#ffffff 0%,#d0e8f2 10%,#d0e8f2 90%,#ffffff 100%);
+  background-image   : -webkit-linear-gradient(right,#ffffff 0%,#e0f8f2 10%,#e0f8f2 90%,#ffffff 100%);
+  background-image   : -moz-linear-gradient(right,#ffffff 0%,#e0f8f2 10%,#e0f8f2 90%,#ffffff 100%);
+  background-image   : -ms-linear-gradient(right,#ffffff 0%,#e0f8f2 10%,#e0f8f2 90%,#ffffff 100%);
+  background-image   : -o-linear-gradient(right,#ffffff 0%,#e0f8f2 10%,#e0f8f2 90%,#ffffff 100%);
+  background-image   : linear-gradient(right,#ffffff 0%,#e0f8f2 10%,#e0f8f2 90%,#ffffff 100%);
   padding            : 0.5em 0px 0.5em 0px;
   margin-bottom      : 1em;
   padding-left       : 12%;
