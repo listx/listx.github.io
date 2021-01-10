@@ -77,20 +77,28 @@ html body div#sticky-title
   background-image   : -ms-linear-gradient(right,#ffffff 0%,#e0f8f2 10%,#e0f8f2 90%,#ffffff 100%);
   background-image   : -o-linear-gradient(right,#ffffff 0%,#e0f8f2 10%,#e0f8f2 90%,#ffffff 100%);
   background-image   : linear-gradient(right,#ffffff 0%,#e0f8f2 10%,#e0f8f2 90%,#ffffff 100%);
+  border-image       : -webkit-linear-gradient(right,#ffffff 0%,#37a68a 10%,#37a68a 90%,#ffffff 100%);
+  border-image       : -moz-linear-gradient(right,#ffffff 0%,#37a68a 10%,#37a68a 90%,#ffffff 100%);
+  border-image       : -ms-linear-gradient(right,#ffffff 0%,#37a68a 10%,#37a68a 90%,#ffffff 100%);
+  border-image       : -o-linear-gradient(right,#ffffff 0%,#37a68a 10%,#37a68a 90%,#ffffff 100%);
+  border-image       : linear-gradient(right,#ffffff 0%,#37a68a 10%,#37a68a 90%,#ffffff 100%);
+  border-image-slice : 1;
+  border-width       : 1px;
+  border-style       : solid;
   padding            : 0.5em 0px 0.5em 0px;
   margin-bottom      : 1em;
-  padding-left       : 12%;
-  padding-right      : 12%;
-  -webkit-box-shadow : 0px 30px 20px -20px #dddddd;
-  -moz-box-shadow    : 0px 30px 20px -20px #dddddd;
-  -ms-box-shadow     : 0px 30px 20px -20px #dddddd;
-  -o-box-shadow      : 0px 30px 20px -20px #dddddd;
-  box-shadow         : 0px 30px 20px -20px #dddddd;
+  -webkit-box-shadow : 0px 30px 25px -30px #aaaaaa;
+  -moz-box-shadow    : 0px 30px 25px -30px #aaaaaa;
+  -ms-box-shadow     : 0px 30px 25px -30px #aaaaaa;
+  -o-box-shadow      : 0px 30px 25px -30px #aaaaaa;
+  box-shadow         : 0px 30px 25px -30px #aaaaaa;
 }
 
 html body div#sticky-title h1
 {
-  text-align : center;
+  padding-left  : 12%;
+  padding-right : 12%;
+  text-align    : center;
 }
 
 
@@ -254,11 +262,20 @@ html body div#content div.code-and-raw div.sourceCode pre code
 
 html body div#content div.code-and-raw div.raw-link
 {
-  background-image : -webkit-linear-gradient(right,#ffffff 0%,#e0e0e0 10%,#e0e0e0 90%,#ffffff 100%);
-  background-image : -moz-linear-gradient(right,#ffffff 0%,#e0e0e0 10%,#e0e0e0 90%,#ffffff 100%);
-  background-image : -ms-linear-gradient(right,#ffffff 0%,#e0e0e0 10%,#e0e0e0 90%,#ffffff 100%);
-  background-image : -o-linear-gradient(right,#ffffff 0%,#e0e0e0 10%,#e0e0e0 90%,#ffffff 100%);
-  background-image : linear-gradient(right,#ffffff 0%,#e0e0e0 10%,#e0e0e0 90%,#ffffff 100%);
+  background-image   : -webkit-linear-gradient(right,#ffffff 0%,#e0e0e0 10%,#e0e0e0 90%,#ffffff 100%);
+  background-image   : -moz-linear-gradient(right,#ffffff 0%,#e0e0e0 10%,#e0e0e0 90%,#ffffff 100%);
+  background-image   : -ms-linear-gradient(right,#ffffff 0%,#e0e0e0 10%,#e0e0e0 90%,#ffffff 100%);
+  background-image   : -o-linear-gradient(right,#ffffff 0%,#e0e0e0 10%,#e0e0e0 90%,#ffffff 100%);
+  background-image   : linear-gradient(right,#ffffff 0%,#e0e0e0 10%,#e0e0e0 90%,#ffffff 100%);
+  border-image       : -webkit-linear-gradient(right,#ffffff 0%,#888888 10%,#888888 90%,#ffffff 100%);
+  border-image       : -moz-linear-gradient(right,#ffffff 0%,#888888 10%,#888888 90%,#ffffff 100%);
+  border-image       : -ms-linear-gradient(right,#ffffff 0%,#888888 10%,#888888 90%,#ffffff 100%);
+  border-image       : -o-linear-gradient(right,#ffffff 0%,#888888 10%,#888888 90%,#ffffff 100%);
+  border-image       : linear-gradient(right,#ffffff 0%,#888888 10%,#888888 90%,#ffffff 100%);
+  border-image-slice : 1;
+  border-width       : 1px;
+  border-style       : solid;
+  border-top-width   : 0px;
 }
 
 html body div#content div.code-and-raw div.raw-link hr
@@ -299,22 +316,30 @@ html body div#content div.sourceCode pre
 
 html body div#content div.sourceCode pre code
 {
-  -moz-tab-size    : 4;
-  -o-tab-size      : 4;
-  tab-size         : 4;
-  display          : block;
-  background-image : -webkit-linear-gradient(right,#ffffff 0%,#f0f0f0 10%,#f0f0f0 90%,#ffffff 100%);
-  background-image : -moz-linear-gradient(right,#ffffff 0%,#f0f0f0 10%,#f0f0f0 90%,#ffffff 100%);
-  background-image : -ms-linear-gradient(right,#ffffff 0%,#f0f0f0 10%,#f0f0f0 90%,#ffffff 100%);
-  background-image : -o-linear-gradient(right,#ffffff 0%,#f0f0f0 10%,#f0f0f0 90%,#ffffff 100%);
-  background-image : linear-gradient(right,#ffffff 0%,#f0f0f0 10%,#f0f0f0 90%,#ffffff 100%);
-  border-radius    : 0px 0px 0px 0px;
-  margin-bottom    : 1em;
-  padding-left     : 12%;
-  padding-right    : 12%;
-  padding-top      : 1em;
-  padding-bottom   : 1em;
-  font-weight      : normal;
+  -moz-tab-size      : 4;
+  -o-tab-size        : 4;
+  tab-size           : 4;
+  display            : block;
+  background-image   : -webkit-linear-gradient(right,#ffffff 0%,#f0f0f0 10%,#f0f0f0 90%,#ffffff 100%);
+  background-image   : -moz-linear-gradient(right,#ffffff 0%,#f0f0f0 10%,#f0f0f0 90%,#ffffff 100%);
+  background-image   : -ms-linear-gradient(right,#ffffff 0%,#f0f0f0 10%,#f0f0f0 90%,#ffffff 100%);
+  background-image   : -o-linear-gradient(right,#ffffff 0%,#f0f0f0 10%,#f0f0f0 90%,#ffffff 100%);
+  background-image   : linear-gradient(right,#ffffff 0%,#f0f0f0 10%,#f0f0f0 90%,#ffffff 100%);
+  border-image       : -webkit-linear-gradient(right,#ffffff 0%,#888888 10%,#888888 90%,#ffffff 100%);
+  border-image       : -moz-linear-gradient(right,#ffffff 0%,#888888 10%,#888888 90%,#ffffff 100%);
+  border-image       : -ms-linear-gradient(right,#ffffff 0%,#888888 10%,#888888 90%,#ffffff 100%);
+  border-image       : -o-linear-gradient(right,#ffffff 0%,#888888 10%,#888888 90%,#ffffff 100%);
+  border-image       : linear-gradient(right,#ffffff 0%,#888888 10%,#888888 90%,#ffffff 100%);
+  border-image-slice : 1;
+  border-width       : 1px;
+  border-style       : solid;
+  border-radius      : 0px 0px 0px 0px;
+  margin-bottom      : 1em;
+  padding-left       : 12%;
+  padding-right      : 12%;
+  padding-top        : 1em;
+  padding-bottom     : 1em;
+  font-weight        : normal;
 }
 
 html body div#content pre
@@ -325,22 +350,30 @@ html body div#content pre
 
 html body div#content pre code
 {
-  -moz-tab-size    : 4;
-  -o-tab-size      : 4;
-  tab-size         : 4;
-  display          : block;
-  background-image : -webkit-linear-gradient(right,#ffffff 0%,#f0f0f0 10%,#f0f0f0 90%,#ffffff 100%);
-  background-image : -moz-linear-gradient(right,#ffffff 0%,#f0f0f0 10%,#f0f0f0 90%,#ffffff 100%);
-  background-image : -ms-linear-gradient(right,#ffffff 0%,#f0f0f0 10%,#f0f0f0 90%,#ffffff 100%);
-  background-image : -o-linear-gradient(right,#ffffff 0%,#f0f0f0 10%,#f0f0f0 90%,#ffffff 100%);
-  background-image : linear-gradient(right,#ffffff 0%,#f0f0f0 10%,#f0f0f0 90%,#ffffff 100%);
-  border-radius    : 0px 0px 0px 0px;
-  margin-bottom    : 1em;
-  padding-left     : 12%;
-  padding-right    : 12%;
-  padding-top      : 1em;
-  padding-bottom   : 1em;
-  font-weight      : normal;
+  -moz-tab-size      : 4;
+  -o-tab-size        : 4;
+  tab-size           : 4;
+  display            : block;
+  background-image   : -webkit-linear-gradient(right,#ffffff 0%,#f0f0f0 10%,#f0f0f0 90%,#ffffff 100%);
+  background-image   : -moz-linear-gradient(right,#ffffff 0%,#f0f0f0 10%,#f0f0f0 90%,#ffffff 100%);
+  background-image   : -ms-linear-gradient(right,#ffffff 0%,#f0f0f0 10%,#f0f0f0 90%,#ffffff 100%);
+  background-image   : -o-linear-gradient(right,#ffffff 0%,#f0f0f0 10%,#f0f0f0 90%,#ffffff 100%);
+  background-image   : linear-gradient(right,#ffffff 0%,#f0f0f0 10%,#f0f0f0 90%,#ffffff 100%);
+  border-image       : -webkit-linear-gradient(right,#ffffff 0%,#888888 10%,#888888 90%,#ffffff 100%);
+  border-image       : -moz-linear-gradient(right,#ffffff 0%,#888888 10%,#888888 90%,#ffffff 100%);
+  border-image       : -ms-linear-gradient(right,#ffffff 0%,#888888 10%,#888888 90%,#ffffff 100%);
+  border-image       : -o-linear-gradient(right,#ffffff 0%,#888888 10%,#888888 90%,#ffffff 100%);
+  border-image       : linear-gradient(right,#ffffff 0%,#888888 10%,#888888 90%,#ffffff 100%);
+  border-image-slice : 1;
+  border-width       : 1px;
+  border-style       : solid;
+  border-radius      : 0px 0px 0px 0px;
+  margin-bottom      : 1em;
+  padding-left       : 12%;
+  padding-right      : 12%;
+  padding-top        : 1em;
+  padding-bottom     : 1em;
+  font-weight        : normal;
 }
 
 html body div#content ol
@@ -429,18 +462,26 @@ html body div#content div.footnotes ol li p
 
 html body div#content blockquote
 {
-  margin           : 0px 0px 0px 0px;
-  padding          : 0px 0px 0px 0px;
-  -moz-tab-size    : 4;
-  -o-tab-size      : 4;
-  tab-size         : 4;
-  background-image : -webkit-linear-gradient(right,#ffffff 0%,#ddffdd 10%,#ddffdd 90%,#ffffff 100%);
-  background-image : -moz-linear-gradient(right,#ffffff 0%,#ddffdd 10%,#ddffdd 90%,#ffffff 100%);
-  background-image : -ms-linear-gradient(right,#ffffff 0%,#ddffdd 10%,#ddffdd 90%,#ffffff 100%);
-  background-image : -o-linear-gradient(right,#ffffff 0%,#ddffdd 10%,#ddffdd 90%,#ffffff 100%);
-  background-image : linear-gradient(right,#ffffff 0%,#ddffdd 10%,#ddffdd 90%,#ffffff 100%);
-  margin-bottom    : 1em;
-  padding-top      : 1em;
+  margin             : 0px 0px 0px 0px;
+  padding            : 0px 0px 0px 0px;
+  -moz-tab-size      : 4;
+  -o-tab-size        : 4;
+  tab-size           : 4;
+  background-image   : -webkit-linear-gradient(right,#ffffff 0%,#ddffdd 10%,#ddffdd 90%,#ffffff 100%);
+  background-image   : -moz-linear-gradient(right,#ffffff 0%,#ddffdd 10%,#ddffdd 90%,#ffffff 100%);
+  background-image   : -ms-linear-gradient(right,#ffffff 0%,#ddffdd 10%,#ddffdd 90%,#ffffff 100%);
+  background-image   : -o-linear-gradient(right,#ffffff 0%,#ddffdd 10%,#ddffdd 90%,#ffffff 100%);
+  background-image   : linear-gradient(right,#ffffff 0%,#ddffdd 10%,#ddffdd 90%,#ffffff 100%);
+  border-image       : -webkit-linear-gradient(right,#ffffff 0%,#8ece8e 10%,#8ece8e 90%,#ffffff 100%);
+  border-image       : -moz-linear-gradient(right,#ffffff 0%,#8ece8e 10%,#8ece8e 90%,#ffffff 100%);
+  border-image       : -ms-linear-gradient(right,#ffffff 0%,#8ece8e 10%,#8ece8e 90%,#ffffff 100%);
+  border-image       : -o-linear-gradient(right,#ffffff 0%,#8ece8e 10%,#8ece8e 90%,#ffffff 100%);
+  border-image       : linear-gradient(right,#ffffff 0%,#8ece8e 10%,#8ece8e 90%,#ffffff 100%);
+  border-image-slice : 1;
+  border-width       : 1px;
+  border-style       : solid;
+  margin-bottom      : 1em;
+  padding-top        : 1em;
 }
 
 
