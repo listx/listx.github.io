@@ -287,9 +287,8 @@ html body div#content div.code-and-raw div.raw-link hr
 
 html body div#content div.code-and-raw div.raw-link p
 {
-  padding       : 0.5em 0px 0.5em 0px;
-  padding-left  : 12%;
-  padding-right : 12%;
+  padding    : 0.5em 0px 0.5em 0px;
+  text-align : center;
 }
 
 html body div#content div.code-and-raw div.raw-link p a
