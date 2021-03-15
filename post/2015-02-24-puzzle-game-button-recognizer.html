@@ -4,7 +4,6 @@
 		<meta charset="utf-8">
 		<title>Linus’s Blog - Programming Puzzle: Game Button Sequence Recognizer</title>
 		<link rel="stylesheet" href="../css/base.css">
-		<link rel="stylesheet" href="../css/syntax.css">
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Serif+Pro">
 		<link rel="shortcut icon" type="image/png" href="../favicon.png">
 		<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
@@ -64,8 +63,8 @@ on_button(&quot;punch&quot;)     # [&quot;uppercut&quot;, &quot;uppercut_2&quot;
 <p>You might have noticed that <code>on_button()</code> depends on the input history of whatever buttons were <em>previously</em> entered into the game. Because of this, you can alternatively write an <code>on_buttons()</code> function (plural with an “s”) that takes the history of buttons as input; this way you don’t have to silently depend on the global state of input history.</p>
 <h1 id="my-nervous-wreck-solution">My Nervous-Wreck Solution</h1>
 <p>I decided to use pure Haskell code in the actual interview. The code I wrote had the general idea, but it was a big failure because it performed a naive, custom search without any thought given to data structures. I actually went back and revised the code to make it compile and work <em>after</em> the interview was over; here it is in all its glory:</p>
-<div class="code-and-raw lineCntMax100">
-<div class="sourceCode" id="cb2" data-input="code/toy/game-button-seq/interview_ver.hs"><pre class="sourceCode numberSource numberLines haskell"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">import</span> <span class="dt">Data.List</span></span>
+<div class="code-and-raw">
+<div class="sourceCode" id="cb2" data-startFrom="1"><pre class="sourceCode numberSource numberLines haskell"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">import</span> <span class="dt">Data.List</span></span>
 <span id="cb2-2"><a href="#cb2-2"></a></span>
 <span id="cb2-3"><a href="#cb2-3"></a><span class="kw">type</span> <span class="dt">ButtonSeqDB</span> <span class="ot">=</span> [(<span class="dt">ButtonSeq</span>, <span class="dt">Name</span>)]</span>
 <span id="cb2-4"><a href="#cb2-4"></a><span class="kw">type</span> <span class="dt">ButtonSeq</span> <span class="ot">=</span> [<span class="dt">String</span>]</span>
@@ -128,8 +127,8 @@ Ok, modules loaded: Main.
 <p>Second, the fact that we have to bring in and mutate <code>dbRem</code>, which is a copy of the original given <code>ButtonSeqDB</code> type, seems wasteful. We’re wasting a lot of CPU cycles here.</p>
 <h1 id="ruby-solution-using-hashes">Ruby Solution Using Hashes</h1>
 <p>So on the day after (that is, <em>today</em> as of the time of this writing), I thought about the problem again and realized we can use hashes. It is a very simple approach, with far less lines of code. I even wrote some tests for it. Here is the implementation below.</p>
-<div class="code-and-raw lineCntMax100">
-<div class="sourceCode" id="cb4" data-input="code/toy/game-button-seq/hash_ver.rb"><pre class="sourceCode numberSource numberLines ruby"><code class="sourceCode ruby"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">module</span> <span class="dt">GameButtonSeq</span></span>
+<div class="code-and-raw">
+<div class="sourceCode" id="cb4" data-startFrom="1"><pre class="sourceCode numberSource numberLines ruby"><code class="sourceCode ruby"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">module</span> <span class="dt">GameButtonSeq</span></span>
 <span id="cb4-2"><a href="#cb4-2"></a>  <span class="co"># button_seq = [&quot;down&quot;, &quot;forward&quot;, &quot;punch&quot;]</span></span>
 <span id="cb4-3"><a href="#cb4-3"></a>  <span class="co"># name = &quot;hadoken&quot;</span></span>
 <span id="cb4-4"><a href="#cb4-4"></a>  <span class="co"># button_seq_db = a hash of {sequence =&gt; name}, but a sequence can have</span></span>
@@ -176,8 +175,8 @@ Ok, modules loaded: Main.
 </div>
 </div>
 <p>And here is the test suite for it. You can run it with <code>ruby test_hash_ver.rb</code>.</p>
-<div class="code-and-raw lineCntMax100">
-<div class="sourceCode" id="cb5" data-input="code/toy/game-button-seq/test_hash_ver.rb"><pre class="sourceCode numberSource numberLines ruby"><code class="sourceCode ruby"><span id="cb5-1"><a href="#cb5-1"></a>require <span class="st">'minitest/autorun'</span></span>
+<div class="code-and-raw">
+<div class="sourceCode" id="cb5" data-startFrom="1"><pre class="sourceCode numberSource numberLines ruby"><code class="sourceCode ruby"><span id="cb5-1"><a href="#cb5-1"></a>require <span class="st">'minitest/autorun'</span></span>
 <span id="cb5-2"><a href="#cb5-2"></a>require_relative <span class="st">'./hash_ver.rb'</span></span>
 <span id="cb5-3"><a href="#cb5-3"></a></span>
 <span id="cb5-4"><a href="#cb5-4"></a><span class="kw">class</span> <span class="dt">TestPuz</span> &lt; <span class="dt">Minitest</span>::<span class="dt">Test</span></span>
@@ -235,8 +234,8 @@ Ok, modules loaded: Main.
 <p>The heart of <code>on_buttons()</code> is a single <code>while</code> loop that checks the given button history against the database; we reduce the button sequence by 1 button on each iteration to check against shorter matches as well. That’s what the <code>button_seq.shift</code> is for.</p>
 <h1 id="haskell-solution-using-hashes">Haskell Solution Using Hashes</h1>
 <p>Inspired by the Ruby solution, I rewrote a Haskell version — with tests to boot! Here is the implementation.</p>
-<div class="code-and-raw lineCntMax100">
-<div class="sourceCode" id="cb6" data-input="code/toy/game-button-seq/GameButtonSeq.hs"><pre class="sourceCode numberSource numberLines haskell"><code class="sourceCode haskell"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw">module</span> <span class="dt">GameButtonSeq</span> <span class="kw">where</span></span>
+<div class="code-and-raw">
+<div class="sourceCode" id="cb6" data-startFrom="1"><pre class="sourceCode numberSource numberLines haskell"><code class="sourceCode haskell"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw">module</span> <span class="dt">GameButtonSeq</span> <span class="kw">where</span></span>
 <span id="cb6-2"><a href="#cb6-2"></a></span>
 <span id="cb6-3"><a href="#cb6-3"></a><span class="kw">import</span> <span class="kw">qualified</span> <span class="dt">Data.Map</span> <span class="kw">as</span> <span class="dt">M</span></span>
 <span id="cb6-4"><a href="#cb6-4"></a><span class="kw">import</span> <span class="dt">Data.Maybe</span></span>
@@ -274,8 +273,8 @@ Ok, modules loaded: Main.
 </div>
 </div>
 <p>The file is named <code>GameButtonSeq</code> because of Haskell naming conventions for files containing module code. And here is the test for it.</p>
-<div class="code-and-raw lineCntMax100">
-<div class="sourceCode" id="cb7" data-input="code/toy/game-button-seq/test_hash_ver.hs"><pre class="sourceCode numberSource numberLines haskell"><code class="sourceCode haskell"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw">module</span> <span class="dt">Main</span> <span class="kw">where</span></span>
+<div class="code-and-raw">
+<div class="sourceCode" id="cb7" data-startFrom="1"><pre class="sourceCode numberSource numberLines haskell"><code class="sourceCode haskell"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw">module</span> <span class="dt">Main</span> <span class="kw">where</span></span>
 <span id="cb7-2"><a href="#cb7-2"></a></span>
 <span id="cb7-3"><a href="#cb7-3"></a><span class="kw">import</span> <span class="kw">qualified</span> <span class="dt">Data.Map</span> <span class="kw">as</span> <span class="dt">M</span></span>
 <span id="cb7-4"><a href="#cb7-4"></a><span class="kw">import</span> <span class="dt">Test.Tasty</span></span>

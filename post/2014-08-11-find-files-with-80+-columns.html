@@ -4,7 +4,6 @@
 		<meta charset="utf-8">
 		<title>Linus’s Blog - Find Lines with 80+ Columns in Multiple Files</title>
 		<link rel="stylesheet" href="../css/base.css">
-		<link rel="stylesheet" href="../css/syntax.css">
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Serif+Pro">
 		<link rel="shortcut icon" type="image/png" href="../favicon.png">
 		<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
@@ -48,8 +47,8 @@
 
 <p>It’s nice to follow the 80-columns-per-line rule<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>, but what if you have some lingering project that has yet to conform?</p>
 <p>Just go to that project’s sources directory and do</p>
-<div class="code-and-raw lineCntMax10">
-<div class="sourceCode" id="cb1" data-input="code/find-80-cols.sh"><pre class="sourceCode numberSource numberLines bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">find</span> . -type f -exec sh -c <span class="st">&quot;expand -t 8 {} | grep -n </span><span class="dt">\&quot;</span><span class="st">.\{81\}</span><span class="dt">\&quot;</span><span class="st">&quot;</span> <span class="dt">\;</span> -print</span></code></pre></div>
+<div class="code-and-raw">
+<div class="sourceCode" id="cb1" data-startFrom="1"><pre class="sourceCode numberSource numberLines bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">find</span> . -type f -exec sh -c <span class="st">&quot;expand -t 8 {} | grep -n </span><span class="dt">\&quot;</span><span class="st">.\{81\}</span><span class="dt">\&quot;</span><span class="st">&quot;</span> <span class="dt">\;</span> -print</span></code></pre></div>
 <div class="raw-link sourceCode">
 <p> <a class="raw" href="../code/find-80-cols.sh" mimetype="text/plain"><code>find-80-cols.sh</code></a> </p>
 </div>

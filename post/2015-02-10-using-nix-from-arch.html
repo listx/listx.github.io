@@ -4,7 +4,6 @@
 		<meta charset="utf-8">
 		<title>Linus’s Blog - Using the Nix Package Manager for Haskell Development from Arch Linux</title>
 		<link rel="stylesheet" href="../css/base.css">
-		<link rel="stylesheet" href="../css/syntax.css">
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Serif+Pro">
 		<link rel="shortcut icon" type="image/png" href="../favicon.png">
 		<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
@@ -98,8 +97,8 @@ alias nix='. /home/l/.nix-profile/etc/profile.d/nix.sh'
 <pre class="example"><code>$ cabal2nix path/to/ppx &gt; ~/.nixpkgs/my-local-hs/ppx.nix
 </code></pre>
 <p>. This will create a Nix expression that can be used to build PPX with Nix. It’s like creating a PKGBUILD file. The next step is to create a <code>~/.nixpkgs/config.nix</code> file, as follows:</p>
-<div class="code-and-raw lineCntMax100">
-<div class="sourceCode" id="cb10" data-input="code/config.nix"><pre class="sourceCode numberSource numberLines"><code class="sourceCode"><span id="cb10-1"><a href="#cb10-1"></a># Taken from</span>
+<div class="code-and-raw">
+<div class="sourceCode" id="cb10" data-startFrom="1"><pre class="sourceCode numberSource numberLines"><code class="sourceCode"><span id="cb10-1"><a href="#cb10-1"></a># Taken from</span>
 <span id="cb10-2"><a href="#cb10-2"></a># http://lists.science.uu.nl/pipermail/nix-dev/2015-January/015601.html.</span>
 <span id="cb10-3"><a href="#cb10-3"></a>{</span>
 <span id="cb10-4"><a href="#cb10-4"></a>  packageOverrides = super: let self = super.pkgs; in</span>

@@ -1,3 +1,63 @@
+/* base.hs: Inject Skylighting-generated CSS */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; } /* Alert */
+code span.an { color: #008000; } /* Annotation */
+code span.at { } /* Attribute */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #0000ff; } /* ControlFlow */
+code span.ch { color: #008080; } /* Char */
+code span.cn { } /* Constant */
+code span.co { color: #008000; } /* Comment */
+code span.cv { color: #008000; } /* CommentVar */
+code span.do { color: #008000; } /* Documentation */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.im { } /* Import */
+code span.in { color: #008000; } /* Information */
+code span.kw { color: #0000ff; } /* Keyword */
+code span.op { } /* Operator */
+code span.ot { color: #ff4000; } /* Other */
+code span.pp { color: #ff4000; } /* Preprocessor */
+code span.sc { color: #008080; } /* SpecialChar */
+code span.ss { color: #008080; } /* SpecialString */
+code span.st { color: #008080; } /* String */
+code span.va { } /* Variable */
+code span.vs { color: #008080; } /* VerbatimString */
+code span.wa { color: #008000; font-weight: bold; } /* Warning */
+
+/* base.hs: Inject Clay-generated CSS */
 
 html
 {
@@ -71,7 +131,7 @@ html body div#sticky-title
 {
   position           : sticky;
   top                : 0;
-  z-index            : 1;
+  z-index            : 2;
   background-image   : -webkit-linear-gradient(right,#ffffff 0%,#e0f8f2 10%,#e0f8f2 90%,#ffffff 100%);
   background-image   : -moz-linear-gradient(right,#ffffff 0%,#e0f8f2 10%,#e0f8f2 90%,#ffffff 100%);
   background-image   : -ms-linear-gradient(right,#ffffff 0%,#e0f8f2 10%,#e0f8f2 90%,#ffffff 100%);
@@ -113,26 +173,66 @@ html body div#content
 {
   background-color : #ffffff;
   padding-bottom   : 0px;
+  margin           : 0px 0px 0px 0px;
+}
+
+
+html body div#content div.canvas-centered
+{
+  display        : grid;
+  justify-items  : center;
+  margin         : 1em auto 1em auto;
+  padding-bottom : 1em;
+}
+
+html body div#content div.canvas-centered canvas
+{
+  image-rendering : pixelated;
+  image-rendering : crisp-edges;
+  image-rendering : -moz-crisp-edges;
+  image-rendering : -webkit-crisp-edges;
+}
+
+html body div#content div.canvas-centered canvas.active-pixel-canvas
+{
+  z-index : 1;
+}
+
+html body div#content div.canvas-centered canvas.layer
+{
+  grid-area : 1/1;
+}
+
+html body div#content div.canvas-tooltip
+{
+  position         : absolute;
+  background-color : #ffffff;
+  padding          : 4px 4px 4px 4px;
+  border           : solid 2px #000000;
+  opacity          : 0;
 }
 
 html body div#content h1,
 html body div#content h2,
 html body div#content h3,
 html body div#content h4,
-html body div#content h5
+html body div#content h5,
+html body div#content h6
 {
-  margin         : 0px 0px 0px 0px;
-  padding-left   : 12%;
-  padding-right  : 12%;
-  padding-bottom : 0.5em;
-  font-weight    : normal;
+  margin            : 0px 0px 0px 0px;
+  padding-left      : 12%;
+  padding-right     : 12%;
+  padding-bottom    : 0.5em;
+  font-weight       : normal;
+  scroll-margin-top : 110px;
 }
 
 html body div#content h1 code,
 html body div#content h2 code,
 html body div#content h3 code,
 html body div#content h4 code,
-html body div#content h5 code
+html body div#content h5 code,
+html body div#content h6 code
 {
   margin : 0px 4px 0px 4px;
 }
@@ -251,13 +351,24 @@ html body div#content div.code-and-raw div.sourceCode
   background-image : -ms-linear-gradient(right,#ffffff 0%,#f0f0f0 10%,#f0f0f0 90%,#ffffff 100%);
   background-image : -o-linear-gradient(right,#ffffff 0%,#f0f0f0 10%,#f0f0f0 90%,#ffffff 100%);
   background-image : linear-gradient(right,#ffffff 0%,#f0f0f0 10%,#f0f0f0 90%,#ffffff 100%);
+  margin           : 0px 0px 0px 0px;
 }
 
+
+html body div#content div.code-and-raw div.sourceCode pre.numberSource
+{
+  border-style : none;
+}
 
 html body div#content div.code-and-raw div.sourceCode pre code
 {
   background-image : none;
   margin-bottom    : 0px;
+}
+
+html body div#content div.code-and-raw div.sourceCode pre code span
+{
+  scroll-margin-top : 110px;
 }
 
 html body div#content div.code-and-raw div.raw-link
@@ -306,11 +417,16 @@ html body div#content div.code-and-raw div.raw-link p a:visited
   color : #0033ff;
 }
 
+html body div#content div.sourceCode
+{
+  margin : 0px 0px 0px 0px;
+}
 
 html body div#content div.sourceCode pre
 {
-  margin  : 0px 0px 0px 0px;
-  padding : 0px 0px 0px 0px;
+  border-style : none;
+  margin       : 0px 0px 0px 0px;
+  padding      : 0px 0px 0px 0px;
 }
 
 html body div#content div.sourceCode pre code
@@ -341,10 +457,16 @@ html body div#content div.sourceCode pre code
   font-weight        : normal;
 }
 
+html body div#content div.sourceCode pre code span
+{
+  scroll-margin-top : 110px;
+}
+
 html body div#content pre
 {
-  margin  : 0px 0px 0px 0px;
-  padding : 0px 0px 0px 0px;
+  border-style : none;
+  margin       : 0px 0px 0px 0px;
+  padding      : 0px 0px 0px 0px;
 }
 
 html body div#content pre code
@@ -373,6 +495,11 @@ html body div#content pre code
   padding-top        : 1em;
   padding-bottom     : 1em;
   font-weight        : normal;
+}
+
+html body div#content pre code span
+{
+  scroll-margin-top : 110px;
 }
 
 html body div#content ol
@@ -404,6 +531,12 @@ html body div#content ul ul
   padding-bottom : 0px;
 }
 
+
+html body div#content span.mtd
+{
+  scroll-margin-top : 110px;
+}
+
 html body div#content p
 {
   margin         : 0px 0px 0px 0px;
@@ -411,6 +544,11 @@ html body div#content p
   padding-left   : 12%;
   padding-right  : 12%;
   text-align     : justify;
+}
+
+html body div#content p a
+{
+  scroll-margin-top : 110px;
 }
 
 html body div#content code
@@ -577,3 +715,4 @@ html body div#footer img#brand-icon
 
 
 /* Generated with Clay, http://fvisser.nl/clay */
+

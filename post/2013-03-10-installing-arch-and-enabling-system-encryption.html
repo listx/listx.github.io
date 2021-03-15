@@ -4,7 +4,6 @@
 		<meta charset="utf-8">
 		<title>Linus’s Blog - Installing Arch Linux and Enabling System Encryption</title>
 		<link rel="stylesheet" href="../css/base.css">
-		<link rel="stylesheet" href="../css/syntax.css">
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Serif+Pro">
 		<link rel="shortcut icon" type="image/png" href="../favicon.png">
 		<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
@@ -56,8 +55,8 @@
 <pre class="example"><code>floop --threads 4 --thread-buf 0x200000 --count 0 | dd of=/dev/sdX
 </code></pre>
 <p>and it will be significantly faster than using <code>/dev/urandom</code>.</p>
-<div class="code-and-raw lineCntMax1000">
-<div class="sourceCode" id="cb3" data-input="code/arch-setup.sh"><pre class="sourceCode numberSource numberLines bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1"></a><span class="co"># Put in the Arch Linux live CD and run the following commands...</span></span>
+<div class="code-and-raw">
+<div class="sourceCode" id="cb3" data-startFrom="1"><pre class="sourceCode numberSource numberLines bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1"></a><span class="co"># Put in the Arch Linux live CD and run the following commands...</span></span>
 <span id="cb3-2"><a href="#cb3-2"></a></span>
 <span id="cb3-3"><a href="#cb3-3"></a><span class="co"># Set up 2 partitions; the first one is the boot 100MB partition (be sure</span></span>
 <span id="cb3-4"><a href="#cb3-4"></a><span class="co"># to toggle the BOOT flag on it), and the second will be the LVM partition.</span></span>

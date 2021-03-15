@@ -4,7 +4,6 @@
 		<meta charset="utf-8">
 		<title>Linus’s Blog - Improved git-diff(1)</title>
 		<link rel="stylesheet" href="../css/base.css">
-		<link rel="stylesheet" href="../css/syntax.css">
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Serif+Pro">
 		<link rel="shortcut icon" type="image/png" href="../favicon.png">
 		<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
@@ -54,8 +53,8 @@ alias gdfc=&quot;git diff --cached&quot;
 <p>Last year I started working professionally as a developer and I began to work on many different repos at the same time. Oftentimes I would do either a <code>git diff</code> or <code>git diff --cached</code>, then come back to it 10 minutes later but then forget whether the diff had a <code>--cached</code> flag or not. I needed to script some more git helpers functions!</p>
 <h1 id="implementation">Implementation</h1>
 <p>I created a new shell function called <code>gdf</code> to replace the two aliases above. It works by first showing you the <code>git diff</code> output, then the <code>git diff --cached</code> output. For both outputs, a vertical colored “ribbon” is printed on the left margin to denote whether it’s the working tree (<code>git diff</code>) or index (<code>git diff --cached</code> aka “staging area”). The name of the repo is prepended/appended to the output as well to further disambiguate it. Here are the functions:</p>
-<div class="code-and-raw lineCntMax100">
-<div class="sourceCode" id="cb2" data-input="code/2016-07-17-git-diff-improved/gdf"><pre class="sourceCode numberSource numberLines"><code class="sourceCode"><span id="cb2-1"><a href="#cb2-1"></a>#!/usr/bin/env zsh</span>
+<div class="code-and-raw">
+<div class="sourceCode" id="cb2" data-startFrom="1"><pre class="sourceCode numberSource numberLines"><code class="sourceCode"><span id="cb2-1"><a href="#cb2-1"></a>#!/usr/bin/env zsh</span>
 <span id="cb2-2"><a href="#cb2-2"></a></span>
 <span id="cb2-3"><a href="#cb2-3"></a>gdf()</span>
 <span id="cb2-4"><a href="#cb2-4"></a>{</span>
@@ -106,8 +105,8 @@ alias gdfc=&quot;git diff --cached&quot;
 <p> <a class="raw" href="../code/2016-07-17-git-diff-improved/gdf" mimetype="text/plain"><code>gdf</code></a> </p>
 </div>
 </div>
-<div class="code-and-raw lineCntMax100">
-<div class="sourceCode" id="cb3" data-input="code/2016-07-17-git-diff-improved/vertical_label"><pre class="sourceCode numberSource numberLines"><code class="sourceCode"><span id="cb3-1"><a href="#cb3-1"></a>#!/usr/bin/env zsh</span>
+<div class="code-and-raw">
+<div class="sourceCode" id="cb3" data-startFrom="1"><pre class="sourceCode numberSource numberLines"><code class="sourceCode"><span id="cb3-1"><a href="#cb3-1"></a>#!/usr/bin/env zsh</span>
 <span id="cb3-2"><a href="#cb3-2"></a></span>
 <span id="cb3-3"><a href="#cb3-3"></a>vertical_label()</span>
 <span id="cb3-4"><a href="#cb3-4"></a>{</span>
@@ -137,8 +136,8 @@ alias gdfc=&quot;git diff --cached&quot;
 <p> <a class="raw" href="../code/2016-07-17-git-diff-improved/vertical_label" mimetype="text/plain"><code>vertical_label</code></a> </p>
 </div>
 </div>
-<div class="code-and-raw lineCntMax100">
-<div class="sourceCode" id="cb4" data-input="code/2016-07-17-git-diff-improved/git_find_repo"><pre class="sourceCode numberSource numberLines"><code class="sourceCode"><span id="cb4-1"><a href="#cb4-1"></a>#!/usr/bin/env zsh</span>
+<div class="code-and-raw">
+<div class="sourceCode" id="cb4" data-startFrom="1"><pre class="sourceCode numberSource numberLines"><code class="sourceCode"><span id="cb4-1"><a href="#cb4-1"></a>#!/usr/bin/env zsh</span>
 <span id="cb4-2"><a href="#cb4-2"></a></span>
 <span id="cb4-3"><a href="#cb4-3"></a>git_find_repo()</span>
 <span id="cb4-4"><a href="#cb4-4"></a>{</span>

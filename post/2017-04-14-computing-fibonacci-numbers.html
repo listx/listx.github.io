@@ -4,7 +4,6 @@
 		<meta charset="utf-8">
 		<title>Linus’s Blog - The Fastest Way to Compute the Nth Fibonacci Number: The Doubling Method</title>
 		<link rel="stylesheet" href="../css/base.css">
-		<link rel="stylesheet" href="../css/syntax.css">
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Serif+Pro">
 		<link rel="shortcut icon" type="image/png" href="../favicon.png">
 		<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
@@ -176,8 +175,8 @@
 <p>Whereas the doubling identities allow us to “double” our way into bigger numbers, the halving property allows us to halve our way down to smaller and smaller numbers. The marriage of these two concepts gives rise to the doubling method.</p>
 <h1 id="the-doubling-method">The Doubling Method</h1>
 <p>To compute the <span class="math inline">\(n\)</span>th Fibonacci term we break <span class="math inline">\(n\)</span> itself down into its halves (<span class="math inline">\(2m\)</span>) recursively, until we go down to <span class="math inline">\(n = 0\)</span>. At this point we multiply our way back up using the doubling identities. Because halving and doubling by themselves always calculate <span class="math inline">\(\mathrm{F}_{2m}\)</span>, we have to manually return <span class="math inline">\(\mathrm{F}_{2m + 1}\)</span> if our current sequence index number <span class="math inline">\(n\)</span> is odd.</p>
-<div class="code-and-raw lineCntMax100">
-<div class="sourceCode" id="cb1" data-input="code/2017-04-14-computing-fibonacci-numbers/fibonacci-doubling.py"><pre class="sourceCode numberSource numberLines python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">def</span> fibonacci_doubling(n):</span>
+<div class="code-and-raw">
+<div class="sourceCode" id="cb1" data-startFrom="1"><pre class="sourceCode numberSource numberLines python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">def</span> fibonacci_doubling(n):</span>
 <span id="cb1-2"><a href="#cb1-2"></a>    <span class="co">&quot;&quot;&quot; Calculate the Nth Fibonacci number using the doubling method. &quot;&quot;&quot;</span></span>
 <span id="cb1-3"><a href="#cb1-3"></a>    <span class="cf">return</span> _fibonacci_doubling(n)[<span class="dv">0</span>]</span>
 <span id="cb1-4"><a href="#cb1-4"></a></span>
@@ -208,8 +207,8 @@
 </div>
 <p>Line 12 is where we do the halving. We use the right-shift operator to do this. Lines 13 and 14 are our doubling identities (I use the left-shift operator here because it feels more natural to me). The if-condition on line 15 returns <span class="math inline">\(\mathrm{F}_{2m + 1}\)</span> if <span class="math inline">\(n\)</span> was odd, and <span class="math inline">\(\mathrm{F}_{2m}\)</span> otherwise.</p>
 <p>For comparison, here is an iterative version. On the one hand it avoids Python’s recursion limit, but the downside is a small loss of elegance (we have to loop twice — first to build up the halving/doubling points, and again for the main loop).</p>
-<div class="code-and-raw lineCntMax100">
-<div class="sourceCode" id="cb2" data-input="code/2017-04-14-computing-fibonacci-numbers/fibonacci-doubling-iter.py"><pre class="sourceCode numberSource numberLines python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">def</span> fibonacci_doubling_iter(n):</span>
+<div class="code-and-raw">
+<div class="sourceCode" id="cb2" data-startFrom="1"><pre class="sourceCode numberSource numberLines python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">def</span> fibonacci_doubling_iter(n):</span>
 <span id="cb2-2"><a href="#cb2-2"></a>    <span class="co">&quot;&quot;&quot; Calculate Nth Fibonacci number using the doubling method, using</span></span>
 <span id="cb2-3"><a href="#cb2-3"></a><span class="co">    iteration. &quot;&quot;&quot;</span></span>
 <span id="cb2-4"><a href="#cb2-4"></a>    ns <span class="op">=</span> []</span>

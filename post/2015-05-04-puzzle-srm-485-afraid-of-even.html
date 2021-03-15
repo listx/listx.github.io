@@ -4,7 +4,6 @@
 		<meta charset="utf-8">
 		<title>Linus’s Blog - SRM 485: AfraidOfEven</title>
 		<link rel="stylesheet" href="../css/base.css">
-		<link rel="stylesheet" href="../css/syntax.css">
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Serif+Pro">
 		<link rel="shortcut icon" type="image/png" href="../favicon.png">
 		<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
@@ -407,8 +406,8 @@ U(AP) = \{1, 2, 3, 4, 5\}
 <h1 id="back-to-designing-u">Back to Designing <span class="math inline">\(U()\)</span></h1>
 <p>Through our discussion up to this point, we’ve established that the universe of all possible <span class="math inline">\(MP\)</span>’s fall under three parity patterns: all honest odd (<span class="math inline">\(\mathrm{O}\)</span>) terms, or alternating between “honest” odd (<span class="math inline">\(\mathrm{O}\)</span>) and “fake” odd (<span class="math inline">\(\mathrm{O_F}\)</span>) terms. There are actually four patterns because the all-honest-odd-terms pattern can be broken down into two cases: (1) all terms are the same odd number (<span class="math inline">\(m = 0\)</span>), or (2) the terms are the same as those in <span class="math inline">\(AP\)</span> (i.e., <span class="math inline">\(AP\)</span> was all odd terms to begin with, so there was no actual mutation involved by applying <span class="math inline">\(M()\)</span>).</p>
 <p>So, we can finally start sketching out the design for our “unmutate” function <span class="math inline">\(U()\)</span>.</p>
-<div class="code-and-raw lineCntMax100">
-<div class="sourceCode" id="cb1" data-input="code/toy/srm485-afraid-of-even/pseudocode.txt"><pre class="sourceCode numberSource numberLines"><code class="sourceCode"><span id="cb1-1"><a href="#cb1-1"></a># Convert MP into a possible AP.</span>
+<div class="code-and-raw">
+<div class="sourceCode" id="cb1" data-startFrom="1"><pre class="sourceCode numberSource numberLines"><code class="sourceCode"><span id="cb1-1"><a href="#cb1-1"></a># Convert MP into a possible AP.</span>
 <span id="cb1-2"><a href="#cb1-2"></a>def unmutate(MP)</span>
 <span id="cb1-3"><a href="#cb1-3"></a>	if length(MP) &lt; 4</span>
 <span id="cb1-4"><a href="#cb1-4"></a>		return NULL (we need at least 4 values to calculate an AP)</span>
@@ -454,8 +453,8 @@ U(AP) = \{1, 2, 3, 4, 5\}
 <p>The interesting point is in line 18; thanks to our math work, we can even declare that a given mutated sequence was somehow either tampered with, or that the original sequence was not an arithmetic progression! We can make these assertions because we’ve exhausted all possible cases of arithmetic sequences and their mutations — and if things don’t fit the way we expect them to, then the only conclusion is that the given sequence <span class="math inline">\(MP\)</span> was not a byproduct of mutating an <em>arithmetic sequence</em>, but some other kind of sequence. Behold the power of math!</p>
 <p>The other thing is that in line 34 we allow <span class="math inline">\(0\)</span> as a possible value in <span class="math inline">\(AP\)</span>. This means that after a mutation, we might still have an even number (<span class="math inline">\(0\)</span>) in <span class="math inline">\(MP\)</span>! Although this sounds like it would break all of the mathematic discussion we’ve had so far, it does not — the proof is in the Haskell code below. The short answer is that a <span class="math inline">\(0\)</span> is harmless because it shares the same quality — immutability — with all other originally odd terms in <span class="math inline">\(AP\)</span>; thus, treating it as an “odd” number does not change our logic.</p>
 <h1 id="haskell-version">Haskell version</h1>
-<div class="code-and-raw lineCntMax100">
-<div class="sourceCode" id="cb2" data-input="code/toy/srm485-afraid-of-even/Unmutate.hs"><pre class="sourceCode numberSource numberLines haskell"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">module</span> <span class="dt">Unmutate</span> <span class="kw">where</span></span>
+<div class="code-and-raw">
+<div class="sourceCode" id="cb2" data-startFrom="1"><pre class="sourceCode numberSource numberLines haskell"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">module</span> <span class="dt">Unmutate</span> <span class="kw">where</span></span>
 <span id="cb2-2"><a href="#cb2-2"></a></span>
 <span id="cb2-3"><a href="#cb2-3"></a><span class="co">-- Convert mutated numbers back into an arithmetic progression (if possible).</span></span>
 <span id="cb2-4"><a href="#cb2-4"></a><span class="ot">unmutate ::</span> <span class="dt">Integral</span> a <span class="ot">=&gt;</span> [a] <span class="ot">-&gt;</span> <span class="dt">Maybe</span> [a]</span>
@@ -530,8 +529,8 @@ U(AP) = \{1, 2, 3, 4, 5\}
 <p> <a class="raw" href="../code/toy/srm485-afraid-of-even/Unmutate.hs" mimetype="text/plain"><code>Unmutate.hs</code></a> </p>
 </div>
 </div>
-<div class="code-and-raw lineCntMax100">
-<div class="sourceCode" id="cb3" data-input="code/toy/srm485-afraid-of-even/test-unmutate.hs"><pre class="sourceCode numberSource numberLines haskell"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">module</span> <span class="dt">Main</span> <span class="kw">where</span></span>
+<div class="code-and-raw">
+<div class="sourceCode" id="cb3" data-startFrom="1"><pre class="sourceCode numberSource numberLines haskell"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">module</span> <span class="dt">Main</span> <span class="kw">where</span></span>
 <span id="cb3-2"><a href="#cb3-2"></a></span>
 <span id="cb3-3"><a href="#cb3-3"></a><span class="kw">import</span> <span class="dt">Data.Maybe</span></span>
 <span id="cb3-4"><a href="#cb3-4"></a><span class="kw">import</span> <span class="dt">Test.Tasty</span></span>
@@ -612,8 +611,8 @@ U(AP) = \{1, 2, 3, 4, 5\}
 </div>
 <p>As you can see, most of the real work involves identifying the <strong>original, immutable numbers</strong> we can work with as-is (<span class="math inline">\(\mathrm{O}\)</span>) (as opposed to the ones we have to ignore (<span class="math inline">\(\mathrm{O_F}\)</span>)) to construct our tentative sister arithmetic progression <span class="math inline">\(BP\)</span>.</p>
 <h1 id="ruby-version">Ruby version</h1>
-<div class="code-and-raw lineCntMax100">
-<div class="sourceCode" id="cb4" data-input="code/toy/srm485-afraid-of-even/unmutate.rb"><pre class="sourceCode numberSource numberLines ruby"><code class="sourceCode ruby"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">module</span> <span class="dt">Unmutate</span></span>
+<div class="code-and-raw">
+<div class="sourceCode" id="cb4" data-startFrom="1"><pre class="sourceCode numberSource numberLines ruby"><code class="sourceCode ruby"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">module</span> <span class="dt">Unmutate</span></span>
 <span id="cb4-2"><a href="#cb4-2"></a>  <span class="kw">def</span> <span class="dt">Unmutate</span>.unmutate(ts)</span>
 <span id="cb4-3"><a href="#cb4-3"></a>    <span class="kw">if</span> ts.size &lt; <span class="dv">4</span></span>
 <span id="cb4-4"><a href="#cb4-4"></a>      <span class="kw">return</span> <span class="dv">nil</span></span>
@@ -711,8 +710,8 @@ U(AP) = \{1, 2, 3, 4, 5\}
 <p> <a class="raw" href="../code/toy/srm485-afraid-of-even/unmutate.rb" mimetype="text/plain"><code>unmutate.rb</code></a> </p>
 </div>
 </div>
-<div class="code-and-raw lineCntMax100">
-<div class="sourceCode" id="cb5" data-input="code/toy/srm485-afraid-of-even/test-unmutate.rb"><pre class="sourceCode numberSource numberLines ruby"><code class="sourceCode ruby"><span id="cb5-1"><a href="#cb5-1"></a><span class="co"># Usage: ruby test-unmutate.rb</span></span>
+<div class="code-and-raw">
+<div class="sourceCode" id="cb5" data-startFrom="1"><pre class="sourceCode numberSource numberLines ruby"><code class="sourceCode ruby"><span id="cb5-1"><a href="#cb5-1"></a><span class="co"># Usage: ruby test-unmutate.rb</span></span>
 <span id="cb5-2"><a href="#cb5-2"></a></span>
 <span id="cb5-3"><a href="#cb5-3"></a>require <span class="st">'minitest/autorun'</span></span>
 <span id="cb5-4"><a href="#cb5-4"></a>require_relative <span class="st">'./unmutate.rb'</span></span>

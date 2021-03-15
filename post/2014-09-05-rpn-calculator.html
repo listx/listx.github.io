@@ -4,7 +4,6 @@
 		<meta charset="utf-8">
 		<title>Linus’s Blog - Reverse Polish Notation (RPN) Calculator in Ruby and Haskell</title>
 		<link rel="stylesheet" href="../css/base.css">
-		<link rel="stylesheet" href="../css/syntax.css">
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Serif+Pro">
 		<link rel="shortcut icon" type="image/png" href="../favicon.png">
 		<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
@@ -49,8 +48,8 @@
 <p>A friend of mine is in DevBootCamp, an intensive coding school program designed to get students ready for real world job placement. Anyway, he was telling me how he was given an extra credit assignment: implement a RPN calculator which supports 3 functions — add, subtract, and multiply — on integer numbers. I.e., write a function <code>evaluate()</code> that when given a string such as <code>"3 4 + 8 *"</code> gives the result <code>56</code>. He gave me his Ruby solution; in response, I wrote my own Ruby version and decided soon thereafter to write an equivalent Haskell version, because, why not?</p>
 <h1 id="ruby">Ruby</h1>
 <p>First, the Ruby version:</p>
-<div class="code-and-raw lineCntMax100">
-<div class="sourceCode" id="cb1" data-input="code/toy/rpn.rb"><pre class="sourceCode numberSource numberLines ruby"><code class="sourceCode ruby"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">def</span> evaluate(equation_str)</span>
+<div class="code-and-raw">
+<div class="sourceCode" id="cb1" data-startFrom="1"><pre class="sourceCode numberSource numberLines ruby"><code class="sourceCode ruby"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">def</span> evaluate(equation_str)</span>
 <span id="cb1-2"><a href="#cb1-2"></a>	stack = []</span>
 <span id="cb1-3"><a href="#cb1-3"></a>	equation_str.split.each <span class="kw">do</span> |term|</span>
 <span id="cb1-4"><a href="#cb1-4"></a>		<span class="kw">case</span> term</span>
@@ -80,8 +79,8 @@
 <p>In the <code>each</code> loop, the actions depend on what <code>term</code> looks like. If <code>term</code> is a number in string form, we convert it into a real number with <code>String#to_i</code>, and push it into <code>stack</code>. If <code>term</code> is one of the 3 recognized operators, we remove 2 terms <code>a</code> and <code>b</code> from <code>stack</code> and apply the necessary operation on it with Ruby’s magic <code>Object#send</code> method, and push the new term <code>c</code> back into <code>stack</code> for further operations (if any, in later iterations of the <code>while</code> loop). Otherwise, we reject the input as an invalid term.</p>
 <h1 id="haskell">Haskell</h1>
 <p>Here is the Haskell version:</p>
-<div class="code-and-raw lineCntMax100">
-<div class="sourceCode" id="cb2" data-input="code/toy/rpn.hs"><pre class="sourceCode numberSource numberLines haskell"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">import</span> <span class="dt">Data.Char</span> (isDigit)</span>
+<div class="code-and-raw">
+<div class="sourceCode" id="cb2" data-startFrom="1"><pre class="sourceCode numberSource numberLines haskell"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">import</span> <span class="dt">Data.Char</span> (isDigit)</span>
 <span id="cb2-2"><a href="#cb2-2"></a></span>
 <span id="cb2-3"><a href="#cb2-3"></a><span class="kw">data</span> <span class="dt">Term</span></span>
 <span id="cb2-4"><a href="#cb2-4"></a>  <span class="ot">=</span> <span class="dt">TermInt</span> <span class="dt">Integer</span></span>

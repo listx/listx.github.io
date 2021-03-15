@@ -4,7 +4,6 @@
 		<meta charset="utf-8">
 		<title>Linus’s Blog - OpenGL from Haskell (#3: Matrices)</title>
 		<link rel="stylesheet" href="../css/base.css">
-		<link rel="stylesheet" href="../css/syntax.css">
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Serif+Pro">
 		<link rel="shortcut icon" type="image/png" href="../favicon.png">
 		<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
@@ -51,8 +50,8 @@
 <p>I have also removed the use of backticks for Haskell’s infix notation (<code>`...`</code>). It’s not because I like using parentheses — I just don’t like using infix notation because it runs against the argument handling order of normal functions found everywhere else.</p>
 <p>Also, I have fixed YPares’s original <code>lookAt</code> function which is actually <a href="https://github.com/YPares/Haskell-OpenGL3.1-Tutos/commit/7a027b927d061fbd26138cb7357c40c4cacbc927">broken as of commit 7a027b927d061fbd26138cb7357c40c4cacbc927</a>; you will need my version if you wish to pursue the later tutorials that actually test the validity of this function, such as the keyboard/mouse input tutorial #6 from <a href="http://www.opengl-tutorial.org">http://www.opengl-tutorial.org</a>.</p>
 <p>The code here is released into the Public Domain.</p>
-<div class="code-and-raw lineCntMax1000">
-<div class="sourceCode" id="cb1" data-input="code/opengl/matrices.hs"><pre class="sourceCode numberSource numberLines haskell"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1"></a><span class="ot">{-# LANGUAGE PackageImports #-}</span></span>
+<div class="code-and-raw">
+<div class="sourceCode" id="cb1" data-startFrom="1"><pre class="sourceCode numberSource numberLines haskell"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1"></a><span class="ot">{-# LANGUAGE PackageImports #-}</span></span>
 <span id="cb1-2"><a href="#cb1-2"></a><span class="ot">{-# LANGUAGE RecordWildCards #-}</span></span>
 <span id="cb1-3"><a href="#cb1-3"></a><span class="ot">{-# LANGUAGE RankNTypes #-}</span></span>
 <span id="cb1-4"><a href="#cb1-4"></a><span class="ot">{-# LANGUAGE TypeOperators #-}</span></span>

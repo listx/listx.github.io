@@ -4,7 +4,6 @@
 		<meta charset="utf-8">
 		<title>Linus’s Blog - Emacs: Using a Unix Filter</title>
 		<link rel="stylesheet" href="../css/base.css">
-		<link rel="stylesheet" href="../css/syntax.css">
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Serif+Pro">
 		<link rel="shortcut icon" type="image/png" href="../favicon.png">
 		<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
@@ -53,8 +52,8 @@
 <p>By default nox comments text, and the <code>-l c</code> option sets it to C-styled comments, <code>//</code>.</p>
 <h1 id="emacs">Emacs</h1>
 <p>I use <a href="https://github.com/emacs-evil/evil">evil-mode</a> with Emacs. Here is my relevant <code>.emacs</code> to set up <code>nox</code> correctly:</p>
-<div class="code-and-raw lineCntMax100">
-<div class="sourceCode" id="cb2" data-input="code/emacs-unix-filter.el"><pre class="sourceCode numberSource numberLines commonlisp"><code class="sourceCode commonlisp"><span id="cb2-1"><a href="#cb2-1"></a>(<span class="kw">defun</span><span class="fu"> my-addrem-comment-region </span>(b e f)</span>
+<div class="code-and-raw">
+<div class="sourceCode" id="cb2" data-startFrom="1"><pre class="sourceCode numberSource numberLines commonlisp"><code class="sourceCode commonlisp"><span id="cb2-1"><a href="#cb2-1"></a>(<span class="kw">defun</span><span class="fu"> my-addrem-comment-region </span>(b e f)</span>
 <span id="cb2-2"><a href="#cb2-2"></a>	<span class="st">&quot;Use the `nox' command to comment the current region.&quot;</span></span>
 <span id="cb2-3"><a href="#cb2-3"></a>	(interactive)</span>
 <span id="cb2-4"><a href="#cb2-4"></a>	(shell-command-on-region</span>

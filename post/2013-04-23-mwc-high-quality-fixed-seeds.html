@@ -4,7 +4,6 @@
 		<meta charset="utf-8">
 		<title>Linus’s Blog - Haskell: System.Random.MWC: High Quality Fixed Seeds</title>
 		<link rel="stylesheet" href="../css/base.css">
-		<link rel="stylesheet" href="../css/syntax.css">
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Serif+Pro">
 		<link rel="shortcut icon" type="image/png" href="../favicon.png">
 		<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
@@ -61,8 +60,8 @@
 <h1 id="the-solution">The Solution</h1>
 <p>To solve my problem, I just take the current date, then feed it to the SHA-1 function to get <code>sha1Hash</code>; I then then repeatedly call SHA-1 against <code>sha1Hash</code> recursively. Meanwhile, each time I get a SHA-1 hash of 20 bytes, I append it to an empty string of bytes, <code>acc</code>. When <code>acc</code> is large enough to be split up into 256 <code>Word32</code> elements, I feed it to <code>initialize</code>. The result is that I get much better seed-vs-similar-seed randomness with MWC.</p>
 <p>Here is the code:</p>
-<div class="code-and-raw lineCntMax100">
-<div class="sourceCode" id="cb2" data-input="code/rng/mwc-seed.hs"><pre class="sourceCode numberSource numberLines haskell"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">import</span> <span class="dt">Data.Bits</span></span>
+<div class="code-and-raw">
+<div class="sourceCode" id="cb2" data-startFrom="1"><pre class="sourceCode numberSource numberLines haskell"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">import</span> <span class="dt">Data.Bits</span></span>
 <span id="cb2-2"><a href="#cb2-2"></a><span class="kw">import</span> <span class="kw">qualified</span> <span class="dt">Data.ByteString.Lazy</span> <span class="kw">as</span> <span class="dt">B</span></span>
 <span id="cb2-3"><a href="#cb2-3"></a><span class="kw">import</span> <span class="dt">Data.Digest.Pure.SHA</span></span>
 <span id="cb2-4"><a href="#cb2-4"></a><span class="kw">import</span> <span class="dt">Data.List</span> (foldl')</span>

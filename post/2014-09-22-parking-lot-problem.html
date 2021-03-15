@@ -4,7 +4,6 @@
 		<meta charset="utf-8">
 		<title>Linus’s Blog - The Parking Lot Problem: A Successor to FizzBuzz?</title>
 		<link rel="stylesheet" href="../css/base.css">
-		<link rel="stylesheet" href="../css/syntax.css">
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Serif+Pro">
 		<link rel="shortcut icon" type="image/png" href="../favicon.png">
 		<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
@@ -77,8 +76,8 @@
 <p>In the more common case (as seen in real life), the parking space closest to the driver (the most desirable parking space) is already taken; and what’s more, the group of spaces closest to the driver is already taken. In this case, we have to proceed from space <code>0</code>, and incrementally observe every subsequent space, until we arrive at an empty parking space. The insight here is that we are treating the multitude of consecutively parked cars as one giant car parked across multiple spaces, and are just trying to find the total number of spaces this car occupies.</p>
 <h1 id="ruby">Ruby</h1>
 <p>I think it is time for some actual code. While I could explain how the Ruby version works, I feel that I have already expounded upon the problem enough above, so that the code here should make intuitive sense.</p>
-<div class="code-and-raw lineCntMax100">
-<div class="sourceCode" id="cb2" data-input="code/toy/parking-space.rb"><pre class="sourceCode numberSource numberLines ruby"><code class="sourceCode ruby"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">def</span> get_parking_space(t)</span>
+<div class="code-and-raw">
+<div class="sourceCode" id="cb2" data-startFrom="1"><pre class="sourceCode numberSource numberLines ruby"><code class="sourceCode ruby"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">def</span> get_parking_space(t)</span>
 <span id="cb2-2"><a href="#cb2-2"></a>	t_sorted = t.sort</span>
 <span id="cb2-3"><a href="#cb2-3"></a></span>
 <span id="cb2-4"><a href="#cb2-4"></a>	i = <span class="dv">0</span></span>
@@ -97,8 +96,8 @@
 </div>
 <h1 id="haskell">Haskell</h1>
 <p>The Haskell version is a direct translation of the Ruby version, as an iterative approach works just fine. The only drawback is that we use <code>Int</code> instead of the arbitrarily large <code>Integer</code> type for succinctness (we can use <code>Integer</code>, but some built-in functions like <code>sort</code> only work on <code>Int</code>).</p>
-<div class="code-and-raw lineCntMax100">
-<div class="sourceCode" id="cb3" data-input="code/toy/parking-space.hs"><pre class="sourceCode numberSource numberLines haskell"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">import</span> <span class="dt">Data.List</span></span>
+<div class="code-and-raw">
+<div class="sourceCode" id="cb3" data-startFrom="1"><pre class="sourceCode numberSource numberLines haskell"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">import</span> <span class="dt">Data.List</span></span>
 <span id="cb3-2"><a href="#cb3-2"></a></span>
 <span id="cb3-3"><a href="#cb3-3"></a><span class="ot">getParkingSpace ::</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> <span class="dt">Int</span></span>
 <span id="cb3-4"><a href="#cb3-4"></a>getParkingSpace ts</span>
@@ -115,8 +114,8 @@
 </div>
 <h2 id="functional-solution">Functional solution</h2>
 <p>Michele Alzetta kindly sent me another solution, which has a much stronger “Haskell” flavor. I’ve made some slight adjustments; here it is:</p>
-<div class="code-and-raw lineCntMax10">
-<div class="sourceCode" id="cb4" data-input="code/toy/parking-space2.hs"><pre class="sourceCode numberSource numberLines haskell"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">import</span> <span class="dt">Data.List</span></span>
+<div class="code-and-raw">
+<div class="sourceCode" id="cb4" data-startFrom="1"><pre class="sourceCode numberSource numberLines haskell"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">import</span> <span class="dt">Data.List</span></span>
 <span id="cb4-2"><a href="#cb4-2"></a><span class="kw">import</span> <span class="dt">Data.Maybe</span></span>
 <span id="cb4-3"><a href="#cb4-3"></a></span>
 <span id="cb4-4"><a href="#cb4-4"></a><span class="ot">getParkingSpace' ::</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> <span class="dt">Int</span></span>
@@ -148,8 +147,8 @@
 <p>We return “N/A” for the empty case because this condition does not make sense under the terms of the problem, which defines the bounds of the parking lot based on the car farthest away; if there are no cars to begin with, the problem cannot be posed.</p>
 <h2 id="ruby-1">Ruby</h2>
 <p>Without further ado, here is the Ruby solution.</p>
-<div class="code-and-raw lineCntMax10">
-<div class="sourceCode" id="cb6" data-input="code/toy/parking-spaces.rb"><pre class="sourceCode numberSource numberLines ruby"><code class="sourceCode ruby"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw">def</span> get_parking_spaces(t)</span>
+<div class="code-and-raw">
+<div class="sourceCode" id="cb6" data-startFrom="1"><pre class="sourceCode numberSource numberLines ruby"><code class="sourceCode ruby"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw">def</span> get_parking_spaces(t)</span>
 <span id="cb6-2"><a href="#cb6-2"></a>	<span class="kw">if</span> t.empty?</span>
 <span id="cb6-3"><a href="#cb6-3"></a>		<span class="kw">return</span> <span class="st">&quot;N/A&quot;</span></span>
 <span id="cb6-4"><a href="#cb6-4"></a>	<span class="kw">else</span></span>
@@ -162,8 +161,8 @@
 </div>
 <h2 id="haskell-1">Haskell</h2>
 <p>The Haskell version is not much different.</p>
-<div class="code-and-raw lineCntMax10">
-<div class="sourceCode" id="cb7" data-input="code/toy/parking-spaces.hs"><pre class="sourceCode numberSource numberLines haskell"><code class="sourceCode haskell"><span id="cb7-1"><a href="#cb7-1"></a><span class="ot">getParkingSpaces ::</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> <span class="dt">Either</span> <span class="dt">String</span> <span class="dt">Int</span></span>
+<div class="code-and-raw">
+<div class="sourceCode" id="cb7" data-startFrom="1"><pre class="sourceCode numberSource numberLines haskell"><code class="sourceCode haskell"><span id="cb7-1"><a href="#cb7-1"></a><span class="ot">getParkingSpaces ::</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> <span class="dt">Either</span> <span class="dt">String</span> <span class="dt">Int</span></span>
 <span id="cb7-2"><a href="#cb7-2"></a>getParkingSpaces t</span>
 <span id="cb7-3"><a href="#cb7-3"></a>  <span class="op">|</span> <span class="fu">null</span> t <span class="ot">=</span> <span class="dt">Left</span> <span class="st">&quot;N/A&quot;</span></span>
 <span id="cb7-4"><a href="#cb7-4"></a>  <span class="op">|</span> <span class="fu">otherwise</span> <span class="ot">=</span> <span class="dt">Right</span> <span class="op">$</span> (<span class="fu">maximum</span> t) <span class="op">-</span> (<span class="fu">length</span> t) <span class="op">+</span> <span class="dv">1</span></span></code></pre></div>

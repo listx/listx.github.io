@@ -4,7 +4,6 @@
 		<meta charset="utf-8">
 		<title>Linus’s Blog - Implementing Binary Search</title>
 		<link rel="stylesheet" href="../css/base.css">
-		<link rel="stylesheet" href="../css/syntax.css">
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Serif+Pro">
 		<link rel="shortcut icon" type="image/png" href="../favicon.png">
 		<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
@@ -64,8 +63,8 @@
 <h1 id="inverted-bounds-checking-aka-binary-search">Inverted Bounds-Checking, aka Binary Search</h1>
 <p>The heading of this subsection might have already given you a hint as to what binary search entails. (Although, if you’ve read the <em>Binary Subdivision</em> section, you should have had a good idea anyhow.) Binary search takes the concept of bounds-checking, and applies it repeatedly, recursively, against <code>KEYS</code>. The only difference when I say “bounds-checking” in the context of binary search is that we do <em>not</em> care about the values of those bounds, but merely that they <em>are</em> the bounds. This is because we only concern ourselves with dividing the list of sorted numbers by <span class="math inline">\(\frac{1}{2}\)</span> every time and take the <em>middle</em> index <code>middle_index</code>, which is located as close as possible to the middle element (halfway between the two bounds). Indeed, the only way to get a valid <code>middle_index</code> value is if we know the bounds (the size of the list). We keep doing this recursively until <code>KEYS[mid] =</code> key=.</p>
 <p>The following is the pseudocode.</p>
-<div class="code-and-raw lineCntMax100">
-<div class="sourceCode" id="cb1" data-input="code/toy/binary-search-pseudo-0.txt"><pre class="sourceCode numberSource numberLines"><code class="sourceCode"><span id="cb1-1"><a href="#cb1-1"></a>KEYS = some random list of numbers</span>
+<div class="code-and-raw">
+<div class="sourceCode" id="cb1" data-startFrom="1"><pre class="sourceCode numberSource numberLines"><code class="sourceCode"><span id="cb1-1"><a href="#cb1-1"></a>KEYS = some random list of numbers</span>
 <span id="cb1-2"><a href="#cb1-2"></a>key = the number we're looking for in KEYS</span>
 <span id="cb1-3"><a href="#cb1-3"></a></span>
 <span id="cb1-4"><a href="#cb1-4"></a>binary_search(KEYS, key):</span>
@@ -91,8 +90,8 @@
 </code></pre>
 <p>instead of just <code>else</code> on line 12, but that is redundant. This is because we already test for the two other conditions of <code>key</code> being <em>lesser</em> or <em>greater</em> than <code>middle_index</code>. Therefore, we’ve excluded the two other conditions and are already only left with the third condition of <code>key =</code> KEYS[mid]= evaluating to TRUE — hence we write just <code>else</code> on line 12.</p>
 <p>Addressing the holes above, we get the next version.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
-<div class="code-and-raw lineCntMax100">
-<div class="sourceCode" id="cb3" data-input="code/toy/binary-search-pseudo-1.txt"><pre class="sourceCode numberSource numberLines"><code class="sourceCode"><span id="cb3-1"><a href="#cb3-1"></a>KEYS = some random list of numbers</span>
+<div class="code-and-raw">
+<div class="sourceCode" id="cb3" data-startFrom="1"><pre class="sourceCode numberSource numberLines"><code class="sourceCode"><span id="cb3-1"><a href="#cb3-1"></a>KEYS = some random list of numbers</span>
 <span id="cb3-2"><a href="#cb3-2"></a>first_index = 0</span>
 <span id="cb3-3"><a href="#cb3-3"></a>last_index = 999 (our KEYS is 1000 elements big)</span>
 <span id="cb3-4"><a href="#cb3-4"></a>key = the number we're looking for in KEYS</span>
@@ -124,8 +123,8 @@
 <h2 id="preliminary-details">Preliminary Details</h2>
 <p>I said at the beginning of the post that I would show a naive implementation in C, Ruby, and Haskell. I could have simply written a <code>binary_search()</code> function (and only that function) for all three languages — but instead I chose to write full standalone programs for all three that print out the same results. Because they are all standalone programs, you can easily tweak some settings (namely, the <code>KEYS_TOTAL</code> value), and see how it scales.<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a> All versions use the new <a href="http://www.pcg-random.org">PCG family</a> of pseudorandom number generators (RNGs), which have been created by Prof. Melissa E. O’Neill, author of the great paper <em>The Genuine Sieve of Eratosthenes</em>.<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a></p>
 <h2 id="c-version-linux">C Version (Linux)</h2>
-<div class="code-and-raw lineCntMax1000">
-<div class="sourceCode" id="cb4" data-input="code/toy/binary-search.c"><pre class="sourceCode numberSource numberLines c"><code class="sourceCode c"><span id="cb4-1"><a href="#cb4-1"></a><span class="co">/*</span></span>
+<div class="code-and-raw">
+<div class="sourceCode" id="cb4" data-startFrom="1"><pre class="sourceCode numberSource numberLines c"><code class="sourceCode c"><span id="cb4-1"><a href="#cb4-1"></a><span class="co">/*</span></span>
 <span id="cb4-2"><a href="#cb4-2"></a><span class="co"> * LICENSE: PUBLIC DOMAIN</span></span>
 <span id="cb4-3"><a href="#cb4-3"></a><span class="co"> *</span></span>
 <span id="cb4-4"><a href="#cb4-4"></a><span class="co"> * Compile with `gcc -o binary-search-c -Wall -Wextra -Wpedantic --std=gnu11 -O2</span></span>
@@ -297,8 +296,8 @@
 </ul>
 <p>I’ve tried to keep the code simple. You may find it disturbing that we use the same type for <code>KEY_NOT_FOUND</code> as the actual valid key value (<code>mid</code>) itself. This kind of type overloading is common in C, and is what gives C its bare metal speed — at the cost of (probable) disaster, of course.</p>
 <h2 id="ruby-version">Ruby Version</h2>
-<div class="code-and-raw lineCntMax1000">
-<div class="sourceCode" id="cb5" data-input="code/toy/binary-search.rb"><pre class="sourceCode numberSource numberLines ruby"><code class="sourceCode ruby"><span id="cb5-1"><a href="#cb5-1"></a><span class="co"># LICENSE: PUBLIC DOMAIN</span></span>
+<div class="code-and-raw">
+<div class="sourceCode" id="cb5" data-startFrom="1"><pre class="sourceCode numberSource numberLines ruby"><code class="sourceCode ruby"><span id="cb5-1"><a href="#cb5-1"></a><span class="co"># LICENSE: PUBLIC DOMAIN</span></span>
 <span id="cb5-2"><a href="#cb5-2"></a></span>
 <span id="cb5-3"><a href="#cb5-3"></a><span class="co"># Interact with `irb -I . -r path/to/this/file'.</span></span>
 <span id="cb5-4"><a href="#cb5-4"></a></span>
@@ -419,8 +418,8 @@
 </div>
 <p>This version, like the Haskell version, tries to follow the C version as much as possible. One drawback of this version is that because Ruby does not support fixed-width integers, we have to make liberal use of the modulo operator <code>%</code> to emulate integer overflow. We could just do a bitwise AND (<code>&amp;</code>) with a mask, but that would risk increased verbosity.</p>
 <h2 id="haskell-version">Haskell Version</h2>
-<div class="code-and-raw lineCntMax1000">
-<div class="sourceCode" id="cb6" data-input="code/toy/binary-search.hs"><pre class="sourceCode numberSource numberLines haskell"><code class="sourceCode haskell"><span id="cb6-1"><a href="#cb6-1"></a><span class="ot">{-# LANGUAGE RecordWildCards #-}</span></span>
+<div class="code-and-raw">
+<div class="sourceCode" id="cb6" data-startFrom="1"><pre class="sourceCode numberSource numberLines haskell"><code class="sourceCode haskell"><span id="cb6-1"><a href="#cb6-1"></a><span class="ot">{-# LANGUAGE RecordWildCards #-}</span></span>
 <span id="cb6-2"><a href="#cb6-2"></a></span>
 <span id="cb6-3"><a href="#cb6-3"></a><span class="co">-- LICENSE: PUBLIC DOMAIN</span></span>
 <span id="cb6-4"><a href="#cb6-4"></a><span class="co">--</span></span>
