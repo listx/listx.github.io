@@ -731,7 +731,7 @@ F(M_{SE}) = F(x + 2, y - \tfrac{3}{2}) = (x + 2)^2 + (y - \tfrac{3}{2})^2 - r^2.
 </div>
 </div>
 <p>Indeed, the small tweak seems to do wonders to the output for low values of <span class="math inline">\(r\)</span>.</p>
-<p>At the same time, there is a tweak we can do as well for the Bresenham algorithm. Instead of turning E (“left”, or away from the circle) when <span class="math inline">\(F(M) &lt; 0&gt;\)</span>, we can do so when <span class="math inline">\(F(M) \leq 0\)</span>.</p>
+<p>At the same time, there is a tweak we can do as well for the Bresenham algorithm. Instead of turning E (“left”, or away from the circle) when <span class="math inline">\(F(M) &lt; 0\)</span>, we can do so when <span class="math inline">\(F(M) \leq 0\)</span>.</p>
 <div class="code-and-raw">
 <div class="sourceCode" id="cb16" data-startFrom="126"><pre class="sourceCode numberSource numberLines python"><code class="sourceCode python" style="counter-reset: source-line 125;"><span id="cb16-126"><a href="#cb16-126"></a><span class="kw">def</span> get_circle_points_bresenham_integer_ene_2order_leq(r):</span>
 <span id="cb16-127"><a href="#cb16-127"></a>    <span class="co">&quot;&quot;&quot; Like draw_circle_bresenham_integer_ene_2order, but use 'f_m &lt;= 0'</span></span>
