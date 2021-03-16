@@ -1,4 +1,6 @@
 *.hi
 *.o
+*.pyc
+__pycache__
 code/2017-04-02-calling-c-from-haskell/hs/ffi
 
