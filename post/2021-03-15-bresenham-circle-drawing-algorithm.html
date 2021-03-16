@@ -718,7 +718,7 @@ F(M_{SE}) = F(x + 2, y - \tfrac{3}{2}) = (x + 2)^2 + (y - \tfrac{3}{2})^2 - r^2.
 <span id="cb15-50"><a href="#cb15-50"></a><span class="co">    &quot;&quot;&quot;</span></span>
 <span id="cb15-51"><a href="#cb15-51"></a>    points <span class="op">=</span> []</span>
 <span id="cb15-52"><a href="#cb15-52"></a>    <span class="co"># In the square root calculation, we just use (r + 0.5) instead of just r.</span></span>
-<span id="cb15-53"><a href="#cb15-53"></a>    <span class="co"># This is more pleasing to the eye and makes the lines a bit smoother..</span></span>
+<span id="cb15-53"><a href="#cb15-53"></a>    <span class="co"># This is more pleasing to the eye and makes the lines a bit smoother.</span></span>
 <span id="cb15-54"><a href="#cb15-54"></a>    r_tweaked <span class="op">=</span> r <span class="op">+</span> <span class="fl">0.5</span></span>
 <span id="cb15-55"><a href="#cb15-55"></a>    <span class="cf">for</span> x <span class="kw">in</span> <span class="bu">range</span>(r <span class="op">+</span> <span class="dv">1</span>):</span>
 <span id="cb15-56"><a href="#cb15-56"></a>        y <span class="op">=</span> sqrt((r_tweaked <span class="op">*</span> r_tweaked) <span class="op">-</span> (x <span class="op">*</span> x))</span>
