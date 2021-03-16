@@ -179,10 +179,9 @@ html body div#content
 
 html body div#content div.canvas-centered
 {
-  display        : grid;
-  justify-items  : center;
-  margin         : 1em auto 1em auto;
-  padding-bottom : 1em;
+  display       : grid;
+  justify-items : center;
+  margin        : 1em auto 1em auto;
 }
 
 html body div#content div.canvas-centered canvas
@@ -671,6 +670,11 @@ html body div#content table.posts-index tbody tr td.bytes
   padding-left : 1em;
   text-align   : right;
   white-space  : nowrap;
+}
+
+html body div#content table.posts-index tbody tr td.centered
+{
+  text-align : center;
 }
 
 html body div#content table.posts-index tbody tr td code
