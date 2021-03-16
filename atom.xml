@@ -282,7 +282,7 @@ F(x,y) = x^2 + y^2 - r^2 = \text{distance from true circle line}.
 <ol>
 <li>If going “straight” would mean going into the circle (i.e., we’re currently veering too much to the right!), we course-correct by turning left (E).</li>
 <li>Conversely, if going “straight” would mean going outside the circle (i.e., we’re currently veering too much to the left), we course-correct by turning right (SE).</li>
-<li>Lastly, if going “straight” would mean staying exactly on the circle (we hit a Pythagorean Triple), we turn SE (it doesn’t really matter which way we turn in this case, as both E and SE result in some amount of error).</li>
+<li>Lastly, if going “straight” would mean staying exactly on the circle (we hit a Pythagorean Triple), we turn SE (from an engineering perspective it doesn’t really matter which way we turn in this case, as both E and SE result in some amount of error — although see <a href="#final-tweaks">“Final tweaks”</a> below for a note on aesthetics).</li>
 </ol>
 <p>Let’s convert this idea into pseudocode:</p>
 <pre><code>Let M be the midpoint (going &quot;straight&quot;).
