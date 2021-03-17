@@ -621,6 +621,14 @@ html body div#content blockquote
 }
 
 
+
+
+
+html body div#content table tbody tr td.centered
+{
+  text-align : center;
+}
+
 html body div#content table.posts-index
 {
   margin-left    : 12%;
@@ -670,11 +678,6 @@ html body div#content table.posts-index tbody tr td.bytes
   padding-left : 1em;
   text-align   : right;
   white-space  : nowrap;
-}
-
-html body div#content table.posts-index tbody tr td.centered
-{
-  text-align : center;
 }
 
 html body div#content table.posts-index tbody tr td code
