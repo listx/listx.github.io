@@ -106,7 +106,7 @@ x = y = \tfrac{r}{\sqrt{2}},
 \]</span></p>
 <p>or simply the point</p>
 <p><span class="math display">\[
-\begin{equation} \label{eq:arc-intersection}
+\begin{equation}
 (\tfrac{r}{\sqrt{2}}, \tfrac{r}{\sqrt{2}}).
 \end{equation}
 \]</span></p>
@@ -125,7 +125,7 @@ x^2 &amp;= \tfrac{r^2}{2}
 \\
 \sqrt{x^2} &amp;= \tfrac{\sqrt{r^2}}{\sqrt{2}}
 \\
-x &amp;= \tfrac{r}{\sqrt{2}}.
+x &amp;= \tfrac{r}{\sqrt{2}}. \label{eq:arc-intersection}
 \end{align}
 \]</span></p>
 <p>This is not that interesting for purposes of the algorithms in this post, but is something that is glossed over in the book.</p>
@@ -390,7 +390,7 @@ F(M) = F(x + 1, y - \tfrac{1}{2}) = (x + 1)^2 + (y - \tfrac{1}{2})^2 - r^2.
 \end{equation}
 \]</span></p>
 <p>The values for <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> are unknown, however they change in only 2 possible ways — by moving E or SE!</p>
-<p>If we move E, then the new value of <span class="math inline">\(F(M)\)</span> will be:</p>
+<p>If we move E, then <span class="math inline">\(M\)</span> will change from <span class="math inline">\((x + 1, y - \tfrac{1}{2})\)</span> to <span class="math inline">\((x + 2, y - \tfrac{1}{2})\)</span> because we add 1 to <span class="math inline">\(x\)</span> to move 1 pixel east; the new value of <span class="math inline">\(F(M)\)</span> at this pixel, which we can call <span class="math inline">\(F(M_E)\)</span>, will then be:</p>
 <p><span class="math display">\[
 \begin{equation}
 F(M_{E}) = F(x + 2, y - \tfrac{1}{2}) = (x + 2)^2 + (y - \tfrac{1}{2})^2 - r^2.
@@ -399,7 +399,10 @@ F(M_{E}) = F(x + 2, y - \tfrac{1}{2}) = (x + 2)^2 + (y - \tfrac{1}{2})^2 - r^2.
 <p>Now we can take the <strong>difference</strong> between these two full calculations. That is, if we were to move E, how would <span class="math inline">\(F(M)\)</span> change? Simple, we just look at the change in <span class="math inline">\(x\)</span> (<span class="math inline">\(\Delta_{x}\)</span>) (we don’t care about the change in <span class="math inline">\(y\)</span> or <span class="math inline">\(r\)</span>, because they stay constant in this case).</p>
 <p><span class="math display">\[
 \begin{align}
-\Delta_{E} = F(M_{E}) - F(M) &amp;= \Delta_{x}
+\Delta_{E} &amp;= F(M_{E}) - F(M)
+\\ &amp;= [(x + 2)^2 + (y - \tfrac{1}{2})^2 - r^2] - [(x + 1)^2 + (y - \tfrac{1}{2})^2 - r^2]
+\\
+&amp;= \Delta_{x}
 \\
 &amp;= (x + 2)^2 - (x + 1)^2 \label{eq:de1}
 \\
@@ -412,17 +415,21 @@ F(M_{E}) = F(x + 2, y - \tfrac{1}{2}) = (x + 2)^2 + (y - \tfrac{1}{2})^2 - r^2.
 &amp;= 2x + 3. \label{eq:de2}
 \end{align}
 \]</span></p>
-<p>So <span class="math inline">\(F(M)\)</span> will change by <span class="math inline">\(2x + 3\)</span> if we move E.</p>
-<p>How about for moving SE? If we move SE, the new value of <span class="math inline">\(F(M)\)</span> will be:</p>
+<p>So <span class="math inline">\(F(M)\)</span> will change by <span class="math inline">\(2x + 3\)</span> if we move E. So at any given point, if we move E, <span class="math inline">\(F(M)\)</span> will <em>always</em> change by <span class="math inline">\(2x + 3\)</span>.</p>
+<p>How about for moving SE? If we move SE, the new value of <span class="math inline">\(M\)</span> will change from <span class="math inline">\((x + 1, y - \tfrac{1}{2})\)</span> to <span class="math inline">\((x + 2, y - \tfrac{3}{2})\)</span> because we add 1 to <span class="math inline">\(x\)</span> and subtract 1 from <span class="math inline">\(y\)</span> to move 1 pixel southeast; the new value of <span class="math inline">\(F(M)\)</span> for this case, which we call <span class="math inline">\(F(M_{SE})\)</span>, will then be:</p>
 <p><span class="math display">\[
 \begin{equation}
 F(M_{SE}) = F(x + 2, y - \tfrac{3}{2}) = (x + 2)^2 + (y - \tfrac{3}{2})^2 - r^2.
 \end{equation}
 \]</span></p>
-<p>We can do the same difference analysis to figure out how <span class="math inline">\(F(M)\)</span> will change if we move SE. In this case we have to consider the change in <span class="math inline">\(y\)</span> (<span class="math inline">\(\Delta_{y}\)</span>), because it obviously changes when moving SE:</p>
+<p>We can do the same difference analysis here, but with the addition that we have to consider the change in <span class="math inline">\(y\)</span> (<span class="math inline">\(\Delta_{y}\)</span>) as well (because of the 1 we subtracted from <span class="math inline">\(y\)</span>):</p>
 <p><span class="math display">\[
 \begin{align}
-\Delta_{SE} = F(M_{SE}) - F(M) &amp;= \Delta_{x} + \Delta_{y}
+\Delta_{SE} &amp;= F(M_{SE}) - F(M)
+\\
+&amp;= [(x + 2)^2 + (y - \tfrac{3}{2})^2 - r^2] - [(x + 1)^2 + (y - \tfrac{1}{2})^2 - r^2]
+\\
+&amp;= \Delta_{x} + \Delta_{y}
 \\
 &amp;= [(x + 2)^2 - (x + 1)^2] + [(y - \tfrac{3}{2})^2 - (y - \tfrac{1}{2})^2]
 \\
@@ -498,7 +505,7 @@ F(M_{SE}) = F(x + 2, y - \tfrac{3}{2}) = (x + 2)^2 + (y - \tfrac{3}{2})^2 - r^2.
 </div>
 <h2 id="second-order-differences">Second-order differences</h2>
 <p>There is a final optimization we can do.<a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a> In the <a href="#calculate-once-adjust-thereafter">“Calculate once, adjust thereafter” section</a> we avoided calculating <span class="math inline">\(F(M)\)</span> from scratch on every iteration. We can do the same thing for the differences themselves!</p>
-<p>That is, we can avoid calculating <span class="math inline">\(\Delta_{E}\)</span> and <span class="math inline">\(\Delta_{SE}\)</span> on every iteration, and instead just calculate them <em>once</em> and make adjustments to them thereafter as well!</p>
+<p>That is, we can avoid calculating <span class="math inline">\(\Delta_{E} = (2x + 3)\)</span> and <span class="math inline">\(\Delta_{SE} = 2(x - y) + 5\)</span> on every iteration, and instead just calculate them <em>once</em> and make adjustments to them, just like we did earlier for <span class="math inline">\(F(M)\)</span>.</p>
 <p>Let’s first consider how <span class="math inline">\(\Delta_{E} = 2x + 3\)</span> changes. First, we initialize <span class="math inline">\(\Delta_{E}\)</span> by plugging in <span class="math inline">\((0, r)\)</span> into Equation <span class="math inline">\(\ref{eq:de2}\)</span>, our starting point. Because there is no <span class="math inline">\(y\)</span> variable in here, we get an initial value of</p>
 <p><span class="math display">\[
 \begin{equation} \label{eq:de-2ord-initial}
@@ -559,18 +566,18 @@ F(M_{SE}) = F(x + 2, y - \tfrac{3}{2}) = (x + 2)^2 + (y - \tfrac{3}{2})^2 - r^2.
 <span id="cb12-3"><a href="#cb12-3"></a>    x <span class="op">=</span> <span class="dv">0</span></span>
 <span id="cb12-4"><a href="#cb12-4"></a>    y <span class="op">=</span> r</span>
 <span id="cb12-5"><a href="#cb12-5"></a>    F_M <span class="op">=</span> <span class="dv">1</span> <span class="op">-</span> r</span>
-<span id="cb12-6"><a href="#cb12-6"></a>    d_e <span class="op">=</span> <span class="dv">3</span> <span class="co"># Equation 36</span></span>
-<span id="cb12-7"><a href="#cb12-7"></a>    d_se <span class="op">=</span> <span class="op">-</span>(<span class="dv">2</span> <span class="op">*</span> r) <span class="op">+</span> <span class="dv">5</span> <span class="co"># Equation 41</span></span>
+<span id="cb12-6"><a href="#cb12-6"></a>    d_e <span class="op">=</span> <span class="dv">3</span> <span class="co"># Equation 40</span></span>
+<span id="cb12-7"><a href="#cb12-7"></a>    d_se <span class="op">=</span> <span class="op">-</span>(<span class="dv">2</span> <span class="op">*</span> r) <span class="op">+</span> <span class="dv">5</span> <span class="co"># Equation 45</span></span>
 <span id="cb12-8"><a href="#cb12-8"></a>    points.extend(mirror_points_8(x, y))</span>
 <span id="cb12-9"><a href="#cb12-9"></a>    <span class="cf">while</span> x <span class="op">&lt;</span> y:</span>
 <span id="cb12-10"><a href="#cb12-10"></a>        <span class="cf">if</span> F_M <span class="op">&lt;</span> <span class="dv">0</span>:</span>
 <span id="cb12-11"><a href="#cb12-11"></a>            F_M <span class="op">+=</span> d_e</span>
-<span id="cb12-12"><a href="#cb12-12"></a>            d_e <span class="op">+=</span> <span class="dv">2</span>  <span class="co"># Equation 40</span></span>
-<span id="cb12-13"><a href="#cb12-13"></a>            d_se <span class="op">+=</span> <span class="dv">2</span> <span class="co"># Equation 46</span></span>
+<span id="cb12-12"><a href="#cb12-12"></a>            d_e <span class="op">+=</span> <span class="dv">2</span>  <span class="co"># Equation 44</span></span>
+<span id="cb12-13"><a href="#cb12-13"></a>            d_se <span class="op">+=</span> <span class="dv">2</span> <span class="co"># Equation 50</span></span>
 <span id="cb12-14"><a href="#cb12-14"></a>        <span class="cf">else</span>:</span>
 <span id="cb12-15"><a href="#cb12-15"></a>            F_M <span class="op">+=</span> d_se</span>
-<span id="cb12-16"><a href="#cb12-16"></a>            d_e <span class="op">+=</span> <span class="dv">2</span>  <span class="co"># Equation 40</span></span>
-<span id="cb12-17"><a href="#cb12-17"></a>            d_se <span class="op">+=</span> <span class="dv">4</span> <span class="co"># Equation 52</span></span>
+<span id="cb12-16"><a href="#cb12-16"></a>            d_e <span class="op">+=</span> <span class="dv">2</span>  <span class="co"># Equation 44</span></span>
+<span id="cb12-17"><a href="#cb12-17"></a>            d_se <span class="op">+=</span> <span class="dv">4</span> <span class="co"># Equation 56</span></span>
 <span id="cb12-18"><a href="#cb12-18"></a>            y <span class="op">-=</span> <span class="dv">1</span></span>
 <span id="cb12-19"><a href="#cb12-19"></a>        x <span class="op">+=</span> <span class="dv">1</span></span>
 <span id="cb12-20"><a href="#cb12-20"></a>        points.extend(mirror_points_8(x, y))</span>
