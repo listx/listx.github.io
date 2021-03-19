@@ -139,7 +139,7 @@ x &amp;= \tfrac{r}{\sqrt{2}}. \label{eq:arc-intersection}
 <span id="cb1-168"><a href="#cb1-168"></a>            ( x, <span class="op">-</span>y),</span>
 <span id="cb1-169"><a href="#cb1-169"></a>            (<span class="op">-</span>x, <span class="op">-</span>y)]</span></code></pre></div>
 <div class="raw-link sourceCode">
-<p> <a class="raw" href="../code/2021-03-15-bresenham-circle-drawing-algorithm/lib.py" mimetype="text/plain"><code>lib.py</code></a> </p>
+<p> <code>lib.py</code> <a class="raw" href="https://github.com/listx/listx_blog/blob/master/code/2021-03-15-bresenham-circle-drawing-algorithm/lib.py#L164-L169"><code>[GitHub]</code></a> <a class="raw" href="../code/2021-03-15-bresenham-circle-drawing-algorithm/lib.py" mimetype="text/plain"><code>[Download]</code></a> </p>
 </div>
 </div>
 <p>Note, however, that there is actually 8-way symmetry at hand because (1) we can swap <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>, and (2) because of the way we can distribute the negative sign:</p>
@@ -206,7 +206,7 @@ x &amp;= \tfrac{r}{\sqrt{2}}. \label{eq:arc-intersection}
 <span id="cb2-180"><a href="#cb2-180"></a>            (<span class="op">-</span>x, <span class="op">-</span>y),</span>
 <span id="cb2-181"><a href="#cb2-181"></a>            (<span class="op">-</span>y, <span class="op">-</span>x)]</span></code></pre></div>
 <div class="raw-link sourceCode">
-<p> <a class="raw" href="../code/2021-03-15-bresenham-circle-drawing-algorithm/lib.py" mimetype="text/plain"><code>lib.py</code></a> </p>
+<p> <code>lib.py</code> <a class="raw" href="https://github.com/listx/listx_blog/blob/master/code/2021-03-15-bresenham-circle-drawing-algorithm/lib.py#L172-L181"><code>[GitHub]</code></a> <a class="raw" href="../code/2021-03-15-bresenham-circle-drawing-algorithm/lib.py" mimetype="text/plain"><code>[Download]</code></a> </p>
 </div>
 </div>
 <p>Fun fact: the exact point at which <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> get “swapped” in Quadrant I is when <span class="math inline">\(x = y = \tfrac{r}{\sqrt{2}}\)</span> (Equation <span class="math inline">\(\ref{eq:arc-intersection}\)</span>).</p>
@@ -225,7 +225,7 @@ x &amp;= \tfrac{r}{\sqrt{2}}. \label{eq:arc-intersection}
 <span id="cb3-16"><a href="#cb3-16"></a>        points.extend(mirror_points_4(x, y))</span>
 <span id="cb3-17"><a href="#cb3-17"></a>    <span class="cf">return</span> points</span></code></pre></div>
 <div class="raw-link sourceCode">
-<p> <a class="raw" href="../code/2021-03-15-bresenham-circle-drawing-algorithm/naive.py" mimetype="text/plain"><code>naive.py</code></a> </p>
+<p> <code>naive.py</code> <a class="raw" href="https://github.com/listx/listx_blog/blob/master/code/2021-03-15-bresenham-circle-drawing-algorithm/naive.py#L7-L17"><code>[GitHub]</code></a> <a class="raw" href="../code/2021-03-15-bresenham-circle-drawing-algorithm/naive.py" mimetype="text/plain"><code>[Download]</code></a> </p>
 </div>
 </div>
 <p><code>get_circle_points_naive_4()</code> is the simplest translation, although there is a bug, which is obvious when we visualize it (in this case, for <span class="math inline">\(r = 15\)</span>):</p>
@@ -244,7 +244,7 @@ x &amp;= \tfrac{r}{\sqrt{2}}. \label{eq:arc-intersection}
 <span id="cb4-27"><a href="#cb4-27"></a>        points.extend(mirror_points_8(x, y))</span>
 <span id="cb4-28"><a href="#cb4-28"></a>    <span class="cf">return</span> points</span></code></pre></div>
 <div class="raw-link sourceCode">
-<p> <a class="raw" href="../code/2021-03-15-bresenham-circle-drawing-algorithm/naive.py" mimetype="text/plain"><code>naive.py</code></a> </p>
+<p> <code>naive.py</code> <a class="raw" href="https://github.com/listx/listx_blog/blob/master/code/2021-03-15-bresenham-circle-drawing-algorithm/naive.py#L20-L28"><code>[GitHub]</code></a> <a class="raw" href="../code/2021-03-15-bresenham-circle-drawing-algorithm/naive.py" mimetype="text/plain"><code>[Download]</code></a> </p>
 </div>
 </div>
 <canvas id="naive_8__15__20"></canvas>
@@ -267,7 +267,7 @@ x &amp;= \tfrac{r}{\sqrt{2}}. \label{eq:arc-intersection}
 <span id="cb5-43"><a href="#cb5-43"></a>        points.extend(mirror_points_8(x, y))</span>
 <span id="cb5-44"><a href="#cb5-44"></a>    <span class="cf">return</span> points</span></code></pre></div>
 <div class="raw-link sourceCode">
-<p> <a class="raw" href="../code/2021-03-15-bresenham-circle-drawing-algorithm/naive.py" mimetype="text/plain"><code>naive.py</code></a> </p>
+<p> <code>naive.py</code> <a class="raw" href="https://github.com/listx/listx_blog/blob/master/code/2021-03-15-bresenham-circle-drawing-algorithm/naive.py#L31-L44"><code>[GitHub]</code></a> <a class="raw" href="../code/2021-03-15-bresenham-circle-drawing-algorithm/naive.py" mimetype="text/plain"><code>[Download]</code></a> </p>
 </div>
 </div>
 <p>This is the best we can do with the simple mathematical translations to code. Note that in all of these implementations we are still forced to calculate square roots in every iteration, which is certainly suboptimal.</p>
@@ -472,7 +472,7 @@ F(M_{SE}) = F(x + 2, y - \tfrac{3}{2}) = (x + 2)^2 + (y - \tfrac{3}{2})^2 - r^2.
 <span id="cb10-22"><a href="#cb10-22"></a>        points.extend(mirror_points_8(x, y))</span>
 <span id="cb10-23"><a href="#cb10-23"></a>    <span class="cf">return</span> points</span></code></pre></div>
 <div class="raw-link sourceCode">
-<p> <a class="raw" href="../code/2021-03-15-bresenham-circle-drawing-algorithm/bresenham.py" mimetype="text/plain"><code>bresenham.py</code></a> </p>
+<p> <code>bresenham.py</code> <a class="raw" href="https://github.com/listx/listx_blog/blob/master/code/2021-03-15-bresenham-circle-drawing-algorithm/bresenham.py#L6-L23"><code>[GitHub]</code></a> <a class="raw" href="../code/2021-03-15-bresenham-circle-drawing-algorithm/bresenham.py" mimetype="text/plain"><code>[Download]</code></a> </p>
 </div>
 </div>
 <h2 id="integer-only-optimization">Integer-only optimization</h2>
@@ -500,7 +500,7 @@ F(M_{SE}) = F(x + 2, y - \tfrac{3}{2}) = (x + 2)^2 + (y - \tfrac{3}{2})^2 - r^2.
 <span id="cb11-44"><a href="#cb11-44"></a>        points.extend(mirror_points_8(x, y))</span>
 <span id="cb11-45"><a href="#cb11-45"></a>    <span class="cf">return</span> points</span></code></pre></div>
 <div class="raw-link sourceCode">
-<p> <a class="raw" href="../code/2021-03-15-bresenham-circle-drawing-algorithm/bresenham.py" mimetype="text/plain"><code>bresenham.py</code></a> </p>
+<p> <code>bresenham.py</code> <a class="raw" href="https://github.com/listx/listx_blog/blob/master/code/2021-03-15-bresenham-circle-drawing-algorithm/bresenham.py#L26-L45"><code>[GitHub]</code></a> <a class="raw" href="../code/2021-03-15-bresenham-circle-drawing-algorithm/bresenham.py" mimetype="text/plain"><code>[Download]</code></a> </p>
 </div>
 </div>
 <h2 id="second-order-differences">Second-order differences</h2>
@@ -611,7 +611,7 @@ F(M_{SE}) = F(x + 2, y - \tfrac{3}{2}) = (x + 2)^2 + (y - \tfrac{3}{2})^2 - r^2.
 <span id="cb13-72"><a href="#cb13-72"></a>        points.extend(mirror_points_8(x, y))</span>
 <span id="cb13-73"><a href="#cb13-73"></a>    <span class="cf">return</span> points</span></code></pre></div>
 <div class="raw-link sourceCode">
-<p> <a class="raw" href="../code/2021-03-15-bresenham-circle-drawing-algorithm/bresenham.py" mimetype="text/plain"><code>bresenham.py</code></a> </p>
+<p> <code>bresenham.py</code> <a class="raw" href="https://github.com/listx/listx_blog/blob/master/code/2021-03-15-bresenham-circle-drawing-algorithm/bresenham.py#L48-L73"><code>[GitHub]</code></a> <a class="raw" href="../code/2021-03-15-bresenham-circle-drawing-algorithm/bresenham.py" mimetype="text/plain"><code>[Download]</code></a> </p>
 </div>
 </div>
 <p>The “purist” in me felt that the decrementing of <span class="math inline">\(y\)</span> stood out like a sore thumb, and so I created a tweaked version that moves E and NE, starting out from <span class="math inline">\((0, -r)\)</span> instead. The mathematical techniques are the same, and due to symmetry the behavior of the algorithm does not change.</p>
@@ -642,7 +642,7 @@ F(M_{SE}) = F(x + 2, y - \tfrac{3}{2}) = (x + 2)^2 + (y - \tfrac{3}{2})^2 - r^2.
 <span id="cb14-122"><a href="#cb14-122"></a>        points.extend(mirror_points_8(x, y))</span>
 <span id="cb14-123"><a href="#cb14-123"></a>    <span class="cf">return</span> points</span></code></pre></div>
 <div class="raw-link sourceCode">
-<p> <a class="raw" href="../code/2021-03-15-bresenham-circle-drawing-algorithm/bresenham.py" mimetype="text/plain"><code>bresenham.py</code></a> </p>
+<p> <code>bresenham.py</code> <a class="raw" href="https://github.com/listx/listx_blog/blob/master/code/2021-03-15-bresenham-circle-drawing-algorithm/bresenham.py#L99-L123"><code>[GitHub]</code></a> <a class="raw" href="../code/2021-03-15-bresenham-circle-drawing-algorithm/bresenham.py" mimetype="text/plain"><code>[Download]</code></a> </p>
 </div>
 </div>
 <p>Here are a couple drawings using Bresenham’s algorithm. This one is for <span class="math inline">\(r = 15\)</span>:</p>
@@ -734,7 +734,7 @@ F(M_{SE}) = F(x + 2, y - \tfrac{3}{2}) = (x + 2)^2 + (y - \tfrac{3}{2})^2 - r^2.
 <span id="cb15-59"><a href="#cb15-59"></a>        points.extend(mirror_points_8(x, floor(y)))</span>
 <span id="cb15-60"><a href="#cb15-60"></a>    <span class="cf">return</span> points</span></code></pre></div>
 <div class="raw-link sourceCode">
-<p> <a class="raw" href="../code/2021-03-15-bresenham-circle-drawing-algorithm/naive.py" mimetype="text/plain"><code>naive.py</code></a> </p>
+<p> <code>naive.py</code> <a class="raw" href="https://github.com/listx/listx_blog/blob/master/code/2021-03-15-bresenham-circle-drawing-algorithm/naive.py#L47-L60"><code>[GitHub]</code></a> <a class="raw" href="../code/2021-03-15-bresenham-circle-drawing-algorithm/naive.py" mimetype="text/plain"><code>[Download]</code></a> </p>
 </div>
 </div>
 <p>Indeed, the small tweak seems to do wonders to the output for low values of <span class="math inline">\(r\)</span>.</p>
@@ -764,7 +764,7 @@ F(M_{SE}) = F(x + 2, y - \tfrac{3}{2}) = (x + 2)^2 + (y - \tfrac{3}{2})^2 - r^2.
 <span id="cb16-147"><a href="#cb16-147"></a>        points.extend(mirror_points_8(x, y))</span>
 <span id="cb16-148"><a href="#cb16-148"></a>    <span class="cf">return</span> points</span></code></pre></div>
 <div class="raw-link sourceCode">
-<p> <a class="raw" href="../code/2021-03-15-bresenham-circle-drawing-algorithm/bresenham.py" mimetype="text/plain"><code>bresenham.py</code></a> </p>
+<p> <code>bresenham.py</code> <a class="raw" href="https://github.com/listx/listx_blog/blob/master/code/2021-03-15-bresenham-circle-drawing-algorithm/bresenham.py#L126-L148"><code>[GitHub]</code></a> <a class="raw" href="../code/2021-03-15-bresenham-circle-drawing-algorithm/bresenham.py" mimetype="text/plain"><code>[Download]</code></a> </p>
 </div>
 </div>
 <p>This makes us turn “left” slightly more often, and intuitively, should give us a slightly larger circle.</p>

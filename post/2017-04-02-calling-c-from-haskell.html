@@ -64,7 +64,7 @@
 <div class="code-and-raw">
 <div class="sourceCode" id="cb2" data-startFrom="1"><pre class="sourceCode numberSource numberLines"><code class="sourceCode"><span id="cb2-1"><a href="#cb2-1"></a>int gcd(int m, int r);</span></code></pre></div>
 <div class="raw-link sourceCode">
-<p> <a class="raw" href="../code/2017-04-02-calling-c-from-haskell/c/gcd.h" mimetype="text/plain"><code>gcd.h</code></a> </p>
+<p> <code>gcd.h</code> <a class="raw" href="https://github.com/listx/listx_blog/blob/master/code/2017-04-02-calling-c-from-haskell/c/gcd.h"><code>[GitHub]</code></a> <a class="raw" href="../code/2017-04-02-calling-c-from-haskell/c/gcd.h" mimetype="text/plain"><code>[Download]</code></a> </p>
 </div>
 </div>
 <div class="code-and-raw">
@@ -79,7 +79,7 @@
 <span id="cb3-9"><a href="#cb3-9"></a>	<span class="cf">return</span> gcd(r, m % r);</span>
 <span id="cb3-10"><a href="#cb3-10"></a>}</span></code></pre></div>
 <div class="raw-link sourceCode">
-<p> <a class="raw" href="../code/2017-04-02-calling-c-from-haskell/c/gcd.c" mimetype="text/plain"><code>gcd.c</code></a> </p>
+<p> <code>gcd.c</code> <a class="raw" href="https://github.com/listx/listx_blog/blob/master/code/2017-04-02-calling-c-from-haskell/c/gcd.c"><code>[GitHub]</code></a> <a class="raw" href="../code/2017-04-02-calling-c-from-haskell/c/gcd.c" mimetype="text/plain"><code>[Download]</code></a> </p>
 </div>
 </div>
 <div class="code-and-raw">
@@ -94,7 +94,7 @@
 <span id="cb4-9"><a href="#cb4-9"></a><span class="ot">f_gcd ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span></span>
 <span id="cb4-10"><a href="#cb4-10"></a>f_gcd a b <span class="ot">=</span> <span class="fu">fromIntegral</span> <span class="op">$</span> c_gcd (<span class="fu">fromIntegral</span> a) (<span class="fu">fromIntegral</span> b)</span></code></pre></div>
 <div class="raw-link sourceCode">
-<p> <a class="raw" href="../code/2017-04-02-calling-c-from-haskell/hs/GCD.hs" mimetype="text/plain"><code>GCD.hs</code></a> </p>
+<p> <code>GCD.hs</code> <a class="raw" href="https://github.com/listx/listx_blog/blob/master/code/2017-04-02-calling-c-from-haskell/hs/GCD.hs"><code>[GitHub]</code></a> <a class="raw" href="../code/2017-04-02-calling-c-from-haskell/hs/GCD.hs" mimetype="text/plain"><code>[Download]</code></a> </p>
 </div>
 </div>
 <div class="code-and-raw">
@@ -103,7 +103,7 @@
 <span id="cb5-3"><a href="#cb5-3"></a><span class="ot">main ::</span> <span class="dt">IO</span> ()</span>
 <span id="cb5-4"><a href="#cb5-4"></a>main <span class="ot">=</span> <span class="fu">mapM_</span> (<span class="fu">print</span> <span class="op">.</span> <span class="fu">uncurry</span> f_gcd) [(<span class="dv">8</span>, <span class="dv">12</span>), (<span class="dv">30</span>, <span class="dv">105</span>), (<span class="dv">24</span>, <span class="dv">108</span>)]</span></code></pre></div>
 <div class="raw-link sourceCode">
-<p> <a class="raw" href="../code/2017-04-02-calling-c-from-haskell/hs/ffi.hs" mimetype="text/plain"><code>ffi.hs</code></a> </p>
+<p> <code>ffi.hs</code> <a class="raw" href="https://github.com/listx/listx_blog/blob/master/code/2017-04-02-calling-c-from-haskell/hs/ffi.hs"><code>[GitHub]</code></a> <a class="raw" href="../code/2017-04-02-calling-c-from-haskell/hs/ffi.hs" mimetype="text/plain"><code>[Download]</code></a> </p>
 </div>
 </div>
 <div class="code-and-raw">
@@ -117,7 +117,7 @@
 <span id="cb6-8"><a href="#cb6-8"></a><span class="ex">ghc</span> --make ffi.hs ../c/gcd.o</span>
 <span id="cb6-9"><a href="#cb6-9"></a><span class="bu">popd</span></span></code></pre></div>
 <div class="raw-link sourceCode">
-<p> <a class="raw" href="../code/2017-04-02-calling-c-from-haskell/build.sh" mimetype="text/plain"><code>build.sh</code></a> </p>
+<p> <code>build.sh</code> <a class="raw" href="https://github.com/listx/listx_blog/blob/master/code/2017-04-02-calling-c-from-haskell/build.sh"><code>[GitHub]</code></a> <a class="raw" href="../code/2017-04-02-calling-c-from-haskell/build.sh" mimetype="text/plain"><code>[Download]</code></a> </p>
 </div>
 </div>
 <h1 id="discussion">Discussion</h1>

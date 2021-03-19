@@ -72,7 +72,7 @@
 <span id="cb1-21"><a href="#cb1-21"></a>	stack</span>
 <span id="cb1-22"><a href="#cb1-22"></a><span class="kw">end</span></span></code></pre></div>
 <div class="raw-link sourceCode">
-<p> <a class="raw" href="../code/toy/rpn.rb" mimetype="text/plain"><code>rpn.rb</code></a> </p>
+<p> <code>rpn.rb</code> <a class="raw" href="https://github.com/listx/listx_blog/blob/master/code/toy/rpn.rb"><code>[GitHub]</code></a> <a class="raw" href="../code/toy/rpn.rb" mimetype="text/plain"><code>[Download]</code></a> </p>
 </div>
 </div>
 <p>Pretty straightforward, yes? The <code>terms</code> variable holds an array of numbers and operators. We use a calculator stack (aptly named, <code>stack</code>) to untangle the RPN in a stack-based way.</p>
@@ -107,7 +107,7 @@
 <span id="cb2-25"><a href="#cb2-25"></a>      (a<span class="op">:</span>b<span class="op">:</span>_) <span class="ot">-&gt;</span> op a b <span class="op">:</span> <span class="fu">drop</span> <span class="dv">2</span> stack</span>
 <span id="cb2-26"><a href="#cb2-26"></a>      _ <span class="ot">-&gt;</span> <span class="fu">error</span> <span class="st">&quot;stack too small for operator application&quot;</span></span></code></pre></div>
 <div class="raw-link sourceCode">
-<p> <a class="raw" href="../code/toy/rpn.hs" mimetype="text/plain"><code>rpn.hs</code></a> </p>
+<p> <code>rpn.hs</code> <a class="raw" href="https://github.com/listx/listx_blog/blob/master/code/toy/rpn.hs"><code>[GitHub]</code></a> <a class="raw" href="../code/toy/rpn.hs" mimetype="text/plain"><code>[Download]</code></a> </p>
 </div>
 </div>
 <p>Probably the first thing to note is that we define a robust data type, <code>Term</code>, to encapsulate the values held in a given RPN string. We take advantage of Haskell’s functions-as-first-class-values ability, and define the <code>TermOp</code> constructor with it (i.e., it needs an arithmetic function <code>(Integer -&gt; Integer -&gt; Integer)</code> as an argument).</p>

@@ -79,7 +79,7 @@
 <span id="cb1-13"><a href="#cb1-13"></a>		return middle_index</span>
 <span id="cb1-14"><a href="#cb1-14"></a>	end</span></code></pre></div>
 <div class="raw-link sourceCode">
-<p> <a class="raw" href="../code/toy/binary-search-pseudo-0.txt" mimetype="text/plain"><code>binary-search-pseudo-0.txt</code></a> </p>
+<p> <code>binary-search-pseudo-0.txt</code> <a class="raw" href="https://github.com/listx/listx_blog/blob/master/code/toy/binary-search-pseudo-0.txt"><code>[GitHub]</code></a> <a class="raw" href="../code/toy/binary-search-pseudo-0.txt" mimetype="text/plain"><code>[Download]</code></a> </p>
 </div>
 </div>
 <p>There are some obvious holes in the code above.</p>
@@ -112,7 +112,7 @@
 <span id="cb3-19"><a href="#cb3-19"></a>		return middle_index</span>
 <span id="cb3-20"><a href="#cb3-20"></a>	end</span></code></pre></div>
 <div class="raw-link sourceCode">
-<p> <a class="raw" href="../code/toy/binary-search-pseudo-1.txt" mimetype="text/plain"><code>binary-search-pseudo-1.txt</code></a> </p>
+<p> <code>binary-search-pseudo-1.txt</code> <a class="raw" href="https://github.com/listx/listx_blog/blob/master/code/toy/binary-search-pseudo-1.txt"><code>[GitHub]</code></a> <a class="raw" href="../code/toy/binary-search-pseudo-1.txt" mimetype="text/plain"><code>[Download]</code></a> </p>
 </div>
 </div>
 <p>There are some obvious differences — mainly the fact that we concern ourselves primarily with the first and last index numbers of the list, and work with these indices instead of working with the entire list <code>KEYS</code> itself. The <code>get_below()</code> and <code>get_above()</code> functions are gone and have been replaced with the index bounds <code>first_index, middle_index</code> and <code>middle_index + 1, last_index</code>, respectively. As you can see, working with these index numbers directly avoids a lot of abstraction. Actually, the <code>list_size</code> abstraction can be further reduced in terms of indices, so that <code>list_size =</code> 0= can be rewritten as <code>first_index &gt; last_index</code>.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
@@ -284,7 +284,7 @@
 <span id="cb4-158"><a href="#cb4-158"></a>	<span class="cf">return</span> <span class="dv">0</span>;</span>
 <span id="cb4-159"><a href="#cb4-159"></a>}</span></code></pre></div>
 <div class="raw-link sourceCode">
-<p> <a class="raw" href="../code/toy/binary-search.c" mimetype="text/plain"><code>binary-search.c</code></a> </p>
+<p> <code>binary-search.c</code> <a class="raw" href="https://github.com/listx/listx_blog/blob/master/code/toy/binary-search.c"><code>[GitHub]</code></a> <a class="raw" href="../code/toy/binary-search.c" mimetype="text/plain"><code>[Download]</code></a> </p>
 </div>
 </div>
 <p>Overview:</p>
@@ -413,7 +413,7 @@
 <span id="cb5-114"><a href="#cb5-114"></a><span class="kw">end</span></span>
 <span id="cb5-115"><a href="#cb5-115"></a>puts <span class="st">&quot;END RUBY VERSION&quot;</span></span></code></pre></div>
 <div class="raw-link sourceCode">
-<p> <a class="raw" href="../code/toy/binary-search.rb" mimetype="text/plain"><code>binary-search.rb</code></a> </p>
+<p> <code>binary-search.rb</code> <a class="raw" href="https://github.com/listx/listx_blog/blob/master/code/toy/binary-search.rb"><code>[GitHub]</code></a> <a class="raw" href="../code/toy/binary-search.rb" mimetype="text/plain"><code>[Download]</code></a> </p>
 </div>
 </div>
 <p>This version, like the Haskell version, tries to follow the C version as much as possible. One drawback of this version is that because Ruby does not support fixed-width integers, we have to make liberal use of the modulo operator <code>%</code> to emulate integer overflow. We could just do a bitwise AND (<code>&amp;</code>) with a mask, but that would risk increased verbosity.</p>
@@ -579,7 +579,7 @@
 <span id="cb6-158"><a href="#cb6-158"></a>    max' <span class="ot">=</span> keys_total <span class="op">-</span> <span class="dv">1</span></span>
 <span id="cb6-159"><a href="#cb6-159"></a>    foundMid <span class="ot">=</span> binary_search keys key min' max'</span></code></pre></div>
 <div class="raw-link sourceCode">
-<p> <a class="raw" href="../code/toy/binary-search.hs" mimetype="text/plain"><code>binary-search.hs</code></a> </p>
+<p> <code>binary-search.hs</code> <a class="raw" href="https://github.com/listx/listx_blog/blob/master/code/toy/binary-search.hs"><code>[GitHub]</code></a> <a class="raw" href="../code/toy/binary-search.hs" mimetype="text/plain"><code>[Download]</code></a> </p>
 </div>
 </div>
 <p>It pained me not to make use of Haskell’s much faster, efficient <code>Array</code> data structure instead of plain lists (that are constructed with the square brackets <code>[]</code>). And, I have to admit that it is written in a strange style; I’ve preserved the names of the variables from C and Ruby where I could, even though mixing snake_case with camelCase results in utter ugliness. I also restrained myself from using the <code>State</code> monad for keeping track of <code>PCG32</code>’s state. For you non-Haskellers, that means that I manually passed around RNG state (as you can see with <code>rng0</code>, <code>rng1</code>, <code>rng2</code>, etc.) as arguments and return values, because I did not want to place another barrier against quickly grasping the code. Do you really want monad transformers in a “naive” implementation?<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a></p>

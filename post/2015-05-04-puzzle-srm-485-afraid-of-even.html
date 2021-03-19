@@ -447,7 +447,7 @@ U(AP) = \{1, 2, 3, 4, 5\}
 <span id="cb1-38"><a href="#cb1-38"></a>	end</span>
 <span id="cb1-39"><a href="#cb1-39"></a>end</span></code></pre></div>
 <div class="raw-link sourceCode">
-<p> <a class="raw" href="../code/toy/srm485-afraid-of-even/pseudocode.txt" mimetype="text/plain"><code>pseudocode.txt</code></a> </p>
+<p> <code>pseudocode.txt</code> <a class="raw" href="https://github.com/listx/listx_blog/blob/master/code/toy/srm485-afraid-of-even/pseudocode.txt"><code>[GitHub]</code></a> <a class="raw" href="../code/toy/srm485-afraid-of-even/pseudocode.txt" mimetype="text/plain"><code>[Download]</code></a> </p>
 </div>
 </div>
 <p>The interesting point is in line 18; thanks to our math work, we can even declare that a given mutated sequence was somehow either tampered with, or that the original sequence was not an arithmetic progression! We can make these assertions because we’ve exhausted all possible cases of arithmetic sequences and their mutations — and if things don’t fit the way we expect them to, then the only conclusion is that the given sequence <span class="math inline">\(MP\)</span> was not a byproduct of mutating an <em>arithmetic sequence</em>, but some other kind of sequence. Behold the power of math!</p>
@@ -526,7 +526,7 @@ U(AP) = \{1, 2, 3, 4, 5\}
 <span id="cb2-70"><a href="#cb2-70"></a><span class="ot">everyNth ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> [a] <span class="ot">-&gt;</span> [a]</span>
 <span id="cb2-71"><a href="#cb2-71"></a>everyNth n <span class="ot">=</span> everyNth0 n <span class="op">.</span> <span class="fu">drop</span> (n <span class="op">-</span> <span class="dv">1</span>)</span></code></pre></div>
 <div class="raw-link sourceCode">
-<p> <a class="raw" href="../code/toy/srm485-afraid-of-even/Unmutate.hs" mimetype="text/plain"><code>Unmutate.hs</code></a> </p>
+<p> <code>Unmutate.hs</code> <a class="raw" href="https://github.com/listx/listx_blog/blob/master/code/toy/srm485-afraid-of-even/Unmutate.hs"><code>[GitHub]</code></a> <a class="raw" href="../code/toy/srm485-afraid-of-even/Unmutate.hs" mimetype="text/plain"><code>[Download]</code></a> </p>
 </div>
 </div>
 <div class="code-and-raw">
@@ -606,7 +606,7 @@ U(AP) = \{1, 2, 3, 4, 5\}
 <span id="cb3-74"><a href="#cb3-74"></a>    <span class="op">@?=</span> <span class="dt">Just</span> [<span class="op">-</span><span class="dv">11</span>, <span class="dv">0</span>, <span class="dv">11</span>, <span class="dv">22</span>, <span class="dv">33</span>, <span class="dv">44</span><span class="ot"> ::</span> <span class="dt">Int</span>]</span>
 <span id="cb3-75"><a href="#cb3-75"></a>  ]</span></code></pre></div>
 <div class="raw-link sourceCode">
-<p> <a class="raw" href="../code/toy/srm485-afraid-of-even/test-unmutate.hs" mimetype="text/plain"><code>test-unmutate.hs</code></a> </p>
+<p> <code>test-unmutate.hs</code> <a class="raw" href="https://github.com/listx/listx_blog/blob/master/code/toy/srm485-afraid-of-even/test-unmutate.hs"><code>[GitHub]</code></a> <a class="raw" href="../code/toy/srm485-afraid-of-even/test-unmutate.hs" mimetype="text/plain"><code>[Download]</code></a> </p>
 </div>
 </div>
 <p>As you can see, most of the real work involves identifying the <strong>original, immutable numbers</strong> we can work with as-is (<span class="math inline">\(\mathrm{O}\)</span>) (as opposed to the ones we have to ignore (<span class="math inline">\(\mathrm{O_F}\)</span>)) to construct our tentative sister arithmetic progression <span class="math inline">\(BP\)</span>.</p>
@@ -707,7 +707,7 @@ U(AP) = \{1, 2, 3, 4, 5\}
 <span id="cb4-93"><a href="#cb4-93"></a>  arr</span>
 <span id="cb4-94"><a href="#cb4-94"></a><span class="kw">end</span></span></code></pre></div>
 <div class="raw-link sourceCode">
-<p> <a class="raw" href="../code/toy/srm485-afraid-of-even/unmutate.rb" mimetype="text/plain"><code>unmutate.rb</code></a> </p>
+<p> <code>unmutate.rb</code> <a class="raw" href="https://github.com/listx/listx_blog/blob/master/code/toy/srm485-afraid-of-even/unmutate.rb"><code>[GitHub]</code></a> <a class="raw" href="../code/toy/srm485-afraid-of-even/unmutate.rb" mimetype="text/plain"><code>[Download]</code></a> </p>
 </div>
 </div>
 <div class="code-and-raw">
@@ -752,7 +752,7 @@ U(AP) = \{1, 2, 3, 4, 5\}
 <span id="cb5-39"><a href="#cb5-39"></a>  <span class="kw">end</span></span>
 <span id="cb5-40"><a href="#cb5-40"></a><span class="kw">end</span></span></code></pre></div>
 <div class="raw-link sourceCode">
-<p> <a class="raw" href="../code/toy/srm485-afraid-of-even/test-unmutate.rb" mimetype="text/plain"><code>test-unmutate.rb</code></a> </p>
+<p> <code>test-unmutate.rb</code> <a class="raw" href="https://github.com/listx/listx_blog/blob/master/code/toy/srm485-afraid-of-even/test-unmutate.rb"><code>[GitHub]</code></a> <a class="raw" href="../code/toy/srm485-afraid-of-even/test-unmutate.rb" mimetype="text/plain"><code>[Download]</code></a> </p>
 </div>
 </div>
 <p>This Ruby version is essentially a port of the Haskell version. The problem at hand is so mathematical that it makes sense to simply preserve the clean Haskell definitions.</p>
