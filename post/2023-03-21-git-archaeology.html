@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Linus’s Blog - Git Archaeology</title>
+		<link rel="stylesheet" href="../css/base.css">
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Serif+Pro">
+		<link rel="shortcut icon" type="image/png" href="../favicon.png">
+		<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+		<script src="../misc.js"></script>
+		<!-- https://github.com/mreid/markreidname-hakyll/blob/master/_templates/mathjax.html -->
+<script type="text/x-mathjax-config">
+	MathJax.Hub.Config({
+		extensions: ["tex2jax.js"],
+		jax: ["input/TeX", "output/HTML-CSS"],
+		tex2jax: {
+			inlineMath: [ ["\\(","\\)"] ],
+			displayMath: [ ["\\[","\\]"] ],
+			processEscapes: true
+		},
+		TeX: { equationNumbers: { autoNumber: "AMS" } },
+		"HTML-CSS": { availableFonts: ["TeX"] }
+	});
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"> </script>
+
+	</head>
+	<body>
+		<div id="header">
+			<a href="../">funloop.org</a>
+			|
+			<a href="../about.html">About</a>
+			|
+			<a href="../etc.html">Etc</a>
+		</div>
+
+		<div id="sticky-title">
+			<h1 class="center" id="page-title">Git Archaeology</h1>
+		</div>
+
+		<div id="content">
+			<div class="info center">
+	<a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2023-03-21-git-archaeology.org" title="History"><code class="date">2023-03-21</code></a>
+	<br>
+	<a title="All pages tagged 'programming'." href="../tag/programming.html">programming</a>, <a title="All pages tagged 'git'." href="../tag/git.html">git</a>
+</div>
+
+<p>TL;DR: Check out my <a href="https://github.com/listx/git/blob/study/STUDY_NOTES.md">STUDY_NOTES.md</a> on Git if you want a quick understanding of (ancient) Git internals!</p>
+<p>I’ve been using Git since 2009. In all that time I never really bothered with
+understanding Git internals, because frankly after learning what a directed
+acyclic graph (DAG) was, everything just fell into place.</p>
+<p>That’s going to change, because in the coming weeks, I will start contributing
+to Git on a somewhat regular basis (at least, that’s the plan). It won’t be the
+first time contributing to the project (which I did back in <a href="2014-09-09-my-first-contribution-to-git.html">2014</a>), but I will
+need to begin studying how Git works under the hood.</p>
+<p>To that end, I spent the better part of last weekend trying to understand Git’s
+internals. The current Git codebase is a bit daunting, and there’s no way that
+I’m going to read it all any time soon. But the very first commit of Git <em>is</em>
+small enough to read in one sitting, and so I tried compiling it (there were
+lots of errors), while taking notes in the source code directly. I also actually
+used the produced binaries to prove to myself that yes, this system actually
+does work even at this primitive stage.</p>
+<p>Now, there <strong>are</strong> major differences between this ancient root-commit version of
+“Git” and modern Git. However, I’ve taken note of all such differences (at least
+as many as I could gather, within reason) by digging into the <a href="https://lore.kernel.org/git/">Git mailing list archive</a> to try to make sense of why things were changed the way they were (e.g.,
+How come we have so-called “pack” files? How come the SHA1 hash of an object
+(using <code class="verbatim">sha1sum</code>) is not the same as its directory name plus filename?) You can
+see my notes in the <a href="https://github.com/listx/git/blob/study/STUDY_NOTES.md">STUDY_NOTES.md</a> file here for the answers.</p>
+<p>I have to admit that I found Linus Torvalds’ initial design decisions to be
+impressively elegant. Reading the first commit made me have multiple “ah-ha!”
+moments behind why Git has a distinction between the index and the working tree,
+why it doesn’t track empty directories, why Git doesn’t care if you blow away
+the working tree as long as the <code class="verbatim">.git</code> folder is intact, etc. And the code is
+pretty easy to follow! It’s a great resource for any aspiring C hacker.</p>
+
+		</div>
+
+		<div id="footer">
+			<img src="../favicon.png" id="brand-icon">
+			<p>Copyright (C) 2013-2023 Linus Arver. All rights reserved.</p>
+			<a href="https://github.com/listx/listx_blog">Site</a>
+			<a href="https://github.com/listx/listx.github.io">generated</a>
+			with
+			<a href="https://jaspervdj.be/hakyll">Hakyll</a>
+			and
+			<a href="http://sebastiaanvisser.github.com/clay">Clay</a>.
+			<br>
+			<a href="../atom.xml">Atom feed</a>
+		</div>
+	</body>
+</html>
