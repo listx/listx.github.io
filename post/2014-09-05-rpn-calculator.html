@@ -45,38 +45,55 @@
 	<a title="All pages tagged 'programming'." href="../tag/programming.html">programming</a>, <a title="All pages tagged 'ruby'." href="../tag/ruby.html">ruby</a>, <a title="All pages tagged 'haskell'." href="../tag/haskell.html">haskell</a>
 </div>
 
-<p>A friend of mine is in DevBootCamp, an intensive coding school program designed to get students ready for real world job placement. Anyway, he was telling me how he was given an extra credit assignment: implement a RPN calculator which supports 3 functions — add, subtract, and multiply — on integer numbers. I.e., write a function <code>evaluate()</code> that when given a string such as <code>"3 4 + 8 *"</code> gives the result <code>56</code>. He gave me his Ruby solution; in response, I wrote my own Ruby version and decided soon thereafter to write an equivalent Haskell version, because, why not?</p>
+<p>A friend of mine is in DevBootCamp, an intensive coding school program
+designed to get students ready for real world job placement. Anyway, he
+was telling me how he was given an extra credit assignment: implement a
+RPN calculator which supports 3 functions — add, subtract, and
+multiply — on integer numbers. I.e., write a function <code class="verbatim">evaluate()</code>
+that when given a string such as <code class="verbatim">"3 4 + 8 *"</code> gives the result <code class="verbatim">56</code>. He
+gave me his Ruby solution; in response, I wrote my own Ruby version and
+decided soon thereafter to write an equivalent Haskell version, because,
+why not?</p>
 <h1 id="ruby">Ruby</h1>
 <p>First, the Ruby version:</p>
 <div class="code-and-raw">
-<div class="sourceCode" id="cb1" data-startFrom="1"><pre class="sourceCode numberSource numberLines ruby"><code class="sourceCode ruby"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">def</span> evaluate(equation_str)</span>
-<span id="cb1-2"><a href="#cb1-2"></a>	stack = []</span>
-<span id="cb1-3"><a href="#cb1-3"></a>	equation_str.split.each <span class="kw">do</span> |term|</span>
-<span id="cb1-4"><a href="#cb1-4"></a>		<span class="kw">case</span> term</span>
-<span id="cb1-5"><a href="#cb1-5"></a>		<span class="kw">when</span> <span class="ot">/^\d+?$/</span></span>
-<span id="cb1-6"><a href="#cb1-6"></a>			stack.push(term.to_i)</span>
-<span id="cb1-7"><a href="#cb1-7"></a>		<span class="kw">when</span> <span class="st">&quot;+&quot;</span>, <span class="st">&quot;-&quot;</span>, <span class="st">&quot;*&quot;</span></span>
-<span id="cb1-8"><a href="#cb1-8"></a>			<span class="kw">if</span> stack.size &lt; <span class="dv">2</span></span>
-<span id="cb1-9"><a href="#cb1-9"></a>				raise <span class="st">&quot;stack too small for operator application&quot;</span></span>
-<span id="cb1-10"><a href="#cb1-10"></a>			<span class="kw">else</span></span>
-<span id="cb1-11"><a href="#cb1-11"></a>				b = stack.pop</span>
-<span id="cb1-12"><a href="#cb1-12"></a>				a = stack.pop</span>
-<span id="cb1-13"><a href="#cb1-13"></a>				op = term.to_sym</span>
-<span id="cb1-14"><a href="#cb1-14"></a>				c = b.send(op, a)</span>
-<span id="cb1-15"><a href="#cb1-15"></a>				stack.push(c)</span>
-<span id="cb1-16"><a href="#cb1-16"></a>			<span class="kw">end</span></span>
-<span id="cb1-17"><a href="#cb1-17"></a>		<span class="kw">else</span></span>
-<span id="cb1-18"><a href="#cb1-18"></a>			raise <span class="st">&quot;invalid input `</span><span class="ot">#{</span>term<span class="ot">}</span><span class="st">'&quot;</span></span>
-<span id="cb1-19"><a href="#cb1-19"></a>		<span class="kw">end</span></span>
-<span id="cb1-20"><a href="#cb1-20"></a>	<span class="kw">end</span></span>
+<div class="sourceCode" id="cb1" data-startFrom="1"><pre class="sourceCode numberSource numberLines ruby"><code class="sourceCode ruby"><span id="cb1-1"><a href="#cb1-1"></a><span class="cf">def</span> evaluate(equation_str)</span>
+<span id="cb1-2"><a href="#cb1-2"></a>	stack <span class="kw">=</span> <span class="kw">[]</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a>	equation_str<span class="at">.split.each</span> <span class="cf">do</span> <span class="kw">|</span>term<span class="kw">|</span></span>
+<span id="cb1-4"><a href="#cb1-4"></a>		<span class="cf">case</span> term</span>
+<span id="cb1-5"><a href="#cb1-5"></a>		<span class="cf">when</span> <span class="ss">/^\d+?$/</span></span>
+<span id="cb1-6"><a href="#cb1-6"></a>			stack<span class="at">.push</span>(term<span class="at">.to_i</span>)</span>
+<span id="cb1-7"><a href="#cb1-7"></a>		<span class="cf">when</span> <span class="st">&quot;+&quot;</span>, <span class="st">&quot;-&quot;</span>, <span class="st">&quot;*&quot;</span></span>
+<span id="cb1-8"><a href="#cb1-8"></a>			<span class="cf">if</span> stack<span class="at">.size</span> <span class="kw">&lt;</span> <span class="dv">2</span></span>
+<span id="cb1-9"><a href="#cb1-9"></a>				<span class="fu">raise</span> <span class="st">&quot;stack too small for operator application&quot;</span></span>
+<span id="cb1-10"><a href="#cb1-10"></a>			<span class="cf">else</span></span>
+<span id="cb1-11"><a href="#cb1-11"></a>				b <span class="kw">=</span> stack<span class="at">.pop</span></span>
+<span id="cb1-12"><a href="#cb1-12"></a>				a <span class="kw">=</span> stack<span class="at">.pop</span></span>
+<span id="cb1-13"><a href="#cb1-13"></a>				op <span class="kw">=</span> term<span class="at">.to_sym</span></span>
+<span id="cb1-14"><a href="#cb1-14"></a>				c <span class="kw">=</span> b<span class="at">.send</span>(op, a)</span>
+<span id="cb1-15"><a href="#cb1-15"></a>				stack<span class="at">.push</span>(c)</span>
+<span id="cb1-16"><a href="#cb1-16"></a>			<span class="cf">end</span></span>
+<span id="cb1-17"><a href="#cb1-17"></a>		<span class="cf">else</span></span>
+<span id="cb1-18"><a href="#cb1-18"></a>			<span class="fu">raise</span> <span class="st">&quot;invalid input `</span><span class="sc">#{</span>term<span class="sc">}</span><span class="st">'&quot;</span></span>
+<span id="cb1-19"><a href="#cb1-19"></a>		<span class="cf">end</span></span>
+<span id="cb1-20"><a href="#cb1-20"></a>	<span class="cf">end</span></span>
 <span id="cb1-21"><a href="#cb1-21"></a>	stack</span>
-<span id="cb1-22"><a href="#cb1-22"></a><span class="kw">end</span></span></code></pre></div>
+<span id="cb1-22"><a href="#cb1-22"></a><span class="cf">end</span></span></code></pre></div>
 <div class="raw-link sourceCode">
 <p> <code>rpn.rb</code> <a class="raw" href="https://github.com/listx/listx_blog/blob/master/code/toy/rpn.rb"><code>[GitHub]</code></a> <a class="raw" href="../code/toy/rpn.rb" mimetype="text/plain"><code>[Download]</code></a> </p>
 </div>
 </div>
-<p>Pretty straightforward, yes? The <code>terms</code> variable holds an array of numbers and operators. We use a calculator stack (aptly named, <code>stack</code>) to untangle the RPN in a stack-based way.</p>
-<p>In the <code>each</code> loop, the actions depend on what <code>term</code> looks like. If <code>term</code> is a number in string form, we convert it into a real number with <code>String#to_i</code>, and push it into <code>stack</code>. If <code>term</code> is one of the 3 recognized operators, we remove 2 terms <code>a</code> and <code>b</code> from <code>stack</code> and apply the necessary operation on it with Ruby’s magic <code>Object#send</code> method, and push the new term <code>c</code> back into <code>stack</code> for further operations (if any, in later iterations of the <code>while</code> loop). Otherwise, we reject the input as an invalid term.</p>
+<p>Pretty straightforward, yes? The <code class="verbatim">terms</code> variable holds an array of
+numbers and operators. We use a calculator stack (aptly named, <code class="verbatim">stack</code>)
+to untangle the RPN in a stack-based way.</p>
+<p>In the <code class="verbatim">each</code> loop, the actions depend on what <code class="verbatim">term</code> looks like. If
+<code class="verbatim">term</code> is a number in string form, we convert it into a real number with
+<code class="verbatim">String#to_i</code>, and push it into <code class="verbatim">stack</code>. If <code class="verbatim">term</code> is one of the 3
+recognized operators, we remove 2 terms <code class="verbatim">a</code> and <code class="verbatim">b</code> from <code class="verbatim">stack</code> and
+apply the necessary operation on it with Ruby’s magic <code class="verbatim">Object#send</code>
+method, and push the new term <code class="verbatim">c</code> back into <code class="verbatim">stack</code> for further
+operations (if any, in later iterations of the <code class="verbatim">while</code> loop). Otherwise,
+we reject the input as an invalid term.</p>
 <h1 id="haskell">Haskell</h1>
 <p>Here is the Haskell version:</p>
 <div class="code-and-raw">
@@ -110,19 +127,52 @@
 <p> <code>rpn.hs</code> <a class="raw" href="https://github.com/listx/listx_blog/blob/master/code/toy/rpn.hs"><code>[GitHub]</code></a> <a class="raw" href="../code/toy/rpn.hs" mimetype="text/plain"><code>[Download]</code></a> </p>
 </div>
 </div>
-<p>Probably the first thing to note is that we define a robust data type, <code>Term</code>, to encapsulate the values held in a given RPN string. We take advantage of Haskell’s functions-as-first-class-values ability, and define the <code>TermOp</code> constructor with it (i.e., it needs an arithmetic function <code>(Integer -&gt; Integer -&gt; Integer)</code> as an argument).</p>
-<p>The next thing to notice is that the <code>evaluate</code> function is composed of smaller helper functions, <code>mkTerm</code> and <code>evalTerms</code>. <code>mkTerm</code> simply converts a <code>String</code> type into an appropriate <code>Term</code> type. <code>evalTerms</code> takes a list of <code>Term</code> values, and reduces it as much as possible by applying the <code>modifyStack</code> function over it with <code>foldl</code> (Haskell’s version of a single-pass loop).</p>
-<p>When <code>modifyStack</code> encounters a <code>TermInt</code>, it pushes the number into the stack. When it encounters a <code>TermOp</code>, it applies that operator to the first 2 items in <code>stack</code>, and pushes this result back into <code>stack</code>. We use pattern matching with <code>(a:b:_)</code> to pull out the <code>a</code> and <code>b</code> values from the stack — the expression <code>(a:b:_)</code> means a value that matches either <span class="math inline">\([x_1, x_2]\)</span>, or <span class="math inline">\([x_1, x_2, ... , x_n]\)</span>, because the <code>_</code> operator matches anything, including the empty list <code>[]</code> used to finalize list creation. The <code>drop 2 stack</code> is necessary because Haskell’s types by default are immutable.</p>
+<p>Probably the first thing to note is that we define a robust data type,
+<code class="verbatim">Term</code>, to encapsulate the values held in a given RPN string. We take
+advantage of Haskell’s functions-as-first-class-values ability, and
+define the <code class="verbatim">TermOp</code> constructor with it (i.e., it needs an arithmetic
+function <code class="verbatim">(Integer -&gt; Integer -&gt; Integer)</code> as an argument).</p>
+<p>The next thing to notice is that the <code class="verbatim">evaluate</code> function is composed of
+smaller helper functions, <code class="verbatim">mkTerm</code> and <code class="verbatim">evalTerms</code>. <code class="verbatim">mkTerm</code> simply
+converts a <code class="verbatim">String</code> type into an appropriate <code class="verbatim">Term</code> type. <code class="verbatim">evalTerms</code>
+takes a list of <code class="verbatim">Term</code> values, and reduces it as much as possible by
+applying the <code class="verbatim">modifyStack</code> function over it with <code class="verbatim">foldl</code> (Haskell’s
+version of a single-pass loop).</p>
+<p>When <code class="verbatim">modifyStack</code> encounters a <code class="verbatim">TermInt</code>, it pushes the number into the
+stack. When it encounters a <code class="verbatim">TermOp</code>, it applies that operator to the
+first 2 items in <code class="verbatim">stack</code>, and pushes this result back into <code class="verbatim">stack</code>. We
+use pattern matching with <code class="verbatim">(a:b:_)</code> to pull out the <code class="verbatim">a</code> and <code class="verbatim">b</code> values
+from the stack — the expression <code class="verbatim">(a:b:_)</code> means a value that matches
+either <span class="math inline">\([x_1, x_2]\)</span>, or <span class="math inline">\([x_1, x_2, ... , x_n]\)</span>, because the <code class="verbatim">_</code>
+operator matches anything, including the empty list <code class="verbatim">[]</code> used to
+finalize list creation. The <code class="verbatim">drop 2 stack</code> is necessary because
+Haskell’s types by default are immutable.</p>
 <h1 id="thoughts">Thoughts</h1>
 <p>I much prefer the Haskell version.</p>
-<p>The separation of concerns is a big win — we can easily create helper functions like <code>mkTerm</code> and <code>evalTerms</code> because of Haskell’s purity<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. Haskell embraces the use of algebraic data types (i.e., <code>Term</code> here), and perhaps this preference lends itself to the use of helper functions that convert things from one type to another. Ruby does not have types, at least in the sense of Haskell types, so to artificially create such concepts and to implement them would be difficult.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> I mean, I really want to write equivalent <code>mkTerm</code> and <code>evalTerms</code> methods in Ruby, but my beginner skills prevent me from doing it in a simple, straightforward way. I know enough about coding to abandon “solutions” that require circuitous, complex design.</p>
-<p>I also like how all the functions are pure and thus easy to reason about with the type signatures. Refactoring code like this is a dream.</p>
-<p>In short, algebraic data types, the clean delegation of subtasks to helper functions, and purity make the Haskell version easier to reason about and maintain in the long run.</p>
-<section class="footnotes" role="doc-endnotes">
+<p>The separation of concerns is a big win — we can easily create helper
+functions like <code class="verbatim">mkTerm</code> and <code class="verbatim">evalTerms</code> because of Haskell’s
+purity<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. Haskell embraces the use of algebraic data types (i.e.,
+<code class="verbatim">Term</code> here), and perhaps this preference lends itself to the use of
+helper functions that convert things from one type to another. Ruby does
+not have types, at least in the sense of Haskell types, so to
+artificially create such concepts and to implement them would be
+difficult.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> I mean, I really want to write equivalent <code class="verbatim">mkTerm</code> and
+<code class="verbatim">evalTerms</code> methods in Ruby, but my beginner skills prevent me from
+doing it in a simple, straightforward way. I know enough about coding to
+abandon “solutions” that require circuitous, complex design.</p>
+<p>I also like how all the functions are pure and thus easy to reason about
+with the type signatures. Refactoring code like this is a dream.</p>
+<p>In short, algebraic data types, the clean delegation of subtasks to
+helper functions, and purity make the Haskell version easier to reason
+about and maintain in the long run.</p>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr />
 <ol>
-<li id="fn1" role="doc-endnote"><p>Haskell’s <em>purity</em> is a term of art. Look it up!<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2" role="doc-endnote"><p>The closest thing to Haskell types in Ruby, in my mind, are Ruby objects. Certainly, Ruby knows the difference between two objects belonging to different classes, but to do that here would make the code much longer and offer little benefit.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>Haskell’s <em>purity</em> is a term of art. Look it up!<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>The closest thing to Haskell types in Ruby, in my mind, are Ruby
+objects. Certainly, Ruby knows the difference between two objects
+belonging to different classes, but to do that here would make
+the code much longer and offer little benefit.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 
@@ -130,7 +180,7 @@
 
 		<div id="footer">
 			<img src="../favicon.png" id="brand-icon">
-			<p>Copyright (C) 2013-2021 Linus Arver. All rights reserved.</p>
+			<p>Copyright (C) 2013-2023 Linus Arver. All rights reserved.</p>
 			<a href="https://github.com/listx/listx_blog">Site</a>
 			<a href="https://github.com/listx/listx.github.io">generated</a>
 			with

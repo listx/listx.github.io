@@ -46,25 +46,39 @@
 </div>
 
 <h1 id="introduction">Introduction</h1>
-<p>I’ve been using <a href="http://software.schmorp.de/pkg/rxvt-unicode.html">rxvt-unicode</a> (<code>urxvt</code>) for years. But, I never really bothered to customize it beyond adding in some simple font changing hotkeys. I discovered that <code>urxvt</code> can be customized with Perl plugins. This post shows some of the plugins I’ve started using.</p>
-<p>For this post, I will use the terms <strong>terminal</strong> and <code>urxvt</code> interchangeably. The plugins are configured in your <code>~/.Xdefaults</code> file, and to have this file take effect, run</p>
+<p>I’ve been using <a href="http://software.schmorp.de/pkg/rxvt-unicode.html">rxvt-unicode</a> (<code class="verbatim">urxvt</code>) for years.
+But, I never really bothered to customize it beyond adding in some simple font changing hotkeys.
+I discovered that <code class="verbatim">urxvt</code> can be customized with Perl plugins.
+This post shows some of the plugins I’ve started using.</p>
+<p>For this post, I will use the terms <strong>terminal</strong> and <code class="verbatim">urxvt</code> interchangeably.
+The plugins are configured in your <code class="verbatim">~/.Xdefaults</code> file, and to have this file take effect, run</p>
 <pre><code>xrdb -merge ~/.Xdefaults
 </code></pre>
-<p>. The hotkeys are defined with key names from <a href="http://cgit.freedesktop.org/xorg/proto/x11proto/plain/keysymdef.h">keysymdef.h</a> as part of X11.</p>
+<p>.
+The hotkeys are defined with key names from <a href="http://cgit.freedesktop.org/xorg/proto/x11proto/plain/keysymdef.h">keysymdef.h</a> as part of X11.</p>
 <h1 id="keyboard-select">keyboard-select</h1>
-<p><a href="https://github.com/muennich/urxvt-perls">Homepage</a> (part of <code>urxvt-perls</code>)</p>
-<p>This is by far the most useful plugin. If you ever need surgical precision to select a particular chunk of text in your terminal, you can use this plugin. It gives you Vim-like <em>normal mode</em> navigation in your terminal — and then you can use hotkeys like <code>v</code> or <code>V</code> to select chunks of text, and use <code>y</code> to copy it to your X primary buffer.</p>
-<p>I use the snippet below in my <code>~/.Xdefaults</code>:</p>
+<p><a href="https://github.com/muennich/urxvt-perls">Homepage</a> (part of <code class="verbatim">urxvt-perls</code>)</p>
+<p>This is by far the most useful plugin.
+If you ever need surgical precision to select a particular chunk of text in your terminal, you can use this plugin.
+It gives you Vim-like <em>normal mode</em> navigation in your terminal — and then you can use hotkeys like <code class="verbatim">v</code> or <code class="verbatim">V</code> to select chunks of text, and use <code class="verbatim">y</code> to copy it to your X primary buffer.</p>
+<p>I use the snippet below in my <code class="verbatim">~/.Xdefaults</code>:</p>
 <pre><code>! keyboard-select
 URxvt.keysym.M-s: perl:keyboard-select:activate
 URxvt.keysym.M-r: perl:keyboard-select:search
 </code></pre>
-<p>. Now, <code>M-s</code> (<code>Alt-s</code> for you folks not familiar with Emacs-style shortcut-naming) in the terminal gives you Vim-like normal mode like I mentioned above. The other shortcut, <code>M-r</code>, gives your reverse search against your terminal’s buffer.</p>
-<p>Let <code>M-r</code> sink in. This means that your terminal is basically running a virtual <code>less</code> pager. Any time you want to go search against some text in your terminal, just use <code>M-r</code> and search; use <code>n</code> and <code>N</code> just like <code>less</code>.</p>
-<p>Actually, <code>M-r</code> is basically doing <code>M-s</code> followed by <code>?</code>. So, if you like searching forwards (not backwards), just do <code>M-s</code> and then <code>/</code>. But considering how terminal buffers are always <strong>above</strong> the cursor, it makes sense to search backwards by default with <code>M-r</code>. For me this runs against my habit of using <code>less</code> and <code>/</code>, but there you have it.</p>
+<p>.
+Now, <code class="verbatim">M-s</code> (<code class="verbatim">Alt-s</code> for you folks not familiar with Emacs-style shortcut-naming) in the terminal gives you Vim-like normal mode like I mentioned above.
+The other shortcut, <code class="verbatim">M-r</code>, gives your reverse search against your terminal’s buffer.</p>
+<p>Let <code class="verbatim">M-r</code> sink in.
+This means that your terminal is basically running a virtual <code class="verbatim">less</code> pager.
+Any time you want to go search against some text in your terminal, just use <code class="verbatim">M-r</code> and search; use <code class="verbatim">n</code> and <code class="verbatim">N</code> just like <code class="verbatim">less</code>.</p>
+<p>Actually, <code class="verbatim">M-r</code> is basically doing <code class="verbatim">M-s</code> followed by <code class="verbatim">?</code>.
+So, if you like searching forwards (not backwards), just do <code class="verbatim">M-s</code> and then <code class="verbatim">/</code>.
+But considering how terminal buffers are always <strong>above</strong> the cursor, it makes sense to search backwards by default with <code class="verbatim">M-r</code>.
+For me this runs against my habit of using <code class="verbatim">less</code> and <code class="verbatim">/</code>, but there you have it.</p>
 <h1 id="clipboard">clipboard</h1>
-<p><a href="https://github.com/muennich/urxvt-perls">Homepage</a> (part of <code>urxvt-perls</code>)</p>
-<p><code>~/.Xdefaults</code> snippet:</p>
+<p><a href="https://github.com/muennich/urxvt-perls">Homepage</a> (part of <code class="verbatim">urxvt-perls</code>)</p>
+<p><code class="verbatim">~/.Xdefaults</code> snippet:</p>
 <pre><code>! clipboard
 ! update clipboard whenever primary gets updated
 URxvt.clipboard.autocopy: true
@@ -72,24 +86,31 @@ URxvt.keysym.M-c: perl:clipboard:copy
 URxvt.keysym.M-v: perl:clipboard:paste
 URxvt.keysym.M-C-v: perl:clipboard:paste_escaped
 </code></pre>
-<p>. To be honest I think the <code>autocopy</code> feature is a bit flaky (at least when using these shortcuts inside a NixOS VirtualBox VM from a Mac) — but that’s not that important.</p>
-<p><code>M-c</code> copies the X11 primary buffer (aka X selection) to the clipboard buffer.</p>
-<p>What’s really nice is the <code>M-v</code> shortcut — it pastes the <strong>clipboard</strong> buffer, not the X11 primary buffer (there is <code>S-&lt;insert&gt;</code> (Shift-Insert) for that). Now you don’t have to type <code>$(xsel -b)</code> for the same thing.</p>
-<p><code>M-C-v</code> (<code>Alt-Control-v</code>) does the same thing, but escapes any special characters. This is very handy — a simple use case might be using <code>M-s</code> (search shortcut discussed above) to find a particular file with a long name (think MP3 files) from the output of <code>ls</code> — you can then just use <code>v</code> to copy that filename to the X11 buffer, then use <code>M-c</code> to copy it to clipboard buffer (if <code>autocopy</code> is working this step is unnecessary), then use <code>M-C-v</code> to paste it in, escaping things like space characters so that you can use other tools like <code>cp</code> or <code>mv</code> on them more easily.</p>
+<p>.
+To be honest I think the <code class="verbatim">autocopy</code> feature is a bit flaky (at least when using these shortcuts inside a NixOS VirtualBox VM from a Mac) — but that’s not that important.</p>
+<p><code class="verbatim">M-c</code> copies the X11 primary buffer (aka X selection) to the clipboard buffer.</p>
+<p>What’s really nice is the <code class="verbatim">M-v</code> shortcut — it pastes the <strong>clipboard</strong> buffer, not the X11 primary buffer (there is <code class="verbatim">S-&lt;insert&gt;</code> (Shift-Insert) for that).
+Now you don’t have to type <code class="verbatim">$(xsel -b)</code> for the same thing.</p>
+<p><code class="verbatim">M-C-v</code> (<code class="verbatim">Alt-Control-v</code>) does the same thing, but escapes any special characters.
+This is very handy — a simple use case might be using <code class="verbatim">M-s</code> (search shortcut discussed above) to find a particular file with a long name (think MP3 files) from the output of <code class="verbatim">ls</code> — you can then just use <code class="verbatim">v</code> to copy that filename to the X11 buffer, then use <code class="verbatim">M-c</code> to copy it to clipboard buffer (if <code class="verbatim">autocopy</code> is working this step is unnecessary), then use <code class="verbatim">M-C-v</code> to paste it in, escaping things like space characters so that you can use other tools like <code class="verbatim">cp</code> or <code class="verbatim">mv</code> on them more easily.</p>
 <h1 id="url-select">url-select</h1>
-<p><a href="https://github.com/muennich/urxvt-perls">Homepage</a> (part of <code>urxvt-perls</code>)</p>
-<p><code>~/.Xdefaults</code> snippet:</p>
+<p><a href="https://github.com/muennich/urxvt-perls">Homepage</a> (part of <code class="verbatim">urxvt-perls</code>)</p>
+<p><code class="verbatim">~/.Xdefaults</code> snippet:</p>
 <pre><code>! url-select. We can middle-click on any url and this will launch the browser
 ! defined by `URxvt.url-select.launcher`.
 URxvt.keysym.M-u: perl:url-select:select_next
 URxvt.url-select.underline: true
 URxvt.url-select.launcher: firefox
 </code></pre>
-<p>. Now you can use <code>M-u</code> to jump between any URL that was printed to the terminal buffer. Use <code>j</code> and <code>k</code> to jump to the next/previous URL, and <code>y</code> to copy it to your X primary buffer (and <code>M-c</code> to make sure it’s also in the clipboard) for easy URL handling. Or, simply press <code>ENTER</code> to open that link in your browser. Next time you grab your mouse to carefully highlight a URL in the terminal, think again!</p>
+<p>.
+Now you can use <code class="verbatim">M-u</code> to jump between any URL that was printed to the terminal buffer.
+Use <code class="verbatim">j</code> and <code class="verbatim">k</code> to jump to the next/previous URL, and <code class="verbatim">y</code> to copy it to your X primary buffer (and <code class="verbatim">M-c</code> to make sure it’s also in the clipboard) for easy URL handling.
+Or, simply press <code class="verbatim">ENTER</code> to open that link in your browser.
+Next time you grab your mouse to carefully highlight a URL in the terminal, think again!</p>
 <h1 id="font-size">font-size</h1>
 <p><a href="https://github.com/majutsushi/urxvt-font-size">Homepage</a></p>
 <p>This plugin allows you to scale fonts up or down.</p>
-<p><code>~/.Xdefaults</code> snippet:</p>
+<p><code class="verbatim">~/.Xdefaults</code> snippet:</p>
 <pre><code>! `font-size` plugin
 URxvt.keysym.C-minus: perl:font-size:decrease
 URxvt.keysym.C-equal: perl:font-size:increase
@@ -100,16 +121,19 @@ URxvt.keysym.C-equal: perl:font-size:increase
 ! size step of 4 for faster transitions between font size changes.
 URxvt.font-size.step: 4
 </code></pre>
-<p>. This is pretty self-explanatory. Use <code>C-minus</code> or <code>C-equal</code> to change your font size as needed — perfect for screencasts or demos!</p>
+<p>.
+This is pretty self-explanatory.
+Use <code class="verbatim">C-minus</code> or <code class="verbatim">C-equal</code> to change your font size as needed — perfect for screencasts or demos!</p>
 <h1 id="conclusion">Conclusion</h1>
-<p>Now that I use these plugins, there’s even less interruption to use the mouse. I hope you find them as useful as I have.</p>
+<p>Now that I use these plugins, there’s even less interruption to use the mouse.
+I hope you find them as useful as I have.</p>
 <p>Happy hacking!</p>
 
 		</div>
 
 		<div id="footer">
 			<img src="../favicon.png" id="brand-icon">
-			<p>Copyright (C) 2013-2021 Linus Arver. All rights reserved.</p>
+			<p>Copyright (C) 2013-2023 Linus Arver. All rights reserved.</p>
 			<a href="https://github.com/listx/listx_blog">Site</a>
 			<a href="https://github.com/listx/listx.github.io">generated</a>
 			with

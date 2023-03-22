@@ -2,6 +2,7 @@
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
@@ -115,7 +116,7 @@ html body sup
 html body hr
 {
   font-size : small;
-  border    : solid 1px #000000;
+  border    : 1px solid #000000;
   margin    : 0px auto 1em auto;
   width     : 76%;
 }
@@ -129,6 +130,7 @@ html body div.center
 
 html body div#sticky-title
 {
+  position           : -webkit-sticky;
   position           : sticky;
   top                : 0;
   z-index            : 2;
@@ -207,7 +209,7 @@ html body div#content div.canvas-tooltip
   position         : absolute;
   background-color : #ffffff;
   padding          : 4px 4px 4px 4px;
-  border           : solid 2px #000000;
+  border           : 2px solid #000000;
   opacity          : 0;
 }
 
@@ -314,7 +316,7 @@ html body div#content table td
 
 html body div#content table td + td
 {
-  border-left : solid 1px #000000;
+  border-left : 1px solid #000000;
 }
 
 
@@ -390,7 +392,7 @@ html body div#content div.code-and-raw div.raw-link
 
 html body div#content div.code-and-raw div.raw-link hr
 {
-  border        : solid 1px #cccccc;
+  border        : 1px solid #cccccc;
   margin-bottom : 0px;
   width         : 76%;
 }
@@ -519,6 +521,13 @@ html body div#content ul
   margin         : 0px 0px 0px 0px;
   padding-left   : 18%;
   padding-right  : 12%;
+  padding-bottom : 1em;
+}
+
+
+html body div#content ul li p
+{
+  padding        : 0px 0px 0px 0px;
   padding-bottom : 1em;
 }
 

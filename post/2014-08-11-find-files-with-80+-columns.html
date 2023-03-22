@@ -45,20 +45,26 @@
 	<a title="All pages tagged 'linux'." href="../tag/linux.html">linux</a>, <a title="All pages tagged 'programming'." href="../tag/programming.html">programming</a>
 </div>
 
-<p>It’s nice to follow the 80-columns-per-line rule<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>, but what if you have some lingering project that has yet to conform?</p>
+<p>It’s nice to follow the 80-columns-per-line rule<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>, but what if you
+have some lingering project that has yet to conform?</p>
 <p>Just go to that project’s sources directory and do</p>
 <div class="code-and-raw">
-<div class="sourceCode" id="cb1" data-startFrom="1"><pre class="sourceCode numberSource numberLines bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">find</span> . -type f -exec sh -c <span class="st">&quot;expand -t 8 {} | grep -n </span><span class="dt">\&quot;</span><span class="st">.\{81\}</span><span class="dt">\&quot;</span><span class="st">&quot;</span> <span class="dt">\;</span> -print</span></code></pre></div>
+<div class="sourceCode" id="cb1" data-startFrom="1"><pre class="sourceCode numberSource numberLines bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">find</span> . <span class="at">-type</span> f <span class="at">-exec</span> sh <span class="at">-c</span> <span class="st">&quot;expand -t 8 {} | grep -n </span><span class="dt">\&quot;</span><span class="st">.\{81\}</span><span class="dt">\&quot;</span><span class="st">&quot;</span> <span class="dt">\;</span> <span class="at">-print</span></span></code></pre></div>
 <div class="raw-link sourceCode">
 <p> <code>find-80-cols.sh</code> <a class="raw" href="https://github.com/listx/listx_blog/blob/master/code/find-80-cols.sh"><code>[GitHub]</code></a> <a class="raw" href="../code/find-80-cols.sh" mimetype="text/plain"><code>[Download]</code></a> </p>
 </div>
 </div>
 <p>.</p>
-<p>The call to <code>expand</code> is necessary because different people use different widths for tabs. That is, we are trying to find files with 80+ <em>columns</em> (as they appear to humans), not 80+ <em>characters</em> (as they appear to the computer).</p>
-<section class="footnotes" role="doc-endnotes">
+<p>The call to <code class="verbatim">expand</code> is necessary because different people use different
+widths for tabs. That is, we are trying to find files with 80+ <em>columns</em>
+(as they appear to humans), not 80+ <em>characters</em> (as they appear to the
+computer).</p>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr />
 <ol>
-<li id="fn1" role="doc-endnote"><p>See the <a href="https://www.kernel.org/doc/Documentation/CodingStyle">Linux Kernel Coding Style</a>, “Chapter 2: Breaking long lines and strings”.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>See the
+<a href="https://www.kernel.org/doc/Documentation/CodingStyle">Linux Kernel Coding Style</a>, “Chapter 2: Breaking long lines and
+strings”.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 
@@ -66,7 +72,7 @@
 
 		<div id="footer">
 			<img src="../favicon.png" id="brand-icon">
-			<p>Copyright (C) 2013-2021 Linus Arver. All rights reserved.</p>
+			<p>Copyright (C) 2013-2023 Linus Arver. All rights reserved.</p>
 			<a href="https://github.com/listx/listx_blog">Site</a>
 			<a href="https://github.com/listx/listx.github.io">generated</a>
 			with

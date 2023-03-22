@@ -8,8 +8,49 @@
         <name>Linus Arver</name>
         <email></email>
     </author>
-    <updated>2021-03-15T00:00:00Z</updated>
+    <updated>2023-03-21T00:00:00Z</updated>
     <entry>
+    <title>Git Archaeology</title>
+    <link href="http://funloop.org/post/2023-03-21-git-archaeology.html" />
+    <id>http://funloop.org/post/2023-03-21-git-archaeology.html</id>
+    <published>2023-03-21T00:00:00Z</published>
+    <updated>2023-03-21T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="info center">
+	<a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2023-03-21-git-archaeology.org" title="History"><code class="date">2023-03-21</code></a>
+	<br>
+	<a title="All pages tagged &#39;programming&#39;." href="/tag/programming.html">programming</a>, <a title="All pages tagged &#39;git&#39;." href="/tag/git.html">git</a>
+</div>
+
+<p>TL;DR: Check out my <a href="https://github.com/listx/git/blob/study/STUDY_NOTES.md">STUDY_NOTES.md</a> on Git if you want a quick understanding of (ancient) Git internals!</p>
+<p>I’ve been using Git since 2009. In all that time I never really bothered with
+understanding Git internals, because frankly after learning what a directed
+acyclic graph (DAG) was, everything just fell into place.</p>
+<p>That’s going to change, because in the coming weeks, I will start contributing
+to Git on a somewhat regular basis (at least, that’s the plan). It won’t be the
+first time contributing to the project (which I did back in <a href="2014-09-09-my-first-contribution-to-git.html">2014</a>), but I will
+need to begin studying how Git works under the hood.</p>
+<p>To that end, I spent the better part of last weekend trying to understand Git’s
+internals. The current Git codebase is a bit daunting, and there’s no way that
+I’m going to read it all any time soon. But the very first commit of Git <em>is</em>
+small enough to read in one sitting, and so I tried compiling it (there were
+lots of errors), while taking notes in the source code directly. I also actually
+used the produced binaries to prove to myself that yes, this system actually
+does work even at this primitive stage.</p>
+<p>Now, there <strong>are</strong> major differences between this ancient root-commit version of
+“Git” and modern Git. However, I’ve taken note of all such differences (at least
+as many as I could gather, within reason) by digging into the <a href="https://lore.kernel.org/git/">Git mailing list archive</a> to try to make sense of why things were changed the way they were (e.g.,
+How come we have so-called “pack” files? How come the SHA1 hash of an object
+(using <code class="verbatim">sha1sum</code>) is not the same as its directory name plus filename?) You can
+see my notes in the <a href="https://github.com/listx/git/blob/study/STUDY_NOTES.md">STUDY_NOTES.md</a> file here for the answers.</p>
+<p>I have to admit that I found Linus Torvalds’ initial design decisions to be
+impressively elegant. Reading the first commit made me have multiple “ah-ha!”
+moments behind why Git has a distinction between the index and the working tree,
+why it doesn’t track empty directories, why Git doesn’t care if you blow away
+the working tree as long as the <code class="verbatim">.git</code> folder is intact, etc. And the code is
+pretty easy to follow! It’s a great resource for any aspiring C hacker.</p>
+]]></summary>
+</entry>
+<entry>
     <title>Bresenham's Circle Drawing Algorithm</title>
     <link href="http://funloop.org/post/2021-03-15-bresenham-circle-drawing-algorithm.html" />
     <id>http://funloop.org/post/2021-03-15-bresenham-circle-drawing-algorithm.html</id>
@@ -50,12 +91,22 @@
 <p>Write a function <code>draw_circle(r)</code> that draws a circle with radius <code>r</code>. Use the given method <code>draw_pixel(x, y)</code> which takes a 2-dimensional point <code>(x, y)</code> and colors it in on the computer screen.</p>
 </blockquote>
 <p>For the solution, you can either collect all pixels (tuples) of <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> coordinate pairs, or just call <code>draw_pixel()</code> on them during the “search” for those pixels that must be filled in.</p>
-<p>This post goes over several solutions, ultimately arriving at Bresenham’s algorithm. The content of this post is merely a distillation of Section 3.3 from the book “Computer Graphics: Principles and Practice (1996)”.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> The authors of the book state that their implementation results in code “essentially the same as that specified in patent 4,371,933 [a.k.a. Bresenham’s algorithm].”<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
-<p>I’ve gone all out and converted the “reference” implementations found in the book and translated them into Rust and Python. The Python was written first, and I used a text-based drawing system to test the correctness. However I became dissatisfied with the non-square “aspect ratio” of most monospaced fonts out there, which distorted the circles to look more like ellipses. To fix this, I decided to port the Python code to Rust, and then target WASM so that I can use it to draw on the HTML5 <code>&lt;canvas&gt;</code> elements (and to eliminate the “aspect ratio” problem). All of the drawings in this document are powered by the Rust code.</p>
+<p>This post goes over several solutions, ultimately arriving at Bresenham’s algorithm.
+The content of this post is merely a distillation of Section 3.3 from the book “Computer Graphics: Principles and Practice (1996)”.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>
+The authors of the book state that their implementation results in code “essentially the same as that specified in patent 4,371,933 [a.k.a. Bresenham’s algorithm].”<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+<p>I’ve gone all out and converted the “reference” implementations found in the book and translated them into Rust and Python.
+The Python was written first, and I used a text-based drawing system to test the correctness.
+However I became dissatisfied with the non-square “aspect ratio” of most monospaced fonts out there, which distorted the circles to look more like ellipses.
+To fix this, I decided to port the Python code to Rust, and then target WASM so that I can use it to draw on the HTML5 <code>&lt;canvas&gt;</code> elements (and to eliminate the “aspect ratio” problem).
+All of the drawings in this document are powered by the Rust code.</p>
 <h1 id="constraints">Constraints</h1>
 <h2 id="drawable-canvas">Drawable canvas</h2>
-<p>Before we start, let’s define the drawable surface (canvas) of pixels for this problem. The pixels are arranged in a 2-dimensional grid. The important thing here is the grid or coordinate system, with the pixel at the center of the grid having the traditional <code>(0, 0)</code> Cartesian coordinate.</p>
-<p>Below is a sample grid to give you a sense of what this will look like. There is a central <code>(0, 0)</code> origin pixel, and 15 pixels to the north, south, east, and west, and everything in-between. Pixels that lie on interesting points of symmetry are highlighted in green.</p>
+<p>Before we start, let’s define the drawable surface (canvas) of pixels for this problem.
+The pixels are arranged in a 2-dimensional grid.
+The important thing here is the grid or coordinate system, with the pixel at the center of the grid having the traditional <code>(0, 0)</code> Cartesian coordinate.</p>
+<p>Below is a sample grid to give you a sense of what this will look like.
+There is a central <code>(0, 0)</code> origin pixel, and 15 pixels to the north, south, east, and west, and everything in-between.
+Pixels that lie on interesting points of symmetry are highlighted in green.</p>
 <canvas id="blank__14__20"></canvas>
 
 <h2 id="mathematical-definitions">Mathematical definitions</h2>
@@ -69,14 +120,20 @@ x^2 + y^2 = r^2.
 <p><span class="math display">\[
 a^2 + b^2 = c^2,
 \]</span></p>
-<p>for any right-angled triangle with sides <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> and hypotenuse <span class="math inline">\(c\)</span>. The resemblance is not a coincidence, because an infinite number of such triangles exists within the top right quadrant of the plane (that is, Quadrant I<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>, or the part of the plane such that <span class="math inline">\(x \geq 0\)</span> and <span class="math inline">\(y \geq 0\)</span>); in Quadrant I, for all points <span class="math inline">\((x,y)\)</span> that make up this portion (or arc) of the circle, their radii is the same as the hypotenuses of these triangles (whose sides are <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>). Later in this post, this will become relevant again when we discuss <a href="https://en.wikipedia.org/wiki/Pythagorean_triple">Pythagorean Triples</a>.</p>
+<p>for any right-angled triangle with sides <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> and hypotenuse <span class="math inline">\(c\)</span>.
+The resemblance is not a coincidence, because an infinite number of such triangles exists within the top right quadrant of the plane (that is, Quadrant I<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>, or the part of the plane such that <span class="math inline">\(x \geq 0\)</span> and <span class="math inline">\(y \geq 0\)</span>); in Quadrant I, for all points <span class="math inline">\((x,y)\)</span> that make up this portion (or arc) of the circle, their radii is the same as the hypotenuses of these triangles (whose sides are <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>).
+Later in this post, this will become relevant again when we discuss <a href="https://en.wikipedia.org/wiki/Pythagorean_triple">Pythagorean Triples</a>.</p>
 <p>Anyway, solving for <span class="math inline">\(y\)</span> in Equation <span class="math inline">\(\ref{eq:circle}\)</span> gives</p>
 <p><span class="math display">\[
 \begin{equation} \label{eq:circle-y}
 y = \pm\sqrt{r^2 - x^2}
 \end{equation}
 \]</span></p>
-<p>to get 2 functions for the top-half and bottom-half of the circle (that’s what the <span class="math inline">\(\pm\)</span> symbol means). Consider the function <span class="math inline">\(y = x\)</span>. This function has slope 1 and is a diagonal line where all values of <span class="math inline">\(x = y\)</span>. Now consider how this line intersects the quarter-arc of the circle in Quadrant I. This intersection point evenly divides the arc into 2 halves, and is where</p>
+<p>to get 2 functions for the top-half and bottom-half of the circle (that’s what the <span class="math inline">\(\pm\)</span> symbol means).
+Consider the function <span class="math inline">\(y = x\)</span>.
+This function has slope 1 and is a diagonal line where all values of <span class="math inline">\(x = y\)</span>.
+Now consider how this line intersects the quarter-arc of the circle in Quadrant I.
+This intersection point evenly divides the arc into 2 halves, and is where</p>
 <p><span class="math display">\[
 x = y = \tfrac{r}{\sqrt{2}},
 \]</span></p>
@@ -106,7 +163,8 @@ x &amp;= \tfrac{r}{\sqrt{2}}. \label{eq:arc-intersection}
 \]</span></p>
 <p>This is not that interesting for purposes of the algorithms in this post, but is something that is glossed over in the book.</p>
 <h2 id="symmetry">Symmetry</h2>
-<p>Because of symmetry, we can mirror the solution <span class="math inline">\((x,y)\)</span> pairs we get in Quadrant I into the other quadrants. This gives us 4-way symmetry because there are 4 quadrants.</p>
+<p>Because of symmetry, we can mirror the solution <span class="math inline">\((x,y)\)</span> pairs we get in Quadrant I into the other quadrants.
+This gives us 4-way symmetry because there are 4 quadrants.</p>
 <div class="code-and-raw">
 <div class="sourceCode" id="cb1" data-startFrom="164"><pre class="sourceCode numberSource numberLines python"><code class="sourceCode python" style="counter-reset: source-line 163;"><span id="cb1-164"><a href="#cb1-164"></a><span class="kw">def</span> mirror_points_4(x, y):</span>
 <span id="cb1-165"><a href="#cb1-165"></a>    <span class="co">&quot;&quot;&quot; Return 4-way symmetry of points. &quot;&quot;&quot;</span></span>
@@ -187,7 +245,8 @@ x &amp;= \tfrac{r}{\sqrt{2}}. \label{eq:arc-intersection}
 </div>
 <p>Fun fact: the exact point at which <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> get “swapped” in Quadrant I is when <span class="math inline">\(x = y = \tfrac{r}{\sqrt{2}}\)</span> (Equation <span class="math inline">\(\ref{eq:arc-intersection}\)</span>).</p>
 <h1 id="naive-solutions">Naive solutions</h1>
-<p>When in doubt, brute force is always a great answer, because at least it gets you started on something that works given enough time and/or memory.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> Because we already have clear mathematical definitions, we can just translate them (albeit mechanically) to code.</p>
+<p>When in doubt, brute force is always a great answer, because at least it gets you started on something that works given enough time and/or memory.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>
+Because we already have clear mathematical definitions, we can just translate them (albeit mechanically) to code.</p>
 <div class="code-and-raw">
 <div class="sourceCode" id="cb3" data-startFrom="7"><pre class="sourceCode numberSource numberLines python"><code class="sourceCode python" style="counter-reset: source-line 6;"><span id="cb3-7"><a href="#cb3-7"></a><span class="kw">def</span> get_circle_points_naive_4(r):</span>
 <span id="cb3-8"><a href="#cb3-8"></a>    <span class="co">&quot;&quot;&quot; Draw a circle by pairing up each Y value with an X value that lie on a</span></span>
@@ -207,7 +266,10 @@ x &amp;= \tfrac{r}{\sqrt{2}}. \label{eq:arc-intersection}
 <p><code>get_circle_points_naive_4()</code> is the simplest translation, although there is a bug, which is obvious when we visualize it (in this case, for <span class="math inline">\(r = 15\)</span>):</p>
 <canvas id="naive_4__15__20"></canvas>
 
-<p>The <code>get_circle_points_naive_4()</code> is based on Equation <span class="math inline">\(\ref{eq:circle-y}\)</span>. We iterate <span class="math inline">\(x\)</span> from <span class="math inline">\(0\)</span> to <span class="math inline">\(r\)</span> <a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>, and at each <span class="math inline">\(x\)</span> try to find the best value for <span class="math inline">\(y\)</span>. The problem is that we’re only solving for 1 <span class="math inline">\(y\)</span> value for every <span class="math inline">\(x\)</span> value we increment by. As we get near the left and right sides of the circle, we need to calculate more than just 1 <span class="math inline">\(y\)</span> value for every <span class="math inline">\(x\)</span>.<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a>.</p>
+<p>The <code>get_circle_points_naive_4()</code> is based on Equation <span class="math inline">\(\ref{eq:circle-y}\)</span>.
+We iterate <span class="math inline">\(x\)</span> from <span class="math inline">\(0\)</span> to <span class="math inline">\(r\)</span> <a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>, and at each <span class="math inline">\(x\)</span> try to find the best value for <span class="math inline">\(y\)</span>.
+The problem is that we’re only solving for 1 <span class="math inline">\(y\)</span> value for every <span class="math inline">\(x\)</span> value we increment by.
+As we get near the left and right sides of the circle, we need to calculate more than just 1 <span class="math inline">\(y\)</span> value for every <span class="math inline">\(x\)</span>.<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a>.</p>
 <p>The <code>get_circle_points_naive_8()</code> function gets around this <span class="math inline">\(y\)</span>-skip bug by invoking 8-way symmetry instead:</p>
 <div class="code-and-raw">
 <div class="sourceCode" id="cb4" data-startFrom="20"><pre class="sourceCode numberSource numberLines python"><code class="sourceCode python" style="counter-reset: source-line 19;"><span id="cb4-20"><a href="#cb4-20"></a><span class="kw">def</span> get_circle_points_naive_8(r):</span>
@@ -225,7 +287,8 @@ x &amp;= \tfrac{r}{\sqrt{2}}. \label{eq:arc-intersection}
 </div>
 <canvas id="naive_8__15__20"></canvas>
 
-<p>However the downside is that it results in multiple points that will be drawn 2 times, wasting CPU cycles.<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a> To be more precise, all points around the gappy area in Quadrant I are redundant because that part of the arc is already mirrored nicely by the contiguous points from <span class="math inline">\(x = 0\)</span> to <span class="math inline">\(x = y\)</span>.</p>
+<p>However the downside is that it results in multiple points that will be drawn 2 times, wasting CPU cycles.<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a>
+To be more precise, all points around the gappy area in Quadrant I are redundant because that part of the arc is already mirrored nicely by the contiguous points from <span class="math inline">\(x = 0\)</span> to <span class="math inline">\(x = y\)</span>.</p>
 <p>The <code>get_circle_points_naive_8_faster()</code> function avoids drawing the gappy areas by just breaking the loop when <span class="math inline">\(x &gt; y\)</span>, but is otherwise the same:</p>
 <div class="code-and-raw">
 <div class="sourceCode" id="cb5" data-startFrom="31"><pre class="sourceCode numberSource numberLines python"><code class="sourceCode python" style="counter-reset: source-line 30;"><span id="cb5-31"><a href="#cb5-31"></a><span class="kw">def</span> get_circle_points_naive_8_faster(r):</span>
@@ -246,25 +309,36 @@ x &amp;= \tfrac{r}{\sqrt{2}}. \label{eq:arc-intersection}
 <p> <code>naive.py</code> <a class="raw" href="https://github.com/listx/listx_blog/blob/master/code/2021-03-15-bresenham-circle-drawing-algorithm/naive.py#L31-L44"><code>[GitHub]</code></a> <a class="raw" href="/code/2021-03-15-bresenham-circle-drawing-algorithm/naive.py"mimetype=text/plain><code>[Download]</code></a> </p>
 </div>
 </div>
-<p>This is the best we can do with the simple mathematical translations to code. Note that in all of these implementations we are still forced to calculate square roots in every iteration, which is certainly suboptimal.</p>
+<p>This is the best we can do with the simple mathematical translations to code.
+Note that in all of these implementations we are still forced to calculate square roots in every iteration, which is certainly suboptimal.</p>
 <h1 id="bresenhams-algorithm">Bresenham’s Algorithm</h1>
-<p>This as also known as the “Midpoint Circle Algorithm,” where the name “midpoint” comes from the mathematical calculations that are done by considering the midpoint <strong>between</strong> pixels. The gist of the algorithm is that instead of using Equation <span class="math inline">\(\ref{eq:circle-y}\)</span> to calculate <span class="math inline">\(y\)</span> for every <span class="math inline">\(x\)</span>, instead you try to <em>move</em> along the arc of the circle, pixel-to-pixel, staying as close as possible to the true arc:</p>
-<ol>
+<p>This as also known as the “Midpoint Circle Algorithm,” where the name “midpoint” comes from the mathematical calculations that are done by considering the midpoint <strong>between</strong> pixels.
+The gist of the algorithm is that instead of using Equation <span class="math inline">\(\ref{eq:circle-y}\)</span> to calculate <span class="math inline">\(y\)</span> for every <span class="math inline">\(x\)</span>, instead you try to <em>move</em> along the arc of the circle, pixel-to-pixel, staying as close as possible to the true arc:</p>
+<ol type="1">
 <li>Start out from the top of the circle (color in pixel <span class="math inline">\((0, r)\)</span>). Note that because of symmetry, we could start out from <span class="math inline">\((0, -r)\)</span>, <span class="math inline">\((r, 0)\)</span>, or even <span class="math inline">\((-r, 0)\)</span> as Bresenham did in his paper.<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a></li>
 <li>Move right (east (E)) or down-right (southeast (SE)), whichever is closer to the circle.</li>
 <li>Stop when <span class="math inline">\(x = y\)</span> (just like in <code>get_circle_points_naive_8_faster()</code>).</li>
 </ol>
-<p>The hard part is Step 2, where we just need to figure out which direction to move (E or SE) from the current pixel. The brute force way here is to just calculate the distance away from the center of the circle for the E and SE pixels (using <a href="https://en.wikipedia.org/wiki/Euclidean_distance">Euclidean distance</a>, which is just a variation of Equation <span class="math inline">\(\ref{eq:circle}\)</span> or the Pythagorean Theorem), and just choose the pixel that is closest to the arc of the circle. This makes sense, but with the power of mathematics, we can do better.</p>
+<p>The hard part is Step 2, where we just need to figure out which direction to move (E or SE) from the current pixel.
+The brute force way here is to just calculate the distance away from the center of the circle for the E and SE pixels (using <a href="https://en.wikipedia.org/wiki/Euclidean_distance">Euclidean distance</a>, which is just a variation of Equation <span class="math inline">\(\ref{eq:circle}\)</span> or the Pythagorean Theorem), and just choose the pixel that is closest to the arc of the circle.
+This makes sense, but with the power of mathematics, we can do better.</p>
 <h2 id="inside-on-or-outside-the-circle">Inside, on, or outside the circle?</h2>
-<p>In order to figure out whether some point <span class="math inline">\((x, y)\)</span> is inside, on, or outside of the circle depends on the definition of the circle from Equation <span class="math inline">\(\ref{eq:circle}\)</span>. We can tweak it in terms of any <span class="math inline">\((x, y)\)</span> pair:</p>
+<p>In order to figure out whether some point <span class="math inline">\((x, y)\)</span> is inside, on, or outside of the circle depends on the definition of the circle from Equation <span class="math inline">\(\ref{eq:circle}\)</span>.
+We can tweak it in terms of any <span class="math inline">\((x, y)\)</span> pair:</p>
 <p><span class="math display">\[
 \begin{equation} \label{eq:error-margin}
 F(x,y) = x^2 + y^2 - r^2 = \text{distance from true circle line}.
 \end{equation}
 \]</span></p>
-<p>Note that if <span class="math inline">\(F(x,y) = 0\)</span>, then the point <span class="math inline">\((x, y)\)</span> is <em>exactly</em> on the circle. If <span class="math inline">\(F(x,y) &gt; 0\)</span>, then the point is outside of the circle, and if <span class="math inline">\(F(x,y) &lt; 0\)</span> then the point is inside of it. In other words, given any point <span class="math inline">\((x, y)\)</span>, <span class="math inline">\(F(x, y)\)</span> is the distance from the true circle line.</p>
+<p>Note that if <span class="math inline">\(F(x,y) = 0\)</span>, then the point <span class="math inline">\((x, y)\)</span> is <em>exactly</em> on the circle.
+If <span class="math inline">\(F(x,y) &gt; 0\)</span>, then the point is outside of the circle, and if <span class="math inline">\(F(x,y) &lt; 0\)</span> then the point is inside of it.
+In other words, given any point <span class="math inline">\((x, y)\)</span>, <span class="math inline">\(F(x, y)\)</span> is the distance from the true circle line.</p>
 <h2 id="choosing-between-e-or-se">Choosing between E or SE</h2>
-<p>Let’s remind ourselves that we’ll always be moving E or SE. One critical (pragmatic) property here is that we’re dealing with a pixel grid with integer increments. There is a very high chance that neither the E or SE pixels we’re moving to is <strong>exactly</strong> on the circle. This is because the only time that the point <span class="math inline">\((x,y)\)</span> will exactly be on the line of the circle is if the <span class="math inline">\(x\)</span>, <span class="math inline">\(y\)</span>, and <span class="math inline">\(r\)</span> values (as integers) form a so-called <a href="https://en.wikipedia.org/wiki/Pythagorean_triple">Pythagorean Triple</a>. For <span class="math inline">\(r &lt; 100\)</span>, there are only 50 such triples:</p>
+<p>Let’s remind ourselves that we’ll always be moving E or SE.
+One critical (pragmatic) property here is that we’re dealing with a pixel grid with integer increments.
+There is a very high chance that neither the E or SE pixels we’re moving to is <strong>exactly</strong> on the circle.
+This is because the only time that the point <span class="math inline">\((x,y)\)</span> will exactly be on the line of the circle is if the <span class="math inline">\(x\)</span>, <span class="math inline">\(y\)</span>, and <span class="math inline">\(r\)</span> values (as integers) form a so-called <a href="https://en.wikipedia.org/wiki/Pythagorean_triple">Pythagorean Triple</a>.
+For <span class="math inline">\(r &lt; 100\)</span>, there are only 50 such triples:</p>
 <pre><code>( 3, 4, 5)  (18,24,30)  (24,45,51)  (16,63,65)  (51,68,85)
 ( 6, 8,10)  (16,30,34)  (20,48,52)  (32,60,68)  (40,75,85)
 ( 5,12,13)  (21,28,35)  (28,45,53)  (42,56,70)  (36,77,85)
@@ -276,10 +350,17 @@ F(x,y) = x^2 + y^2 - r^2 = \text{distance from true circle line}.
 (10,24,26)  (30,40,50)  (33,56,65)  (48,64,80)  (57,76,95)
 (20,21,29)  (14,48,50)  (25,60,65)  (18,80,82)  (65,72,97)
 </code></pre>
-<p>In other words, for all practical purposes, <strong>there will always be some error</strong> and we’ll always be outside or inside the circle and never directly on it. It’s sort of like driving a car and trying to stay within your designated lane: if you think you’re moving too much to the right, you turn your wheel left to stay “within” the lane (or some acceptable amount within the lane), and vice versa.</p>
-<p>The idea is the same for moving along the circle: if we think we’re moving too far <em>outside</em> the circle, we try to move into it. On the other hand, if we think we’re moving <em>into</em> the circle, we move out of it. And so imagine yourself standing on point <span class="math inline">\((0, r)\)</span>, our starting point. The line of the circle is our “lane” we want to stay “on” as much as possible. Choosing to go E is the same as turning “left”. Choosing to go SE is the same as turning “right”. Using this metaphor, if we were not to turn at all (go “straight”), we would be heading to the virtual “in-between” pixel between E and SE, the <strong>midpoint</strong> between them.</p>
+<p>In other words, for all practical purposes, <strong>there will always be some error</strong> and we’ll always be outside or inside the circle and never directly on it.
+It’s sort of like driving a car and trying to stay within your designated lane: if you think you’re moving too much to the right, you turn your wheel left to stay “within” the lane (or some acceptable amount within the lane), and vice versa.</p>
+<p>The idea is the same for moving along the circle: if we think we’re moving too far <em>outside</em> the circle, we try to move into it.
+On the other hand, if we think we’re moving <em>into</em> the circle, we move out of it.
+And so imagine yourself standing on point <span class="math inline">\((0, r)\)</span>, our starting point.
+The line of the circle is our “lane” we want to stay “on” as much as possible.
+Choosing to go E is the same as turning “left”.
+Choosing to go SE is the same as turning “right”.
+Using this metaphor, if we were not to turn at all (go “straight”), we would be heading to the virtual “in-between” pixel between E and SE, the <strong>midpoint</strong> between them.</p>
 <p>And so here’s the basic idea behind choosing E or SE:</p>
-<ol>
+<ol type="1">
 <li>If going “straight” would mean going into the circle (i.e., we’re currently veering too much to the right!), we course-correct by turning left (E).</li>
 <li>Conversely, if going “straight” would mean going outside the circle (i.e., we’re currently veering too much to the left), we course-correct by turning right (SE).</li>
 <li>Lastly, if going “straight” would mean staying exactly on the circle (we hit a Pythagorean Triple), we turn SE (from an engineering perspective it doesn’t really matter which way we turn in this case, as both E and SE result in some amount of error — although see <a href="#final-tweaks">“Final tweaks”</a> below for a note on aesthetics).</li>
@@ -293,7 +374,9 @@ If F(M) is &lt; 0, we&#39;re moving &quot;into&quot; the circle (veering right),
 
 Otherwise move SE.
 </code></pre>
-<p>Note that we only have to calculate <span class="math inline">\(F(...)\)</span> for the midpoint <span class="math inline">\(M\)</span>. Isn’t this cool? It is much better than calculating <span class="math inline">\(F(E)\)</span> and <span class="math inline">\(F(SE)\)</span> and having to compare them!</p>
+<p>Note that we only have to calculate <span class="math inline">\(F(...)\)</span> for the midpoint <span class="math inline">\(M\)</span>.
+Isn’t this cool?
+It is much better than calculating <span class="math inline">\(F(E)\)</span> and <span class="math inline">\(F(SE)\)</span> and having to compare them!</p>
 <div class="sourceCode" id="cb8" data-startFrom="1"><pre class="sourceCode numberSource python numberLines"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a><span class="co"># This F() function is the same as the mathematical F(...) function</span></span>
 <span id="cb8-2"><a href="#cb8-2"></a><span class="co"># discussed above (Equation 11).</span></span>
 <span id="cb8-3"><a href="#cb8-3"></a><span class="kw">def</span> F(x, y, r):</span>
@@ -323,7 +406,9 @@ Otherwise move SE.
 <span id="cb8-27"><a href="#cb8-27"></a>            F_M <span class="op">=</span> F(x, y, r)</span>
 <span id="cb8-28"><a href="#cb8-28"></a>        points.extend(mirror_points_8(x, y))</span>
 <span id="cb8-29"><a href="#cb8-29"></a>    <span class="cf">return</span> points</span></code></pre></div>
-<p>We can refactor the above slightly. We can simplify the initial calculation of <code>F_M</code> to avoid calling <code>F()</code>, and also move out some of the redundant bits. The very first midpoint we have to consider is <span class="math inline">\((1, r - \tfrac{1}{2})\)</span>; plugging this into <span class="math inline">\(F()\)</span> gets us</p>
+<p>We can refactor the above slightly.
+We can simplify the initial calculation of <code>F_M</code> to avoid calling <code>F()</code>, and also move out some of the redundant bits.
+The very first midpoint we have to consider is <span class="math inline">\((1, r - \tfrac{1}{2})\)</span>; plugging this into <span class="math inline">\(F()\)</span> gets us</p>
 <p><span class="math display">\[
 \begin{align}
 F(1, r - \tfrac{1}{2}) &amp;= 1^2 + (r - \tfrac{1}{2})^2 - r^2
@@ -356,10 +441,13 @@ F(1, r - \tfrac{1}{2}) &amp;= 1^2 + (r - \tfrac{1}{2})^2 - r^2
 <span id="cb9-16"><a href="#cb9-16"></a>        F_M <span class="op">=</span> F(x, y, r)</span>
 <span id="cb9-17"><a href="#cb9-17"></a>        points.extend(mirror_points_8(x, y))</span>
 <span id="cb9-18"><a href="#cb9-18"></a>    <span class="cf">return</span> points</span></code></pre></div>
-<p>The annoying bit is the call to <code>F()</code>. Surprisingly, the call to <code>F()</code> can be elimitated entirely, because we can <em>calculate it once</em>, and then merely adjust it thereafter.</p>
+<p>The annoying bit is the call to <code>F()</code>.
+Surprisingly, the call to <code>F()</code> can be elimitated entirely, because we can <em>calculate it once</em>, and then merely adjust it thereafter.</p>
 <h2 id="calculate-once-adjust-thereafter">Calculate once, adjust thereafter</h2>
-<p>We can just calculate <span class="math inline">\(F(x,y)\)</span> <em>once</em> when we start out at <span class="math inline">\((0, r)\)</span>, and then just <em>adjust it</em> depending on whether we move E or SE. The key is that this “adjustment” computation is cheaper than calculating the full <span class="math inline">\(F(x,y)\)</span> distance function all over again.</p>
-<p>Let <span class="math inline">\(M\)</span> be the midpoint <span class="math inline">\((x + 1, y - \tfrac{1}{2})\)</span> between the E <span class="math inline">\((x + 1, y)\)</span> and SE <span class="math inline">\((x + 1, y - 1)\)</span> pixels. Then <span class="math inline">\(F(M)\)</span> is the result of going “straight” and tells us the direction we’re veering off from the circle line:</p>
+<p>We can just calculate <span class="math inline">\(F(x,y)\)</span> <em>once</em> when we start out at <span class="math inline">\((0, r)\)</span>, and then just <em>adjust it</em> depending on whether we move E or SE.
+The key is that this “adjustment” computation is cheaper than calculating the full <span class="math inline">\(F(x,y)\)</span> distance function all over again.</p>
+<p>Let <span class="math inline">\(M\)</span> be the midpoint <span class="math inline">\((x + 1, y - \tfrac{1}{2})\)</span> between the E <span class="math inline">\((x + 1, y)\)</span> and SE <span class="math inline">\((x + 1, y - 1)\)</span> pixels.
+Then <span class="math inline">\(F(M)\)</span> is the result of going “straight” and tells us the direction we’re veering off from the circle line:</p>
 <p><span class="math display">\[
 \begin{equation}
 F(M) = F(x + 1, y - \tfrac{1}{2}) = (x + 1)^2 + (y - \tfrac{1}{2})^2 - r^2.
@@ -372,7 +460,9 @@ F(M) = F(x + 1, y - \tfrac{1}{2}) = (x + 1)^2 + (y - \tfrac{1}{2})^2 - r^2.
 F(M_{E}) = F(x + 2, y - \tfrac{1}{2}) = (x + 2)^2 + (y - \tfrac{1}{2})^2 - r^2.
 \end{equation}
 \]</span></p>
-<p>Now we can take the <strong>difference</strong> between these two full calculations. That is, if we were to move E, how would <span class="math inline">\(F(M)\)</span> change? Simple, we just look at the change in <span class="math inline">\(x\)</span> (<span class="math inline">\(\Delta_{x}\)</span>) (we don’t care about the change in <span class="math inline">\(y\)</span> or <span class="math inline">\(r\)</span>, because they stay constant in this case).</p>
+<p>Now we can take the <strong>difference</strong> between these two full calculations.
+That is, if we were to move E, how would <span class="math inline">\(F(M)\)</span> change?
+Simple, we just look at the change in <span class="math inline">\(x\)</span> (<span class="math inline">\(\Delta_{x}\)</span>) (we don’t care about the change in <span class="math inline">\(y\)</span> or <span class="math inline">\(r\)</span>, because they stay constant in this case).</p>
 <p><span class="math display">\[
 \begin{align}
 \Delta_{E} &amp;= F(M_{E}) - F(M)
@@ -391,8 +481,10 @@ F(M_{E}) = F(x + 2, y - \tfrac{1}{2}) = (x + 2)^2 + (y - \tfrac{1}{2})^2 - r^2.
 &amp;= 2x + 3. \label{eq:de2}
 \end{align}
 \]</span></p>
-<p>So <span class="math inline">\(F(M)\)</span> will change by <span class="math inline">\(2x + 3\)</span> if we move E. So at any given point, if we move E, <span class="math inline">\(F(M)\)</span> will <em>always</em> change by <span class="math inline">\(2x + 3\)</span>.</p>
-<p>How about for moving SE? If we move SE, the new value of <span class="math inline">\(M\)</span> will change from <span class="math inline">\((x + 1, y - \tfrac{1}{2})\)</span> to <span class="math inline">\((x + 2, y - \tfrac{3}{2})\)</span> because we add 1 to <span class="math inline">\(x\)</span> and subtract 1 from <span class="math inline">\(y\)</span> to move 1 pixel southeast; the new value of <span class="math inline">\(F(M)\)</span> for this case, which we call <span class="math inline">\(F(M_{SE})\)</span>, will then be:</p>
+<p>So <span class="math inline">\(F(M)\)</span> will change by <span class="math inline">\(2x + 3\)</span> if we move E.
+So at any given point, if we move E, <span class="math inline">\(F(M)\)</span> will <em>always</em> change by <span class="math inline">\(2x + 3\)</span>.</p>
+<p>How about for moving SE?
+If we move SE, the new value of <span class="math inline">\(M\)</span> will change from <span class="math inline">\((x + 1, y - \tfrac{1}{2})\)</span> to <span class="math inline">\((x + 2, y - \tfrac{3}{2})\)</span> because we add 1 to <span class="math inline">\(x\)</span> and subtract 1 from <span class="math inline">\(y\)</span> to move 1 pixel southeast; the new value of <span class="math inline">\(F(M)\)</span> for this case, which we call <span class="math inline">\(F(M_{SE})\)</span>, will then be:</p>
 <p><span class="math display">\[
 \begin{equation}
 F(M_{SE}) = F(x + 2, y - \tfrac{3}{2}) = (x + 2)^2 + (y - \tfrac{3}{2})^2 - r^2.
@@ -452,8 +544,13 @@ F(M_{SE}) = F(x + 2, y - \tfrac{3}{2}) = (x + 2)^2 + (y - \tfrac{3}{2})^2 - r^2.
 </div>
 </div>
 <h2 id="integer-only-optimization">Integer-only optimization</h2>
-<p>The initial value of <code>F_M</code> (<span class="math inline">\(F(M)\)</span>) is <span class="math inline">\(\tfrac{5}{4} - r\)</span>. Notice how this is the only place where we have to perform division in the whole algorithm. We can avoid this initial division (and subsequent floating point arithmetic) by initializing it to <span class="math inline">\(1 - r\)</span> instead, which is a difference of <span class="math inline">\(\tfrac{1}{4}\)</span> vs the original.</p>
-<p>Because we tweaked the initialization by <span class="math inline">\(\tfrac{1}{4}\)</span>, we have to do the same for all comparisons of <span class="math inline">\(F(M)\)</span> moving forward. That is, the comparison <span class="math inline">\(F(M) &lt; 0\)</span> actually becomes <span class="math inline">\(F(M) &lt; -\tfrac{1}{4}\)</span>. <em>However, this fractional comparison is unnecessary</em> because we only deal with integer increments and decrements in the rest of the code, so we can just keep the same <span class="math inline">\(F(M) &lt; 0\)</span> as before. In other words, our algorithm only cares about whole numbers, so worrying about this extra <span class="math inline">\(\tfrac{1}{4}\)</span> difference is meaningless.</p>
+<p>The initial value of <code>F_M</code> (<span class="math inline">\(F(M)\)</span>) is <span class="math inline">\(\tfrac{5}{4} - r\)</span>.
+Notice how this is the only place where we have to perform division in the whole algorithm.
+We can avoid this initial division (and subsequent floating point arithmetic) by initializing it to <span class="math inline">\(1 - r\)</span> instead, which is a difference of <span class="math inline">\(\tfrac{1}{4}\)</span> vs the original.</p>
+<p>Because we tweaked the initialization by <span class="math inline">\(\tfrac{1}{4}\)</span>, we have to do the same for all comparisons of <span class="math inline">\(F(M)\)</span> moving forward.
+That is, the comparison <span class="math inline">\(F(M) &lt; 0\)</span> actually becomes <span class="math inline">\(F(M) &lt; -\tfrac{1}{4}\)</span>.
+<em>However, this fractional comparison is unnecessary</em> because we only deal with integer increments and decrements in the rest of the code, so we can just keep the same <span class="math inline">\(F(M) &lt; 0\)</span> as before.
+In other words, our algorithm only cares about whole numbers, so worrying about this extra <span class="math inline">\(\tfrac{1}{4}\)</span> difference is meaningless.</p>
 <div class="code-and-raw">
 <div class="sourceCode" id="cb11" data-startFrom="26"><pre class="sourceCode numberSource numberLines python"><code class="sourceCode python" style="counter-reset: source-line 25;"><span id="cb11-26"><a href="#cb11-26"></a><span class="kw">def</span> get_circle_points_bresenham_integer_ese(r):</span>
 <span id="cb11-27"><a href="#cb11-27"></a>    <span class="co">&quot;&quot;&quot; Like draw_circle_bresenham_float_ese, but F_M is an integer variable.</span></span>
@@ -480,15 +577,20 @@ F(M_{SE}) = F(x + 2, y - \tfrac{3}{2}) = (x + 2)^2 + (y - \tfrac{3}{2})^2 - r^2.
 </div>
 </div>
 <h2 id="second-order-differences">Second-order differences</h2>
-<p>There is a final optimization we can do.<a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a> In the <a href="#calculate-once-adjust-thereafter">“Calculate once, adjust thereafter” section</a> we avoided calculating <span class="math inline">\(F(M)\)</span> from scratch on every iteration. We can do the same thing for the differences themselves!</p>
+<p>There is a final optimization we can do.<a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a>
+In the <a href="#calculate-once-adjust-thereafter">“Calculate once, adjust thereafter” section</a> we avoided calculating <span class="math inline">\(F(M)\)</span> from scratch on every iteration.
+We can do the same thing for the differences themselves!</p>
 <p>That is, we can avoid calculating <span class="math inline">\(\Delta_{E} = (2x + 3)\)</span> and <span class="math inline">\(\Delta_{SE} = 2(x - y) + 5\)</span> on every iteration, and instead just calculate them <em>once</em> and make adjustments to them, just like we did earlier for <span class="math inline">\(F(M)\)</span>.</p>
-<p>Let’s first consider how <span class="math inline">\(\Delta_{E} = 2x + 3\)</span> changes. First, we initialize <span class="math inline">\(\Delta_{E}\)</span> by plugging in <span class="math inline">\((0, r)\)</span> into Equation <span class="math inline">\(\ref{eq:de2}\)</span>, our starting point. Because there is no <span class="math inline">\(y\)</span> variable in here, we get an initial value of</p>
+<p>Let’s first consider how <span class="math inline">\(\Delta_{E} = 2x + 3\)</span> changes.
+First, we initialize <span class="math inline">\(\Delta_{E}\)</span> by plugging in <span class="math inline">\((0, r)\)</span> into Equation <span class="math inline">\(\ref{eq:de2}\)</span>, our starting point.
+Because there is no <span class="math inline">\(y\)</span> variable in here, we get an initial value of</p>
 <p><span class="math display">\[
 \begin{equation} \label{eq:de-2ord-initial}
 2(0) + 3 = 3.
 \end{equation}
 \]</span></p>
-<p>If we go E, <span class="math inline">\(\Delta_{E}\)</span> changes like this: <span class="math display">\[
+<p>If we go E, <span class="math inline">\(\Delta_{E}\)</span> changes like this:
+<span class="math display">\[
 \begin{align}
 \Delta_{E_{new}} = \Delta_{E_(x+1,y)} - \Delta_{E_(x,y)} &amp;= [2(x+1) + 3] - (2x + 3) \label{eq:de-2ord-e}
 \\
@@ -500,7 +602,8 @@ F(M_{SE}) = F(x + 2, y - \tfrac{3}{2}) = (x + 2)^2 + (y - \tfrac{3}{2})^2 - r^2.
 \end{align}
 \]</span></p>
 <p>If we go SE, <span class="math inline">\(\Delta_{E}\)</span> changes in the exact same way, because even though our new point is at <span class="math inline">\((x+1, y-1)\)</span>, there is no <span class="math inline">\(y\)</span> in <span class="math inline">\(\Delta_{E} = 2x + 3\)</span>, so it doesn’t matter and <span class="math inline">\(\Delta_{E_{new}} = 2\)</span> again.</p>
-<p>Now let’s consider how <span class="math inline">\(\Delta_{SE}\)</span> changes. For the initial value, we again plug in <span class="math inline">\((0, r)\)</span> into <span class="math inline">\(2(x-y) + 5\)</span>, to get</p>
+<p>Now let’s consider how <span class="math inline">\(\Delta_{SE}\)</span> changes.
+For the initial value, we again plug in <span class="math inline">\((0, r)\)</span> into <span class="math inline">\(2(x-y) + 5\)</span>, to get</p>
 <p><span class="math display">\[
 \begin{equation} \label{eq:dse-2ord-initial}
 2(0-r) + 5 = -2r + 5.
@@ -590,7 +693,8 @@ F(M_{SE}) = F(x + 2, y - \tfrac{3}{2}) = (x + 2)^2 + (y - \tfrac{3}{2})^2 - r^2.
 <p> <code>bresenham.py</code> <a class="raw" href="https://github.com/listx/listx_blog/blob/master/code/2021-03-15-bresenham-circle-drawing-algorithm/bresenham.py#L48-L73"><code>[GitHub]</code></a> <a class="raw" href="/code/2021-03-15-bresenham-circle-drawing-algorithm/bresenham.py"mimetype=text/plain><code>[Download]</code></a> </p>
 </div>
 </div>
-<p>The “purist” in me felt that the decrementing of <span class="math inline">\(y\)</span> stood out like a sore thumb, and so I created a tweaked version that moves E and NE, starting out from <span class="math inline">\((0, -r)\)</span> instead. The mathematical techniques are the same, and due to symmetry the behavior of the algorithm does not change.</p>
+<p>The “purist” in me felt that the decrementing of <span class="math inline">\(y\)</span> stood out like a sore thumb, and so I created a tweaked version that moves E and NE, starting out from <span class="math inline">\((0, -r)\)</span> instead.
+The mathematical techniques are the same, and due to symmetry the behavior of the algorithm does not change.</p>
 <div class="code-and-raw">
 <div class="sourceCode" id="cb14" data-startFrom="99"><pre class="sourceCode numberSource numberLines python"><code class="sourceCode python" style="counter-reset: source-line 98;"><span id="cb14-99"><a href="#cb14-99"></a><span class="kw">def</span> get_circle_points_bresenham_integer_ene_2order(r):</span>
 <span id="cb14-100"><a href="#cb14-100"></a>    <span class="co">&quot;&quot;&quot; Like draw_circle_bresenham_integer_ene, but start from (0, -r) and move</span></span>
@@ -621,7 +725,8 @@ F(M_{SE}) = F(x + 2, y - \tfrac{3}{2}) = (x + 2)^2 + (y - \tfrac{3}{2})^2 - r^2.
 <p> <code>bresenham.py</code> <a class="raw" href="https://github.com/listx/listx_blog/blob/master/code/2021-03-15-bresenham-circle-drawing-algorithm/bresenham.py#L99-L123"><code>[GitHub]</code></a> <a class="raw" href="/code/2021-03-15-bresenham-circle-drawing-algorithm/bresenham.py"mimetype=text/plain><code>[Download]</code></a> </p>
 </div>
 </div>
-<p>Here are a couple drawings using Bresenham’s algorithm. This one is for <span class="math inline">\(r = 15\)</span>:</p>
+<p>Here are a couple drawings using Bresenham’s algorithm.
+This one is for <span class="math inline">\(r = 15\)</span>:</p>
 <canvas id="bresenham_integer_ene_2order__15__20"></canvas>
 
 <p>And for <span class="math inline">\(r = 60\)</span>:</p>
@@ -714,7 +819,8 @@ F(M_{SE}) = F(x + 2, y - \tfrac{3}{2}) = (x + 2)^2 + (y - \tfrac{3}{2})^2 - r^2.
 </div>
 </div>
 <p>Indeed, the small tweak seems to do wonders to the output for low values of <span class="math inline">\(r\)</span>.</p>
-<p>At the same time, there is a tweak we can do as well for the Bresenham algorithm. Instead of turning E (“left”, or away from the circle) when <span class="math inline">\(F(M) &lt; 0\)</span>, we can do so when <span class="math inline">\(F(M) \leq 0\)</span>.</p>
+<p>At the same time, there is a tweak we can do as well for the Bresenham algorithm.
+Instead of turning E (“left”, or away from the circle) when <span class="math inline">\(F(M) &lt; 0\)</span>, we can do so when <span class="math inline">\(F(M) \leq 0\)</span>.</p>
 <div class="code-and-raw">
 <div class="sourceCode" id="cb16" data-startFrom="126"><pre class="sourceCode numberSource numberLines python"><code class="sourceCode python" style="counter-reset: source-line 125;"><span id="cb16-126"><a href="#cb16-126"></a><span class="kw">def</span> get_circle_points_bresenham_integer_ene_2order_leq(r):</span>
 <span id="cb16-127"><a href="#cb16-127"></a>    <span class="co">&quot;&quot;&quot; Like draw_circle_bresenham_integer_ene_2order, but use &#39;f_m &lt;= 0&#39;</span></span>
@@ -832,26 +938,33 @@ F(M_{SE}) = F(x + 2, y - \tfrac{3}{2}) = (x + 2)^2 + (y - \tfrac{3}{2})^2 - r^2.
   </tr>
 </table>
 
-<p>It appears to me that the most aesthetically pleasing algorithm is the tweaked version of the Bresenham algorithm.<a href="#fn10" class="footnote-ref" id="fnref10" role="doc-noteref"><sup>10</sup></a> When given equally bad choices (the case where <span class="math inline">\(F(M) = 0\)</span>), this version draws a pixel <em>away</em> from the origin by choosing to go E, thereby drawing a slightly bigger circle. You can see this play out in the above table for when <span class="math inline">\(r = 6\)</span> and especially <span class="math inline">\(r = 1\)</span>. It’s a bit unfortunate that the authors of the book did not choose this version, as it seems to do a better job for small values of <span class="math inline">\(r\)</span>.</p>
-<p>We can carry over the same intuition over to the tweak to increase <span class="math inline">\(r\)</span> by <span class="math inline">\(\tfrac{1}{2}\)</span> for the naive algorithm — increasing <span class="math inline">\(r\)</span> should result in a larger value of <span class="math inline">\(y\)</span>, thereby resulting in drawing a larger circle (and in the process improving the aesthetics). Neat!</p>
+<p>It appears to me that the most aesthetically pleasing algorithm is the tweaked version of the Bresenham algorithm.<a href="#fn10" class="footnote-ref" id="fnref10" role="doc-noteref"><sup>10</sup></a>
+When given equally bad choices (the case where <span class="math inline">\(F(M) = 0\)</span>), this version draws a pixel <em>away</em> from the origin by choosing to go E, thereby drawing a slightly bigger circle.
+You can see this play out in the above table for when <span class="math inline">\(r = 6\)</span> and especially <span class="math inline">\(r = 1\)</span>.
+It’s a bit unfortunate that the authors of the book did not choose this version, as it seems to do a better job for small values of <span class="math inline">\(r\)</span>.</p>
+<p>We can carry over the same intuition over to the tweak to increase <span class="math inline">\(r\)</span> by <span class="math inline">\(\tfrac{1}{2}\)</span> for the naive algorithm — increasing <span class="math inline">\(r\)</span> should result in a larger value of <span class="math inline">\(y\)</span>, thereby resulting in drawing a larger circle (and in the process improving the aesthetics).
+Neat!</p>
 <h1 id="conclusion">Conclusion</h1>
-<p>To me, Bresenham’s algorithm is interesting because it does not try to be “perfect”. Instead it merely does its best to reduce the amount of error, and in doing so, gets the job done remarkably well.</p>
-<p>The technique of avoiding the full polynomial calculation behind <span class="math inline">\(F(M)\)</span> (referred by the book as finding the first and second-order differences) took some time to get used to, but is intuitive enough in the end. You just need to consider differences in terms of variables. There’s also a connection to calculus because we’re dealing in terms of <em>differences</em> to “cut down” on the polynomial degrees — we go from the squares in Equation <span class="math inline">\(\ref{eq:circle}\)</span> to just linear functions in Equations <span class="math inline">\(\ref{eq:de2}\)</span> and <span class="math inline">\(\ref{eq:se1}\)</span>, and again go one more step to just constant functions in Equations <span class="math inline">\(\ref{eq:e2ord}\)</span>, <span class="math inline">\(\ref{eq:se2ord1}\)</span>, and <span class="math inline">\(\ref{eq:se2ord2}\)</span>.</p>
+<p>To me, Bresenham’s algorithm is interesting because it does not try to be “perfect”.
+Instead it merely does its best to reduce the amount of error, and in doing so, gets the job done remarkably well.</p>
+<p>The technique of avoiding the full polynomial calculation behind <span class="math inline">\(F(M)\)</span> (referred by the book as finding the first and second-order differences) took some time to get used to, but is intuitive enough in the end.
+You just need to consider differences in terms of variables.
+There’s also a connection to calculus because we’re dealing in terms of <em>differences</em> to “cut down” on the polynomial degrees — we go from the squares in Equation <span class="math inline">\(\ref{eq:circle}\)</span> to just linear functions in Equations <span class="math inline">\(\ref{eq:de2}\)</span> and <span class="math inline">\(\ref{eq:se1}\)</span>, and again go one more step to just constant functions in Equations <span class="math inline">\(\ref{eq:e2ord}\)</span>, <span class="math inline">\(\ref{eq:se2ord1}\)</span>, and <span class="math inline">\(\ref{eq:se2ord2}\)</span>.</p>
 <p>I hope you learned something!</p>
 <p>Happy hacking!</p>
-<section class="footnotes" role="doc-endnotes">
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr />
 <ol>
-<li id="fn1" role="doc-endnote"><p>Foley, J. D., van Dam, A., Feiner, S. K., Hughes, J. F. (1996). Basic Raster Graphics Algorithms for Drawing 2D Primitives, Scan Converting Circles. <em>Computer Graphics: Principles and Practice</em> (pp. 81–87). Addison-Wesley. ISBN: 0201848406<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2" role="doc-endnote"><p>Bresenham, J.E., D.G. Grice, and S.C. Pi, “Bi-Directional Display of Circular Arcs,” US Patent 4,371,933. February 1, 1983. <em>Note: unfortunately, trying to understand the original text of the patent is perhaps equally as difficult as inventing the algorithm on your own from scratch. Hence this blog post.</em><a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn3" role="doc-endnote"><p>There are 4 such <a href="https://en.wikipedia.org/wiki/Quadrant_(plane_geometry)">quadrants</a>: I, II, III, and IV.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn4" role="doc-endnote"><p>In some sense, all great algorithms are mere optimizations of brute force approaches.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn5" role="doc-endnote"><p>In code, we have to write <code>range(r + 1)</code> because the <code>range()</code> function does not include the last integer. Such “fence-post” or “off by one” logic is the bane of computer programmers.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn6" role="doc-endnote"><p>Mathematically, this is because the slope of the arc in Equation <span class="math inline">\(\ref{eq:circle-y}\)</span> approach positive and negative infinity around these areas.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn7" role="doc-endnote"><p>In the <a href="https://github.com/listx/listx_blog/blob/master/rust-js/src/lib.rs">Rust WASM implementation</a> that is used for the graphics in this blog post, we actually use a bitmap such that we only draw a particular pixel just once. However, we still end up <em>setting</em> the a pixel as “on” more than once.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn8" role="doc-endnote"><p>Bresenham, Jack. “A Linear Algorithm for Incremental Digital Display of Circular Arcs.” Communications of the ACM, vol. 20, no. 2, 1977, pp. 100–106., <a href="doi:10.1145/359423.359432">doi:10.1145/359423.359432</a>.<a href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn9" role="doc-endnote"><p>It is not clear to me if this change runs faster on modern CPUs, because I recall reading that multiplication can sometimes be faster than adding. But it’s still interesting.<a href="#fnref9" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn10" role="doc-endnote"><p>This version looks slightly better than the tweaked naive one for <span class="math inline">\(r = 8\)</span>.<a href="#fnref10" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>Foley, J. D., van Dam, A., Feiner, S. K., Hughes, J. F. (1996). Basic Raster Graphics Algorithms for Drawing 2D Primitives, Scan Converting Circles. <em>Computer Graphics: Principles and Practice</em> (pp. 81–87). Addison-Wesley. ISBN: 0201848406<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Bresenham, J.E., D.G. Grice, and S.C. Pi, “Bi-Directional Display of Circular Arcs,” US Patent 4,371,933. February 1, 1983. <em>Note: unfortunately, trying to understand the original text of the patent is perhaps equally as difficult as inventing the algorithm on your own from scratch. Hence this blog post.</em><a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>There are 4 such <a href="https://en.wikipedia.org/wiki/Quadrant_(plane_geometry)">quadrants</a>: I, II, III, and IV.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>In some sense, all great algorithms are mere optimizations of brute force approaches.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>In code, we have to write <code>range(r + 1)</code> because the <code>range()</code> function does not include the last integer. Such “fence-post” or “off by one” logic is the bane of computer programmers.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p>Mathematically, this is because the slope of the arc in Equation <span class="math inline">\(\ref{eq:circle-y}\)</span> approach positive and negative infinity around these areas.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7"><p>In the <a href="https://github.com/listx/listx_blog/blob/master/rust-js/src/lib.rs">Rust WASM implementation</a> that is used for the graphics in this blog post, we actually use a bitmap such that we only draw a particular pixel just once. However, we still end up <em>setting</em> the a pixel as “on” more than once.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn8"><p>Bresenham, Jack. “A Linear Algorithm for Incremental Digital Display of Circular Arcs.” Communications of the ACM, vol. 20, no. 2, 1977, pp. 100–106., <a href="doi:10.1145/359423.359432">doi:10.1145/359423.359432</a>.<a href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn9"><p>It is not clear to me if this change runs faster on modern CPUs, because I recall reading that multiplication can sometimes be faster than adding. But it’s still interesting.<a href="#fnref9" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn10"><p>This version looks slightly better than the tweaked naive one for <span class="math inline">\(r = 8\)</span>.<a href="#fnref10" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 ]]></summary>
@@ -868,11 +981,15 @@ F(M_{SE}) = F(x + 2, y - \tfrac{3}{2}) = (x + 2)^2 + (y - \tfrac{3}{2})^2 - r^2.
 	<a title="All pages tagged &#39;linux&#39;." href="/tag/linux.html">linux</a>, <a title="All pages tagged &#39;audio&#39;." href="/tag/audio.html">audio</a>
 </div>
 
-<p>Something like ~10 years ago, there was no easy way to apply <a href="https://en.wikipedia.org/wiki/ReplayGain">ReplayGain</a> to various audio files with different formats (e.g., flac vs mp3). Over the holiday break I discovered <a href="https://github.com/desbma/r128gain">r128gain</a> which is exactly the tool I wanted for many years. You just run</p>
+<p>Something like ~10 years ago, there was no easy way to apply <a href="https://en.wikipedia.org/wiki/ReplayGain">ReplayGain</a> to various audio files with different formats (e.g., flac vs mp3).
+Over the holiday break I discovered <a href="https://github.com/desbma/r128gain">r128gain</a> which is exactly the tool I wanted for many years.
+You just run</p>
 <pre><code>r128gain -r &lt;folder&gt;
 </code></pre>
 <p>and it will recursively tag all music files with ReplayGain information — in parallel, no less!</p>
-<p>The only downside is that neither <a href="https://cmus.github.io/">cmus</a> nor <a href="https://mpv.io/">mpv</a> currently support the <code>R128_TRACK_GAIN</code> tag that r128gain generates (at least for <code>*.opus</code> files).<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> However, I discovered that <a href="https://www.musicpd.org/">MPD (Music Player Daemon)</a> supports <code>R128_TRACK_GAIN</code>.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> MPD is easy to start up and the basic minimal configuration was <a href="https://raw.githubusercontent.com/listx/syscfg/e0f95dd04a4cd7247ca4e0fe3f02eccd78660d24/mpd/mpd.conf">small enough</a>:</p>
+<p>The only downside is that neither <a href="https://cmus.github.io/">cmus</a> nor <a href="https://mpv.io/">mpv</a> currently support the <code class="verbatim">R128_TRACK_GAIN</code> tag that r128gain generates (at least for <code class="verbatim">*.opus</code> files).<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>
+However, I discovered that <a href="https://www.musicpd.org/">MPD (Music Player Daemon)</a> supports <code class="verbatim">R128_TRACK_GAIN</code>.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>
+MPD is easy to start up and the basic minimal configuration was <a href="https://raw.githubusercontent.com/listx/syscfg/e0f95dd04a4cd7247ca4e0fe3f02eccd78660d24/mpd/mpd.conf">small enough</a>:</p>
 <pre><code>music_directory     &quot;~/Music&quot;
 # Automatically prune new/deleted files in the music_directory.
 auto_update         &quot;yes&quot;
@@ -890,11 +1007,11 @@ replaygain          &quot;track&quot;
 </code></pre>
 <p>As far as actually controlling MPD, I settled on <a href="https://github.com/boysetsfrog/vimpc">vimpc</a> — because Vi-like keybindings are too good to pass up.</p>
 <p>Cheers!</p>
-<section class="footnotes" role="doc-endnotes">
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr />
 <ol>
-<li id="fn1" role="doc-endnote"><p>To be precise, cmus has a commit in master that <a href="https://github.com/cmus/cmus/commit/174b93ee1c3a290751513ac557b39dea8e31c7f9">adds support</a>, and mpv has an <a href="https://github.com/mpv-player/mpv/issues/5079">open issue</a> for it. And I’m too lazy to compile cmus from source.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2" role="doc-endnote"><p>I had actually used MPD back in the day, but switched to cmus because it was simpler. And because cross-format ReplayGain tagging software was not available, MPD’s support for ReplayGain wasn’t very meaningful for me.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>To be precise, cmus has a commit in master that <a href="https://github.com/cmus/cmus/commit/174b93ee1c3a290751513ac557b39dea8e31c7f9">adds support</a>, and mpv has an <a href="https://github.com/mpv-player/mpv/issues/5079">open issue</a> for it. And I’m too lazy to compile cmus from source.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>I had actually used MPD back in the day, but switched to cmus because it was simpler. And because cross-format ReplayGain tagging software was not available, MPD’s support for ReplayGain wasn’t very meaningful for me.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 ]]></summary>
@@ -913,28 +1030,53 @@ replaygain          &quot;track&quot;
 
 <h1 id="my-history-with-baduk">My history with Baduk</h1>
 <p>I’ve started playing Baduk more during the pandemic, and I thought I should write about this fascinating game.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
-<p>When I was a child growing up in Korea, I remember seeing newspapers with pictures of Baduk positions with professional commentary. Unfortunately, no one in my immediate family had any interest in the game, so my initial curiosity of the game came and went.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
-<p>Later in the United States, I picked up chess during high school. Chess had the advantage that there were many more people who already know how to play the game. And also, carrying around a lightweight board with some pieces wasn’t difficult at all. I recall whipping out my chess board for a quick game during lunch, recess, and any other time I could find an opponent.</p>
-<p>I took a step back from chess during college and later years. I started to lose interest after I kept playing the same openings.</p>
-<p>Around 2016 I re-learned how to play Baduk. One reason I picked it up again was that at this time, Baduk was still played best by humans (a computer AI had not yet defeated a master human player on an even game). This was just before the great “AlphaGo” match with Lee Sedol, and at the time most people believed that AI supremacy in this game was still another decade away.</p>
-<p>I started playing and losing a ton of games against the AI on 9x9 at <a href="https://online-go.com/player/213337/funloop">online-go.com</a>, especially around 2019 when sometimes I played marathon 9x9 games, over and over against the computer. The most memorable game from this period is <a href="https://online-go.com/game/16295331">this one</a> where I won by 0.5 points against a 7-stone handicap. That victory was a pleasant surprise, but it also left me with a sense of obligation to study the game with a little more seriousness.</p>
-<p>After a brief pause, I returned to the game in the fall of 2020. During this time I watched some videos from <a href="https://www.youtube.com/channel/UCfA0tTDLNooBB0ymdoI5M7w">this YouTube channel</a>, which I was able to roughly understand thanks to my knowledge of Korean. I began to realize large gaps in my style of play, and it was only after this realization that I started improving my results.</p>
+<p>When I was a child growing up in Korea, I remember seeing newspapers with pictures of Baduk positions with professional commentary.
+Unfortunately, no one in my immediate family had any interest in the game, so my initial curiosity of the game came and went.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+<p>Later in the United States, I picked up chess during high school.
+Chess had the advantage that there were many more people who already know how to play the game.
+And also, carrying around a lightweight board with some pieces wasn’t difficult at all.
+I recall whipping out my chess board for a quick game during lunch, recess, and any other time I could find an opponent.</p>
+<p>I took a step back from chess during college and later years.
+I started to lose interest after I kept playing the same openings.</p>
+<p>Around 2016 I re-learned how to play Baduk.
+One reason I picked it up again was that at this time, Baduk was still played best by humans (a computer AI had not yet defeated a master human player on an even game).
+This was just before the great “AlphaGo” match with Lee Sedol, and at the time most people believed that AI supremacy in this game was still another decade away.</p>
+<p>I started playing and losing a ton of games against the AI on 9x9 at <a href="https://online-go.com/player/213337/funloop">online-go.com</a>, especially around 2019 when sometimes I played marathon 9x9 games, over and over against the computer.
+The most memorable game from this period is <a href="https://online-go.com/game/16295331">this one</a> where I won by 0.5 points against a 7-stone handicap.
+That victory was a pleasant surprise, but it also left me with a sense of obligation to study the game with a little more seriousness.</p>
+<p>After a brief pause, I returned to the game in the fall of 2020.
+During this time I watched some videos from <a href="https://www.youtube.com/channel/UCfA0tTDLNooBB0ymdoI5M7w">this YouTube channel</a>, which I was able to roughly understand thanks to my knowledge of Korean.
+I began to realize large gaps in my style of play, and it was only after this realization that I started improving my results.</p>
 <h1 id="baduk-vs.-chess">Baduk vs. Chess</h1>
-<p>Having a working knowledge of both chess and Baduk, I would have to say that the biggest difference between them for me is that there is far, far more room for strategy in Baduk. This is because you can ignore threats and play for bigger moves on the more much more often than in chess, especially in the opening and middlegame. There is more wiggle room for creativity!</p>
-<p>Speaking of openings, because the Baduk board has 4 symmetrical corners, there are actually 4 areas of openings in each game. You can have 4 different “openings” in each game. In chess there is only 1 “center” of the board where the vast majority of opening theory takes place.</p>
-<p>The handicap system is far more elegant in Baduk as well. In chess, the handicap is usually to remove a pawn (or two), but this drastically alters the nature of the game. Not so for Baduk! The weaker player gets up to 9 extra stones on the board before the start of the game. This way you can play with opponents at different levels without getting completely crushed from the very beginning.</p>
-<p>Perhaps the best part of the game is that each game is decided by a score (where the score is the amount of “territory” you control). A win is technically a win, sure, but the “wins” can be judged against each other by their score.</p>
-<p>Finally, the game is more forgiving in terms of errors. In chess if you lose your queen (without adequate compensation), the game is pretty much over. In baduk, even if you lose a sizable group, you can still come back. Actually, the bigger your group of stones, the harder it is to get them captured outright, and so there is a natural, automatic tendency for your strongest “pieces”, if you will, to resist capture.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> Brilliant!</p>
+<p>Having a working knowledge of both chess and Baduk, I would have to say that the biggest difference between them for me is that there is far, far more room for strategy in Baduk.
+This is because you can ignore threats and play for bigger moves on the more much more often than in chess, especially in the opening and middlegame.
+There is more wiggle room for creativity!</p>
+<p>Speaking of openings, because the Baduk board has 4 symmetrical corners, there are actually 4 areas of openings in each game.
+You can have 4 different “openings” in each game.
+In chess there is only 1 “center” of the board where the vast majority of opening theory takes place.</p>
+<p>The handicap system is far more elegant in Baduk as well.
+In chess, the handicap is usually to remove a pawn (or two), but this drastically alters the nature of the game.
+Not so for Baduk!
+The weaker player gets up to 9 extra stones on the board before the start of the game.
+This way you can play with opponents at different levels without getting completely crushed from the very beginning.</p>
+<p>Perhaps the best part of the game is that each game is decided by a score (where the score is the amount of “territory” you control).
+A win is technically a win, sure, but the “wins” can be judged against each other by their score.</p>
+<p>Finally, the game is more forgiving in terms of errors.
+In chess if you lose your queen (without adequate compensation), the game is pretty much over.
+In baduk, even if you lose a sizable group, you can still come back.
+Actually, the bigger your group of stones, the harder it is to get them captured outright, and so there is a natural, automatic tendency for your strongest “pieces”, if you will, to resist capture.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>
+Brilliant!</p>
 <h1 id="conclusion">Conclusion</h1>
-<p>If you haven’t learned the game yet, I strongly recommend this game! I used the book <a href="https://www.amazon.com/Go-Complete-Introduction-Beginner-Elementary/dp/4906574505">“Go: A Complete Introduction to the Game”</a> to get a nice overview.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p>
+<p>If you haven’t learned the game yet, I strongly recommend this game!
+I used the book <a href="https://www.amazon.com/Go-Complete-Introduction-Beginner-Elementary/dp/4906574505">“Go: A Complete Introduction to the Game”</a> to get a nice overview.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p>
 <p>Have fun!</p>
-<section class="footnotes" role="doc-endnotes">
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr />
 <ol>
-<li id="fn1" role="doc-endnote"><p>I use the Korean word “Baduk” (바둑) because the usual Japanese loanword “Go” overlaps with the name “Go” of the Go programming language.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2" role="doc-endnote"><p>Years later I learned that my uncle is an amateur 5-dan.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn3" role="doc-endnote"><p>In Baduk as long as a group gets 2 “eyes”, it becomes uncapturable — and the bigger the group, the easier it is to make such eyes.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn4" role="doc-endnote"><p>The author of this book is Cho Chikun, one of the top players of the 20th century.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>I use the Korean word “Baduk” (바둑) because the usual Japanese loanword “Go” overlaps with the name “Go” of the Go programming language.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Years later I learned that my uncle is an amateur 5-dan.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>In Baduk as long as a group gets 2 “eyes”, it becomes uncapturable — and the bigger the group, the easier it is to make such eyes.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>The author of this book is Cho Chikun, one of the top players of the 20th century.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 ]]></summary>
@@ -951,49 +1093,74 @@ replaygain          &quot;track&quot;
 	<a title="All pages tagged &#39;algorithms&#39;." href="/tag/algorithms.html">algorithms</a>, <a title="All pages tagged &#39;math&#39;." href="/tag/math.html">math</a>
 </div>
 
-<p>Just over three years ago, I watched <a href="https://youtu.be/XKu_SEDAykw">this video</a> that goes over the so-called “Two Sum” problem for the first time. The problem statement is as follows:</p>
+<p>Just over three years ago, I watched <a href="https://youtu.be/XKu_SEDAykw">this video</a> that goes over the so-called “Two Sum” problem for the first time.
+The problem statement is as follows:</p>
 <blockquote>
 <p>Given a sorted list of integers (unimaginitively called <strong>numbers</strong>), determine if any 2 integers in the list sum up to a number <strong>N</strong>.</p>
 </blockquote>
-<p>To be honest I did not understand why the proposed optimal solution that uses 2 pointers works the way it does, without missing any possible pairs. The <a href="https://youtu.be/XKu_SEDAykw?t=300">explanation given by the interview candidate in the video</a> always struck me as way too hand-wavy for my tastes.</p>
-<p>And to be really honest I never bothered to convince myself that the 2-pointer approach is correct. Until today. This post is about the correctness behind the 2-pointer method, because I have yet to see a clear explanation about this topic.</p>
+<p>To be honest I did not understand why the proposed optimal solution that uses 2 pointers works the way it does, without missing any possible pairs.
+The <a href="https://youtu.be/XKu_SEDAykw?t=300">explanation given by the interview candidate in the video</a> always struck me as way too hand-wavy for my tastes.</p>
+<p>And to be really honest I never bothered to convince myself that the 2-pointer approach is correct.
+Until today.
+This post is about the correctness behind the 2-pointer method, because I have yet to see a clear explanation about this topic.</p>
 <h1 id="brute-force-approach">Brute force approach</h1>
-<p>First let’s look at the brute-force solution. The brute-force solution looks at every single possible pair of numbers by using a double-for-loop. This is a very common pattern (nested looping) whenever one wants to consider all possible combinations, where each for-loop corresponds to a single “dimension” we want to exhaustively pore over. In this case there are 2 dimensions because there are 2 numbers we need to look at, so we must use 2 for-loops.</p>
+<p>First let’s look at the brute-force solution.
+The brute-force solution looks at every single possible pair of numbers by using a double-for-loop.
+This is a very common pattern (nested looping) whenever one wants to consider all possible combinations, where each for-loop corresponds to a single “dimension” we want to exhaustively pore over.
+In this case there are 2 dimensions because there are 2 numbers we need to look at, so we must use 2 for-loops.</p>
 <p>Here is the basic pseudocode <a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>:</p>
 <pre><code>for i in numbers:
   for j in numbers:
     if i + j == N:
       return i, j
 </code></pre>
-<p>I think even beginner programmers can see that the brute force approach works. We just look at every possible 2-number combination to see if they will add up to <strong>N</strong>, and if so, we stop the search. Simple! <a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+<p>I think even beginner programmers can see that the brute force approach works.
+We just look at every possible 2-number combination to see if they will add up to <strong>N</strong>, and if so, we stop the search.
+Simple! <a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
 <h1 id="pointer-method">2-pointer method</h1>
 <p>The 2-pointer method boils down to the following observation:</p>
 <blockquote>
 <p>Remove numbers from the pairwise search if they cannot be used (with any other number) to sum up to <strong>N</strong>.</p>
 </blockquote>
-<p>Although the solution posted in countless places online involve pointers, it is more intuitive to think of <em>modifying the list</em> after each pairwise inspection. Below is the algorithm in plain English:</p>
-<ol>
-<li>Construct a pair of numbers <code>(a, b)</code> such that <code>a</code> is the smallest number and <code>b</code> is the biggest number in the list. That is, these are the leftmost and rightmost ends of the sorted list, respectively.</li>
-<li>If the sum of <code>a + b</code> is equal to <strong>N</strong>, of course we’re done.</li>
-<li>If the sum of <code>a + b</code> is bigger than <strong>N</strong>, delete <code>b</code> from the list. Go back to Step 1.</li>
-<li>If the sum of <code>a + b</code> is smaller than <strong>N</strong>, delete <code>a</code> from the list. Go back to Step 1.</li>
+<p>Although the solution posted in countless places online involve pointers, it is more intuitive to think of <em>modifying the list</em> after each pairwise inspection.
+Below is the algorithm in plain English:</p>
+<ol type="1">
+<li>Construct a pair of numbers <code class="verbatim">(a, b)</code> such that <code class="verbatim">a</code> is the smallest number and <code class="verbatim">b</code> is the biggest number in the list. That is, these are the leftmost and rightmost ends of the sorted list, respectively.</li>
+<li>If the sum of <code class="verbatim">a + b</code> is equal to <strong>N</strong>, of course we’re done.</li>
+<li>If the sum of <code class="verbatim">a + b</code> is bigger than <strong>N</strong>, delete <code class="verbatim">b</code> from the list. Go back to Step 1.</li>
+<li>If the sum of <code class="verbatim">a + b</code> is smaller than <strong>N</strong>, delete <code class="verbatim">a</code> from the list. Go back to Step 1.</li>
 <li>If the list becomes smaller than 2 elements, stop (obviously, because there are no more pairs to consider). Optionally return an error.</li>
 </ol>
 <p>The algorithm described above can be equivalently coded with pointers, so there is no material difference to discuss in terms of implementation.</p>
 <p>Anyway, we just need to make sense of the critical Steps, namely Steps 3, 4, and 5, and that should be enough to quell any worries about correctness.</p>
 <h1 id="step-3">Step 3</h1>
-<p>This is the step that removes the largest element <code>b</code> in the list from consideration <em>for all future iterations</em>. How can this be correct?</p>
-<p>Well, let’s consider an example. If <strong>N</strong> is 50 but <code>a + b</code> is 85, we must look for a smaller sum. This much is obvious.</p>
-<p>We just used <code>a</code> and <code>b</code> to get to 85, but because we <em>must</em> get to a smaller sum, we would like to swap out either <code>a</code> or <code>b</code> (or both, eventually) with another number from the list. The question is, which one do we swap out?</p>
-<p>We can’t replace <code>a</code> with the next bigger number (or any other number between <code>a</code> and <code>b</code>), because doing so will result in a sum that is at least as big as 85 (or bigger). So <code>a</code> has to stay — we can’t rule out other combinations of <code>a</code> with some number other than <code>b</code> (maybe <code>a</code> and its next-biggest neighbor, etc).</p>
-<p>That leaves us with <code>b</code>. We throw out <code>b</code> and replace it with the next biggest number, which is guaranteed to be less than or equal to the just-thrown-out <code>b</code>, because the list is sorted.</p>
-<p>In other words, <em>all pairs</em> of <code>b</code> and every other element in the list already sums up to 85 or some other <em>higher number</em>. So <code>b</code> is a red herring that’s leading us astray. We must throw it out.</p>
+<p>This is the step that removes the largest element <code class="verbatim">b</code> in the list from consideration <em>for all future iterations</em>.
+How can this be correct?</p>
+<p>Well, let’s consider an example.
+If <strong>N</strong> is 50 but <code class="verbatim">a + b</code> is 85, we must look for a smaller sum.
+This much is obvious.</p>
+<p>We just used <code class="verbatim">a</code> and <code class="verbatim">b</code> to get to 85, but because we <em>must</em> get to a smaller sum, we would like to swap out either <code class="verbatim">a</code> or <code class="verbatim">b</code> (or both, eventually) with another number from the list.
+The question is, which one do we swap out?</p>
+<p>We can’t replace <code class="verbatim">a</code> with the next bigger number (or any other number between <code class="verbatim">a</code> and <code class="verbatim">b</code>), because doing so will result in a sum that is at least as big as 85 (or bigger).
+So <code class="verbatim">a</code> has to stay — we can’t rule out other combinations of <code class="verbatim">a</code> with some number other than <code class="verbatim">b</code> (maybe <code class="verbatim">a</code> and its next-biggest neighbor, etc).</p>
+<p>That leaves us with <code class="verbatim">b</code>.
+We throw out <code class="verbatim">b</code> and replace it with the next biggest number, which is guaranteed to be less than or equal to the just-thrown-out <code class="verbatim">b</code>, because the list is sorted.</p>
+<p>In other words, <em>all pairs</em> of <code class="verbatim">b</code> and every other element in the list already sums up to 85 or some other <em>higher number</em>.
+So <code class="verbatim">b</code> is a red herring that’s leading us astray.
+We must throw it out.</p>
 <h1 id="step-4">Step 4</h1>
-<p>This is the “mirror” of Step 3. Here we throw out the smallest number out of future pairwise searches, because we know that <code>a</code>, no matter which number it is paired with (even with the biggest one, <code>b</code>), is too small to meet the target <strong>N</strong>. In other words, <code>a</code> fails to give enough of a “boost” to <em>any</em> other number to reach <strong>N</strong>. It is very much useless to the remaining other candidates, and so we throw it out.</p>
+<p>This is the “mirror” of Step 3.
+Here we throw out the smallest number out of future pairwise searches, because we know that <code class="verbatim">a</code>, no matter which number it is paired with (even with the biggest one, <code class="verbatim">b</code>), is too small to meet the target <strong>N</strong>.
+In other words, <code class="verbatim">a</code> fails to give enough of a “boost” to <em>any</em> other number to reach <strong>N</strong>.
+It is very much useless to the remaining other candidates, and so we throw it out.</p>
 <h1 id="step-5">Step 5</h1>
-<p>This Step’s analogy when using pointers is to consider the condition when the pointers “cross”. The pointers “crossing”, in and of itself, doesn’t seem particularly significant. However when we view this condition by looking at the dwindling size of the overall list (by chopping off the left and right ends in Steps 4 and 3), the point becomes obvious. We must stop when the list becomes too small to make Step 1 impossible to fulfill (namely, the construction of the pair <code>(a, b)</code>), due to the fact that there aren’t enough elements in the list (singleton or empty list).</p>
+<p>This Step’s analogy when using pointers is to consider the condition when the pointers “cross”.
+The pointers “crossing”, in and of itself, doesn’t seem particularly significant.
+However when we view this condition by looking at the dwindling size of the overall list (by chopping off the left and right ends in Steps 4 and 3), the point becomes obvious.
+We must stop when the list becomes too small to make Step 1 impossible to fulfill (namely, the construction of the pair <code class="verbatim">(a, b)</code>), due to the fact that there aren’t enough elements in the list (singleton or empty list).</p>
 <h1 id="pointer-method-in-pseudocode">2-pointer method, in pseudocode</h1>
-<p>For sake of completeness, here is the pseudocode for the same algorithm. You will see how using pointers (instead of deleting elements outright as described in Steps 3 and 4) doesn’t change the algorithm at all.</p>
+<p>For sake of completeness, here is the pseudocode for the same algorithm.
+You will see how using pointers (instead of deleting elements outright as described in Steps 3 and 4) doesn’t change the algorithm at all.</p>
 <pre><code># Partial implementation of Step 5. Early exit if list is too small to begin with.
 if length(numbers) &lt; 2:
   return error
@@ -1022,18 +1189,26 @@ while sum != N:
 # Step 2
 return numbers[a_idx], numbers[b_idx]
 </code></pre>
-<p>It may be of interest to readers who are fairly new to programming that Step 2 comes in at the very end. Getting the “feel” for converting plain-English algorithms into actual code is something that requires experience, and can only be acquired with practice over time.</p>
+<p>It may be of interest to readers who are fairly new to programming that Step 2 comes in at the very end.
+Getting the “feel” for converting plain-English algorithms into actual code is something that requires experience, and can only be acquired with practice over time.</p>
 <h2 id="do-the-pointers-ever-skip-over-each-other">Do the pointers ever skip over each other?</h2>
-<p>It is worth pointing out that the condition <code>a_idx == b_idx</code> is well-formed. That is, there will never be a case where <code>a_idx</code> and <code>b_idx</code> will somehow “skip over” each other, rendering the <code>if</code>-condition useless. This is because we only ever increment <code>a_idx</code> or decrement <code>b_idx</code>, <em>exclusively</em> — that is, we never modify both of them within the same iteration. So, the variables only ever change by <code>±1</code>, and at some point, if the search goes on long enough, the indices are bound to converge at the same numerical value.</p>
+<p>It is worth pointing out that the condition <code>a_idx == b_idx</code> is well-formed.
+That is, there will never be a case where <code class="verbatim">a_idx</code> and <code class="verbatim">b_idx</code> will somehow “skip over” each other, rendering the <code class="verbatim">if</code>-condition useless.
+This is because we only ever increment <code class="verbatim">a_idx</code> or decrement <code class="verbatim">b_idx</code>, <em>exclusively</em> — that is, we never modify both of them within the same iteration.
+So, the variables only ever change by <code class="verbatim">±1</code>, and at some point, if the search goes on long enough, the indices are bound to converge at the same numerical value.</p>
 <h1 id="conclusion">Conclusion</h1>
-<p>I think the beauty of this problem is that it’s so simple, and yet it is also a very cool way of looking at the problem of <em>search</em>. Steps 3 and 4 are essentially very aggressive (and correct!) eliminations of bad search paths. There’s just something refreshing about eliminating entire branches of a search tree to speed things up.</p>
-<p>If you compare the 2-pointer method with the brute force approach, it is in essence doing the same logical thing, with fewer steps. Whereas the brute force approach performs a pairwise comparison across all possible combinations, the 2-pointer method preemptively discards many combinations by removing elements outright from future consideration. That’s the kind of power you need to go from <span class="math inline">\(O(n^2)\)</span> to <span class="math inline">\(O(n)\)</span>!</p>
+<p>I think the beauty of this problem is that it’s so simple, and yet it is also a very cool way of looking at the problem of <em>search</em>.
+Steps 3 and 4 are essentially very aggressive (and correct!) eliminations of bad search paths.
+There’s just something refreshing about eliminating entire branches of a search tree to speed things up.</p>
+<p>If you compare the 2-pointer method with the brute force approach, it is in essence doing the same logical thing, with fewer steps.
+Whereas the brute force approach performs a pairwise comparison across all possible combinations, the 2-pointer method preemptively discards many combinations by removing elements outright from future consideration.
+That’s the kind of power you need to go from <span class="math inline">\(O(n^2)\)</span> to <span class="math inline">\(O(n)\)</span>!</p>
 <p>Hope this helps!</p>
-<section class="footnotes" role="doc-endnotes">
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr />
 <ol>
-<li id="fn1" role="doc-endnote"><p>Of course, this pseudocode ignores edge-cases, but I didn’t want to clutter the code listing with non-essential ideas.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2" role="doc-endnote"><p>As an added benefit, the brute-force approach works even if the input list is not sorted.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>Of course, this pseudocode ignores edge-cases, but I didn’t want to clutter the code listing with non-essential ideas.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>As an added benefit, the brute-force approach works even if the input list is not sorted.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 ]]></summary>
@@ -1050,10 +1225,18 @@ return numbers[a_idx], numbers[b_idx]
 	<a title="All pages tagged &#39;hardware&#39;." href="/tag/hardware.html">hardware</a>, <a title="All pages tagged &#39;esrille&#39;." href="/tag/esrille.html">esrille</a>, <a title="All pages tagged &#39;cherry mx&#39;." href="/tag/cherry%20mx.html">cherry mx</a>
 </div>
 
-<p>Over three years ago, I wrote <a href="./2016-04-14-esrille-nisse-keyboard.html">a post</a> describing the Esrille Nisse keyboard. This post is a reflection on the keyboard, more than 3 years later.</p>
+<p>Over three years ago, I wrote <a href="./2016-04-14-esrille-nisse-keyboard.html">a post</a> describing the Esrille Nisse keyboard.
+This post is a reflection on the keyboard, more than 3 years later.</p>
 <h1 id="layout">Layout</h1>
-<p>Ultimately I settled on a different layout than the one described in the old blog post. This was a result of many hands-on trial-and-error sessions over a period of weeks which turned into many months. In my old post I described writing a program to help find the optimal layout. This proved very difficult in practice, because encoding the optimization rules turned out to be non-trivial. One aspect that was particularly difficult was that the actualy physical shape of my own fingers played a part (some fingers were not as versatile as others, for example the pinky finger, and so the key-distance for certain fingers had to have different “weights”, and this was too much to translate into code).</p>
-<p>Anyway, I read <a href="https://norvig.com/mayzner.html">this post by Peter Norvig</a> forwards and backwards, and used the values there to guide the design of my layout. One big realization after actual usage was that I could not let go of the QWERTY <code>hjkl</code> keys on the home row. There was just so much muscle memory built into these four keys (the only other key I could not let go of was the spacebar key that I used my left thumb for), that I had to “fix” them on the layout first. I then focused on getting the commonly-used keys right.</p>
+<p>Ultimately I settled on a different layout than the one described in the old blog post.
+This was a result of many hands-on trial-and-error sessions over a period of weeks which turned into many months.
+In my old post I described writing a program to help find the optimal layout.
+This proved very difficult in practice, because encoding the optimization rules turned out to be non-trivial.
+One aspect that was particularly difficult was that the actualy physical shape of my own fingers played a part (some fingers were not as versatile as others, for example the pinky finger, and so the key-distance for certain fingers had to have different “weights”, and this was too much to translate into code).</p>
+<p>Anyway, I read <a href="https://norvig.com/mayzner.html">this post by Peter Norvig</a> forwards and backwards, and used the values there to guide the design of my layout.
+One big realization after actual usage was that I could not let go of the QWERTY <code>hjkl</code> keys on the home row.
+There was just so much muscle memory built into these four keys (the only other key I could not let go of was the spacebar key that I used my left thumb for), that I had to “fix” them on the layout first.
+I then focused on getting the commonly-used keys right.</p>
 <p>All that being said, here is my current layout.</p>
 <pre><code>      LEFT-SIDE     RIGHT-SIDE
     ---------------------------
@@ -1087,9 +1270,11 @@ Right-side legend
 7) Alt
 8) Right Alt (aka &quot;AltGr&quot; for US International Layout)
 </code></pre>
-<p>The main thing to note is the reduced number of keys that are mapped at all. I like this aspect a lot (not having to move my fingers around much at all) — I never have to reach for a particular key because everything is just so close.</p>
+<p>The main thing to note is the reduced number of keys that are mapped at all.
+I like this aspect a lot (not having to move my fingers around much at all) — I never have to reach for a particular key because everything is just so close.</p>
 <p>I also dedicated a key just for the colon symbol (as a “Shift + semicolon” macro), because it comes up often enough in programming.</p>
-<p>I should also note that the function keys (F1-F12) are situated on the topmost row, left-to-right. I just didn’t bother adding them to the legend because of symbol space constraints.</p>
+<p>I should also note that the function keys (F1-F12) are situated on the topmost row, left-to-right.
+I just didn’t bother adding them to the legend because of symbol space constraints.</p>
 <p>FN layer.</p>
 <pre><code>      LEFT-SIDE     RIGHT-SIDE
     ---------------------------
@@ -1110,7 +1295,11 @@ a) Backspace
 b) Home
 c) Shift
 </code></pre>
-<p>The FN layer has the majority of the punctuation keys I need. You might notice that some symbols like <code>!@#$&amp;*^</code> are not in here. This is because the numeral keys on the left side are actually the same numeral keys on the top row (<strong>not</strong> the Numpad) of a typical QWERTY layout. This means that I can just press FN+Shift to get these keys. This is the main trick that allowed me to reduce the number of keys used overall.</p>
+<p>The FN layer has the majority of the punctuation keys I need.
+You might notice that some symbols like <code>!@#$&amp;*^</code> are not in here.
+This is because the numeral keys on the left side are actually the same numeral keys on the top row (<strong>not</strong> the Numpad) of a typical QWERTY layout.
+This means that I can just press FN+Shift to get these keys.
+This is the main trick that allowed me to reduce the number of keys used overall.</p>
 <p>The “~/” macro in the left side is particularly useful as well.</p>
 <p>FN2 layer.</p>
 <pre><code>      LEFT-SIDE     RIGHT-SIDE
@@ -1130,24 +1319,33 @@ c) Up Arrow
 d) Right Arrow
 e) Shift + Insert macro (for pasting X primary buffer)
 </code></pre>
-<p>This layer is mostly empty, but it is used surprisingly frequently. I really like how the arrow keys line up with my <code>hjkl</code> keys in the main layer.</p>
+<p>This layer is mostly empty, but it is used surprisingly frequently.
+I really like how the arrow keys line up with my <code>hjkl</code> keys in the main layer.</p>
 <p>For the latest changes to my layout, check out <a href="https://github.com/listx/new-keyboard">this repo</a>.</p>
 <h1 id="typing-speed">Typing Speed</h1>
 <p>It took me roughly 3 months of everyday use to get somewhat familiar with the layout, and probably another month or two to reach upwards of 60wpm.</p>
 <p>It was painstakingly slow at first (it felt a lot like learning how to type all over again), but still “fun” because I noticed that I was getting better with time.</p>
 <p>I think these days (after having used this keyboard every day for both my home and work PCs (yes, I have two of these!)) I can go higher than 60wpm.</p>
-<p>Suffice it to say that there is never a time when I think “oh, I wish I could type faster” on this layout. My speed on this keyboard is about on par as with my old typing speed on QWERTY.</p>
-<p>My typing speed on the old QWERTY layout hasn’t really changed. I still have to use it for when I use the keyboard on laptops. And surprisingly, my brain knows to “switch” to QWERTY when I’m typing on there — granted, this instinct took some time to kick in.</p>
+<p>Suffice it to say that there is never a time when I think “oh, I wish I could type faster” on this layout.
+My speed on this keyboard is about on par as with my old typing speed on QWERTY.</p>
+<p>My typing speed on the old QWERTY layout hasn’t really changed.
+I still have to use it for when I use the keyboard on laptops.
+And surprisingly, my brain knows to “switch” to QWERTY when I’m typing on there — granted, this instinct took some time to kick in.</p>
 <h1 id="was-it-worth-it">Was it worth it?</h1>
 <p>Totally!</p>
-<p>The biggest thing I love about this layout is that I don’t have to move my right hand around when reaching for the typical “hard” keys on QWERTY (such as `[]{}`). I rarely (if ever) have typos when typing punctuation keys. The numeral keys being just underneath my left hand in a different layer is nice, too.</p>
+<p>The biggest thing I love about this layout is that I don’t have to move my right hand around when reaching for the typical “hard” keys on QWERTY (such as `[]{}`).
+I rarely (if ever) have typos when typing punctuation keys.
+The numeral keys being just underneath my left hand in a different layer is nice, too.</p>
 <p>There are some “downsides” though in everyday life:</p>
 <ul>
 <li>it’s hard to play games because the key mappings are usually designed for QWERTY;</li>
 <li>when I make typos using this layout, they look rather unusual from a “QWERTY” perspective (as a contrived example, I might type “yen” instead of “yes” because the “n” and “s” keys are next to each other on my layout)</li>
 </ul>
 <p>I don’t really play games that much though, and when I do I am usually on the separate gaming PC that just use a regular QWERTY layout so it’s not really a negative.</p>
-<p>I guess the biggest downside of all is that the keyboard form factor on the Nisse is one-of-a-kind on the planet. If Esrille goes under, I would be worried about taking very good care of my keyboards in case one of the components breaks for whatever reason. I imagine that at that point, I would have to just create my own keyboard or make do with a shabby imitation using ErgoDox or some other form factor. I sincerely hope that that day never comes…!</p>
+<p>I guess the biggest downside of all is that the keyboard form factor on the Nisse is one-of-a-kind on the planet.
+If Esrille goes under, I would be worried about taking very good care of my keyboards in case one of the components breaks for whatever reason.
+I imagine that at that point, I would have to just create my own keyboard or make do with a shabby imitation using ErgoDox or some other form factor.
+I sincerely hope that that day never comes…!</p>
 <p>Happy hacking!</p>
 ]]></summary>
 </entry>
@@ -1167,11 +1365,15 @@ e) Shift + Insert macro (for pasting X primary buffer)
 <h1 id="on-work">On work</h1>
 <p>I’m still happily employed at Google.</p>
 <h1 id="git-book">Git Book</h1>
-<p>I’m still working on this project. It is hard because I’m trying to create real repositories and situations that the reader should be able to check out and follow along. Still, I should be able to finish this next year.</p>
+<p>I’m still working on this project.
+It is hard because I’m trying to create real repositories and situations that the reader should be able to check out and follow along.
+Still, I should be able to finish this next year.</p>
 <h1 id="programming-languages">Programming Languages</h1>
-<p>I’ve started dabbling in Clojure, Rust, and Elixir. This list is not the same list of programming languages in my last post (which mentioned Shen, Rust, Erlang, Idris, and Factor), but it’s something to chew on for quite some time.</p>
+<p>I’ve started dabbling in Clojure, Rust, and Elixir.
+This list is not the same list of programming languages in my last post (which mentioned Shen, Rust, Erlang, Idris, and Factor), but it’s something to chew on for quite some time.</p>
 <h1 id="future">Future</h1>
-<p>I will post again when the Git book is ready. Stay tuned!</p>
+<p>I will post again when the Git book is ready.
+Stay tuned!</p>
 ]]></summary>
 </entry>
 <entry>
@@ -1186,21 +1388,37 @@ e) Shift + Insert macro (for pasting X primary buffer)
 	<a title="All pages tagged &#39;status&#39;." href="/tag/status.html">status</a>
 </div>
 
-<p>It’s been a year since my last blog post. Many things have happened since that time.</p>
+<p>It’s been a year since my last blog post.
+Many things have happened since that time.</p>
 <p>Below are some of the more interesting items.</p>
 <h1 id="imvu-to-google">IMVU to Google</h1>
-<p>I got laid off at <a href="https://imvu.com">IMVU</a> in September 2017. It was a difficult time for me as I had become good friends with the people there. After almost 2 months of searching for jobs, I somehow managed to land a job at Google! My title is Release Engineer. I’ve been there almost a year now and I am still happy and excited to work there.</p>
+<p>I got laid off at <a href="https://imvu.com">IMVU</a> in September 2017.
+It was a difficult time for me as I had become good friends with the people there.
+After almost 2 months of searching for jobs, I somehow managed to land a job at Google!
+My title is Release Engineer.
+I’ve been there almost a year now and I am still happy and excited to work there.</p>
 <h1 id="golang">Golang</h1>
-<p>I started learning Golang a few months ago, because, I felt that this is the best time to learn it (while I’m employed by Google). I haven’t really done any of the advanced things yet, but I like how the language tries really hard to keep the syntax simple. It’s a lot like C in that regard.</p>
-<p>The only pain point in Go for me is the packaging/installation system. The whole opintionated $GOPATH thing just feels a bit clunky because of the shared folder namespace with other projects. But I guess that’s unavoidable in any language’s ecosystem.</p>
+<p>I started learning Golang a few months ago, because, I felt that this is the best time to learn it (while I’m employed by Google).
+I haven’t really done any of the advanced things yet, but I like how the language tries really hard to keep the syntax simple.
+It’s a lot like C in that regard.</p>
+<p>The only pain point in Go for me is the packaging/installation system.
+The whole opintionated $GOPATH thing just feels a bit clunky because of the shared folder namespace with other projects.
+But I guess that’s unavoidable in any language’s ecosystem.</p>
 <h1 id="git-book">Git Book</h1>
-<p>I started writing a short (informal) book on Git. I am using LuaTeX to write it; I started in March 2018 but have yet to cross the 1/2 way mark. Hopefully I’ll get it done before March 2019 rolls around.</p>
+<p>I started writing a short (informal) book on Git.
+I am using LuaTeX to write it; I started in March 2018 but have yet to cross the 1/2 way mark.
+Hopefully I’ll get it done before March 2019 rolls around.</p>
 <h1 id="haskell-book">Haskell book</h1>
-<p>Back in <a href="./2016-01-04-status-update.html">2016’s status update</a> I said that I still planned to finish the Haskell book I was working on. That project is definitely dead. One reason is that due to the rising popularity of the language, I feel that other people have already said what I had meant to say in my book.</p>
+<p>Back in <a href="./2016-01-04-status-update.html">2016’s status update</a> I said that I still planned to finish the Haskell book I was working on.
+That project is definitely dead.
+One reason is that due to the rising popularity of the language, I feel that other people have already said what I had meant to say in my book.</p>
 <h1 id="shen-rust-erlang-idris-factor">Shen, Rust, Erlang, Idris, Factor</h1>
-<p>I’ve grown interested in these languages because well, I feel like they are important. My hope is to find some interesting problems that can be solved idiomatically in each language. That might take years, but, it is my hope that in the future I’ll be able to write about these languages.</p>
+<p>I’ve grown interested in these languages because well, I feel like they are important.
+My hope is to find some interesting problems that can be solved idiomatically in each language.
+That might take years, but, it is my hope that in the future I’ll be able to write about these languages.</p>
 <h1 id="https-for-this-site">HTTPS for this site</h1>
-<p>Apparently HTTPS support for custom domains on Github have been a thing since earlier this year. I never got around to it but thanks to <a href="https://medium.com/@goelanirudh/add-https-to-your-namecheap-domain-hosted-on-github-pages-d66fd96308b5">this post</a> I finally enabled it.</p>
+<p>Apparently HTTPS support for custom domains on Github have been a thing since earlier this year.
+I never got around to it but thanks to <a href="https://medium.com/@goelanirudh/add-https-to-your-namecheap-domain-hosted-on-github-pages-d66fd96308b5">this post</a> I finally enabled it.</p>
 ]]></summary>
 </entry>
 <entry>
@@ -1215,7 +1433,9 @@ e) Shift + Insert macro (for pasting X primary buffer)
 	<a title="All pages tagged &#39;linux&#39;." href="/tag/linux.html">linux</a>, <a title="All pages tagged &#39;git&#39;." href="/tag/git.html">git</a>
 </div>
 
-<p>A while ago I discovered that <a href="https://www.reddit.com/r/linux/comments/74msho/til_there_is_a_manpage_for_the_ascii_character_set/">there is a manpage for the ASCII character set</a>. It got a bunch of upvotes, and since then I wondered what other manpages were worth knowing about. Below is a small table of manpages that I found interesting.</p>
+<p>A while ago I discovered that <a href="https://www.reddit.com/r/linux/comments/74msho/til_there_is_a_manpage_for_the_ascii_character_set/">there is a manpage for the ASCII character set</a>.
+It got a bunch of upvotes, and since then I wondered what other manpages were worth knowing about.
+Below is a small table of manpages that I found interesting.</p>
 <table>
 <thead>
 <tr class="header">
@@ -1225,63 +1445,63 @@ e) Shift + Insert macro (for pasting X primary buffer)
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>ascii(7)</code></td>
+<td><code class="verbatim">ascii(7)</code></td>
 <td>the ASCII character set (in octal, decimal, and hex)</td>
 </tr>
 <tr class="even">
-<td><code>units(7)</code></td>
+<td><code class="verbatim">units(7)</code></td>
 <td>megabytes vs mebibytes, etc.</td>
 </tr>
 <tr class="odd">
-<td><code>hier(7)</code></td>
-<td>traditional filesystem hierarchy (e.g., <code>/bin</code> vs <code>/usr/bin</code>)</td>
+<td><code class="verbatim">hier(7)</code></td>
+<td>traditional filesystem hierarchy (e.g., <code class="verbatim">/bin</code> vs <code class="verbatim">/usr/bin</code>)</td>
 </tr>
 <tr class="even">
-<td><code>file-hierarchy(7)</code></td>
+<td><code class="verbatim">file-hierarchy(7)</code></td>
 <td>(systemd) filesystem hierarchy</td>
 </tr>
 <tr class="odd">
-<td><code>operator(7)</code></td>
+<td><code class="verbatim">operator(7)</code></td>
 <td>C operator precedence rules (listed in descending order)</td>
 </tr>
 <tr class="even">
-<td><code>console_codes(4)</code></td>
+<td><code class="verbatim">console_codes(4)</code></td>
 <td>Linux console escape and control sequences</td>
 </tr>
 <tr class="odd">
-<td><code>terminal-colors.d(5)</code></td>
+<td><code class="verbatim">terminal-colors.d(5)</code></td>
 <td>among other things, ANSI color sequences</td>
 </tr>
 <tr class="even">
-<td><code>boot(7)</code></td>
+<td><code class="verbatim">boot(7)</code></td>
 <td>UNIX System V Release 4 bootup process</td>
 </tr>
 <tr class="odd">
-<td><code>daemon(7)</code></td>
+<td><code class="verbatim">daemon(7)</code></td>
 <td>(systemd) how to write/package daemons</td>
 </tr>
 <tr class="even">
-<td><code>proc(5)</code></td>
-<td>proc filesystem (<code>/proc</code>)</td>
+<td><code class="verbatim">proc(5)</code></td>
+<td>proc filesystem (<code class="verbatim">/proc</code>)</td>
 </tr>
 <tr class="odd">
-<td><code>ip(7)</code></td>
+<td><code class="verbatim">ip(7)</code></td>
 <td>Linux IPv4 protocol implementation (a bit low-level, but still useful)</td>
 </tr>
 <tr class="even">
-<td><code>ipv6(7)</code></td>
+<td><code class="verbatim">ipv6(7)</code></td>
 <td>Linux IPv6 protocol implementation</td>
 </tr>
 <tr class="odd">
-<td><code>socket(7)</code></td>
+<td><code class="verbatim">socket(7)</code></td>
 <td>Linux socket interface</td>
 </tr>
 <tr class="even">
-<td><code>unix(7)</code></td>
+<td><code class="verbatim">unix(7)</code></td>
 <td>UNIX domain sockets</td>
 </tr>
 <tr class="odd">
-<td><code>fifo(7)</code></td>
+<td><code class="verbatim">fifo(7)</code></td>
 <td>named pipes</td>
 </tr>
 </tbody>
@@ -1289,9 +1509,10 @@ e) Shift + Insert macro (for pasting X primary buffer)
 <p>Note that you need to run</p>
 <pre><code>sudo mandb
 </code></pre>
-<p>to be able to invoke <code>apropos &lt;SEARCH_TERM&gt;</code> or <code>man -k &lt;SEARCH_TERM&gt;</code> (<code>man -k</code> is equivalent to <code>apropos</code> — see <code>man(1)</code>).</p>
+<p>to be able to invoke <code class="verbatim">apropos &lt;SEARCH_TERM&gt;</code> or <code class="verbatim">man -k &lt;SEARCH_TERM&gt;</code> (<code class="verbatim">man -k</code> is equivalent to <code class="verbatim">apropos</code> — see <code class="verbatim">man(1)</code>).</p>
 <h2 id="git-specific">Git-specific</h2>
-<p>You probably knew already that Git has many manpages dedicated to each of its subcommands, such as <code>git-clone(1)</code> or <code>git-commit(1)</code>, but did you know that it also comes with a suite of tutorials? Behold!</p>
+<p>You probably knew already that Git has many manpages dedicated to each of its subcommands, such as <code class="verbatim">git-clone(1)</code> or <code class="verbatim">git-commit(1)</code>, but did you know that it also comes with a suite of tutorials?
+Behold!</p>
 <table>
 <thead>
 <tr class="header">
@@ -1301,27 +1522,27 @@ e) Shift + Insert macro (for pasting X primary buffer)
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>giteveryday(7)</code></td>
+<td><code class="verbatim">giteveryday(7)</code></td>
 <td>the top ~20 useful git commands you should know</td>
 </tr>
 <tr class="even">
-<td><code>gitglossary(7)</code></td>
+<td><code class="verbatim">gitglossary(7)</code></td>
 <td>a glossary of all git concepts (blob object, working tree, etc.)</td>
 </tr>
 <tr class="odd">
-<td><code>gittutorial(7)</code></td>
+<td><code class="verbatim">gittutorial(7)</code></td>
 <td>a high-level view of using git</td>
 </tr>
 <tr class="even">
-<td><code>gittutorial-2(7)</code></td>
+<td><code class="verbatim">gittutorial-2(7)</code></td>
 <td>explains the object database and index file (git architecture internals)</td>
 </tr>
 <tr class="odd">
-<td><code>gitcore-tutorial(7)</code></td>
-<td>like <code>gittutorial-2(7)</code>, but much more detailed</td>
+<td><code class="verbatim">gitcore-tutorial(7)</code></td>
+<td>like <code class="verbatim">gittutorial-2(7)</code>, but much more detailed</td>
 </tr>
 <tr class="even">
-<td><code>gitworkflows(7)</code></td>
+<td><code class="verbatim">gitworkflows(7)</code></td>
 <td>recommended workflows, esp. branching strategies for maintainers</td>
 </tr>
 </tbody>
@@ -1341,17 +1562,28 @@ e) Shift + Insert macro (for pasting X primary buffer)
 	<a title="All pages tagged &#39;math&#39;." href="/tag/math.html">math</a>
 </div>
 
-<p>In the very first chapter of the book <a href="https://en.wikipedia.org/wiki/Concrete_Mathematics"><em>Concrete Mathematics</em> 2ed</a> there is a discussion about the <a href="https://en.wikipedia.org/wiki/Tower_of_Hanoi">Tower of Hanoi</a>. This post is a distillation of that discussion.</p>
+<p>In the very first chapter of the book <a href="https://en.wikipedia.org/wiki/Concrete_Mathematics"><em>Concrete Mathematics</em> 2ed</a> there is a discussion about the <a href="https://en.wikipedia.org/wiki/Tower_of_Hanoi">Tower of Hanoi</a>.
+This post is a distillation of that discussion.</p>
 <h1 id="the-problem">The Problem</h1>
-<p>There are 3 rods, with 8 discs (with holes) resting on one rod; the discs are sorted in size like a pyramid, with the smallest disc on top. We want to move all discs to another rod, but with the following rules: (1) a move consists of moving a single disc onto a rod; (2) you may never place a bigger disc on top of a smaller one. A question arises — <strong>how many steps are required to move the entire tower of disks onto another rod?</strong></p>
+<p>There are 3 rods, with 8 discs (with holes) resting on one rod; the discs are sorted in size like a pyramid, with the smallest disc on top.
+We want to move all discs to another rod, but with the following rules: (1) a move consists of moving a single disc onto a rod; (2) you may never place a bigger disc on top of a smaller one.
+A question arises — <strong>how many steps are required to move the entire tower of disks onto another rod?</strong></p>
 <h1 id="finding-the-recurrence">Finding the Recurrence</h1>
-<p>First consider the simplest case, without any discs. Because there are no discs to move, we cannot make any moves, and so the number of steps required is 0. We can write this as</p>
+<p>First consider the simplest case, without any discs.
+Because there are no discs to move, we cannot make any moves, and so the number of steps required is 0.
+We can write this as</p>
 <p><span class="math display">\[
 S_0 = 0
 \]</span></p>
 <p>with <span class="math inline">\(S\)</span> meaning the number of steps and the subscript representing the number of discs in the tower.</p>
-<p>Now let’s consider how the problem scales. With 1 disc, the answer is a single step since the one disc is itself the entire tower. With 2 discs, the answer is three steps — one step to move the top (small) disc to another rod, one step to move the big disc to the destination rod, and lastly one step to move the small disc on top of the big disc. With 3 discs, the answer is seven steps — the insight here is that we treat the top two discs exactly the same as the previous problem; so we need 3 moves to move the top two to another rod, then one move to move the biggest disc to the destination rod, then again 3 moves to move the 2-disc sub-tower to the destination rod.</p>
-<p>The example with 3 discs is quite telling. We can use the insights gained there to set an upper bound to the number of steps required for the general case of <span class="math inline">\(n\)</span> discs; if we take more steps than this upper bound, we would know that we made mistakes. For a tower of size <span class="math inline">\(n\)</span>, we require <span class="math inline">\(S_{n - 1}\)</span> steps to move all discs except the biggest one, then move the biggest disc, then move the sub-tower on top of that disc with (again) <span class="math inline">\(S_{n - 1}\)</span> steps. So the upper bound is</p>
+<p>Now let’s consider how the problem scales.
+With 1 disc, the answer is a single step since the one disc is itself the entire tower.
+With 2 discs, the answer is three steps — one step to move the top (small) disc to another rod, one step to move the big disc to the destination rod, and lastly one step to move the small disc on top of the big disc.
+With 3 discs, the answer is seven steps — the insight here is that we treat the top two discs exactly the same as the previous problem; so we need 3 moves to move the top two to another rod, then one move to move the biggest disc to the destination rod, then again 3 moves to move the 2-disc sub-tower to the destination rod.</p>
+<p>The example with 3 discs is quite telling.
+We can use the insights gained there to set an upper bound to the number of steps required for the general case of <span class="math inline">\(n\)</span> discs; if we take more steps than this upper bound, we would know that we made mistakes.
+For a tower of size <span class="math inline">\(n\)</span>, we require <span class="math inline">\(S_{n - 1}\)</span> steps to move all discs except the biggest one, then move the biggest disc, then move the sub-tower on top of that disc with (again) <span class="math inline">\(S_{n - 1}\)</span> steps.
+So the upper bound is</p>
 <p><span class="math display">\[
 \begin{equation} \label{eq:recurrence}
   S_n =
@@ -1361,13 +1593,27 @@ S_0 = 0
   \end{cases}
 \end{equation}
 \]</span></p>
-<p>If that’s the upper bound, then is there a separate formula for the <em>lower bound</em> (optimal solution)? Nope! It’s because there must come a time in solving the puzzle where we move the biggest disc to the destination rod. To get to the biggest disc, we must have moved all discs on top of it to another rod (the sub-tower); and, after having moved the biggest disc, we must move this sub-tower back on top of that rod (back onto the biggest disc). Because of these constraints stemming the definition of the puzzle itself, we know that for <span class="math inline">\(n\)</span> &gt; 0 we must take <em>at least</em> <span class="math inline">\(2 * (S_{n - 1}) + 1\)</span> steps.</p>
-<p>The upper and lower bounds agree in their formulation, and this formulation (Equation <span class="math inline">\(\ref{eq:recurrence}\)</span>) is our recurrence. In mathematics, a <a href="https://en.wikipedia.org/wiki/Recurrence_relation">recurrence relation</a> is basically a recursively-defined equation, where a <em>base case</em> in the recurrence defines the starting point. In Equation <span class="math inline">\(\ref{eq:recurrence}\)</span>, the base case is <span class="math inline">\(n = 0\)</span>; for <span class="math inline">\(n &gt; 0\)</span>, we define the number of steps required in a recursive manner.</p>
-<p>In our discussion of finding the upper and lower bounds, there were two key concepts — the need to move the biggest disc, and the need to move the sub-tower twice (before and after moving the biggest disc). Our recurrence clearly agrees with these two concepts. The “<span class="math inline">\(+ 1\)</span>” in the non-base case is the step of moving the biggest disc, whereas the <span class="math inline">\(2 * (S_{n - 1})\)</span> is the number of steps required to move the sub-tower <em>twice</em>.</p>
+<p>If that’s the upper bound, then is there a separate formula for the <em>lower bound</em> (optimal solution)?
+Nope!
+It’s because there must come a time in solving the puzzle where we move the biggest disc to the destination rod.
+To get to the biggest disc, we must have moved all discs on top of it to another rod (the sub-tower); and, after having moved the biggest disc, we must move this sub-tower back on top of that rod (back onto the biggest disc).
+Because of these constraints stemming the definition of the puzzle itself, we know that for <span class="math inline">\(n\)</span> &gt; 0 we must take <em>at least</em> <span class="math inline">\(2 * (S_{n - 1}) + 1\)</span> steps.</p>
+<p>The upper and lower bounds agree in their formulation, and this formulation (Equation <span class="math inline">\(\ref{eq:recurrence}\)</span>) is our recurrence.
+In mathematics, a <a href="https://en.wikipedia.org/wiki/Recurrence_relation">recurrence relation</a> is basically a recursively-defined equation, where a <em>base case</em> in the recurrence defines the starting point.
+In Equation <span class="math inline">\(\ref{eq:recurrence}\)</span>, the base case is <span class="math inline">\(n = 0\)</span>; for <span class="math inline">\(n &gt; 0\)</span>, we define the number of steps required in a recursive manner.</p>
+<p>In our discussion of finding the upper and lower bounds, there were two key concepts — the need to move the biggest disc, and the need to move the sub-tower twice (before and after moving the biggest disc).
+Our recurrence clearly agrees with these two concepts.
+The “<span class="math inline">\(+ 1\)</span>” in the non-base case is the step of moving the biggest disc, whereas the <span class="math inline">\(2 * (S_{n - 1})\)</span> is the number of steps required to move the sub-tower <em>twice</em>.</p>
 <h1 id="simplifying-the-recurrence">Simplifying the Recurrence</h1>
-<p>Recurrences are great, but they are painful to compute. For example, it’s not immediately clear what <span class="math inline">\(S_{11}\)</span> or <span class="math inline">\(S_{54}\)</span> evaluates to. It would be really nice if we could avoid defining <span class="math inline">\(S_n\)</span> recursively.</p>
-<p>And this is where math meets science. In the scientific method, we have to come up with a hypothesis and then test that hypothesis with one or more experiments. We can do the same thing here by trying to guess the solution to the recurrence.</p>
-<p>For one thing, we know that <span class="math inline">\(S_n\)</span> grows as <span class="math inline">\(n\)</span> grows (it will never be the case that <span class="math inline">\(S_n\)</span> somehow plateaus or decreases down the road). The more discs there are, the more work we have to do, right? So let’s look at small cases to see how the numbers grow, and see if there is a pattern to the growth rate of <span class="math inline">\(S_n\)</span>.</p>
+<p>Recurrences are great, but they are painful to compute.
+For example, it’s not immediately clear what <span class="math inline">\(S_{11}\)</span> or <span class="math inline">\(S_{54}\)</span> evaluates to.
+It would be really nice if we could avoid defining <span class="math inline">\(S_n\)</span> recursively.</p>
+<p>And this is where math meets science.
+In the scientific method, we have to come up with a hypothesis and then test that hypothesis with one or more experiments.
+We can do the same thing here by trying to guess the solution to the recurrence.</p>
+<p>For one thing, we know that <span class="math inline">\(S_n\)</span> grows as <span class="math inline">\(n\)</span> grows (it will never be the case that <span class="math inline">\(S_n\)</span> somehow plateaus or decreases down the road).
+The more discs there are, the more work we have to do, right?
+So let’s look at small cases to see how the numbers grow, and see if there is a pattern to the growth rate of <span class="math inline">\(S_n\)</span>.</p>
 <table>
 <thead>
 <tr class="header">
@@ -1468,17 +1714,28 @@ S_0 = 0
   S_n = 2^n - 1 \quad \text{for } n \geq 0,
 \end{equation}
 \]</span></p>
-<p>except it is no longer a recurrence as there is no need to define a base case. We’ll call it a <em>solution</em> to the recurrence.</p>
+<p>except it is no longer a recurrence as there is no need to define a base case.
+We’ll call it a <em>solution</em> to the recurrence.</p>
 <h1 id="proving-the-solution">Proving the Solution</h1>
-<p>Although the empirical evidence looks very good, we have not formally proved that the solution (Equation <span class="math inline">\(\ref{eq:solution}\)</span>) holds for <em>all</em> <span class="math inline">\(n\)</span>. It’s one thing to say that something is true for all <em>observed</em> cases (scientific experiment), and quite another to say that something is true for <em>all</em> cases (mathematical proof).</p>
-<p>Can we prove it? Yes! Fortunately for us, Equation <span class="math inline">\(\ref{eq:recurrence}\)</span> lends itself to proof by <a href="https://en.wikipedia.org/wiki/Mathematical_induction">induction</a>. Induction requires you to first prove some number <span class="math inline">\(k_0\)</span> as a starting point (the base case) using some proposition <span class="math inline">\(P\)</span>. Then you prove that <span class="math inline">\(P\)</span> holds for <span class="math inline">\(k + 1\)</span> (the next number); i.e., show that going from <span class="math inline">\(k\)</span> to <span class="math inline">\(k + 1\)</span> does not change <span class="math inline">\(P\)</span>. This is the <em>inductive step</em>. In this way, we prove the “totality” of <span class="math inline">\(P\)</span> as it applies to all numbers in the range <span class="math inline">\([k_0, k_{m}]\)</span> and we are done. <a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
-<p>Here we want to prove that Equation <span class="math inline">\(\ref{eq:solution}\)</span> holds for all <span class="math inline">\(n\)</span> (all natural numbers). <a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> For this proof let’s rewrite Equation <span class="math inline">\(\ref{eq:solution}\)</span> to use <span class="math inline">\(k\)</span> instead of <span class="math inline">\(n\)</span>:</p>
+<p>Although the empirical evidence looks very good, we have not formally proved that the solution (Equation <span class="math inline">\(\ref{eq:solution}\)</span>) holds for <em>all</em> <span class="math inline">\(n\)</span>.
+It’s one thing to say that something is true for all <em>observed</em> cases (scientific experiment), and quite another to say that something is true for <em>all</em> cases (mathematical proof).</p>
+<p>Can we prove it?
+Yes!
+Fortunately for us, Equation <span class="math inline">\(\ref{eq:recurrence}\)</span> lends itself to proof by <a href="https://en.wikipedia.org/wiki/Mathematical_induction">induction</a>.
+Induction requires you to first prove some number <span class="math inline">\(k_0\)</span> as a starting point (the base case) using some proposition <span class="math inline">\(P\)</span>.
+Then you prove that <span class="math inline">\(P\)</span> holds for <span class="math inline">\(k + 1\)</span> (the next number); i.e., show that going from <span class="math inline">\(k\)</span> to <span class="math inline">\(k + 1\)</span> does not change <span class="math inline">\(P\)</span>.
+This is the <em>inductive step</em>.
+In this way, we prove the “totality” of <span class="math inline">\(P\)</span> as it applies to all numbers in the range <span class="math inline">\([k_0, k_{m}]\)</span> and we are done. <a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+<p>Here we want to prove that Equation <span class="math inline">\(\ref{eq:solution}\)</span> holds for all <span class="math inline">\(n\)</span> (all natural numbers). <a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>
+For this proof let’s rewrite Equation <span class="math inline">\(\ref{eq:solution}\)</span> to use <span class="math inline">\(k\)</span> instead of <span class="math inline">\(n\)</span>:</p>
 <p><span class="math display">\[
 \begin{equation} \label{eq:proposition}
   S_k = 2^k - 1 \quad \text{for } k \geq 0.
 \end{equation}
 \]</span></p>
-<p>Equation <span class="math inline">\(\ref{eq:proposition}\)</span> is our proposition <span class="math inline">\(P\)</span>. The base case is easy enough to prove: <span class="math inline">\(S_0 = 0\)</span> because there are no disks to move. For the inductive step, we use the non-base part of our recurrence from Equation <span class="math inline">\(\ref{eq:recurrence}\)</span> to get</p>
+<p>Equation <span class="math inline">\(\ref{eq:proposition}\)</span> is our proposition <span class="math inline">\(P\)</span>.
+The base case is easy enough to prove: <span class="math inline">\(S_0 = 0\)</span> because there are no disks to move.
+For the inductive step, we use the non-base part of our recurrence from Equation <span class="math inline">\(\ref{eq:recurrence}\)</span> to get</p>
 <p><span class="math display">\[
   \begin{align}
   S_k &amp;= 2 * (S_{k - 1}) + 1 \label{eq:induct1}
@@ -1506,7 +1763,9 @@ S_0 = 0
   &amp;= 2^{k + 1} - 1 \label{eq:induct3}.
   \end{align}
 \]</span></p>
-<p>And now we can see that Equation <span class="math inline">\(\ref{eq:induct3}\)</span> (our “evolved” proposition <span class="math inline">\(P\)</span>, if you will) is the same as our solution (Equation <span class="math inline">\(\ref{eq:solution}\)</span>), even though we increased <span class="math inline">\(k\)</span> to <span class="math inline">\(k + 1\)</span>! This is because simple substitution allows us to replace “<span class="math inline">\(k + 1\)</span>” with “<span class="math inline">\(n\)</span>”. We have completed our proof by induction. <a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p>
+<p>And now we can see that Equation <span class="math inline">\(\ref{eq:induct3}\)</span> (our “evolved” proposition <span class="math inline">\(P\)</span>, if you will) is the same as our solution (Equation <span class="math inline">\(\ref{eq:solution}\)</span>), even though we increased <span class="math inline">\(k\)</span> to <span class="math inline">\(k + 1\)</span>!
+This is because simple substitution allows us to replace “<span class="math inline">\(k + 1\)</span>” with “<span class="math inline">\(n\)</span>”.
+We have completed our proof by induction. <a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p>
 <h1 id="alternate-recurrence-and-solution">Alternate Recurrence and Solution</h1>
 <p>The book goes on to offer an alternate recurrence to Equation <span class="math inline">\(\ref{eq:recurrence}\)</span>, by adding 1 to both sides:</p>
 <p><span class="math display">\[
@@ -1523,7 +1782,8 @@ S_0 = 0
   \end{cases}
 \end{align}
 \]</span></p>
-<p>This recurrence is the same as the original, except that it adds 1 to the answer. Now we let <span class="math inline">\(W_n = (S_n) + 1\)</span> and <span class="math inline">\(W_{n - 1} = (S_{n - 1}) + 1\)</span> and rewrite everything in terms of <span class="math inline">\(W\)</span>:</p>
+<p>This recurrence is the same as the original, except that it adds 1 to the answer.
+Now we let <span class="math inline">\(W_n = (S_n) + 1\)</span> and <span class="math inline">\(W_{n - 1} = (S_{n - 1}) + 1\)</span> and rewrite everything in terms of <span class="math inline">\(W\)</span>:</p>
 <p><span class="math display">\[
 \begin{align}
   W_n &amp;=
@@ -1533,7 +1793,9 @@ S_0 = 0
   \end{cases}
 \end{align}
 \]</span></p>
-<p>Notice how the “<span class="math inline">\( + 2\)</span>” in Equation <span class="math inline">\(\ref{eq:recurrence2}\)</span> goes away, because the coefficient <span class="math inline">\(2\)</span> in Equation <span class="math inline">\(\ref{eq:recurrence3}\)</span> will multiply with the “<span class="math inline">\( + 1\)</span>” from <span class="math inline">\(W_{n - 1}\)</span> to get it back. Using this alternate recurrence, it’s easy to see that the solution is just <span class="math inline">\(W_n = 2^n\)</span>, because <span class="math inline">\(W\)</span> can only grow by multiplying <span class="math inline">\(2\)</span> to itself! Hence</p>
+<p>Notice how the “<span class="math inline">\( + 2\)</span>” in Equation <span class="math inline">\(\ref{eq:recurrence2}\)</span> goes away, because the coefficient <span class="math inline">\(2\)</span> in Equation <span class="math inline">\(\ref{eq:recurrence3}\)</span> will multiply with the “<span class="math inline">\( + 1\)</span>” from <span class="math inline">\(W_{n - 1}\)</span> to get it back.
+Using this alternate recurrence, it’s easy to see that the solution is just <span class="math inline">\(W_n = 2^n\)</span>, because <span class="math inline">\(W\)</span> can only grow by multiplying <span class="math inline">\(2\)</span> to itself!
+Hence</p>
 <p><span class="math display">\[
 \begin{align}
 W_n = (S_n) + 1 = 2^n
@@ -1545,231 +1807,25 @@ W_n = (S_n) + 1 = 2^n
 (W_n) - 1 =S_n = 2^n - 1.
 \end{align}
 \]</span></p>
-<p>The lesson here is that if it is difficult to find the solution to a recurrence, we can use basic algebra rules to transform the recurrence to something more amenable. In this case, all it took was adding 1 to the original recurrence.</p>
+<p>The lesson here is that if it is difficult to find the solution to a recurrence, we can use basic algebra rules to transform the recurrence to something more amenable.
+In this case, all it took was adding 1 to the original recurrence.</p>
 <h1 id="conclusion">Conclusion</h1>
-<p>I thoroughly enjoyed figuring this stuff out because possibly for the first time in my life I used my programming experience (recurrence/recursion, memoization) to help myself understand mathematics — not the other way around. The other way around was never enjoyable — calculating what <code>i</code> was in some <span class="math inline">\(n\)</span>th iteration of a <code>for</code>-loop never really excited me.</p>
-<p>I hope this explanation helps you better understand the first few pages of <em>Concrete Mathematics</em>; I had to read that part three times over to really “get it” (never having learned what induction is). And henceforth, I will never look at a string of consecutive 1’s in binary the same way again. 😃</p>
-<section class="footnotes" role="doc-endnotes">
+<p>I thoroughly enjoyed figuring this stuff out because possibly for the first time in my life I used my programming experience (recurrence/recursion, memoization) to help myself understand mathematics — not the other way around.
+The other way around was never enjoyable — calculating what <code>i</code> was in some <span class="math inline">\(n\)</span>th iteration of a <code>for</code>-loop never really excited me.</p>
+<p>I hope this explanation helps you better understand the first few pages of <em>Concrete Mathematics</em>; I had to read that part three times over to really “get it” (never having learned what induction is).
+And henceforth, I will never look at a string of consecutive 1’s in binary the same way again.
+😃</p>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr />
 <ol>
-<li id="fn1" role="doc-endnote"><p>In computer science, this process of avoiding the recalculation of previously known values is called <em>memoization</em> and is useful in generating the first N values of a recursive algorithm in <span class="math inline">\(O(N)\)</span> (linear) time.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2" role="doc-endnote"><p>Note that if <span class="math inline">\(k_0 = 0\)</span>, then <span class="math inline">\([k_0, k_{m}]\)</span> is the set of all natural numbers (zero plus the positive integers).<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn3" role="doc-endnote"><p>There is no need to prove the recurrence (Equation <span class="math inline">\(\ref{eq:recurrence}\)</span>) as we have already proved it in the process of deriving it.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn4" role="doc-endnote"><p>In <em>Concrete Mathematics</em> 2 ed. p. 3 (where the book uses <span class="math inline">\(T_n\)</span> instead of <span class="math inline">\(S_n\)</span>), the proof is simply a one-liner: <span class="math display">\[
+<li id="fn1"><p>In computer science, this process of avoiding the recalculation of previously known values is called <em>memoization</em> and is useful in generating the first N values of a recursive algorithm in <span class="math inline">\(O(N)\)</span> (linear) time.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Note that if <span class="math inline">\(k_0 = 0\)</span>, then <span class="math inline">\([k_0, k_{m}]\)</span> is the set of all natural numbers (zero plus the positive integers).<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>There is no need to prove the recurrence (Equation <span class="math inline">\(\ref{eq:recurrence}\)</span>) as we have already proved it in the process of deriving it.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>In <em>Concrete Mathematics</em> 2 ed. p. 3 (where the book uses <span class="math inline">\(T_n\)</span> instead of <span class="math inline">\(S_n\)</span>), the proof is simply a one-liner:
+<span class="math display">\[
 T_n = 2(T_{n - 1}) + 1 = 2(2^{n - 1} - 1) + 1 = 2^n - 1.
-\]</span> But I find it a bit too terse for my tastes.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-</ol>
-</section>
-]]></summary>
-</entry>
-<entry>
-    <title>The Fastest Way to Compute the Nth Fibonacci Number: The Doubling Method</title>
-    <link href="http://funloop.org/post/2017-04-14-computing-fibonacci-numbers.html" />
-    <id>http://funloop.org/post/2017-04-14-computing-fibonacci-numbers.html</id>
-    <published>2017-04-14T00:00:00Z</published>
-    <updated>2017-04-14T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="info center">
-	<a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2017-04-14-computing-fibonacci-numbers.org" title="History"><code class="date">2017-04-14</code></a>
-	<br>
-	<a title="All pages tagged &#39;math&#39;." href="/tag/math.html">math</a>, <a title="All pages tagged &#39;programming&#39;." href="/tag/programming.html">programming</a>, <a title="All pages tagged &#39;python&#39;." href="/tag/python.html">python</a>
-</div>
-
-<h1 id="introduction">Introduction</h1>
-<p>The Fibonacci Sequence is defined as follows:</p>
-<p><span class="math display">\[
-\begin{align}
-\mathrm{F}_{0} = 0\\
-\mathrm{F}_{1} = 1\\
-\mathrm{F}_{n} = \mathrm{F}_{n - 2} + \mathrm{F}_{n - 1}.
-\end{align}
-\]</span></p>
-<p>That is, each Fibonacci number <span class="math inline">\(\mathrm{F}_{n}\)</span> is the sum of the previous two Fibonacci numbers, except the very first two numbers which are defined to be 0 and 1. <a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
-<p>From the definition above, it appears that computing <span class="math inline">\(\mathrm{F}_{n}\)</span> requires one to always compute <span class="math inline">\(\mathrm{F}_{n - 2}\)</span> and <span class="math inline">\(\mathrm{F}_{n - 1}\)</span>. <strong>This is false:</strong> enter the “doubling method”. <a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> <a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
-<h1 id="the-genesis-of-the-doubling-method">The Genesis of the Doubling Method</h1>
-<p>The doubling method uses a couple of mathematical formulas derived from matrix multiplication as it applies to calculating Fibonacci numbers; it can be seen as an improvement over the matrix multiplication method, although it does not use matrix multplication itself. The matrix multiplication method uses the following formula:</p>
-<p><span class="math display">\[
-\begin{equation}
-\begin{bmatrix}
-1 &amp; 1\\
-1 &amp; 0
-\end{bmatrix}^n
-=
-\begin{bmatrix}
-\mathrm{F}_{n + 1} &amp; \mathrm{F}_{n}\\
-\mathrm{F}_{n} &amp; \mathrm{F}_{n - 1}
-\end{bmatrix}.
-\end{equation}
-\]</span></p>
-<p>This result is quite interesting in its own right; to find <span class="math inline">\(\mathrm{F}_{n}\)</span> you only need to raise the matrix</p>
-<p><span class="math display">\[
-\begin{bmatrix}
-1 &amp; 1\\
-1 &amp; 0
-\end{bmatrix}
-\]</span></p>
-<p>to the <span class="math inline">\(n\)</span>th power. To be more precise, this method is matrix <em>exponentiation</em>. The only downside is that much of the answer is wasted — we don’t care about <span class="math inline">\(\mathrm{F}_{n - 1}\)</span>, not to mention how <span class="math inline">\(\mathrm{F}_{n}\)</span> is redundantly computed twice.</p>
-<h2 id="thinking-in-terms-of-mathrmf_n">Thinking in Terms of <span class="math inline">\(\mathrm{F}_{n}\)</span></h2>
-<p>What if we could find <span class="math inline">\(\mathrm{F}_{n}\)</span> not by multiplying or adding some numbers, but by multiplying and adding <em>other Fibonacci terms</em>? Of course, we’re not talking about adding <span class="math inline">\(\mathrm{F}_{n - 2}\)</span> and <span class="math inline">\(\mathrm{F}_{n - 1}\)</span> because that would be too slow. Let’s have a look at the matrix identity again (reversed for easier reading):</p>
-<p><span class="math display">\[
-\begin{equation}
-\begin{bmatrix}
-\mathrm{F}_{n + 1} &amp; \mathrm{F}_{n}\\
-\mathrm{F}_{n} &amp; \mathrm{F}_{n - 1}
-\end{bmatrix}
-=
-\begin{bmatrix}
-1 &amp; 1\\
-1 &amp; 0
-\end{bmatrix}^n.
-\end{equation}
-\]</span></p>
-<p>If we substitute in <span class="math inline">\(2n\)</span> for <span class="math inline">\(n\)</span>, we get</p>
-<p><span class="math display">\[
-\begin{align}
-\begin{bmatrix}
-\mathrm{F}_{2n + 1} &amp; \mathrm{F}_{2n}\\
-\mathrm{F}_{2n} &amp; \mathrm{F}_{2n - 1}
-\end{bmatrix}
-&amp; =
-  \begin{bmatrix}
-  1 &amp; 1\\
-  1 &amp; 0
-  \end{bmatrix}^{2n} \\
-&amp; =
-  \bigg(\begin{bmatrix}
-  1 &amp; 1\\
-  1 &amp; 0
-  \end{bmatrix}^{n}\bigg)^2
-\end{align}
-\]</span></p>
-<p>and we can substitute in our matrix identity from above to rewrite this as</p>
-<p><span class="math display">\[
-\begin{align}
-&amp; =
-  \bigg(\begin{bmatrix}
-  \mathrm{F}_{n + 1} &amp; \mathrm{F}_{n}\\
-  \mathrm{F}_{n} &amp; \mathrm{F}_{n - 1}
-  \end{bmatrix}\bigg)^2
-\end{align}
-\]</span></p>
-<p>and carry out the squaring to get</p>
-<p><span class="math display">\[
-\begin{align}
-&amp; =
-  \begin{bmatrix}
-  {{\mathrm{F}_{n + 1}}^2 + {\mathrm{F}_{n}}^2} &amp; {{\mathrm{F}_{n + 1}\mathrm{F}_{n}} + {\mathrm{F}_{n}\mathrm{F}_{n - 1}}}\\
-  {{\mathrm{F}_{n}\mathrm{F}_{n + 1}} + {\mathrm{F}_{n - 1}\mathrm{F}_{n}}} &amp; {{\mathrm{F}_{n}}^2 + {\mathrm{F}_{n - 1}}^2}
-  \end{bmatrix}.
-\end{align}
-\]</span></p>
-<p>The top right and bottom left terms are identical; we can also rewrite them to be a bit simpler.</p>
-<p><span class="math display">\[
-\begin{align}
-  {{\mathrm{F}_{n + 1}\mathrm{F}_{n}} + {\mathrm{F}_{n}\mathrm{F}_{n - 1}}}
-&amp; =
-  \mathrm{F}_{n}(\mathrm{F}_{n + 1} + \mathrm{F}_{n - 1}) \\
-&amp; =
-  \mathrm{F}_{n}[\mathrm{F}_{n + 1} + (\mathrm{F}_{n + 1} - \mathrm{F}_{n})] \\
-&amp; =
-  \mathrm{F}_{n}(2\mathrm{F}_{n + 1} - \mathrm{F}_{n}).
-\end{align}
-\]</span></p>
-<p>This simplication achieves an important task — it obviates <span class="math inline">\(\mathrm{F}_{n - 1}\)</span> by cleverly defining it as <span class="math inline">\(\mathrm{F}_{n + 1} - \mathrm{F}_{n}\)</span>. Putting everything together, whe have</p>
-<p><span class="math display">\[
-\begin{align}
-\begin{bmatrix}
-\mathrm{F}_{2n + 1} &amp; \mathrm{F}_{2n}\\
-\mathrm{F}_{2n} &amp; \mathrm{F}_{2n - 1}
-\end{bmatrix}
-&amp; =
-  \begin{bmatrix}
-  {{\mathrm{F}_{n + 1}}^2 + {\mathrm{F}_{n}}^2} &amp; {\mathrm{F}_{n}(2\mathrm{F}_{n + 1} - \mathrm{F}_{n})}\\
-  {\mathrm{F}_{n}(2\mathrm{F}_{n + 1} - \mathrm{F}_{n})} &amp; {{\mathrm{F}_{n}}^2 + {\mathrm{F}_{n - 1}}^2}
-  \end{bmatrix}
-\end{align}
-\]</span></p>
-<p>where the first row (or column) gives us two very useful identities</p>
-<p><span class="math display">\[
-\begin{align}
-\mathrm{F}_{2n}
-&amp; =
-  {\mathrm{F}_{n}(2\mathrm{F}_{n + 1} - \mathrm{F}_{n})} \\
-\mathrm{F}_{2n + 1}
-&amp; =
-  {{\mathrm{F}_{n}}^2 + {\mathrm{F}_{n + 1}}^2}.
-\end{align}
-\]</span></p>
-<p>As these identities form the heart of the doubling method, let’s call them the <em>doubling identities</em>.</p>
-<p>And now we just need one more piece to formulate our doubling method; we need to borrow an idea from number theory. Given any positive integer <span class="math inline">\(n\)</span>, it is the same as either <span class="math inline">\(2m\)</span> (even) or <span class="math inline">\(2m + 1\)</span> (odd), where <span class="math inline">\(m = \lfloor\frac{n}{2}\rfloor\)</span>; for our purposes, let us call this property the “halving property”.</p>
-<p>Whereas the doubling identities allow us to “double” our way into bigger numbers, the halving property allows us to halve our way down to smaller and smaller numbers. The marriage of these two concepts gives rise to the doubling method.</p>
-<h1 id="the-doubling-method">The Doubling Method</h1>
-<p>To compute the <span class="math inline">\(n\)</span>th Fibonacci term we break <span class="math inline">\(n\)</span> itself down into its halves (<span class="math inline">\(2m\)</span>) recursively, until we go down to <span class="math inline">\(n = 0\)</span>. At this point we multiply our way back up using the doubling identities. Because halving and doubling by themselves always calculate <span class="math inline">\(\mathrm{F}_{2m}\)</span>, we have to manually return <span class="math inline">\(\mathrm{F}_{2m + 1}\)</span> if our current sequence index number <span class="math inline">\(n\)</span> is odd.</p>
-<div class="code-and-raw">
-<div class="sourceCode" id="cb1" data-startFrom="1"><pre class="sourceCode numberSource numberLines python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">def</span> fibonacci_doubling(n):</span>
-<span id="cb1-2"><a href="#cb1-2"></a>    <span class="co">&quot;&quot;&quot; Calculate the Nth Fibonacci number using the doubling method. &quot;&quot;&quot;</span></span>
-<span id="cb1-3"><a href="#cb1-3"></a>    <span class="cf">return</span> _fibonacci_doubling(n)[<span class="dv">0</span>]</span>
-<span id="cb1-4"><a href="#cb1-4"></a></span>
-<span id="cb1-5"><a href="#cb1-5"></a></span>
-<span id="cb1-6"><a href="#cb1-6"></a><span class="kw">def</span> _fibonacci_doubling(n):</span>
-<span id="cb1-7"><a href="#cb1-7"></a>    <span class="co">&quot;&quot;&quot; Calculate Nth Fibonacci number using the doubling method. Return the</span></span>
-<span id="cb1-8"><a href="#cb1-8"></a><span class="co">    tuple (F(n), F(n+1)).&quot;&quot;&quot;</span></span>
-<span id="cb1-9"><a href="#cb1-9"></a>    <span class="cf">if</span> n <span class="op">==</span> <span class="dv">0</span>:</span>
-<span id="cb1-10"><a href="#cb1-10"></a>        <span class="cf">return</span> (<span class="dv">0</span>, <span class="dv">1</span>)</span>
-<span id="cb1-11"><a href="#cb1-11"></a>    <span class="cf">else</span>:</span>
-<span id="cb1-12"><a href="#cb1-12"></a>        a, b <span class="op">=</span> _fibonacci_doubling(n <span class="op">&gt;&gt;</span> <span class="dv">1</span>)</span>
-<span id="cb1-13"><a href="#cb1-13"></a>        c <span class="op">=</span> a <span class="op">*</span> ((b <span class="op">&lt;&lt;</span> <span class="dv">1</span>) <span class="op">-</span> a)</span>
-<span id="cb1-14"><a href="#cb1-14"></a>        d <span class="op">=</span> a <span class="op">*</span> a <span class="op">+</span> b <span class="op">*</span> b</span>
-<span id="cb1-15"><a href="#cb1-15"></a>        <span class="cf">if</span> n <span class="op">&amp;</span> <span class="dv">1</span>:</span>
-<span id="cb1-16"><a href="#cb1-16"></a>            <span class="cf">return</span> (d, c <span class="op">+</span> d)</span>
-<span id="cb1-17"><a href="#cb1-17"></a>        <span class="cf">else</span>:</span>
-<span id="cb1-18"><a href="#cb1-18"></a>            <span class="cf">return</span> (c, d)</span>
-<span id="cb1-19"><a href="#cb1-19"></a></span>
-<span id="cb1-20"><a href="#cb1-20"></a></span>
-<span id="cb1-21"><a href="#cb1-21"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">&quot;__main__&quot;</span>:</span>
-<span id="cb1-22"><a href="#cb1-22"></a>    <span class="cf">for</span> n <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">20</span>):</span>
-<span id="cb1-23"><a href="#cb1-23"></a>        <span class="bu">print</span>(fibonacci_doubling(n))</span>
-<span id="cb1-24"><a href="#cb1-24"></a>    <span class="co"># As a demonstration of this algorithm&#39;s speed, here is a large n.</span></span>
-<span id="cb1-25"><a href="#cb1-25"></a>    <span class="bu">print</span>(fibonacci_doubling(<span class="dv">10000</span>))</span></code></pre></div>
-<div class="raw-link sourceCode">
-<p> <code>fibonacci-doubling.py</code> <a class="raw" href="https://github.com/listx/listx_blog/blob/master/code/2017-04-14-computing-fibonacci-numbers/fibonacci-doubling.py"><code>[GitHub]</code></a> <a class="raw" href="/code/2017-04-14-computing-fibonacci-numbers/fibonacci-doubling.py"mimetype=text/plain><code>[Download]</code></a> </p>
-</div>
-</div>
-<p>Line 12 is where we do the halving. We use the right-shift operator to do this. Lines 13 and 14 are our doubling identities (I use the left-shift operator here because it feels more natural to me). The if-condition on line 15 returns <span class="math inline">\(\mathrm{F}_{2m + 1}\)</span> if <span class="math inline">\(n\)</span> was odd, and <span class="math inline">\(\mathrm{F}_{2m}\)</span> otherwise.</p>
-<p>For comparison, here is an iterative version. On the one hand it avoids Python’s recursion limit, but the downside is a small loss of elegance (we have to loop twice — first to build up the halving/doubling points, and again for the main loop).</p>
-<div class="code-and-raw">
-<div class="sourceCode" id="cb2" data-startFrom="1"><pre class="sourceCode numberSource numberLines python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">def</span> fibonacci_doubling_iter(n):</span>
-<span id="cb2-2"><a href="#cb2-2"></a>    <span class="co">&quot;&quot;&quot; Calculate Nth Fibonacci number using the doubling method, using</span></span>
-<span id="cb2-3"><a href="#cb2-3"></a><span class="co">    iteration. &quot;&quot;&quot;</span></span>
-<span id="cb2-4"><a href="#cb2-4"></a>    ns <span class="op">=</span> []</span>
-<span id="cb2-5"><a href="#cb2-5"></a>    <span class="cf">while</span> n:</span>
-<span id="cb2-6"><a href="#cb2-6"></a>        ns.extend([n])</span>
-<span id="cb2-7"><a href="#cb2-7"></a>        n <span class="op">&gt;&gt;=</span> <span class="dv">1</span></span>
-<span id="cb2-8"><a href="#cb2-8"></a></span>
-<span id="cb2-9"><a href="#cb2-9"></a>    a, b <span class="op">=</span> <span class="dv">0</span>, <span class="dv">1</span></span>
-<span id="cb2-10"><a href="#cb2-10"></a></span>
-<span id="cb2-11"><a href="#cb2-11"></a>    <span class="cf">while</span> ns:</span>
-<span id="cb2-12"><a href="#cb2-12"></a>        n <span class="op">=</span> ns.pop()</span>
-<span id="cb2-13"><a href="#cb2-13"></a>        c <span class="op">=</span> a <span class="op">*</span> ((b <span class="op">&lt;&lt;</span> <span class="dv">1</span>) <span class="op">-</span> a)</span>
-<span id="cb2-14"><a href="#cb2-14"></a>        d <span class="op">=</span> a <span class="op">*</span> a <span class="op">+</span> b <span class="op">*</span> b</span>
-<span id="cb2-15"><a href="#cb2-15"></a>        <span class="cf">if</span> n <span class="op">&amp;</span> <span class="dv">1</span>:</span>
-<span id="cb2-16"><a href="#cb2-16"></a>            a, b <span class="op">=</span> d, c <span class="op">+</span> d</span>
-<span id="cb2-17"><a href="#cb2-17"></a>        <span class="cf">else</span>:</span>
-<span id="cb2-18"><a href="#cb2-18"></a>            a, b <span class="op">=</span> c, d</span>
-<span id="cb2-19"><a href="#cb2-19"></a></span>
-<span id="cb2-20"><a href="#cb2-20"></a>    <span class="cf">return</span> a</span></code></pre></div>
-<div class="raw-link sourceCode">
-<p> <code>fibonacci-doubling-iter.py</code> <a class="raw" href="https://github.com/listx/listx_blog/blob/master/code/2017-04-14-computing-fibonacci-numbers/fibonacci-doubling-iter.py"><code>[GitHub]</code></a> <a class="raw" href="/code/2017-04-14-computing-fibonacci-numbers/fibonacci-doubling-iter.py"mimetype=text/plain><code>[Download]</code></a> </p>
-</div>
-</div>
-<h1 id="conclusion">Conclusion</h1>
-<p>I hope you enjoyed reading about this method of calculationg Fibonacci numbers as much as I enjoyed learning the math behind it. This algorithm can be sped up if it uses a faster multiplication algorithm as <code>a</code> and <code>b</code> get very large (e.g., Karatsuba multiplication). <a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> Time complexity is <span class="math inline">\(\Theta(\log{n})\)</span>; it reminds me of the binary search algorithm, in how the problem space is halved repeatedly. Neat!</p>
-<section class="footnotes" role="doc-endnotes">
-<hr />
-<ol>
-<li id="fn1" role="doc-endnote"><p>We can choose to define the first two terms as 1 and 1 instead, but this distinction is needlessly arbitrary.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2" role="doc-endnote"><p>There is actually a known formula for our purposes, where <span class="math display">\[ \mathrm{F}_{n} = \frac{\varphi^n - (-\varphi)^{-n}}{2\varphi - 1}\]</span> and <span class="math inline">\(\varphi = \frac{1 + \sqrt{5}}{2} \approx 1.6180339887\cdots\)</span> (the golden ratio). Unfortunately this requires arbitrary-precision floating point calculations.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn3" role="doc-endnote"><p>For more discussion, see <a href="https://www.nayuki.io/page/fast-fibonacci-algorithms">https://www.nayuki.io/page/fast-fibonacci-algorithms</a>.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn4" role="doc-endnote"><p>Python already uses Karatsuba multiplication natively for large integers.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+\]</span>
+But I find it a bit too terse for my tastes.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 ]]></summary>

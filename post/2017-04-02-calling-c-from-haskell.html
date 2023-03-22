@@ -45,9 +45,11 @@
 	<a title="All pages tagged 'programming'." href="../tag/programming.html">programming</a>, <a title="All pages tagged 'haskell'." href="../tag/haskell.html">haskell</a>
 </div>
 
-<p>Yesterday I made a minimal working example of calling C from Haskell, where I call a simple C function to compute the greatest common denominator, or “GCD”. The Haskell portion only serves as a wrapper around the C function. This post is a brief look at the whole setup.</p>
+<p>Yesterday I made a minimal working example of calling C from Haskell, where I call a simple C function to compute the greatest common denominator, or “GCD”.
+The Haskell portion only serves as a wrapper around the C function.
+This post is a brief look at the whole setup.</p>
 <h1 id="the-setup">The Setup</h1>
-<p>I used <code>ghc</code> 8.0.1, and <code>gcc</code> 5.4.0. <a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+<p>I used <code class="verbatim">ghc</code> 8.0.1, and <code class="verbatim">gcc</code> 5.4.0. <a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
 <h2 id="folder-structure">Folder Structure</h2>
 <pre><code>2017-04-02-calling-c-from-haskell
 ├── build.sh
@@ -71,13 +73,13 @@
 <div class="sourceCode" id="cb3" data-startFrom="1"><pre class="sourceCode numberSource numberLines c"><code class="sourceCode c"><span id="cb3-1"><a href="#cb3-1"></a><span class="pp">#include </span><span class="im">&quot;gcd.h&quot;</span></span>
 <span id="cb3-2"><a href="#cb3-2"></a></span>
 <span id="cb3-3"><a href="#cb3-3"></a><span class="co">/* Find greatest common divisor. */</span></span>
-<span id="cb3-4"><a href="#cb3-4"></a><span class="dt">int</span> gcd(<span class="dt">int</span> m, <span class="dt">int</span> r)</span>
-<span id="cb3-5"><a href="#cb3-5"></a>{</span>
-<span id="cb3-6"><a href="#cb3-6"></a>	<span class="cf">if</span> (r == <span class="dv">0</span>)</span>
-<span id="cb3-7"><a href="#cb3-7"></a>		<span class="cf">return</span> m;</span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="dt">int</span> gcd<span class="op">(</span><span class="dt">int</span> m<span class="op">,</span> <span class="dt">int</span> r<span class="op">)</span></span>
+<span id="cb3-5"><a href="#cb3-5"></a><span class="op">{</span></span>
+<span id="cb3-6"><a href="#cb3-6"></a>	<span class="cf">if</span> <span class="op">(</span>r <span class="op">==</span> <span class="dv">0</span><span class="op">)</span></span>
+<span id="cb3-7"><a href="#cb3-7"></a>		<span class="cf">return</span> m<span class="op">;</span></span>
 <span id="cb3-8"><a href="#cb3-8"></a></span>
-<span id="cb3-9"><a href="#cb3-9"></a>	<span class="cf">return</span> gcd(r, m % r);</span>
-<span id="cb3-10"><a href="#cb3-10"></a>}</span></code></pre></div>
+<span id="cb3-9"><a href="#cb3-9"></a>	<span class="cf">return</span> gcd<span class="op">(</span>r<span class="op">,</span> m <span class="op">%</span> r<span class="op">);</span></span>
+<span id="cb3-10"><a href="#cb3-10"></a><span class="op">}</span></span></code></pre></div>
 <div class="raw-link sourceCode">
 <p> <code>gcd.c</code> <a class="raw" href="https://github.com/listx/listx_blog/blob/master/code/2017-04-02-calling-c-from-haskell/c/gcd.c"><code>[GitHub]</code></a> <a class="raw" href="../code/2017-04-02-calling-c-from-haskell/c/gcd.c" mimetype="text/plain"><code>[Download]</code></a> </p>
 </div>
@@ -110,24 +112,27 @@
 <div class="sourceCode" id="cb6" data-startFrom="1"><pre class="sourceCode numberSource numberLines bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1"></a><span class="co">#!/usr/bin/env bash</span></span>
 <span id="cb6-2"><a href="#cb6-2"></a></span>
 <span id="cb6-3"><a href="#cb6-3"></a><span class="bu">pushd</span> c</span>
-<span id="cb6-4"><a href="#cb6-4"></a><span class="fu">gcc</span> -c -o gcd.o gcd.c</span>
+<span id="cb6-4"><a href="#cb6-4"></a><span class="fu">gcc</span> <span class="at">-c</span> <span class="at">-o</span> gcd.o gcd.c</span>
 <span id="cb6-5"><a href="#cb6-5"></a><span class="bu">popd</span></span>
 <span id="cb6-6"><a href="#cb6-6"></a></span>
 <span id="cb6-7"><a href="#cb6-7"></a><span class="bu">pushd</span> hs</span>
-<span id="cb6-8"><a href="#cb6-8"></a><span class="ex">ghc</span> --make ffi.hs ../c/gcd.o</span>
+<span id="cb6-8"><a href="#cb6-8"></a><span class="ex">ghc</span> <span class="at">--make</span> ffi.hs ../c/gcd.o</span>
 <span id="cb6-9"><a href="#cb6-9"></a><span class="bu">popd</span></span></code></pre></div>
 <div class="raw-link sourceCode">
 <p> <code>build.sh</code> <a class="raw" href="https://github.com/listx/listx_blog/blob/master/code/2017-04-02-calling-c-from-haskell/build.sh"><code>[GitHub]</code></a> <a class="raw" href="../code/2017-04-02-calling-c-from-haskell/build.sh" mimetype="text/plain"><code>[Download]</code></a> </p>
 </div>
 </div>
 <h1 id="discussion">Discussion</h1>
-<p>To compile the example, run the <code>build.sh</code> script. Here is the expected output of the built executable:</p>
+<p>To compile the example, run the <code class="verbatim">build.sh</code> script.
+Here is the expected output of the built executable:</p>
 <pre><code> $ ./hs/ffi
 4
 15
 12
 </code></pre>
-<p>. The <code>gcd()</code> C function is easy to work with because it is a pure function without side effects. You can run the <code>ffi</code> binary against <code>valgrind</code> to make sure that we are not leaking any memory (sample output below).</p>
+<p>.
+The <code class="verbatim">gcd()</code> C function is easy to work with because it is a pure function without side effects.
+You can run the <code class="verbatim">ffi</code> binary against <code class="verbatim">valgrind</code> to make sure that we are not leaking any memory (sample output below).</p>
 <pre><code> $ valgrind --error-exitcode=1 --leak-check=yes ./hs/ffi
 ==14582== Memcheck, a memory error detector
 ==14582== Copyright (C) 2002-2015, and GNU GPL'd, by Julian Seward et al.
@@ -151,7 +156,7 @@
 <h2 id="caveats">Caveats</h2>
 <p>Below are some things I tried, but could not get to work.</p>
 <ul>
-<li>I tried to delete the <code>gcd.c</code> file by moving the function definition in <code>gcd.c</code> to <code>gcd.h</code> (and delete <code>gcd.c</code> entirely). I compiled the object file with <code>gcc -c -Wall -Wextra -Werror -o gcd.o gcd.h</code> but then I got this error:</li>
+<li>I tried to delete the <code class="verbatim">gcd.c</code> file by moving the function definition in <code class="verbatim">gcd.c</code> to <code class="verbatim">gcd.h</code> (and delete <code class="verbatim">gcd.c</code> entirely). I compiled the object file with <code class="verbatim">gcc -c -Wall -Wextra -Werror -o gcd.o gcd.h</code> but then I got this error:</li>
 </ul>
 <pre><code> $ ghc --make ffi.hs ../c/gcd.o
 [1 of 2] Compiling GCD              ( GCD.hs, GCD.o )
@@ -162,7 +167,7 @@ collect2: error: ld returned 1 exit status
 `cc' failed in phase `Linker'. (Exit code: 1)
 </code></pre>
 <ul>
-<li>In <code>GCD.hs</code> you can see the line <code>foreign import ccall "gcd.h gcd"﻿</code>. Instinctively I thought that the <code>gcd.h</code> in <code>﻿"gcd.h gcd"﻿</code> served as a kind of disambiguator, for where the <code>gcd()</code> function came from. So then I defined another function named <code>gcd()</code> in a different C header file (<code>gcd_other.h</code>), compiled it separately, but got a “multple definition” error:</li>
+<li>In <code class="verbatim">GCD.hs</code> you can see the line <code class="verbatim">foreign import ccall "gcd.h gcd"﻿</code>. Instinctively I thought that the <code class="verbatim">gcd.h</code> in <code class="verbatim">﻿"gcd.h gcd"﻿</code> served as a kind of disambiguator, for where the <code class="verbatim">gcd()</code> function came from. So then I defined another function named <code class="verbatim">gcd()</code> in a different C header file (<code class="verbatim">gcd_other.h</code>), compiled it separately, but got a “multple definition” error:</li>
 </ul>
 <pre><code> $ ghc --make ffi.hs ../c/gcd.o ../c/gcd_other.o
 [1 of 2] Compiling GCD              ( GCD.hs, GCD.o )
@@ -174,10 +179,10 @@ gcd_other.c:(.text+0x0): multiple definition of `gcd'
 collect2: error: ld returned 1 exit status
 `cc' failed in phase `Linker'. (Exit code: 1)
 </code></pre>
-<section class="footnotes" role="doc-endnotes">
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr />
 <ol>
-<li id="fn1" role="doc-endnote"><p>The version of gcc should not matter at all – actually, any decent C compiler should work.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>The version of gcc should not matter at all – actually, any decent C compiler should work.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 
@@ -185,7 +190,7 @@ collect2: error: ld returned 1 exit status
 
 		<div id="footer">
 			<img src="../favicon.png" id="brand-icon">
-			<p>Copyright (C) 2013-2021 Linus Arver. All rights reserved.</p>
+			<p>Copyright (C) 2013-2023 Linus Arver. All rights reserved.</p>
 			<a href="https://github.com/listx/listx_blog">Site</a>
 			<a href="https://github.com/listx/listx.github.io">generated</a>
 			with

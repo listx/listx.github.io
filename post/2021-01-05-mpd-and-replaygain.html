@@ -45,11 +45,15 @@
 	<a title="All pages tagged 'linux'." href="../tag/linux.html">linux</a>, <a title="All pages tagged 'audio'." href="../tag/audio.html">audio</a>
 </div>
 
-<p>Something like ~10 years ago, there was no easy way to apply <a href="https://en.wikipedia.org/wiki/ReplayGain">ReplayGain</a> to various audio files with different formats (e.g., flac vs mp3). Over the holiday break I discovered <a href="https://github.com/desbma/r128gain">r128gain</a> which is exactly the tool I wanted for many years. You just run</p>
+<p>Something like ~10 years ago, there was no easy way to apply <a href="https://en.wikipedia.org/wiki/ReplayGain">ReplayGain</a> to various audio files with different formats (e.g., flac vs mp3).
+Over the holiday break I discovered <a href="https://github.com/desbma/r128gain">r128gain</a> which is exactly the tool I wanted for many years.
+You just run</p>
 <pre><code>r128gain -r &lt;folder&gt;
 </code></pre>
 <p>and it will recursively tag all music files with ReplayGain information — in parallel, no less!</p>
-<p>The only downside is that neither <a href="https://cmus.github.io/">cmus</a> nor <a href="https://mpv.io/">mpv</a> currently support the <code>R128_TRACK_GAIN</code> tag that r128gain generates (at least for <code>*.opus</code> files).<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> However, I discovered that <a href="https://www.musicpd.org/">MPD (Music Player Daemon)</a> supports <code>R128_TRACK_GAIN</code>.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> MPD is easy to start up and the basic minimal configuration was <a href="https://raw.githubusercontent.com/listx/syscfg/e0f95dd04a4cd7247ca4e0fe3f02eccd78660d24/mpd/mpd.conf">small enough</a>:</p>
+<p>The only downside is that neither <a href="https://cmus.github.io/">cmus</a> nor <a href="https://mpv.io/">mpv</a> currently support the <code class="verbatim">R128_TRACK_GAIN</code> tag that r128gain generates (at least for <code class="verbatim">*.opus</code> files).<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>
+However, I discovered that <a href="https://www.musicpd.org/">MPD (Music Player Daemon)</a> supports <code class="verbatim">R128_TRACK_GAIN</code>.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>
+MPD is easy to start up and the basic minimal configuration was <a href="https://raw.githubusercontent.com/listx/syscfg/e0f95dd04a4cd7247ca4e0fe3f02eccd78660d24/mpd/mpd.conf">small enough</a>:</p>
 <pre><code>music_directory     &quot;~/Music&quot;
 # Automatically prune new/deleted files in the music_directory.
 auto_update         &quot;yes&quot;
@@ -67,11 +71,11 @@ replaygain          &quot;track&quot;
 </code></pre>
 <p>As far as actually controlling MPD, I settled on <a href="https://github.com/boysetsfrog/vimpc">vimpc</a> — because Vi-like keybindings are too good to pass up.</p>
 <p>Cheers!</p>
-<section class="footnotes" role="doc-endnotes">
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr />
 <ol>
-<li id="fn1" role="doc-endnote"><p>To be precise, cmus has a commit in master that <a href="https://github.com/cmus/cmus/commit/174b93ee1c3a290751513ac557b39dea8e31c7f9">adds support</a>, and mpv has an <a href="https://github.com/mpv-player/mpv/issues/5079">open issue</a> for it. And I’m too lazy to compile cmus from source.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2" role="doc-endnote"><p>I had actually used MPD back in the day, but switched to cmus because it was simpler. And because cross-format ReplayGain tagging software was not available, MPD’s support for ReplayGain wasn’t very meaningful for me.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>To be precise, cmus has a commit in master that <a href="https://github.com/cmus/cmus/commit/174b93ee1c3a290751513ac557b39dea8e31c7f9">adds support</a>, and mpv has an <a href="https://github.com/mpv-player/mpv/issues/5079">open issue</a> for it. And I’m too lazy to compile cmus from source.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>I had actually used MPD back in the day, but switched to cmus because it was simpler. And because cross-format ReplayGain tagging software was not available, MPD’s support for ReplayGain wasn’t very meaningful for me.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 
@@ -79,7 +83,7 @@ replaygain          &quot;track&quot;
 
 		<div id="footer">
 			<img src="../favicon.png" id="brand-icon">
-			<p>Copyright (C) 2013-2021 Linus Arver. All rights reserved.</p>
+			<p>Copyright (C) 2013-2023 Linus Arver. All rights reserved.</p>
 			<a href="https://github.com/listx/listx_blog">Site</a>
 			<a href="https://github.com/listx/listx.github.io">generated</a>
 			with

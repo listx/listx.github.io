@@ -46,23 +46,46 @@
 </div>
 
 <p>UPDATE 2014-01-24: See <a href="2014-01-24-cabal2pkgbuild.html">this post</a>.</p>
-<p>The <a href="https://github.com/magthe/cblrepo">cblrepo</a> command line utility helps to maintain a set of Haskell packages, and is used as the de facto Hackage package manager in Arch Linux.</p>
-<p>At least in Arch Linux, the idea is to first install the base set of available Haskell packages from the <a href="https://wiki.archlinux.org/index.php/Haskell_Package_Guidelines">haskell-core</a> repo. If you now want to install a package from <a href="http://hackage.haskell.org">http://hackage.haskell.org</a> <em>and</em> want to track it with Arch Linux’s own package manager <code>pacman</code>, you have to somehow generate a PKGBUILD from the Hackage package and feed it into <code>makepkg</code>, and then call <code>sudo pacman -U &lt;generated_package&gt;</code> on it. You can do this with <code>cblrepo</code>, but it takes a number of steps that could get very tedious, very fast:</p>
-<ol>
-<li>Sync all the packages on Hackage with <code>cblrepo</code>, via <code>cblrepo sync</code>.</li>
-<li>Initialize the <code>cblrepo.db</code> file, which is generated automatically each time you execute a <code>cblrepo add ...</code> command.</li>
-<li>Add all of the standard packages that comes with installing GHC (<code>ghc</code> in Arch Linux) with <code>cblrepo add --ghc-pkg ...</code>.</li>
-<li>Add all the packages installed by yourself from the [haskell-core] repository with <code>cblrepo add --distro-pkg ...</code></li>
-<li>Add the <code>&lt;package_name&gt;.cabal</code> URL from the Hackage package’s page, which is in the format <code>http://hackage.haskell.org/package/&lt;package_name&gt;</code>.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></li>
-<li>Run <code>cblrepo pkgbuild &lt;package_name&gt;</code>.</li>
-<li>Go into the generated <code>haskell-&lt;package_name_lowercased&gt;</code> directory which contains the <code>PKGBUILD</code> we are after, and run <code>makepkg -s</code>.</li>
-<li>Finally run <code>sudo pacman -U &lt;package_arch_linux_format&gt;</code> on it to track it with <code>pacman</code>.</li>
+<p>The <a href="https://github.com/magthe/cblrepo">cblrepo</a> command line utility
+helps to maintain a set of Haskell packages, and is used as the de facto
+Hackage package manager in Arch Linux.</p>
+<p>At least in Arch Linux, the idea is to first install the base set of
+available Haskell packages from the
+<a href="https://wiki.archlinux.org/index.php/Haskell_Package_Guidelines">haskell-core</a>
+repo. If you now want to install a package from
+<a href="http://hackage.haskell.org">http://hackage.haskell.org</a> <em>and</em> want to track it with Arch Linux’s own
+package manager <code class="verbatim">pacman</code>, you have to somehow generate a PKGBUILD from
+the Hackage package and feed it into <code class="verbatim">makepkg</code>, and then call
+<code class="verbatim">sudo pacman -U &lt;generated_package&gt;</code> on it. You can do this with
+<code class="verbatim">cblrepo</code>, but it takes a number of steps that could get very tedious,
+very fast:</p>
+<ol type="1">
+<li>Sync all the packages on Hackage with <code class="verbatim">cblrepo</code>, via <code class="verbatim">cblrepo sync</code>.</li>
+<li>Initialize the <code class="verbatim">cblrepo.db</code> file, which is generated automatically
+each time you execute a <code class="verbatim">cblrepo add ...</code> command.</li>
+<li>Add all of the standard packages that comes with installing GHC
+(<code class="verbatim">ghc</code> in Arch Linux) with <code class="verbatim">cblrepo add --ghc-pkg ...</code>.</li>
+<li>Add all the packages installed by yourself from the [haskell-core]
+repository with <code class="verbatim">cblrepo add --distro-pkg ...</code></li>
+<li>Add the <code class="verbatim">&lt;package_name&gt;.cabal</code> URL from the Hackage package’s page,
+which is in the format
+<code class="verbatim">http://hackage.haskell.org/package/&lt;package_name&gt;</code>.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></li>
+<li>Run <code class="verbatim">cblrepo pkgbuild &lt;package_name&gt;</code>.</li>
+<li>Go into the generated <code class="verbatim">haskell-&lt;package_name_lowercased&gt;</code> directory
+which contains the <code class="verbatim">PKGBUILD</code> we are after, and run <code class="verbatim">makepkg -s</code>.</li>
+<li>Finally run <code class="verbatim">sudo pacman -U &lt;package_arch_linux_format&gt;</code> on it to
+track it with <code class="verbatim">pacman</code>.</li>
 </ol>
-<p>The problem is that steps 3 and 4 take forever to do by hand because you have to add every single package individually, writing out the version numbers (and, it is something of a mystery unless you know where to look for the crucial information).<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> Plus, you have to redo all steps 1 through 7 each time you upgrade <code>ghc</code>. So, naturally, I wrote a script (called <code>maintain_cblrepo.sh</code>) to automate things a bit.</p>
+<p>The problem is that steps 3 and 4 take forever to do by hand because you
+have to add every single package individually, writing out the version
+numbers (and, it is something of a mystery unless you know where to look
+for the crucial information).<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> Plus, you have to redo all steps 1
+through 7 each time you upgrade <code class="verbatim">ghc</code>. So, naturally, I wrote a script
+(called <code class="verbatim">maintain_cblrepo.sh</code>) to automate things a bit.</p>
 <div class="sourceCode" id="cb1" data-org-language="sh" data-startFrom><pre class="sourceCode numberSource bash numberLines"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="co">#!/usr/bin/env zsh</span></span>
 <span id="cb1-2"><a href="#cb1-2"></a><span class="co"># LICENSE: PUBLIC DOMAIN</span></span>
 <span id="cb1-3"><a href="#cb1-3"></a><span class="co"># Usage: ./maintain_cblrepo.sh &lt;HACKAGE_PACKAGES_FILE&gt; &lt;MODE&gt;</span></span>
-<span id="cb1-4"><a href="#cb1-4"></a><span class="va">usage=</span><span class="st">&quot;Usage: ./maintain_cblrepo.sh &lt;HACKAGE_PACKAGES_FILE&gt; &lt;MODE&gt;&quot;</span></span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="va">usage</span><span class="op">=</span><span class="st">&quot;Usage: ./maintain_cblrepo.sh &lt;HACKAGE_PACKAGES_FILE&gt; &lt;MODE&gt;&quot;</span></span>
 <span id="cb1-5"><a href="#cb1-5"></a></span>
 <span id="cb1-6"><a href="#cb1-6"></a><span class="co"># Exit immediately if any errors are found</span></span>
 <span id="cb1-7"><a href="#cb1-7"></a><span class="ex">setopt</span> errexit</span>
@@ -70,122 +93,124 @@
 <span id="cb1-9"><a href="#cb1-9"></a><span class="co"># http://www.zsh.org/mla/users/2008/msg01139.html</span></span>
 <span id="cb1-10"><a href="#cb1-10"></a><span class="ex">setopt</span> local_options no_nomatch</span>
 <span id="cb1-11"><a href="#cb1-11"></a></span>
-<span id="cb1-12"><a href="#cb1-12"></a><span class="kw">if [[</span> <span class="ot">-z</span> <span class="va">$1</span><span class="kw"> ]]</span>; <span class="kw">then</span></span>
+<span id="cb1-12"><a href="#cb1-12"></a><span class="cf">if</span> <span class="kw">[[</span> <span class="ot">-z</span> <span class="va">$1</span> <span class="kw">]];</span> <span class="cf">then</span></span>
 <span id="cb1-13"><a href="#cb1-13"></a>    <span class="bu">echo</span> <span class="va">$usage</span></span>
 <span id="cb1-14"><a href="#cb1-14"></a>    <span class="bu">exit</span> 1</span>
-<span id="cb1-15"><a href="#cb1-15"></a><span class="kw">fi</span></span>
-<span id="cb1-16"><a href="#cb1-16"></a><span class="kw">if [[</span> <span class="ot">!</span> <span class="ot">-f</span> <span class="va">$1</span><span class="kw"> ]]</span>; <span class="kw">then</span></span>
+<span id="cb1-15"><a href="#cb1-15"></a><span class="cf">fi</span></span>
+<span id="cb1-16"><a href="#cb1-16"></a><span class="cf">if</span> <span class="kw">[[</span> <span class="ot">!</span> <span class="ot">-f</span> <span class="va">$1</span> <span class="kw">]];</span> <span class="cf">then</span></span>
 <span id="cb1-17"><a href="#cb1-17"></a>    <span class="bu">echo</span> <span class="st">&quot;</span><span class="dt">\`</span><span class="va">$1</span><span class="st">' does not exist or is not a regular file&quot;</span></span>
 <span id="cb1-18"><a href="#cb1-18"></a>    <span class="bu">exit</span> 1</span>
-<span id="cb1-19"><a href="#cb1-19"></a><span class="kw">fi</span></span>
-<span id="cb1-20"><a href="#cb1-20"></a><span class="kw">if [[</span> <span class="ot">-z</span> <span class="va">$2</span><span class="kw"> ]]</span>; <span class="kw">then</span></span>
+<span id="cb1-19"><a href="#cb1-19"></a><span class="cf">fi</span></span>
+<span id="cb1-20"><a href="#cb1-20"></a><span class="cf">if</span> <span class="kw">[[</span> <span class="ot">-z</span> <span class="va">$2</span> <span class="kw">]];</span> <span class="cf">then</span></span>
 <span id="cb1-21"><a href="#cb1-21"></a>    <span class="bu">echo</span> <span class="va">$usage</span></span>
 <span id="cb1-22"><a href="#cb1-22"></a>    <span class="bu">exit</span> 1</span>
-<span id="cb1-23"><a href="#cb1-23"></a><span class="kw">fi</span></span>
+<span id="cb1-23"><a href="#cb1-23"></a><span class="cf">fi</span></span>
 <span id="cb1-24"><a href="#cb1-24"></a></span>
-<span id="cb1-25"><a href="#cb1-25"></a><span class="va">hackage_url=</span><span class="st">&quot;http://hackage.haskell.org&quot;</span></span>
-<span id="cb1-26"><a href="#cb1-26"></a><span class="va">hackage_packages_file=(</span><span class="op">$(&lt;</span><span class="va">$1</span><span class="op">)</span><span class="va">)</span></span>
+<span id="cb1-25"><a href="#cb1-25"></a><span class="va">hackage_url</span><span class="op">=</span><span class="st">&quot;http://hackage.haskell.org&quot;</span></span>
+<span id="cb1-26"><a href="#cb1-26"></a><span class="va">hackage_packages_file</span><span class="op">=</span><span class="va">($(</span><span class="op">&lt;</span><span class="va">$1))</span></span>
 <span id="cb1-27"><a href="#cb1-27"></a></span>
-<span id="cb1-28"><a href="#cb1-28"></a><span class="va">mode=$2</span></span>
+<span id="cb1-28"><a href="#cb1-28"></a><span class="va">mode</span><span class="op">=</span><span class="va">$2</span></span>
 <span id="cb1-29"><a href="#cb1-29"></a></span>
-<span id="cb1-30"><a href="#cb1-30"></a><span class="kw">case</span> <span class="va">$mode</span><span class="kw"> in</span></span>
+<span id="cb1-30"><a href="#cb1-30"></a><span class="cf">case</span> <span class="va">$mode</span> <span class="kw">in</span></span>
 <span id="cb1-31"><a href="#cb1-31"></a>    <span class="co">### Remove any old cblrepo.db file. </span><span class="al">###</span></span>
-<span id="cb1-32"><a href="#cb1-32"></a>    <span class="kw">(</span>initdb<span class="kw">|</span>initdb-sync<span class="kw">)</span></span>
-<span id="cb1-33"><a href="#cb1-33"></a>    <span class="fu">rm</span> -f cblrepo.db</span>
+<span id="cb1-32"><a href="#cb1-32"></a>    <span class="kw">(</span><span class="ss">initdb</span><span class="kw">|</span><span class="ss">initdb-sync</span><span class="kw">)</span></span>
+<span id="cb1-33"><a href="#cb1-33"></a>    <span class="fu">rm</span> <span class="at">-f</span> cblrepo.db</span>
 <span id="cb1-34"><a href="#cb1-34"></a></span>
 <span id="cb1-35"><a href="#cb1-35"></a>    <span class="co"># Add packages provided by GHC</span></span>
 <span id="cb1-36"><a href="#cb1-36"></a></span>
 <span id="cb1-37"><a href="#cb1-37"></a>    <span class="co"># Pacman provides information about which modules are exposed by installing the</span></span>
 <span id="cb1-38"><a href="#cb1-38"></a>    <span class="co"># 'ghc' package. We put each package into an array.</span></span>
-<span id="cb1-39"><a href="#cb1-39"></a>    <span class="va">provided=($(</span><span class="ex">pacman</span> -Qi ghc <span class="kw">|</span> <span class="fu">grep</span> Provides <span class="kw">|</span> <span class="fu">cut</span> -d <span class="st">&quot;:&quot;</span> -f2<span class="va">))</span></span>
+<span id="cb1-39"><a href="#cb1-39"></a>    <span class="va">provided</span><span class="op">=</span><span class="va">($(</span><span class="ex">pacman</span> <span class="at">-Qi</span> ghc <span class="kw">|</span> <span class="fu">grep</span> Provides <span class="kw">|</span> <span class="fu">cut</span> <span class="at">-d</span> <span class="st">&quot;:&quot;</span> <span class="at">-f2</span><span class="va">))</span></span>
 <span id="cb1-40"><a href="#cb1-40"></a></span>
-<span id="cb1-41"><a href="#cb1-41"></a>    <span class="kw">for</span> <span class="ex">p</span> in <span class="va">$provided</span><span class="kw">;</span> <span class="kw">do</span></span>
+<span id="cb1-41"><a href="#cb1-41"></a>    <span class="cf">for</span> p <span class="kw">in</span> <span class="va">$provided</span><span class="kw">;</span> <span class="cf">do</span></span>
 <span id="cb1-42"><a href="#cb1-42"></a>        <span class="co"># Change the syntax to be compatible with cblrepo. The `cut` command here</span></span>
 <span id="cb1-43"><a href="#cb1-43"></a>        <span class="co"># removes the 'haskell-' prefix for each package, and `sed` here replaces</span></span>
 <span id="cb1-44"><a href="#cb1-44"></a>        <span class="co"># each '=' sign with a ',', as per cblrepo's requirements.</span></span>
-<span id="cb1-45"><a href="#cb1-45"></a>        <span class="va">package=$(</span><span class="bu">echo</span> <span class="va">$p</span> <span class="kw">|</span> <span class="fu">cut</span> -c9- <span class="kw">|</span> <span class="fu">sed</span> <span class="st">'s/=/,/'</span><span class="va">)</span></span>
-<span id="cb1-46"><a href="#cb1-46"></a>        <span class="va">command=</span><span class="st">&quot;cblrepo add --ghc-pkg </span><span class="va">$package</span><span class="st">&quot;</span></span>
+<span id="cb1-45"><a href="#cb1-45"></a>        <span class="va">package</span><span class="op">=</span><span class="va">$(</span><span class="bu">echo</span> <span class="va">$p</span> <span class="kw">|</span> <span class="fu">cut</span> <span class="at">-c9-</span> <span class="kw">|</span> <span class="fu">sed</span> <span class="st">'s/=/,/'</span><span class="va">)</span></span>
+<span id="cb1-46"><a href="#cb1-46"></a>        <span class="va">command</span><span class="op">=</span><span class="st">&quot;cblrepo add --ghc-pkg </span><span class="va">$package</span><span class="st">&quot;</span></span>
 <span id="cb1-47"><a href="#cb1-47"></a>        <span class="co"># Tell user what we are going to do.</span></span>
 <span id="cb1-48"><a href="#cb1-48"></a>        <span class="bu">echo</span> <span class="va">$command</span></span>
 <span id="cb1-49"><a href="#cb1-49"></a>        <span class="co"># Actually execute the command.</span></span>
 <span id="cb1-50"><a href="#cb1-50"></a>        <span class="bu">eval</span> <span class="va">$command</span></span>
-<span id="cb1-51"><a href="#cb1-51"></a>    <span class="kw">done</span></span>
+<span id="cb1-51"><a href="#cb1-51"></a>    <span class="cf">done</span></span>
 <span id="cb1-52"><a href="#cb1-52"></a></span>
 <span id="cb1-53"><a href="#cb1-53"></a>    <span class="co"># Add packages installed by the user from [haskell-core] or some other Arch Linux repository</span></span>
-<span id="cb1-54"><a href="#cb1-54"></a>    <span class="va">installed=($(</span><span class="ex">pacman</span> -Qq <span class="kw">|</span> <span class="fu">grep</span> <span class="st">&quot;^haskell-&quot;</span> <span class="kw">|</span> <span class="fu">sed</span> <span class="st">'s/^haskell-//'</span><span class="va">))</span></span>
+<span id="cb1-54"><a href="#cb1-54"></a>    <span class="va">installed</span><span class="op">=</span><span class="va">($(</span><span class="ex">pacman</span> <span class="at">-Qq</span> <span class="kw">|</span> <span class="fu">grep</span> <span class="st">&quot;^haskell-&quot;</span> <span class="kw">|</span> <span class="fu">sed</span> <span class="st">'s/^haskell-//'</span><span class="va">))</span></span>
 <span id="cb1-55"><a href="#cb1-55"></a>    <span class="co"># Filter out those packages that were installed from Hackage using this very</span></span>
 <span id="cb1-56"><a href="#cb1-56"></a>    <span class="co"># same script (in Arch Linux, the hackage packages, once installed, are in</span></span>
 <span id="cb1-57"><a href="#cb1-57"></a>    <span class="co"># the format `haskell-&lt;lowercased_package_name&gt;'). This way, we avoid</span></span>
 <span id="cb1-58"><a href="#cb1-58"></a>    <span class="co"># duplicate definitions and the packages added with --distro-pkg will really</span></span>
 <span id="cb1-59"><a href="#cb1-59"></a>    <span class="co"># be those packages available from the distribution's official haskell</span></span>
 <span id="cb1-60"><a href="#cb1-60"></a>    <span class="co"># repository.</span></span>
-<span id="cb1-61"><a href="#cb1-61"></a>    <span class="va">hackage_lowercased=($hackage_packages_file</span>:l<span class="va">)</span></span>
-<span id="cb1-62"><a href="#cb1-62"></a>    <span class="va">installed_filtered=(${installed:</span><span class="er">|</span><span class="va">hackage_lowercased})</span></span>
+<span id="cb1-61"><a href="#cb1-61"></a>    <span class="va">hackage_lowercased</span><span class="op">=</span><span class="va">($hackage_packages_file</span>:l<span class="va">)</span></span>
+<span id="cb1-62"><a href="#cb1-62"></a>    <span class="va">installed_filtered</span><span class="op">=</span><span class="va">(${installed</span><span class="op">:</span>|hackage_lowercased<span class="va">})</span></span>
 <span id="cb1-63"><a href="#cb1-63"></a></span>
-<span id="cb1-64"><a href="#cb1-64"></a>    <span class="kw">for</span> <span class="ex">p</span> in <span class="va">$installed_filtered</span><span class="kw">;</span> <span class="kw">do</span></span>
-<span id="cb1-65"><a href="#cb1-65"></a>        <span class="va">version=$(</span><span class="ex">pacman</span> -Q haskell-<span class="va">$p</span> <span class="kw">|</span> <span class="fu">cut</span> -d <span class="st">&quot; &quot;</span> -f2 <span class="kw">|</span> <span class="fu">sed</span> <span class="st">'s/-/,/'</span><span class="va">)</span></span>
-<span id="cb1-66"><a href="#cb1-66"></a>        <span class="va">command=</span><span class="st">&quot;cblrepo add --distro-pkg </span><span class="va">$p</span><span class="st">,</span><span class="va">$version</span><span class="st">&quot;</span></span>
+<span id="cb1-64"><a href="#cb1-64"></a>    <span class="cf">for</span> p <span class="kw">in</span> <span class="va">$installed_filtered</span><span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb1-65"><a href="#cb1-65"></a>        <span class="va">version</span><span class="op">=</span><span class="va">$(</span><span class="ex">pacman</span> <span class="at">-Q</span> haskell-<span class="va">$p</span> <span class="kw">|</span> <span class="fu">cut</span> <span class="at">-d</span> <span class="st">&quot; &quot;</span> <span class="at">-f2</span> <span class="kw">|</span> <span class="fu">sed</span> <span class="st">'s/-/,/'</span><span class="va">)</span></span>
+<span id="cb1-66"><a href="#cb1-66"></a>        <span class="va">command</span><span class="op">=</span><span class="st">&quot;cblrepo add --distro-pkg </span><span class="va">$p</span><span class="st">,</span><span class="va">$version</span><span class="st">&quot;</span></span>
 <span id="cb1-67"><a href="#cb1-67"></a>        <span class="bu">echo</span> <span class="va">$command</span></span>
 <span id="cb1-68"><a href="#cb1-68"></a>        <span class="bu">eval</span> <span class="va">$command</span></span>
-<span id="cb1-69"><a href="#cb1-69"></a>    <span class="kw">done</span></span>
+<span id="cb1-69"><a href="#cb1-69"></a>    <span class="cf">done</span></span>
 <span id="cb1-70"><a href="#cb1-70"></a></span>
-<span id="cb1-71"><a href="#cb1-71"></a>    <span class="kw">if [[</span> <span class="va">$mode</span> <span class="ot">==</span> initdb-sync<span class="kw"> ]]</span>; <span class="kw">then</span></span>
+<span id="cb1-71"><a href="#cb1-71"></a>    <span class="cf">if</span> <span class="kw">[[</span> <span class="va">$mode</span> <span class="ot">==</span> initdb-sync <span class="kw">]];</span> <span class="cf">then</span></span>
 <span id="cb1-72"><a href="#cb1-72"></a>        <span class="co"># Sync cblrepo with Hackage</span></span>
-<span id="cb1-73"><a href="#cb1-73"></a>        <span class="bu">echo</span> -n <span class="st">&quot;Syncing cblrepo with Hackage...&quot;</span></span>
+<span id="cb1-73"><a href="#cb1-73"></a>        <span class="bu">echo</span> <span class="at">-n</span> <span class="st">&quot;Syncing cblrepo with Hackage...&quot;</span></span>
 <span id="cb1-74"><a href="#cb1-74"></a>        <span class="ex">cblrepo</span> sync</span>
 <span id="cb1-75"><a href="#cb1-75"></a>        <span class="bu">echo</span> <span class="st">&quot;done&quot;</span></span>
-<span id="cb1-76"><a href="#cb1-76"></a>    <span class="kw">fi</span></span>
+<span id="cb1-76"><a href="#cb1-76"></a>    <span class="cf">fi</span></span>
 <span id="cb1-77"><a href="#cb1-77"></a></span>
 <span id="cb1-78"><a href="#cb1-78"></a>    <span class="co"># Add packages from Hackage</span></span>
-<span id="cb1-79"><a href="#cb1-79"></a>    <span class="kw">for</span> <span class="ex">hp</span> in <span class="va">$hackage_packages_file</span><span class="kw">;</span> <span class="kw">do</span></span>
+<span id="cb1-79"><a href="#cb1-79"></a>    <span class="cf">for</span> hp <span class="kw">in</span> <span class="va">$hackage_packages_file</span><span class="kw">;</span> <span class="cf">do</span></span>
 <span id="cb1-80"><a href="#cb1-80"></a>        <span class="co"># Grab latest version of package</span></span>
-<span id="cb1-81"><a href="#cb1-81"></a>        <span class="va">cabal_file=$(</span><span class="ex">curl</span> -s <span class="va">$hackage_url</span>/package/<span class="va">$hp</span> <span class="kw">|</span> <span class="fu">grep</span> -ioE <span class="st">&quot;Cabal source package[)&lt;&gt;/lia href=</span><span class="dt">\&quot;</span><span class="st">]+\/package\/.+\.cabal&quot;</span> <span class="kw">|</span> <span class="fu">grep</span> -ioE <span class="st">&quot;\/package.+&quot;</span><span class="va">)</span></span>
-<span id="cb1-82"><a href="#cb1-82"></a>        <span class="va">command=</span><span class="st">&quot;cblrepo add --cbl-url </span><span class="va">$hackage_url$cabal_file</span><span class="st">&quot;</span></span>
+<span id="cb1-81"><a href="#cb1-81"></a>        <span class="va">cabal_file</span><span class="op">=</span><span class="va">$(</span><span class="ex">curl</span> <span class="at">-s</span> <span class="va">$hackage_url</span>/package/<span class="va">$hp</span> <span class="kw">|</span> <span class="fu">grep</span> <span class="at">-ioE</span> <span class="st">&quot;Cabal source package[)&lt;&gt;/lia href=</span><span class="dt">\&quot;</span><span class="st">]+\/package\/.+\.cabal&quot;</span> <span class="kw">|</span> <span class="fu">grep</span> <span class="at">-ioE</span> <span class="st">&quot;\/package.+&quot;</span><span class="va">)</span></span>
+<span id="cb1-82"><a href="#cb1-82"></a>        <span class="va">command</span><span class="op">=</span><span class="st">&quot;cblrepo add --cbl-url </span><span class="va">$hackage_url$cabal_file</span><span class="st">&quot;</span></span>
 <span id="cb1-83"><a href="#cb1-83"></a>        <span class="bu">echo</span> <span class="va">$command</span></span>
 <span id="cb1-84"><a href="#cb1-84"></a>        <span class="bu">eval</span> <span class="va">$command</span></span>
-<span id="cb1-85"><a href="#cb1-85"></a>    <span class="kw">done</span></span>
+<span id="cb1-85"><a href="#cb1-85"></a>    <span class="cf">done</span></span>
 <span id="cb1-86"><a href="#cb1-86"></a></span>
 <span id="cb1-87"><a href="#cb1-87"></a>    <span class="co"># Link the generated cblrepo.db file into ~/.cblrepo</span></span>
-<span id="cb1-88"><a href="#cb1-88"></a>    <span class="fu">ln</span> -sf <span class="va">$PWD</span>/cblrepo.db ~/.cblrepo/cblrepo.db</span>
-<span id="cb1-89"><a href="#cb1-89"></a>    <span class="kw">;;</span></span>
+<span id="cb1-88"><a href="#cb1-88"></a>    <span class="fu">ln</span> <span class="at">-sf</span> <span class="va">$PWD</span>/cblrepo.db ~/.cblrepo/cblrepo.db</span>
+<span id="cb1-89"><a href="#cb1-89"></a>    <span class="cf">;;</span></span>
 <span id="cb1-90"><a href="#cb1-90"></a>    <span class="co">### Generate PKGBUILD files for Hackage packages </span><span class="al">###</span></span>
-<span id="cb1-91"><a href="#cb1-91"></a>    <span class="kw">(</span>pkgbuild<span class="kw">)</span></span>
+<span id="cb1-91"><a href="#cb1-91"></a>    <span class="kw">(</span><span class="ss">pkgbuild</span><span class="kw">)</span></span>
 <span id="cb1-92"><a href="#cb1-92"></a></span>
 <span id="cb1-93"><a href="#cb1-93"></a>    <span class="co"># Remove any old packages.</span></span>
 <span id="cb1-94"><a href="#cb1-94"></a>    <span class="bu">echo</span> <span class="st">&quot;Deleting old PKGBUILD directories...&quot;</span></span>
-<span id="cb1-95"><a href="#cb1-95"></a>    <span class="fu">rm</span> -rfv haskell-*</span>
+<span id="cb1-95"><a href="#cb1-95"></a>    <span class="fu">rm</span> <span class="at">-rfv</span> haskell-<span class="pp">*</span></span>
 <span id="cb1-96"><a href="#cb1-96"></a></span>
-<span id="cb1-97"><a href="#cb1-97"></a>    <span class="va">i=</span>1</span>
-<span id="cb1-98"><a href="#cb1-98"></a>    <span class="kw">for</span> <span class="ex">hp</span> in <span class="va">${hackage_packages_file}</span><span class="kw">;</span> <span class="kw">do</span></span>
-<span id="cb1-99"><a href="#cb1-99"></a>        <span class="va">command=</span><span class="st">&quot;cblrepo pkgbuild --patchdir patch </span><span class="va">$hp</span><span class="st">&quot;</span></span>
-<span id="cb1-100"><a href="#cb1-100"></a>        <span class="bu">echo</span> <span class="st">&quot;(</span><span class="va">$i</span><span class="st">/</span><span class="va">${#hackage_packages_file}</span><span class="st">) </span><span class="va">$command</span><span class="st">&quot;</span></span>
+<span id="cb1-97"><a href="#cb1-97"></a>    <span class="va">i</span><span class="op">=</span>1</span>
+<span id="cb1-98"><a href="#cb1-98"></a>    <span class="cf">for</span> hp <span class="kw">in</span> <span class="va">${hackage_packages_file}</span><span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb1-99"><a href="#cb1-99"></a>        <span class="va">command</span><span class="op">=</span><span class="st">&quot;cblrepo pkgbuild --patchdir patch </span><span class="va">$hp</span><span class="st">&quot;</span></span>
+<span id="cb1-100"><a href="#cb1-100"></a>        <span class="bu">echo</span> <span class="st">&quot;(</span><span class="va">$i</span><span class="st">/</span><span class="va">${</span><span class="op">#</span><span class="va">hackage_packages_file}</span><span class="st">) </span><span class="va">$command</span><span class="st">&quot;</span></span>
 <span id="cb1-101"><a href="#cb1-101"></a>        <span class="bu">eval</span> <span class="va">$command</span></span>
-<span id="cb1-102"><a href="#cb1-102"></a>        <span class="kw">((</span> i+=1 <span class="kw">))</span></span>
-<span id="cb1-103"><a href="#cb1-103"></a>    <span class="kw">done</span></span>
-<span id="cb1-104"><a href="#cb1-104"></a>    <span class="kw">;;</span></span>
+<span id="cb1-102"><a href="#cb1-102"></a>        <span class="kw">((</span> <span class="va">i</span><span class="op">+=</span><span class="dv">1</span> <span class="kw">))</span></span>
+<span id="cb1-103"><a href="#cb1-103"></a>    <span class="cf">done</span></span>
+<span id="cb1-104"><a href="#cb1-104"></a>    <span class="cf">;;</span></span>
 <span id="cb1-105"><a href="#cb1-105"></a>    <span class="co">### Create Arch Linux packages for the Hackage packages </span><span class="al">###</span></span>
-<span id="cb1-106"><a href="#cb1-106"></a>    <span class="kw">(</span>makepkg<span class="kw">)</span></span>
-<span id="cb1-107"><a href="#cb1-107"></a>    <span class="kw">for</span> <span class="ex">pdir</span> in haskell-*<span class="kw">;</span> <span class="kw">do</span></span>
+<span id="cb1-106"><a href="#cb1-106"></a>    <span class="kw">(</span><span class="ss">makepkg</span><span class="kw">)</span></span>
+<span id="cb1-107"><a href="#cb1-107"></a>    <span class="cf">for</span> pdir <span class="kw">in</span> haskell-<span class="pp">*</span><span class="kw">;</span> <span class="cf">do</span></span>
 <span id="cb1-108"><a href="#cb1-108"></a>        <span class="bu">cd</span> <span class="va">$pdir</span></span>
 <span id="cb1-109"><a href="#cb1-109"></a>        <span class="bu">echo</span> <span class="va">$(</span><span class="fu">basename</span> <span class="va">$PWD)</span></span>
-<span id="cb1-110"><a href="#cb1-110"></a>        <span class="ex">makepkg</span> -sf</span>
-<span id="cb1-111"><a href="#cb1-111"></a>        <span class="fu">sudo</span> pacman -U <span class="va">$(</span><span class="fu">basename</span> <span class="va">$PWD)</span>-*.pkg.tar.xz</span>
+<span id="cb1-110"><a href="#cb1-110"></a>        <span class="ex">makepkg</span> <span class="at">-sf</span></span>
+<span id="cb1-111"><a href="#cb1-111"></a>        <span class="fu">sudo</span> pacman <span class="at">-U</span> <span class="va">$(</span><span class="fu">basename</span> <span class="va">$PWD)</span>-<span class="pp">*</span>.pkg.tar.xz</span>
 <span id="cb1-112"><a href="#cb1-112"></a>        <span class="bu">cd</span> ..</span>
 <span id="cb1-113"><a href="#cb1-113"></a>        <span class="bu">echo</span></span>
 <span id="cb1-114"><a href="#cb1-114"></a>        <span class="bu">echo</span> <span class="st">&quot;  Finished making/installing package for </span><span class="va">$pdir</span><span class="st">&quot;</span></span>
 <span id="cb1-115"><a href="#cb1-115"></a>        <span class="bu">echo</span></span>
-<span id="cb1-116"><a href="#cb1-116"></a>    <span class="kw">done</span></span>
-<span id="cb1-117"><a href="#cb1-117"></a>    <span class="kw">;;</span></span>
-<span id="cb1-118"><a href="#cb1-118"></a>    *<span class="kw">)</span></span>
+<span id="cb1-116"><a href="#cb1-116"></a>    <span class="cf">done</span></span>
+<span id="cb1-117"><a href="#cb1-117"></a>    <span class="cf">;;</span></span>
+<span id="cb1-118"><a href="#cb1-118"></a>    <span class="pp">*</span><span class="kw">)</span></span>
 <span id="cb1-119"><a href="#cb1-119"></a>    <span class="bu">echo</span> <span class="st">&quot;Unrecognized &lt;MODE&gt;; valid ones are: initdb initdb-sync pkgbuild makepkg&quot;</span></span>
-<span id="cb1-120"><a href="#cb1-120"></a>    <span class="kw">;;</span></span>
-<span id="cb1-121"><a href="#cb1-121"></a><span class="kw">esac</span></span></code></pre></div>
-<p>A simple <code>HACKAGE_PACKAGES_FILE</code> (perhaps named <code>hackage_pkgs</code>) might look something like this:</p>
+<span id="cb1-120"><a href="#cb1-120"></a>    <span class="cf">;;</span></span>
+<span id="cb1-121"><a href="#cb1-121"></a><span class="cf">esac</span></span></code></pre></div>
+<p>A simple <code class="verbatim">HACKAGE_PACKAGES_FILE</code> (perhaps named <code class="verbatim">hackage_pkgs</code>) might
+look something like this:</p>
 <div class="sourceCode" id="cb2" data-startFrom><pre class="sourceCode numberSource example numberLines"><code class="sourceCode"><span id="cb2-1"><a href="#cb2-1"></a>bindings-DSL</span>
 <span id="cb2-2"><a href="#cb2-2"></a>bindings-GLFW</span>
 <span id="cb2-3"><a href="#cb2-3"></a>GLFW-b</span>
 <span id="cb2-4"><a href="#cb2-4"></a>rosezipper</span></code></pre></div>
-<p>Here is sample output from the command <code>./maintain_cblrepo.sh hackage_pkgs initdb</code>:</p>
+<p>Here is sample output from the command
+<code class="verbatim">./maintain_cblrepo.sh hackage_pkgs initdb</code>:</p>
 <div class="sourceCode" id="cb3" data-startFrom><pre class="sourceCode numberSource example numberLines"><code class="sourceCode"><span id="cb3-1"><a href="#cb3-1"></a>cblrepo add --ghc-pkg array,0.4.0.1</span>
 <span id="cb3-2"><a href="#cb3-2"></a>cblrepo add --ghc-pkg base,4.6.0.1</span>
 <span id="cb3-3"><a href="#cb3-3"></a>cblrepo add --ghc-pkg binary,0.5.1.1</span>
@@ -325,12 +350,20 @@
 <span id="cb3-137"><a href="#cb3-137"></a>cblrepo add --cbl-url http://hackage.haskell.org/package/bindings-GLFW-3.0.3.2/bindings-GLFW.cabal</span>
 <span id="cb3-138"><a href="#cb3-138"></a>cblrepo add --cbl-url http://hackage.haskell.org/package/GLFW-b-1.4.6/GLFW-b.cabal</span>
 <span id="cb3-139"><a href="#cb3-139"></a>cblrepo add --cbl-url http://hackage.haskell.org/package/rosezipper-0.2/rosezipper.cabal</span></code></pre></div>
-<p>This is infinitely faster than adding each package by hand. Feel free to copy/paste/modify/redistribute the code in <code>maintain_cblrepo.sh</code> to suit your needs.</p>
-<section class="footnotes" role="doc-endnotes">
+<p>This is infinitely faster than adding each package by hand. Feel free to
+copy/paste/modify/redistribute the code in <code class="verbatim">maintain_cblrepo.sh</code> to suit
+your needs.</p>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr />
 <ol>
-<li id="fn1" role="doc-endnote"><p>I use a <a href="http://mycroftproject.com/search-engines.html?name=hackage">Hackage-tailored search engine for Firefox</a> to make package searching on Hackage easier.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2" role="doc-endnote"><p>The command for finding out which packages are provided by GHC is <code>pacman -Qi ghc</code>, and you have to look for the <code>Provides</code> field. As for the packages from [haskell-core], you have to do some manual grepping for packages that start with <code>haskell-</code> from the command <code>pacman -Q</code>.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>I use a
+<a href="http://mycroftproject.com/search-engines.html?name=hackage">Hackage-tailored search engine for Firefox</a> to make package searching on Hackage
+easier.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>The command for finding out which packages are provided by GHC is
+<code class="verbatim">pacman -Qi ghc</code>, and you have to look for the <code class="verbatim">Provides</code> field.
+As for the packages from [haskell-core], you have to do some
+manual grepping for packages that start with <code class="verbatim">haskell-</code> from the
+command <code class="verbatim">pacman -Q</code>.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 
@@ -338,7 +371,7 @@
 
 		<div id="footer">
 			<img src="../favicon.png" id="brand-icon">
-			<p>Copyright (C) 2013-2021 Linus Arver. All rights reserved.</p>
+			<p>Copyright (C) 2013-2023 Linus Arver. All rights reserved.</p>
 			<a href="https://github.com/listx/listx_blog">Site</a>
 			<a href="https://github.com/listx/listx.github.io">generated</a>
 			with

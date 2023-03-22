@@ -45,17 +45,28 @@
 	<a title="All pages tagged 'math'." href="../tag/math.html">math</a>
 </div>
 
-<p>In the very first chapter of the book <a href="https://en.wikipedia.org/wiki/Concrete_Mathematics"><em>Concrete Mathematics</em> 2ed</a> there is a discussion about the <a href="https://en.wikipedia.org/wiki/Tower_of_Hanoi">Tower of Hanoi</a>. This post is a distillation of that discussion.</p>
+<p>In the very first chapter of the book <a href="https://en.wikipedia.org/wiki/Concrete_Mathematics"><em>Concrete Mathematics</em> 2ed</a> there is a discussion about the <a href="https://en.wikipedia.org/wiki/Tower_of_Hanoi">Tower of Hanoi</a>.
+This post is a distillation of that discussion.</p>
 <h1 id="the-problem">The Problem</h1>
-<p>There are 3 rods, with 8 discs (with holes) resting on one rod; the discs are sorted in size like a pyramid, with the smallest disc on top. We want to move all discs to another rod, but with the following rules: (1) a move consists of moving a single disc onto a rod; (2) you may never place a bigger disc on top of a smaller one. A question arises — <strong>how many steps are required to move the entire tower of disks onto another rod?</strong></p>
+<p>There are 3 rods, with 8 discs (with holes) resting on one rod; the discs are sorted in size like a pyramid, with the smallest disc on top.
+We want to move all discs to another rod, but with the following rules: (1) a move consists of moving a single disc onto a rod; (2) you may never place a bigger disc on top of a smaller one.
+A question arises — <strong>how many steps are required to move the entire tower of disks onto another rod?</strong></p>
 <h1 id="finding-the-recurrence">Finding the Recurrence</h1>
-<p>First consider the simplest case, without any discs. Because there are no discs to move, we cannot make any moves, and so the number of steps required is 0. We can write this as</p>
+<p>First consider the simplest case, without any discs.
+Because there are no discs to move, we cannot make any moves, and so the number of steps required is 0.
+We can write this as</p>
 <p><span class="math display">\[
 S_0 = 0
 \]</span></p>
 <p>with <span class="math inline">\(S\)</span> meaning the number of steps and the subscript representing the number of discs in the tower.</p>
-<p>Now let’s consider how the problem scales. With 1 disc, the answer is a single step since the one disc is itself the entire tower. With 2 discs, the answer is three steps — one step to move the top (small) disc to another rod, one step to move the big disc to the destination rod, and lastly one step to move the small disc on top of the big disc. With 3 discs, the answer is seven steps — the insight here is that we treat the top two discs exactly the same as the previous problem; so we need 3 moves to move the top two to another rod, then one move to move the biggest disc to the destination rod, then again 3 moves to move the 2-disc sub-tower to the destination rod.</p>
-<p>The example with 3 discs is quite telling. We can use the insights gained there to set an upper bound to the number of steps required for the general case of <span class="math inline">\(n\)</span> discs; if we take more steps than this upper bound, we would know that we made mistakes. For a tower of size <span class="math inline">\(n\)</span>, we require <span class="math inline">\(S_{n - 1}\)</span> steps to move all discs except the biggest one, then move the biggest disc, then move the sub-tower on top of that disc with (again) <span class="math inline">\(S_{n - 1}\)</span> steps. So the upper bound is</p>
+<p>Now let’s consider how the problem scales.
+With 1 disc, the answer is a single step since the one disc is itself the entire tower.
+With 2 discs, the answer is three steps — one step to move the top (small) disc to another rod, one step to move the big disc to the destination rod, and lastly one step to move the small disc on top of the big disc.
+With 3 discs, the answer is seven steps — the insight here is that we treat the top two discs exactly the same as the previous problem; so we need 3 moves to move the top two to another rod, then one move to move the biggest disc to the destination rod, then again 3 moves to move the 2-disc sub-tower to the destination rod.</p>
+<p>The example with 3 discs is quite telling.
+We can use the insights gained there to set an upper bound to the number of steps required for the general case of <span class="math inline">\(n\)</span> discs; if we take more steps than this upper bound, we would know that we made mistakes.
+For a tower of size <span class="math inline">\(n\)</span>, we require <span class="math inline">\(S_{n - 1}\)</span> steps to move all discs except the biggest one, then move the biggest disc, then move the sub-tower on top of that disc with (again) <span class="math inline">\(S_{n - 1}\)</span> steps.
+So the upper bound is</p>
 <p><span class="math display">\[
 \begin{equation} \label{eq:recurrence}
   S_n =
@@ -65,13 +76,27 @@ S_0 = 0
   \end{cases}
 \end{equation}
 \]</span></p>
-<p>If that’s the upper bound, then is there a separate formula for the <em>lower bound</em> (optimal solution)? Nope! It’s because there must come a time in solving the puzzle where we move the biggest disc to the destination rod. To get to the biggest disc, we must have moved all discs on top of it to another rod (the sub-tower); and, after having moved the biggest disc, we must move this sub-tower back on top of that rod (back onto the biggest disc). Because of these constraints stemming the definition of the puzzle itself, we know that for <span class="math inline">\(n\)</span> &gt; 0 we must take <em>at least</em> <span class="math inline">\(2 * (S_{n - 1}) + 1\)</span> steps.</p>
-<p>The upper and lower bounds agree in their formulation, and this formulation (Equation <span class="math inline">\(\ref{eq:recurrence}\)</span>) is our recurrence. In mathematics, a <a href="https://en.wikipedia.org/wiki/Recurrence_relation">recurrence relation</a> is basically a recursively-defined equation, where a <em>base case</em> in the recurrence defines the starting point. In Equation <span class="math inline">\(\ref{eq:recurrence}\)</span>, the base case is <span class="math inline">\(n = 0\)</span>; for <span class="math inline">\(n &gt; 0\)</span>, we define the number of steps required in a recursive manner.</p>
-<p>In our discussion of finding the upper and lower bounds, there were two key concepts — the need to move the biggest disc, and the need to move the sub-tower twice (before and after moving the biggest disc). Our recurrence clearly agrees with these two concepts. The “<span class="math inline">\(+ 1\)</span>” in the non-base case is the step of moving the biggest disc, whereas the <span class="math inline">\(2 * (S_{n - 1})\)</span> is the number of steps required to move the sub-tower <em>twice</em>.</p>
+<p>If that’s the upper bound, then is there a separate formula for the <em>lower bound</em> (optimal solution)?
+Nope!
+It’s because there must come a time in solving the puzzle where we move the biggest disc to the destination rod.
+To get to the biggest disc, we must have moved all discs on top of it to another rod (the sub-tower); and, after having moved the biggest disc, we must move this sub-tower back on top of that rod (back onto the biggest disc).
+Because of these constraints stemming the definition of the puzzle itself, we know that for <span class="math inline">\(n\)</span> &gt; 0 we must take <em>at least</em> <span class="math inline">\(2 * (S_{n - 1}) + 1\)</span> steps.</p>
+<p>The upper and lower bounds agree in their formulation, and this formulation (Equation <span class="math inline">\(\ref{eq:recurrence}\)</span>) is our recurrence.
+In mathematics, a <a href="https://en.wikipedia.org/wiki/Recurrence_relation">recurrence relation</a> is basically a recursively-defined equation, where a <em>base case</em> in the recurrence defines the starting point.
+In Equation <span class="math inline">\(\ref{eq:recurrence}\)</span>, the base case is <span class="math inline">\(n = 0\)</span>; for <span class="math inline">\(n &gt; 0\)</span>, we define the number of steps required in a recursive manner.</p>
+<p>In our discussion of finding the upper and lower bounds, there were two key concepts — the need to move the biggest disc, and the need to move the sub-tower twice (before and after moving the biggest disc).
+Our recurrence clearly agrees with these two concepts.
+The “<span class="math inline">\(+ 1\)</span>” in the non-base case is the step of moving the biggest disc, whereas the <span class="math inline">\(2 * (S_{n - 1})\)</span> is the number of steps required to move the sub-tower <em>twice</em>.</p>
 <h1 id="simplifying-the-recurrence">Simplifying the Recurrence</h1>
-<p>Recurrences are great, but they are painful to compute. For example, it’s not immediately clear what <span class="math inline">\(S_{11}\)</span> or <span class="math inline">\(S_{54}\)</span> evaluates to. It would be really nice if we could avoid defining <span class="math inline">\(S_n\)</span> recursively.</p>
-<p>And this is where math meets science. In the scientific method, we have to come up with a hypothesis and then test that hypothesis with one or more experiments. We can do the same thing here by trying to guess the solution to the recurrence.</p>
-<p>For one thing, we know that <span class="math inline">\(S_n\)</span> grows as <span class="math inline">\(n\)</span> grows (it will never be the case that <span class="math inline">\(S_n\)</span> somehow plateaus or decreases down the road). The more discs there are, the more work we have to do, right? So let’s look at small cases to see how the numbers grow, and see if there is a pattern to the growth rate of <span class="math inline">\(S_n\)</span>.</p>
+<p>Recurrences are great, but they are painful to compute.
+For example, it’s not immediately clear what <span class="math inline">\(S_{11}\)</span> or <span class="math inline">\(S_{54}\)</span> evaluates to.
+It would be really nice if we could avoid defining <span class="math inline">\(S_n\)</span> recursively.</p>
+<p>And this is where math meets science.
+In the scientific method, we have to come up with a hypothesis and then test that hypothesis with one or more experiments.
+We can do the same thing here by trying to guess the solution to the recurrence.</p>
+<p>For one thing, we know that <span class="math inline">\(S_n\)</span> grows as <span class="math inline">\(n\)</span> grows (it will never be the case that <span class="math inline">\(S_n\)</span> somehow plateaus or decreases down the road).
+The more discs there are, the more work we have to do, right?
+So let’s look at small cases to see how the numbers grow, and see if there is a pattern to the growth rate of <span class="math inline">\(S_n\)</span>.</p>
 <table>
 <thead>
 <tr class="header">
@@ -172,17 +197,28 @@ S_0 = 0
   S_n = 2^n - 1 \quad \text{for } n \geq 0,
 \end{equation}
 \]</span></p>
-<p>except it is no longer a recurrence as there is no need to define a base case. We’ll call it a <em>solution</em> to the recurrence.</p>
+<p>except it is no longer a recurrence as there is no need to define a base case.
+We’ll call it a <em>solution</em> to the recurrence.</p>
 <h1 id="proving-the-solution">Proving the Solution</h1>
-<p>Although the empirical evidence looks very good, we have not formally proved that the solution (Equation <span class="math inline">\(\ref{eq:solution}\)</span>) holds for <em>all</em> <span class="math inline">\(n\)</span>. It’s one thing to say that something is true for all <em>observed</em> cases (scientific experiment), and quite another to say that something is true for <em>all</em> cases (mathematical proof).</p>
-<p>Can we prove it? Yes! Fortunately for us, Equation <span class="math inline">\(\ref{eq:recurrence}\)</span> lends itself to proof by <a href="https://en.wikipedia.org/wiki/Mathematical_induction">induction</a>. Induction requires you to first prove some number <span class="math inline">\(k_0\)</span> as a starting point (the base case) using some proposition <span class="math inline">\(P\)</span>. Then you prove that <span class="math inline">\(P\)</span> holds for <span class="math inline">\(k + 1\)</span> (the next number); i.e., show that going from <span class="math inline">\(k\)</span> to <span class="math inline">\(k + 1\)</span> does not change <span class="math inline">\(P\)</span>. This is the <em>inductive step</em>. In this way, we prove the “totality” of <span class="math inline">\(P\)</span> as it applies to all numbers in the range <span class="math inline">\([k_0, k_{m}]\)</span> and we are done. <a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
-<p>Here we want to prove that Equation <span class="math inline">\(\ref{eq:solution}\)</span> holds for all <span class="math inline">\(n\)</span> (all natural numbers). <a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> For this proof let’s rewrite Equation <span class="math inline">\(\ref{eq:solution}\)</span> to use <span class="math inline">\(k\)</span> instead of <span class="math inline">\(n\)</span>:</p>
+<p>Although the empirical evidence looks very good, we have not formally proved that the solution (Equation <span class="math inline">\(\ref{eq:solution}\)</span>) holds for <em>all</em> <span class="math inline">\(n\)</span>.
+It’s one thing to say that something is true for all <em>observed</em> cases (scientific experiment), and quite another to say that something is true for <em>all</em> cases (mathematical proof).</p>
+<p>Can we prove it?
+Yes!
+Fortunately for us, Equation <span class="math inline">\(\ref{eq:recurrence}\)</span> lends itself to proof by <a href="https://en.wikipedia.org/wiki/Mathematical_induction">induction</a>.
+Induction requires you to first prove some number <span class="math inline">\(k_0\)</span> as a starting point (the base case) using some proposition <span class="math inline">\(P\)</span>.
+Then you prove that <span class="math inline">\(P\)</span> holds for <span class="math inline">\(k + 1\)</span> (the next number); i.e., show that going from <span class="math inline">\(k\)</span> to <span class="math inline">\(k + 1\)</span> does not change <span class="math inline">\(P\)</span>.
+This is the <em>inductive step</em>.
+In this way, we prove the “totality” of <span class="math inline">\(P\)</span> as it applies to all numbers in the range <span class="math inline">\([k_0, k_{m}]\)</span> and we are done. <a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+<p>Here we want to prove that Equation <span class="math inline">\(\ref{eq:solution}\)</span> holds for all <span class="math inline">\(n\)</span> (all natural numbers). <a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>
+For this proof let’s rewrite Equation <span class="math inline">\(\ref{eq:solution}\)</span> to use <span class="math inline">\(k\)</span> instead of <span class="math inline">\(n\)</span>:</p>
 <p><span class="math display">\[
 \begin{equation} \label{eq:proposition}
   S_k = 2^k - 1 \quad \text{for } k \geq 0.
 \end{equation}
 \]</span></p>
-<p>Equation <span class="math inline">\(\ref{eq:proposition}\)</span> is our proposition <span class="math inline">\(P\)</span>. The base case is easy enough to prove: <span class="math inline">\(S_0 = 0\)</span> because there are no disks to move. For the inductive step, we use the non-base part of our recurrence from Equation <span class="math inline">\(\ref{eq:recurrence}\)</span> to get</p>
+<p>Equation <span class="math inline">\(\ref{eq:proposition}\)</span> is our proposition <span class="math inline">\(P\)</span>.
+The base case is easy enough to prove: <span class="math inline">\(S_0 = 0\)</span> because there are no disks to move.
+For the inductive step, we use the non-base part of our recurrence from Equation <span class="math inline">\(\ref{eq:recurrence}\)</span> to get</p>
 <p><span class="math display">\[
   \begin{align}
   S_k &amp;= 2 * (S_{k - 1}) + 1 \label{eq:induct1}
@@ -210,7 +246,9 @@ S_0 = 0
   &amp;= 2^{k + 1} - 1 \label{eq:induct3}.
   \end{align}
 \]</span></p>
-<p>And now we can see that Equation <span class="math inline">\(\ref{eq:induct3}\)</span> (our “evolved” proposition <span class="math inline">\(P\)</span>, if you will) is the same as our solution (Equation <span class="math inline">\(\ref{eq:solution}\)</span>), even though we increased <span class="math inline">\(k\)</span> to <span class="math inline">\(k + 1\)</span>! This is because simple substitution allows us to replace “<span class="math inline">\(k + 1\)</span>” with “<span class="math inline">\(n\)</span>”. We have completed our proof by induction. <a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p>
+<p>And now we can see that Equation <span class="math inline">\(\ref{eq:induct3}\)</span> (our “evolved” proposition <span class="math inline">\(P\)</span>, if you will) is the same as our solution (Equation <span class="math inline">\(\ref{eq:solution}\)</span>), even though we increased <span class="math inline">\(k\)</span> to <span class="math inline">\(k + 1\)</span>!
+This is because simple substitution allows us to replace “<span class="math inline">\(k + 1\)</span>” with “<span class="math inline">\(n\)</span>”.
+We have completed our proof by induction. <a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p>
 <h1 id="alternate-recurrence-and-solution">Alternate Recurrence and Solution</h1>
 <p>The book goes on to offer an alternate recurrence to Equation <span class="math inline">\(\ref{eq:recurrence}\)</span>, by adding 1 to both sides:</p>
 <p><span class="math display">\[
@@ -227,7 +265,8 @@ S_0 = 0
   \end{cases}
 \end{align}
 \]</span></p>
-<p>This recurrence is the same as the original, except that it adds 1 to the answer. Now we let <span class="math inline">\(W_n = (S_n) + 1\)</span> and <span class="math inline">\(W_{n - 1} = (S_{n - 1}) + 1\)</span> and rewrite everything in terms of <span class="math inline">\(W\)</span>:</p>
+<p>This recurrence is the same as the original, except that it adds 1 to the answer.
+Now we let <span class="math inline">\(W_n = (S_n) + 1\)</span> and <span class="math inline">\(W_{n - 1} = (S_{n - 1}) + 1\)</span> and rewrite everything in terms of <span class="math inline">\(W\)</span>:</p>
 <p><span class="math display">\[
 \begin{align}
   W_n &amp;=
@@ -237,7 +276,9 @@ S_0 = 0
   \end{cases}
 \end{align}
 \]</span></p>
-<p>Notice how the “<span class="math inline">\( + 2\)</span>” in Equation <span class="math inline">\(\ref{eq:recurrence2}\)</span> goes away, because the coefficient <span class="math inline">\(2\)</span> in Equation <span class="math inline">\(\ref{eq:recurrence3}\)</span> will multiply with the “<span class="math inline">\( + 1\)</span>” from <span class="math inline">\(W_{n - 1}\)</span> to get it back. Using this alternate recurrence, it’s easy to see that the solution is just <span class="math inline">\(W_n = 2^n\)</span>, because <span class="math inline">\(W\)</span> can only grow by multiplying <span class="math inline">\(2\)</span> to itself! Hence</p>
+<p>Notice how the “<span class="math inline">\( + 2\)</span>” in Equation <span class="math inline">\(\ref{eq:recurrence2}\)</span> goes away, because the coefficient <span class="math inline">\(2\)</span> in Equation <span class="math inline">\(\ref{eq:recurrence3}\)</span> will multiply with the “<span class="math inline">\( + 1\)</span>” from <span class="math inline">\(W_{n - 1}\)</span> to get it back.
+Using this alternate recurrence, it’s easy to see that the solution is just <span class="math inline">\(W_n = 2^n\)</span>, because <span class="math inline">\(W\)</span> can only grow by multiplying <span class="math inline">\(2\)</span> to itself!
+Hence</p>
 <p><span class="math display">\[
 \begin{align}
 W_n = (S_n) + 1 = 2^n
@@ -249,19 +290,25 @@ W_n = (S_n) + 1 = 2^n
 (W_n) - 1 =S_n = 2^n - 1.
 \end{align}
 \]</span></p>
-<p>The lesson here is that if it is difficult to find the solution to a recurrence, we can use basic algebra rules to transform the recurrence to something more amenable. In this case, all it took was adding 1 to the original recurrence.</p>
+<p>The lesson here is that if it is difficult to find the solution to a recurrence, we can use basic algebra rules to transform the recurrence to something more amenable.
+In this case, all it took was adding 1 to the original recurrence.</p>
 <h1 id="conclusion">Conclusion</h1>
-<p>I thoroughly enjoyed figuring this stuff out because possibly for the first time in my life I used my programming experience (recurrence/recursion, memoization) to help myself understand mathematics — not the other way around. The other way around was never enjoyable — calculating what <code>i</code> was in some <span class="math inline">\(n\)</span>th iteration of a <code>for</code>-loop never really excited me.</p>
-<p>I hope this explanation helps you better understand the first few pages of <em>Concrete Mathematics</em>; I had to read that part three times over to really “get it” (never having learned what induction is). And henceforth, I will never look at a string of consecutive 1’s in binary the same way again. 😃</p>
-<section class="footnotes" role="doc-endnotes">
+<p>I thoroughly enjoyed figuring this stuff out because possibly for the first time in my life I used my programming experience (recurrence/recursion, memoization) to help myself understand mathematics — not the other way around.
+The other way around was never enjoyable — calculating what <code>i</code> was in some <span class="math inline">\(n\)</span>th iteration of a <code>for</code>-loop never really excited me.</p>
+<p>I hope this explanation helps you better understand the first few pages of <em>Concrete Mathematics</em>; I had to read that part three times over to really “get it” (never having learned what induction is).
+And henceforth, I will never look at a string of consecutive 1’s in binary the same way again.
+😃</p>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr />
 <ol>
-<li id="fn1" role="doc-endnote"><p>In computer science, this process of avoiding the recalculation of previously known values is called <em>memoization</em> and is useful in generating the first N values of a recursive algorithm in <span class="math inline">\(O(N)\)</span> (linear) time.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2" role="doc-endnote"><p>Note that if <span class="math inline">\(k_0 = 0\)</span>, then <span class="math inline">\([k_0, k_{m}]\)</span> is the set of all natural numbers (zero plus the positive integers).<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn3" role="doc-endnote"><p>There is no need to prove the recurrence (Equation <span class="math inline">\(\ref{eq:recurrence}\)</span>) as we have already proved it in the process of deriving it.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn4" role="doc-endnote"><p>In <em>Concrete Mathematics</em> 2 ed. p. 3 (where the book uses <span class="math inline">\(T_n\)</span> instead of <span class="math inline">\(S_n\)</span>), the proof is simply a one-liner: <span class="math display">\[
+<li id="fn1"><p>In computer science, this process of avoiding the recalculation of previously known values is called <em>memoization</em> and is useful in generating the first N values of a recursive algorithm in <span class="math inline">\(O(N)\)</span> (linear) time.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Note that if <span class="math inline">\(k_0 = 0\)</span>, then <span class="math inline">\([k_0, k_{m}]\)</span> is the set of all natural numbers (zero plus the positive integers).<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>There is no need to prove the recurrence (Equation <span class="math inline">\(\ref{eq:recurrence}\)</span>) as we have already proved it in the process of deriving it.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>In <em>Concrete Mathematics</em> 2 ed. p. 3 (where the book uses <span class="math inline">\(T_n\)</span> instead of <span class="math inline">\(S_n\)</span>), the proof is simply a one-liner:
+<span class="math display">\[
 T_n = 2(T_{n - 1}) + 1 = 2(2^{n - 1} - 1) + 1 = 2^n - 1.
-\]</span> But I find it a bit too terse for my tastes.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+\]</span>
+But I find it a bit too terse for my tastes.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 
@@ -269,7 +316,7 @@ T_n = 2(T_{n - 1}) + 1 = 2(2^{n - 1} - 1) + 1 = 2^n - 1.
 
 		<div id="footer">
 			<img src="../favicon.png" id="brand-icon">
-			<p>Copyright (C) 2013-2021 Linus Arver. All rights reserved.</p>
+			<p>Copyright (C) 2013-2023 Linus Arver. All rights reserved.</p>
 			<a href="https://github.com/listx/listx_blog">Site</a>
 			<a href="https://github.com/listx/listx.github.io">generated</a>
 			with

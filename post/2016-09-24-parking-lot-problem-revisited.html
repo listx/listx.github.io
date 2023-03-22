@@ -45,11 +45,16 @@
 	<a title="All pages tagged 'math'." href="../tag/math.html">math</a>, <a title="All pages tagged 'programming'." href="../tag/programming.html">programming</a>, <a title="All pages tagged 'haskell'." href="../tag/haskell.html">haskell</a>
 </div>
 
-<p>Almost exactly two years ago, I discussed what I called the <a href="./2014-09-22-parking-lot-problem.html">Parking Lot Problem</a>. Recently I discovered that it is a widely-known problem, enough to be featured in the very first chapter of <em>Pearls of Functional Algorithm Design</em> (2010) by Richard Bird — where it is simply called “smallest free number”. In this post, I want to go over Bird’s explanations in more detail; my aim is to spare you the effort in deciphering his opaque writing style.</p>
+<p>Almost exactly two years ago, I discussed what I called the <a href="./2014-09-22-parking-lot-problem.html">Parking Lot Problem</a>.
+Recently I discovered that it is a widely-known problem, enough to be featured in the very first chapter of <em>Pearls of Functional Algorithm Design</em> (2010) by Richard Bird — where it is simply called “smallest free number”.
+In this post, I want to go over Bird’s explanations in more detail; my aim is to spare you the effort in deciphering his opaque writing style.</p>
 <p>Bird presents two solutions — an imperative, array-based solution and a functional solution based on divide-and-conquer.</p>
 <h1 id="problem-statement">Problem Statement</h1>
-<p>Bird describes the problem as “computing the smallest natural number not in a given finite set <em>X</em> of natural numbers”. Here, <strong>natural numbers</strong> means the set of all positive integers and zero, or just <code>[0..]</code> in Haskell.</p>
-<p>I would like to add some further terminology. Let us think of the set <em>X</em> as <code>xs</code> (a list of elements in <em>X</em>), and call the set of all free numbers as the <em>free set</em>. Using our original parking lot analogy, the infinite parking lot is the set of all natural numbers, <em>X</em> is the list of parked spots (occupied), and finally the <em>free set</em> is the list of all unoccupied (open) parking spots.</p>
+<p>Bird describes the problem as “computing the smallest natural number not in a given finite set <em>X</em> of natural numbers”.
+Here, <strong>natural numbers</strong> means the set of all positive integers and zero, or just <code>[0..]</code> in Haskell.</p>
+<p>I would like to add some further terminology.
+Let us think of the set <em>X</em> as <code>xs</code> (a list of elements in <em>X</em>), and call the set of all free numbers as the <em>free set</em>.
+Using our original parking lot analogy, the infinite parking lot is the set of all natural numbers, <em>X</em> is the list of parked spots (occupied), and finally the <em>free set</em> is the list of all unoccupied (open) parking spots.</p>
 <h1 id="naive-list-based-solution">Naive list-based solution</h1>
 <div class="code-and-raw">
 <div class="sourceCode" id="cb1" data-startFrom="1"><pre class="sourceCode numberSource numberLines haskell"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">import</span> <span class="dt">Data.List</span> ((\\))</span>
@@ -84,27 +89,47 @@ minfreeNaive(xs)
   return freeSpots.first_one
 }
 </code></pre>
-<p>. Now imagine if <strong>xs</strong> looks like <strong>[9,8,7,6,5,4,3,2,1,0]</strong>. Then the first iteration of the outer <strong>i</strong> for-loop would check all 10 values in <strong>xs</strong>, until finally hitting the last value in <strong>xs</strong>, 0 to remove that 0 from <strong>candidates</strong>. Then the second iteration would check all values 9 through 2, until removing <strong>1</strong> from candidates. And so on, until it removed 9 as well. So, the total number of times that single <strong>if</strong> statement gets executed is</p>
+<p>.
+Now imagine if <strong>xs</strong> looks like <strong>[9,8,7,6,5,4,3,2,1,0]</strong>.
+Then the first iteration of the outer <strong>i</strong> for-loop would check all 10 values in <strong>xs</strong>, until finally hitting the last value in <strong>xs</strong>, 0 to remove that 0 from <strong>candidates</strong>.
+Then the second iteration would check all values 9 through 2, until removing <strong>1</strong> from candidates.
+And so on, until it removed 9 as well.
+So, the total number of times that single <strong>if</strong> statement gets executed is</p>
 <p><span class="math display">\[
 10 + 9 + 8 + 7 + 6 + 5 + 4 + 3 + 2 + 1 = 55
 \]</span></p>
-<p>. The formula for the sum of all positive, consecutive integers 1 through N is</p>
+<p>.
+The formula for the sum of all positive, consecutive integers 1 through N is</p>
 <p><span class="math display">\[
 \frac{n(n + 1)}{2} = \frac{n^2 + n}{2}.
 \]</span></p>
-<p>In Big-O notation, the above reduces to just <span class="math inline">\(n^2\)</span> because of the first term <span class="math inline">\(n^2\)</span> in <span class="math inline">\(n^2 + n\)</span>. <a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> As a side note, the above equation has a colorful history in mathematics, <a href="https://en.wikipedia.org/wiki/Carl_Friedrich_Gauss#Anecdotes">anecdotally attributed to Gauss</a>.</p>
+<p>In Big-O notation, the above reduces to just <span class="math inline">\(n^2\)</span> because of the first term <span class="math inline">\(n^2\)</span> in <span class="math inline">\(n^2 + n\)</span>. <a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>
+As a side note, the above equation has a colorful history in mathematics, <a href="https://en.wikipedia.org/wiki/Carl_Friedrich_Gauss#Anecdotes">anecdotally attributed to Gauss</a>.</p>
 <h1 id="interlude-key-insight-of-the-problem">Interlude: Key insight of the problem</h1>
 <p>Bird says the following:</p>
 <blockquote>
 <p>The key fact for both the array-based and divide and conquer solutions is that not every number in the range [ 0 .. <em>length xs</em> ] can be in <em>xs</em>. Thus the smallest number not in <em>xs</em> is the smallest number not in <em>filter (&lt;= n) xs</em>, where <em>n = length xs</em>.</p>
 </blockquote>
-<p>. Let’s examine the first sentence. Consider <code>length xs = 1</code>. That is, what if <code>xs</code> is only 1 element big (only 1 car is parked in the lot)? Intuitively, it appears that we don’t need to perform millions and millions of checks. Since we know that there is only 1 car parked, we just need to consider if that car is in Parking Spot 0 (the first free spot, or <em>PS0</em>). If it is, then we can assign the next slot, PS1. Otherwise, we can assign PS0 itself. If there are 2 cars parked (<code>length xs = 2</code>), in total we need only consider the first 2 spots, PS0, PS1 — if those are both taken, then the answer is PS2.</p>
+<p>.
+Let’s examine the first sentence.
+Consider <code>length xs = 1</code>.
+That is, what if <code>xs</code> is only 1 element big (only 1 car is parked in the lot)?
+Intuitively, it appears that we don’t need to perform millions and millions of checks.
+Since we know that there is only 1 car parked, we just need to consider if that car is in Parking Spot 0 (the first free spot, or <em>PS0</em>).
+If it is, then we can assign the next slot, PS1.
+Otherwise, we can assign PS0 itself.
+If there are 2 cars parked (<code>length xs = 2</code>), in total we need only consider the first 2 spots, PS0, PS1 — if those are both taken, then the answer is PS2.</p>
 <p>This leads us to the main theorem of this problem (let’s call it the <strong>Fullness Theorem</strong>):</p>
 <blockquote>
 <p>For any <strong>n</strong> cars parked, we can consider the spots numbered <code>[0..(n-1)]</code>; if all of those spots are full, we can assign spot <strong>n</strong> itself.</p>
 </blockquote>
-<p>(This statement may seem elementary, but it plays a crucial role in the divide-and-conquer approach discussed later.) Now, since <code>length [0..(n-1)]</code> coincidentally happens to be just <strong>n</strong>, the total number of spots taken into consideration for this problem is <strong>n + 1</strong> — parking spots <code>[0..(n-1)]</code> and spot <code>n</code> itself. And so we can reduce the free set to just <code>[0..(n-1)] ++ [n]</code>, or the equivalent <code>[0 .. length xs]</code> and ignore all other possible free spots. <a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> To restate, our answer to the original problem statement lies somewhere in this range <code>[0 .. length xs]</code>, which we will call <strong>reducedFrees</strong>.</p>
-<p>Now let’s look at the second sentence. It describes the set <code>filter (&lt;n) xs</code>, which we will call <strong>reducedXs</strong>. <a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> The set <strong>reducedXs</strong> is found by removing all elements in <strong>xs</strong> that are too big for our problem size of <strong>n + 1</strong> spots — i.e., beyond the range in <strong>reducedFrees</strong>.</p>
+<p>(This statement may seem elementary, but it plays a crucial role in the divide-and-conquer approach discussed later.)
+Now, since <code>length [0..(n-1)]</code> coincidentally happens to be just <strong>n</strong>, the total number of spots taken into consideration for this problem is <strong>n + 1</strong> — parking spots <code>[0..(n-1)]</code> and spot <code>n</code> itself.
+And so we can reduce the free set to just <code>[0..(n-1)] ++ [n]</code>, or the equivalent <code>[0 .. length xs]</code> and ignore all other possible free spots. <a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>
+To restate, our answer to the original problem statement lies somewhere in this range <code>[0 .. length xs]</code>, which we will call <strong>reducedFrees</strong>.</p>
+<p>Now let’s look at the second sentence.
+It describes the set <code>filter (&lt;n) xs</code>, which we will call <strong>reducedXs</strong>. <a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>
+The set <strong>reducedXs</strong> is found by removing all elements in <strong>xs</strong> that are too big for our problem size of <strong>n + 1</strong> spots — i.e., beyond the range in <strong>reducedFrees</strong>.</p>
 <h1 id="improved-array-based-solution">Improved array-based solution</h1>
 <p>Using the insight gained above, we can restate the problem as follows:</p>
 <div class="code-and-raw">
@@ -132,40 +157,71 @@ minfreeNaive(xs)
 </div>
 </div>
 <p>.</p>
-<p>Bird says “[t]he function <em>search</em> takes an array of Booleans, converts the array into a list of Booleans and returns the length of the longest initial segment consisting of <em>True</em> entries. This number will be the position of the first <em>False</em> entry.” This is true, and we’ll soon see why this is the case.</p>
-<p>In order to understand how <strong>minfreeArray1</strong> works, let’s first examine a further simplification of the problem. Conceptually we are only interested in the very first group of consecutively parked cars (if it exists at all), because as soon as this first group of cars ends, we are at the lowest-numbered free parking spot. In binary, we can represent an empty spot as 0 and a parked car as 1. The set of parked cars in <strong>reducedXs</strong> might look something like this (using a <code>.</code> for <code>0</code>):</p>
+<p>Bird says “[t]he function <em>search</em> takes an array of Booleans, converts the array into a list of Booleans and returns the length of the longest initial segment consisting of <em>True</em> entries. This number will be the position of the first <em>False</em> entry.”
+This is true, and we’ll soon see why this is the case.</p>
+<p>In order to understand how <strong>minfreeArray1</strong> works, let’s first examine a further simplification of the problem.
+Conceptually we are only interested in the very first group of consecutively parked cars (if it exists at all), because as soon as this first group of cars ends, we are at the lowest-numbered free parking spot.
+In binary, we can represent an empty spot as 0 and a parked car as 1.
+The set of parked cars in <strong>reducedXs</strong> might look something like this (using a <code>.</code> for <code>0</code>):</p>
 <pre class="example"><code>111111.11.1.111.1.111.111.11.1......1.1.111.1
 ^^^^^^
 </code></pre>
-<p>. Although there are many groups of parked cars, we are only interested in the <strong>first</strong> group, denoted by the hat signs. Consider another example:</p>
+<p>.
+Although there are many groups of parked cars, we are only interested in the <strong>first</strong> group, denoted by the hat signs.
+Consider another example:</p>
 <pre class="example"><code>.111.1.111.11...
  ^^^
 </code></pre>
-<p>. In this there is the triplet of cars, but it starts after an empty spot at PS0. Lastly let’s consider</p>
+<p>.
+In this there is the triplet of cars, but it starts after an empty spot at PS0.
+Lastly let’s consider</p>
 <pre class="example"><code>..........1..111111.111.1.1.111.1
           ^
 </code></pre>
-<p>; again, the first group of cars (in this case just 1 car) is preceded by an empty spot (actually, many such empty spots). In the last two examples, the answer is simply 0, for the very first spot PS0. For all other cases, the first group of cars starts from PS0, and extends some arbitrary number of spots, until “breaking” by an available spot. So there are two cases really as far as <strong>reducedXs</strong> is concerned:</p>
-<ol>
+<p>; again, the first group of cars (in this case just 1 car) is preceded by an empty spot (actually, many such empty spots).
+In the last two examples, the answer is simply 0, for the very first spot PS0.
+For all other cases, the first group of cars starts from PS0, and extends some arbitrary number of spots, until “breaking” by an available spot.
+So there are two cases really as far as <strong>reducedXs</strong> is concerned:</p>
+<ol type="1">
 <li>there is a contiguous group of car(s) from PS0 onwards, or</li>
 <li>PS0 is empty.</li>
 </ol>
-<p>The algorithm then is simply <code>length $ takeWhile (==True) checklist</code>, where <code>checklist</code> is a list of Boolean values with a 1:1 mapping of the parking spots, in order (with <code>True</code> representing a parked car and <code>False</code> representing an empty spot). If we’re in case 2) as above, then we get 0 because <code>takeWhile</code> never grows. If we’re in case 1), <code>takeWhile</code> keeps growing until the first empty spot; coincidentally, the length of <code>takeWhile</code>’s return list happens to be the index of the next free spot, we can just use the size of the return list of <code>takeWhile</code> as-is.</p>
-<p>And this is exactly what the <code>search</code> function does in the algorithm Bird describes. <code>elems</code> returns all the elements of an Array. <code>takeWhile</code> grows a list so long as the given predicate evaluates to <strong>True</strong>; since we already have Booleans, we can just use <strong>id</strong>. All we need to give as an argument to <code>search</code> is a Boolean list that is ordered from PS0 to PSn (the range of <strong>reducedXs</strong>). This conversion of a list of unordered natural numbers into a sorted list of Boolean values in the range covered by <strong>reducedXs</strong> is handled by <code>checklist</code>.</p>
-<p>Bird uses the library function <code>Data.Array.accumArray</code> to populate <code>checklist</code>. <code>accumArray</code> takes a list of index-value pairs, and if there are multiple pairs with the same index, combines the values of those pairs using the accumulating function. A common use case of <code>accumArray</code> is to use it to create a histogram of values, by using <code>(+)</code> as the accumulating function (so that all values at a particular index are summed together). In the <code>checklist</code> implementation by Bird, the accumulating function is <code>(||)</code> (logical OR function) to account for the possibility of duplicate numbers in <code>xs</code>. E.g., if <code>xs = [1, 2, 1]</code>, then the ordered pairs are <code>[(0, False), (1, True), (2, True), (1, True)]</code>, and <code>checklist</code> evaluates to <code>[False, True, True]</code>, because the <code>True</code> value in the two instances of <code>(1, True)</code> are simply OR-ed together by <code>(||)</code>.</p>
+<p>The algorithm then is simply <code>length $ takeWhile (==True) checklist</code>, where <code>checklist</code> is a list of Boolean values with a 1:1 mapping of the parking spots, in order (with <code>True</code> representing a parked car and <code>False</code> representing an empty spot).
+If we’re in case 2) as above, then we get 0 because <code>takeWhile</code> never grows.
+If we’re in case 1), <code>takeWhile</code> keeps growing until the first empty spot; coincidentally, the length of <code>takeWhile</code>’s return list happens to be the index of the next free spot, we can just use the size of the return list of <code>takeWhile</code> as-is.</p>
+<p>And this is exactly what the <code>search</code> function does in the algorithm Bird describes.
+<code>elems</code> returns all the elements of an Array.
+<code>takeWhile</code> grows a list so long as the given predicate evaluates to <strong>True</strong>; since we already have Booleans, we can just use <strong>id</strong>.
+All we need to give as an argument to <code>search</code> is a Boolean list that is ordered from PS0 to PSn (the range of <strong>reducedXs</strong>).
+This conversion of a list of unordered natural numbers into a sorted list of Boolean values in the range covered by <strong>reducedXs</strong> is handled by <code>checklist</code>.</p>
+<p>Bird uses the library function <code>Data.Array.accumArray</code> to populate <code>checklist</code>.
+<code>accumArray</code> takes a list of index-value pairs, and if there are multiple pairs with the same index, combines the values of those pairs using the accumulating function.
+A common use case of <code>accumArray</code> is to use it to create a histogram of values, by using <code>(+)</code> as the accumulating function (so that all values at a particular index are summed together).
+In the <code>checklist</code> implementation by Bird, the accumulating function is <code>(||)</code> (logical OR function) to account for the possibility of duplicate numbers in <code>xs</code>.
+E.g., if <code>xs = [1, 2, 1]</code>, then the ordered pairs are <code>[(0, False), (1, True), (2, True), (1, True)]</code>, and <code>checklist</code> evaluates to <code>[False, True, True]</code>, because the <code>True</code> value in the two instances of <code>(1, True)</code> are simply OR-ed together by <code>(||)</code>.</p>
 <h2 id="using-accumarray-to-sort-numbers">Using <code>accumArray</code> to sort numbers</h2>
-<p>Bird mentions that you can use <code>accumArray</code> to sort positive integers. The code is as follows:</p>
-<div class="sourceCode" id="cb7" data-results="session"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a><span class="kw">import</span> <span class="dt">Data.Array</span> (<span class="dt">Array</span>, accumArray)</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true"></a></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true"></a><span class="ot">countlist ::</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> <span class="dt">Array</span> <span class="dt">Int</span> <span class="dt">Int</span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true"></a>countlist xs <span class="ot">=</span> accumArray (<span class="op">+</span>) <span class="dv">0</span> (<span class="dv">0</span>, n) (<span class="fu">zip</span> xs (<span class="fu">repeat</span> <span class="dv">1</span>))</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true"></a></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true"></a><span class="fu">sort</span> xs <span class="ot">=</span> <span class="fu">concat</span> [ <span class="fu">replicate</span> k x <span class="op">|</span> (x, k) <span class="ot">&lt;-</span> assocs <span class="op">$</span> countlist xs ]</span></code></pre></div>
-<p>. (Bird defines <code>sort</code> without the use of <code>assocs</code> which gives a list of tuples of the form <code>(index, element-at-index)</code>, but that is in error.) The way it works is, <code>countlist</code> essentially builds a histogram of numbers we want to sort. So, given <code>[0, 6, 2, 0, 0]</code>, we get <code>[(0,3),(2,1),(6,1)]</code>. We then use <code>replicate</code> in <code>sort</code> to “unpack” each element of the histogram. Continuing with the example, <code>(0,3)</code> becomes <code>[0, 0, 0]</code>, <code>(2,1)</code> becomes <code>[2]</code>, and so on. Since the result looks like <code>[[0,0,0],[2],[6]]</code> we have to <code>concat</code> it to get <code>[0,0,0,2,6]</code>, our sorted list.</p>
+<p>Bird mentions that you can use <code>accumArray</code> to sort positive integers.
+The code is as follows:</p>
+<div class="sourceCode" id="cb7" data-results="session"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">import</span> <span class="dt">Data.Array</span> (<span class="dt">Array</span>, accumArray)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="ot">countlist ::</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> <span class="dt">Array</span> <span class="dt">Int</span> <span class="dt">Int</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>countlist xs <span class="ot">=</span> accumArray (<span class="op">+</span>) <span class="dv">0</span> (<span class="dv">0</span>, n) (<span class="fu">zip</span> xs (<span class="fu">repeat</span> <span class="dv">1</span>))</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="fu">sort</span> xs <span class="ot">=</span> <span class="fu">concat</span> [ <span class="fu">replicate</span> k x <span class="op">|</span> (x, k) <span class="ot">&lt;-</span> assocs <span class="op">$</span> countlist xs ]</span></code></pre></div>
+<p>.
+(Bird defines <code>sort</code> without the use of <code>assocs</code> which gives a list of tuples of the form <code>(index, element-at-index)</code>, but that is in error.)
+The way it works is, <code>countlist</code> essentially builds a histogram of numbers we want to sort.
+So, given <code>[0, 6, 2, 0, 0]</code>, we get <code>[(0,3),(2,1),(6,1)]</code>.
+We then use <code>replicate</code> in <code>sort</code> to “unpack” each element of the histogram.
+Continuing with the example, <code>(0,3)</code> becomes <code>[0, 0, 0]</code>, <code>(2,1)</code> becomes <code>[2]</code>, and so on.
+Since the result looks like <code>[[0,0,0],[2],[6]]</code> we have to <code>concat</code> it to get <code>[0,0,0,2,6]</code>, our sorted list.</p>
 <h2 id="sorting-for-free">Sorting for “free”</h2>
-<p>It should be reiterated here that ultimately we want to have an ordered list of Booleans that preserves the occupied parking spot information in the original list of “taken” spots. The way in which <code>checklist</code> performs the conversion of unordered numbers into a nice list of Booleans in the range <code>[0..n]</code> is virtually identical in design to the algorithm described by Jon Bentley in the very first chapter of his book <em>Programming Pearls</em> (2nd Ed., 2000). There Bentley used a bitmap to represent a Boolean array because of strict memory requirements — but otherwise the spirit of the data structure remains the same.</p>
+<p>It should be reiterated here that ultimately we want to have an ordered list of Booleans that preserves the occupied parking spot information in the original list of “taken” spots.
+The way in which <code>checklist</code> performs the conversion of unordered numbers into a nice list of Booleans in the range <code>[0..n]</code> is virtually identical in design to the algorithm described by Jon Bentley in the very first chapter of his book <em>Programming Pearls</em> (2nd Ed., 2000).
+There Bentley used a bitmap to represent a Boolean array because of strict memory requirements — but otherwise the spirit of the data structure remains the same.</p>
 <h1 id="further-improved-array-based-solution">(Further improved) Array-based solution</h1>
-<p>Bird’s final array-based algorithm uses the ST Monad to squeeze out some more performance of the <code>checklist</code> function. Here is the code:</p>
+<p>Bird’s final array-based algorithm uses the ST Monad to squeeze out some more performance of the <code>checklist</code> function.
+Here is the code:</p>
 <div class="code-and-raw">
 <div class="sourceCode" id="cb8" data-startFrom="1"><pre class="sourceCode numberSource numberLines haskell"><code class="sourceCode haskell"><span id="cb8-1"><a href="#cb8-1"></a><span class="kw">import</span> <span class="dt">Data.Array</span> (<span class="dt">Array</span>, elems)</span>
 <span id="cb8-2"><a href="#cb8-2"></a><span class="kw">import</span> <span class="dt">Data.Array.ST</span> (runSTArray, newArray, writeArray)</span>
@@ -187,9 +243,11 @@ minfreeNaive(xs)
 <p> <code>array2.hs</code> <a class="raw" href="https://github.com/listx/listx_blog/blob/master/code/2016-09-24-parking-lot-problem-revisited/array2.hs"><code>[GitHub]</code></a> <a class="raw" href="../code/2016-09-24-parking-lot-problem-revisited/array2.hs" mimetype="text/plain"><code>[Download]</code></a> </p>
 </div>
 </div>
-<p>. The use of the ST monad here reduces memory overhead, and according to Bird it is the most efficient approach using an imperative style on top of arrays.</p>
+<p>.
+The use of the ST monad here reduces memory overhead, and according to Bird it is the most efficient approach using an imperative style on top of arrays.</p>
 <h1 id="divide-and-conquer-via-recursion">Divide and Conquer via Recursion</h1>
-<p>Ah, recursion. Bird describes the following divide-and-conquer algorithm as a faster alternative to <code>accumArray</code>. <a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p>
+<p>Ah, recursion.
+Bird describes the following divide-and-conquer algorithm as a faster alternative to <code>accumArray</code>. <a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p>
 <div class="code-and-raw">
 <div class="sourceCode" id="cb9" data-startFrom="1"><pre class="sourceCode numberSource numberLines haskell"><code class="sourceCode haskell"><span id="cb9-1"><a href="#cb9-1"></a><span class="kw">import</span> <span class="dt">Data.List</span> (partition)</span>
 <span id="cb9-2"><a href="#cb9-2"></a></span>
@@ -209,53 +267,87 @@ minfreeNaive(xs)
 <p> <code>divideAndConquer.hs</code> <a class="raw" href="https://github.com/listx/listx_blog/blob/master/code/2016-09-24-parking-lot-problem-revisited/divideAndConquer.hs"><code>[GitHub]</code></a> <a class="raw" href="../code/2016-09-24-parking-lot-problem-revisited/divideAndConquer.hs" mimetype="text/plain"><code>[Download]</code></a> </p>
 </div>
 </div>
-<p>The overall idea is that we can define the problem <code>minimum of ([0..] \\ xs)</code> by dividing up <code>xs</code> into 2 halves, and then look into the correct sub-part for the solution. Notice that we are partitioning the <code>xs</code> (soley the list of parked spots), and <em>not</em> the parking lot itself.</p>
-<p>For example, we can divide up <code>xs</code> into <code>as</code> and <code>bs</code>, where <code>(as, bs) = partition (&lt;b) xs</code>. (The <code>partition</code> library function simply splits up a given list into 2 subsets, those that satisfy the given condition, and those that do not.) Deciding which partition to look at is simple: look in the upper partition if the lower partition (containing the smaller-numbered parking spots) is full.</p>
-<p>The line <code>(n == 0) = a</code> merely means that, if the list of cars is empty, simply choose the lowest number (which is, by definition, <code>a</code>). The line <code>(m == b - a) = minfrom b (n -m, bs)</code> chooses the bigger partition of the two partitions, on the condition <code>(m == b - a)</code>. This condition asks whether the <em>length</em> of <code>as</code> (the first partition) equal to the distance of <code>b - a</code> — in other words, whether <code>as</code> fills up the entire range <code>[a..(b-1)]</code>. If it does fill up the entire range, then this parking lot subsection is completely packed with cars, so there is no point in looking; we must look into the other partition (<code>[b..]</code>) for the first empty spot. Otherwise, we look into the first partition.</p>
-<p>The hard part here is choosing the value of <code>b</code> (the pivot at which we decide to partition <code>xs</code>). By definition, our partitions are <code>as</code> and <code>bs</code>, where <code>(as, bs) = partition (&lt;b) xs</code>.) There are two things we want:</p>
+<p>The overall idea is that we can define the problem <code>minimum of ([0..] \\ xs)</code> by dividing up <code>xs</code> into 2 halves, and then look into the correct sub-part for the solution.
+Notice that we are partitioning the <code>xs</code> (soley the list of parked spots), and <em>not</em> the parking lot itself.</p>
+<p>For example, we can divide up <code>xs</code> into <code>as</code> and <code>bs</code>, where <code>(as, bs) = partition (&lt;b) xs</code>.
+(The <code>partition</code> library function simply splits up a given list into 2 subsets, those that satisfy the given condition, and those that do not.)
+Deciding which partition to look at is simple: look in the upper partition if the lower partition (containing the smaller-numbered parking spots) is full.</p>
+<p>The line <code>(n == 0) = a</code> merely means that, if the list of cars is empty, simply choose the lowest number (which is, by definition, <code>a</code>).
+The line <code>(m == b - a) = minfrom b (n -m, bs)</code> chooses the bigger partition of the two partitions, on the condition <code>(m == b - a)</code>.
+This condition asks whether the <em>length</em> of <code>as</code> (the first partition) equal to the distance of <code>b - a</code> — in other words, whether <code>as</code> fills up the entire range <code>[a..(b-1)]</code>.
+If it does fill up the entire range, then this parking lot subsection is completely packed with cars, so there is no point in looking; we must look into the other partition (<code>[b..]</code>) for the first empty spot.
+Otherwise, we look into the first partition.</p>
+<p>The hard part here is choosing the value of <code>b</code> (the pivot at which we decide to partition <code>xs</code>).
+By definition, our partitions are <code>as</code> and <code>bs</code>, where <code>(as, bs) = partition (&lt;b) xs</code>.)
+There are two things we want:</p>
 <ul>
 <li>minimum difference in size between <code>as</code> and <code>bs</code>, and</li>
 <li>nonzero length partition for the first partition <code>as</code>.</li>
 </ul>
-<p>We want minimal size difference between <code>as</code> and <code>bs</code> because otherwise we might end up calling <code>minfrom</code> many times; we want it so that whether we use <code>as</code> or <code>bs</code> (in whichever sequence), we deal with smaller and smaller lists of parked cars. The only way to do this is to divide the list of cars by half each time. This is where we get <code>div n 2</code>. This is, more or less, the spirit of binary search.</p>
-<p>The requirement of the second condition is more subtle — we want to avoid taking a zero-length partition for <code>as</code>, because our main conditional <code>m == b - a</code> relies on the fact that this distance, <code>b - a</code>, is nonzero. This is because it must ask the question, “do the parking spots in the first partition fill up all spots in the range that it can cover?”, and this question loses its meaning if we give it an empty partition. Seen another way, the statement <code>partition (&lt;b) xs</code>, and the act of choosing those <code>xs</code> that are <code>b</code> or bigger <em>if the first partition is completely full</em>, is the recursive analogue of the Fullness Theorem. Whereas the Fullness Theorem did not really help much in the iterative array-based solution, it plays a key role in this recursive solution, because it correctly describes how to partition <code>xs</code> with minimum fuss. The phrase “otherwise assign spot <strong>n</strong> itself” in that Theorem translates to choosing the non-full, bigger partition, because it starts with spot <strong>n</strong> — the only twist here is that instead of assigning spot <strong>n</strong> directly, we re-assign ourselves a new problem of looking for parking spots <em>starting</em> with spot <strong>n</strong>. To be clear, this partitioning scheme merely discards consecutive runs of parked cars, about <code>div n 2</code> spots at a time.</p>
+<p>We want minimal size difference between <code>as</code> and <code>bs</code> because otherwise we might end up calling <code>minfrom</code> many times; we want it so that whether we use <code>as</code> or <code>bs</code> (in whichever sequence), we deal with smaller and smaller lists of parked cars.
+The only way to do this is to divide the list of cars by half each time.
+This is where we get <code>div n 2</code>.
+This is, more or less, the spirit of binary search.</p>
+<p>The requirement of the second condition is more subtle — we want to avoid taking a zero-length partition for <code>as</code>, because our main conditional <code>m == b - a</code> relies on the fact that this distance, <code>b - a</code>, is nonzero.
+This is because it must ask the question, “do the parking spots in the first partition fill up all spots in the range that it can cover?”, and this question loses its meaning if we give it an empty partition.
+Seen another way, the statement <code>partition (&lt;b) xs</code>, and the act of choosing those <code>xs</code> that are <code>b</code> or bigger <em>if the first partition is completely full</em>, is the recursive analogue of the Fullness Theorem.
+Whereas the Fullness Theorem did not really help much in the iterative array-based solution, it plays a key role in this recursive solution, because it correctly describes how to partition <code>xs</code> with minimum fuss.
+The phrase “otherwise assign spot <strong>n</strong> itself” in that Theorem translates to choosing the non-full, bigger partition, because it starts with spot <strong>n</strong> — the only twist here is that instead of assigning spot <strong>n</strong> directly, we re-assign ourselves a new problem of looking for parking spots <em>starting</em> with spot <strong>n</strong>.
+To be clear, this partitioning scheme merely discards consecutive runs of parked cars, about <code>div n 2</code> spots at a time.</p>
 <p>For demonstrative purposes, let’s consider what would happen if we ignored what we just said and really did define <code>b</code> as</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true"></a>b <span class="ot">=</span> a <span class="op">+</span> (<span class="fu">div</span> n <span class="dv">2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>b <span class="ot">=</span> a <span class="op">+</span> (<span class="fu">div</span> n <span class="dv">2</span>)</span></code></pre></div>
 <p>for the case of <code>xs = [0]</code> and <code>n = 1</code>; we would start off with</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true"></a>minfrom <span class="dv">0</span> (<span class="dv">1</span>, [<span class="dv">0</span>])</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>minfrom <span class="dv">0</span> (<span class="dv">1</span>, [<span class="dv">0</span>])</span></code></pre></div>
 <p>and</p>
 <p><span class="math display">\[
 b = 0 + (\mathrm{div}\;1\,2) = 0 + 0 = 0,
 \]</span></p>
 <p>such that</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true"></a>partition (<span class="op">&lt;</span><span class="dv">0</span>) [<span class="dv">0</span>] <span class="co">-- ([], [0])</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true"></a><span class="co">-- as = []</span></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true"></a><span class="co">-- m = 0</span></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true"></a><span class="co">-- bs = [0]</span></span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true"></a><span class="co">-- n = 1</span></span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>partition (<span class="op">&lt;</span><span class="dv">0</span>) [<span class="dv">0</span>] <span class="co">-- ([], [0])</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="co">-- as = []</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co">-- m = 0</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co">-- bs = [0]</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="co">-- n = 1</span></span></code></pre></div>
 <p>and since</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true"></a>(m <span class="op">==</span> b <span class="op">-</span> a) <span class="co">-- (0 == 0 - 0) true!</span></span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>(m <span class="op">==</span> b <span class="op">-</span> a) <span class="co">-- (0 == 0 - 0) true!</span></span></code></pre></div>
 <p>we would in turn execute</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true"></a>minfrom b (n <span class="op">-</span> m, bs) <span class="co">-- minfrom 0 (1, [0])</span></span></code></pre></div>
-<p>, resulting in an infinite loop! Thus the correct way to choose <code>b</code> is with</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true"></a>b <span class="ot">=</span> a <span class="op">+</span> (<span class="fu">div</span> n <span class="dv">2</span>) <span class="op">+</span> <span class="dv">1</span></span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>minfrom b (n <span class="op">-</span> m, bs) <span class="co">-- minfrom 0 (1, [0])</span></span></code></pre></div>
+<p>, resulting in an infinite loop!
+Thus the correct way to choose <code>b</code> is with</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>b <span class="ot">=</span> a <span class="op">+</span> (<span class="fu">div</span> n <span class="dv">2</span>) <span class="op">+</span> <span class="dv">1</span></span></code></pre></div>
 <h2 id="running-time">Running time</h2>
-<p>Bird gives the running time as <span class="math inline">\(\Theta(n)\)</span>. He offers this cryptic phrase:</p>
+<p>Bird gives the running time as <span class="math inline">\(\Theta(n)\)</span>.
+He offers this cryptic phrase:</p>
 <blockquote>
 <p>… the number of steps <span class="math inline">\(T(n)\)</span> for evaluating <em>minfrom 0 xs</em> when <em>n = length xs</em> satisfies <span class="math inline">\(T(n) = T(n\,div\,2) + \Theta(n)\)</span>, with the solution <span class="math inline">\(T(n) = \Theta(n)\)</span>.</p>
 </blockquote>
-<p>Alas, I am not sure what this means. Here’s my own justification of why we have running time <span class="math inline">\(\Theta(n)\)</span>. The two most expensive operations in the recursive algorithm are <code>m = length as</code> and <code>partition (&lt;b) xs</code>. The thing is that both of these calculations take <span class="math inline">\(\Theta(n)\)</span> time, and both occur only once each, for every call to <code>minfrom</code>. Now, <code>minfrom</code> calculates <code>length as</code>, but <em>it does not calculate</em> <code>length bs</code>. This is again, because of the Fullness Theorem — we only care about the first partition being completely packed with cars. Thus, we never really calculate <code>m = length as</code> over the same range. The worst case is an input like <code>xs = [0..1000]</code> where the entire range of concern is packed with cars; in this case we would calculate the length of <code>[0..500]</code>, then see that it’s full and choose the second partition. We’d then choose <code>[501..750]</code>, and so on, such that the sum of these calculations effectively cost as much as <code>length xs</code>, or <span class="math inline">\(n\)</span> itself.</p>
+<p>Alas, I am not sure what this means.
+Here’s my own justification of why we have running time <span class="math inline">\(\Theta(n)\)</span>.
+The two most expensive operations in the recursive algorithm are <code>m = length as</code> and <code>partition (&lt;b) xs</code>.
+The thing is that both of these calculations take <span class="math inline">\(\Theta(n)\)</span> time, and both occur only once each, for every call to <code>minfrom</code>.
+Now, <code>minfrom</code> calculates <code>length as</code>, but <em>it does not calculate</em> <code>length bs</code>.
+This is again, because of the Fullness Theorem — we only care about the first partition being completely packed with cars.
+Thus, we never really calculate <code>m = length as</code> over the same range.
+The worst case is an input like <code>xs = [0..1000]</code> where the entire range of concern is packed with cars; in this case we would calculate the length of <code>[0..500]</code>, then see that it’s full and choose the second partition.
+We’d then choose <code>[501..750]</code>, and so on, such that the sum of these calculations effectively cost as much as <code>length xs</code>, or <span class="math inline">\(n\)</span> itself.</p>
 <h2 id="connection-to-parking-load-problem">Connection to “Parking Load” problem</h2>
-<p>In my sister post, I also described a similar problem, dubbed the Parking Load problem. At the time, I was quite surprised at how the answer was much simpler and easier to calculate. From the insight I gained from the Fullness Theorem, I think it is clear why that is the case. Indeed, the Parking Load problem is just a slight wrinkle of the Fullness Theorem, where <code>n</code> (number of parked cars) is known, but <code>b</code> (the endpoint of the “partition”), if you will, is unknown. The problem is to simply compute <span class="math inline">\(b + 1 - n\)</span>. (We have to add 1 to <code>b</code> because we use 0-based indexing.) I love it when you can explain something in a new way — don’t you?</p>
+<p>In my sister post, I also described a similar problem, dubbed the Parking Load problem.
+At the time, I was quite surprised at how the answer was much simpler and easier to calculate.
+From the insight I gained from the Fullness Theorem, I think it is clear why that is the case.
+Indeed, the Parking Load problem is just a slight wrinkle of the Fullness Theorem, where <code>n</code> (number of parked cars) is known, but <code>b</code> (the endpoint of the “partition”), if you will, is unknown.
+The problem is to simply compute <span class="math inline">\(b + 1 - n\)</span>.
+(We have to add 1 to <code>b</code> because we use 0-based indexing.)
+I love it when you can explain something in a new way — don’t you?</p>
 <h1 id="conclusion">Conclusion</h1>
-<p>I think this lays to rest (for now) the intricacies of the Parking Lot problem, or as Bird puts it, finding the smallest free number. Still, I like my parking lot analogy better because I believe it’s important to talk about problems in a way that can be related to the real world.</p>
-<section class="footnotes" role="doc-endnotes">
+<p>I think this lays to rest (for now) the intricacies of the Parking Lot problem, or as Bird puts it, finding the smallest free number.
+Still, I like my parking lot analogy better because I believe it’s important to talk about problems in a way that can be related to the real world.</p>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr />
 <ol>
-<li id="fn1" role="doc-endnote"><p>Big-O only cares about growth of the algorithm; the <span class="math inline">\(n^2\)</span> will come to dominate the growth rate as <span class="math inline">\(n\)</span> gets bigger.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2" role="doc-endnote"><p>It is for this reason, apart from looping indefinitely, that justifies the <strong>break</strong> condition for the outer loop in Algorithm P1.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn3" role="doc-endnote"><p>Bird wrote (&lt;=n) as the filter condition, but this is in error. The simpler <code>(&lt;n)</code> does the job just as well.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn4" role="doc-endnote"><p>According to Bird, it is 20% faster than the array-based algorithm.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>Big-O only cares about growth of the algorithm; the <span class="math inline">\(n^2\)</span> will come to dominate the growth rate as <span class="math inline">\(n\)</span> gets bigger.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>It is for this reason, apart from looping indefinitely, that justifies the <strong>break</strong> condition for the outer loop in Algorithm P1.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>Bird wrote (&lt;=n) as the filter condition, but this is in error. The simpler <code>(&lt;n)</code> does the job just as well.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>According to Bird, it is 20% faster than the array-based algorithm.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 
@@ -263,7 +355,7 @@ b = 0 + (\mathrm{div}\;1\,2) = 0 + 0 = 0,
 
 		<div id="footer">
 			<img src="../favicon.png" id="brand-icon">
-			<p>Copyright (C) 2013-2021 Linus Arver. All rights reserved.</p>
+			<p>Copyright (C) 2013-2023 Linus Arver. All rights reserved.</p>
 			<a href="https://github.com/listx/listx_blog">Site</a>
 			<a href="https://github.com/listx/listx.github.io">generated</a>
 			with

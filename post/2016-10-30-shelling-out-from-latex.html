@@ -47,13 +47,14 @@
 
 <h1 id="the-problem">The Problem</h1>
 <p>For years, whenever I wanted to interact with the outer shell environment from Latex, I would use one of two methods:</p>
-<ol>
+<ol type="1">
 <li>perform some shell step separately from Latex and inject it into the Latex sources, or</li>
 <li>save it somewhere else and pull it in from Latex with <code>\input{foo}</code>.</li>
 </ol>
 <p>But I learned recently that it can be done much more simply, if you are willing to use Luatex!</p>
 <h1 id="enter-luatex">Enter Luatex</h1>
-<p>Let’s assume that you keep your Latex document in source control and want to inject the Git hash into the document. First, define a new command called <code>\shell</code>.</p>
+<p>Let’s assume that you keep your Latex document in source control and want to inject the Git hash into the document.
+First, define a new command called <code>\shell</code>.</p>
 <pre><code>% Call shell! See http://tex.stackexchange.com/a/114939/30920.
 \newcommand\shell[1]{\directlua{
     local handle, err = io.popen([[#1]])
@@ -72,7 +73,9 @@
 \shell{git describe --always}%
 \shell{(( $(git --no-pager diff 2&gt;/dev/null | wc -l) + $(git --no-pager diff --cached 2&gt;/dev/null | wc -l) &gt; 0 )) &amp;&amp; echo '*'}
 </code></pre>
-<p>. I then use <code>lualatex --shell-escape foo.tex</code> to compile it. This is actual code from a Luatex document of mine.</p>
+<p>.
+I then use <code>lualatex --shell-escape foo.tex</code> to compile it.
+This is actual code from a Luatex document of mine.</p>
 <p>I am not sure which shell program gets invoked, but for most things it should not matter much.</p>
 <h1 id="conclusion">Conclusion</h1>
 <p>Now you know how to shell out from Latex!</p>
@@ -82,7 +85,7 @@
 
 		<div id="footer">
 			<img src="../favicon.png" id="brand-icon">
-			<p>Copyright (C) 2013-2021 Linus Arver. All rights reserved.</p>
+			<p>Copyright (C) 2013-2023 Linus Arver. All rights reserved.</p>
 			<a href="https://github.com/listx/listx_blog">Site</a>
 			<a href="https://github.com/listx/listx.github.io">generated</a>
 			with

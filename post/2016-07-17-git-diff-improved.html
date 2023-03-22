@@ -46,13 +46,20 @@
 </div>
 
 <h1 id="motivation">Motivation</h1>
-<p>Like most people, I use git daily. For many years, I used to have these two aliases:</p>
+<p>Like most people, I use git daily.
+For many years, I used to have these two aliases:</p>
 <pre class="shell"><code>alias gdf=&quot;git diff&quot;
 alias gdfc=&quot;git diff --cached&quot;
 </code></pre>
-<p>Last year I started working professionally as a developer and I began to work on many different repos at the same time. Oftentimes I would do either a <code>git diff</code> or <code>git diff --cached</code>, then come back to it 10 minutes later but then forget whether the diff had a <code>--cached</code> flag or not. I needed to script some more git helpers functions!</p>
+<p>Last year I started working professionally as a developer and I began to work on many different repos at the same time.
+Oftentimes I would do either a <code>git diff</code> or <code>git diff --cached</code>, then come back to it 10 minutes later but then forget whether the diff had a <code>--cached</code> flag or not.
+I needed to script some more git helpers functions!</p>
 <h1 id="implementation">Implementation</h1>
-<p>I created a new shell function called <code>gdf</code> to replace the two aliases above. It works by first showing you the <code>git diff</code> output, then the <code>git diff --cached</code> output. For both outputs, a vertical colored “ribbon” is printed on the left margin to denote whether it’s the working tree (<code>git diff</code>) or index (<code>git diff --cached</code> aka “staging area”). The name of the repo is prepended/appended to the output as well to further disambiguate it. Here are the functions:</p>
+<p>I created a new shell function called <code>gdf</code> to replace the two aliases above.
+It works by first showing you the <code>git diff</code> output, then the <code>git diff --cached</code> output.
+For both outputs, a vertical colored “ribbon” is printed on the left margin to denote whether it’s the working tree (<code>git diff</code>) or index (<code>git diff --cached</code> aka “staging area”).
+The name of the repo is prepended/appended to the output as well to further disambiguate it.
+Here are the functions:</p>
 <div class="code-and-raw">
 <div class="sourceCode" id="cb2" data-startFrom="1"><pre class="sourceCode numberSource numberLines"><code class="sourceCode"><span id="cb2-1"><a href="#cb2-1"></a>#!/usr/bin/env zsh</span>
 <span id="cb2-2"><a href="#cb2-2"></a></span>
@@ -154,80 +161,83 @@ alias gdfc=&quot;git diff --cached&quot;
 <p> <code>git_find_repo</code> <a class="raw" href="https://github.com/listx/listx_blog/blob/master/code/2016-07-17-git-diff-improved/git_find_repo"><code>[GitHub]</code></a> <a class="raw" href="../code/2016-07-17-git-diff-improved/git_find_repo" mimetype="text/plain"><code>[Download]</code></a> </p>
 </div>
 </div>
-<p>I use Zsh as my shell, so I wrote the above in Zsh. I simply drop these files inside my autoloaded directory, which is defined like this:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="ot">fpath=(</span>~/.zsh/func <span class="ot">$fpath)</span> <span class="co"># add ~/.zsh/func to $fpath</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a><span class="kw">autoload</span> -U ~/.zsh/func/*<span class="kw">(</span>:t<span class="kw">)</span> <span class="co"># load all functions in ~/.zsh/func</span></span></code></pre></div>
+<p>I use Zsh as my shell, so I wrote the above in Zsh.
+I simply drop these files inside my autoloaded directory, which is defined like this:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="va">fpath</span><span class="op">=</span><span class="va">(</span>~/.zsh/func <span class="va">$fpath)</span> <span class="co"># add ~/.zsh/func to $fpath</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="bu">autoload</span> <span class="at">-U</span> ~/.zsh/func/<span class="pp">*</span><span class="op">(:</span><span class="va">t</span><span class="op">)</span> <span class="co"># load all functions in ~/.zsh/func</span></span></code></pre></div>
 <p>Here is some sample output (used in the course of writing this blog post):</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode diff"><code class="sourceCode diff"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a>   -- blog --</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true"></a>T  diff --git a/post/2016-07-17-git-diff-improved.org b/post/2016-07-17-git-diff-improved.org</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true"></a>R  index 631bcf4..9f6fbac 100644</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true"></a>E  --- a/post/2016-07-17-git-diff-improved.org</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true"></a>E  +++ b/post/2016-07-17-git-diff-improved.org</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true"></a>   @@ -7,7 +7,7 @@ tags: programming</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true"></a>┃</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true"></a>┃   * Motivation</span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true"></a>┃</span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true"></a>┃  -Like most people, I use git every day.</span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true"></a>┃  +Like most people, I use git daily.</span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true"></a>┃   For many years, I used to have these two aliases:</span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true"></a>┃</span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true"></a>┃   #+begin_src shell</span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true"></a>┃  @@ -15,9 +15,9 @@ alias gdf=&quot;git diff&quot;</span>
-<span id="cb6-16"><a href="#cb6-16" aria-hidden="true"></a>┃   alias gdfc=&quot;git diff --cached&quot;</span>
-<span id="cb6-17"><a href="#cb6-17" aria-hidden="true"></a>┃   #+end_src</span>
-<span id="cb6-18"><a href="#cb6-18" aria-hidden="true"></a>┃</span>
-<span id="cb6-19"><a href="#cb6-19" aria-hidden="true"></a>┃  -Last year, I started working professionally as a developer, and I began to work on many different repos at the same time.</span>
-<span id="cb6-20"><a href="#cb6-20" aria-hidden="true"></a>┃  +Last year I started working professionally as a developer and I began to work on many different repos at the same time.</span>
-<span id="cb6-21"><a href="#cb6-21" aria-hidden="true"></a>┃   Oftentimes I would do either a ~git diff~ or ~git diff --cached~, then come back to it 10 minutes later but then forget whether the diff had a ~--cached~ flag or not.</span>
-<span id="cb6-22"><a href="#cb6-22" aria-hidden="true"></a>┃  -So, I needed to script some more git helpers functions!</span>
-<span id="cb6-23"><a href="#cb6-23" aria-hidden="true"></a>┃  +I needed to script some more git helpers functions!</span>
-<span id="cb6-24"><a href="#cb6-24" aria-hidden="true"></a>┃</span>
-<span id="cb6-25"><a href="#cb6-25" aria-hidden="true"></a>┃   * Implementation</span>
-<span id="cb6-26"><a href="#cb6-26" aria-hidden="true"></a>┃</span>
-<span id="cb6-27"><a href="#cb6-27" aria-hidden="true"></a>┃  @@ -41,9 +41,11 @@ autoload -U ~/.zsh/func/*(:t) # load all functions in ~/.zsh/func</span>
-<span id="cb6-28"><a href="#cb6-28" aria-hidden="true"></a>┃   Here is some sample output:</span>
-<span id="cb6-29"><a href="#cb6-29" aria-hidden="true"></a>┃</span>
-<span id="cb6-30"><a href="#cb6-30" aria-hidden="true"></a>┃   #+begin_src diff</span>
-<span id="cb6-31"><a href="#cb6-31" aria-hidden="true"></a>   + foo</span>
-<span id="cb6-32"><a href="#cb6-32" aria-hidden="true"></a>T   #+end_src</span>
-<span id="cb6-33"><a href="#cb6-33" aria-hidden="true"></a>R</span>
-<span id="cb6-34"><a href="#cb6-34" aria-hidden="true"></a>E   #+begin_src diff</span>
-<span id="cb6-35"><a href="#cb6-35" aria-hidden="true"></a>E  +</span>
-<span id="cb6-36"><a href="#cb6-36" aria-hidden="true"></a>    + bar</span>
-<span id="cb6-37"><a href="#cb6-37" aria-hidden="true"></a>┃    #+end_src</span>
-<span id="cb6-38"><a href="#cb6-38" aria-hidden="true"></a>┃</span>
-<span id="cb6-39"><a href="#cb6-39" aria-hidden="true"></a>┃   * Conclusion</span>
-<span id="cb6-40"><a href="#cb6-40" aria-hidden="true"></a>   -- blog --</span></code></pre></div>
-<div class="sourceCode" id="cb7"><pre class="sourceCode diff"><code class="sourceCode diff"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a>   -- blog --</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true"></a>I  diff --git a/post/2016-07-17-git-diff-improved.org b/post/2016-07-17-git-diff-improved.org</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true"></a>N  index dc2fca4..631bcf4 100644</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true"></a>D  --- a/post/2016-07-17-git-diff-improved.org</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true"></a>E  +++ b/post/2016-07-17-git-diff-improved.org</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true"></a>X  @@ -38,6 +38,14 @@ fpath=(~/.zsh/func $fpath) # add ~/.zsh/func to $fpath</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true"></a>    autoload -U ~/.zsh/func/*(:t) # load all functions in ~/.zsh/func</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true"></a>┃   #+end_src</span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true"></a>┃</span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true"></a>┃  +Here is some sample output:</span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true"></a>┃  +</span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true"></a>┃  +#+begin_src diff</span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true"></a>┃  +#+end_src</span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true"></a>┃  +</span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true"></a>┃  +#+begin_src diff</span>
-<span id="cb7-16"><a href="#cb7-16" aria-hidden="true"></a>┃  +#+end_src</span>
-<span id="cb7-17"><a href="#cb7-17" aria-hidden="true"></a>┃  +</span>
-<span id="cb7-18"><a href="#cb7-18" aria-hidden="true"></a>┃   * Conclusion</span>
-<span id="cb7-19"><a href="#cb7-19" aria-hidden="true"></a>┃</span>
-<span id="cb7-20"><a href="#cb7-20" aria-hidden="true"></a>┃   I've been a happy ~gdf~ user for some months now.</span>
-<span id="cb7-21"><a href="#cb7-21" aria-hidden="true"></a>   -- blog --</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode diff"><code class="sourceCode diff"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>   -- blog --</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>T  diff --git a/post/2016-07-17-git-diff-improved.org b/post/2016-07-17-git-diff-improved.org</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>R  index 631bcf4..9f6fbac 100644</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>E  --- a/post/2016-07-17-git-diff-improved.org</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>E  +++ b/post/2016-07-17-git-diff-improved.org</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>   @@ -7,7 +7,7 @@ tags: programming</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>┃</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>┃   * Motivation</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>┃</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>┃  -Like most people, I use git every day.</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>┃  +Like most people, I use git daily.</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>┃   For many years, I used to have these two aliases:</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>┃</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>┃   #+begin_src shell</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>┃  @@ -15,9 +15,9 @@ alias gdf=&quot;git diff&quot;</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>┃   alias gdfc=&quot;git diff --cached&quot;</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>┃   #+end_src</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>┃</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>┃  -Last year, I started working professionally as a developer, and I began to work on many different repos at the same time.</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>┃  +Last year I started working professionally as a developer and I began to work on many different repos at the same time.</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>┃   Oftentimes I would do either a ~git diff~ or ~git diff --cached~, then come back to it 10 minutes later but then forget whether the diff had a ~--cached~ flag or not.</span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>┃  -So, I needed to script some more git helpers functions!</span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>┃  +I needed to script some more git helpers functions!</span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>┃</span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>┃   * Implementation</span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>┃</span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>┃  @@ -41,9 +41,11 @@ autoload -U ~/.zsh/func/*(:t) # load all functions in ~/.zsh/func</span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>┃   Here is some sample output:</span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>┃</span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>┃   #+begin_src diff</span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>   + foo</span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>T   #+end_src</span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>R</span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>E   #+begin_src diff</span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a>E  +</span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a>    + bar</span>
+<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a>┃    #+end_src</span>
+<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a>┃</span>
+<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a>┃   * Conclusion</span>
+<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a>   -- blog --</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode diff"><code class="sourceCode diff"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>   -- blog --</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>I  diff --git a/post/2016-07-17-git-diff-improved.org b/post/2016-07-17-git-diff-improved.org</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>N  index dc2fca4..631bcf4 100644</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>D  --- a/post/2016-07-17-git-diff-improved.org</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>E  +++ b/post/2016-07-17-git-diff-improved.org</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>X  @@ -38,6 +38,14 @@ fpath=(~/.zsh/func $fpath) # add ~/.zsh/func to $fpath</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    autoload -U ~/.zsh/func/*(:t) # load all functions in ~/.zsh/func</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>┃   #+end_src</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>┃</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>┃  +Here is some sample output:</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>┃  +</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>┃  +#+begin_src diff</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>┃  +#+end_src</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>┃  +</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>┃  +#+begin_src diff</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>┃  +#+end_src</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>┃  +</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>┃   * Conclusion</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>┃</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>┃   I've been a happy ~gdf~ user for some months now.</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>   -- blog --</span></code></pre></div>
 <h1 id="conclusion">Conclusion</h1>
-<p>I’ve been a happy <code>gdf</code> user for some months now. The only “downside” is that because of the vertical ribbon (and the repo name at the top/bottom), the output is no longer readable by <code>patch</code> (or copy-pastable into a diff-reading utility/service). But, this is a minor grievance at best as one can easily invoke the low-level <code>git diff</code> or <code>git diff --cached</code> directly to get the raw (<code>patch</code>-able) output.</p>
+<p>I’ve been a happy <code>gdf</code> user for some months now.
+The only “downside” is that because of the vertical ribbon (and the repo name at the top/bottom), the output is no longer readable by <code>patch</code> (or copy-pastable into a diff-reading utility/service).
+But, this is a minor grievance at best as one can easily invoke the low-level <code>git diff</code> or <code>git diff --cached</code> directly to get the raw (<code>patch</code>-able) output.</p>
 <p>Happy hacking!</p>
 
 		</div>
 
 		<div id="footer">
 			<img src="../favicon.png" id="brand-icon">
-			<p>Copyright (C) 2013-2021 Linus Arver. All rights reserved.</p>
+			<p>Copyright (C) 2013-2023 Linus Arver. All rights reserved.</p>
 			<a href="https://github.com/listx/listx_blog">Site</a>
 			<a href="https://github.com/listx/listx.github.io">generated</a>
 			with

@@ -45,11 +45,36 @@
 	<a title="All pages tagged 'linux'." href="../tag/linux.html">linux</a>, <a title="All pages tagged 'hardware'." href="../tag/hardware.html">hardware</a>, <a title="All pages tagged 'nvidia'." href="../tag/nvidia.html">nvidia</a>, <a title="All pages tagged 'xmonad'." href="../tag/xmonad.html">xmonad</a>
 </div>
 
-<p>I got my two QNIX QX2710 LED Evolution II SE Matte 27" 2560x1440 Samsung PLS WQHD monitors and incorporated them into my existing dual Acer X222W 22" 1680x1050 setup. I put the two QNIXes in the middle, and put the Acers on the left and right edges. All four are in “portrait” orientation, because I primarily code on my computer. A single Gigabyte GeForce GTX 750 Ti OC 2GB GDDR5 2DVI/2HDMI card powers all four monitors; the QNIXes use the DVI ports, while the Acers use the HDMI ports via two HDMI-to-DVI(female) adapters. I bought this card because of the simplicity of the four ports — just DVI and HDMI.</p>
-<p>As for the stands, I just bought another dual monitor stand and put it next to my existing dual monitor stand; each stand holds a QNIX and an Acer on each arm. The fact that the stands are subject to differently weighted monitors (27" monitor on one arm and a 22" on another) does not really affect them negatively. The desk in the image below is 140mm wide, in case you want to have a sense of how tight two dual-monitor stands would fit on your own desk.</p>
-<p><img src="../img/quad-monitor.jpg" alt="Quad monitor setup" title="Quad monitor setup" style="width:100.0%" /></p>
-<p>Using four monitors sounds difficult, but it’s a breeze with Xinerama and Xmonad. The hardest part was figuring out the correct <code>xorg.conf</code> configuration file. It was difficult because the QNIX monitors, being cheap, do not work out of the box, because the latest Nvidia driver (version 337.12) does not detect the correct resolution. What’s worse, the QNIXes do not support anything other than their native 2560x1440 resolution, so you’ll get blank screens if you try to just use these monitors without tweaking some <code>xorg.conf</code> settings. I actually ended up googling to find the correct <code>Modeline</code> value for <code>xorg.conf</code> for my QNIX, at 96hz refresh rate.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> You could try using the <code>cvt</code> program included with <code>xorg-server</code>, but when I tried it out on my own it generated different numbers and my QNIXes couldn’t handle those numbers.</p>
-<p>Here is my <code>xorg.conf</code>:</p>
+<p>I got my two QNIX QX2710 LED Evolution II SE Matte 27" 2560x1440 Samsung
+PLS WQHD monitors and incorporated them into my existing dual Acer X222W
+22" 1680x1050 setup. I put the two QNIXes in the middle, and put the
+Acers on the left and right edges. All four are in “portrait”
+orientation, because I primarily code on my computer. A single Gigabyte
+GeForce GTX 750 Ti OC 2GB GDDR5 2DVI/2HDMI card powers all four
+monitors; the QNIXes use the DVI ports, while the Acers use the HDMI
+ports via two HDMI-to-DVI(female) adapters. I bought this card because
+of the simplicity of the four ports — just DVI and HDMI.</p>
+<p>As for the stands, I just bought another dual monitor stand and put it
+next to my existing dual monitor stand; each stand holds a QNIX and an
+Acer on each arm. The fact that the stands are subject to differently
+weighted monitors (27" monitor on one arm and a 22" on another) does not
+really affect them negatively. The desk in the image below is 140mm
+wide, in case you want to have a sense of how tight two dual-monitor
+stands would fit on your own desk.</p>
+<p><img src="../img/quad-monitor.jpg" style="width:100.0%" alt="Quad monitor setup" title="Quad monitor setup" /></p>
+<p>Using four monitors sounds difficult, but it’s a breeze with Xinerama
+and Xmonad. The hardest part was figuring out the correct <code class="verbatim">xorg.conf</code>
+configuration file. It was difficult because the QNIX monitors, being
+cheap, do not work out of the box, because the latest Nvidia driver
+(version 337.12) does not detect the correct resolution. What’s worse,
+the QNIXes do not support anything other than their native 2560x1440
+resolution, so you’ll get blank screens if you try to just use these
+monitors without tweaking some <code class="verbatim">xorg.conf</code> settings. I actually ended up
+googling to find the correct <code class="verbatim">Modeline</code> value for <code class="verbatim">xorg.conf</code> for my
+QNIX, at 96hz refresh rate.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> You could try using the <code class="verbatim">cvt</code> program
+included with <code class="verbatim">xorg-server</code>, but when I tried it out on my own it
+generated different numbers and my QNIXes couldn’t handle those numbers.</p>
+<p>Here is my <code class="verbatim">xorg.conf</code>:</p>
 <div class="code-and-raw">
 <div class="sourceCode" id="cb1" data-startFrom="1"><pre class="sourceCode numberSource numberLines xorg"><code class="sourceCode xorg"><span id="cb1-1"><a href="#cb1-1"></a>#<span class="co"> nvidia-settings: X configuration file generated by nvidia-settings</span></span>
 <span id="cb1-2"><a href="#cb1-2"></a>#<span class="co"> nvidia-settings:  version 337.12  (buildmeister@swio-display-x64-rhel04-11)  Fri Apr  4 15:17:43 PDT 2014</span></span>
@@ -234,10 +259,12 @@
 <p> <code>quad-monitor-portrait.xorg.conf</code> <a class="raw" href="https://github.com/listx/listx_blog/blob/master/code/quad-monitor-portrait.xorg.conf"><code>[GitHub]</code></a> <a class="raw" href="../code/quad-monitor-portrait.xorg.conf" mimetype="text/plain"><code>[Download]</code></a> </p>
 </div>
 </div>
-<section class="footnotes" role="doc-endnotes">
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr />
 <ol>
-<li id="fn1" role="doc-endnote"><p>I tried using the higher refresh rate modelines, but they resulted in my monitors going crazy (extreme artifacting, lines shrieking irregularly with different colors, etc.).<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>I tried using the higher refresh rate modelines, but they
+resulted in my monitors going crazy (extreme artifacting, lines
+shrieking irregularly with different colors, etc.).<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 
@@ -245,7 +272,7 @@
 
 		<div id="footer">
 			<img src="../favicon.png" id="brand-icon">
-			<p>Copyright (C) 2013-2021 Linus Arver. All rights reserved.</p>
+			<p>Copyright (C) 2013-2023 Linus Arver. All rights reserved.</p>
 			<a href="https://github.com/listx/listx_blog">Site</a>
 			<a href="https://github.com/listx/listx.github.io">generated</a>
 			with

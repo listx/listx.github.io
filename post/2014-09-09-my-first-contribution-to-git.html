@@ -45,30 +45,91 @@
 	<a title="All pages tagged 'programming'." href="../tag/programming.html">programming</a>, <a title="All pages tagged 'git'." href="../tag/git.html">git</a>
 </div>
 
-<p>I am happy to say that my <a href="https://marc.info/?l=git&amp;m=140700284616433&amp;w=2">first</a> <a href="https://marc.info/?l=git&amp;m=140751902721342&amp;w=2">patches</a> were <a href="https://github.com/git/git/commit/4645b014c5c82a3b75337">recently merged</a> into the master Git branch! Now, I am by no means a C or Git expert, so the patches only dealt with changes to the documentation. I did not know anyone involved with Git in real life; nor did I have any experience submitting patches to a big project like Git. So, how did I do it?</p>
+<p>I am happy to say that my <a href="https://lore.kernel.org/git/1407002817-29221-1-git-send-email-linusarver@gmail.com/">first series</a> was
+<a href="https://github.com/git/git/commit/4645b014c5c82a3b75337">recently merged</a> into the master Git branch! Now, I am by no means a C or Git
+expert, so the patches only dealt with changes to the documentation. I
+did not know anyone involved with Git in real life; nor did I have any
+experience submitting patches to a big project like Git. So, how did I
+do it?</p>
 <h1 id="dead-simple-fix">Dead Simple Fix</h1>
-<p>It all started when I typed in <code>man git init</code> and found this line:</p>
+<p>It all started when I typed in <code class="verbatim">man git init</code> and found this line:</p>
 <pre class="example"><code>The template directory used will (in order):
 </code></pre>
-<p>. Obviously, there was a missing word “be” in that sentence. I could not believe that such a glaring error was present in such a high profile project like Git. Then again, if you think about it, you only invoke <code>git init</code> once per project (to initialize a Git repository), so the vast majority of users have but a cursory glance at the manpage — that is, if they even bother at all to consult the manpages for such a basic task.</p>
-<p>Anyway, my initial reaction was “Aha! I will fix this typo and submit my first patch to Git!”. I thought fixing something so simple and obvious would surely have no trouble getting into the main branch. But then, something stirred inside me, and compelled me to look for similar errors in the manpage. Judging by the pace of things, my next patch to Git might take one, two, five years (or forever?), and the thought of becoming a one-shot, one-commit, one-word-fix contributor made my ego twitch. And besides, it felt a bit stupid to just submit a two-letter (“b” and “e”) fix. I thought to myself, “Maybe there are other low-hanging fruits to pluck?”</p>
+<p>. Obviously, there was a missing word “be” in that sentence. I could not
+believe that such a glaring error was present in such a high profile
+project like Git. Then again, if you think about it, you only invoke
+<code class="verbatim">git init</code> once per project (to initialize a Git repository), so the
+vast majority of users have but a cursory glance at the manpage — that
+is, if they even bother at all to consult the manpages for such a basic
+task.</p>
+<p>Anyway, my initial reaction was “Aha! I will fix this typo and submit my
+first patch to Git!”. I thought fixing something so simple and obvious
+would surely have no trouble getting into the main branch. But then,
+something stirred inside me, and compelled me to look for similar errors
+in the manpage. Judging by the pace of things, my next patch to Git
+might take one, two, five years (or forever?), and the thought of
+becoming a one-shot, one-commit, one-word-fix contributor made my ego
+twitch. And besides, it felt a bit stupid to just submit a two-letter
+(“b” and “e”) fix. I thought to myself, “Maybe there are other
+low-hanging fruits to pluck?”</p>
 <h1 id="real-work">Real Work</h1>
-<p>So, I set a medium-term goal to myself: read the entire <code>git init</code> manpage, with a singular focus on clarity. I spotted more typographical errors, and even some confusing parts that a Git newbie would have trouble with. <code>git init</code>, after all, is a very basic, fundamental operation that all newcomers to Git would probably have questions about. It might even be the first thing that newbies might look up in the docs!</p>
-<p>First things first. I cloned the <a href="https://github.com/git/git">master Git repository</a> from GitHub. I then created a new branch to record my work; in the end, I created 7 commits. I read Git’s documentation on how to submit patches, and also consulted contribution advice for the Linux Kernel project in the form of <a href="http://youtu.be/LLBrBBImJt4">Greg Kroah-Hartman’s excellent talk</a>. The Linux Kernel is where Git’s real action is (tens of thousands of contributors, all using Git!), so it made sense to check out the Kernel’s way of doing things.</p>
-<p>I used <code>git rebase -i</code> countless times until I got everything sorted out. I even reordered the commits to have the <a href="https://github.com/git/git/commit/6e1ccacbedf084971f095816f4450c4b607607c5">most basic one</a> (all typographical changes) be the first one, in case they wanted to merge just a few of them and reject the rest.</p>
-<p>After re-reading everything for the eighth time, I sent an email to the official mailing list with <code>git send-email</code>. I checked <code>git blame</code> for the lines I touched to CC everyone that could be directly affected by my changes. After a few days, I got a response back — from the principal maintainer of Git, Junio Hamano, no less!</p>
+<p>So, I set a medium-term goal to myself: read the entire <code class="verbatim">git init</code>
+manpage, with a singular focus on clarity. I spotted more typographical
+errors, and even some confusing parts that a Git newbie would have
+trouble with. <code class="verbatim">git init</code>, after all, is a very basic, fundamental
+operation that all newcomers to Git would probably have questions about.
+It might even be the first thing that newbies might look up in the docs!</p>
+<p>First things first. I cloned the <a href="https://github.com/git/git">master Git repository</a> from GitHub. I then created a new branch to record my
+work; in the end, I created 7 commits. I read Git’s documentation on how
+to submit patches, and also consulted contribution advice for the Linux
+Kernel project in the form of <a href="http://youtu.be/LLBrBBImJt4">Greg Kroah-Hartman’s excellent talk</a>. The Linux Kernel is where Git’s real
+action is (tens of thousands of contributors, all using Git!), so it
+made sense to check out the Kernel’s way of doing things.</p>
+<p>I used <code class="verbatim">git rebase -i</code> countless times until I got everything sorted
+out. I even reordered the commits to have the
+<a href="https://github.com/git/git/commit/6e1ccacbedf084971f095816f4450c4b607607c5">most basic one</a> (all typographical changes) be the first one, in case they
+wanted to merge just a few of them and reject the rest.</p>
+<p>After re-reading everything for the eighth time, I sent an email to the
+official mailing list with <code class="verbatim">git send-email</code>. I checked <code class="verbatim">git blame</code> for
+the lines I touched to CC everyone that could be directly affected by my
+changes. After a few days, I got a response back — from the principal
+maintainer of Git, Junio Hamano, no less!</p>
 <h1 id="the-response">The Response?</h1>
-<p>He was very polite, and true to his duty as maintainer, very thorough. You can see the discussion that took place over at the <a href="https://marc.info/?l=git&amp;m=140700284616433&amp;w=2">mailing list archive</a>. I sent off my second version of my 7-commit patch series after a few days, and waited.</p>
-<p>And waited. I waited two weeks, but alas, my new patch series was not getting any further feedback. I was concerned that my changes were simply forgotten. A nagging thought annoyed me — “What if I miss the current merge window<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>?” In mild desperation, I sent an email directly to Junio to remind him about my patches. Still no response. A couple more weeks passed, and I almost forgot about my patches…</p>
-<p>Until today! I got an email from <code>tip4commit.com</code> telling me that I was given some miniscule fraction of a bitcoin for my contribution to the Git project. It felt like some strange sort of scam, but even if it was, whoever wrote that automated emailing script did their homework on the Github API because lo and behold, my patches were indeed merged into the mainline!</p>
+<p>He was very polite, and true to his duty as maintainer, very thorough.
+You can see the discussion that took place over at the
+<a href="https://lore.kernel.org/git/1407002817-29221-1-git-send-email-linusarver@gmail.com/">mailing list archive</a>. I sent off my second version of my 7-commit patch series
+after a few days, and waited.</p>
+<p>And waited. I waited two weeks, but alas, my new patch series was not
+getting any further feedback. I was concerned that my changes were
+simply forgotten. A nagging thought annoyed me — “What if I miss the
+current merge window<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>?” In mild desperation, I sent an email
+directly to Junio to remind him about my patches. Still no response. A
+couple more weeks passed, and I almost forgot about my patches…</p>
+<p>Until today! I got an email from <code class="verbatim">tip4commit.com</code> telling me that I was
+given some miniscule fraction of a bitcoin for my contribution to the
+Git project. It felt like some strange sort of scam, but even if it was,
+whoever wrote that automated emailing script did their homework on the
+Github API because lo and behold, my patches were indeed merged into the
+mainline!</p>
 <h1 id="conclusion">Conclusion</h1>
-<p>Well, as they say, if you don’t know how to code but still want to contribute to an open source project, you should work on the documentation! I assume that I did not get any feedback after the initial code review because the maintainer, Junio, was busy with other matters. If I think about it now, he does get tons of patches and needs to do countless merges, containing countless commits, to make a new release of Git.</p>
-<p>So, when contributing to open source, try working on the documentation first. Improving the documentation not only benefits all newcomers to the project, but also helps you understand the project better — a win win! And, be patient with your patches — especially if the project you are contributing to has a busy schedule.</p>
+<p>Well, as they say, if you don’t know how to code but still want to
+contribute to an open source project, you should work on the
+documentation! I assume that I did not get any feedback after the
+initial code review because the maintainer, Junio, was busy with other
+matters. If I think about it now, he does get tons of patches and needs
+to do countless merges, containing countless commits, to make a new
+release of Git.</p>
+<p>So, when contributing to open source, try working on the documentation
+first. Improving the documentation not only benefits all newcomers to
+the project, but also helps you understand the project better — a win
+win! And, be patient with your patches — especially if the project you
+are contributing to has a busy schedule.</p>
 <p>Happy hacking!</p>
-<section class="footnotes" role="doc-endnotes">
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr />
 <ol>
-<li id="fn1" role="doc-endnote"><p>This is the period of time when the maintainer of a project accepts patches for the next release.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>This is the period of time when the maintainer of a project
+accepts patches for the next release.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 
@@ -76,7 +137,7 @@
 
 		<div id="footer">
 			<img src="../favicon.png" id="brand-icon">
-			<p>Copyright (C) 2013-2021 Linus Arver. All rights reserved.</p>
+			<p>Copyright (C) 2013-2023 Linus Arver. All rights reserved.</p>
 			<a href="https://github.com/listx/listx_blog">Site</a>
 			<a href="https://github.com/listx/listx.github.io">generated</a>
 			with

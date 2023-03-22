@@ -45,10 +45,29 @@
 	<a title="All pages tagged 'haskell'." href="../tag/haskell.html">haskell</a>, <a title="All pages tagged 'opengl'." href="../tag/opengl.html">opengl</a>
 </div>
 
-<p>The following is my translation/adaptation of <a href="http://www.opengl-tutorial.org/beginners-tutorials/tutorial-2-the-first-triangle/">tutorial #2</a> at <a href="http://www.opengl-tutorial.org">http://www.opengl-tutorial.org</a>. It draws a single red triangle on the screen with a dark blue background. It takes quite a bit of boilerplate code just to get something on the screen!</p>
-<p>My version uses the code from <a href="https://github.com/YPares/Haskell-OpenGL3.1-Tutos">https://github.com/YPares/Haskell-OpenGL3.1-Tutos</a>, but does not use <code>Control.Applicative</code> and also does not put the shaders containing GLSL in a separate text file. Everything is self-contained in one file, and it only uses the <code>PackageImports</code> and <code>RecordWildCards</code> GHC extensions. The <code>PackageImports</code> is only necessary if you have both <a href="http://hackage.haskell.org/package/GLFW">GLFW</a> and <a href="http://hackage.haskell.org/package/GLFW-b">GLFW-b</a> Hackage packages installed in your system (as they have a name clash of <code>Graphics.UI.GLFW</code>, you need to disambiguate this import by specifying the package name). The <code>RecordWildCards</code> extension is pretty standard and exists purely for syntactic sugar (no type-level hoops and such) — if you don’t know about it you should google it.</p>
-<p>I went ahead and added type signatures for all top-level functions — something that many Haskell tutorial writers hate doing for some strange, unknown reason.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> Also, I ran the code through <code>ghc --make -Wall</code> and silenced all warnings.</p>
-<p>I hereby release it into the Public Domain. From what I can tell, YPares’s code doesn’t have a license… I think this should be OK.</p>
+<p>The following is my translation/adaptation of
+<a href="http://www.opengl-tutorial.org/beginners-tutorials/tutorial-2-the-first-triangle/">tutorial #2</a> at <a href="http://www.opengl-tutorial.org">http://www.opengl-tutorial.org</a>. It draws a single red
+triangle on the screen with a dark blue background. It takes quite a bit
+of boilerplate code just to get something on the screen!</p>
+<p>My version uses the code from
+<a href="https://github.com/YPares/Haskell-OpenGL3.1-Tutos">https://github.com/YPares/Haskell-OpenGL3.1-Tutos</a>, but does not use
+<code class="verbatim">Control.Applicative</code> and also does not put the shaders containing GLSL
+in a separate text file. Everything is self-contained in one file, and
+it only uses the <code class="verbatim">PackageImports</code> and <code class="verbatim">RecordWildCards</code> GHC extensions.
+The <code class="verbatim">PackageImports</code> is only necessary if you have both
+<a href="http://hackage.haskell.org/package/GLFW">GLFW</a> and
+<a href="http://hackage.haskell.org/package/GLFW-b">GLFW-b</a> Hackage packages
+installed in your system (as they have a name clash of
+<code class="verbatim">Graphics.UI.GLFW</code>, you need to disambiguate this import by specifying
+the package name). The <code class="verbatim">RecordWildCards</code> extension is pretty standard
+and exists purely for syntactic sugar (no type-level hoops and such) —
+if you don’t know about it you should google it.</p>
+<p>I went ahead and added type signatures for all top-level functions —
+something that many Haskell tutorial writers hate doing for some
+strange, unknown reason.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> Also, I ran the code through
+<code class="verbatim">ghc --make -Wall</code> and silenced all warnings.</p>
+<p>I hereby release it into the Public Domain. From what I can tell,
+YPares’s code doesn’t have a license… I think this should be OK.</p>
 <div class="code-and-raw">
 <div class="sourceCode" id="cb1" data-startFrom="1"><pre class="sourceCode numberSource numberLines haskell"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1"></a><span class="ot">{-# LANGUAGE PackageImports #-}</span></span>
 <span id="cb1-2"><a href="#cb1-2"></a><span class="ot">{-# LANGUAGE RecordWildCards #-}</span></span>
@@ -253,10 +272,11 @@
 <p> <code>triangle.hs</code> <a class="raw" href="https://github.com/listx/listx_blog/blob/master/code/opengl/triangle.hs"><code>[GitHub]</code></a> <a class="raw" href="../code/opengl/triangle.hs" mimetype="text/plain"><code>[Download]</code></a> </p>
 </div>
 </div>
-<section class="footnotes" role="doc-endnotes">
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr />
 <ol>
-<li id="fn1" role="doc-endnote"><p>Seriously, why do so many Haskell tutorials omit function type signatures?<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>Seriously, why do so many Haskell tutorials omit function type
+signatures?<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 
@@ -264,7 +284,7 @@
 
 		<div id="footer">
 			<img src="../favicon.png" id="brand-icon">
-			<p>Copyright (C) 2013-2021 Linus Arver. All rights reserved.</p>
+			<p>Copyright (C) 2013-2023 Linus Arver. All rights reserved.</p>
 			<a href="https://github.com/listx/listx_blog">Site</a>
 			<a href="https://github.com/listx/listx.github.io">generated</a>
 			with

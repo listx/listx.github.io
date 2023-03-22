@@ -45,27 +45,37 @@
 	<a title="All pages tagged 'arch'." href="../tag/arch.html">arch</a>, <a title="All pages tagged 'linux'." href="../tag/linux.html">linux</a>, <a title="All pages tagged 'hardware'." href="../tag/hardware.html">hardware</a>, <a title="All pages tagged 'printer'." href="../tag/printer.html">printer</a>
 </div>
 
-<p>After more than a year of struggling with my Brother printer, I finally got it to print flawlessly. I will kindly refrain from getting into the drama, and just write a short tutorial to set it up with CUPS in Arch Linux.</p>
-<p>First, install the <code>cups</code> package, as well as the Brother driver packages in the AUR:</p>
+<p>After more than a year of struggling with my Brother printer, I finally
+got it to print flawlessly. I will kindly refrain from getting into the
+drama, and just write a short tutorial to set it up with CUPS in Arch
+Linux.</p>
+<p>First, install the <code class="verbatim">cups</code> package, as well as the Brother driver
+packages in the AUR:</p>
 <ul>
-<li><code>brother-cups-wrapper-ac</code></li>
-<li><code>brother-cups-wrapper-common</code></li>
-<li><code>brother-lpr-drivers-ac</code></li>
-<li><code>brother-lpr-drivers-common</code></li>
+<li><code class="verbatim">brother-cups-wrapper-ac</code></li>
+<li><code class="verbatim">brother-cups-wrapper-common</code></li>
+<li><code class="verbatim">brother-lpr-drivers-ac</code></li>
+<li><code class="verbatim">brother-lpr-drivers-common</code></li>
 </ul>
-<p>Then, enable the <code>cups</code> daemon with <code>systemd</code>, and then start it:</p>
+<p>Then, enable the <code class="verbatim">cups</code> daemon with <code class="verbatim">systemd</code>, and then start it:</p>
 <div class="sourceCode" id="cb1" data-startFrom><pre class="sourceCode numberSource example numberLines"><code class="sourceCode"><span id="cb1-1"><a href="#cb1-1"></a>sudo systemctl enable cups.service</span>
 <span id="cb1-2"><a href="#cb1-2"></a>sudo systemctl start cups.service</span></code></pre></div>
-<p>Now go into your favorite web browser, and go to <code>http://localhost:631</code>, to find the CUPS web admin interface. From here, just add a new printer using the web form buttons. When adding the printer, use the LPR/LPD protocol, as follows:</p>
+<p>Now go into your favorite web browser, and go to <code class="verbatim">http://localhost:631</code>,
+to find the CUPS web admin interface. From here, just add a new printer
+using the web form buttons. When adding the printer, use the LPR/LPD
+protocol, as follows:</p>
 <div class="sourceCode" id="cb2" data-startFrom><pre class="sourceCode numberSource example numberLines"><code class="sourceCode"><span id="cb2-1"><a href="#cb2-1"></a>lpd://IP_ADDRESS_OF_PRINTER/BINARY_P1</span></code></pre></div>
-<p>and use the appropriate IP address that your printer has on the network. For the driver, select the CUPS driver for the MFC-9840CDW model (the various Brother drivers will only appear after installing the Brother driver packages from the AUR).</p>
+<p>and use the appropriate IP address that your printer has on the network.
+For the driver, select the CUPS driver for the MFC-9840CDW model (the
+various Brother drivers will only appear after installing the Brother
+driver packages from the AUR).</p>
 <p>Done!</p>
 
 		</div>
 
 		<div id="footer">
 			<img src="../favicon.png" id="brand-icon">
-			<p>Copyright (C) 2013-2021 Linus Arver. All rights reserved.</p>
+			<p>Copyright (C) 2013-2023 Linus Arver. All rights reserved.</p>
 			<a href="https://github.com/listx/listx_blog">Site</a>
 			<a href="https://github.com/listx/listx.github.io">generated</a>
 			with

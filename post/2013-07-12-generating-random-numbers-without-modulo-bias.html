@@ -46,80 +46,112 @@
 </div>
 
 <p>UPDATE: See <a href="2015-02-27-removing-modulo-bias-redux.html">this blog post</a>.</p>
-<p>Let’s say you need a random number from 0 to 2 (0, 1, or 2). If you do this:</p>
+<p>Let’s say you need a random number from 0 to 2 (0, 1, or 2). If you do
+this:</p>
 <div class="code-and-raw">
 <div class="sourceCode" id="cb1" data-startFrom="1"><pre class="sourceCode numberSource numberLines c"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1"></a><span class="co">/* Listing 1 */</span></span>
-<span id="cb1-2"><a href="#cb1-2"></a><span class="dt">int</span> n, x;</span>
-<span id="cb1-3"><a href="#cb1-3"></a>n = <span class="dv">3</span>;</span>
-<span id="cb1-4"><a href="#cb1-4"></a>x = rand() % n;</span>
-<span id="cb1-5"><a href="#cb1-5"></a><span class="cf">return</span> x;</span></code></pre></div>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="dt">int</span> n<span class="op">,</span> x<span class="op">;</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a>n <span class="op">=</span> <span class="dv">3</span><span class="op">;</span></span>
+<span id="cb1-4"><a href="#cb1-4"></a>x <span class="op">=</span> rand<span class="op">()</span> <span class="op">%</span> n<span class="op">;</span></span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="cf">return</span> x<span class="op">;</span></span></code></pre></div>
 <div class="raw-link sourceCode">
 <p> <code>listing-1.c</code> <a class="raw" href="https://github.com/listx/listx_blog/blob/master/code/rng/listing-1.c"><code>[GitHub]</code></a> <a class="raw" href="../code/rng/listing-1.c" mimetype="text/plain"><code>[Download]</code></a> </p>
 </div>
 </div>
-<p>your code is broken, thanks to modulo bias. You will always get modulo bias (however slight, or great, it may be) whenever <code>RAND_MAX + 1</code> of your <code>rand()</code> function is not evenly divisible by your modulus <code>n</code>.</p>
-<p>Continuing with our example, let’s say <code>rand()</code>’s <code>RAND_MAX</code> is 4, so there are 5 different possible values that <code>rand()</code> can generate (0, 1, 2, 3, or 4). Now rand() will return each value 20% of the time, assuming that <code>rand()</code> has very good distribution from 0 to <code>RAND_MAX</code>.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> But since we take the modulo by 3, <strong>we get 0 40% of the time (0 and 3)!</strong> This fact alone should make you worried. Visually it is as follows:</p>
-<p><img src="../img/mbias.png" alt="Modulo bias" title="Modulo bias" style="width:100.0%" /></p>
+<p>your code is broken, thanks to modulo bias. You will always get modulo
+bias (however slight, or great, it may be) whenever <code class="verbatim">RAND_MAX + 1</code> of
+your <code class="verbatim">rand()</code> function is not evenly divisible by your modulus <code class="verbatim">n</code>.</p>
+<p>Continuing with our example, let’s say <code class="verbatim">rand()</code>’s <code class="verbatim">RAND_MAX</code> is 4, so
+there are 5 different possible values that <code class="verbatim">rand()</code> can generate (0, 1,
+2, 3, or 4). Now rand() will return each value 20% of the time, assuming
+that <code class="verbatim">rand()</code> has very good distribution from 0 to <code class="verbatim">RAND_MAX</code>.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> But
+since we take the modulo by 3, <strong>we get 0 40% of the time (0 and 3)!</strong>
+This fact alone should make you worried. Visually it is as follows:</p>
+<p><img src="../img/mbias.png" style="width:100.0%" alt="Modulo bias" title="Modulo bias" /></p>
 <p>The following code is correct:</p>
 <div class="code-and-raw">
 <div class="sourceCode" id="cb2" data-startFrom="1"><pre class="sourceCode numberSource numberLines c"><code class="sourceCode c"><span id="cb2-1"><a href="#cb2-1"></a><span class="co">/* Listing 2 */</span></span>
-<span id="cb2-2"><a href="#cb2-2"></a><span class="dt">int</span> n, x, rand_limit, rand_excess;</span>
-<span id="cb2-3"><a href="#cb2-3"></a>n = <span class="dv">3</span>;</span>
-<span id="cb2-4"><a href="#cb2-4"></a>rand_excess = (RAND_MAX + <span class="dv">1</span>) % n;</span>
-<span id="cb2-5"><a href="#cb2-5"></a>rand_limit = RAND_MAX - rand_excess;</span>
-<span id="cb2-6"><a href="#cb2-6"></a><span class="cf">while</span> (x = rand() &gt; rand_limit) {};</span>
-<span id="cb2-7"><a href="#cb2-7"></a><span class="cf">return</span> x % n;</span></code></pre></div>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="dt">int</span> n<span class="op">,</span> x<span class="op">,</span> rand_limit<span class="op">,</span> rand_excess<span class="op">;</span></span>
+<span id="cb2-3"><a href="#cb2-3"></a>n <span class="op">=</span> <span class="dv">3</span><span class="op">;</span></span>
+<span id="cb2-4"><a href="#cb2-4"></a>rand_excess <span class="op">=</span> <span class="op">(</span>RAND_MAX <span class="op">+</span> <span class="dv">1</span><span class="op">)</span> <span class="op">%</span> n<span class="op">;</span></span>
+<span id="cb2-5"><a href="#cb2-5"></a>rand_limit <span class="op">=</span> RAND_MAX <span class="op">-</span> rand_excess<span class="op">;</span></span>
+<span id="cb2-6"><a href="#cb2-6"></a><span class="cf">while</span> <span class="op">(</span>x <span class="op">=</span> rand<span class="op">()</span> <span class="op">&gt;</span> rand_limit<span class="op">)</span> <span class="op">{};</span></span>
+<span id="cb2-7"><a href="#cb2-7"></a><span class="cf">return</span> x <span class="op">%</span> n<span class="op">;</span></span></code></pre></div>
 <div class="raw-link sourceCode">
 <p> <code>listing-2.c</code> <a class="raw" href="https://github.com/listx/listx_blog/blob/master/code/rng/listing-2.c"><code>[GitHub]</code></a> <a class="raw" href="../code/rng/listing-2.c" mimetype="text/plain"><code>[Download]</code></a> </p>
 </div>
 </div>
-<p>So, if <code>RAND_MAX</code> is 4 as in the previous example, <code>rand_excess</code> is <span class="math display">\[
+<p>So, if <code class="verbatim">RAND_MAX</code> is 4 as in the previous example, <code class="verbatim">rand_excess</code> is <span class="math display">\[
 (4 + 1) \mbox{ mod 3}\\
 = 5 \mbox{ mod 3}\\
 = 2
-\]</span>. Then <code>rand_limit</code> becomes <span class="math inline">\(4 - 2 = 2\)</span>. The <code>while</code> statement then throws out the values 3 and 4 (i.e., x is only allowed to be 0, 1, or 2). Then, we return the modulo expression <code>x % n</code> (which is redundant here onlyu because <code>RAND_MAX</code> is very low for the sake of our example).</p>
-<p>A problem might exist if <code>RAND_MAX</code> is already the maximum value allowed by the type that <code>rand()</code> returns. E.g., if <code>rand()</code> returns a 64-bit unsigned integer (in C99, this is the <code>uint64_t</code> type) , and <code>RAND_MAX</code> is already set to <span class="math inline">\(2^{64} - 1\)</span>, then <code>RAND_MAX - 1</code> would wrap back around to 0, and <code>rand_excess</code> would likewise be 0. To avoid this, you can use the alternate expression <code>rand_excess = (RAND_MAX % n) + 1;</code> for setting <code>rand_excess</code>:</p>
+\]</span>. Then <code class="verbatim">rand_limit</code> becomes <span class="math inline">\(4 - 2 = 2\)</span>. The <code class="verbatim">while</code> statement then
+throws out the values 3 and 4 (i.e., x is only allowed to be 0, 1, or
+2). Then, we return the modulo expression <code class="verbatim">x % n</code> (which is redundant
+here onlyu because <code class="verbatim">RAND_MAX</code> is very low for the sake of our example).</p>
+<p>A problem might exist if <code class="verbatim">RAND_MAX</code> is already the maximum value allowed
+by the type that <code class="verbatim">rand()</code> returns. E.g., if <code class="verbatim">rand()</code> returns a 64-bit
+unsigned integer (in C99, this is the <code class="verbatim">uint64_t</code> type) , and <code class="verbatim">RAND_MAX</code>
+is already set to <span class="math inline">\(2^{64} - 1\)</span>, then <code class="verbatim">RAND_MAX - 1</code> would wrap back
+around to 0, and <code class="verbatim">rand_excess</code> would likewise be 0. To avoid this, you
+can use the alternate expression <code class="verbatim">rand_excess = (RAND_MAX % n) + 1;</code> for
+setting <code class="verbatim">rand_excess</code>:</p>
 <div class="code-and-raw">
 <div class="sourceCode" id="cb3" data-startFrom="1"><pre class="sourceCode numberSource numberLines c"><code class="sourceCode c"><span id="cb3-1"><a href="#cb3-1"></a><span class="co">/* Listing 3 */</span></span>
-<span id="cb3-2"><a href="#cb3-2"></a><span class="dt">int</span> n, x, rand_limit, rand_excess;</span>
-<span id="cb3-3"><a href="#cb3-3"></a>n = <span class="dv">3</span>;</span>
-<span id="cb3-4"><a href="#cb3-4"></a>rand_excess = (RAND_MAX % n) + <span class="dv">1</span>; <span class="co">/* only difference vs listing-2.c */</span></span>
-<span id="cb3-5"><a href="#cb3-5"></a>rand_limit = RAND_MAX - rand_excess;</span>
-<span id="cb3-6"><a href="#cb3-6"></a><span class="cf">while</span> (x = rand() &gt; rand_limit) {};</span>
-<span id="cb3-7"><a href="#cb3-7"></a><span class="cf">return</span> x % n;</span></code></pre></div>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="dt">int</span> n<span class="op">,</span> x<span class="op">,</span> rand_limit<span class="op">,</span> rand_excess<span class="op">;</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a>n <span class="op">=</span> <span class="dv">3</span><span class="op">;</span></span>
+<span id="cb3-4"><a href="#cb3-4"></a>rand_excess <span class="op">=</span> <span class="op">(</span>RAND_MAX <span class="op">%</span> n<span class="op">)</span> <span class="op">+</span> <span class="dv">1</span><span class="op">;</span> <span class="co">/* only difference vs listing-2.c */</span></span>
+<span id="cb3-5"><a href="#cb3-5"></a>rand_limit <span class="op">=</span> RAND_MAX <span class="op">-</span> rand_excess<span class="op">;</span></span>
+<span id="cb3-6"><a href="#cb3-6"></a><span class="cf">while</span> <span class="op">(</span>x <span class="op">=</span> rand<span class="op">()</span> <span class="op">&gt;</span> rand_limit<span class="op">)</span> <span class="op">{};</span></span>
+<span id="cb3-7"><a href="#cb3-7"></a><span class="cf">return</span> x <span class="op">%</span> n<span class="op">;</span></span></code></pre></div>
 <div class="raw-link sourceCode">
 <p> <code>listing-3.c</code> <a class="raw" href="https://github.com/listx/listx_blog/blob/master/code/rng/listing-3.c"><code>[GitHub]</code></a> <a class="raw" href="../code/rng/listing-3.c" mimetype="text/plain"><code>[Download]</code></a> </p>
 </div>
 </div>
-<p>This way, you ensure that you shrink the value of <code>RAND_MAX</code> to something smaller first, before adding 1 to it as in Listing 2. Unfortunately, there still remains a problem with this workaround: there is a remote chance that <code>rand_excess</code> will be equal to <code>n</code>, needlessly reducing the size of <code>rand_limit</code> (and thus throwing away perfectly bias-free numbers generated by <code>rand()</code>). For example, say <code>RAND_MAX</code> is 8 and <code>n</code> is 3. Then <code>rand_excess</code> is <span class="math display">\[
+<p>This way, you ensure that you shrink the value of <code class="verbatim">RAND_MAX</code> to
+something smaller first, before adding 1 to it as in Listing 2.
+Unfortunately, there still remains a problem with this workaround: there
+is a remote chance that <code class="verbatim">rand_excess</code> will be equal to <code class="verbatim">n</code>, needlessly
+reducing the size of <code class="verbatim">rand_limit</code> (and thus throwing away perfectly
+bias-free numbers generated by <code class="verbatim">rand()</code>). For example, say <code class="verbatim">RAND_MAX</code> is
+8 and <code class="verbatim">n</code> is 3. Then <code class="verbatim">rand_excess</code> is <span class="math display">\[
 (8 \mbox{ mod 3}) + 1\\
 = 2 + 1\\
 = 3
-\]</span>. Now <code>rand_limit</code> is <span class="math inline">\(8 - 3 = 5\)</span>. But <code>RAND_MAX</code> of 8 is already valid because there are 9 possible values 0 through 8, and there is no modulo bias to begin with (since <span class="math inline">\(9 \mbox{ mod 3} = 0\)</span>)! To get around this, we can do one more modulo operation <code>rand_excess = ((RAND_MAX % n) + 1) % n;</code> to avoid the case where <code>rand_excess</code> could equal <code>n</code>:</p>
+\]</span>. Now <code class="verbatim">rand_limit</code> is <span class="math inline">\(8 - 3 = 5\)</span>. But <code class="verbatim">RAND_MAX</code> of 8 is already
+valid because there are 9 possible values 0 through 8, and there is no
+modulo bias to begin with (since <span class="math inline">\(9 \mbox{ mod 3} = 0\)</span>)! To get around
+this, we can do one more modulo operation
+<code class="verbatim">rand_excess = ((RAND_MAX % n) + 1) % n;</code> to avoid the case where
+<code class="verbatim">rand_excess</code> could equal <code class="verbatim">n</code>:</p>
 <div class="code-and-raw">
 <div class="sourceCode" id="cb4" data-startFrom="1"><pre class="sourceCode numberSource numberLines c"><code class="sourceCode c"><span id="cb4-1"><a href="#cb4-1"></a><span class="co">/* Listing 4 */</span></span>
-<span id="cb4-2"><a href="#cb4-2"></a><span class="dt">int</span> n, x, rand_limit, rand_excess;</span>
-<span id="cb4-3"><a href="#cb4-3"></a>n = <span class="dv">3</span>;</span>
-<span id="cb4-4"><a href="#cb4-4"></a>rand_excess = ((RAND_MAX % n) + <span class="dv">1</span>) % n; <span class="co">/* only difference vs listing-3.c */</span></span>
-<span id="cb4-5"><a href="#cb4-5"></a>rand_limit = RAND_MAX - rand_excess;</span>
-<span id="cb4-6"><a href="#cb4-6"></a><span class="cf">while</span> (x = rand() &gt; rand_limit) {};</span>
-<span id="cb4-7"><a href="#cb4-7"></a><span class="cf">return</span> x % n;</span></code></pre></div>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="dt">int</span> n<span class="op">,</span> x<span class="op">,</span> rand_limit<span class="op">,</span> rand_excess<span class="op">;</span></span>
+<span id="cb4-3"><a href="#cb4-3"></a>n <span class="op">=</span> <span class="dv">3</span><span class="op">;</span></span>
+<span id="cb4-4"><a href="#cb4-4"></a>rand_excess <span class="op">=</span> <span class="op">((</span>RAND_MAX <span class="op">%</span> n<span class="op">)</span> <span class="op">+</span> <span class="dv">1</span><span class="op">)</span> <span class="op">%</span> n<span class="op">;</span> <span class="co">/* only difference vs listing-3.c */</span></span>
+<span id="cb4-5"><a href="#cb4-5"></a>rand_limit <span class="op">=</span> RAND_MAX <span class="op">-</span> rand_excess<span class="op">;</span></span>
+<span id="cb4-6"><a href="#cb4-6"></a><span class="cf">while</span> <span class="op">(</span>x <span class="op">=</span> rand<span class="op">()</span> <span class="op">&gt;</span> rand_limit<span class="op">)</span> <span class="op">{};</span></span>
+<span id="cb4-7"><a href="#cb4-7"></a><span class="cf">return</span> x <span class="op">%</span> n<span class="op">;</span></span></code></pre></div>
 <div class="raw-link sourceCode">
 <p> <code>listing-4.c</code> <a class="raw" href="https://github.com/listx/listx_blog/blob/master/code/rng/listing-4.c"><code>[GitHub]</code></a> <a class="raw" href="../code/rng/listing-4.c" mimetype="text/plain"><code>[Download]</code></a> </p>
 </div>
 </div>
-<p>So if <code>RAND_MAX</code> is 8 and <code>n</code> is 3, then <code>rand_excess</code> is <span class="math display">\[
+<p>So if <code class="verbatim">RAND_MAX</code> is 8 and <code class="verbatim">n</code> is 3, then <code class="verbatim">rand_excess</code> is <span class="math display">\[
 ((8 \mbox{ mod 3}) + 1) \mbox{ mod 3}\\
 = (2 + 1) \mbox{ mod 3}\\
 = 3 \mbox{ mod 3}\\
 = 0
-\]</span> and <code>rand_limit</code> would not be reduced by any amount.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
-<p>If you actually know beforehand the exact size of <code>RAND_MAX</code> (usually it is <code>INT_MAX</code> or some such, determined by the type of the variable returned by <code>rand()</code>), you should instead just define <code>rand_limit</code> as a constant to save some CPU cycles (write out the mathematical expressions involved by hand to find the number and just hardcode it).</p>
-<section class="footnotes" role="doc-endnotes">
+\]</span> and <code class="verbatim">rand_limit</code> would not be reduced by any amount.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+<p>If you actually know beforehand the exact size of <code class="verbatim">RAND_MAX</code> (usually it
+is <code class="verbatim">INT_MAX</code> or some such, determined by the type of the variable
+returned by <code class="verbatim">rand()</code>), you should instead just define <code class="verbatim">rand_limit</code> as a
+constant to save some CPU cycles (write out the mathematical expressions
+involved by hand to find the number and just hardcode it).</p>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr />
 <ol>
-<li id="fn1" role="doc-endnote"><p>All modern <code>rand()</code> functions should have very good distribution.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2" role="doc-endnote"><p>Thanks to Stanislav Tsyganov for this improvement over Listing 3.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>All modern <code class="verbatim">rand()</code> functions should have very good distribution.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Thanks to Stanislav Tsyganov for this improvement over Listing 3.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 
@@ -127,7 +159,7 @@
 
 		<div id="footer">
 			<img src="../favicon.png" id="brand-icon">
-			<p>Copyright (C) 2013-2021 Linus Arver. All rights reserved.</p>
+			<p>Copyright (C) 2013-2023 Linus Arver. All rights reserved.</p>
 			<a href="https://github.com/listx/listx_blog">Site</a>
 			<a href="https://github.com/listx/listx.github.io">generated</a>
 			with

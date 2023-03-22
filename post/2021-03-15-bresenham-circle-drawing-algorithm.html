@@ -74,12 +74,22 @@
 <p>Write a function <code>draw_circle(r)</code> that draws a circle with radius <code>r</code>. Use the given method <code>draw_pixel(x, y)</code> which takes a 2-dimensional point <code>(x, y)</code> and colors it in on the computer screen.</p>
 </blockquote>
 <p>For the solution, you can either collect all pixels (tuples) of <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> coordinate pairs, or just call <code>draw_pixel()</code> on them during the “search” for those pixels that must be filled in.</p>
-<p>This post goes over several solutions, ultimately arriving at Bresenham’s algorithm. The content of this post is merely a distillation of Section 3.3 from the book “Computer Graphics: Principles and Practice (1996)”.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> The authors of the book state that their implementation results in code “essentially the same as that specified in patent 4,371,933 [a.k.a. Bresenham’s algorithm].”<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
-<p>I’ve gone all out and converted the “reference” implementations found in the book and translated them into Rust and Python. The Python was written first, and I used a text-based drawing system to test the correctness. However I became dissatisfied with the non-square “aspect ratio” of most monospaced fonts out there, which distorted the circles to look more like ellipses. To fix this, I decided to port the Python code to Rust, and then target WASM so that I can use it to draw on the HTML5 <code>&lt;canvas&gt;</code> elements (and to eliminate the “aspect ratio” problem). All of the drawings in this document are powered by the Rust code.</p>
+<p>This post goes over several solutions, ultimately arriving at Bresenham’s algorithm.
+The content of this post is merely a distillation of Section 3.3 from the book “Computer Graphics: Principles and Practice (1996)”.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>
+The authors of the book state that their implementation results in code “essentially the same as that specified in patent 4,371,933 [a.k.a. Bresenham’s algorithm].”<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+<p>I’ve gone all out and converted the “reference” implementations found in the book and translated them into Rust and Python.
+The Python was written first, and I used a text-based drawing system to test the correctness.
+However I became dissatisfied with the non-square “aspect ratio” of most monospaced fonts out there, which distorted the circles to look more like ellipses.
+To fix this, I decided to port the Python code to Rust, and then target WASM so that I can use it to draw on the HTML5 <code>&lt;canvas&gt;</code> elements (and to eliminate the “aspect ratio” problem).
+All of the drawings in this document are powered by the Rust code.</p>
 <h1 id="constraints">Constraints</h1>
 <h2 id="drawable-canvas">Drawable canvas</h2>
-<p>Before we start, let’s define the drawable surface (canvas) of pixels for this problem. The pixels are arranged in a 2-dimensional grid. The important thing here is the grid or coordinate system, with the pixel at the center of the grid having the traditional <code>(0, 0)</code> Cartesian coordinate.</p>
-<p>Below is a sample grid to give you a sense of what this will look like. There is a central <code>(0, 0)</code> origin pixel, and 15 pixels to the north, south, east, and west, and everything in-between. Pixels that lie on interesting points of symmetry are highlighted in green.</p>
+<p>Before we start, let’s define the drawable surface (canvas) of pixels for this problem.
+The pixels are arranged in a 2-dimensional grid.
+The important thing here is the grid or coordinate system, with the pixel at the center of the grid having the traditional <code>(0, 0)</code> Cartesian coordinate.</p>
+<p>Below is a sample grid to give you a sense of what this will look like.
+There is a central <code>(0, 0)</code> origin pixel, and 15 pixels to the north, south, east, and west, and everything in-between.
+Pixels that lie on interesting points of symmetry are highlighted in green.</p>
 <canvas id="blank__14__20"></canvas>
 
 <h2 id="mathematical-definitions">Mathematical definitions</h2>
@@ -93,14 +103,20 @@ x^2 + y^2 = r^2.
 <p><span class="math display">\[
 a^2 + b^2 = c^2,
 \]</span></p>
-<p>for any right-angled triangle with sides <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> and hypotenuse <span class="math inline">\(c\)</span>. The resemblance is not a coincidence, because an infinite number of such triangles exists within the top right quadrant of the plane (that is, Quadrant I<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>, or the part of the plane such that <span class="math inline">\(x \geq 0\)</span> and <span class="math inline">\(y \geq 0\)</span>); in Quadrant I, for all points <span class="math inline">\((x,y)\)</span> that make up this portion (or arc) of the circle, their radii is the same as the hypotenuses of these triangles (whose sides are <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>). Later in this post, this will become relevant again when we discuss <a href="https://en.wikipedia.org/wiki/Pythagorean_triple">Pythagorean Triples</a>.</p>
+<p>for any right-angled triangle with sides <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> and hypotenuse <span class="math inline">\(c\)</span>.
+The resemblance is not a coincidence, because an infinite number of such triangles exists within the top right quadrant of the plane (that is, Quadrant I<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>, or the part of the plane such that <span class="math inline">\(x \geq 0\)</span> and <span class="math inline">\(y \geq 0\)</span>); in Quadrant I, for all points <span class="math inline">\((x,y)\)</span> that make up this portion (or arc) of the circle, their radii is the same as the hypotenuses of these triangles (whose sides are <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>).
+Later in this post, this will become relevant again when we discuss <a href="https://en.wikipedia.org/wiki/Pythagorean_triple">Pythagorean Triples</a>.</p>
 <p>Anyway, solving for <span class="math inline">\(y\)</span> in Equation <span class="math inline">\(\ref{eq:circle}\)</span> gives</p>
 <p><span class="math display">\[
 \begin{equation} \label{eq:circle-y}
 y = \pm\sqrt{r^2 - x^2}
 \end{equation}
 \]</span></p>
-<p>to get 2 functions for the top-half and bottom-half of the circle (that’s what the <span class="math inline">\(\pm\)</span> symbol means). Consider the function <span class="math inline">\(y = x\)</span>. This function has slope 1 and is a diagonal line where all values of <span class="math inline">\(x = y\)</span>. Now consider how this line intersects the quarter-arc of the circle in Quadrant I. This intersection point evenly divides the arc into 2 halves, and is where</p>
+<p>to get 2 functions for the top-half and bottom-half of the circle (that’s what the <span class="math inline">\(\pm\)</span> symbol means).
+Consider the function <span class="math inline">\(y = x\)</span>.
+This function has slope 1 and is a diagonal line where all values of <span class="math inline">\(x = y\)</span>.
+Now consider how this line intersects the quarter-arc of the circle in Quadrant I.
+This intersection point evenly divides the arc into 2 halves, and is where</p>
 <p><span class="math display">\[
 x = y = \tfrac{r}{\sqrt{2}},
 \]</span></p>
@@ -130,7 +146,8 @@ x &amp;= \tfrac{r}{\sqrt{2}}. \label{eq:arc-intersection}
 \]</span></p>
 <p>This is not that interesting for purposes of the algorithms in this post, but is something that is glossed over in the book.</p>
 <h2 id="symmetry">Symmetry</h2>
-<p>Because of symmetry, we can mirror the solution <span class="math inline">\((x,y)\)</span> pairs we get in Quadrant I into the other quadrants. This gives us 4-way symmetry because there are 4 quadrants.</p>
+<p>Because of symmetry, we can mirror the solution <span class="math inline">\((x,y)\)</span> pairs we get in Quadrant I into the other quadrants.
+This gives us 4-way symmetry because there are 4 quadrants.</p>
 <div class="code-and-raw">
 <div class="sourceCode" id="cb1" data-startFrom="164"><pre class="sourceCode numberSource numberLines python"><code class="sourceCode python" style="counter-reset: source-line 163;"><span id="cb1-164"><a href="#cb1-164"></a><span class="kw">def</span> mirror_points_4(x, y):</span>
 <span id="cb1-165"><a href="#cb1-165"></a>    <span class="co">&quot;&quot;&quot; Return 4-way symmetry of points. &quot;&quot;&quot;</span></span>
@@ -211,7 +228,8 @@ x &amp;= \tfrac{r}{\sqrt{2}}. \label{eq:arc-intersection}
 </div>
 <p>Fun fact: the exact point at which <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> get “swapped” in Quadrant I is when <span class="math inline">\(x = y = \tfrac{r}{\sqrt{2}}\)</span> (Equation <span class="math inline">\(\ref{eq:arc-intersection}\)</span>).</p>
 <h1 id="naive-solutions">Naive solutions</h1>
-<p>When in doubt, brute force is always a great answer, because at least it gets you started on something that works given enough time and/or memory.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> Because we already have clear mathematical definitions, we can just translate them (albeit mechanically) to code.</p>
+<p>When in doubt, brute force is always a great answer, because at least it gets you started on something that works given enough time and/or memory.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>
+Because we already have clear mathematical definitions, we can just translate them (albeit mechanically) to code.</p>
 <div class="code-and-raw">
 <div class="sourceCode" id="cb3" data-startFrom="7"><pre class="sourceCode numberSource numberLines python"><code class="sourceCode python" style="counter-reset: source-line 6;"><span id="cb3-7"><a href="#cb3-7"></a><span class="kw">def</span> get_circle_points_naive_4(r):</span>
 <span id="cb3-8"><a href="#cb3-8"></a>    <span class="co">&quot;&quot;&quot; Draw a circle by pairing up each Y value with an X value that lie on a</span></span>
@@ -231,7 +249,10 @@ x &amp;= \tfrac{r}{\sqrt{2}}. \label{eq:arc-intersection}
 <p><code>get_circle_points_naive_4()</code> is the simplest translation, although there is a bug, which is obvious when we visualize it (in this case, for <span class="math inline">\(r = 15\)</span>):</p>
 <canvas id="naive_4__15__20"></canvas>
 
-<p>The <code>get_circle_points_naive_4()</code> is based on Equation <span class="math inline">\(\ref{eq:circle-y}\)</span>. We iterate <span class="math inline">\(x\)</span> from <span class="math inline">\(0\)</span> to <span class="math inline">\(r\)</span> <a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>, and at each <span class="math inline">\(x\)</span> try to find the best value for <span class="math inline">\(y\)</span>. The problem is that we’re only solving for 1 <span class="math inline">\(y\)</span> value for every <span class="math inline">\(x\)</span> value we increment by. As we get near the left and right sides of the circle, we need to calculate more than just 1 <span class="math inline">\(y\)</span> value for every <span class="math inline">\(x\)</span>.<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a>.</p>
+<p>The <code>get_circle_points_naive_4()</code> is based on Equation <span class="math inline">\(\ref{eq:circle-y}\)</span>.
+We iterate <span class="math inline">\(x\)</span> from <span class="math inline">\(0\)</span> to <span class="math inline">\(r\)</span> <a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>, and at each <span class="math inline">\(x\)</span> try to find the best value for <span class="math inline">\(y\)</span>.
+The problem is that we’re only solving for 1 <span class="math inline">\(y\)</span> value for every <span class="math inline">\(x\)</span> value we increment by.
+As we get near the left and right sides of the circle, we need to calculate more than just 1 <span class="math inline">\(y\)</span> value for every <span class="math inline">\(x\)</span>.<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a>.</p>
 <p>The <code>get_circle_points_naive_8()</code> function gets around this <span class="math inline">\(y\)</span>-skip bug by invoking 8-way symmetry instead:</p>
 <div class="code-and-raw">
 <div class="sourceCode" id="cb4" data-startFrom="20"><pre class="sourceCode numberSource numberLines python"><code class="sourceCode python" style="counter-reset: source-line 19;"><span id="cb4-20"><a href="#cb4-20"></a><span class="kw">def</span> get_circle_points_naive_8(r):</span>
@@ -249,7 +270,8 @@ x &amp;= \tfrac{r}{\sqrt{2}}. \label{eq:arc-intersection}
 </div>
 <canvas id="naive_8__15__20"></canvas>
 
-<p>However the downside is that it results in multiple points that will be drawn 2 times, wasting CPU cycles.<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a> To be more precise, all points around the gappy area in Quadrant I are redundant because that part of the arc is already mirrored nicely by the contiguous points from <span class="math inline">\(x = 0\)</span> to <span class="math inline">\(x = y\)</span>.</p>
+<p>However the downside is that it results in multiple points that will be drawn 2 times, wasting CPU cycles.<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a>
+To be more precise, all points around the gappy area in Quadrant I are redundant because that part of the arc is already mirrored nicely by the contiguous points from <span class="math inline">\(x = 0\)</span> to <span class="math inline">\(x = y\)</span>.</p>
 <p>The <code>get_circle_points_naive_8_faster()</code> function avoids drawing the gappy areas by just breaking the loop when <span class="math inline">\(x &gt; y\)</span>, but is otherwise the same:</p>
 <div class="code-and-raw">
 <div class="sourceCode" id="cb5" data-startFrom="31"><pre class="sourceCode numberSource numberLines python"><code class="sourceCode python" style="counter-reset: source-line 30;"><span id="cb5-31"><a href="#cb5-31"></a><span class="kw">def</span> get_circle_points_naive_8_faster(r):</span>
@@ -270,25 +292,36 @@ x &amp;= \tfrac{r}{\sqrt{2}}. \label{eq:arc-intersection}
 <p> <code>naive.py</code> <a class="raw" href="https://github.com/listx/listx_blog/blob/master/code/2021-03-15-bresenham-circle-drawing-algorithm/naive.py#L31-L44"><code>[GitHub]</code></a> <a class="raw" href="../code/2021-03-15-bresenham-circle-drawing-algorithm/naive.py" mimetype="text/plain"><code>[Download]</code></a> </p>
 </div>
 </div>
-<p>This is the best we can do with the simple mathematical translations to code. Note that in all of these implementations we are still forced to calculate square roots in every iteration, which is certainly suboptimal.</p>
+<p>This is the best we can do with the simple mathematical translations to code.
+Note that in all of these implementations we are still forced to calculate square roots in every iteration, which is certainly suboptimal.</p>
 <h1 id="bresenhams-algorithm">Bresenham’s Algorithm</h1>
-<p>This as also known as the “Midpoint Circle Algorithm,” where the name “midpoint” comes from the mathematical calculations that are done by considering the midpoint <strong>between</strong> pixels. The gist of the algorithm is that instead of using Equation <span class="math inline">\(\ref{eq:circle-y}\)</span> to calculate <span class="math inline">\(y\)</span> for every <span class="math inline">\(x\)</span>, instead you try to <em>move</em> along the arc of the circle, pixel-to-pixel, staying as close as possible to the true arc:</p>
-<ol>
+<p>This as also known as the “Midpoint Circle Algorithm,” where the name “midpoint” comes from the mathematical calculations that are done by considering the midpoint <strong>between</strong> pixels.
+The gist of the algorithm is that instead of using Equation <span class="math inline">\(\ref{eq:circle-y}\)</span> to calculate <span class="math inline">\(y\)</span> for every <span class="math inline">\(x\)</span>, instead you try to <em>move</em> along the arc of the circle, pixel-to-pixel, staying as close as possible to the true arc:</p>
+<ol type="1">
 <li>Start out from the top of the circle (color in pixel <span class="math inline">\((0, r)\)</span>). Note that because of symmetry, we could start out from <span class="math inline">\((0, -r)\)</span>, <span class="math inline">\((r, 0)\)</span>, or even <span class="math inline">\((-r, 0)\)</span> as Bresenham did in his paper.<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a></li>
 <li>Move right (east (E)) or down-right (southeast (SE)), whichever is closer to the circle.</li>
 <li>Stop when <span class="math inline">\(x = y\)</span> (just like in <code>get_circle_points_naive_8_faster()</code>).</li>
 </ol>
-<p>The hard part is Step 2, where we just need to figure out which direction to move (E or SE) from the current pixel. The brute force way here is to just calculate the distance away from the center of the circle for the E and SE pixels (using <a href="https://en.wikipedia.org/wiki/Euclidean_distance">Euclidean distance</a>, which is just a variation of Equation <span class="math inline">\(\ref{eq:circle}\)</span> or the Pythagorean Theorem), and just choose the pixel that is closest to the arc of the circle. This makes sense, but with the power of mathematics, we can do better.</p>
+<p>The hard part is Step 2, where we just need to figure out which direction to move (E or SE) from the current pixel.
+The brute force way here is to just calculate the distance away from the center of the circle for the E and SE pixels (using <a href="https://en.wikipedia.org/wiki/Euclidean_distance">Euclidean distance</a>, which is just a variation of Equation <span class="math inline">\(\ref{eq:circle}\)</span> or the Pythagorean Theorem), and just choose the pixel that is closest to the arc of the circle.
+This makes sense, but with the power of mathematics, we can do better.</p>
 <h2 id="inside-on-or-outside-the-circle">Inside, on, or outside the circle?</h2>
-<p>In order to figure out whether some point <span class="math inline">\((x, y)\)</span> is inside, on, or outside of the circle depends on the definition of the circle from Equation <span class="math inline">\(\ref{eq:circle}\)</span>. We can tweak it in terms of any <span class="math inline">\((x, y)\)</span> pair:</p>
+<p>In order to figure out whether some point <span class="math inline">\((x, y)\)</span> is inside, on, or outside of the circle depends on the definition of the circle from Equation <span class="math inline">\(\ref{eq:circle}\)</span>.
+We can tweak it in terms of any <span class="math inline">\((x, y)\)</span> pair:</p>
 <p><span class="math display">\[
 \begin{equation} \label{eq:error-margin}
 F(x,y) = x^2 + y^2 - r^2 = \text{distance from true circle line}.
 \end{equation}
 \]</span></p>
-<p>Note that if <span class="math inline">\(F(x,y) = 0\)</span>, then the point <span class="math inline">\((x, y)\)</span> is <em>exactly</em> on the circle. If <span class="math inline">\(F(x,y) &gt; 0\)</span>, then the point is outside of the circle, and if <span class="math inline">\(F(x,y) &lt; 0\)</span> then the point is inside of it. In other words, given any point <span class="math inline">\((x, y)\)</span>, <span class="math inline">\(F(x, y)\)</span> is the distance from the true circle line.</p>
+<p>Note that if <span class="math inline">\(F(x,y) = 0\)</span>, then the point <span class="math inline">\((x, y)\)</span> is <em>exactly</em> on the circle.
+If <span class="math inline">\(F(x,y) &gt; 0\)</span>, then the point is outside of the circle, and if <span class="math inline">\(F(x,y) &lt; 0\)</span> then the point is inside of it.
+In other words, given any point <span class="math inline">\((x, y)\)</span>, <span class="math inline">\(F(x, y)\)</span> is the distance from the true circle line.</p>
 <h2 id="choosing-between-e-or-se">Choosing between E or SE</h2>
-<p>Let’s remind ourselves that we’ll always be moving E or SE. One critical (pragmatic) property here is that we’re dealing with a pixel grid with integer increments. There is a very high chance that neither the E or SE pixels we’re moving to is <strong>exactly</strong> on the circle. This is because the only time that the point <span class="math inline">\((x,y)\)</span> will exactly be on the line of the circle is if the <span class="math inline">\(x\)</span>, <span class="math inline">\(y\)</span>, and <span class="math inline">\(r\)</span> values (as integers) form a so-called <a href="https://en.wikipedia.org/wiki/Pythagorean_triple">Pythagorean Triple</a>. For <span class="math inline">\(r &lt; 100\)</span>, there are only 50 such triples:</p>
+<p>Let’s remind ourselves that we’ll always be moving E or SE.
+One critical (pragmatic) property here is that we’re dealing with a pixel grid with integer increments.
+There is a very high chance that neither the E or SE pixels we’re moving to is <strong>exactly</strong> on the circle.
+This is because the only time that the point <span class="math inline">\((x,y)\)</span> will exactly be on the line of the circle is if the <span class="math inline">\(x\)</span>, <span class="math inline">\(y\)</span>, and <span class="math inline">\(r\)</span> values (as integers) form a so-called <a href="https://en.wikipedia.org/wiki/Pythagorean_triple">Pythagorean Triple</a>.
+For <span class="math inline">\(r &lt; 100\)</span>, there are only 50 such triples:</p>
 <pre><code>( 3, 4, 5)  (18,24,30)  (24,45,51)  (16,63,65)  (51,68,85)
 ( 6, 8,10)  (16,30,34)  (20,48,52)  (32,60,68)  (40,75,85)
 ( 5,12,13)  (21,28,35)  (28,45,53)  (42,56,70)  (36,77,85)
@@ -300,10 +333,17 @@ F(x,y) = x^2 + y^2 - r^2 = \text{distance from true circle line}.
 (10,24,26)  (30,40,50)  (33,56,65)  (48,64,80)  (57,76,95)
 (20,21,29)  (14,48,50)  (25,60,65)  (18,80,82)  (65,72,97)
 </code></pre>
-<p>In other words, for all practical purposes, <strong>there will always be some error</strong> and we’ll always be outside or inside the circle and never directly on it. It’s sort of like driving a car and trying to stay within your designated lane: if you think you’re moving too much to the right, you turn your wheel left to stay “within” the lane (or some acceptable amount within the lane), and vice versa.</p>
-<p>The idea is the same for moving along the circle: if we think we’re moving too far <em>outside</em> the circle, we try to move into it. On the other hand, if we think we’re moving <em>into</em> the circle, we move out of it. And so imagine yourself standing on point <span class="math inline">\((0, r)\)</span>, our starting point. The line of the circle is our “lane” we want to stay “on” as much as possible. Choosing to go E is the same as turning “left”. Choosing to go SE is the same as turning “right”. Using this metaphor, if we were not to turn at all (go “straight”), we would be heading to the virtual “in-between” pixel between E and SE, the <strong>midpoint</strong> between them.</p>
+<p>In other words, for all practical purposes, <strong>there will always be some error</strong> and we’ll always be outside or inside the circle and never directly on it.
+It’s sort of like driving a car and trying to stay within your designated lane: if you think you’re moving too much to the right, you turn your wheel left to stay “within” the lane (or some acceptable amount within the lane), and vice versa.</p>
+<p>The idea is the same for moving along the circle: if we think we’re moving too far <em>outside</em> the circle, we try to move into it.
+On the other hand, if we think we’re moving <em>into</em> the circle, we move out of it.
+And so imagine yourself standing on point <span class="math inline">\((0, r)\)</span>, our starting point.
+The line of the circle is our “lane” we want to stay “on” as much as possible.
+Choosing to go E is the same as turning “left”.
+Choosing to go SE is the same as turning “right”.
+Using this metaphor, if we were not to turn at all (go “straight”), we would be heading to the virtual “in-between” pixel between E and SE, the <strong>midpoint</strong> between them.</p>
 <p>And so here’s the basic idea behind choosing E or SE:</p>
-<ol>
+<ol type="1">
 <li>If going “straight” would mean going into the circle (i.e., we’re currently veering too much to the right!), we course-correct by turning left (E).</li>
 <li>Conversely, if going “straight” would mean going outside the circle (i.e., we’re currently veering too much to the left), we course-correct by turning right (SE).</li>
 <li>Lastly, if going “straight” would mean staying exactly on the circle (we hit a Pythagorean Triple), we turn SE (from an engineering perspective it doesn’t really matter which way we turn in this case, as both E and SE result in some amount of error — although see <a href="#final-tweaks">“Final tweaks”</a> below for a note on aesthetics).</li>
@@ -317,7 +357,9 @@ If F(M) is &lt; 0, we're moving &quot;into&quot; the circle (veering right), so 
 
 Otherwise move SE.
 </code></pre>
-<p>Note that we only have to calculate <span class="math inline">\(F(...)\)</span> for the midpoint <span class="math inline">\(M\)</span>. Isn’t this cool? It is much better than calculating <span class="math inline">\(F(E)\)</span> and <span class="math inline">\(F(SE)\)</span> and having to compare them!</p>
+<p>Note that we only have to calculate <span class="math inline">\(F(...)\)</span> for the midpoint <span class="math inline">\(M\)</span>.
+Isn’t this cool?
+It is much better than calculating <span class="math inline">\(F(E)\)</span> and <span class="math inline">\(F(SE)\)</span> and having to compare them!</p>
 <div class="sourceCode" id="cb8" data-startFrom="1"><pre class="sourceCode numberSource python numberLines"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a><span class="co"># This F() function is the same as the mathematical F(...) function</span></span>
 <span id="cb8-2"><a href="#cb8-2"></a><span class="co"># discussed above (Equation 11).</span></span>
 <span id="cb8-3"><a href="#cb8-3"></a><span class="kw">def</span> F(x, y, r):</span>
@@ -347,7 +389,9 @@ Otherwise move SE.
 <span id="cb8-27"><a href="#cb8-27"></a>            F_M <span class="op">=</span> F(x, y, r)</span>
 <span id="cb8-28"><a href="#cb8-28"></a>        points.extend(mirror_points_8(x, y))</span>
 <span id="cb8-29"><a href="#cb8-29"></a>    <span class="cf">return</span> points</span></code></pre></div>
-<p>We can refactor the above slightly. We can simplify the initial calculation of <code>F_M</code> to avoid calling <code>F()</code>, and also move out some of the redundant bits. The very first midpoint we have to consider is <span class="math inline">\((1, r - \tfrac{1}{2})\)</span>; plugging this into <span class="math inline">\(F()\)</span> gets us</p>
+<p>We can refactor the above slightly.
+We can simplify the initial calculation of <code>F_M</code> to avoid calling <code>F()</code>, and also move out some of the redundant bits.
+The very first midpoint we have to consider is <span class="math inline">\((1, r - \tfrac{1}{2})\)</span>; plugging this into <span class="math inline">\(F()\)</span> gets us</p>
 <p><span class="math display">\[
 \begin{align}
 F(1, r - \tfrac{1}{2}) &amp;= 1^2 + (r - \tfrac{1}{2})^2 - r^2
@@ -380,10 +424,13 @@ F(1, r - \tfrac{1}{2}) &amp;= 1^2 + (r - \tfrac{1}{2})^2 - r^2
 <span id="cb9-16"><a href="#cb9-16"></a>        F_M <span class="op">=</span> F(x, y, r)</span>
 <span id="cb9-17"><a href="#cb9-17"></a>        points.extend(mirror_points_8(x, y))</span>
 <span id="cb9-18"><a href="#cb9-18"></a>    <span class="cf">return</span> points</span></code></pre></div>
-<p>The annoying bit is the call to <code>F()</code>. Surprisingly, the call to <code>F()</code> can be elimitated entirely, because we can <em>calculate it once</em>, and then merely adjust it thereafter.</p>
+<p>The annoying bit is the call to <code>F()</code>.
+Surprisingly, the call to <code>F()</code> can be elimitated entirely, because we can <em>calculate it once</em>, and then merely adjust it thereafter.</p>
 <h2 id="calculate-once-adjust-thereafter">Calculate once, adjust thereafter</h2>
-<p>We can just calculate <span class="math inline">\(F(x,y)\)</span> <em>once</em> when we start out at <span class="math inline">\((0, r)\)</span>, and then just <em>adjust it</em> depending on whether we move E or SE. The key is that this “adjustment” computation is cheaper than calculating the full <span class="math inline">\(F(x,y)\)</span> distance function all over again.</p>
-<p>Let <span class="math inline">\(M\)</span> be the midpoint <span class="math inline">\((x + 1, y - \tfrac{1}{2})\)</span> between the E <span class="math inline">\((x + 1, y)\)</span> and SE <span class="math inline">\((x + 1, y - 1)\)</span> pixels. Then <span class="math inline">\(F(M)\)</span> is the result of going “straight” and tells us the direction we’re veering off from the circle line:</p>
+<p>We can just calculate <span class="math inline">\(F(x,y)\)</span> <em>once</em> when we start out at <span class="math inline">\((0, r)\)</span>, and then just <em>adjust it</em> depending on whether we move E or SE.
+The key is that this “adjustment” computation is cheaper than calculating the full <span class="math inline">\(F(x,y)\)</span> distance function all over again.</p>
+<p>Let <span class="math inline">\(M\)</span> be the midpoint <span class="math inline">\((x + 1, y - \tfrac{1}{2})\)</span> between the E <span class="math inline">\((x + 1, y)\)</span> and SE <span class="math inline">\((x + 1, y - 1)\)</span> pixels.
+Then <span class="math inline">\(F(M)\)</span> is the result of going “straight” and tells us the direction we’re veering off from the circle line:</p>
 <p><span class="math display">\[
 \begin{equation}
 F(M) = F(x + 1, y - \tfrac{1}{2}) = (x + 1)^2 + (y - \tfrac{1}{2})^2 - r^2.
@@ -396,7 +443,9 @@ F(M) = F(x + 1, y - \tfrac{1}{2}) = (x + 1)^2 + (y - \tfrac{1}{2})^2 - r^2.
 F(M_{E}) = F(x + 2, y - \tfrac{1}{2}) = (x + 2)^2 + (y - \tfrac{1}{2})^2 - r^2.
 \end{equation}
 \]</span></p>
-<p>Now we can take the <strong>difference</strong> between these two full calculations. That is, if we were to move E, how would <span class="math inline">\(F(M)\)</span> change? Simple, we just look at the change in <span class="math inline">\(x\)</span> (<span class="math inline">\(\Delta_{x}\)</span>) (we don’t care about the change in <span class="math inline">\(y\)</span> or <span class="math inline">\(r\)</span>, because they stay constant in this case).</p>
+<p>Now we can take the <strong>difference</strong> between these two full calculations.
+That is, if we were to move E, how would <span class="math inline">\(F(M)\)</span> change?
+Simple, we just look at the change in <span class="math inline">\(x\)</span> (<span class="math inline">\(\Delta_{x}\)</span>) (we don’t care about the change in <span class="math inline">\(y\)</span> or <span class="math inline">\(r\)</span>, because they stay constant in this case).</p>
 <p><span class="math display">\[
 \begin{align}
 \Delta_{E} &amp;= F(M_{E}) - F(M)
@@ -415,8 +464,10 @@ F(M_{E}) = F(x + 2, y - \tfrac{1}{2}) = (x + 2)^2 + (y - \tfrac{1}{2})^2 - r^2.
 &amp;= 2x + 3. \label{eq:de2}
 \end{align}
 \]</span></p>
-<p>So <span class="math inline">\(F(M)\)</span> will change by <span class="math inline">\(2x + 3\)</span> if we move E. So at any given point, if we move E, <span class="math inline">\(F(M)\)</span> will <em>always</em> change by <span class="math inline">\(2x + 3\)</span>.</p>
-<p>How about for moving SE? If we move SE, the new value of <span class="math inline">\(M\)</span> will change from <span class="math inline">\((x + 1, y - \tfrac{1}{2})\)</span> to <span class="math inline">\((x + 2, y - \tfrac{3}{2})\)</span> because we add 1 to <span class="math inline">\(x\)</span> and subtract 1 from <span class="math inline">\(y\)</span> to move 1 pixel southeast; the new value of <span class="math inline">\(F(M)\)</span> for this case, which we call <span class="math inline">\(F(M_{SE})\)</span>, will then be:</p>
+<p>So <span class="math inline">\(F(M)\)</span> will change by <span class="math inline">\(2x + 3\)</span> if we move E.
+So at any given point, if we move E, <span class="math inline">\(F(M)\)</span> will <em>always</em> change by <span class="math inline">\(2x + 3\)</span>.</p>
+<p>How about for moving SE?
+If we move SE, the new value of <span class="math inline">\(M\)</span> will change from <span class="math inline">\((x + 1, y - \tfrac{1}{2})\)</span> to <span class="math inline">\((x + 2, y - \tfrac{3}{2})\)</span> because we add 1 to <span class="math inline">\(x\)</span> and subtract 1 from <span class="math inline">\(y\)</span> to move 1 pixel southeast; the new value of <span class="math inline">\(F(M)\)</span> for this case, which we call <span class="math inline">\(F(M_{SE})\)</span>, will then be:</p>
 <p><span class="math display">\[
 \begin{equation}
 F(M_{SE}) = F(x + 2, y - \tfrac{3}{2}) = (x + 2)^2 + (y - \tfrac{3}{2})^2 - r^2.
@@ -476,8 +527,13 @@ F(M_{SE}) = F(x + 2, y - \tfrac{3}{2}) = (x + 2)^2 + (y - \tfrac{3}{2})^2 - r^2.
 </div>
 </div>
 <h2 id="integer-only-optimization">Integer-only optimization</h2>
-<p>The initial value of <code>F_M</code> (<span class="math inline">\(F(M)\)</span>) is <span class="math inline">\(\tfrac{5}{4} - r\)</span>. Notice how this is the only place where we have to perform division in the whole algorithm. We can avoid this initial division (and subsequent floating point arithmetic) by initializing it to <span class="math inline">\(1 - r\)</span> instead, which is a difference of <span class="math inline">\(\tfrac{1}{4}\)</span> vs the original.</p>
-<p>Because we tweaked the initialization by <span class="math inline">\(\tfrac{1}{4}\)</span>, we have to do the same for all comparisons of <span class="math inline">\(F(M)\)</span> moving forward. That is, the comparison <span class="math inline">\(F(M) &lt; 0\)</span> actually becomes <span class="math inline">\(F(M) &lt; -\tfrac{1}{4}\)</span>. <em>However, this fractional comparison is unnecessary</em> because we only deal with integer increments and decrements in the rest of the code, so we can just keep the same <span class="math inline">\(F(M) &lt; 0\)</span> as before. In other words, our algorithm only cares about whole numbers, so worrying about this extra <span class="math inline">\(\tfrac{1}{4}\)</span> difference is meaningless.</p>
+<p>The initial value of <code>F_M</code> (<span class="math inline">\(F(M)\)</span>) is <span class="math inline">\(\tfrac{5}{4} - r\)</span>.
+Notice how this is the only place where we have to perform division in the whole algorithm.
+We can avoid this initial division (and subsequent floating point arithmetic) by initializing it to <span class="math inline">\(1 - r\)</span> instead, which is a difference of <span class="math inline">\(\tfrac{1}{4}\)</span> vs the original.</p>
+<p>Because we tweaked the initialization by <span class="math inline">\(\tfrac{1}{4}\)</span>, we have to do the same for all comparisons of <span class="math inline">\(F(M)\)</span> moving forward.
+That is, the comparison <span class="math inline">\(F(M) &lt; 0\)</span> actually becomes <span class="math inline">\(F(M) &lt; -\tfrac{1}{4}\)</span>.
+<em>However, this fractional comparison is unnecessary</em> because we only deal with integer increments and decrements in the rest of the code, so we can just keep the same <span class="math inline">\(F(M) &lt; 0\)</span> as before.
+In other words, our algorithm only cares about whole numbers, so worrying about this extra <span class="math inline">\(\tfrac{1}{4}\)</span> difference is meaningless.</p>
 <div class="code-and-raw">
 <div class="sourceCode" id="cb11" data-startFrom="26"><pre class="sourceCode numberSource numberLines python"><code class="sourceCode python" style="counter-reset: source-line 25;"><span id="cb11-26"><a href="#cb11-26"></a><span class="kw">def</span> get_circle_points_bresenham_integer_ese(r):</span>
 <span id="cb11-27"><a href="#cb11-27"></a>    <span class="co">&quot;&quot;&quot; Like draw_circle_bresenham_float_ese, but F_M is an integer variable.</span></span>
@@ -504,15 +560,20 @@ F(M_{SE}) = F(x + 2, y - \tfrac{3}{2}) = (x + 2)^2 + (y - \tfrac{3}{2})^2 - r^2.
 </div>
 </div>
 <h2 id="second-order-differences">Second-order differences</h2>
-<p>There is a final optimization we can do.<a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a> In the <a href="#calculate-once-adjust-thereafter">“Calculate once, adjust thereafter” section</a> we avoided calculating <span class="math inline">\(F(M)\)</span> from scratch on every iteration. We can do the same thing for the differences themselves!</p>
+<p>There is a final optimization we can do.<a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a>
+In the <a href="#calculate-once-adjust-thereafter">“Calculate once, adjust thereafter” section</a> we avoided calculating <span class="math inline">\(F(M)\)</span> from scratch on every iteration.
+We can do the same thing for the differences themselves!</p>
 <p>That is, we can avoid calculating <span class="math inline">\(\Delta_{E} = (2x + 3)\)</span> and <span class="math inline">\(\Delta_{SE} = 2(x - y) + 5\)</span> on every iteration, and instead just calculate them <em>once</em> and make adjustments to them, just like we did earlier for <span class="math inline">\(F(M)\)</span>.</p>
-<p>Let’s first consider how <span class="math inline">\(\Delta_{E} = 2x + 3\)</span> changes. First, we initialize <span class="math inline">\(\Delta_{E}\)</span> by plugging in <span class="math inline">\((0, r)\)</span> into Equation <span class="math inline">\(\ref{eq:de2}\)</span>, our starting point. Because there is no <span class="math inline">\(y\)</span> variable in here, we get an initial value of</p>
+<p>Let’s first consider how <span class="math inline">\(\Delta_{E} = 2x + 3\)</span> changes.
+First, we initialize <span class="math inline">\(\Delta_{E}\)</span> by plugging in <span class="math inline">\((0, r)\)</span> into Equation <span class="math inline">\(\ref{eq:de2}\)</span>, our starting point.
+Because there is no <span class="math inline">\(y\)</span> variable in here, we get an initial value of</p>
 <p><span class="math display">\[
 \begin{equation} \label{eq:de-2ord-initial}
 2(0) + 3 = 3.
 \end{equation}
 \]</span></p>
-<p>If we go E, <span class="math inline">\(\Delta_{E}\)</span> changes like this: <span class="math display">\[
+<p>If we go E, <span class="math inline">\(\Delta_{E}\)</span> changes like this:
+<span class="math display">\[
 \begin{align}
 \Delta_{E_{new}} = \Delta_{E_(x+1,y)} - \Delta_{E_(x,y)} &amp;= [2(x+1) + 3] - (2x + 3) \label{eq:de-2ord-e}
 \\
@@ -524,7 +585,8 @@ F(M_{SE}) = F(x + 2, y - \tfrac{3}{2}) = (x + 2)^2 + (y - \tfrac{3}{2})^2 - r^2.
 \end{align}
 \]</span></p>
 <p>If we go SE, <span class="math inline">\(\Delta_{E}\)</span> changes in the exact same way, because even though our new point is at <span class="math inline">\((x+1, y-1)\)</span>, there is no <span class="math inline">\(y\)</span> in <span class="math inline">\(\Delta_{E} = 2x + 3\)</span>, so it doesn’t matter and <span class="math inline">\(\Delta_{E_{new}} = 2\)</span> again.</p>
-<p>Now let’s consider how <span class="math inline">\(\Delta_{SE}\)</span> changes. For the initial value, we again plug in <span class="math inline">\((0, r)\)</span> into <span class="math inline">\(2(x-y) + 5\)</span>, to get</p>
+<p>Now let’s consider how <span class="math inline">\(\Delta_{SE}\)</span> changes.
+For the initial value, we again plug in <span class="math inline">\((0, r)\)</span> into <span class="math inline">\(2(x-y) + 5\)</span>, to get</p>
 <p><span class="math display">\[
 \begin{equation} \label{eq:dse-2ord-initial}
 2(0-r) + 5 = -2r + 5.
@@ -614,7 +676,8 @@ F(M_{SE}) = F(x + 2, y - \tfrac{3}{2}) = (x + 2)^2 + (y - \tfrac{3}{2})^2 - r^2.
 <p> <code>bresenham.py</code> <a class="raw" href="https://github.com/listx/listx_blog/blob/master/code/2021-03-15-bresenham-circle-drawing-algorithm/bresenham.py#L48-L73"><code>[GitHub]</code></a> <a class="raw" href="../code/2021-03-15-bresenham-circle-drawing-algorithm/bresenham.py" mimetype="text/plain"><code>[Download]</code></a> </p>
 </div>
 </div>
-<p>The “purist” in me felt that the decrementing of <span class="math inline">\(y\)</span> stood out like a sore thumb, and so I created a tweaked version that moves E and NE, starting out from <span class="math inline">\((0, -r)\)</span> instead. The mathematical techniques are the same, and due to symmetry the behavior of the algorithm does not change.</p>
+<p>The “purist” in me felt that the decrementing of <span class="math inline">\(y\)</span> stood out like a sore thumb, and so I created a tweaked version that moves E and NE, starting out from <span class="math inline">\((0, -r)\)</span> instead.
+The mathematical techniques are the same, and due to symmetry the behavior of the algorithm does not change.</p>
 <div class="code-and-raw">
 <div class="sourceCode" id="cb14" data-startFrom="99"><pre class="sourceCode numberSource numberLines python"><code class="sourceCode python" style="counter-reset: source-line 98;"><span id="cb14-99"><a href="#cb14-99"></a><span class="kw">def</span> get_circle_points_bresenham_integer_ene_2order(r):</span>
 <span id="cb14-100"><a href="#cb14-100"></a>    <span class="co">&quot;&quot;&quot; Like draw_circle_bresenham_integer_ene, but start from (0, -r) and move</span></span>
@@ -645,7 +708,8 @@ F(M_{SE}) = F(x + 2, y - \tfrac{3}{2}) = (x + 2)^2 + (y - \tfrac{3}{2})^2 - r^2.
 <p> <code>bresenham.py</code> <a class="raw" href="https://github.com/listx/listx_blog/blob/master/code/2021-03-15-bresenham-circle-drawing-algorithm/bresenham.py#L99-L123"><code>[GitHub]</code></a> <a class="raw" href="../code/2021-03-15-bresenham-circle-drawing-algorithm/bresenham.py" mimetype="text/plain"><code>[Download]</code></a> </p>
 </div>
 </div>
-<p>Here are a couple drawings using Bresenham’s algorithm. This one is for <span class="math inline">\(r = 15\)</span>:</p>
+<p>Here are a couple drawings using Bresenham’s algorithm.
+This one is for <span class="math inline">\(r = 15\)</span>:</p>
 <canvas id="bresenham_integer_ene_2order__15__20"></canvas>
 
 <p>And for <span class="math inline">\(r = 60\)</span>:</p>
@@ -738,7 +802,8 @@ F(M_{SE}) = F(x + 2, y - \tfrac{3}{2}) = (x + 2)^2 + (y - \tfrac{3}{2})^2 - r^2.
 </div>
 </div>
 <p>Indeed, the small tweak seems to do wonders to the output for low values of <span class="math inline">\(r\)</span>.</p>
-<p>At the same time, there is a tweak we can do as well for the Bresenham algorithm. Instead of turning E (“left”, or away from the circle) when <span class="math inline">\(F(M) &lt; 0\)</span>, we can do so when <span class="math inline">\(F(M) \leq 0\)</span>.</p>
+<p>At the same time, there is a tweak we can do as well for the Bresenham algorithm.
+Instead of turning E (“left”, or away from the circle) when <span class="math inline">\(F(M) &lt; 0\)</span>, we can do so when <span class="math inline">\(F(M) \leq 0\)</span>.</p>
 <div class="code-and-raw">
 <div class="sourceCode" id="cb16" data-startFrom="126"><pre class="sourceCode numberSource numberLines python"><code class="sourceCode python" style="counter-reset: source-line 125;"><span id="cb16-126"><a href="#cb16-126"></a><span class="kw">def</span> get_circle_points_bresenham_integer_ene_2order_leq(r):</span>
 <span id="cb16-127"><a href="#cb16-127"></a>    <span class="co">&quot;&quot;&quot; Like draw_circle_bresenham_integer_ene_2order, but use 'f_m &lt;= 0'</span></span>
@@ -856,26 +921,33 @@ F(M_{SE}) = F(x + 2, y - \tfrac{3}{2}) = (x + 2)^2 + (y - \tfrac{3}{2})^2 - r^2.
   </tr>
 </table>
 
-<p>It appears to me that the most aesthetically pleasing algorithm is the tweaked version of the Bresenham algorithm.<a href="#fn10" class="footnote-ref" id="fnref10" role="doc-noteref"><sup>10</sup></a> When given equally bad choices (the case where <span class="math inline">\(F(M) = 0\)</span>), this version draws a pixel <em>away</em> from the origin by choosing to go E, thereby drawing a slightly bigger circle. You can see this play out in the above table for when <span class="math inline">\(r = 6\)</span> and especially <span class="math inline">\(r = 1\)</span>. It’s a bit unfortunate that the authors of the book did not choose this version, as it seems to do a better job for small values of <span class="math inline">\(r\)</span>.</p>
-<p>We can carry over the same intuition over to the tweak to increase <span class="math inline">\(r\)</span> by <span class="math inline">\(\tfrac{1}{2}\)</span> for the naive algorithm — increasing <span class="math inline">\(r\)</span> should result in a larger value of <span class="math inline">\(y\)</span>, thereby resulting in drawing a larger circle (and in the process improving the aesthetics). Neat!</p>
+<p>It appears to me that the most aesthetically pleasing algorithm is the tweaked version of the Bresenham algorithm.<a href="#fn10" class="footnote-ref" id="fnref10" role="doc-noteref"><sup>10</sup></a>
+When given equally bad choices (the case where <span class="math inline">\(F(M) = 0\)</span>), this version draws a pixel <em>away</em> from the origin by choosing to go E, thereby drawing a slightly bigger circle.
+You can see this play out in the above table for when <span class="math inline">\(r = 6\)</span> and especially <span class="math inline">\(r = 1\)</span>.
+It’s a bit unfortunate that the authors of the book did not choose this version, as it seems to do a better job for small values of <span class="math inline">\(r\)</span>.</p>
+<p>We can carry over the same intuition over to the tweak to increase <span class="math inline">\(r\)</span> by <span class="math inline">\(\tfrac{1}{2}\)</span> for the naive algorithm — increasing <span class="math inline">\(r\)</span> should result in a larger value of <span class="math inline">\(y\)</span>, thereby resulting in drawing a larger circle (and in the process improving the aesthetics).
+Neat!</p>
 <h1 id="conclusion">Conclusion</h1>
-<p>To me, Bresenham’s algorithm is interesting because it does not try to be “perfect”. Instead it merely does its best to reduce the amount of error, and in doing so, gets the job done remarkably well.</p>
-<p>The technique of avoiding the full polynomial calculation behind <span class="math inline">\(F(M)\)</span> (referred by the book as finding the first and second-order differences) took some time to get used to, but is intuitive enough in the end. You just need to consider differences in terms of variables. There’s also a connection to calculus because we’re dealing in terms of <em>differences</em> to “cut down” on the polynomial degrees — we go from the squares in Equation <span class="math inline">\(\ref{eq:circle}\)</span> to just linear functions in Equations <span class="math inline">\(\ref{eq:de2}\)</span> and <span class="math inline">\(\ref{eq:se1}\)</span>, and again go one more step to just constant functions in Equations <span class="math inline">\(\ref{eq:e2ord}\)</span>, <span class="math inline">\(\ref{eq:se2ord1}\)</span>, and <span class="math inline">\(\ref{eq:se2ord2}\)</span>.</p>
+<p>To me, Bresenham’s algorithm is interesting because it does not try to be “perfect”.
+Instead it merely does its best to reduce the amount of error, and in doing so, gets the job done remarkably well.</p>
+<p>The technique of avoiding the full polynomial calculation behind <span class="math inline">\(F(M)\)</span> (referred by the book as finding the first and second-order differences) took some time to get used to, but is intuitive enough in the end.
+You just need to consider differences in terms of variables.
+There’s also a connection to calculus because we’re dealing in terms of <em>differences</em> to “cut down” on the polynomial degrees — we go from the squares in Equation <span class="math inline">\(\ref{eq:circle}\)</span> to just linear functions in Equations <span class="math inline">\(\ref{eq:de2}\)</span> and <span class="math inline">\(\ref{eq:se1}\)</span>, and again go one more step to just constant functions in Equations <span class="math inline">\(\ref{eq:e2ord}\)</span>, <span class="math inline">\(\ref{eq:se2ord1}\)</span>, and <span class="math inline">\(\ref{eq:se2ord2}\)</span>.</p>
 <p>I hope you learned something!</p>
 <p>Happy hacking!</p>
-<section class="footnotes" role="doc-endnotes">
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr />
 <ol>
-<li id="fn1" role="doc-endnote"><p>Foley, J. D., van Dam, A., Feiner, S. K., Hughes, J. F. (1996). Basic Raster Graphics Algorithms for Drawing 2D Primitives, Scan Converting Circles. <em>Computer Graphics: Principles and Practice</em> (pp. 81–87). Addison-Wesley. ISBN: 0201848406<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2" role="doc-endnote"><p>Bresenham, J.E., D.G. Grice, and S.C. Pi, “Bi-Directional Display of Circular Arcs,” US Patent 4,371,933. February 1, 1983. <em>Note: unfortunately, trying to understand the original text of the patent is perhaps equally as difficult as inventing the algorithm on your own from scratch. Hence this blog post.</em><a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn3" role="doc-endnote"><p>There are 4 such <a href="https://en.wikipedia.org/wiki/Quadrant_(plane_geometry)">quadrants</a>: I, II, III, and IV.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn4" role="doc-endnote"><p>In some sense, all great algorithms are mere optimizations of brute force approaches.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn5" role="doc-endnote"><p>In code, we have to write <code>range(r + 1)</code> because the <code>range()</code> function does not include the last integer. Such “fence-post” or “off by one” logic is the bane of computer programmers.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn6" role="doc-endnote"><p>Mathematically, this is because the slope of the arc in Equation <span class="math inline">\(\ref{eq:circle-y}\)</span> approach positive and negative infinity around these areas.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn7" role="doc-endnote"><p>In the <a href="https://github.com/listx/listx_blog/blob/master/rust-js/src/lib.rs">Rust WASM implementation</a> that is used for the graphics in this blog post, we actually use a bitmap such that we only draw a particular pixel just once. However, we still end up <em>setting</em> the a pixel as “on” more than once.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn8" role="doc-endnote"><p>Bresenham, Jack. “A Linear Algorithm for Incremental Digital Display of Circular Arcs.” Communications of the ACM, vol. 20, no. 2, 1977, pp. 100–106., <a href="doi:10.1145/359423.359432">doi:10.1145/359423.359432</a>.<a href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn9" role="doc-endnote"><p>It is not clear to me if this change runs faster on modern CPUs, because I recall reading that multiplication can sometimes be faster than adding. But it’s still interesting.<a href="#fnref9" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn10" role="doc-endnote"><p>This version looks slightly better than the tweaked naive one for <span class="math inline">\(r = 8\)</span>.<a href="#fnref10" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>Foley, J. D., van Dam, A., Feiner, S. K., Hughes, J. F. (1996). Basic Raster Graphics Algorithms for Drawing 2D Primitives, Scan Converting Circles. <em>Computer Graphics: Principles and Practice</em> (pp. 81–87). Addison-Wesley. ISBN: 0201848406<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Bresenham, J.E., D.G. Grice, and S.C. Pi, “Bi-Directional Display of Circular Arcs,” US Patent 4,371,933. February 1, 1983. <em>Note: unfortunately, trying to understand the original text of the patent is perhaps equally as difficult as inventing the algorithm on your own from scratch. Hence this blog post.</em><a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>There are 4 such <a href="https://en.wikipedia.org/wiki/Quadrant_(plane_geometry)">quadrants</a>: I, II, III, and IV.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>In some sense, all great algorithms are mere optimizations of brute force approaches.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>In code, we have to write <code>range(r + 1)</code> because the <code>range()</code> function does not include the last integer. Such “fence-post” or “off by one” logic is the bane of computer programmers.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p>Mathematically, this is because the slope of the arc in Equation <span class="math inline">\(\ref{eq:circle-y}\)</span> approach positive and negative infinity around these areas.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7"><p>In the <a href="https://github.com/listx/listx_blog/blob/master/rust-js/src/lib.rs">Rust WASM implementation</a> that is used for the graphics in this blog post, we actually use a bitmap such that we only draw a particular pixel just once. However, we still end up <em>setting</em> the a pixel as “on” more than once.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn8"><p>Bresenham, Jack. “A Linear Algorithm for Incremental Digital Display of Circular Arcs.” Communications of the ACM, vol. 20, no. 2, 1977, pp. 100–106., <a href="doi:10.1145/359423.359432">doi:10.1145/359423.359432</a>.<a href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn9"><p>It is not clear to me if this change runs faster on modern CPUs, because I recall reading that multiplication can sometimes be faster than adding. But it’s still interesting.<a href="#fnref9" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn10"><p>This version looks slightly better than the tweaked naive one for <span class="math inline">\(r = 8\)</span>.<a href="#fnref10" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 
@@ -883,7 +955,7 @@ F(M_{SE}) = F(x + 2, y - \tfrac{3}{2}) = (x + 2)^2 + (y - \tfrac{3}{2})^2 - r^2.
 
 		<div id="footer">
 			<img src="../favicon.png" id="brand-icon">
-			<p>Copyright (C) 2013-2021 Linus Arver. All rights reserved.</p>
+			<p>Copyright (C) 2013-2023 Linus Arver. All rights reserved.</p>
 			<a href="https://github.com/listx/listx_blog">Site</a>
 			<a href="https://github.com/listx/listx.github.io">generated</a>
 			with

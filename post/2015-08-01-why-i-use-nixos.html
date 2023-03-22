@@ -45,23 +45,51 @@
 	<a title="All pages tagged 'linux'." href="../tag/linux.html">linux</a>, <a title="All pages tagged 'arch'." href="../tag/arch.html">arch</a>, <a title="All pages tagged 'nix'." href="../tag/nix.html">nix</a>, <a title="All pages tagged 'nixos'." href="../tag/nixos.html">nixos</a>
 </div>
 
-<p>Since March 2015, I’ve been using NixOS on my main desktop machine at home. I was on Arch Linux for 6~7 years before that. So, why did I switch?</p>
+<p>Since March 2015, I’ve been using NixOS on my main desktop machine at home.
+I was on Arch Linux for 6~7 years before that.
+So, why did I switch?</p>
 <h1 id="arch-linux">Arch Linux</h1>
-<p>Let’s review the reasons I switched to Arch Linux in the first place. I switched to Arch Linux from Xubuntu because I did not want to do big distribution upgrades from one major version to the next. Arch Linux is based on a rolling release schedule — packages are updated on a daily basis. What people often say is that Arch is “bleeding edge”. While that is true, they don’t realize that at the same time, you can choose to do weekly or monthly upgrades (in an incremental fashion) rather than waiting six months or a year for a big fat distribution upgrade.</p>
+<p>Let’s review the reasons I switched to Arch Linux in the first place.
+I switched to Arch Linux from Xubuntu because I did not want to do big distribution upgrades from one major version to the next.
+Arch Linux is based on a rolling release schedule — packages are updated on a daily basis.
+What people often say is that Arch is “bleeding edge”.
+While that is true, they don’t realize that at the same time, you can choose to do weekly or monthly upgrades (in an incremental fashion) rather than waiting six months or a year for a big fat distribution upgrade.</p>
 <h2 id="system-age">System age</h2>
-<p>The problem though, is that with age the system becomes increasingly confusing because of unused files/directories. You install packages, then delete them, but then your system still has traces of them left. I still have an old laptop with Arch on it dating from an earlier install probably about five years back (or more) — and the <code>$HOME</code> directory on there has a lot of dotfiles and other folders — some of which I have no clue about. <a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> It’s not very different from the same feeling I got as a teenager looking at Windows XP’s <code>regedit.exe</code> and wondering what some of the registry keys did, or if they were used at all.</p>
+<p>The problem though, is that with age the system becomes increasingly confusing because of unused files/directories.
+You install packages, then delete them, but then your system still has traces of them left.
+I still have an old laptop with Arch on it dating from an earlier install probably about five years back (or more) — and the <code class="verbatim">$HOME</code> directory on there has a lot of dotfiles and other folders — some of which I have no clue about. <a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>
+It’s not very different from the same feeling I got as a teenager looking at Windows XP’s <code class="verbatim">regedit.exe</code> and wondering what some of the registry keys did, or if they were used at all.</p>
 <h2 id="power-user-mindset">Power user mindset</h2>
-<p>Another problem is that Arch expects the user to understand their entire system from the bottom up! The culture is very much “RTFM”, but not only that, you are expected to sign up to the Arch mailing lists and also read the distro homepage on a regular basis. Dare I say it — the only reason the Arch Wiki is so well-regarded is because of this culture of “you must know everything”.</p>
-<p>This is fine, but ultimately I believe that it is too much responsibility. For example, every once in a while, <code>pacman</code> generates copies of existing system files whenever they would get overwritten by newer ones. One example is the <code>/etc/group</code> file. Call me lazy but I never bothered learning about the ins-and-outs of this file and what the syntax means. But every Arch Linux user out there has to do a <code>vimdiff</code> against the old/new versions of this file and perform the correct changes (basically merge them), usually with the helper CLI tool called <code>yaourt</code> with its <code>-C</code> flag.</p>
+<p>Another problem is that Arch expects the user to understand their entire system from the bottom up!
+The culture is very much “RTFM”, but not only that, you are expected to sign up to the Arch mailing lists and also read the distro homepage on a regular basis.
+Dare I say it — the only reason the Arch Wiki is so well-regarded is because of this culture of “you must know everything”.</p>
+<p>This is fine, but ultimately I believe that it is too much responsibility.
+For example, every once in a while, <code class="verbatim">pacman</code> generates copies of existing system files whenever they would get overwritten by newer ones.
+One example is the <code class="verbatim">/etc/group</code> file.
+Call me lazy but I never bothered learning about the ins-and-outs of this file and what the syntax means.
+But every Arch Linux user out there has to do a <code class="verbatim">vimdiff</code> against the old/new versions of this file and perform the correct changes (basically merge them), usually with the helper CLI tool called <code class="verbatim">yaourt</code> with its <code class="verbatim">-C</code> flag.</p>
 <h2 id="package-confusion">Package confusion</h2>
-<p>As you use Arch Linux, you invariably end up installing one package after another. Right now, there is no way to introduce some hierarchical system of organizing packages. For example, let’s say you install the <code>firefox</code> package because you want to use, well, Firefox! In <code>pacman</code>’s point of view, there is no difference between <code>firefox</code> and <code>libfoo</code>. I.e., high-visibility, userland packages like <code>firefox</code> are treated the same in all respects as <code>libfoo</code>. You can do clever things like have meta-packages, which are defined in terms of other packages (e.g., LibreOffice), but this kind of organizational structure is hard-coded at the <code>PKGBUILD</code> level. <a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
-<p>I’m sure there are <code>pacman</code> helper scripts/programs out there to give you a better, organized understanding of all of your installed packages. But do you really want to know that you have <code>libvdpau</code> installed, or that it needs to get updated? As you press <code>pacman -Syu&lt;ENTER&gt;</code>, do you really care about the exact names of the 50 low-level system packages that your userland programs (like Firefox) depend on?</p>
+<p>As you use Arch Linux, you invariably end up installing one package after another.
+Right now, there is no way to introduce some hierarchical system of organizing packages.
+For example, let’s say you install the <code class="verbatim">firefox</code> package because you want to use, well, Firefox!
+In <code class="verbatim">pacman</code>’s point of view, there is no difference between <code class="verbatim">firefox</code> and <code class="verbatim">libfoo</code>.
+I.e., high-visibility, userland packages like <code class="verbatim">firefox</code> are treated the same in all respects as <code class="verbatim">libfoo</code>.
+You can do clever things like have meta-packages, which are defined in terms of other packages (e.g., LibreOffice), but this kind of organizational structure is hard-coded at the <code class="verbatim">PKGBUILD</code> level. <a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+<p>I’m sure there are <code class="verbatim">pacman</code> helper scripts/programs out there to give you a better, organized understanding of all of your installed packages.
+But do you really want to know that you have <code class="verbatim">libvdpau</code> installed, or that it needs to get updated?
+As you press <code class="verbatim">pacman -Syu&lt;ENTER&gt;</code>, do you really care about the exact names of the 50 low-level system packages that your userland programs (like Firefox) depend on?</p>
 <h1 id="nixos">NixOS</h1>
 <p>So what makes NixOS better?</p>
 <h2 id="pros">Pros</h2>
-<p>First off, system age has no real bearing on NixOS. Because everything is done in a functional way with the Nix package manager, your <strong>entire system</strong> becomes “recreated” each time you decide to upgrade. By default, you cannot directly write to places like <code>/usr/share</code> or <code>/usr/local</code>. Essentially, anything outside of <code>$HOME</code> can only be manipulated via the Nix package manager. And Nix does an excellent job of keeping all system directories clean and stateless!</p>
-<p>Second, you don’t have to hand-tune system files like <code>/etc/group</code>. The NixOS configuration file is where you define system-wide things like users and groups, and after you set it once, it’s done for good.</p>
-<p>Third, you can either hard-code what packages get installed system-wide in your config file (<code>/etc/nixos/configuration.nix</code>), or you can define your own set of packages on top of the ones defined by the official NixOS Nix expression. I used to do the former, but now I do the latter; and all I do now to see what packages I have installed explicitly is invoke <code>nix-env -q</code>, and I get this:</p>
+<p>First off, system age has no real bearing on NixOS.
+Because everything is done in a functional way with the Nix package manager, your <strong>entire system</strong> becomes “recreated” each time you decide to upgrade.
+By default, you cannot directly write to places like <code class="verbatim">/usr/share</code> or <code class="verbatim">/usr/local</code>.
+Essentially, anything outside of <code class="verbatim">$HOME</code> can only be manipulated via the Nix package manager.
+And Nix does an excellent job of keeping all system directories clean and stateless!</p>
+<p>Second, you don’t have to hand-tune system files like <code class="verbatim">/etc/group</code>.
+The NixOS configuration file is where you define system-wide things like users and groups, and after you set it once, it’s done for good.</p>
+<p>Third, you can either hard-code what packages get installed system-wide in your config file (<code class="verbatim">/etc/nixos/configuration.nix</code>), or you can define your own set of packages on top of the ones defined by the official NixOS Nix expression.
+I used to do the former, but now I do the latter; and all I do now to see what packages I have installed explicitly is invoke <code class="verbatim">nix-env -q</code>, and I get this:</p>
 <pre><code>fontforge-20141230
 ghc-7.10.1
 l-set-av
@@ -75,20 +103,36 @@ l-set-web
 pavucontrol-3.0
 source-code-pro-2.010
 </code></pre>
-<p>. Those <code>l-set-</code> packages are ones where I have defined a hierarchy — i.e., I’ve coded up Arch Linux’s version of meta-packages. What’s great is that it’s all done in a programmatic way using the Nix expression language. <a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> The rest are official packages I chose to install. But basically this sure beats doing something like <code>pacman -Q</code>, which grabs all installed packages on the entire system.</p>
-<p>Fourth, I really like how I can do a <strong>system</strong> upgrade without touching my explicitly-installed packages in my user’s Nix environment (<code>nix-env</code>). I can update my version of <code>firefox</code> as much as I like without touching low-level packages like Xorg or the kernel, or vice-versa. It gives me the flexibility of a “rolling release” distro without the stability issues.</p>
-<p>Fifth, the heart of NixOS — the Nix package manager — works by looking at a single “master” Nix expression. So if you have any custom Nix expressions, they better play well with the other ones officially provided upstream by the NixOS team! In Nix, no package is an island; in a sense, it’s a lot like how FreeBSD keeps all of their packages in a single code repository to guarantee stability.</p>
+<p>.
+Those <code class="verbatim">l-set-</code> packages are ones where I have defined a hierarchy — i.e., I’ve coded up Arch Linux’s version of meta-packages.
+What’s great is that it’s all done in a programmatic way using the Nix expression language. <a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>
+The rest are official packages I chose to install.
+But basically this sure beats doing something like <code class="verbatim">pacman -Q</code>, which grabs all installed packages on the entire system.</p>
+<p>Fourth, I really like how I can do a <strong>system</strong> upgrade without touching my explicitly-installed packages in my user’s Nix environment (<code class="verbatim">nix-env</code>).
+I can update my version of <code class="verbatim">firefox</code> as much as I like without touching low-level packages like Xorg or the kernel, or vice-versa.
+It gives me the flexibility of a “rolling release” distro without the stability issues.</p>
+<p>Fifth, the heart of NixOS — the Nix package manager — works by looking at a single “master” Nix expression.
+So if you have any custom Nix expressions, they better play well with the other ones officially provided upstream by the NixOS team!
+In Nix, no package is an island; in a sense, it’s a lot like how FreeBSD keeps all of their packages in a single code repository to guarantee stability.</p>
 <h2 id="cons">Cons</h2>
-<p>Granted, there are problems with NixOS. The biggest problem is the lack of adoption. It still has not hit critical mass, and most of the core contributors are overloaded with far too much work.</p>
-<p>The second problem is that there is no way to do things like <code>make install</code> after you download the source code to some program <code>foo</code>. This is because NixOS does not have directories like <code>/usr/share</code> — the whole Linux Filesystem Hierarchy Standard is thrown out the window in favor of symlinks to the “compiled” Nix expressions. So, you have to Nxifiy it first, and then install it via its Nix expression (<code>foo.nix</code>). In this respect it shares the same pain point with <a href="http://www.gobolinux.org/">GoboLinux</a>. Personally this is not a huge problem for me, but it’s still a problem.</p>
+<p>Granted, there are problems with NixOS.
+The biggest problem is the lack of adoption.
+It still has not hit critical mass, and most of the core contributors are overloaded with far too much work.</p>
+<p>The second problem is that there is no way to do things like <code class="verbatim">make install</code> after you download the source code to some program <code class="verbatim">foo</code>.
+This is because NixOS does not have directories like <code class="verbatim">/usr/share</code> — the whole Linux Filesystem Hierarchy Standard is thrown out the window in favor of symlinks to the “compiled” Nix expressions.
+So, you have to Nxifiy it first, and then install it via its Nix expression (<code class="verbatim">foo.nix</code>).
+In this respect it shares the same pain point with <a href="http://www.gobolinux.org/">GoboLinux</a>.
+Personally this is not a huge problem for me, but it’s still a problem.</p>
 <h1 id="conclusion">Conclusion</h1>
-<p>I hope this post gave you some motivation to try out NixOS. It has a steep learning curve but after you get most things working, it’s really great. Happy hacking!</p>
-<section class="footnotes" role="doc-endnotes">
+<p>I hope this post gave you some motivation to try out NixOS.
+It has a steep learning curve but after you get most things working, it’s really great.
+Happy hacking!</p>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr />
 <ol>
-<li id="fn1" role="doc-endnote"><p>Granted, <code>$HOME</code> directories are supposed to be “dirty” as they are by their nature stateful things. On the other hand, system directories like <code>/usr/share</code> and <code>/usr/bin</code> should be kept clean by the distribution’s package management system, but rarely is it automatic and maintenance-free. Arch Linux is no exception.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2" role="doc-endnote"><p><code>PKGBUILD</code> files are like Makefiles, but for creating Arch Linux packages.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn3" role="doc-endnote"><p>The Nix package manager only deals with *.nix files, which are exclusively written in the Nix expression language.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>Granted, <code class="verbatim">$HOME</code> directories are supposed to be “dirty” as they are by their nature stateful things. On the other hand, system directories like <code class="verbatim">/usr/share</code> and <code class="verbatim">/usr/bin</code> should be kept clean by the distribution’s package management system, but rarely is it automatic and maintenance-free. Arch Linux is no exception.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p><code class="verbatim">PKGBUILD</code> files are like Makefiles, but for creating Arch Linux packages.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>The Nix package manager only deals with *.nix files, which are exclusively written in the Nix expression language.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 
@@ -96,7 +140,7 @@ source-code-pro-2.010
 
 		<div id="footer">
 			<img src="../favicon.png" id="brand-icon">
-			<p>Copyright (C) 2013-2021 Linus Arver. All rights reserved.</p>
+			<p>Copyright (C) 2013-2023 Linus Arver. All rights reserved.</p>
 			<a href="https://github.com/listx/listx_blog">Site</a>
 			<a href="https://github.com/listx/listx.github.io">generated</a>
 			with

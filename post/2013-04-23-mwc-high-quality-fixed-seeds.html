@@ -45,9 +45,25 @@
 	<a title="All pages tagged 'haskell'." href="../tag/haskell.html">haskell</a>, <a title="All pages tagged 'rng'." href="../tag/rng.html">rng</a>
 </div>
 
-<p>I use Bryan O’Sullivan’s <a href="http://hackage.haskell.org/package/mwc-random"><code>mwc-random</code></a> package for my PRNG (pseudorandom number generator) needs in my Haskell projects. <code>mwc-random</code> is very fast and generates high quality random numbers. It has a pretty simple API, and gives you several options of initializing the RNG state. One way is to use the <code>initialize</code> function, which simply takes a list of <code>Word32</code> elements and takes the first 256 of them to seed the generator (if less than 256, it fills the rest from a hard-coded list). I’ve discovered that using a simple list of 3 small numbers representing the year, month, and day (e.g., <code>[2013, 4, 11]</code>) is not very good as an argument to <code>initialize</code>, as the generator behaves somewhat similarly to, say, one with slightly different date (e.g., <code>[2013, 4, 12]</code>).</p>
+<p>I use Bryan O’Sullivan’s
+<a href="http://hackage.haskell.org/package/mwc-random"><code class="verbatim">mwc-random</code></a> package
+for my PRNG (pseudorandom number generator) needs in my Haskell
+projects. <code class="verbatim">mwc-random</code> is very fast and generates high quality random
+numbers. It has a pretty simple API, and gives you several options of
+initializing the RNG state. One way is to use the <code class="verbatim">initialize</code> function,
+which simply takes a list of <code class="verbatim">Word32</code> elements and takes the first 256
+of them to seed the generator (if less than 256, it fills the rest from
+a hard-coded list). I’ve discovered that using a simple list of 3 small
+numbers representing the year, month, and day (e.g., <code class="verbatim">[2013, 4, 11]</code>) is
+not very good as an argument to <code class="verbatim">initialize</code>, as the generator behaves
+somewhat similarly to, say, one with slightly different date (e.g.,
+<code class="verbatim">[2013, 4, 12]</code>).</p>
 <h1 id="the-problem">The Problem</h1>
-<p>I have a program that needs to be seeded on a day-by-day basis, and it must use the current date (year, month, and day only) as the seed; however, I need the seed to be random enough to make the MWC state spit out substantially different random numbers on different, yet similar days. In essence, I need to change</p>
+<p>I have a program that needs to be seeded on a day-by-day basis, and it
+must use the current date (year, month, and day only) as the seed;
+however, I need the seed to be random enough to make the MWC state spit
+out substantially different random numbers on different, yet similar
+days. In essence, I need to change</p>
 <div class="sourceCode" id="cb1" data-startFrom><pre class="sourceCode numberSource haskell numberLines"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">import</span> <span class="kw">qualified</span> <span class="dt">Data.Vector</span> <span class="kw">as</span> <span class="dt">V</span></span>
 <span id="cb1-2"><a href="#cb1-2"></a><span class="kw">import</span> <span class="dt">System.Random.MWC</span></span>
 <span id="cb1-3"><a href="#cb1-3"></a></span>
@@ -56,9 +72,22 @@
 <span id="cb1-6"><a href="#cb1-6"></a>    <span class="op">...</span></span></code></pre></div>
 <p>to something that has a much higher quality in terms of randomness.</p>
 <h1 id="enter-the-sha-1-hash-function">Enter the SHA-1 Hash Function</h1>
-<p>Ah, the venerable <a href="http://en.wikipedia.org/wiki/Sha1">SHA-1</a> function. It’s a real gem because you can use it to generate an extremely high-quality 160-bit (20-byte) random number from a given set of bytes; and, even if you change the input by a single byte, it will generate a <strong>totally different</strong> number. <em>You can think of the SHA-1 hash function as a function that takes a seed and generates a random number — where the seed can be 0 bytes or 123 bytes or whatever size.</em> Thankfully, there is a SHA-1 <a href="http://hackage.haskell.org/package/SHA">package</a> available, so I don’t need to write my own correct implementation of SHA-1 (not to mention that only a handful of programmers can even write such code).</p>
+<p>Ah, the venerable <a href="http://en.wikipedia.org/wiki/Sha1">SHA-1</a> function.
+It’s a real gem because you can use it to generate an extremely
+high-quality 160-bit (20-byte) random number from a given set of bytes;
+and, even if you change the input by a single byte, it will generate a
+<strong>totally different</strong> number. <em>You can think of the SHA-1 hash function as a function that takes a seed and generates a random number — where the seed can be 0 bytes or 123 bytes or whatever size.</em> Thankfully, there is
+a SHA-1 <a href="http://hackage.haskell.org/package/SHA">package</a> available,
+so I don’t need to write my own correct implementation of SHA-1 (not to
+mention that only a handful of programmers can even write such code).</p>
 <h1 id="the-solution">The Solution</h1>
-<p>To solve my problem, I just take the current date, then feed it to the SHA-1 function to get <code>sha1Hash</code>; I then then repeatedly call SHA-1 against <code>sha1Hash</code> recursively. Meanwhile, each time I get a SHA-1 hash of 20 bytes, I append it to an empty string of bytes, <code>acc</code>. When <code>acc</code> is large enough to be split up into 256 <code>Word32</code> elements, I feed it to <code>initialize</code>. The result is that I get much better seed-vs-similar-seed randomness with MWC.</p>
+<p>To solve my problem, I just take the current date, then feed it to the
+SHA-1 function to get <code class="verbatim">sha1Hash</code>; I then then repeatedly call SHA-1
+against <code class="verbatim">sha1Hash</code> recursively. Meanwhile, each time I get a SHA-1 hash
+of 20 bytes, I append it to an empty string of bytes, <code class="verbatim">acc</code>. When <code class="verbatim">acc</code>
+is large enough to be split up into 256 <code class="verbatim">Word32</code> elements, I feed it to
+<code class="verbatim">initialize</code>. The result is that I get much better seed-vs-similar-seed
+randomness with MWC.</p>
 <p>Here is the code:</p>
 <div class="code-and-raw">
 <div class="sourceCode" id="cb2" data-startFrom="1"><pre class="sourceCode numberSource numberLines haskell"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">import</span> <span class="dt">Data.Bits</span></span>
@@ -118,11 +147,16 @@
 <p> <code>mwc-seed.hs</code> <a class="raw" href="https://github.com/listx/listx_blog/blob/master/code/rng/mwc-seed.hs"><code>[GitHub]</code></a> <a class="raw" href="../code/rng/mwc-seed.hs" mimetype="text/plain"><code>[Download]</code></a> </p>
 </div>
 </div>
-<p>The neat <code>chop</code> function is by <a href="http://stackoverflow.com/a/5188922/437583">Dan Burton</a>. The octet conversion functions between <code>Word8</code> and <code>Word32</code> types are from <a href="http://www.haskell.org/pipermail/beginners/2010-October/005571.html">this message</a>.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
-<section class="footnotes" role="doc-endnotes">
+<p>The neat <code class="verbatim">chop</code> function is by
+<a href="http://stackoverflow.com/a/5188922/437583">Dan Burton</a>. The octet
+conversion functions between <code class="verbatim">Word8</code> and <code class="verbatim">Word32</code> types are from
+<a href="http://www.haskell.org/pipermail/beginners/2010-October/005571.html">this message</a>.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr />
 <ol>
-<li id="fn1" role="doc-endnote"><p>The distinction between big-endianness and little-endianness does not matter at all for purposes of my solution, but I still distinguished them anyway as a reference.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>The distinction between big-endianness and little-endianness does
+not matter at all for purposes of my solution, but I still
+distinguished them anyway as a reference.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 
@@ -130,7 +164,7 @@
 
 		<div id="footer">
 			<img src="../favicon.png" id="brand-icon">
-			<p>Copyright (C) 2013-2021 Linus Arver. All rights reserved.</p>
+			<p>Copyright (C) 2013-2023 Linus Arver. All rights reserved.</p>
 			<a href="https://github.com/listx/listx_blog">Site</a>
 			<a href="https://github.com/listx/listx.github.io">generated</a>
 			with

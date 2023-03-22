@@ -46,27 +46,43 @@
 </div>
 
 <h1 id="newsflash">Newsflash!</h1>
-<p>I just open-sourced my dotfiles! The repo is probably one of the older Git repos out there and has over 2000 commits! The <a href="https://github.com/listx/syscfg/commit/7ef106b306c1f2a5a7f622f67f1571976e8097ef">first commit</a> was made in March 10, 2009, over 7 years ago. Mind you, even by that time I had accumulated a whole suite of configs, and I even had an exotic setup with XMonad 0.8.1!</p>
+<p>I just open-sourced my dotfiles!
+The repo is probably one of the older Git repos out there and has over 2000 commits!
+The <a href="https://github.com/listx/syscfg/commit/7ef106b306c1f2a5a7f622f67f1571976e8097ef">first commit</a> was made in March 10, 2009, over 7 years ago.
+Mind you, even by that time I had accumulated a whole suite of configs, and I even had an exotic setup with XMonad 0.8.1!</p>
 <p>Here are some takeaways:</p>
 <h2 id="maintain-clean-meaningful-commit-history">Maintain clean, meaningful commit history</h2>
-<p>It’s nice to have clean commit history — every line of code can answer <strong>why</strong> it exists. You are doing yourself a disservice (in the long run) if you have overly terse commit messages. Generally speaking, be as verbose as you can be, but within reason. Keeping the first line of the commit message down to less than 80 characters goes a long way in setting the tone for any auxiliary paragraphs that follow.</p>
-<p>I am quite proud of the richness of my commit messages. Pretty much everything makes sense and I don’t have to use Google to reason about my choices.</p>
+<p>It’s nice to have clean commit history — every line of code can answer <strong>why</strong> it exists.
+You are doing yourself a disservice (in the long run) if you have overly terse commit messages.
+Generally speaking, be as verbose as you can be, but within reason.
+Keeping the first line of the commit message down to less than 80 characters goes a long way in setting the tone for any auxiliary paragraphs that follow.</p>
+<p>I am quite proud of the richness of my commit messages.
+Pretty much everything makes sense and I don’t have to use Google to reason about my choices.</p>
 <h2 id="keep-your-build-system-simple">Keep your build system simple</h2>
-<p>I’ve used a stupidly simple build system of creating symlinks to “install” my configuration — all with the help of a single <code>Makefile</code>. It’s not very flexible, and to be honest my Shell sklls are much better than what they used to be such that I could replace this setup with a script. But alas, the need for such a change has not been serious enough to warrant it.</p>
-<p>Moreover, having a simple “build” system ensures robustness; the more I get older, the more I value systems that have a long “bit-rot halflife”. I admire Knuth’s TEX system for this very same reason. And this is the same reason why I will probably not use anything higher-level than a shell script for the job.</p>
+<p>I’ve used a stupidly simple build system of creating symlinks to “install” my configuration — all with the help of a single <code>Makefile</code>.
+It’s not very flexible, and to be honest my Shell sklls are much better than what they used to be such that I could replace this setup with a script.
+But alas, the need for such a change has not been serious enough to warrant it.</p>
+<p>Moreover, having a simple “build” system ensures robustness; the more I get older, the more I value systems that have a long “bit-rot halflife”.
+I admire Knuth’s TEX system for this very same reason.
+And this is the same reason why I will probably not use anything higher-level than a shell script for the job.</p>
 <h2 id="delete-dead-code">Delete dead code</h2>
-<p>Every long-living code repository ends up collecting clutter over the years. It’s important to delete such code (and of course any corresponding comments), to keep the codebase nimble. Ultimately, the less code you have to maintain, the better.</p>
+<p>Every long-living code repository ends up collecting clutter over the years.
+It’s important to delete such code (and of course any corresponding comments), to keep the codebase nimble.
+Ultimately, the less code you have to maintain, the better.</p>
 <h2 id="dont-settle">Don’t settle</h2>
-<p>Software evolves. Always be on the lookout for better software, and new ways to configure them! Leverage the power of open source (free upgrades!) and make it work for you.</p>
+<p>Software evolves.
+Always be on the lookout for better software, and new ways to configure them!
+Leverage the power of open source (free upgrades!) and make it work for you.</p>
 <h1 id="do-you-track-your-configs">Do you track your configs?</h1>
-<p>If not, you should definitely consider it — what have you got to lose? Keeping a configuration repo (distributed across home computers) is probably the best way for you to learn how to use a distributed source control system; indeed it was how I learned to use Git properly.</p>
+<p>If not, you should definitely consider it — what have you got to lose?
+Keeping a configuration repo (distributed across home computers) is probably the best way for you to learn how to use a distributed source control system; indeed it was how I learned to use Git properly.</p>
 <p>Happy hacking!</p>
 
 		</div>
 
 		<div id="footer">
 			<img src="../favicon.png" id="brand-icon">
-			<p>Copyright (C) 2013-2021 Linus Arver. All rights reserved.</p>
+			<p>Copyright (C) 2013-2023 Linus Arver. All rights reserved.</p>
 			<a href="https://github.com/listx/listx_blog">Site</a>
 			<a href="https://github.com/listx/listx.github.io">generated</a>
 			with

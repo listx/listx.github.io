@@ -45,23 +45,28 @@
 	<a title="All pages tagged 'programming'." href="../tag/programming.html">programming</a>, <a title="All pages tagged 'linux'." href="../tag/linux.html">linux</a>, <a title="All pages tagged 'git'." href="../tag/git.html">git</a>
 </div>
 
-<p>I love <a href="https://github.com/jonas/tig">tig</a>. Still, I think the defaults aren’t the best for most developers. Here are two easy customizations to make the default view better.</p>
+<p>I love <a href="https://github.com/jonas/tig">tig</a>.
+Still, I think the defaults aren’t the best for most developers.
+Here are two easy customizations to make the default view better.</p>
 <p>First, put</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="bu">alias</span> tig=<span class="st">'tig -n 1000'</span></span></code></pre></div>
-<p>in your <code>~/.bashrc</code> to reduce tig’s startup time (especially on large repositories). There’s rarely a need to go back more than 1000 commits from your current HEAD position in an interactive, GUI-driven manner. And if you really need to see everything, do</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a>$ \<span class="ex">tig</span></span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="bu">alias</span> tig=<span class="st">'tig -n 1000'</span></span></code></pre></div>
+<p>in your <code class="verbatim">~/.bashrc</code> to reduce tig’s startup time (especially on large repositories).
+There’s rarely a need to go back more than 1000 commits from your current HEAD position in an interactive, GUI-driven manner.
+And if you really need to see everything, do</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> <span class="dt">\t</span>ig</span></code></pre></div>
 <p>on the terminal to bypass the shell alias.</p>
-<p>Second, put the following in your <code>~/.tigrc</code> file:</p>
+<p>Second, put the following in your <code class="verbatim">~/.tigrc</code> file:</p>
 <pre><code>set main-view = date author id:width=10 commit-title:yes,graph,refs
 </code></pre>
-<p>. This makes the default view show git commit hashes (where <code>width</code> is the number of hex digits to show), so that you don’t have to press ENTER on a particular commit to see its hash.</p>
+<p>.
+This makes the default view show git commit hashes (where <code class="verbatim">width</code> is the number of hex digits to show), so that you don’t have to press ENTER on a particular commit to see its hash.</p>
 <p>Happy hacking!</p>
 
 		</div>
 
 		<div id="footer">
 			<img src="../favicon.png" id="brand-icon">
-			<p>Copyright (C) 2013-2021 Linus Arver. All rights reserved.</p>
+			<p>Copyright (C) 2013-2023 Linus Arver. All rights reserved.</p>
 			<a href="https://github.com/listx/listx_blog">Site</a>
 			<a href="https://github.com/listx/listx.github.io">generated</a>
 			with
