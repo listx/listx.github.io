@@ -1,3 +1,4 @@
+make[2]: Entering directory '/home/l/blog'
 /* base.hs: Inject Skylighting-generated CSS */
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
@@ -732,3 +733,4 @@ html body div#footer img#brand-icon
 
 /* Generated with Clay, http://fvisser.nl/clay */
 
+make[2]: Leaving directory '/home/l/blog'
