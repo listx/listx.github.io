@@ -1,5 +1,3 @@
-make[2]: Entering directory '/home/l/blog'
-make[2]: Leaving directory '/home/l/blog'
 
 let wasm;
 
