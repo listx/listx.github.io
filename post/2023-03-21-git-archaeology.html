@@ -173,10 +173,7 @@ saving disk space) in a subsequent commit is if does not change. It must
 match identically!</p>
 <p>You may think, “why not just divide a file into chunks, and make blobs
 out of each chunk?” — that way, you’d naturally get some level of
-deduping, even without any additional work. Torvalds
-[[<a href="https://lore.kernel.org/git/Pine.LNX.4.58.0504151117360.7211@ppc970.osdl.org/">https://lore.kernel.org/git/Pine.LNX.4.58.0504151117360.7211@ppc970.osdl.org/</a>][considered
-this but rejected the idea for two reasons: performance and
-simplicity]].</p>
+deduping, even without any additional work. Torvalds <a href="https://lore.kernel.org/git/Pine.LNX.4.58.0504151117360.7211@ppc970.osdl.org/">considered this but rejected the idea for two reasons: performance and simplicity</a>.</p>
 <p>Just a couple months after the above email though, Git
 <a href="https://github.com/git/git/commit/c323ac7d9c573c5ee8b45b9b9def92a4d4d8204d">learned about pack files</a>. Basically, pack files compress a range of reachable
 objects between two commits and puts them all into two files, a pack
