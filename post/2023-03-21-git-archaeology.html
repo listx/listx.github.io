@@ -237,11 +237,10 @@ is a way to keep track of the latest commit by saving its object ID
 have a file with this object ID in it — and this is what modern Git
 (still) does. The old
 <a href="https://github.com/git/git/commit/6ad6d3d36c5924c8ff502ebbb6a6216df01e7efb">README</a>
-notes that in practice, the SHA1 hash was written at <code class="verbatim">.git/HEAD</code> in
-practice. It was formally recognized as such just a day later in
-<a href="https://github.com/git/git/commit/839a7a06f35bf8cd563a41d6db97f453ab108129"><code class="verbatim">839a7a06f35bf8cd563a41d6db97f453ab108129</code></a>,
-as part of the <code class="verbatim">git-prune-script</code> and <code class="verbatim">git-pull-script</code> helpers to help
-with merging.</p>
+notes that in practice, the SHA1 hash was written at <code class="verbatim">.git/HEAD</code>. It was
+formally recognized as such just a day later in
+<a href="https://github.com/git/git/commit/839a7a06f35bf8cd563a41d6db97f453ab108129"><code class="verbatim">839a7a06f35bf8cd563a41d6db97f453ab108129</code></a>, as part of the <code class="verbatim">git-prune-script</code>
+and <code class="verbatim">git-pull-script</code> helpers to help with merging.</p>
 <h2 id="usage-guide">Usage Guide</h2>
 <p>This guide explains how the earliest version of Git (root commit) works.
 You can read these steps and also look up the C source code and read
