@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Linus’s Blog - Lilac and Codex</title>
+		<link rel="stylesheet" href="../css/base.css">
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Serif+Pro">
+		<link rel="shortcut icon" type="image/png" href="../favicon.png">
+		<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+		<script src="../misc.js"></script>
+		<!-- https://github.com/mreid/markreidname-hakyll/blob/master/_templates/mathjax.html -->
+<script type="text/x-mathjax-config">
+	MathJax.Hub.Config({
+		extensions: ["tex2jax.js"],
+		jax: ["input/TeX", "output/HTML-CSS"],
+		tex2jax: {
+			inlineMath: [ ["\\(","\\)"] ],
+			displayMath: [ ["\\[","\\]"] ],
+			processEscapes: true
+		},
+		TeX: { equationNumbers: { autoNumber: "AMS" } },
+		"HTML-CSS": { availableFonts: ["TeX"] }
+	});
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"> </script>
+
+	</head>
+	<body>
+		<div id="header">
+			<a href="../">funloop.org</a>
+			|
+			<a href="../about.html">About</a>
+			|
+			<a href="../etc.html">Etc</a>
+		</div>
+
+		<div id="sticky-title">
+			<h1 class="center" id="page-title">Lilac and Codex</h1>
+		</div>
+
+		<div id="content">
+			<div class="info center">
+	<a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2023-11-21-lilac-and-codex.org" title="History"><code class="date">2023-11-21</code></a>
+	<br>
+	<a title="All pages tagged 'programming'." href="../tag/programming.html">programming</a>
+</div>
+
+<p>TL;DR: Check out my new open source projects, <a href="https://funloop.org/lilac">Lilac</a> (<a href="https://github.com/listx/lilac">GitHub</a>) and <a href="https://funloop.org/codex">Codex</a> (<a href="https://github.com/listx/codex">GitHub</a>)!</p>
+<h1 id="lilac">Lilac</h1>
+<p><a href="https://funloop.org/lilac">Lilac</a> builds on top of Emacs Orgmode to make Literate Programming (LP) targeting
+HTML
+much more pleasant than the default experience. It’s unapologetically
+opinionated. It encourages heavy use of Noweb-style references.</p>
+<p>Most people don’t believe in LP, which means it’ll get little use. But there is
+at least one user, officially…</p>
+<h1 id="codex">Codex</h1>
+<p><a href="https://funloop.org/codex">Codex</a> uses Lilac! Codex is a collection of blogpost-worthy solutions for some
+programming
+problems. I’m mainly doing this because it’s really fun for me when I dive deep
+into technical problems.</p>
+<p>Using Lilac and LP is a natural choice for Codex, because many (if not all?) the
+topics are small enough to be read and understood in one sitting. Bite-sized
+knowledge, my favorite!</p>
+<h1 id="lp-is-amazing">LP is amazing</h1>
+<p>I’m starting to think that any new programming project of mine should be done
+with LP. There’s already been numerous times when I had to dig deep into Lilac
+to edit things around after taking a long break, fearing that I may have trouble
+regaining context to become productive; and each time I was surprised to see how
+easy it was to context-switch. Thanks to Donald Knuth for introducing LP to the
+world.</p>
+
+		</div>
+
+		<div id="footer">
+			<img src="../favicon.png" id="brand-icon">
+			<p>Copyright (C) 2013-2023 Linus Arver. All rights reserved.</p>
+			<a href="https://github.com/listx/listx_blog">Site</a>
+			<a href="https://github.com/listx/listx.github.io">generated</a>
+			with
+			<a href="https://jaspervdj.be/hakyll">Hakyll</a>
+			and
+			<a href="http://sebastiaanvisser.github.com/clay">Clay</a>.
+			<br>
+			<a href="../atom.xml">Atom feed</a>
+		</div>
+	</body>
+</html>
