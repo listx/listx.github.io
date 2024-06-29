@@ -30,8 +30,6 @@
 			<a href="../">funloop.org</a>
 			|
 			<a href="../about.html">About</a>
-			|
-			<a href="../etc.html">Etc</a>
 		</div>
 
 		<div id="sticky-title">
@@ -42,7 +40,7 @@
 			<div class="info center">
 	<a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2021-03-15-bresenham-circle-drawing-algorithm.org" title="History"><code class="date">2021-03-15</code></a>
 	<br>
-	<a title="All pages tagged 'programming'." href="../tag/programming.html">programming</a>, <a title="All pages tagged 'math'." href="../tag/math.html">math</a>
+	<a title="All pages tagged 'programming'." href="../tag/programming.html" rel="tag">programming</a>, <a title="All pages tagged 'math'." href="../tag/math.html" rel="tag">math</a>
 </div>
 
 <!-- This is from https://rustwasm.github.io/docs/wasm-bindgen/examples/without-a-bundler.html. -->
@@ -162,49 +160,49 @@ This gives us 4-way symmetry because there are 4 quadrants.</p>
 <p>Note, however, that there is actually 8-way symmetry at hand because (1) we can swap <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>, and (2) because of the way we can distribute the negative sign:</p>
 <table>
 <thead>
-<tr class="header">
+<tr>
 <th>#</th>
 <th>Coordinate</th>
 <th>Quadrant</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>1</td>
 <td><code>( x, y)</code></td>
 <td>I</td>
 </tr>
-<tr class="even">
+<tr>
 <td>2</td>
 <td><code>( y, x)</code></td>
 <td>I</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>3</td>
 <td><code>(-x, y)</code></td>
 <td>II</td>
 </tr>
-<tr class="even">
+<tr>
 <td>4</td>
 <td><code>(-y, x)</code></td>
 <td>II</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>6</td>
 <td><code>(-x,-y)</code></td>
 <td>III</td>
 </tr>
-<tr class="even">
+<tr>
 <td>5</td>
 <td><code>(-y,-x)</code></td>
 <td>III</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>7</td>
 <td><code>( x,-y)</code></td>
 <td>IV</td>
 </tr>
-<tr class="even">
+<tr>
 <td>8</td>
 <td><code>( y,-x)</code></td>
 <td>IV</td>
@@ -955,7 +953,7 @@ There’s also a connection to calculus because we’re dealing in terms of <em>
 
 		<div id="footer">
 			<img src="../favicon.png" id="brand-icon">
-			<p>Copyright (C) 2013-2023 Linus Arver. All rights reserved.</p>
+			<p>Copyright (C) 2013-2024 Linus Arver. All rights reserved.</p>
 			<a href="https://github.com/listx/listx_blog">Site</a>
 			<a href="https://github.com/listx/listx.github.io">generated</a>
 			with

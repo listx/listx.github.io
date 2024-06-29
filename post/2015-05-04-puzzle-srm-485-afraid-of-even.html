@@ -30,8 +30,6 @@
 			<a href="../">funloop.org</a>
 			|
 			<a href="../about.html">About</a>
-			|
-			<a href="../etc.html">Etc</a>
 		</div>
 
 		<div id="sticky-title">
@@ -42,7 +40,7 @@
 			<div class="info center">
 	<a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2015-05-04-puzzle-srm-485-afraid-of-even.org" title="History"><code class="date">2015-05-04</code></a>
 	<br>
-	<a title="All pages tagged 'programming'." href="../tag/programming.html">programming</a>, <a title="All pages tagged 'math'." href="../tag/math.html">math</a>, <a title="All pages tagged 'haskell'." href="../tag/haskell.html">haskell</a>, <a title="All pages tagged 'ruby'." href="../tag/ruby.html">ruby</a>
+	<a title="All pages tagged 'programming'." href="../tag/programming.html" rel="tag">programming</a>, <a title="All pages tagged 'math'." href="../tag/math.html" rel="tag">math</a>, <a title="All pages tagged 'haskell'." href="../tag/haskell.html" rel="tag">haskell</a>, <a title="All pages tagged 'ruby'." href="../tag/ruby.html" rel="tag">ruby</a>
 </div>
 
 <h1 id="introduction">Introduction</h1>
@@ -92,7 +90,7 @@ Another interesting point is that adding by an even number does not change the p
 We now know how to construct <span class="math inline">\(AP\)</span> from <span class="math inline">\(m\)</span> and <span class="math inline">\(A_0\)</span>, so let’s examine the possible outcomes below:</p>
 <table>
 <thead>
-<tr class="header">
+<tr>
 <th style="text-align: center;"></th>
 <th style="text-align: center;"><span class="math inline">\(m\)</span></th>
 <th style="text-align: center;"><span class="math inline">\(A_0\)</span></th>
@@ -100,37 +98,37 @@ We now know how to construct <span class="math inline">\(AP\)</span> from <span 
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">1</td>
 <td style="text-align: center;"><span class="math inline">\(0\)</span></td>
 <td style="text-align: center;"><span class="math inline">\(\mathrm{O}\)</span></td>
 <td style="text-align: center;"><span class="math inline">\(\{\mathrm{O, O, O, O, \cdots{}}\}\)</span></td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;">2</td>
 <td style="text-align: center;"><span class="math inline">\(0\)</span></td>
 <td style="text-align: center;"><span class="math inline">\(\mathrm{E}\)</span></td>
 <td style="text-align: center;"><span class="math inline">\(\{\mathrm{E, E, E, E, \cdots{}}\}\)</span></td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">3</td>
 <td style="text-align: center;"><span class="math inline">\(\mathrm{E}\)</span></td>
 <td style="text-align: center;"><span class="math inline">\(\mathrm{O}\)</span></td>
 <td style="text-align: center;"><span class="math inline">\(\{\mathrm{O, O, O, O, \cdots{}}\}\)</span></td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;">4</td>
 <td style="text-align: center;"><span class="math inline">\(\mathrm{E}\)</span></td>
 <td style="text-align: center;"><span class="math inline">\(\mathrm{E}\)</span></td>
 <td style="text-align: center;"><span class="math inline">\(\{\mathrm{E, E, E, E, \cdots{}}\}\)</span></td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">5</td>
 <td style="text-align: center;"><span class="math inline">\(\mathrm{O}\)</span></td>
 <td style="text-align: center;"><span class="math inline">\(\mathrm{O}\)</span></td>
 <td style="text-align: center;"><span class="math inline">\(\{\mathrm{O, E, O, E, \cdots{}}\}\)</span></td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;">6</td>
 <td style="text-align: center;"><span class="math inline">\(\mathrm{O}\)</span></td>
 <td style="text-align: center;"><span class="math inline">\(\mathrm{E}\)</span></td>
@@ -148,13 +146,13 @@ That is, subsequent terms after <span class="math inline">\(A_0\)</span> do not 
 E.g.,</p>
 <table>
 <tbody>
-<tr class="odd">
+<tr>
 <td style="text-align: center;"><span class="math inline">\(AP = \{\mathrm{3, 3, 3, 3, \cdots{}, 3}\}\)</span></td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;">becomes</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: center;"><span class="math inline">\(MP = \{\mathrm{3, 3, 3, 3, \cdots{}, 3}\}\)</span></td>
 </tr>
 </tbody>
@@ -165,13 +163,13 @@ What’s more, every term in <span class="math inline">\(M_0\)</span> will be th
 E.g.,</p>
 <table>
 <tbody>
-<tr class="odd">
+<tr>
 <td style="text-align: center;"><span class="math inline">\(AP = \{\mathrm{10, 10, 10, 10, \cdots{}, 10}\}\)</span></td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;">becomes</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: center;"><span class="math inline">\(MP = \{\mathrm{5, 5, 5, 5, \cdots{}, 5}\}\)</span></td>
 </tr>
 </tbody>
@@ -187,13 +185,13 @@ So unlike in the case of <span class="math inline">\(m = 0\)</span> where all ev
 E.g.,</p>
 <table>
 <tbody>
-<tr class="odd">
+<tr>
 <td style="text-align: center;"><span class="math inline">\(AP = \{\mathrm{40, 48, 56, 64, 72}\}\)</span></td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;">becomes</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: center;"><span class="math inline">\(MP = \{\mathrm{5, 3, 7, 1, 9}\}\)</span></td>
 </tr>
 </tbody>
@@ -210,13 +208,13 @@ Let’s call these mutated terms <span class="math inline">\(O_F\)</span>.
 So if <span class="math inline">\(m\)</span> is odd, then we get either</p>
 <table>
 <tbody>
-<tr class="odd">
+<tr>
 <td style="text-align: center;"><span class="math inline">\(AP = \{\mathrm{O, E, O, E}\}, MP = \{\mathrm{O, O_F, O, O_F}\}\)</span></td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;">or</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: center;"><span class="math inline">\(AP = \{\mathrm{E, O, E, O}\}, MP = \{\mathrm{O_F, O, O_F, O}\}\)</span></td>
 </tr>
 </tbody>
@@ -233,13 +231,13 @@ The other way is if <span class="math inline">\(m\)</span> is even, and <span cl
 E.g. (where <span class="math inline">\(m = 10\)</span> and <span class="math inline">\(A_0 = 11\)</span>),</p>
 <table>
 <tbody>
-<tr class="odd">
+<tr>
 <td style="text-align: center;"><span class="math inline">\(AP = \{\mathrm{11, 21, 31, 41, 51}\}\)</span></td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;">becomes</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: center;"><span class="math inline">\(MP = \{\mathrm{11, 21, 31, 41, 51}\}\)</span></td>
 </tr>
 </tbody>
@@ -257,7 +255,7 @@ Our task in designing an “unmutate” function <span class="math inline">\(U()
 Let’s rewrite the table of all possibilities, with this analogy of “honest” and “fake” (<span class="math inline">\(O_F\)</span>) odd numbers after the mutation.</p>
 <table>
 <thead>
-<tr class="header">
+<tr>
 <th style="text-align: center;"></th>
 <th style="text-align: center;"><span class="math inline">\(m\)</span></th>
 <th style="text-align: center;"><span class="math inline">\(A_0\)</span></th>
@@ -266,42 +264,42 @@ Let’s rewrite the table of all possibilities, with this analogy of “honest�
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">1</td>
 <td style="text-align: center;"><span class="math inline">\(0\)</span></td>
 <td style="text-align: center;"><span class="math inline">\(\mathrm{O}\)</span></td>
 <td style="text-align: center;"><span class="math inline">\(\{\mathrm{O, O, O, O, \cdots{}}\}\)</span></td>
 <td style="text-align: center;"><span class="math inline">\(\{\mathrm{O, O, O, O, \cdots{}}\}\)</span></td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;">2</td>
 <td style="text-align: center;"><span class="math inline">\(0\)</span></td>
 <td style="text-align: center;"><span class="math inline">\(\mathrm{E}\)</span></td>
 <td style="text-align: center;"><span class="math inline">\(\{\mathrm{E, E, E, E, \cdots{}}\}\)</span></td>
 <td style="text-align: center;"><span class="math inline">\(\{\mathrm{O, O, O, O, \cdots{}}\}\)</span></td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">3</td>
 <td style="text-align: center;"><span class="math inline">\(\mathrm{E}\)</span></td>
 <td style="text-align: center;"><span class="math inline">\(\mathrm{O}\)</span></td>
 <td style="text-align: center;"><span class="math inline">\(\{\mathrm{O, O, O, O, \cdots{}}\}\)</span></td>
 <td style="text-align: center;"><span class="math inline">\(\{\mathrm{O, O, O, O, \cdots{}}\}\)</span></td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;">4</td>
 <td style="text-align: center;"><span class="math inline">\(\mathrm{E}\)</span></td>
 <td style="text-align: center;"><span class="math inline">\(\mathrm{E}\)</span></td>
 <td style="text-align: center;"><span class="math inline">\(\{\mathrm{E, E, E, E, \cdots{}}\}\)</span></td>
 <td style="text-align: center;"><span class="math inline">\(?\)</span></td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">5</td>
 <td style="text-align: center;"><span class="math inline">\(\mathrm{O}\)</span></td>
 <td style="text-align: center;"><span class="math inline">\(\mathrm{O}\)</span></td>
 <td style="text-align: center;"><span class="math inline">\(\{\mathrm{O, E, O, E, \cdots{}}\}\)</span></td>
 <td style="text-align: center;"><span class="math inline">\(\{\mathrm{O, O_F, O, O_F, \cdots{}}\}\)</span></td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;">6</td>
 <td style="text-align: center;"><span class="math inline">\(\mathrm{O}\)</span></td>
 <td style="text-align: center;"><span class="math inline">\(\mathrm{E}\)</span></td>
@@ -321,13 +319,13 @@ We can use the <strong>same</strong> equation to describe the growth behavior of
 And for that, we use the following translation:</p>
 <table>
 <tbody>
-<tr class="odd">
+<tr>
 <td style="text-align: center;"><span class="math inline">\(y = mx + b\)</span></td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;">becomes</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: center;"><span class="math inline">\(A_n = mn + A_0\)</span></td>
 </tr>
 </tbody>
@@ -338,13 +336,13 @@ Let’s simplify the equation with a concern to parity only.</p>
 <p>First, let’s rewrite the equation as follows:</p>
 <table>
 <tbody>
-<tr class="odd">
+<tr>
 <td style="text-align: center;"><span class="math inline">\(A_n = \mathrm{E\cdot{}}n + \mathrm{E}\)</span></td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;">or</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: center;"><span class="math inline">\(A_n = \mathrm{E_m}\cdot{}n + \mathrm{E_{A0}}\)</span></td>
 </tr>
 </tbody>
@@ -354,16 +352,16 @@ The <span class="math inline">\(\mathrm{E}\)</span> here represents that this nu
 If we use this equation to map out the first 4 elements of <span class="math inline">\(AP\)</span>, we get the following:</p>
 <table>
 <tbody>
-<tr class="odd">
+<tr>
 <td style="text-align: center;"><span class="math inline">\(A_0 = \mathrm{E_m\cdot{}0 + E_{A0}}\)</span></td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;"><span class="math inline">\(A_1 = \mathrm{E_m\cdot{}1 + E_{A0}}\)</span></td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: center;"><span class="math inline">\(A_2 = \mathrm{E_m\cdot{}2 + E_{A0}}\)</span></td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;"><span class="math inline">\(A_3 = \mathrm{E_m\cdot{}3 + E_{A0}}\)</span></td>
 </tr>
 </tbody>
@@ -378,19 +376,19 @@ There are two scaling rules: (1) if you multiply all terms of an arithmetic prog
 <p>The first scaling rule works because</p>
 <table>
 <tbody>
-<tr class="odd">
+<tr>
 <td style="text-align: center;"><span class="math inline">\(A_n = \mathrm{E_m\cdot{}}n + \mathrm{E_{A0}}\)</span></td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;">becomes</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: center;"><span class="math inline">\(A_n\cdot{}k = (\mathrm{E_m\cdot{}}n + \mathrm{E_{A0}})\cdot{}k\)</span></td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;">becomes</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: center;"><span class="math inline">\(A_n\cdot{}k = (\mathrm{E_m}\cdot{}{k})\cdot{}n + \mathrm{E_{A0}}\cdot{}k\)</span></td>
 </tr>
 </tbody>
@@ -400,19 +398,19 @@ Apart from increasing the first term <span class="math inline">\(\mathrm{A_0}\)<
 Likewise, if you <em>divide</em> all terms of an arithmetic progression by some nonzero integer <span class="math inline">\(k\)</span>, the new progression still remains arithmetic, because what you are doing is</p>
 <table>
 <tbody>
-<tr class="odd">
+<tr>
 <td style="text-align: center;"><span class="math inline">\(A_n = \mathrm{E_m\cdot{}}n + \mathrm{E_{A0}}\)</span></td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;">becomes</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: center;"><span class="math inline">\(\frac{A_n}{k} = \frac{\mathrm{E_m\cdot{}}n + \mathrm{E_{A0}}}{k}\)</span></td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;">becomes</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: center;"><span class="math inline">\(\frac{A_n}{k} = \frac{\mathrm{E_m}}{k}\cdot{}n + \frac{\mathrm{E_{A0}}}{k}\)</span></td>
 </tr>
 </tbody>
@@ -431,7 +429,7 @@ Which term is more <em>even</em> than the other?</p>
 If we write these three scenarios into a table, we get the following:</p>
 <table>
 <thead>
-<tr class="header">
+<tr>
 <th style="text-align: center;"></th>
 <th style="text-align: center;">Scaled by <span class="math inline">\(\frac{1}{2}\)</span> repeatedly</th>
 <th style="text-align: center;">Parity of Scaled <span class="math inline">\(AP\)</span></th>
@@ -439,19 +437,19 @@ If we write these three scenarios into a table, we get the following:</p>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">1</td>
 <td style="text-align: center;"><span class="math inline">\(\mathrm{S(E_m\cdot{}}n + \mathrm{E_{A0}}) = \mathrm{E\cdot{}}n + \mathrm{O}\)</span></td>
 <td style="text-align: center;"><span class="math inline">\(\{\mathrm{O, O, O, O, \cdots{}}\}\)</span></td>
 <td style="text-align: center;"><span class="math inline">\(\{\mathrm{O, O, O, O, \cdots{}}\}\)</span></td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;">2</td>
 <td style="text-align: center;"><span class="math inline">\(\mathrm{S(E_m\cdot{}}n + \mathrm{E_{A0}}) = \mathrm{O\cdot{}}n + \mathrm{E}\)</span></td>
 <td style="text-align: center;"><span class="math inline">\(\{\mathrm{E, O, E, O, \cdots{}}\}\)</span></td>
 <td style="text-align: center;"><span class="math inline">\(\{\mathrm{O_F, O, O_F, O, \cdots{}}\}\)</span></td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">3</td>
 <td style="text-align: center;"><span class="math inline">\(\mathrm{S(E_m\cdot{}}n + \mathrm{E_{A0}}) = \mathrm{O\cdot{}}n + \mathrm{O}\)</span></td>
 <td style="text-align: center;"><span class="math inline">\(\{\mathrm{O, E, O, E, \cdots{}}\}\)</span></td>
@@ -847,7 +845,7 @@ Until next time, happy hacking!</p>
 
 		<div id="footer">
 			<img src="../favicon.png" id="brand-icon">
-			<p>Copyright (C) 2013-2023 Linus Arver. All rights reserved.</p>
+			<p>Copyright (C) 2013-2024 Linus Arver. All rights reserved.</p>
 			<a href="https://github.com/listx/listx_blog">Site</a>
 			<a href="https://github.com/listx/listx.github.io">generated</a>
 			with

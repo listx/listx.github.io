@@ -6,10 +6,59 @@
     <id>http://funloop.org/atom.xml</id>
     <author>
         <name>Linus Arver</name>
-        <email></email>
+        
     </author>
-    <updated>2023-11-21T00:00:00Z</updated>
+    <updated>2024-06-29T00:00:00Z</updated>
     <entry>
+    <title>A New Chapter Begins</title>
+    <link href="http://funloop.org/post/2024-06-29-a-new-chapter-begins.html" />
+    <id>http://funloop.org/post/2024-06-29-a-new-chapter-begins.html</id>
+    <published>2024-06-29T00:00:00Z</published>
+    <updated>2024-06-29T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="info center">
+	<a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2024-06-29-a-new-chapter-begins.org" title="History"><code class="date">2024-06-29</code></a>
+	<br>
+	<a title="All pages tagged &#39;life&#39;." href="/tag/life.html" rel="tag">life</a>
+</div>
+
+<h1 id="jobs">Jobs</h1>
+<p>I recently started work at Qantas, focusing on backend systems written in
+Clojure. It’s an interesting change from the Golang work I did at Google for the
+Kubernetes community (primarily on <a href="https://github.com/kubernetes-sigs/prow">Prow</a>, the Kubernetes-native CI system). I
+expect to learn lots of new things and continue to grow as an engineer.</p>
+<p>The opportunity at Qantas presents a unique proposition to me because I’ve
+somehow managed to avoid getting familiar with Java and the JVM so far in my
+career. I’ve been doing some Clojure exercises on <a href="https://exercism.org/profiles/listx">Exercism</a> for a few weeks now
+and am getting the hang of the language. And I’ve been liking it so far — it
+feels like Haskell without all of the mind-bending GHC extensions, plus a great
+library/ecosystem story (seamless JVM interop). Oh and I actually prefer Lisp
+syntax over Haskell syntax (I’ll choose Lisp macros over Template Haskell, every
+time).</p>
+<h1 id="blog">Blog</h1>
+<p>I have some other blog post items in the backlog, so I plan on getting around to
+them in due time. I’ve just cleaned out some of the bitrot that’s been plaguing
+this site’s codebase for a while, so things are in working order again.</p>
+<h1 id="git">Git</h1>
+<p>I must mention that a few months back the Git community interviewed me for their
+<a href="https://git.github.io/rev_news/2024/03/31/edition-109/#developer-spotlight-linus-arver">Developer Spotlight</a>! Sadly I haven’t been involved much with Git as of late (due
+to moving countries, and also battling a nasty cold), but I do hope to upstream
+the 50+ patches I still have locally for improving the parser for the
+<code class="verbatim">git-interpret-trailers</code> subcommand. You could say that those patches helped me
+understand how to work with the Git mailing list (as well as getting used to
+writing C again).</p>
+<p>I also started using Notmuch again inside Emacs to communicate with the mailing
+list. I should write a short post about it.</p>
+<h1 id="australia">Australia</h1>
+<p>I’m now in Australia! How exciting! I fell in love with the country when I first
+visited it in 2019, and now I feel very lucky to call Australia home. I’m slowly
+getting used to the accent, and I do wonder if I’ll ever pick it up myself.</p>
+<p>The weather has been a bit wild (we had a cold snap with sub-zero temperatures
+in the first couple weeks of winter), but I really can’t complain because it’s
+still quite nice compared to Seattle’s cold and wet climate.</p>
+<p>Cheers!</p>
+]]></summary>
+</entry>
+<entry>
     <title>Lilac and Codex</title>
     <link href="http://funloop.org/post/2023-11-21-lilac-and-codex.html" />
     <id>http://funloop.org/post/2023-11-21-lilac-and-codex.html</id>
@@ -18,7 +67,7 @@
     <summary type="html"><![CDATA[<div class="info center">
 	<a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2023-11-21-lilac-and-codex.org" title="History"><code class="date">2023-11-21</code></a>
 	<br>
-	<a title="All pages tagged &#39;programming&#39;." href="/tag/programming.html">programming</a>
+	<a title="All pages tagged &#39;programming&#39;." href="/tag/programming.html" rel="tag">programming</a>
 </div>
 
 <p>TL;DR: Check out my new open source projects, <a href="https://funloop.org/lilac">Lilac</a> (<a href="https://github.com/listx/lilac">GitHub</a>) and <a href="https://funloop.org/codex">Codex</a> (<a href="https://github.com/listx/codex">GitHub</a>)!</p>
@@ -55,7 +104,7 @@ easy it was to context-switch.</p>
     <summary type="html"><![CDATA[<div class="info center">
 	<a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2023-03-21-git-archaeology.org" title="History"><code class="date">2023-03-21</code></a>
 	<br>
-	<a title="All pages tagged &#39;programming&#39;." href="/tag/programming.html">programming</a>, <a title="All pages tagged &#39;git&#39;." href="/tag/git.html">git</a>
+	<a title="All pages tagged &#39;programming&#39;." href="/tag/programming.html" rel="tag">programming</a>, <a title="All pages tagged &#39;git&#39;." href="/tag/git.html" rel="tag">git</a>
 </div>
 
 <p>TL;DR: Check out my <a href="https://github.com/listx/git/blob/study/STUDY_NOTES.md">STUDY_NOTES.md</a> on Git if you want a quick understanding of (ancient) Git internals!</p>
@@ -330,7 +379,7 @@ the very first merge in Git’s own history, see
     <summary type="html"><![CDATA[<div class="info center">
 	<a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2021-03-15-bresenham-circle-drawing-algorithm.org" title="History"><code class="date">2021-03-15</code></a>
 	<br>
-	<a title="All pages tagged &#39;programming&#39;." href="/tag/programming.html">programming</a>, <a title="All pages tagged &#39;math&#39;." href="/tag/math.html">math</a>
+	<a title="All pages tagged &#39;programming&#39;." href="/tag/programming.html" rel="tag">programming</a>, <a title="All pages tagged &#39;math&#39;." href="/tag/math.html" rel="tag">math</a>
 </div>
 
 <!-- This is from https://rustwasm.github.io/docs/wasm-bindgen/examples/without-a-bundler.html. -->
@@ -450,49 +499,49 @@ This gives us 4-way symmetry because there are 4 quadrants.</p>
 <p>Note, however, that there is actually 8-way symmetry at hand because (1) we can swap <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>, and (2) because of the way we can distribute the negative sign:</p>
 <table>
 <thead>
-<tr class="header">
+<tr>
 <th>#</th>
 <th>Coordinate</th>
 <th>Quadrant</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>1</td>
 <td><code>( x, y)</code></td>
 <td>I</td>
 </tr>
-<tr class="even">
+<tr>
 <td>2</td>
 <td><code>( y, x)</code></td>
 <td>I</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>3</td>
 <td><code>(-x, y)</code></td>
 <td>II</td>
 </tr>
-<tr class="even">
+<tr>
 <td>4</td>
 <td><code>(-y, x)</code></td>
 <td>II</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>6</td>
 <td><code>(-x,-y)</code></td>
 <td>III</td>
 </tr>
-<tr class="even">
+<tr>
 <td>5</td>
 <td><code>(-y,-x)</code></td>
 <td>III</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>7</td>
 <td><code>( x,-y)</code></td>
 <td>IV</td>
 </tr>
-<tr class="even">
+<tr>
 <td>8</td>
 <td><code>( y,-x)</code></td>
 <td>IV</td>
@@ -1249,7 +1298,7 @@ There’s also a connection to calculus because we’re dealing in terms of <em>
     <summary type="html"><![CDATA[<div class="info center">
 	<a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2021-01-05-mpd-and-replaygain.org" title="History"><code class="date">2021-01-05</code></a>
 	<br>
-	<a title="All pages tagged &#39;linux&#39;." href="/tag/linux.html">linux</a>, <a title="All pages tagged &#39;audio&#39;." href="/tag/audio.html">audio</a>
+	<a title="All pages tagged &#39;linux&#39;." href="/tag/linux.html" rel="tag">linux</a>, <a title="All pages tagged &#39;audio&#39;." href="/tag/audio.html" rel="tag">audio</a>
 </div>
 
 <p>Something like ~10 years ago, there was no easy way to apply <a href="https://en.wikipedia.org/wiki/ReplayGain">ReplayGain</a> to various audio files with different formats (e.g., flac vs mp3).
@@ -1296,7 +1345,7 @@ replaygain          &quot;track&quot;
     <summary type="html"><![CDATA[<div class="info center">
 	<a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2021-01-04-thoughts-on-baduk.org" title="History"><code class="date">2021-01-04</code></a>
 	<br>
-	<a title="All pages tagged &#39;baduk&#39;." href="/tag/baduk.html">baduk</a>
+	<a title="All pages tagged &#39;baduk&#39;." href="/tag/baduk.html" rel="tag">baduk</a>
 </div>
 
 <h1 id="my-history-with-baduk">My history with Baduk</h1>
@@ -1361,7 +1410,7 @@ I used the book <a href="https://www.amazon.com/Go-Complete-Introduction-Beginne
     <summary type="html"><![CDATA[<div class="info center">
 	<a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2020-12-05-twosum-problem-explained.org" title="History"><code class="date">2020-12-05</code></a>
 	<br>
-	<a title="All pages tagged &#39;algorithms&#39;." href="/tag/algorithms.html">algorithms</a>, <a title="All pages tagged &#39;math&#39;." href="/tag/math.html">math</a>
+	<a title="All pages tagged &#39;algorithms&#39;." href="/tag/algorithms.html" rel="tag">algorithms</a>, <a title="All pages tagged &#39;math&#39;." href="/tag/math.html" rel="tag">math</a>
 </div>
 
 <p>Just over three years ago, I watched <a href="https://youtu.be/XKu_SEDAykw">this video</a> that goes over the so-called “Two Sum” problem for the first time.
@@ -1493,7 +1542,7 @@ That’s the kind of power you need to go from <span class="math inline">\(O(n^2
     <summary type="html"><![CDATA[<div class="info center">
 	<a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2019-11-13-esrille-nisse-three-years-later.org" title="History"><code class="date">2019-11-13</code></a>
 	<br>
-	<a title="All pages tagged &#39;hardware&#39;." href="/tag/hardware.html">hardware</a>, <a title="All pages tagged &#39;esrille&#39;." href="/tag/esrille.html">esrille</a>, <a title="All pages tagged &#39;cherry mx&#39;." href="/tag/cherry%20mx.html">cherry mx</a>
+	<a title="All pages tagged &#39;hardware&#39;." href="/tag/hardware.html" rel="tag">hardware</a>, <a title="All pages tagged &#39;esrille&#39;." href="/tag/esrille.html" rel="tag">esrille</a>, <a title="All pages tagged &#39;cherry mx&#39;." href="/tag/cherry%20mx.html" rel="tag">cherry mx</a>
 </div>
 
 <p>Over three years ago, I wrote <a href="./2016-04-14-esrille-nisse-keyboard.html">a post</a> describing the Esrille Nisse keyboard.
@@ -1629,7 +1678,7 @@ I sincerely hope that that day never comes…!</p>
     <summary type="html"><![CDATA[<div class="info center">
 	<a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2019-11-11-status-update.org" title="History"><code class="date">2019-11-11</code></a>
 	<br>
-	<a title="All pages tagged &#39;status&#39;." href="/tag/status.html">status</a>
+	<a title="All pages tagged &#39;status&#39;." href="/tag/status.html" rel="tag">status</a>
 </div>
 
 <p>It’s been another year since my last blog post!</p>
@@ -1656,7 +1705,7 @@ Stay tuned!</p>
     <summary type="html"><![CDATA[<div class="info center">
 	<a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2018-11-11-status-update.org" title="History"><code class="date">2018-11-11</code></a>
 	<br>
-	<a title="All pages tagged &#39;status&#39;." href="/tag/status.html">status</a>
+	<a title="All pages tagged &#39;status&#39;." href="/tag/status.html" rel="tag">status</a>
 </div>
 
 <p>It’s been a year since my last blog post.
@@ -1690,135 +1739,6 @@ That might take years, but, it is my hope that in the future I’ll be able to w
 <h1 id="https-for-this-site">HTTPS for this site</h1>
 <p>Apparently HTTPS support for custom domains on Github have been a thing since earlier this year.
 I never got around to it but thanks to <a href="https://medium.com/@goelanirudh/add-https-to-your-namecheap-domain-hosted-on-github-pages-d66fd96308b5">this post</a> I finally enabled it.</p>
-]]></summary>
-</entry>
-<entry>
-    <title>Useful Manpages</title>
-    <link href="http://funloop.org/post/2017-11-11-useful-manpages.html" />
-    <id>http://funloop.org/post/2017-11-11-useful-manpages.html</id>
-    <published>2017-11-11T00:00:00Z</published>
-    <updated>2017-11-11T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="info center">
-	<a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2017-11-11-useful-manpages.org" title="History"><code class="date">2017-11-11</code></a>
-	<br>
-	<a title="All pages tagged &#39;linux&#39;." href="/tag/linux.html">linux</a>, <a title="All pages tagged &#39;git&#39;." href="/tag/git.html">git</a>
-</div>
-
-<p>A while ago I discovered that <a href="https://www.reddit.com/r/linux/comments/74msho/til_there_is_a_manpage_for_the_ascii_character_set/">there is a manpage for the ASCII character set</a>.
-It got a bunch of upvotes, and since then I wondered what other manpages were worth knowing about.
-Below is a small table of manpages that I found interesting.</p>
-<table>
-<thead>
-<tr class="header">
-<th>Manpage</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><code class="verbatim">ascii(7)</code></td>
-<td>the ASCII character set (in octal, decimal, and hex)</td>
-</tr>
-<tr class="even">
-<td><code class="verbatim">units(7)</code></td>
-<td>megabytes vs mebibytes, etc.</td>
-</tr>
-<tr class="odd">
-<td><code class="verbatim">hier(7)</code></td>
-<td>traditional filesystem hierarchy (e.g., <code class="verbatim">/bin</code> vs <code class="verbatim">/usr/bin</code>)</td>
-</tr>
-<tr class="even">
-<td><code class="verbatim">file-hierarchy(7)</code></td>
-<td>(systemd) filesystem hierarchy</td>
-</tr>
-<tr class="odd">
-<td><code class="verbatim">operator(7)</code></td>
-<td>C operator precedence rules (listed in descending order)</td>
-</tr>
-<tr class="even">
-<td><code class="verbatim">console_codes(4)</code></td>
-<td>Linux console escape and control sequences</td>
-</tr>
-<tr class="odd">
-<td><code class="verbatim">terminal-colors.d(5)</code></td>
-<td>among other things, ANSI color sequences</td>
-</tr>
-<tr class="even">
-<td><code class="verbatim">boot(7)</code></td>
-<td>UNIX System V Release 4 bootup process</td>
-</tr>
-<tr class="odd">
-<td><code class="verbatim">daemon(7)</code></td>
-<td>(systemd) how to write/package daemons</td>
-</tr>
-<tr class="even">
-<td><code class="verbatim">proc(5)</code></td>
-<td>proc filesystem (<code class="verbatim">/proc</code>)</td>
-</tr>
-<tr class="odd">
-<td><code class="verbatim">ip(7)</code></td>
-<td>Linux IPv4 protocol implementation (a bit low-level, but still useful)</td>
-</tr>
-<tr class="even">
-<td><code class="verbatim">ipv6(7)</code></td>
-<td>Linux IPv6 protocol implementation</td>
-</tr>
-<tr class="odd">
-<td><code class="verbatim">socket(7)</code></td>
-<td>Linux socket interface</td>
-</tr>
-<tr class="even">
-<td><code class="verbatim">unix(7)</code></td>
-<td>UNIX domain sockets</td>
-</tr>
-<tr class="odd">
-<td><code class="verbatim">fifo(7)</code></td>
-<td>named pipes</td>
-</tr>
-</tbody>
-</table>
-<p>Note that you need to run</p>
-<pre><code>sudo mandb
-</code></pre>
-<p>to be able to invoke <code class="verbatim">apropos &lt;SEARCH_TERM&gt;</code> or <code class="verbatim">man -k &lt;SEARCH_TERM&gt;</code> (<code class="verbatim">man -k</code> is equivalent to <code class="verbatim">apropos</code> — see <code class="verbatim">man(1)</code>).</p>
-<h2 id="git-specific">Git-specific</h2>
-<p>You probably knew already that Git has many manpages dedicated to each of its subcommands, such as <code class="verbatim">git-clone(1)</code> or <code class="verbatim">git-commit(1)</code>, but did you know that it also comes with a suite of tutorials?
-Behold!</p>
-<table>
-<thead>
-<tr class="header">
-<th>Manpage</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><code class="verbatim">giteveryday(7)</code></td>
-<td>the top ~20 useful git commands you should know</td>
-</tr>
-<tr class="even">
-<td><code class="verbatim">gitglossary(7)</code></td>
-<td>a glossary of all git concepts (blob object, working tree, etc.)</td>
-</tr>
-<tr class="odd">
-<td><code class="verbatim">gittutorial(7)</code></td>
-<td>a high-level view of using git</td>
-</tr>
-<tr class="even">
-<td><code class="verbatim">gittutorial-2(7)</code></td>
-<td>explains the object database and index file (git architecture internals)</td>
-</tr>
-<tr class="odd">
-<td><code class="verbatim">gitcore-tutorial(7)</code></td>
-<td>like <code class="verbatim">gittutorial-2(7)</code>, but much more detailed</td>
-</tr>
-<tr class="even">
-<td><code class="verbatim">gitworkflows(7)</code></td>
-<td>recommended workflows, esp. branching strategies for maintainers</td>
-</tr>
-</tbody>
-</table>
-<p>Happy hacking!</p>
 ]]></summary>
 </entry>
 

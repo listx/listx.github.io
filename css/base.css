@@ -1,6 +1,6 @@
 /* base.hs: Inject Skylighting-generated CSS */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -11,7 +11,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -130,8 +130,6 @@ html body div.center
 
 html body div#sticky-title
 {
-  position           : -webkit-sticky;
-  position           : sticky;
   top                : 0;
   z-index            : 2;
   background-image   : -webkit-linear-gradient(right,#ffffff 0%,#e0f8f2 10%,#e0f8f2 90%,#ffffff 100%);

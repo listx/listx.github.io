@@ -30,8 +30,6 @@
 			<a href="../">funloop.org</a>
 			|
 			<a href="../about.html">About</a>
-			|
-			<a href="../etc.html">Etc</a>
 		</div>
 
 		<div id="sticky-title">
@@ -42,7 +40,7 @@
 			<div class="info center">
 	<a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2017-05-13-tower-of-hanoi.org" title="History"><code class="date">2017-05-13</code></a>
 	<br>
-	<a title="All pages tagged 'math'." href="../tag/math.html">math</a>
+	<a title="All pages tagged 'math'." href="../tag/math.html" rel="tag">math</a>
 </div>
 
 <p>In the very first chapter of the book <a href="https://en.wikipedia.org/wiki/Concrete_Mathematics"><em>Concrete Mathematics</em> 2ed</a> there is a discussion about the <a href="https://en.wikipedia.org/wiki/Tower_of_Hanoi">Tower of Hanoi</a>.
@@ -99,45 +97,45 @@ The more discs there are, the more work we have to do, right?
 So let’s look at small cases to see how the numbers grow, and see if there is a pattern to the growth rate of <span class="math inline">\(S_n\)</span>.</p>
 <table>
 <thead>
-<tr class="header">
+<tr>
 <th style="text-align: center;"><span class="math inline">\(n\)</span></th>
 <th style="text-align: center;"><span class="math inline">\(S_n\)</span></th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">0</td>
 <td style="text-align: center;">0</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;">1</td>
 <td style="text-align: center;">1</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">2</td>
 <td style="text-align: center;">3</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;">3</td>
 <td style="text-align: center;">7</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">4</td>
 <td style="text-align: center;">15</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;">5</td>
 <td style="text-align: center;">31</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">6</td>
 <td style="text-align: center;">63</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;">7</td>
 <td style="text-align: center;">127</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">8</td>
 <td style="text-align: center;">255</td>
 </tr>
@@ -147,45 +145,45 @@ So let’s look at small cases to see how the numbers grow, and see if there is 
 <p>Anyway, the values of <span class="math inline">\(S_n\)</span> sure look familiar — especially if we use base 2.</p>
 <table>
 <thead>
-<tr class="header">
+<tr>
 <th style="text-align: center;"><span class="math inline">\(n\)</span></th>
 <th style="text-align: right;">binary(<span class="math inline">\(S_n\)</span>)</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">0</td>
 <td style="text-align: right;"><span class="math inline">\(0_2\)</span></td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;">1</td>
 <td style="text-align: right;"><span class="math inline">\(1_2\)</span></td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">2</td>
 <td style="text-align: right;"><span class="math inline">\(11_2\)</span></td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;">3</td>
 <td style="text-align: right;"><span class="math inline">\(111_2\)</span></td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">4</td>
 <td style="text-align: right;"><span class="math inline">\(1111_2\)</span></td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;">5</td>
 <td style="text-align: right;"><span class="math inline">\(11111_2\)</span></td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">6</td>
 <td style="text-align: right;"><span class="math inline">\(111111_2\)</span></td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: center;">7</td>
 <td style="text-align: right;"><span class="math inline">\(1111111_2\)</span></td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: center;">8</td>
 <td style="text-align: right;"><span class="math inline">\(11111111_2\)</span></td>
 </tr>
@@ -316,7 +314,7 @@ But I find it a bit too terse for my tastes.<a href="#fnref4" class="footnote-ba
 
 		<div id="footer">
 			<img src="../favicon.png" id="brand-icon">
-			<p>Copyright (C) 2013-2023 Linus Arver. All rights reserved.</p>
+			<p>Copyright (C) 2013-2024 Linus Arver. All rights reserved.</p>
 			<a href="https://github.com/listx/listx_blog">Site</a>
 			<a href="https://github.com/listx/listx.github.io">generated</a>
 			with
