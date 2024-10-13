@@ -8,8 +8,200 @@
         <name>Linus Arver</name>
         
     </author>
-    <updated>2024-06-29T00:00:00Z</updated>
+    <updated>2024-10-11T00:00:00Z</updated>
     <entry>
+    <title>Using Git the Right Way</title>
+    <link href="http://funloop.org/post/2024-10-11-using-git-the-right-way.html" />
+    <id>http://funloop.org/post/2024-10-11-using-git-the-right-way.html</id>
+    <published>2024-10-11T00:00:00Z</published>
+    <updated>2024-10-11T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="info center">
+	<a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2024-10-11-using-git-the-right-way.org" title="History"><code class="date">2024-10-11</code></a>
+	<br>
+	<a title="All pages tagged &#39;git&#39;." href="/tag/git.html" rel="tag">git</a>, <a title="All pages tagged &#39;programming&#39;." href="/tag/programming.html" rel="tag">programming</a>
+</div>
+
+<p>I’ll first describe 3 different levels of Git proficiency. Then I’ll discuss
+ways to actually use Git “The Right Way” to get the most value out of it, and
+end with some tips. Hopefully by the end of this post you’ll want to become an
+advanced Git user if you’re not one already.</p>
+<h1 id="beginner">Beginner</h1>
+<p>You use Git as a necessary evil, because it’s mandated by your company to use
+it. It’s the only way for you to contribute code, so you put up with it.</p>
+<p>You use <code class="verbatim">git commit .</code> to commit everything in the (top-level?) directory, because
+you don’t know how to use <code class="verbatim">git rebase -i</code> effectively.</p>
+<h1 id="intermediate">Intermediate</h1>
+<p>You realize that Git is a useful tool for organizing code changes. You have
+multiple branches and know how to keep each one up-to-date. You might also know
+how to use <code class="verbatim">git rebase -i</code> to clean up history, for example to separate out
+formatting changes from semantic changes.</p>
+<p>You use <code class="verbatim">git add -p</code> to help avoid needing to reach for <code class="verbatim">git rebase -i</code>.</p>
+<h1 id="advanced">Advanced</h1>
+<p>You appreciate Git commit messages as an important tool for archiving historical
+context and knowledge about every code change. These commit messages are written
+in stone forever, so you take care to craft each one with the utmost care. You
+care about giving a good reason (the <em>why</em>) in each commit message. And sometimes
+there are multiple “why” reasons: why you are authoring the commit at all in the
+first place, as well as why you are choosing the particular approach in the code.</p>
+<p>This makes it pleasant for others to review your code, because you’ve taken the
+time to explain everything in each commit, perhaps even preemptively answering
+questions that code reviewers might have.</p>
+<p>You try your best to help others understand the benefit of clean, beautiful Git
+history, because you know that future maintainers of the codebase will
+appreciate the story behind how it evolved over time.</p>
+<h1 id="using-git-the-right-way-as-an-advanced-user">Using Git “The Right Way” as an Advanced User</h1>
+<p>But what does it mean to use Git as an advanced user? How do commits
+actually get created in an advanced way? This is what that looks like in
+practice:</p>
+<ul>
+<li><p>You have to make each commit do exactly one thing, and also explain why you
+did it that way (esp. if there are several alternative paths you rejected).</p></li>
+<li><p>You have to order each commit so that it makes sense from the reviewer’s point
+of view as they review each commit one at a time (for example, you don’t want
+to have a pure formatting (whitespace) commit right in the middle of your
+5-commit PR).</p></li>
+<li><p>When you get PR comments, you have to go back to each commit and modify each
+one accordingly. That is, you mustn’t add a trailing “address PR comments”
+commit at the end which does 5 different things in one commit. That’s because
+there is little value in preserving the original approach (with all its warts)
+if they’re going to be deprecated within the same PR by an “address PR
+comments” commit at the end. And such commits are by definition poorly crafted
+because they often do 2, 3, or 5 things at once in a single commit.</p></li>
+</ul>
+<p>The last point may be the dealbreaker for most Git users, because it requires
+<code class="verbatim">git rebase -i</code> familiarity. However there are at least two fantastic benefits
+that you get from a codebase where Git was used in “The Right Way”:</p>
+<ul>
+<li><p><strong>Code review becomes much more effective</strong>, because reviewers only have to focus
+on one (neatly-explained and crafted) commit at a time. The signal-to-noise
+ratio of each commit is high, so reviewers can spend more of their brainpower
+actually thinking about the code, instead of fighting an uphill battle against
+poorly organized commits that do several things at once (perhaps even wasting
+time commenting on commit 1, only to see in commit 2 that a large chunk of
+commit 1 has already been deprecated).</p></li>
+<li><p><strong>Using <code class="verbatim">git-blame</code> becomes less noisy</strong>, because you’re not led back to messy
+commits. This matters even more when the original authors of the codebase are
+gone, because the value of a Git repo is that it can tell you a story of how
+code changed over time. The value of this story is directly correlated with
+the quality of the commit history. Woe to the developer who is led by
+<code class="verbatim">git-blame</code> to a mega-commit (perhaps squashed together automatically by
+GitHub), which squashes together 20 commits all together into a single
+2000-line diff.</p></li>
+</ul>
+<p>The benefit to code review alone should be reason enough for you to get better
+at using Git if you’re not comfortable with it already.</p>
+<h1 id="tips-for-getting-better-at-git">Tips for getting better at Git</h1>
+<h2 id="most-useful-git-commands">Most useful Git commands</h2>
+<p>If I had to recommend 2 commands (which are most often neglected), it would be:</p>
+<ul>
+<li><p><code class="verbatim">git add -p</code> to add only those pieces that belong logically together, and</p></li>
+<li><p><code class="verbatim">git rebase -i</code> to modify history for both preparing a PR for review, as well as
+addressing review comments on a commit-by-commit basis (and not overall PR
+basis as mentioned above with “address PR comments”)</p></li>
+</ul>
+<p>These two commands help you craft small, short-and-sweet commits that do one
+thing well. It makes code review a breeze because the reviewer only has to look
+at each of these small commits, one at a time.</p>
+<h2 id="dont-create-meaningless-merges">Don’t create meaningless merges</h2>
+<p>Another thing you can do is to avoid merging in the latest <code class="verbatim">main</code> (or <code class="verbatim">master</code>)
+branch into your PR branch. GitHub shockingly encourages this horrible behavior,
+encouraging newcomers to create many useless merge commits in a PR before it is
+merged, making a real mess of the history.</p>
+<p>Never merge <code class="verbatim">main</code> into your branch. Instead, every PR should have only 1 merge
+commit — when the PR is merged into <code class="verbatim">main</code>. This keeps the history clean.</p>
+<h2 id="rich-commit-messages">Rich commit messages</h2>
+<p>Lastly, I recommend using the <strong>active voice</strong> in <strong>present tense (imperative mood)</strong> to
+keep commit messages as <strong>direct</strong> as possible. Here’s an example of a noisy commit
+message not adhering to these rules:</p>
+<pre class="example"><code>fixed string buffer to have dynamically allocated memory instead of statically allocated limit of 255 characters sometimes we might need more than this esp on production
+</code></pre>
+<p>Terrible, right? Here’s why:</p>
+<ul>
+<li><p>There’s no commit message. It’s just the commit title.</p></li>
+<li><p>The commit title is a long string (far over the recommended 50-character
+limit) that will get truncated by GitHub on some of its UIs, not to mention
+other Git tooling.</p></li>
+<li><p>There is no use of punctuation like this sentence which makes it a run-on
+sentence that makes it hard to read because punctuation was designed to help
+break up long series of words into smaller chunks of logical groupings do you
+really like to read long sentences without any punctuation I don’t think so
+but if you do then I don’t know what to say about that.</p></li>
+<li><p>It’s messy. There are several ideas here (string buffers, memory allocation,
+hardcoded limits, and real-world production use-cases), but they aren’t really
+given any attention individually. Instead they’re all jumbled up together into
+one big mess.</p></li>
+</ul>
+<p>In summary, there are all of these <em>speed bumps</em> that just get in your way. It has
+a very low signal-to-noise ratio. Well, at least it’s better than “fix string
+bug” or some other lazy gibberish.</p>
+<p>Now consider how the same commit message could have been written:</p>
+<pre class="example"><code>module foo: use dynamic strings to avoid truncation
+
+The use of the 255-character limit for strings in module foo was first
+introduced in 0a6f593 (use fixed sizes for strings, 2022-03-14). This
+worked for a long time because we always knew (at program init time)
+what each string looked like.
+
+But then 51b475c (allow changing strings during runtime, 2024-06-29)
+introduced the ability for strings to be reassigned during runtime, not
+just at program initialization. This means that sometimes users were
+assigning strings longer than 255 characters without realizing that this
+was the case, because we don&#39;t perform input validation during string
+reassignments. This led to these strings getting silently truncated,
+leading to a jarring experience later on.
+
+Drop the 255-character limit, and instead use dynamic strings. We could
+probably get away with a larger 1024-character limit, but then given how
+most strings are far less than 1024 characters, using a larger hardcoded
+limit would lead to a large amount of memory being wasted in practice.
+If we do need to go back to a larger hardcoded limit in the future, we
+could consider moving toward a model of multiple hardcoded limits,
+perhaps 255, 512, and 1024. For now, using dynamic allocation everywhere
+is simpler, so that&#39;s what we do here.
+</code></pre>
+<p>And here’s why it’s better:</p>
+<ul>
+<li><p>It had a clear title. It even has a “module foo” prefix to signal that it’s
+about the “foo” module.</p></li>
+<li><p>It shares some historical knowledge (which is already present in Git but
+perhaps not obvious to those not familiar with “module foo”) to explain the
+problem, its origins, and current status quo. It references important
+historical events with the associated commit messages, using <code class="verbatim">git show
+ --no-patch --pretty=reference</code> output. The historical tour of these important
+commits provides a huge amount of value behind the motivation of this commit.</p></li>
+<li><p>It uses imperative mood “Drop the 255-character limit, and instead use dynamic
+strings” to emphasize (and summarize) what’s actually changing in this commit.
+So now when reviewers read this commit, they already know what to look for
+(did the committer actually remove all fixed string limits?). This <em>empowers</em>
+reviewers, because now they know what to expect.</p></li>
+<li><p>It explains how the problem was happening, with “This means that sometimes
+users were assigning strings longer than 255 characters without realizing that
+this was the case, because we don’t perform input validation during string
+reassignments.” A good reviewer may ask “why not just add input validation as
+an alternative solution, instead of using dynamic allocation, to fix the
+problem?” during code review. A commit message isn’t good because it’s some
+bulletproof case for doing something a particular way — it also exposes
+(perhaps unintentionally) any possible weaknesses with the chosen approach by
+providing sufficient context into the problem space.</p></li>
+<li><p>It uses well-formed sentences! With punctuation!</p></li>
+<li><p>It has no typos and observes the “~50 char title, 72 char commit message”
+rule. The 72 characters for commit messages could be relaxed to 80 or 100, but
+you don’t want it too long because shorter columns are simply easier to read
+when scanning the text with your eyes.</p></li>
+</ul>
+<p>Of course, it is longer. And it took more effort to write. I’m arguing that such
+effort is worth it for future maintainers (maybe it’ll be the same person who
+authored the commit 6 months later who has forgotten everything about “module
+foo”).</p>
+<h1 id="conclusion">Conclusion</h1>
+<p>Hopefully I’ve convinced you that using Git is much more nuanced than simply
+knowing the right commands. If you want to get exposure to a project that
+follows the above recommendations (full of advanced Git users), I recommend the
+<a href="https://git-scm.com/community">Git project itself</a>.</p>
+<p>Please use Git to its full potential. Don’t settle!</p>
+]]></summary>
+</entry>
+<entry>
     <title>A New Chapter Begins</title>
     <link href="http://funloop.org/post/2024-06-29-a-new-chapter-begins.html" />
     <id>http://funloop.org/post/2024-06-29-a-new-chapter-begins.html</id>
@@ -1694,51 +1886,6 @@ This list is not the same list of programming languages in my last post (which m
 <h1 id="future">Future</h1>
 <p>I will post again when the Git book is ready.
 Stay tuned!</p>
-]]></summary>
-</entry>
-<entry>
-    <title>Status Update</title>
-    <link href="http://funloop.org/post/2018-11-11-status-update.html" />
-    <id>http://funloop.org/post/2018-11-11-status-update.html</id>
-    <published>2018-11-11T00:00:00Z</published>
-    <updated>2018-11-11T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="info center">
-	<a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2018-11-11-status-update.org" title="History"><code class="date">2018-11-11</code></a>
-	<br>
-	<a title="All pages tagged &#39;status&#39;." href="/tag/status.html" rel="tag">status</a>
-</div>
-
-<p>It’s been a year since my last blog post.
-Many things have happened since that time.</p>
-<p>Below are some of the more interesting items.</p>
-<h1 id="imvu-to-google">IMVU to Google</h1>
-<p>I got laid off at <a href="https://imvu.com">IMVU</a> in September 2017.
-It was a difficult time for me as I had become good friends with the people there.
-After almost 2 months of searching for jobs, I somehow managed to land a job at Google!
-My title is Release Engineer.
-I’ve been there almost a year now and I am still happy and excited to work there.</p>
-<h1 id="golang">Golang</h1>
-<p>I started learning Golang a few months ago, because, I felt that this is the best time to learn it (while I’m employed by Google).
-I haven’t really done any of the advanced things yet, but I like how the language tries really hard to keep the syntax simple.
-It’s a lot like C in that regard.</p>
-<p>The only pain point in Go for me is the packaging/installation system.
-The whole opintionated $GOPATH thing just feels a bit clunky because of the shared folder namespace with other projects.
-But I guess that’s unavoidable in any language’s ecosystem.</p>
-<h1 id="git-book">Git Book</h1>
-<p>I started writing a short (informal) book on Git.
-I am using LuaTeX to write it; I started in March 2018 but have yet to cross the 1/2 way mark.
-Hopefully I’ll get it done before March 2019 rolls around.</p>
-<h1 id="haskell-book">Haskell book</h1>
-<p>Back in <a href="./2016-01-04-status-update.html">2016’s status update</a> I said that I still planned to finish the Haskell book I was working on.
-That project is definitely dead.
-One reason is that due to the rising popularity of the language, I feel that other people have already said what I had meant to say in my book.</p>
-<h1 id="shen-rust-erlang-idris-factor">Shen, Rust, Erlang, Idris, Factor</h1>
-<p>I’ve grown interested in these languages because well, I feel like they are important.
-My hope is to find some interesting problems that can be solved idiomatically in each language.
-That might take years, but, it is my hope that in the future I’ll be able to write about these languages.</p>
-<h1 id="https-for-this-site">HTTPS for this site</h1>
-<p>Apparently HTTPS support for custom domains on Github have been a thing since earlier this year.
-I never got around to it but thanks to <a href="https://medium.com/@goelanirudh/add-https-to-your-namecheap-domain-hosted-on-github-pages-d66fd96308b5">this post</a> I finally enabled it.</p>
 ]]></summary>
 </entry>
 
