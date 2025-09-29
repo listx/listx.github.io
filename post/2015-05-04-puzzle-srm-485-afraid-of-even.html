@@ -692,22 +692,22 @@ The short answer is that a <span class="math inline">\(0\)</span> is harmless be
 <div class="code-and-raw">
 <div class="sourceCode" id="cb4" data-startFrom="1"><pre class="sourceCode numberSource numberLines ruby"><code class="sourceCode ruby"><span id="cb4-1"><a href="#cb4-1"></a><span class="cf">module</span> <span class="dt">Unmutate</span></span>
 <span id="cb4-2"><a href="#cb4-2"></a>  <span class="cf">def</span> <span class="dt">Unmutate</span><span class="at">.unmutate</span>(ts)</span>
-<span id="cb4-3"><a href="#cb4-3"></a>    <span class="cf">if</span> ts<span class="at">.size</span> <span class="kw">&lt;</span> <span class="dv">4</span></span>
+<span id="cb4-3"><a href="#cb4-3"></a>    <span class="cf">if</span> ts<span class="at">.size</span> <span class="op">&lt;</span> <span class="dv">4</span></span>
 <span id="cb4-4"><a href="#cb4-4"></a>      <span class="cf">return</span> <span class="dv">nil</span></span>
 <span id="cb4-5"><a href="#cb4-5"></a>    <span class="cf">end</span></span>
 <span id="cb4-6"><a href="#cb4-6"></a></span>
-<span id="cb4-7"><a href="#cb4-7"></a>    bp1_terms <span class="kw">=</span> every_nth0(<span class="dv">2</span>, ts)</span>
-<span id="cb4-8"><a href="#cb4-8"></a>    bp1 <span class="kw">=</span> make_BP(ts<span class="at">.size</span>, <span class="dv">false</span>, bp1_terms)</span>
-<span id="cb4-9"><a href="#cb4-9"></a>    bp2_terms <span class="kw">=</span> every_nth(<span class="dv">2</span>, ts)</span>
-<span id="cb4-10"><a href="#cb4-10"></a>    bp2 <span class="kw">=</span> make_BP(ts<span class="at">.size</span>, <span class="dv">true</span>, bp2_terms)</span>
+<span id="cb4-7"><a href="#cb4-7"></a>    bp1_terms <span class="op">=</span> every_nth0(<span class="dv">2</span>, ts)</span>
+<span id="cb4-8"><a href="#cb4-8"></a>    bp1 <span class="op">=</span> make_BP(ts<span class="at">.size</span>, <span class="dv">false</span>, bp1_terms)</span>
+<span id="cb4-9"><a href="#cb4-9"></a>    bp2_terms <span class="op">=</span> every_nth(<span class="dv">2</span>, ts)</span>
+<span id="cb4-10"><a href="#cb4-10"></a>    bp2 <span class="op">=</span> make_BP(ts<span class="at">.size</span>, <span class="dv">true</span>, bp2_terms)</span>
 <span id="cb4-11"><a href="#cb4-11"></a></span>
-<span id="cb4-12"><a href="#cb4-12"></a>    <span class="cf">if</span> ts<span class="at">.uniq.size</span> <span class="kw">==</span> <span class="dv">1</span></span>
+<span id="cb4-12"><a href="#cb4-12"></a>    <span class="cf">if</span> ts<span class="at">.uniq.size</span> <span class="op">==</span> <span class="dv">1</span></span>
 <span id="cb4-13"><a href="#cb4-13"></a>      ts</span>
 <span id="cb4-14"><a href="#cb4-14"></a>    <span class="cf">elsif</span> <span class="dt">Unmutate</span><span class="at">.arithmetic?</span>(ts)</span>
 <span id="cb4-15"><a href="#cb4-15"></a>      ts</span>
-<span id="cb4-16"><a href="#cb4-16"></a>    <span class="cf">elsif</span> <span class="dt">Unmutate</span><span class="at">.mutate</span>(bp1) <span class="kw">==</span> ts</span>
+<span id="cb4-16"><a href="#cb4-16"></a>    <span class="cf">elsif</span> <span class="dt">Unmutate</span><span class="at">.mutate</span>(bp1) <span class="op">==</span> ts</span>
 <span id="cb4-17"><a href="#cb4-17"></a>      bp1</span>
-<span id="cb4-18"><a href="#cb4-18"></a>    <span class="cf">elsif</span> <span class="dt">Unmutate</span><span class="at">.mutate</span>(bp2) <span class="kw">==</span> ts</span>
+<span id="cb4-18"><a href="#cb4-18"></a>    <span class="cf">elsif</span> <span class="dt">Unmutate</span><span class="at">.mutate</span>(bp2) <span class="op">==</span> ts</span>
 <span id="cb4-19"><a href="#cb4-19"></a>      bp2</span>
 <span id="cb4-20"><a href="#cb4-20"></a>    <span class="cf">else</span></span>
 <span id="cb4-21"><a href="#cb4-21"></a>      <span class="dv">nil</span></span>
@@ -715,40 +715,40 @@ The short answer is that a <span class="math inline">\(0\)</span> is harmless be
 <span id="cb4-23"><a href="#cb4-23"></a>  <span class="cf">end</span></span>
 <span id="cb4-24"><a href="#cb4-24"></a></span>
 <span id="cb4-25"><a href="#cb4-25"></a>  <span class="cf">def</span> <span class="dt">Unmutate</span><span class="at">.make_BP</span>(len, make_first_term, originals)</span>
-<span id="cb4-26"><a href="#cb4-26"></a>    <span class="cf">if</span> originals<span class="at">.size</span> <span class="kw">&lt;</span> <span class="dv">2</span></span>
+<span id="cb4-26"><a href="#cb4-26"></a>    <span class="cf">if</span> originals<span class="at">.size</span> <span class="op">&lt;</span> <span class="dv">2</span></span>
 <span id="cb4-27"><a href="#cb4-27"></a>      <span class="cf">return</span> <span class="kw">[]</span></span>
 <span id="cb4-28"><a href="#cb4-28"></a>    <span class="cf">end</span></span>
 <span id="cb4-29"><a href="#cb4-29"></a></span>
-<span id="cb4-30"><a href="#cb4-30"></a>    o0 <span class="kw">=</span> originals<span class="kw">[</span><span class="dv">0</span><span class="kw">]</span></span>
-<span id="cb4-31"><a href="#cb4-31"></a>    o1 <span class="kw">=</span> originals<span class="kw">[</span><span class="dv">1</span><span class="kw">]</span></span>
-<span id="cb4-32"><a href="#cb4-32"></a>    m <span class="kw">=</span> (o1 <span class="kw">-</span> o0) <span class="kw">/</span> <span class="dv">2</span></span>
-<span id="cb4-33"><a href="#cb4-33"></a>    bp <span class="kw">=</span> <span class="kw">[]</span></span>
+<span id="cb4-30"><a href="#cb4-30"></a>    o0 <span class="op">=</span> originals<span class="kw">[</span><span class="dv">0</span><span class="kw">]</span></span>
+<span id="cb4-31"><a href="#cb4-31"></a>    o1 <span class="op">=</span> originals<span class="kw">[</span><span class="dv">1</span><span class="kw">]</span></span>
+<span id="cb4-32"><a href="#cb4-32"></a>    m <span class="op">=</span> (o1 <span class="op">-</span> o0) <span class="op">/</span> <span class="dv">2</span></span>
+<span id="cb4-33"><a href="#cb4-33"></a>    bp <span class="op">=</span> <span class="kw">[]</span></span>
 <span id="cb4-34"><a href="#cb4-34"></a></span>
-<span id="cb4-35"><a href="#cb4-35"></a>    <span class="cf">for</span> n <span class="cf">in</span> (<span class="dv">0</span><span class="kw">..</span>(len <span class="kw">-</span> <span class="dv">1</span>)) <span class="cf">do</span></span>
-<span id="cb4-36"><a href="#cb4-36"></a>      bp <span class="kw">&lt;&lt;</span> m<span class="kw">*</span>n <span class="kw">+</span> o0</span>
+<span id="cb4-35"><a href="#cb4-35"></a>    <span class="cf">for</span> n <span class="cf">in</span> (<span class="dv">0</span><span class="op">..</span>(len <span class="op">-</span> <span class="dv">1</span>)) <span class="cf">do</span></span>
+<span id="cb4-36"><a href="#cb4-36"></a>      bp <span class="op">&lt;&lt;</span> m<span class="op">*</span>n <span class="op">+</span> o0</span>
 <span id="cb4-37"><a href="#cb4-37"></a>    <span class="cf">end</span></span>
 <span id="cb4-38"><a href="#cb4-38"></a></span>
 <span id="cb4-39"><a href="#cb4-39"></a>    <span class="cf">if</span> make_first_term</span>
-<span id="cb4-40"><a href="#cb4-40"></a>      <span class="kw">[</span>o0 <span class="kw">-</span> m<span class="kw">]</span> <span class="kw">+</span> bp<span class="at">.take</span>(len <span class="kw">-</span> <span class="dv">1</span>)</span>
+<span id="cb4-40"><a href="#cb4-40"></a>      <span class="kw">[</span>o0 <span class="op">-</span> m<span class="kw">]</span> <span class="op">+</span> bp<span class="at">.take</span>(len <span class="op">-</span> <span class="dv">1</span>)</span>
 <span id="cb4-41"><a href="#cb4-41"></a>    <span class="cf">else</span></span>
 <span id="cb4-42"><a href="#cb4-42"></a>      bp</span>
 <span id="cb4-43"><a href="#cb4-43"></a>    <span class="cf">end</span></span>
 <span id="cb4-44"><a href="#cb4-44"></a>  <span class="cf">end</span></span>
 <span id="cb4-45"><a href="#cb4-45"></a></span>
 <span id="cb4-46"><a href="#cb4-46"></a>  <span class="cf">def</span> <span class="dt">Unmutate</span><span class="at">.mutate</span>(ts)</span>
-<span id="cb4-47"><a href="#cb4-47"></a>    ts<span class="at">.map</span><span class="kw">{|</span>t<span class="kw">|</span> make_odd t<span class="kw">}</span></span>
+<span id="cb4-47"><a href="#cb4-47"></a>    ts<span class="at">.map</span><span class="op">{|</span>t<span class="op">|</span> make_odd t<span class="op">}</span></span>
 <span id="cb4-48"><a href="#cb4-48"></a>  <span class="cf">end</span></span>
 <span id="cb4-49"><a href="#cb4-49"></a></span>
 <span id="cb4-50"><a href="#cb4-50"></a>  <span class="cf">def</span> <span class="dt">Unmutate</span><span class="at">.arithmetic?</span>(ts)</span>
-<span id="cb4-51"><a href="#cb4-51"></a>    <span class="cf">if</span> ts<span class="at">.size</span> <span class="kw">&lt;</span> <span class="dv">2</span></span>
+<span id="cb4-51"><a href="#cb4-51"></a>    <span class="cf">if</span> ts<span class="at">.size</span> <span class="op">&lt;</span> <span class="dv">2</span></span>
 <span id="cb4-52"><a href="#cb4-52"></a>      <span class="cf">return</span> <span class="dv">false</span></span>
 <span id="cb4-53"><a href="#cb4-53"></a>    <span class="cf">end</span></span>
 <span id="cb4-54"><a href="#cb4-54"></a></span>
-<span id="cb4-55"><a href="#cb4-55"></a>    m <span class="kw">=</span> ts<span class="kw">[</span><span class="dv">1</span><span class="kw">]</span> <span class="kw">-</span> ts<span class="kw">[</span><span class="dv">0</span><span class="kw">]</span></span>
-<span id="cb4-56"><a href="#cb4-56"></a>    ms <span class="kw">=</span> ts<span class="at">.drop</span>(<span class="dv">1</span>)<span class="at">.zip</span>(ts<span class="at">.take</span>(ts<span class="at">.size</span> <span class="kw">-</span> <span class="dv">1</span>))</span>
+<span id="cb4-55"><a href="#cb4-55"></a>    m <span class="op">=</span> ts<span class="kw">[</span><span class="dv">1</span><span class="kw">]</span> <span class="op">-</span> ts<span class="kw">[</span><span class="dv">0</span><span class="kw">]</span></span>
+<span id="cb4-56"><a href="#cb4-56"></a>    ms <span class="op">=</span> ts<span class="at">.drop</span>(<span class="dv">1</span>)<span class="at">.zip</span>(ts<span class="at">.take</span>(ts<span class="at">.size</span> <span class="op">-</span> <span class="dv">1</span>))</span>
 <span id="cb4-57"><a href="#cb4-57"></a></span>
-<span id="cb4-58"><a href="#cb4-58"></a>    ms<span class="at">.each</span> <span class="cf">do</span> <span class="kw">|</span>t1, t0<span class="kw">|</span></span>
-<span id="cb4-59"><a href="#cb4-59"></a>      <span class="cf">if</span> (t1 <span class="kw">-</span> t0) !<span class="kw">=</span> m</span>
+<span id="cb4-58"><a href="#cb4-58"></a>    ms<span class="at">.each</span> <span class="cf">do</span> <span class="op">|</span>t1, t0<span class="op">|</span></span>
+<span id="cb4-59"><a href="#cb4-59"></a>      <span class="cf">if</span> (t1 <span class="op">-</span> t0) <span class="op">!=</span> m</span>
 <span id="cb4-60"><a href="#cb4-60"></a>        <span class="cf">return</span> <span class="dv">false</span></span>
 <span id="cb4-61"><a href="#cb4-61"></a>      <span class="cf">end</span></span>
 <span id="cb4-62"><a href="#cb4-62"></a>    <span class="cf">end</span></span>
@@ -758,28 +758,28 @@ The short answer is that a <span class="math inline">\(0\)</span> is harmless be
 <span id="cb4-66"><a href="#cb4-66"></a><span class="cf">end</span></span>
 <span id="cb4-67"><a href="#cb4-67"></a></span>
 <span id="cb4-68"><a href="#cb4-68"></a><span class="cf">def</span> make_odd(t)</span>
-<span id="cb4-69"><a href="#cb4-69"></a>  <span class="cf">if</span> t<span class="at">.odd?</span> <span class="kw">||</span> t <span class="kw">==</span> <span class="dv">0</span></span>
+<span id="cb4-69"><a href="#cb4-69"></a>  <span class="cf">if</span> t<span class="at">.odd?</span> <span class="op">||</span> t <span class="op">==</span> <span class="dv">0</span></span>
 <span id="cb4-70"><a href="#cb4-70"></a>    t</span>
 <span id="cb4-71"><a href="#cb4-71"></a>  <span class="cf">else</span></span>
-<span id="cb4-72"><a href="#cb4-72"></a>    make_odd(t<span class="kw">/</span><span class="dv">2</span>)</span>
+<span id="cb4-72"><a href="#cb4-72"></a>    make_odd(t<span class="op">/</span><span class="dv">2</span>)</span>
 <span id="cb4-73"><a href="#cb4-73"></a>  <span class="cf">end</span></span>
 <span id="cb4-74"><a href="#cb4-74"></a><span class="cf">end</span></span>
 <span id="cb4-75"><a href="#cb4-75"></a></span>
 <span id="cb4-76"><a href="#cb4-76"></a><span class="cf">def</span> every_nth0(n, ts)</span>
-<span id="cb4-77"><a href="#cb4-77"></a>  arr <span class="kw">=</span> <span class="kw">[]</span></span>
-<span id="cb4-78"><a href="#cb4-78"></a>  <span class="cf">for</span> i <span class="cf">in</span> (<span class="dv">0</span><span class="kw">..</span>(ts<span class="at">.size</span> <span class="kw">-</span> <span class="dv">1</span>)) <span class="cf">do</span></span>
-<span id="cb4-79"><a href="#cb4-79"></a>    <span class="cf">if</span> i <span class="kw">%</span> n <span class="kw">==</span> <span class="dv">0</span></span>
-<span id="cb4-80"><a href="#cb4-80"></a>      arr <span class="kw">&lt;&lt;</span> ts<span class="kw">[</span>i<span class="kw">]</span></span>
+<span id="cb4-77"><a href="#cb4-77"></a>  arr <span class="op">=</span> <span class="kw">[]</span></span>
+<span id="cb4-78"><a href="#cb4-78"></a>  <span class="cf">for</span> i <span class="cf">in</span> (<span class="dv">0</span><span class="op">..</span>(ts<span class="at">.size</span> <span class="op">-</span> <span class="dv">1</span>)) <span class="cf">do</span></span>
+<span id="cb4-79"><a href="#cb4-79"></a>    <span class="cf">if</span> i <span class="op">%</span> n <span class="op">==</span> <span class="dv">0</span></span>
+<span id="cb4-80"><a href="#cb4-80"></a>      arr <span class="op">&lt;&lt;</span> ts<span class="kw">[</span>i<span class="kw">]</span></span>
 <span id="cb4-81"><a href="#cb4-81"></a>    <span class="cf">end</span></span>
 <span id="cb4-82"><a href="#cb4-82"></a>  <span class="cf">end</span></span>
 <span id="cb4-83"><a href="#cb4-83"></a>  arr</span>
 <span id="cb4-84"><a href="#cb4-84"></a><span class="cf">end</span></span>
 <span id="cb4-85"><a href="#cb4-85"></a></span>
 <span id="cb4-86"><a href="#cb4-86"></a><span class="cf">def</span> every_nth(n, ts)</span>
-<span id="cb4-87"><a href="#cb4-87"></a>  arr <span class="kw">=</span> <span class="kw">[]</span></span>
-<span id="cb4-88"><a href="#cb4-88"></a>  <span class="cf">for</span> i <span class="cf">in</span> (<span class="dv">0</span><span class="kw">..</span>(ts<span class="at">.size</span> <span class="kw">-</span> <span class="dv">1</span>)) <span class="cf">do</span></span>
-<span id="cb4-89"><a href="#cb4-89"></a>    <span class="cf">if</span> (i <span class="kw">+</span> <span class="dv">1</span>) <span class="kw">%</span> n <span class="kw">==</span> <span class="dv">0</span></span>
-<span id="cb4-90"><a href="#cb4-90"></a>      arr <span class="kw">&lt;&lt;</span> ts<span class="kw">[</span>i<span class="kw">]</span></span>
+<span id="cb4-87"><a href="#cb4-87"></a>  arr <span class="op">=</span> <span class="kw">[]</span></span>
+<span id="cb4-88"><a href="#cb4-88"></a>  <span class="cf">for</span> i <span class="cf">in</span> (<span class="dv">0</span><span class="op">..</span>(ts<span class="at">.size</span> <span class="op">-</span> <span class="dv">1</span>)) <span class="cf">do</span></span>
+<span id="cb4-89"><a href="#cb4-89"></a>    <span class="cf">if</span> (i <span class="op">+</span> <span class="dv">1</span>) <span class="op">%</span> n <span class="op">==</span> <span class="dv">0</span></span>
+<span id="cb4-90"><a href="#cb4-90"></a>      arr <span class="op">&lt;&lt;</span> ts<span class="kw">[</span>i<span class="kw">]</span></span>
 <span id="cb4-91"><a href="#cb4-91"></a>    <span class="cf">end</span></span>
 <span id="cb4-92"><a href="#cb4-92"></a>  <span class="cf">end</span></span>
 <span id="cb4-93"><a href="#cb4-93"></a>  arr</span>
@@ -794,7 +794,7 @@ The short answer is that a <span class="math inline">\(0\)</span> is harmless be
 <span id="cb5-3"><a href="#cb5-3"></a><span class="fu">require</span> <span class="vs">'minitest/autorun'</span></span>
 <span id="cb5-4"><a href="#cb5-4"></a><span class="fu">require_relative</span> <span class="vs">'./unmutate.rb'</span></span>
 <span id="cb5-5"><a href="#cb5-5"></a></span>
-<span id="cb5-6"><a href="#cb5-6"></a><span class="cf">class</span> <span class="dt">TestUnmutate</span> <span class="kw">&lt;</span> <span class="dt">Minitest</span><span class="kw">::</span><span class="dt">Test</span></span>
+<span id="cb5-6"><a href="#cb5-6"></a><span class="cf">class</span> <span class="dt">TestUnmutate</span> <span class="op">&lt;</span> <span class="dt">Minitest</span><span class="op">:</span><span class="wa">:Test</span></span>
 <span id="cb5-7"><a href="#cb5-7"></a>  <span class="cf">def</span> test_empty_list_incalculable</span>
 <span id="cb5-8"><a href="#cb5-8"></a>    assert_equal <span class="dv">nil</span>, <span class="dt">Unmutate</span><span class="at">.unmutate</span>(<span class="kw">[]</span>)</span>
 <span id="cb5-9"><a href="#cb5-9"></a>  <span class="cf">end</span></span>
@@ -825,8 +825,8 @@ The short answer is that a <span class="math inline">\(0\)</span> is harmless be
 <span id="cb5-34"><a href="#cb5-34"></a>  <span class="cf">end</span></span>
 <span id="cb5-35"><a href="#cb5-35"></a></span>
 <span id="cb5-36"><a href="#cb5-36"></a>  <span class="cf">def</span> test_known_case_4</span>
-<span id="cb5-37"><a href="#cb5-37"></a>    assert_equal <span class="kw">[-</span><span class="dv">11</span>, <span class="dv">0</span>, <span class="dv">11</span>, <span class="dv">22</span>, <span class="dv">33</span>, <span class="dv">44</span><span class="kw">]</span>,</span>
-<span id="cb5-38"><a href="#cb5-38"></a>      <span class="dt">Unmutate</span><span class="at">.unmutate</span>(<span class="kw">[-</span><span class="dv">11</span>, <span class="dv">0</span>, <span class="dv">11</span>, <span class="dv">11</span>, <span class="dv">33</span>, <span class="dv">11</span><span class="kw">]</span>)</span>
+<span id="cb5-37"><a href="#cb5-37"></a>    assert_equal <span class="kw">[</span><span class="op">-</span><span class="dv">11</span>, <span class="dv">0</span>, <span class="dv">11</span>, <span class="dv">22</span>, <span class="dv">33</span>, <span class="dv">44</span><span class="kw">]</span>,</span>
+<span id="cb5-38"><a href="#cb5-38"></a>      <span class="dt">Unmutate</span><span class="at">.unmutate</span>(<span class="kw">[</span><span class="op">-</span><span class="dv">11</span>, <span class="dv">0</span>, <span class="dv">11</span>, <span class="dv">11</span>, <span class="dv">33</span>, <span class="dv">11</span><span class="kw">]</span>)</span>
 <span id="cb5-39"><a href="#cb5-39"></a>  <span class="cf">end</span></span>
 <span id="cb5-40"><a href="#cb5-40"></a><span class="cf">end</span></span></code></pre></div>
 <div class="raw-link sourceCode">
@@ -845,7 +845,7 @@ Until next time, happy hacking!</p>
 
 		<div id="footer">
 			<img src="../favicon.png" id="brand-icon">
-			<p>Copyright (C) 2013-2024 Linus Arver. All rights reserved.</p>
+			<p>Copyright (C) 2013-2025 Linus Arver. All rights reserved.</p>
 			<a href="https://github.com/listx/listx_blog">Site</a>
 			<a href="https://github.com/listx/listx.github.io">generated</a>
 			with

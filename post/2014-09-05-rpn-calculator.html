@@ -56,19 +56,19 @@ why not?</p>
 <p>First, the Ruby version:</p>
 <div class="code-and-raw">
 <div class="sourceCode" id="cb1" data-startFrom="1"><pre class="sourceCode numberSource numberLines ruby"><code class="sourceCode ruby"><span id="cb1-1"><a href="#cb1-1"></a><span class="cf">def</span> evaluate(equation_str)</span>
-<span id="cb1-2"><a href="#cb1-2"></a>	stack <span class="kw">=</span> <span class="kw">[]</span></span>
-<span id="cb1-3"><a href="#cb1-3"></a>	equation_str<span class="at">.split.each</span> <span class="cf">do</span> <span class="kw">|</span>term<span class="kw">|</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a>	stack <span class="op">=</span> <span class="kw">[]</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a>	equation_str<span class="at">.split.each</span> <span class="cf">do</span> <span class="op">|</span>term<span class="op">|</span></span>
 <span id="cb1-4"><a href="#cb1-4"></a>		<span class="cf">case</span> term</span>
-<span id="cb1-5"><a href="#cb1-5"></a>		<span class="cf">when</span> <span class="ss">/^\d+?$/</span></span>
+<span id="cb1-5"><a href="#cb1-5"></a>		<span class="cf">when</span> <span class="ss">/^</span><span class="sc">\d</span><span class="ss">+?$/</span></span>
 <span id="cb1-6"><a href="#cb1-6"></a>			stack<span class="at">.push</span>(term<span class="at">.to_i</span>)</span>
 <span id="cb1-7"><a href="#cb1-7"></a>		<span class="cf">when</span> <span class="st">&quot;+&quot;</span>, <span class="st">&quot;-&quot;</span>, <span class="st">&quot;*&quot;</span></span>
-<span id="cb1-8"><a href="#cb1-8"></a>			<span class="cf">if</span> stack<span class="at">.size</span> <span class="kw">&lt;</span> <span class="dv">2</span></span>
+<span id="cb1-8"><a href="#cb1-8"></a>			<span class="cf">if</span> stack<span class="at">.size</span> <span class="op">&lt;</span> <span class="dv">2</span></span>
 <span id="cb1-9"><a href="#cb1-9"></a>				<span class="fu">raise</span> <span class="st">&quot;stack too small for operator application&quot;</span></span>
 <span id="cb1-10"><a href="#cb1-10"></a>			<span class="cf">else</span></span>
-<span id="cb1-11"><a href="#cb1-11"></a>				b <span class="kw">=</span> stack<span class="at">.pop</span></span>
-<span id="cb1-12"><a href="#cb1-12"></a>				a <span class="kw">=</span> stack<span class="at">.pop</span></span>
-<span id="cb1-13"><a href="#cb1-13"></a>				op <span class="kw">=</span> term<span class="at">.to_sym</span></span>
-<span id="cb1-14"><a href="#cb1-14"></a>				c <span class="kw">=</span> b<span class="at">.send</span>(op, a)</span>
+<span id="cb1-11"><a href="#cb1-11"></a>				b <span class="op">=</span> stack<span class="at">.pop</span></span>
+<span id="cb1-12"><a href="#cb1-12"></a>				a <span class="op">=</span> stack<span class="at">.pop</span></span>
+<span id="cb1-13"><a href="#cb1-13"></a>				op <span class="op">=</span> term<span class="at">.to_sym</span></span>
+<span id="cb1-14"><a href="#cb1-14"></a>				c <span class="op">=</span> b<span class="at">.send</span>(op, a)</span>
 <span id="cb1-15"><a href="#cb1-15"></a>				stack<span class="at">.push</span>(c)</span>
 <span id="cb1-16"><a href="#cb1-16"></a>			<span class="cf">end</span></span>
 <span id="cb1-17"><a href="#cb1-17"></a>		<span class="cf">else</span></span>
@@ -178,7 +178,7 @@ the code much longer and offer little benefit.<a href="#fnref2" class="footnote-
 
 		<div id="footer">
 			<img src="../favicon.png" id="brand-icon">
-			<p>Copyright (C) 2013-2024 Linus Arver. All rights reserved.</p>
+			<p>Copyright (C) 2013-2025 Linus Arver. All rights reserved.</p>
 			<a href="https://github.com/listx/listx_blog">Site</a>
 			<a href="https://github.com/listx/listx.github.io">generated</a>
 			with

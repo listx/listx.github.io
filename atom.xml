@@ -262,9 +262,9 @@ still quite nice compared to Seattle’s cold and wet climate.</p>
 	<a title="All pages tagged &#39;programming&#39;." href="/tag/programming.html" rel="tag">programming</a>
 </div>
 
-<p>TL;DR: Check out my new open source projects, <a href="https://funloop.org/lilac">Lilac</a> (<a href="https://github.com/listx/lilac">GitHub</a>) and <a href="https://funloop.org/codex">Codex</a> (<a href="https://github.com/listx/codex">GitHub</a>)!</p>
+<p>TL;DR: Check out my new open source projects, <a href="https://funloop.org/lilac-legacy">Lilac</a> (<a href="https://github.com/listx/lilac-legacy">GitHub</a>) and <a href="https://funloop.org/codex">Codex</a> (<a href="https://github.com/listx/codex">GitHub</a>)!</p>
 <h1 id="lilac">Lilac</h1>
-<p><a href="https://funloop.org/lilac">Lilac</a> builds on top of Emacs Orgmode to make Literate Programming (LP) targeting
+<p><a href="https://funloop.org/lilac-legacy">Lilac</a> builds on top of Emacs Orgmode to make Literate Programming (LP) targeting
 HTML
 much more pleasant than the default experience. It’s unapologetically
 opinionated. It encourages heavy use of Noweb-style references.</p>
