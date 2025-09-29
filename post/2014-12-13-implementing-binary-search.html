@@ -431,66 +431,66 @@ disaster, of course.</p>
 <span id="cb5-5"><a href="#cb5-5"></a><span class="co"># Usage: just execute the binary as-is without any arguments. To test the RNG,</span></span>
 <span id="cb5-6"><a href="#cb5-6"></a><span class="co"># call with the argument &quot;rng&quot;.</span></span>
 <span id="cb5-7"><a href="#cb5-7"></a></span>
-<span id="cb5-8"><a href="#cb5-8"></a><span class="cn">U32_MAX</span> <span class="kw">=</span> <span class="bn">0xffffffff</span></span>
-<span id="cb5-9"><a href="#cb5-9"></a><span class="cn">U64_MAX</span> <span class="kw">=</span> <span class="bn">0xffffffffffffffff</span></span>
-<span id="cb5-10"><a href="#cb5-10"></a><span class="cn">U32_MOD</span> <span class="kw">=</span> <span class="cn">U32_MAX</span> <span class="kw">+</span> <span class="dv">1</span></span>
-<span id="cb5-11"><a href="#cb5-11"></a><span class="cn">U64_MOD</span> <span class="kw">=</span> <span class="cn">U64_MAX</span> <span class="kw">+</span> <span class="dv">1</span></span>
+<span id="cb5-8"><a href="#cb5-8"></a><span class="cn">U32_MAX</span> <span class="op">=</span> <span class="bn">0xffffffff</span></span>
+<span id="cb5-9"><a href="#cb5-9"></a><span class="cn">U64_MAX</span> <span class="op">=</span> <span class="bn">0xffffffffffffffff</span></span>
+<span id="cb5-10"><a href="#cb5-10"></a><span class="cn">U32_MOD</span> <span class="op">=</span> <span class="cn">U32_MAX</span> <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb5-11"><a href="#cb5-11"></a><span class="cn">U64_MOD</span> <span class="op">=</span> <span class="cn">U64_MAX</span> <span class="op">+</span> <span class="dv">1</span></span>
 <span id="cb5-12"><a href="#cb5-12"></a></span>
-<span id="cb5-13"><a href="#cb5-13"></a><span class="cn">KEYS_TOTAL</span> <span class="kw">=</span> <span class="dv">1000000</span></span>
+<span id="cb5-13"><a href="#cb5-13"></a><span class="cn">KEYS_TOTAL</span> <span class="op">=</span> <span class="dv">1000000</span></span>
 <span id="cb5-14"><a href="#cb5-14"></a></span>
 <span id="cb5-15"><a href="#cb5-15"></a><span class="cf">class</span> <span class="cn">PCG32</span></span>
 <span id="cb5-16"><a href="#cb5-16"></a>	<span class="ot">@state</span></span>
 <span id="cb5-17"><a href="#cb5-17"></a>	<span class="ot">@inc</span></span>
 <span id="cb5-18"><a href="#cb5-18"></a></span>
 <span id="cb5-19"><a href="#cb5-19"></a>	<span class="cf">def</span> initialize(state, inc)</span>
-<span id="cb5-20"><a href="#cb5-20"></a>		<span class="ot">@state</span> <span class="kw">=</span> state</span>
-<span id="cb5-21"><a href="#cb5-21"></a>		<span class="ot">@inc</span> <span class="kw">=</span> inc</span>
+<span id="cb5-20"><a href="#cb5-20"></a>		<span class="ot">@state</span> <span class="op">=</span> state</span>
+<span id="cb5-21"><a href="#cb5-21"></a>		<span class="ot">@inc</span> <span class="op">=</span> inc</span>
 <span id="cb5-22"><a href="#cb5-22"></a>	<span class="cf">end</span></span>
 <span id="cb5-23"><a href="#cb5-23"></a></span>
 <span id="cb5-24"><a href="#cb5-24"></a>	<span class="cf">def</span> pcg32_random_r</span>
-<span id="cb5-25"><a href="#cb5-25"></a>		oldstate <span class="kw">=</span> <span class="ot">@state</span></span>
-<span id="cb5-26"><a href="#cb5-26"></a>		<span class="ot">@state</span> <span class="kw">=</span> (((oldstate <span class="kw">*</span> <span class="dv">6364136223846793005</span>) <span class="kw">%</span> <span class="cn">U64_MOD</span>) <span class="kw">+</span></span>
-<span id="cb5-27"><a href="#cb5-27"></a>			(<span class="ot">@inc</span> <span class="kw">|</span> <span class="dv">1</span>)) <span class="kw">%</span> <span class="cn">U64_MOD</span></span>
-<span id="cb5-28"><a href="#cb5-28"></a>		xorshifted <span class="kw">=</span> (((oldstate <span class="kw">&gt;&gt;</span> <span class="dv">18</span>) <span class="kw">^</span> oldstate) <span class="kw">&gt;&gt;</span> <span class="dv">27</span>) <span class="kw">%</span> <span class="cn">U32_MOD</span></span>
-<span id="cb5-29"><a href="#cb5-29"></a>		rot <span class="kw">=</span> oldstate <span class="kw">&gt;&gt;</span> <span class="dv">59</span></span>
-<span id="cb5-30"><a href="#cb5-30"></a>		(xorshifted <span class="kw">&gt;&gt;</span> rot) <span class="kw">|</span> ((xorshifted <span class="kw">&lt;&lt;</span> ((<span class="kw">-</span>rot) <span class="kw">&amp;</span> <span class="dv">31</span>)) <span class="kw">%</span> <span class="cn">U32_MOD</span>)</span>
+<span id="cb5-25"><a href="#cb5-25"></a>		oldstate <span class="op">=</span> <span class="ot">@state</span></span>
+<span id="cb5-26"><a href="#cb5-26"></a>		<span class="ot">@state</span> <span class="op">=</span> (((oldstate <span class="op">*</span> <span class="dv">6364136223846793005</span>) <span class="op">%</span> <span class="cn">U64_MOD</span>) <span class="op">+</span></span>
+<span id="cb5-27"><a href="#cb5-27"></a>			(<span class="ot">@inc</span> <span class="op">|</span> <span class="dv">1</span>)) <span class="op">%</span> <span class="cn">U64_MOD</span></span>
+<span id="cb5-28"><a href="#cb5-28"></a>		xorshifted <span class="op">=</span> (((oldstate <span class="op">&gt;&gt;</span> <span class="dv">18</span>) <span class="op">^</span> oldstate) <span class="op">&gt;&gt;</span> <span class="dv">27</span>) <span class="op">%</span> <span class="cn">U32_MOD</span></span>
+<span id="cb5-29"><a href="#cb5-29"></a>		rot <span class="op">=</span> oldstate <span class="op">&gt;&gt;</span> <span class="dv">59</span></span>
+<span id="cb5-30"><a href="#cb5-30"></a>		(xorshifted <span class="op">&gt;&gt;</span> rot) <span class="op">|</span> ((xorshifted <span class="op">&lt;&lt;</span> ((<span class="op">-</span>rot) <span class="op">&amp;</span> <span class="dv">31</span>)) <span class="op">%</span> <span class="cn">U32_MOD</span>)</span>
 <span id="cb5-31"><a href="#cb5-31"></a>	<span class="cf">end</span></span>
 <span id="cb5-32"><a href="#cb5-32"></a></span>
 <span id="cb5-33"><a href="#cb5-33"></a>	<span class="cf">def</span> uniform32(range)</span>
-<span id="cb5-34"><a href="#cb5-34"></a>		rand_excess <span class="kw">=</span> ((<span class="cn">U32_MAX</span> <span class="kw">%</span> range) <span class="kw">+</span> <span class="dv">1</span>) <span class="kw">%</span> range</span>
-<span id="cb5-35"><a href="#cb5-35"></a>		rand_limit <span class="kw">=</span> <span class="cn">U32_MAX</span> <span class="kw">-</span> rand_excess</span>
-<span id="cb5-36"><a href="#cb5-36"></a>		<span class="cf">while</span> ((x <span class="kw">=</span> <span class="dv">self</span><span class="at">.pcg32_random_r</span>) <span class="kw">&gt;</span> rand_limit)</span>
+<span id="cb5-34"><a href="#cb5-34"></a>		rand_excess <span class="op">=</span> ((<span class="cn">U32_MAX</span> <span class="op">%</span> range) <span class="op">+</span> <span class="dv">1</span>) <span class="op">%</span> range</span>
+<span id="cb5-35"><a href="#cb5-35"></a>		rand_limit <span class="op">=</span> <span class="cn">U32_MAX</span> <span class="op">-</span> rand_excess</span>
+<span id="cb5-36"><a href="#cb5-36"></a>		<span class="cf">while</span> ((x <span class="op">=</span> <span class="dv">self</span><span class="at">.pcg32_random_r</span>) <span class="op">&gt;</span> rand_limit)</span>
 <span id="cb5-37"><a href="#cb5-37"></a>		<span class="cf">end</span></span>
-<span id="cb5-38"><a href="#cb5-38"></a>		x <span class="kw">%</span> range</span>
+<span id="cb5-38"><a href="#cb5-38"></a>		x <span class="op">%</span> range</span>
 <span id="cb5-39"><a href="#cb5-39"></a>	<span class="cf">end</span></span>
 <span id="cb5-40"><a href="#cb5-40"></a><span class="cf">end</span></span>
 <span id="cb5-41"><a href="#cb5-41"></a></span>
 <span id="cb5-42"><a href="#cb5-42"></a><span class="cf">def</span> init_array(keys, has_key, rng)</span>
-<span id="cb5-43"><a href="#cb5-43"></a>	j <span class="kw">=</span> <span class="dv">0</span></span>
-<span id="cb5-44"><a href="#cb5-44"></a>	<span class="cf">for</span> i <span class="cf">in</span> <span class="dv">0</span><span class="kw">..</span>(<span class="cn">KEYS_TOTAL</span> <span class="kw">-</span> <span class="dv">1</span>)</span>
-<span id="cb5-45"><a href="#cb5-45"></a>		j <span class="kw">+=</span> rng<span class="at">.uniform32</span>(<span class="dv">2</span>)</span>
-<span id="cb5-46"><a href="#cb5-46"></a>		keys<span class="kw">[</span>i<span class="kw">]</span> <span class="kw">=</span> i <span class="kw">+</span> j</span>
+<span id="cb5-43"><a href="#cb5-43"></a>	j <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb5-44"><a href="#cb5-44"></a>	<span class="cf">for</span> i <span class="cf">in</span> <span class="dv">0</span><span class="op">..</span>(<span class="cn">KEYS_TOTAL</span> <span class="op">-</span> <span class="dv">1</span>)</span>
+<span id="cb5-45"><a href="#cb5-45"></a>		j <span class="op">+=</span> rng<span class="at">.uniform32</span>(<span class="dv">2</span>)</span>
+<span id="cb5-46"><a href="#cb5-46"></a>		keys<span class="kw">[</span>i<span class="kw">]</span> <span class="op">=</span> i <span class="op">+</span> j</span>
 <span id="cb5-47"><a href="#cb5-47"></a>	<span class="cf">end</span></span>
 <span id="cb5-48"><a href="#cb5-48"></a></span>
 <span id="cb5-49"><a href="#cb5-49"></a>	<span class="cf">if</span> has_key</span>
 <span id="cb5-50"><a href="#cb5-50"></a>		keys<span class="kw">[</span>rng<span class="at">.uniform32</span>(<span class="cn">KEYS_TOTAL</span>)<span class="kw">]</span></span>
 <span id="cb5-51"><a href="#cb5-51"></a>	<span class="cf">else</span></span>
-<span id="cb5-52"><a href="#cb5-52"></a>		keys<span class="kw">[</span><span class="cn">KEYS_TOTAL</span> <span class="kw">-</span> <span class="dv">1</span><span class="kw">]</span> <span class="kw">+</span> <span class="dv">1</span></span>
+<span id="cb5-52"><a href="#cb5-52"></a>		keys<span class="kw">[</span><span class="cn">KEYS_TOTAL</span> <span class="op">-</span> <span class="dv">1</span><span class="kw">]</span> <span class="op">+</span> <span class="dv">1</span></span>
 <span id="cb5-53"><a href="#cb5-53"></a>	<span class="cf">end</span></span>
 <span id="cb5-54"><a href="#cb5-54"></a><span class="cf">end</span></span>
 <span id="cb5-55"><a href="#cb5-55"></a></span>
 <span id="cb5-56"><a href="#cb5-56"></a><span class="cf">def</span> binary_search(keys, key, min, max)</span>
-<span id="cb5-57"><a href="#cb5-57"></a>	list_size <span class="kw">=</span> (max <span class="kw">-</span> min) <span class="kw">+</span> <span class="dv">1</span></span>
-<span id="cb5-58"><a href="#cb5-58"></a>	<span class="cf">if</span> (list_size <span class="kw">==</span> <span class="dv">0</span>)</span>
+<span id="cb5-57"><a href="#cb5-57"></a>	list_size <span class="op">=</span> (max <span class="op">-</span> min) <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb5-58"><a href="#cb5-58"></a>	<span class="cf">if</span> (list_size <span class="op">==</span> <span class="dv">0</span>)</span>
 <span id="cb5-59"><a href="#cb5-59"></a>		<span class="cf">return</span> <span class="dv">nil</span></span>
 <span id="cb5-60"><a href="#cb5-60"></a>	<span class="cf">end</span></span>
 <span id="cb5-61"><a href="#cb5-61"></a></span>
-<span id="cb5-62"><a href="#cb5-62"></a>	mid <span class="kw">=</span> (list_size <span class="kw">/</span> <span class="dv">2</span>) <span class="kw">+</span> min</span>
+<span id="cb5-62"><a href="#cb5-62"></a>	mid <span class="op">=</span> (list_size <span class="op">/</span> <span class="dv">2</span>) <span class="op">+</span> min</span>
 <span id="cb5-63"><a href="#cb5-63"></a></span>
-<span id="cb5-64"><a href="#cb5-64"></a>	<span class="cf">if</span> (key <span class="kw">&lt;</span> keys<span class="kw">[</span>mid<span class="kw">]</span>)</span>
-<span id="cb5-65"><a href="#cb5-65"></a>		binary_search(keys, key, min, mid <span class="kw">-</span> <span class="dv">1</span>)</span>
-<span id="cb5-66"><a href="#cb5-66"></a>	<span class="cf">elsif</span> (key <span class="kw">&gt;</span> keys<span class="kw">[</span>mid<span class="kw">]</span>)</span>
-<span id="cb5-67"><a href="#cb5-67"></a>		binary_search(keys, key, mid <span class="kw">+</span> <span class="dv">1</span>, max)</span>
+<span id="cb5-64"><a href="#cb5-64"></a>	<span class="cf">if</span> (key <span class="op">&lt;</span> keys<span class="kw">[</span>mid<span class="kw">]</span>)</span>
+<span id="cb5-65"><a href="#cb5-65"></a>		binary_search(keys, key, min, mid <span class="op">-</span> <span class="dv">1</span>)</span>
+<span id="cb5-66"><a href="#cb5-66"></a>	<span class="cf">elsif</span> (key <span class="op">&gt;</span> keys<span class="kw">[</span>mid<span class="kw">]</span>)</span>
+<span id="cb5-67"><a href="#cb5-67"></a>		binary_search(keys, key, mid <span class="op">+</span> <span class="dv">1</span>, max)</span>
 <span id="cb5-68"><a href="#cb5-68"></a>	<span class="cf">else</span></span>
 <span id="cb5-69"><a href="#cb5-69"></a>		mid</span>
 <span id="cb5-70"><a href="#cb5-70"></a>	<span class="cf">end</span></span>
@@ -498,40 +498,40 @@ disaster, of course.</p>
 <span id="cb5-72"><a href="#cb5-72"></a></span>
 <span id="cb5-73"><a href="#cb5-73"></a><span class="co"># Begin program</span></span>
 <span id="cb5-74"><a href="#cb5-74"></a></span>
-<span id="cb5-75"><a href="#cb5-75"></a>rng <span class="kw">=</span> <span class="cn">PCG32</span><span class="at">.new</span>(<span class="bn">0x1234567890abcdef</span>, <span class="bn">0x1234567890abcdef</span>)</span>
+<span id="cb5-75"><a href="#cb5-75"></a>rng <span class="op">=</span> <span class="cn">PCG32</span><span class="at">.new</span>(<span class="bn">0x1234567890abcdef</span>, <span class="bn">0x1234567890abcdef</span>)</span>
 <span id="cb5-76"><a href="#cb5-76"></a></span>
 <span id="cb5-77"><a href="#cb5-77"></a><span class="co"># RNG self-test.</span></span>
-<span id="cb5-78"><a href="#cb5-78"></a><span class="cf">if</span> (<span class="cn">ARGV</span> <span class="kw">==</span> <span class="kw">[</span><span class="st">&quot;rng&quot;</span><span class="kw">]</span>)</span>
+<span id="cb5-78"><a href="#cb5-78"></a><span class="cf">if</span> (<span class="cn">ARGV</span> <span class="op">==</span> <span class="kw">[</span><span class="st">&quot;rng&quot;</span><span class="kw">]</span>)</span>
 <span id="cb5-79"><a href="#cb5-79"></a>	<span class="fu">puts</span> <span class="st">&quot;Running RNG self-test.&quot;</span></span>
 <span id="cb5-80"><a href="#cb5-80"></a>	<span class="fu">puts</span> rng<span class="at">.pcg32_random_r</span></span>
-<span id="cb5-81"><a href="#cb5-81"></a>	<span class="cf">for</span> n <span class="cf">in</span> <span class="dv">0</span><span class="kw">..</span><span class="dv">999999</span></span>
+<span id="cb5-81"><a href="#cb5-81"></a>	<span class="cf">for</span> n <span class="cf">in</span> <span class="dv">0</span><span class="op">..</span><span class="dv">999999</span></span>
 <span id="cb5-82"><a href="#cb5-82"></a>		rng<span class="at">.pcg32_random_r</span></span>
 <span id="cb5-83"><a href="#cb5-83"></a>	<span class="cf">end</span></span>
 <span id="cb5-84"><a href="#cb5-84"></a>	<span class="fu">puts</span> rng<span class="at">.pcg32_random_r</span></span>
-<span id="cb5-85"><a href="#cb5-85"></a>	<span class="cf">for</span> n <span class="cf">in</span> <span class="dv">0</span><span class="kw">..</span><span class="dv">99</span></span>
-<span id="cb5-86"><a href="#cb5-86"></a>		<span class="fu">puts</span> rng<span class="at">.uniform32</span>((<span class="cn">U32_MAX</span> <span class="kw">/</span> <span class="dv">2</span>) <span class="kw">+</span> (<span class="cn">U32_MAX</span> <span class="kw">/</span> <span class="dv">3</span>))</span>
+<span id="cb5-85"><a href="#cb5-85"></a>	<span class="cf">for</span> n <span class="cf">in</span> <span class="dv">0</span><span class="op">..</span><span class="dv">99</span></span>
+<span id="cb5-86"><a href="#cb5-86"></a>		<span class="fu">puts</span> rng<span class="at">.uniform32</span>((<span class="cn">U32_MAX</span> <span class="op">/</span> <span class="dv">2</span>) <span class="op">+</span> (<span class="cn">U32_MAX</span> <span class="op">/</span> <span class="dv">3</span>))</span>
 <span id="cb5-87"><a href="#cb5-87"></a>	<span class="cf">end</span></span>
-<span id="cb5-88"><a href="#cb5-88"></a>	<span class="cf">for</span> n <span class="cf">in</span> <span class="dv">0</span><span class="kw">..</span><span class="dv">9</span></span>
-<span id="cb5-89"><a href="#cb5-89"></a>		has_key <span class="kw">=</span> rng<span class="at">.uniform32</span>(<span class="dv">2</span>) <span class="kw">==</span> <span class="dv">1</span></span>
-<span id="cb5-90"><a href="#cb5-90"></a>		keys <span class="kw">=</span> <span class="kw">[]</span></span>
-<span id="cb5-91"><a href="#cb5-91"></a>		key <span class="kw">=</span> init_array(keys, has_key, rng)</span>
-<span id="cb5-92"><a href="#cb5-92"></a>		<span class="fu">puts</span> <span class="st">&quot;last number in array </span><span class="sc">#{</span>n<span class="sc">}</span><span class="st"> for key </span><span class="sc">#{</span>key<span class="sc">}</span><span class="st">: </span><span class="sc">#{</span>keys<span class="kw">[</span><span class="cn">KEYS_TOTAL</span> <span class="kw">-</span> <span class="dv">1</span><span class="kw">]</span><span class="sc">}</span><span class="st">&quot;</span></span>
+<span id="cb5-88"><a href="#cb5-88"></a>	<span class="cf">for</span> n <span class="cf">in</span> <span class="dv">0</span><span class="op">..</span><span class="dv">9</span></span>
+<span id="cb5-89"><a href="#cb5-89"></a>		has_key <span class="op">=</span> rng<span class="at">.uniform32</span>(<span class="dv">2</span>) <span class="op">==</span> <span class="dv">1</span></span>
+<span id="cb5-90"><a href="#cb5-90"></a>		keys <span class="op">=</span> <span class="kw">[]</span></span>
+<span id="cb5-91"><a href="#cb5-91"></a>		key <span class="op">=</span> init_array(keys, has_key, rng)</span>
+<span id="cb5-92"><a href="#cb5-92"></a>		<span class="fu">puts</span> <span class="st">&quot;last number in array </span><span class="sc">#{</span>n<span class="sc">}</span><span class="st"> for key </span><span class="sc">#{</span>key<span class="sc">}</span><span class="st">: </span><span class="sc">#{</span>keys<span class="kw">[</span><span class="cn">KEYS_TOTAL</span> <span class="op">-</span> <span class="dv">1</span><span class="kw">]</span><span class="sc">}</span><span class="st">&quot;</span></span>
 <span id="cb5-93"><a href="#cb5-93"></a>	<span class="cf">end</span></span>
 <span id="cb5-94"><a href="#cb5-94"></a>	<span class="fu">puts</span> <span class="st">&quot;Done.&quot;</span></span>
 <span id="cb5-95"><a href="#cb5-95"></a>	<span class="fu">puts</span> <span class="st">&quot;END RUBY VERSION&quot;</span></span>
 <span id="cb5-96"><a href="#cb5-96"></a>	<span class="fu">exit</span></span>
 <span id="cb5-97"><a href="#cb5-97"></a><span class="cf">end</span></span>
 <span id="cb5-98"><a href="#cb5-98"></a></span>
-<span id="cb5-99"><a href="#cb5-99"></a>keys <span class="kw">=</span> <span class="kw">[]</span></span>
+<span id="cb5-99"><a href="#cb5-99"></a>keys <span class="op">=</span> <span class="kw">[]</span></span>
 <span id="cb5-100"><a href="#cb5-100"></a></span>
 <span id="cb5-101"><a href="#cb5-101"></a><span class="co"># Stress-test 'binary_search' method.</span></span>
-<span id="cb5-102"><a href="#cb5-102"></a><span class="cf">for</span> i <span class="cf">in</span> <span class="dv">0</span><span class="kw">..</span><span class="dv">19</span></span>
-<span id="cb5-103"><a href="#cb5-103"></a>	has_key <span class="kw">=</span> rng<span class="at">.uniform32</span>(<span class="dv">2</span>) <span class="kw">==</span> <span class="dv">1</span></span>
-<span id="cb5-104"><a href="#cb5-104"></a>	key <span class="kw">=</span> init_array(keys, has_key, rng)</span>
-<span id="cb5-105"><a href="#cb5-105"></a>	min <span class="kw">=</span> <span class="dv">0</span></span>
-<span id="cb5-106"><a href="#cb5-106"></a>	max <span class="kw">=</span> <span class="cn">KEYS_TOTAL</span> <span class="kw">-</span> <span class="dv">1</span></span>
-<span id="cb5-107"><a href="#cb5-107"></a>	mid <span class="kw">=</span> binary_search(keys, key, min, max)</span>
-<span id="cb5-108"><a href="#cb5-108"></a>	<span class="fu">printf</span>(<span class="st">&quot;%02d - &quot;</span>, i <span class="kw">+</span> <span class="dv">1</span>)</span>
+<span id="cb5-102"><a href="#cb5-102"></a><span class="cf">for</span> i <span class="cf">in</span> <span class="dv">0</span><span class="op">..</span><span class="dv">19</span></span>
+<span id="cb5-103"><a href="#cb5-103"></a>	has_key <span class="op">=</span> rng<span class="at">.uniform32</span>(<span class="dv">2</span>) <span class="op">==</span> <span class="dv">1</span></span>
+<span id="cb5-104"><a href="#cb5-104"></a>	key <span class="op">=</span> init_array(keys, has_key, rng)</span>
+<span id="cb5-105"><a href="#cb5-105"></a>	min <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb5-106"><a href="#cb5-106"></a>	max <span class="op">=</span> <span class="cn">KEYS_TOTAL</span> <span class="op">-</span> <span class="dv">1</span></span>
+<span id="cb5-107"><a href="#cb5-107"></a>	mid <span class="op">=</span> binary_search(keys, key, min, max)</span>
+<span id="cb5-108"><a href="#cb5-108"></a>	<span class="fu">printf</span>(<span class="st">&quot;%02d - &quot;</span>, i <span class="op">+</span> <span class="dv">1</span>)</span>
 <span id="cb5-109"><a href="#cb5-109"></a>	<span class="cf">if</span> mid<span class="at">.nil?</span></span>
 <span id="cb5-110"><a href="#cb5-110"></a>		<span class="fu">puts</span> <span class="st">&quot;key `</span><span class="sc">#{</span>key<span class="sc">}</span><span class="st">' not found.&quot;</span></span>
 <span id="cb5-111"><a href="#cb5-111"></a>	<span class="cf">else</span></span>
@@ -837,7 +837,7 @@ functions <em>inside</em> the <code class="verbatim">State</code> monad (actuall
 
 		<div id="footer">
 			<img src="../favicon.png" id="brand-icon">
-			<p>Copyright (C) 2013-2024 Linus Arver. All rights reserved.</p>
+			<p>Copyright (C) 2013-2025 Linus Arver. All rights reserved.</p>
 			<a href="https://github.com/listx/listx_blog">Site</a>
 			<a href="https://github.com/listx/listx.github.io">generated</a>
 			with
