@@ -122,14 +122,14 @@ Ruby version works, I feel that I have already expounded upon the
 problem enough above, so that the code here should make intuitive sense.</p>
 <div class="code-and-raw">
 <div class="sourceCode" id="cb2" data-startFrom="1"><pre class="sourceCode numberSource numberLines ruby"><code class="sourceCode ruby"><span id="cb2-1"><a href="#cb2-1"></a><span class="cf">def</span> get_parking_space(t)</span>
-<span id="cb2-2"><a href="#cb2-2"></a>	t_sorted <span class="op">=</span> t<span class="at">.sort</span></span>
+<span id="cb2-2"><a href="#cb2-2"></a>	t_sorted <span class="kw">=</span> t<span class="at">.sort</span></span>
 <span id="cb2-3"><a href="#cb2-3"></a></span>
-<span id="cb2-4"><a href="#cb2-4"></a>	i <span class="op">=</span> <span class="dv">0</span></span>
-<span id="cb2-5"><a href="#cb2-5"></a>	<span class="cf">while</span> i <span class="op">&lt;</span> t_sorted<span class="at">.size</span></span>
-<span id="cb2-6"><a href="#cb2-6"></a>		<span class="cf">if</span> i <span class="op">&lt;</span> t_sorted<span class="kw">[</span>i<span class="kw">]</span></span>
+<span id="cb2-4"><a href="#cb2-4"></a>	i <span class="kw">=</span> <span class="dv">0</span></span>
+<span id="cb2-5"><a href="#cb2-5"></a>	<span class="cf">while</span> i <span class="kw">&lt;</span> t_sorted<span class="at">.size</span></span>
+<span id="cb2-6"><a href="#cb2-6"></a>		<span class="cf">if</span> i <span class="kw">&lt;</span> t_sorted<span class="kw">[</span>i<span class="kw">]</span></span>
 <span id="cb2-7"><a href="#cb2-7"></a>			<span class="cf">break</span></span>
 <span id="cb2-8"><a href="#cb2-8"></a>		<span class="cf">end</span></span>
-<span id="cb2-9"><a href="#cb2-9"></a>		i <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb2-9"><a href="#cb2-9"></a>		i <span class="kw">+=</span> <span class="dv">1</span></span>
 <span id="cb2-10"><a href="#cb2-10"></a>	<span class="cf">end</span></span>
 <span id="cb2-11"><a href="#cb2-11"></a></span>
 <span id="cb2-12"><a href="#cb2-12"></a>	<span class="cf">return</span> i</span>
@@ -231,7 +231,7 @@ begin with, the problem cannot be posed.</p>
 <span id="cb6-2"><a href="#cb6-2"></a>	<span class="cf">if</span> t<span class="at">.empty?</span></span>
 <span id="cb6-3"><a href="#cb6-3"></a>		<span class="cf">return</span> <span class="st">&quot;N/A&quot;</span></span>
 <span id="cb6-4"><a href="#cb6-4"></a>	<span class="cf">else</span></span>
-<span id="cb6-5"><a href="#cb6-5"></a>		<span class="cf">return</span> (t<span class="at">.max</span> <span class="op">-</span> t<span class="at">.size</span>) <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb6-5"><a href="#cb6-5"></a>		<span class="cf">return</span> (t<span class="at">.max</span> <span class="kw">-</span> t<span class="at">.size</span>) <span class="kw">+</span> <span class="dv">1</span></span>
 <span id="cb6-6"><a href="#cb6-6"></a>	<span class="cf">end</span></span>
 <span id="cb6-7"><a href="#cb6-7"></a><span class="cf">end</span></span></code></pre></div>
 <div class="raw-link sourceCode">
@@ -327,7 +327,7 @@ thing worthwhile.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩
 
 		<div id="footer">
 			<img src="../favicon.png" id="brand-icon">
-			<p>Copyright (C) 2013-2025 Linus Arver. All rights reserved.</p>
+			<p>Copyright (C) 2013-2024 Linus Arver. All rights reserved.</p>
 			<a href="https://github.com/listx/listx_blog">Site</a>
 			<a href="https://github.com/listx/listx.github.io">generated</a>
 			with

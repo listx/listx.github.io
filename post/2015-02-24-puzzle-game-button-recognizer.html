@@ -189,25 +189,25 @@ tests for it. Here is the implementation below.</p>
 <span id="cb4-7"><a href="#cb4-7"></a>    <span class="co"># If the sequence already exists, simply add the new name to the old name,</span></span>
 <span id="cb4-8"><a href="#cb4-8"></a>    <span class="co"># and store it as a list of names.</span></span>
 <span id="cb4-9"><a href="#cb4-9"></a>    <span class="cf">if</span> button_seq_db<span class="at">.key?</span>(button_seq)</span>
-<span id="cb4-10"><a href="#cb4-10"></a>      button_seq_db<span class="kw">[</span>button_seq<span class="kw">]</span> <span class="op">=</span> <span class="kw">[</span>name<span class="kw">]</span> <span class="op">+</span> button_seq_db<span class="kw">[</span>button_seq<span class="kw">]</span></span>
+<span id="cb4-10"><a href="#cb4-10"></a>      button_seq_db<span class="kw">[</span>button_seq<span class="kw">]</span> <span class="kw">=</span> <span class="kw">[</span>name<span class="kw">]</span> <span class="kw">+</span> button_seq_db<span class="kw">[</span>button_seq<span class="kw">]</span></span>
 <span id="cb4-11"><a href="#cb4-11"></a>    <span class="cf">else</span></span>
-<span id="cb4-12"><a href="#cb4-12"></a>      button_seq_db<span class="kw">[</span>button_seq<span class="kw">]</span> <span class="op">=</span> <span class="kw">[</span>name<span class="kw">]</span></span>
+<span id="cb4-12"><a href="#cb4-12"></a>      button_seq_db<span class="kw">[</span>button_seq<span class="kw">]</span> <span class="kw">=</span> <span class="kw">[</span>name<span class="kw">]</span></span>
 <span id="cb4-13"><a href="#cb4-13"></a>    <span class="cf">end</span></span>
 <span id="cb4-14"><a href="#cb4-14"></a></span>
 <span id="cb4-15"><a href="#cb4-15"></a>    button_seq_db</span>
 <span id="cb4-16"><a href="#cb4-16"></a>  <span class="cf">end</span></span>
 <span id="cb4-17"><a href="#cb4-17"></a></span>
 <span id="cb4-18"><a href="#cb4-18"></a>  <span class="cf">def</span> <span class="dt">GameButtonSeq</span><span class="at">.on_buttons</span>(button_seq, button_seq_db)</span>
-<span id="cb4-19"><a href="#cb4-19"></a>    found <span class="op">=</span> <span class="kw">[]</span></span>
+<span id="cb4-19"><a href="#cb4-19"></a>    found <span class="kw">=</span> <span class="kw">[]</span></span>
 <span id="cb4-20"><a href="#cb4-20"></a>    <span class="co"># We search the entire button_seq_db hash for the full length of N buttons</span></span>
 <span id="cb4-21"><a href="#cb4-21"></a>    <span class="co"># first, then N - 1 buttons, then N - 2 buttons, until the search input</span></span>
 <span id="cb4-22"><a href="#cb4-22"></a>    <span class="co"># becomes 0. Meanwhile, we collect any and all matches that come our way.</span></span>
 <span id="cb4-23"><a href="#cb4-23"></a>    <span class="co"># The point is to search based on the *last* input button, as this is the</span></span>
 <span id="cb4-24"><a href="#cb4-24"></a>    <span class="co"># &quot;current&quot; button that should &quot;finish&quot; whatever combination/move we were</span></span>
 <span id="cb4-25"><a href="#cb4-25"></a>    <span class="co"># trying to do.</span></span>
-<span id="cb4-26"><a href="#cb4-26"></a>    <span class="cf">while</span> button_seq<span class="at">.size</span> <span class="op">&gt;</span> <span class="dv">0</span></span>
+<span id="cb4-26"><a href="#cb4-26"></a>    <span class="cf">while</span> button_seq<span class="at">.size</span> <span class="kw">&gt;</span> <span class="dv">0</span></span>
 <span id="cb4-27"><a href="#cb4-27"></a>      <span class="cf">if</span> button_seq_db<span class="at">.key?</span>(button_seq)</span>
-<span id="cb4-28"><a href="#cb4-28"></a>        found <span class="op">&lt;&lt;</span> button_seq_db<span class="kw">[</span>button_seq<span class="kw">]</span></span>
+<span id="cb4-28"><a href="#cb4-28"></a>        found <span class="kw">&lt;&lt;</span> button_seq_db<span class="kw">[</span>button_seq<span class="kw">]</span></span>
 <span id="cb4-29"><a href="#cb4-29"></a>      <span class="cf">end</span></span>
 <span id="cb4-30"><a href="#cb4-30"></a>      <span class="co"># Discard oldest button press, and search again. Even if we have a match,</span></span>
 <span id="cb4-31"><a href="#cb4-31"></a>      <span class="co"># it's important to search for other matches, too.</span></span>
@@ -219,7 +219,7 @@ tests for it. Here is the implementation below.</p>
 <span id="cb4-37"><a href="#cb4-37"></a>  <span class="cf">end</span></span>
 <span id="cb4-38"><a href="#cb4-38"></a></span>
 <span id="cb4-39"><a href="#cb4-39"></a>  <span class="cf">def</span> <span class="dt">GameButtonSeq</span><span class="at">.add_hist</span>(button_hist, button_name)</span>
-<span id="cb4-40"><a href="#cb4-40"></a>    button_hist <span class="op">+</span> <span class="kw">[</span>button_name<span class="kw">]</span></span>
+<span id="cb4-40"><a href="#cb4-40"></a>    button_hist <span class="kw">+</span> <span class="kw">[</span>button_name<span class="kw">]</span></span>
 <span id="cb4-41"><a href="#cb4-41"></a>  <span class="cf">end</span></span>
 <span id="cb4-42"><a href="#cb4-42"></a><span class="cf">end</span></span></code></pre></div>
 <div class="raw-link sourceCode">
@@ -232,43 +232,43 @@ tests for it. Here is the implementation below.</p>
 <div class="sourceCode" id="cb5" data-startFrom="1"><pre class="sourceCode numberSource numberLines ruby"><code class="sourceCode ruby"><span id="cb5-1"><a href="#cb5-1"></a><span class="fu">require</span> <span class="vs">'minitest/autorun'</span></span>
 <span id="cb5-2"><a href="#cb5-2"></a><span class="fu">require_relative</span> <span class="vs">'./hash_ver.rb'</span></span>
 <span id="cb5-3"><a href="#cb5-3"></a></span>
-<span id="cb5-4"><a href="#cb5-4"></a><span class="cf">class</span> <span class="dt">TestPuz</span> <span class="op">&lt;</span> <span class="dt">Minitest</span><span class="op">:</span><span class="wa">:Test</span></span>
+<span id="cb5-4"><a href="#cb5-4"></a><span class="cf">class</span> <span class="dt">TestPuz</span> <span class="kw">&lt;</span> <span class="dt">Minitest</span><span class="kw">::</span><span class="dt">Test</span></span>
 <span id="cb5-5"><a href="#cb5-5"></a></span>
 <span id="cb5-6"><a href="#cb5-6"></a>  <span class="cf">def</span> setup</span>
-<span id="cb5-7"><a href="#cb5-7"></a>    <span class="ot">@db</span> <span class="op">=</span> <span class="dt">GameButtonSeq</span><span class="at">.register</span>(<span class="kw">[</span><span class="st">&quot;down&quot;</span>, <span class="st">&quot;forward&quot;</span>, <span class="st">&quot;punch&quot;</span><span class="kw">]</span>, <span class="st">&quot;hadoken&quot;</span>, <span class="op">{}</span>)</span>
-<span id="cb5-8"><a href="#cb5-8"></a>    <span class="ot">@db</span> <span class="op">=</span> <span class="dt">GameButtonSeq</span><span class="at">.register</span>(<span class="kw">[</span><span class="st">&quot;forward&quot;</span>, <span class="st">&quot;punch&quot;</span><span class="kw">]</span>, <span class="st">&quot;charger&quot;</span>, <span class="ot">@db</span>)</span>
-<span id="cb5-9"><a href="#cb5-9"></a>    <span class="ot">@db</span> <span class="op">=</span> <span class="dt">GameButtonSeq</span><span class="at">.register</span>(<span class="kw">[</span><span class="st">&quot;up&quot;</span>, <span class="st">&quot;punch&quot;</span><span class="kw">]</span>, <span class="st">&quot;uppercut&quot;</span>, <span class="ot">@db</span>)</span>
+<span id="cb5-7"><a href="#cb5-7"></a>    <span class="ot">@db</span> <span class="kw">=</span> <span class="dt">GameButtonSeq</span><span class="at">.register</span>(<span class="kw">[</span><span class="st">&quot;down&quot;</span>, <span class="st">&quot;forward&quot;</span>, <span class="st">&quot;punch&quot;</span><span class="kw">]</span>, <span class="st">&quot;hadoken&quot;</span>, <span class="kw">{}</span>)</span>
+<span id="cb5-8"><a href="#cb5-8"></a>    <span class="ot">@db</span> <span class="kw">=</span> <span class="dt">GameButtonSeq</span><span class="at">.register</span>(<span class="kw">[</span><span class="st">&quot;forward&quot;</span>, <span class="st">&quot;punch&quot;</span><span class="kw">]</span>, <span class="st">&quot;charger&quot;</span>, <span class="ot">@db</span>)</span>
+<span id="cb5-9"><a href="#cb5-9"></a>    <span class="ot">@db</span> <span class="kw">=</span> <span class="dt">GameButtonSeq</span><span class="at">.register</span>(<span class="kw">[</span><span class="st">&quot;up&quot;</span>, <span class="st">&quot;punch&quot;</span><span class="kw">]</span>, <span class="st">&quot;uppercut&quot;</span>, <span class="ot">@db</span>)</span>
 <span id="cb5-10"><a href="#cb5-10"></a></span>
 <span id="cb5-11"><a href="#cb5-11"></a>    <span class="co"># Aside: We can easily limit the size of button_hist[] by forcefully always</span></span>
 <span id="cb5-12"><a href="#cb5-12"></a>    <span class="co"># saving only the last N key presses, with N determined by the longest</span></span>
 <span id="cb5-13"><a href="#cb5-13"></a>    <span class="co"># button sequence.</span></span>
-<span id="cb5-14"><a href="#cb5-14"></a>    <span class="ot">@button_hist</span> <span class="op">=</span> <span class="kw">[]</span></span>
+<span id="cb5-14"><a href="#cb5-14"></a>    <span class="ot">@button_hist</span> <span class="kw">=</span> <span class="kw">[]</span></span>
 <span id="cb5-15"><a href="#cb5-15"></a></span>
-<span id="cb5-16"><a href="#cb5-16"></a>    <span class="ot">@button_hist</span> <span class="op">=</span> <span class="dt">GameButtonSeq</span><span class="at">.add_hist</span>(<span class="ot">@button_hist</span>, <span class="st">&quot;down&quot;</span>)</span>
-<span id="cb5-17"><a href="#cb5-17"></a>    <span class="ot">@button_hist</span> <span class="op">=</span> <span class="dt">GameButtonSeq</span><span class="at">.add_hist</span>(<span class="ot">@button_hist</span>, <span class="st">&quot;down&quot;</span>)</span>
-<span id="cb5-18"><a href="#cb5-18"></a>    <span class="ot">@button_hist</span> <span class="op">=</span> <span class="dt">GameButtonSeq</span><span class="at">.add_hist</span>(<span class="ot">@button_hist</span>, <span class="st">&quot;down&quot;</span>)</span>
-<span id="cb5-19"><a href="#cb5-19"></a>    <span class="ot">@button_hist</span> <span class="op">=</span> <span class="dt">GameButtonSeq</span><span class="at">.add_hist</span>(<span class="ot">@button_hist</span>, <span class="st">&quot;forward&quot;</span>)</span>
-<span id="cb5-20"><a href="#cb5-20"></a>    <span class="ot">@button_hist</span> <span class="op">=</span> <span class="dt">GameButtonSeq</span><span class="at">.add_hist</span>(<span class="ot">@button_hist</span>, <span class="st">&quot;punch&quot;</span>)</span>
+<span id="cb5-16"><a href="#cb5-16"></a>    <span class="ot">@button_hist</span> <span class="kw">=</span> <span class="dt">GameButtonSeq</span><span class="at">.add_hist</span>(<span class="ot">@button_hist</span>, <span class="st">&quot;down&quot;</span>)</span>
+<span id="cb5-17"><a href="#cb5-17"></a>    <span class="ot">@button_hist</span> <span class="kw">=</span> <span class="dt">GameButtonSeq</span><span class="at">.add_hist</span>(<span class="ot">@button_hist</span>, <span class="st">&quot;down&quot;</span>)</span>
+<span id="cb5-18"><a href="#cb5-18"></a>    <span class="ot">@button_hist</span> <span class="kw">=</span> <span class="dt">GameButtonSeq</span><span class="at">.add_hist</span>(<span class="ot">@button_hist</span>, <span class="st">&quot;down&quot;</span>)</span>
+<span id="cb5-19"><a href="#cb5-19"></a>    <span class="ot">@button_hist</span> <span class="kw">=</span> <span class="dt">GameButtonSeq</span><span class="at">.add_hist</span>(<span class="ot">@button_hist</span>, <span class="st">&quot;forward&quot;</span>)</span>
+<span id="cb5-20"><a href="#cb5-20"></a>    <span class="ot">@button_hist</span> <span class="kw">=</span> <span class="dt">GameButtonSeq</span><span class="at">.add_hist</span>(<span class="ot">@button_hist</span>, <span class="st">&quot;punch&quot;</span>)</span>
 <span id="cb5-21"><a href="#cb5-21"></a>  <span class="cf">end</span></span>
 <span id="cb5-22"><a href="#cb5-22"></a></span>
 <span id="cb5-23"><a href="#cb5-23"></a>  <span class="cf">def</span> test_button_seq_multiple_names_entered</span>
-<span id="cb5-24"><a href="#cb5-24"></a>    db2 <span class="op">=</span> <span class="dt">GameButtonSeq</span><span class="at">.register</span>(<span class="kw">[</span><span class="st">&quot;up&quot;</span>, <span class="st">&quot;punch&quot;</span><span class="kw">]</span>, <span class="st">&quot;uppercut_2&quot;</span>, <span class="ot">@db</span>)</span>
-<span id="cb5-25"><a href="#cb5-25"></a>    button_hist2 <span class="op">=</span> <span class="dt">GameButtonSeq</span><span class="at">.add_hist</span>(<span class="ot">@button_hist</span>, <span class="st">&quot;up&quot;</span>)</span>
-<span id="cb5-26"><a href="#cb5-26"></a>    button_hist2 <span class="op">=</span> <span class="dt">GameButtonSeq</span><span class="at">.add_hist</span>(button_hist2, <span class="st">&quot;punch&quot;</span>)</span>
+<span id="cb5-24"><a href="#cb5-24"></a>    db2 <span class="kw">=</span> <span class="dt">GameButtonSeq</span><span class="at">.register</span>(<span class="kw">[</span><span class="st">&quot;up&quot;</span>, <span class="st">&quot;punch&quot;</span><span class="kw">]</span>, <span class="st">&quot;uppercut_2&quot;</span>, <span class="ot">@db</span>)</span>
+<span id="cb5-25"><a href="#cb5-25"></a>    button_hist2 <span class="kw">=</span> <span class="dt">GameButtonSeq</span><span class="at">.add_hist</span>(<span class="ot">@button_hist</span>, <span class="st">&quot;up&quot;</span>)</span>
+<span id="cb5-26"><a href="#cb5-26"></a>    button_hist2 <span class="kw">=</span> <span class="dt">GameButtonSeq</span><span class="at">.add_hist</span>(button_hist2, <span class="st">&quot;punch&quot;</span>)</span>
 <span id="cb5-27"><a href="#cb5-27"></a>    assert_equal <span class="kw">[</span><span class="st">&quot;uppercut_2&quot;</span>, <span class="st">&quot;uppercut&quot;</span><span class="kw">]</span>,</span>
 <span id="cb5-28"><a href="#cb5-28"></a>      <span class="dt">GameButtonSeq</span><span class="at">.on_buttons</span>(button_hist2, db2)</span>
 <span id="cb5-29"><a href="#cb5-29"></a>  <span class="cf">end</span></span>
 <span id="cb5-30"><a href="#cb5-30"></a></span>
 <span id="cb5-31"><a href="#cb5-31"></a>  <span class="cf">def</span> test_button_seq_no_sequence_found</span>
 <span id="cb5-32"><a href="#cb5-32"></a>    <span class="co"># Add an unrecognized button.</span></span>
-<span id="cb5-33"><a href="#cb5-33"></a>    button_hist2 <span class="op">=</span> <span class="dt">GameButtonSeq</span><span class="at">.add_hist</span>(<span class="ot">@button_hist</span>, <span class="st">&quot;back&quot;</span>)</span>
+<span id="cb5-33"><a href="#cb5-33"></a>    button_hist2 <span class="kw">=</span> <span class="dt">GameButtonSeq</span><span class="at">.add_hist</span>(<span class="ot">@button_hist</span>, <span class="st">&quot;back&quot;</span>)</span>
 <span id="cb5-34"><a href="#cb5-34"></a>    assert_equal <span class="kw">[]</span>,</span>
 <span id="cb5-35"><a href="#cb5-35"></a>      <span class="dt">GameButtonSeq</span><span class="at">.on_buttons</span>(button_hist2, <span class="ot">@db</span>)</span>
 <span id="cb5-36"><a href="#cb5-36"></a>  <span class="cf">end</span></span>
 <span id="cb5-37"><a href="#cb5-37"></a></span>
 <span id="cb5-38"><a href="#cb5-38"></a>  <span class="cf">def</span> test_button_seq_one_sequence_found</span>
-<span id="cb5-39"><a href="#cb5-39"></a>    button_hist2 <span class="op">=</span> <span class="dt">GameButtonSeq</span><span class="at">.add_hist</span>(<span class="ot">@button_hist</span>, <span class="st">&quot;up&quot;</span>)</span>
-<span id="cb5-40"><a href="#cb5-40"></a>    button_hist2 <span class="op">=</span> <span class="dt">GameButtonSeq</span><span class="at">.add_hist</span>(button_hist2, <span class="st">&quot;punch&quot;</span>)</span>
+<span id="cb5-39"><a href="#cb5-39"></a>    button_hist2 <span class="kw">=</span> <span class="dt">GameButtonSeq</span><span class="at">.add_hist</span>(<span class="ot">@button_hist</span>, <span class="st">&quot;up&quot;</span>)</span>
+<span id="cb5-40"><a href="#cb5-40"></a>    button_hist2 <span class="kw">=</span> <span class="dt">GameButtonSeq</span><span class="at">.add_hist</span>(button_hist2, <span class="st">&quot;punch&quot;</span>)</span>
 <span id="cb5-41"><a href="#cb5-41"></a>    assert_equal <span class="kw">[</span><span class="st">&quot;uppercut&quot;</span><span class="kw">]</span>,</span>
 <span id="cb5-42"><a href="#cb5-42"></a>      <span class="dt">GameButtonSeq</span><span class="at">.on_buttons</span>(button_hist2, <span class="ot">@db</span>)</span>
 <span id="cb5-43"><a href="#cb5-43"></a>  <span class="cf">end</span></span>
@@ -444,7 +444,7 @@ tests inside.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎<
 
 		<div id="footer">
 			<img src="../favicon.png" id="brand-icon">
-			<p>Copyright (C) 2013-2025 Linus Arver. All rights reserved.</p>
+			<p>Copyright (C) 2013-2024 Linus Arver. All rights reserved.</p>
 			<a href="https://github.com/listx/listx_blog">Site</a>
 			<a href="https://github.com/listx/listx.github.io">generated</a>
 			with
