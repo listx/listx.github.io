@@ -8,8 +8,38 @@
         <name>Linus Arver</name>
         
     </author>
-    <updated>2024-10-11T00:00:00Z</updated>
+    <updated>2025-09-29T00:00:00Z</updated>
     <entry>
+    <title>Status Update</title>
+    <link href="http://funloop.org/post/2025-09-29-general-update.html" />
+    <id>http://funloop.org/post/2025-09-29-general-update.html</id>
+    <published>2025-09-29T00:00:00Z</published>
+    <updated>2025-09-29T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="info center">
+	<a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2025-09-29-general-update.org" title="History"><code class="date">2025-09-29</code></a>
+	<br>
+	<a title="All pages tagged &#39;update&#39;." href="/tag/update.html" rel="tag">update</a>
+</div>
+
+<p>It’s been a long time. The most important thing you should know is that I’ve
+been working on a new version of <a href="https://funloop.org/lilac-legacy">Lilac</a>; as such I’ve renamed the existing
+version as <code>lilac-legacy</code>.</p>
+<p>I’ve learned over the past year or so that I prefer literate programming over
+any other programming paradigm. Sadly the tooling is just not that great
+(<code>lilac-legacy</code> included) if you want to work with Orgmode as the foundation. This
+is why I’ve spent a fair amount of time rewriting Lilac from scratch. I hope to
+unveil it soon (hopefully within this year).</p>
+<p>Another thing: I will probably port this blog over to use the new Lilac version
+over the coming months. The reason is, I don’t want to maintain the tech stack
+behind Hakyll (and the other programs I’ve written over the years on this blog).
+Or, I may decide to just freeze the old posts and move them to a separate page.
+Although, that’s probably not very desirable because it will break links for
+people who have linked to this blog (there are quite a few hits if you search
+for <code>funloop.org</code> on GitHub). I haven’t really done a blog tech stack migration
+before (while keeping the same domain name), so it’ll be interesting.</p>
+]]></summary>
+</entry>
+<entry>
     <title>Using Git the Right Way</title>
     <link href="http://funloop.org/post/2024-10-11-using-git-the-right-way.html" />
     <id>http://funloop.org/post/2024-10-11-using-git-the-right-way.html</id>
@@ -1859,33 +1889,6 @@ If Esrille goes under, I would be worried about taking very good care of my keyb
 I imagine that at that point, I would have to just create my own keyboard or make do with a shabby imitation using ErgoDox or some other form factor.
 I sincerely hope that that day never comes…!</p>
 <p>Happy hacking!</p>
-]]></summary>
-</entry>
-<entry>
-    <title>Status Update</title>
-    <link href="http://funloop.org/post/2019-11-11-status-update.html" />
-    <id>http://funloop.org/post/2019-11-11-status-update.html</id>
-    <published>2019-11-11T00:00:00Z</published>
-    <updated>2019-11-11T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="info center">
-	<a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2019-11-11-status-update.org" title="History"><code class="date">2019-11-11</code></a>
-	<br>
-	<a title="All pages tagged &#39;status&#39;." href="/tag/status.html" rel="tag">status</a>
-</div>
-
-<p>It’s been another year since my last blog post!</p>
-<h1 id="on-work">On work</h1>
-<p>I’m still happily employed at Google.</p>
-<h1 id="git-book">Git Book</h1>
-<p>I’m still working on this project.
-It is hard because I’m trying to create real repositories and situations that the reader should be able to check out and follow along.
-Still, I should be able to finish this next year.</p>
-<h1 id="programming-languages">Programming Languages</h1>
-<p>I’ve started dabbling in Clojure, Rust, and Elixir.
-This list is not the same list of programming languages in my last post (which mentioned Shen, Rust, Erlang, Idris, and Factor), but it’s something to chew on for quite some time.</p>
-<h1 id="future">Future</h1>
-<p>I will post again when the Git book is ready.
-Stay tuned!</p>
 ]]></summary>
 </entry>
 

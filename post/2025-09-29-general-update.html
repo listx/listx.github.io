@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Linus’s Blog - Status Update</title>
+		<link rel="stylesheet" href="../css/base.css">
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Serif+Pro">
+		<link rel="shortcut icon" type="image/png" href="../favicon.png">
+		<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+		<script src="../misc.js"></script>
+		<!-- https://github.com/mreid/markreidname-hakyll/blob/master/_templates/mathjax.html -->
+<script type="text/x-mathjax-config">
+	MathJax.Hub.Config({
+		extensions: ["tex2jax.js"],
+		jax: ["input/TeX", "output/HTML-CSS"],
+		tex2jax: {
+			inlineMath: [ ["\\(","\\)"] ],
+			displayMath: [ ["\\[","\\]"] ],
+			processEscapes: true
+		},
+		TeX: { equationNumbers: { autoNumber: "AMS" } },
+		"HTML-CSS": { availableFonts: ["TeX"] }
+	});
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"> </script>
+
+	</head>
+	<body>
+		<div id="header">
+			<a href="../">funloop.org</a>
+			|
+			<a href="../about.html">About</a>
+		</div>
+
+		<div id="sticky-title">
+			<h1 class="center" id="page-title">Status Update</h1>
+		</div>
+
+		<div id="content">
+			<div class="info center">
+	<a class="history" href="https://github.com/listx/listx_blog/commits/master/post/2025-09-29-general-update.org" title="History"><code class="date">2025-09-29</code></a>
+	<br>
+	<a title="All pages tagged 'update'." href="../tag/update.html" rel="tag">update</a>
+</div>
+
+<p>It’s been a long time. The most important thing you should know is that I’ve
+been working on a new version of <a href="https://funloop.org/lilac-legacy">Lilac</a>; as such I’ve renamed the existing
+version as <code>lilac-legacy</code>.</p>
+<p>I’ve learned over the past year or so that I prefer literate programming over
+any other programming paradigm. Sadly the tooling is just not that great
+(<code>lilac-legacy</code> included) if you want to work with Orgmode as the foundation. This
+is why I’ve spent a fair amount of time rewriting Lilac from scratch. I hope to
+unveil it soon (hopefully within this year).</p>
+<p>Another thing: I will probably port this blog over to use the new Lilac version
+over the coming months. The reason is, I don’t want to maintain the tech stack
+behind Hakyll (and the other programs I’ve written over the years on this blog).
+Or, I may decide to just freeze the old posts and move them to a separate page.
+Although, that’s probably not very desirable because it will break links for
+people who have linked to this blog (there are quite a few hits if you search
+for <code>funloop.org</code> on GitHub). I haven’t really done a blog tech stack migration
+before (while keeping the same domain name), so it’ll be interesting.</p>
+
+		</div>
+
+		<div id="footer">
+			<img src="../favicon.png" id="brand-icon">
+			<p>Copyright (C) 2013-2025 Linus Arver. All rights reserved.</p>
+			<a href="https://github.com/listx/listx_blog">Site</a>
+			<a href="https://github.com/listx/listx.github.io">generated</a>
+			with
+			<a href="https://jaspervdj.be/hakyll">Hakyll</a>
+			and
+			<a href="http://sebastiaanvisser.github.com/clay">Clay</a>.
+			<br>
+			<a href="../atom.xml">Atom feed</a>
+		</div>
+	</body>
+</html>
