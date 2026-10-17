@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Codex</title>
+<meta name="author" content="Linus Arver" />
+<meta name="generator" content="Org Mode" />
+<style>
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { }
+</style>
+<link rel="preconnect" href="/vendor/source-fonts/source-fonts.css" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="/vendor/source-fonts/source-fonts.css">
+<script src="/vendor/jquery-3.6.4.min.js"></script>
+<script src="lilac.js"></script>
+<link rel="stylesheet" type="text/css" href="syntax-highlighting.css"/>
+<link rel="stylesheet" type="text/css" href="lilac.css" />
+<link rel="stylesheet" type="text/css" href="codex.css" />
+<link rel="stylesheet" href="/vendor/source-fonts/source-fonts.css">
+<style type="text/css">
+.problems-table col:nth-of-type(1) { width:  40%; }
+.problems-table col:nth-of-type(2) { width: 30%; }
+.problems-table col:nth-of-type(3) { width: 30%; }
+</style>
+<style type="text/css">
+.problems-table col:nth-of-type(1) { width:  40%; }
+.problems-table col:nth-of-type(2) { width: 30%; }
+.problems-table col:nth-of-type(3) { width: 30%; }
+</style>
+<script>
+// @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&amp;dn=gpl-3.0.txt GPL-v3-or-Later
+     function CodeHighlightOn(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.add("code-highlighted");
+         target.classList.add("code-highlighted");
+       }
+     }
+     function CodeHighlightOff(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.remove("code-highlighted");
+         target.classList.remove("code-highlighted");
+       }
+     }
+// @license-end
+</script>
+</head>
+<body>
+<div id="content" class="content">
+<h1 class="title">Codex</h1>
+<div id="table-of-contents" role="doc-toc">
+
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#h-Introduction">1. Introduction</a>
+<ul>
+<li><a href="#h-How-to-read-this-document">1.1. How to read this document</a></li>
+</ul>
+</li>
+<li><a href="#h-Problems">2. Problems</a>
+<ul>
+<li><a href="#h-Data-structures">2.1. Data structures</a></li>
+<li><a href="#h-Appendix">2.2. Appendix</a></li>
+</ul>
+</li>
+<li><a href="#h-Tests">3. Tests</a></li>
+<li><a href="#h-Literate-Programming-Build-System">4. Literate Programming Build System</a>
+<ul>
+<li><a href="#h-Weaving--generating-the-docs">4.1. Weaving (generating the docs)</a>
+<ul>
+<li><a href="#h-Use--lilac-theme--file">4.1.1. Use <code>lilac.theme</code> file</a></li>
+<li><a href="#h-Custom-CSS-and-HTML--head--content">4.1.2. Custom CSS and HTML &lt;head&gt; content</a>
+<ul>
+<li><a href="#h-Main-CSS-file">4.1.2.1. Main CSS file</a>
+<ul>
+<li><a href="#h-Title-font">4.1.2.1.1. Title font</a></li>
+<li><a href="#h-Tables">4.1.2.1.2. Tables</a></li>
+</ul>
+</li>
+<li><a href="#h-Secondary-CSS-file">4.1.2.2. Secondary CSS file</a></li>
+</ul>
+</li>
+<li><a href="#h-Ignore-woven-HTML-from--git-diff">4.1.3. Ignore woven HTML from <code>git diff</code></a>
+<ul>
+<li><a href="#h-git-add--p">4.1.3.1. <code>git add -p</code></a></li>
+</ul>
+</li>
+<li><a href="#h-gitignore">4.1.4. gitignore</a></li>
+</ul>
+</li>
+<li><a href="#h-Tangling--generating-the-source-code">4.2. Tangling (generating the source code)</a></li>
+<li><a href="#h-Linting">4.3. Linting</a>
+<ul>
+<li><a href="#h-Spell-checker">4.3.1. Spell checker</a></li>
+<li><a href="#h-Detect-long-lines">4.3.2. Detect long lines</a></li>
+<li><a href="#h-Link-checker">4.3.3. Link checker</a></li>
+</ul>
+</li>
+<li><a href="#h-Development-environment--Nix-shell">4.4. Development environment (Nix shell)</a>
+<ul>
+<li><a href="#h-Update-Nix-dependencies">4.4.1. Update Nix dependencies</a></li>
+</ul>
+</li>
+<li><a href="#h-Elisp">4.5. Elisp</a></li>
+</ul>
+</li>
+<li><a href="#h-References">5. References</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h-Introduction" class="outline-2">
+<h2 id="h-Introduction"><span class="section-number-2">1.</span> Introduction</h2>
+<div class="outline-text-2" id="text-h-Introduction">
+<p>
+This project aims to capture my notes for studying various programming problems
+(data structures and algorithms). Have a look at the problems in Section <a href="#h-Problems">2</a>.
+</p>
+
+<p>
+For those curious about how these notes were created, check out Section <a href="#h-Literate-Programming-Build-System">4</a>.
+</p>
+
+<p>
+As for why this project is named <i>Codex</i>, I just think it's a cool word that has
+the word "code" in it as a substring.
+</p>
+</div>
+
+<div id="outline-container-h-How-to-read-this-document" class="outline-3">
+<h3 id="h-How-to-read-this-document"><span class="section-number-3">1.1.</span> How to read this document</h3>
+<div class="outline-text-3" id="text-h-How-to-read-this-document">
+<p>
+Please do not use the GitHub-rendered view of this file, as many things like
+links and citations simply do not work. Instead go to <a href="https://funloop.org/codex">https://funloop.org/codex</a>
+for the best experience, on a desktop or laptop screen (mobile devices don't
+work very well, not to mention the missing Table of Contents sidebar).
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-Problems" class="outline-2">
+<h2 id="h-Problems"><span class="section-number-2">2.</span> Problems</h2>
+<div class="outline-text-2" id="text-h-Problems">
+<p>
+Every problem gets its own <code>README.org</code> file in its own subfolder. The solutions
+are all in Python. All solutions are "standalone" in that none of them use any
+libraries other than what's provided by Python's standard libraries.
+</p>
+
+<p>
+The problems are drawn mainly from <a href="#citeproc_bib_item_1">[1]</a>. Other reference materials are
+cited where applicable. Below is a table of every problem, with tags that give a
+brief description of each one, and references.
+</p>
+
+<table class="problems-table">
+
+
+<colgroup>
+<col  class="org-left">
+
+<col  class="org-left">
+
+<col  class="org-left">
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Name</th>
+<th scope="col" class="org-left">Tags</th>
+<th scope="col" class="org-left">References</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left"><a href="problem/parity/README.html">Parity</a></td>
+<td class="org-left">bitwise</td>
+<td class="org-left"><a href="#citeproc_bib_item_1">[1, p. 27]</a>, <a href="#citeproc_bib_item_2">[2, p. 96]</a></td>
+</tr>
+
+<tr>
+<td class="org-left"><a href="problem/rectangle_overlap/README.html">Rectangle overlap</a></td>
+<td class="org-left">geometry</td>
+<td class="org-left"><a href="#citeproc_bib_item_1">[1, p. 39]</a></td>
+</tr>
+
+<tr>
+<td class="org-left"><a href="problem/rearrange_list_even_odd/README.html">Rearrange list</a></td>
+<td class="org-left">array, partitioning</td>
+<td class="org-left"><a href="#citeproc_bib_item_1">[1, p. 41]</a></td>
+</tr>
+
+<tr>
+<td class="org-left"><a href="problem/dutch_national_flag/README.html">Dutch national flag</a></td>
+<td class="org-left">array, partitioning</td>
+<td class="org-left"><a href="#citeproc_bib_item_1">[1, p. 43]</a>, <a href="#citeproc_bib_item_3">[3, p. 200]</a>, <a href="#citeproc_bib_item_4">[4, pp. 296–301]</a>, <a href="#citeproc_bib_item_5">[5, p. 123]</a>, <a href="#citeproc_bib_item_6">[6, p. 186]</a>, <a href="#citeproc_bib_item_7">[7, pp. 125–126]</a></td>
+</tr>
+
+<tr>
+<td class="org-left"><a href="problem/buy_sell_stock_once/README.html">Buy and sell stock once</a></td>
+<td class="org-left">array</td>
+<td class="org-left"><a href="#citeproc_bib_item_1">[1, p. 51]</a>, <a href="#citeproc_bib_item_6">[6, p. 69]</a></td>
+</tr>
+
+<tr>
+<td class="org-left"><a href="problem/buy_sell_stock_twice/README.html">Buy and sell stock twice</a></td>
+<td class="org-left">array</td>
+<td class="org-left"><a href="#citeproc_bib_item_1">[1, p. 53]</a></td>
+</tr>
+
+<tr>
+<td class="org-left"><a href="problem/interconvert_strings_and_integers/README.html">Interconvert strings and integers</a></td>
+<td class="org-left">array, string</td>
+<td class="org-left"><a href="#citeproc_bib_item_1">[1, p. 75]</a></td>
+</tr>
+
+<tr>
+<td class="org-left"><a href="problem/merge_sorted_linked_lists/README.html">Merge sorted linked lists</a></td>
+<td class="org-left">linked list</td>
+<td class="org-left"><a href="#citeproc_bib_item_1">[1, p. 92]</a></td>
+</tr>
+
+<tr>
+<td class="org-left"><a href="problem/binary_tree_height_balanced/README.html">Height-balanced binary trees</a></td>
+<td class="org-left">binary tree</td>
+<td class="org-left"><a href="#citeproc_bib_item_1">[1, p. 124]</a></td>
+</tr>
+
+<tr>
+<td class="org-left"><a href="problem/merge_monotonically_increasing_streams/README.html">Merge monotonically increasing streams</a></td>
+<td class="org-left">priority queue</td>
+<td class="org-left"><a href="#citeproc_bib_item_1">[1, p. 144]</a></td>
+</tr>
+
+<tr>
+<td class="org-left"><a href="problem/find_first_occurrence_from_sorted_array/README.html">Find first occurrence from sorted array</a></td>
+<td class="org-left">binary search</td>
+<td class="org-left"><a href="#citeproc_bib_item_1">[1, p. 155]</a></td>
+</tr>
+
+<tr>
+<td class="org-left"><a href="problem/anonymous_message_from_magazine/README.html">Anonymous message from magazine</a></td>
+<td class="org-left">hash table</td>
+<td class="org-left"><a href="#citeproc_bib_item_1">[1, p. 175]</a></td>
+</tr>
+
+<tr>
+<td class="org-left"><a href="problem/intersection_of_two_sorted_arrays/README.html">Intersection of two sorted arrays</a></td>
+<td class="org-left">sorting</td>
+<td class="org-left"><a href="#citeproc_bib_item_1">[1, p. 194]</a></td>
+</tr>
+
+<tr>
+<td class="org-left"><a href="problem/binary_tree_validate_as_BST/README.html">Validate binary tree as BST</a></td>
+<td class="org-left">binary tree</td>
+<td class="org-left"><a href="#citeproc_bib_item_1">[1, p. 213]</a></td>
+</tr>
+
+<tr>
+<td class="org-left"><a href="problem/tower_of_hanoi/README.html">Tower of Hanoi</a></td>
+<td class="org-left">recursion, binary tree</td>
+<td class="org-left"><a href="#citeproc_bib_item_1">[1, p. 233]</a></td>
+</tr>
+
+<tr>
+<td class="org-left"><a href="problem/maximum_subarray/README.html">Maximum Subarray</a></td>
+<td class="org-left">divide and conquer, dynamic programming</td>
+<td class="org-left"><a href="#citeproc_bib_item_1">[1, p. 250]</a>, <a href="#citeproc_bib_item_5">[5, p. 77]</a></td>
+</tr>
+
+<tr>
+<td class="org-left"><a href="problem/making_change/README.html">Making Change</a></td>
+<td class="org-left">dynamic programming</td>
+<td class="org-left"><a href="#citeproc_bib_item_1">[1, p. 253]</a>, <a href="#citeproc_bib_item_8">[8, Sec. 1.2.9]</a>]</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<div id="outline-container-h-Data-structures" class="outline-3">
+<h3 id="h-Data-structures"><span class="section-number-3">2.1.</span> Data structures</h3>
+<div class="outline-text-3" id="text-h-Data-structures">
+<p>
+Some problems can only be solved in an elegant way if we use particular data
+structures. See below for introductory discussions about some of these.
+</p>
+
+<table class="problems-table">
+
+
+<colgroup>
+<col  class="org-left">
+
+<col  class="org-left">
+
+<col  class="org-left">
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Name</th>
+<th scope="col" class="org-left">Tags</th>
+<th scope="col" class="org-left">References</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left"><a href="problem/linked_list/README.html">Linked list</a></td>
+<td class="org-left">linked list</td>
+<td class="org-left"><a href="#citeproc_bib_item_1">[1, p. 91]</a></td>
+</tr>
+
+<tr>
+<td class="org-left"><a href="problem/stack_with_max/README.html">Stack (with "max" method)</a></td>
+<td class="org-left">stack</td>
+<td class="org-left"><a href="#citeproc_bib_item_1">[1, p. 106]</a></td>
+</tr>
+
+<tr>
+<td class="org-left"><a href="problem/binary_tree/README.html">Binary tree</a></td>
+<td class="org-left">tree</td>
+<td class="org-left"><a href="#citeproc_bib_item_1">[1, p. 123]</a></td>
+</tr>
+
+<tr>
+<td class="org-left"><a href="problem/binary_search_tree/README.html">Binary search tree</a></td>
+<td class="org-left">tree</td>
+<td class="org-left"><a href="#citeproc_bib_item_4">[4, p. 396]</a></td>
+</tr>
+
+<tr>
+<td class="org-left"><a href="problem/heap/README.html">Heap</a></td>
+<td class="org-left">tree, heap, priority queue</td>
+<td class="org-left"><a href="#citeproc_bib_item_4">[4, p. 308]</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+<div id="outline-container-h-Appendix" class="outline-3">
+<h3 id="h-Appendix"><span class="section-number-3">2.2.</span> Appendix</h3>
+<div class="outline-text-3" id="text-h-Appendix">
+<dl class="org-dl">
+<div class="lilac-description-list-entry"><dt><a href="appendix/python_tricks/README.html">Python tricks</a></dt><dd>There are some Python-language-specific tricks available for
+programming problems. You might want to skim over this if your Python skills
+are rusty.</dd></div>
+<div class="lilac-description-list-entry"><dt><a href="appendix/mathematics/README.html">Mathematics</a></dt><dd>Some (some would argue <i>all</i>) topics in programming have
+mathematical underpinnings.</dd></div>
+</dl>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-Tests" class="outline-2">
+<h2 id="h-Tests"><span class="section-number-2">3.</span> Tests</h2>
+<div class="outline-text-2" id="text-h-Tests">
+<table>
+
+
+<colgroup>
+<col  class="org-left">
+
+<col  class="org-left">
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Dependency</th>
+<th scope="col" class="org-left">Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left"><a href="https://github.com/charliermarsh/ruff">Ruff</a></td>
+<td class="org-left">for linting</td>
+</tr>
+
+<tr>
+<td class="org-left"><a href="https://github.com/python/mypy">Mypy</a></td>
+<td class="org-left">for enforcing type hints</td>
+</tr>
+
+<tr>
+<td class="org-left"><a href="https://github.com/HypothesisWorks/hypothesis">Hypothesis</a></td>
+<td class="org-left">for property-based tests</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+All solutions to the problems are implemented in Python, and tested with basic
+unit tests and the Hyothesis property-based testing framework. Each problem's
+discussion comes with its own test suite. All source code samples are linted as
+well with ruff and mypy. Testing has been extremely valuable in checking the
+correctness of the puzzle solutions collected in this work.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-Literate-Programming-Build-System" class="outline-2">
+<h2 id="h-Literate-Programming-Build-System"><span class="section-number-2">4.</span> Literate Programming Build System</h2>
+<div class="outline-text-2" id="text-h-Literate-Programming-Build-System">
+<p>
+We use <a href="https://github.com/listx/lilac">Lilac</a> for literate programming. To build everything just run <code>make
+shell</code> to drop inside the development environment shell then run <code>make</code> inside
+it.
+</p>
+</div>
+
+<div id="outline-container-h-Weaving--generating-the-docs" class="outline-3">
+<h3 id="h-Weaving--generating-the-docs"><span class="section-number-3">4.1.</span> Weaving (generating the docs)</h3>
+<div class="outline-text-3" id="text-h-Weaving--generating-the-docs">
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><label class="org-src-name">Makefile</label><span class="lilac-caption-link-symbol"><a href="#Makefile">&#x1f517;</a></span></div><pre class="src src-makefile" id="Makefile"><span class="org-variable-name">PROJ_ROOT</span> := $(<span class="org-variable-name">shell</span> git rev-parse --show-toplevel)
+<span class="org-variable-name">LILAC_ROOT</span> := $(<span class="org-variable-name">PROJ_ROOT</span>)/deps/elisp/lilac
+<span class="org-variable-name">PROCS</span> := $(<span class="org-variable-name">shell</span> nproc)
+define run_emacs
+    <span class="org-variable-name">LILAC_ROOT</span>=$(<span class="org-variable-name">LILAC_ROOT</span>) emacs $(<span class="org-variable-name">2</span>) --quick --batch --kill \
+        --load $(<span class="org-variable-name">LILAC_ROOT</span>)/lilac.el \
+        --load $(<span class="org-variable-name">PROJ_ROOT</span>)/codex.el \
+        <span class="org-variable-name">--eval</span>=<span class="org-string">"$(</span><span class="org-string"><span class="org-variable-name">1</span></span><span class="org-string">)"</span>
+endef
+define run_emacs_nobatch
+    <span class="org-variable-name">LILAC_ROOT</span>=$(<span class="org-variable-name">LILAC_ROOT</span>) emacs $(<span class="org-variable-name">2</span>) --quick --kill \
+        --load $(<span class="org-variable-name">LILAC_ROOT</span>)/lilac.el \
+        --load $(<span class="org-variable-name">PROJ_ROOT</span>)/codex.el \
+        <span class="org-variable-name">--eval</span>=<span class="org-string">"$(</span><span class="org-string"><span class="org-variable-name">1</span></span><span class="org-string">)"</span>
+endef
+<span class="org-variable-name">src_problem</span> = $(<span class="org-variable-name">shell</span> find problem/ -type f -name <span class="org-string">'README.org'</span>)
+<span class="org-variable-name">woven_html</span> = \
+    $(<span class="org-variable-name">patsubst</span> \
+        problem/%/README.org, \
+        problem/%/README.html, \
+        $(<span class="org-variable-name">src_problem</span>)) \
+    appendix/mathematics/README.html \
+    appendix/python_tricks/README.html \
+    README.html
+<span class="org-variable-name">problem_dirs</span> = $(<span class="org-variable-name">shell</span> find problem -maxdepth 1 -type d | sort | tail -n+2)
+<span class="org-variable-name">problem_dirs_without_prefix</span> = $(<span class="org-variable-name">subst</span> problem/,,$(<span class="org-variable-name">problem_dirs</span>))
+<span class="org-variable-name">test_dirs</span> = $(<span class="org-variable-name">shell</span> find . -type f -name <span class="org-string">'__init__.py'</span> \
+        | sed <span class="org-string">'s|/__init__.py||'</span>)
+<span class="org-comment-delimiter"># </span><span class="org-comment">All problem dirs with Tikz-generated images.</span>
+<span class="org-variable-name">image_dirs</span> = $(<span class="org-variable-name">shell</span> find . -type f -name <span class="org-string">'images.org'</span> \
+        | sed -e <span class="org-string">'s|/[^/]*$$||'</span> -e <span class="org-string">'s|^problem/||'</span> | sort -u)
+<span class="org-variable-name">all_tests_verified</span> = $(<span class="org-variable-name">patsubst</span> %.py, %.py.verified, \
+        $(<span class="org-variable-name">shell</span> find . -type f -name <span class="org-string">'test.py'</span>))
+
+define weave_org
+
+<span class="org-makefile-targets">$(</span><span class="org-variable-name"><span class="org-makefile-targets">1</span></span><span class="org-makefile-targets">)</span>: $(<span class="org-variable-name">2</span>) build-literate.org \
+        $(<span class="org-variable-name">shell</span> find $(<span class="org-variable-name">3</span>) -type f -name <span class="org-string">'images.org'</span> \
+            | xargs grep <span class="org-string">'img.pdf'</span> \
+            | sed \
+                -e <span class="org-string">'s|images.org:#+header: :file ||'</span> \
+                -e <span class="org-string">'s|.img.pdf|.svg|'</span>)
+    <span class="org-type">@</span><span class="org-makefile-shell">echo weaving $(</span><span class="org-makefile-shell"><span class="org-variable-name">2</span></span><span class="org-makefile-shell">)</span>
+    $(<span class="org-variable-name">call</span> run_emacs,(lilac-publish),$(<span class="org-variable-name">2</span>))
+
+endef
+
+<span class="org-makefile-targets">all</span>: check.verified weave
+<span class="org-makefile-targets">.PHONY</span>: all
+
+<span class="lilac-child-link-from-parent"><a href="#__NREF__Makefile-tangle">Makefile-tangle</a></span>
+
+<span class="org-makefile-targets">weave</span>: $(<span class="org-variable-name">woven_html</span>)
+    touch weave
+
+<span class="org-makefile-targets">README.html</span>: build-literate.org README.org citations.bib
+    $(<span class="org-variable-name">call</span> run_emacs,(lilac-publish),README.org)
+
+$(<span class="org-variable-name">foreach</span> d,$(<span class="org-variable-name">problem_dirs_without_prefix</span>),\
+    $(<span class="org-variable-name">eval</span> $(<span class="org-variable-name">call</span> weave_org,\
+    problem/$(<span class="org-variable-name">d</span>)/README.html,\
+    problem/$(<span class="org-variable-name">d</span>)/README.org,problem)))
+
+<span class="org-makefile-targets">appendix/mathematics/README.html</span>: appendix/mathematics/README.org \
+        appendix/mathematics/twos-complement.org
+    $(<span class="org-variable-name">call</span> run_emacs,(lilac-publish),appendix/mathematics/README.org)
+
+<span class="org-makefile-targets">appendix/python_tricks/README.html</span>: appendix/python_tricks/README.org
+    $(<span class="org-variable-name">call</span> run_emacs,(lilac-publish),appendix/python_tricks/README.org)
+
+<span class="org-makefile-targets">check.verified</span>: lint.verified test
+    touch check.verified
+
+<span class="org-makefile-targets">test</span>: $(<span class="org-variable-name">all_tests_verified</span>)
+    touch test
+
+<span class="org-makefile-targets">lint.verified</span>: \
+        mypy.verified \
+        ruff.verified \
+        spellcheck.verified \
+        linelength.verified \
+        linkcheck.verified
+    touch lint.verified
+
+<span class="org-makefile-targets">mypy.verified</span>: $(<span class="org-variable-name">all_tests_verified</span>)
+    mypy problem appendix
+    touch mypy.verified
+
+<span class="org-makefile-targets">ruff.verified</span>: $(<span class="org-variable-name">all_tests_verified</span>)
+    ruff problem appendix
+    touch ruff.verified
+
+<span class="lilac-child-link-from-parent"><a href="#__NREF__Makefile-spellcheck">Makefile-spellcheck</a></span>
+
+<span class="lilac-child-link-from-parent"><a href="#__NREF__Makefile-linelength">Makefile-linelength</a></span>
+
+<span class="lilac-child-link-from-parent"><a href="#__NREF__Makefile-linkcheck">Makefile-linkcheck</a></span>
+
+<span class="org-comment-delimiter"># </span><span class="org-comment">Enter development environment.</span>
+<span class="org-makefile-targets">shell</span>:
+    nix-shell --pure
+
+<span class="lilac-child-link-from-parent"><a href="#__NREF__Makefile-update-deps">Makefile-update-deps</a></span>
+</pre></div></div>
+</div>
+
+<div id="outline-container-h-Use--lilac-theme--file" class="outline-4">
+<h4 id="h-Use--lilac-theme--file"><span class="section-number-4">4.1.1.</span> Use <code>lilac.theme</code> file</h4>
+<div class="outline-text-4" id="text-h-Use--lilac-theme--file">
+<p>
+First we track Lilac as a submodule within this project, and then symlink to the
+CSS, JS, and theme files to the project root. Symlinking adds a level of
+indirection such that if we ever decide to move around the submodule location to
+somewhere else, we won't have to update all of our Org files and can instead
+just update these symlinks.
+</p>
+
+<p>
+Then in all of our published Org files, we do
+</p>
+
+<div class="org-src-container"><pre class="src src-org" id="org0000002"><span class="org-org-meta-line">#+SETUPFILE: path/to/lilac.theme</span>
+</pre></div><p>
+to get the CSS/JS that comes with Lilac.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-Custom-CSS-and-HTML--head--content" class="outline-4">
+<h4 id="h-Custom-CSS-and-HTML--head--content"><span class="section-number-4">4.1.2.</span> Custom CSS and HTML &lt;head&gt; content</h4>
+<div class="outline-text-4" id="text-h-Custom-CSS-and-HTML--head--content">
+<p>
+We tweak Lilac's default CSS a bit.
+</p>
+
+<p>
+Make all HTML files we generate try to pull in a local file called
+<code>codex.css</code>, as well as a custom font.
+</p>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#codex-el">codex-html-head</a></span><span class="lilac-caption-link-symbol"><a href="#__NREF__codex-html-head">&#x1f517;</a></span></div><pre class="src src-emacs-lisp" id="__NREF__codex-html-head"><span class="org-comment-delimiter">; </span><span class="org-comment">See https://stackoverflow.com/a/27285582/437583.</span>
+(<span class="org-keyword">setq</span> lilac-html-head
+      (concat
+       <span class="org-string">"&lt;link rel=\"stylesheet\" type=\"text/css\" href=\"codex.css\" /&gt;\n"</span>
+       <span class="org-string">"&lt;link rel=\"stylesheet\" href="</span>
+        <span class="org-string">"\"https://fonts.googleapis.com/css2"</span>
+        <span class="org-string">"?family=Bungee+Shade:wght@400"</span>
+       <span class="org-string">"\"&gt;"</span>
+       ))
+</pre></div></div>
+</div>
+
+<div id="outline-container-h-Main-CSS-file" class="outline-5">
+<h5 id="h-Main-CSS-file"><span class="section-number-5">4.1.2.1.</span> Main CSS file</h5>
+<div class="outline-text-5" id="text-h-Main-CSS-file">
+<p>
+The default <code>codex.css</code> file has some miscellaneous customizations.
+</p>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><label class="org-src-name">codex.css</label><span class="lilac-caption-link-symbol"><a href="#codex-css">&#x1f517;</a></span></div><pre class="src src-css" id="codex-css"><span class="lilac-child-link-from-parent"><a href="#__NREF__codex-css-title-font">codex-css-title-font</a></span>
+<span class="lilac-child-link-from-parent"><a href="#__NREF__codex-css-tables">codex-css-tables</a></span>
+</pre></div></div>
+</div>
+
+<div id="outline-container-h-Title-font" class="outline-6">
+<h6 id="h-Title-font"><span class="section-number-6">4.1.2.1.1.</span> Title font</h6>
+<div class="outline-text-6" id="text-h-Title-font">
+<p>
+This makes the title font bigger and uses a more ornate font for it.
+</p>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#codex-css">codex-css-title-font</a></span><span class="lilac-caption-link-symbol"><a href="#__NREF__codex-css-title-font">&#x1f517;</a></span></div><pre class="src src-css" id="__NREF__codex-css-title-font"><span class="org-css-selector">h1.title</span> {
+    <span class="org-css-property">font-family</span>: <span class="org-string">"Bungee Shade"</span>, serif;
+    <span class="org-css-property">font-size</span>: 100pt;
+}
+<span class="org-builtin">@media</span> (any-pointer: coarse) {
+    <span class="org-css-selector">h1.title</span> {
+        <span class="org-css-property">font-family</span>: <span class="org-string">"Bungee Shade"</span>, serif;
+        <span class="org-css-property">font-size</span>: 60pt;
+    }
+}
+</pre></div></div>
+</div>
+</div>
+
+<div id="outline-container-h-Tables" class="outline-6">
+<h6 id="h-Tables"><span class="section-number-6">4.1.2.1.2.</span> Tables</h6>
+<div class="outline-text-6" id="text-h-Tables">
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#codex-css">codex-css-tables</a></span><span class="lilac-caption-parent-link"><a href="#codex-problems-css">2</a></span><span class="lilac-caption-link-symbol"><a href="#__NREF__codex-css-tables">&#x1f517;</a></span></div><pre class="src src-css" id="__NREF__codex-css-tables"><span class="org-css-selector">table.monospace-except-header</span> {
+    <span class="org-css-property">font-family</span>: monospace;
+}
+
+<span class="org-css-selector">table.monospace-except-header thead</span> {
+    <span class="org-css-property">font-family</span>: var(<span class="org-variable-name">--font-serif</span>);
+}
+</pre></div></div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-Secondary-CSS-file" class="outline-5">
+<h5 id="h-Secondary-CSS-file"><span class="section-number-5">4.1.2.2.</span> Secondary CSS file</h5>
+<div class="outline-text-5" id="text-h-Secondary-CSS-file">
+<p>
+This is a second CSS file where we customize the title text of the pages for the
+problems. We just (manually) create a symlink from the problem page's
+<code>codex.css</code> to this one (because we don't want to use the regular <code>codex.css</code>
+from above).
+</p>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><label class="org-src-name">codex.problems.css</label><span class="lilac-caption-link-symbol"><a href="#codex-problems-css">&#x1f517;</a></span></div><pre class="src src-css" id="codex-problems-css"><span class="org-css-selector">h1.title</span> {
+    <span class="org-css-property">font-family</span>: <span class="org-string">"Source Serif Pro"</span>, serif;
+}
+<span class="lilac-child-link-from-parent"><a href="#__NREF__codex-css-tables">codex-css-tables</a></span>
+</pre></div></div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-Ignore-woven-HTML-from--git-diff" class="outline-4">
+<h4 id="h-Ignore-woven-HTML-from--git-diff"><span class="section-number-4">4.1.3.</span> Ignore woven HTML from <code>git diff</code></h4>
+<div class="outline-text-4" id="text-h-Ignore-woven-HTML-from--git-diff">
+<p>
+Typically we only need to look at the rendered HTML output in a web browser as
+the raw HTML diff output is extremely difficult to parse as a human. So by
+default we ask Git to exclude it from <code>git diff</code> by treating them as binary
+data.
+</p>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><label class="org-src-name">.gitattributes</label><span class="lilac-caption-link-symbol"><a href="#gitattributes">&#x1f517;</a></span></div><pre class="src src-gitattributes" id="gitattributes">* -diff
+**/*.org diff
+**/.gitattributes diff
+**/.gitmodules diff
+**/.gitignore diff
+package/nix/sources.json diff
+COPYRIGHT diff
+LICENSE diff
+</pre></div></div><p>
+In order to still show the HTML textual diff, we can run <code>git diff --text</code>.
+</p>
+</div>
+
+<div id="outline-container-h-git-add--p" class="outline-5">
+<h5 id="h-git-add--p"><span class="section-number-5">4.1.3.1.</span> <code>git add -p</code></h5>
+<div class="outline-text-5" id="text-h-git-add--p">
+<p>
+Note that the above setting to treat HTML files as binary data prevents them
+from being considered for <code>git add -p</code>. In order to add them, use <code>git add -u</code>
+instead.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-gitignore" class="outline-4">
+<h4 id="h-gitignore"><span class="section-number-4">4.1.4.</span> gitignore</h4>
+<div class="outline-text-4" id="text-h-gitignore">
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><label class="org-src-name">.gitignore</label><span class="lilac-caption-link-symbol"><a href="#gitignore">&#x1f517;</a></span></div><pre class="src src-gitignore" id="gitignore">**/__pycache__
+**/*.auctex-auto
+**/*.hypothesis
+**/*.pdf
+**/*.log
+**/*.py.verified
+check.verified
+lint.verified
+linkcheck.verified
+linelength.verified
+mypy.verified
+ruff.verified
+spellcheck.verified
+test
+update-deps
+weave
+</pre></div></div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-Tangling--generating-the-source-code" class="outline-3">
+<h3 id="h-Tangling--generating-the-source-code"><span class="section-number-3">4.2.</span> Tangling (generating the source code)</h3>
+<div class="outline-text-3" id="text-h-Tangling--generating-the-source-code">
+<p>
+Tangling is simply the act of collecting the <code>#+begin_src ... #+end_src</code> blocks
+and arranging them into the various target (source code) files. Every source
+code block is given a unique name.
+</p>
+
+<p>
+We simply tangle all major <code>*.org</code> files in the toplevel Makefile.
+</p>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#Makefile">Makefile-tangle</a></span><span class="lilac-caption-link-symbol"><a href="#__NREF__Makefile-tangle">&#x1f517;</a></span></div><pre class="src src-makefile" id="__NREF__Makefile-tangle"><span class="org-variable-name">build_literate_tangled</span> = \
+        .gitattributes \
+        .gitignore \
+        _typos.toml \
+        codex.css \
+        codex.problem.css \
+        codex.el \
+        Makefile \
+        shell.nix
+<span class="org-makefile-targets">$(</span><span class="org-variable-name"><span class="org-makefile-targets">build_literate_tangled</span></span><span class="org-makefile-targets">) &amp;</span>: build-literate.org
+    $(<span class="org-variable-name">call</span> run_emacs,(org-babel-tangle),build-literate.org)
+    touch $(<span class="org-variable-name">build_literate_tangled</span>)
+
+<span class="org-makefile-targets">citations.bib</span>: README.org
+    $(<span class="org-variable-name">call</span> run_emacs,(org-babel-tangle),README.org)
+    touch citations.bib
+
+define generate_img_pdfs
+$(<span class="org-variable-name">shell</span> grep <span class="org-string">'img.pdf'</span> $(<span class="org-variable-name">1</span>) \
+        | sed \
+            -e <span class="org-string">'s|^|$(</span><span class="org-string"><span class="org-variable-name">1</span></span><span class="org-string">):|'</span> \
+            -e <span class="org-string">'s|images.org:#+header: :file ||'</span>) &amp;: $(<span class="org-variable-name">1</span>)
+    <span class="org-type">@</span><span class="org-makefile-shell">echo generating images from $(</span><span class="org-makefile-shell"><span class="org-variable-name">1</span></span><span class="org-makefile-shell">)</span>
+    $(<span class="org-variable-name">call</span> run_emacs,(org-html-export-to-html),$(<span class="org-variable-name">1</span>))
+    rm -f $(<span class="org-variable-name">patsubst</span> %/images.org, %/images.html, $(<span class="org-variable-name">1</span>))
+endef
+
+define generate_img_svgs
+<span class="org-makefile-targets">$(</span><span class="org-variable-name"><span class="org-makefile-targets">1</span></span><span class="org-makefile-targets">:</span><span class="org-variable-name"><span class="org-makefile-targets">.img.pdf</span></span><span class="org-makefile-targets">=.svg)</span>: $(<span class="org-variable-name">1</span>)
+    <span class="org-type">@</span><span class="org-makefile-shell">echo generating svg from $(</span><span class="org-makefile-shell"><span class="org-variable-name">1</span></span><span class="org-makefile-shell">)</span>
+    <span class="org-type">@</span><span class="org-makefile-shell">echo $(</span><span class="org-makefile-shell"><span class="org-variable-name">shell</span></span><span class="org-makefile-shell"> pwd)</span>
+    pdf2svg $(<span class="org-variable-name">1</span>) $(<span class="org-variable-name">1</span>).uncropped.svg
+    inkscape \
+        --export-plain-svg \
+        <span class="org-variable-name">--export-margin</span>=5 \
+        <span class="org-variable-name">--export-filename</span>=$(<span class="org-variable-name">1</span>:<span class="org-variable-name">.img.pdf</span>=.svg) \
+        --export-area-drawing \
+        $(<span class="org-variable-name">1</span>).uncropped.svg
+    rm $(<span class="org-variable-name">1</span>).uncropped.svg
+endef
+
+$(<span class="org-variable-name">foreach</span> p,$(<span class="org-variable-name">image_dirs</span>),\
+    $(<span class="org-variable-name">eval</span> $(<span class="org-variable-name">call</span> generate_img_pdfs,\
+    $(<span class="org-variable-name">p</span>)/images.org)))
+
+<span class="org-variable-name">all_img_pdfs</span> = $(<span class="org-variable-name">shell</span> find . -type f -name <span class="org-string">'images.org'</span> \
+        | xargs grep <span class="org-string">'img.pdf'</span> \
+        | sed <span class="org-string">'s|images.org:#+header: :file ||'</span>)
+$(<span class="org-variable-name">foreach</span> img,$(<span class="org-variable-name">all_img_pdfs</span>),\
+    $(<span class="org-variable-name">eval</span> $(<span class="org-variable-name">call</span> generate_img_svgs,\
+    $(<span class="org-variable-name">img</span>))))
+
+define tangle_tests
+<span class="org-makefile-targets">$(</span><span class="org-variable-name"><span class="org-makefile-targets">1</span></span><span class="org-makefile-targets">)/__init__.py $(</span><span class="org-variable-name"><span class="org-makefile-targets">1</span></span><span class="org-makefile-targets">)/test.py &amp;</span>: $(<span class="org-variable-name">1</span>)/README.org
+    <span class="org-type">@</span><span class="org-makefile-shell">echo tangling $(</span><span class="org-makefile-shell"><span class="org-variable-name">1</span></span><span class="org-makefile-shell">)/README.org</span>
+    $(<span class="org-variable-name">call</span> run_emacs,(org-babel-tangle),$(<span class="org-variable-name">1</span>)/README.org)
+    find $(<span class="org-variable-name">1</span>) -type f -name <span class="org-string">'*.py'</span> \
+        -execdir sed -i <span class="org-string">'s/[[:blank:]]*$$$$//'</span> {} +
+endef
+
+<span class="org-comment-delimiter"># </span><span class="org-comment">See https://stackoverflow.com/a/9694782/437583.</span>
+$(<span class="org-variable-name">foreach</span> d,$(<span class="org-variable-name">test_dirs</span>),\
+    $(<span class="org-variable-name">eval</span> $(<span class="org-variable-name">call</span> tangle_tests,$(<span class="org-variable-name">d</span>))))
+
+define verify_tests
+<span class="org-makefile-targets">$(</span><span class="org-variable-name"><span class="org-makefile-targets">1</span></span><span class="org-makefile-targets">)/test.py.verified</span>: $(<span class="org-variable-name">1</span>)/test.py
+    python -m unittest discover \
+        --failfast --start-directory $(<span class="org-variable-name">1</span>) \
+        --top $(<span class="org-variable-name">shell</span> echo $(<span class="org-variable-name">1</span>) | sed -e <span class="org-string">'s|./||'</span> -e <span class="org-string">'s|/.\+||'</span>)
+    touch $(<span class="org-variable-name">1</span>)/test.py.verified
+endef
+
+$(<span class="org-variable-name">foreach</span> d,$(<span class="org-variable-name">test_dirs</span>),\
+    $(<span class="org-variable-name">eval</span> $(<span class="org-variable-name">call</span> verify_tests,$(<span class="org-variable-name">d</span>))))
+</pre></div></div>
+</div>
+</div>
+
+<div id="outline-container-h-Linting" class="outline-3">
+<h3 id="h-Linting"><span class="section-number-3">4.3.</span> Linting</h3>
+<div class="outline-text-3" id="text-h-Linting">
+</div>
+
+<div id="outline-container-h-Spell-checker" class="outline-4">
+<h4 id="h-Spell-checker"><span class="section-number-4">4.3.1.</span> Spell checker</h4>
+<div class="outline-text-4" id="text-h-Spell-checker">
+<p>
+We use <a href="https://github.com/crate-ci/typos">typos-cli</a> to check for spelling errors. Below we configure it to only
+check the original source material &#x2014; Org files.
+</p>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><label class="org-src-name">_typos.toml</label><span class="lilac-caption-link-symbol"><a href="#typos-toml">&#x1f517;</a></span></div><pre class="src src-toml" id="typos-toml">[<span class="org-type">files</span>]
+<span class="org-variable-name">extend-exclude</span> = [
+    <span class="org-string">"*.html"</span>,
+    <span class="org-string">"deps/*"</span>,
+]
+</pre></div></div><p>
+Here we have the Makefile rules for linting, which include this spellchecker.
+</p>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#Makefile">Makefile-spellcheck</a></span><span class="lilac-caption-link-symbol"><a href="#__NREF__Makefile-spellcheck">&#x1f517;</a></span></div><pre class="src src-makefile" id="__NREF__Makefile-spellcheck"><span class="org-variable-name">ORG_FILES</span> = $(<span class="org-variable-name">shell</span> find . -type f -name <span class="org-string">'*.org'</span>)
+
+<span class="org-makefile-targets">spellcheck.verified</span>: $(<span class="org-variable-name">ORG_FILES</span>)
+    typos
+    touch spellcheck.verified
+</pre></div></div>
+</div>
+</div>
+
+<div id="outline-container-h-Detect-long-lines" class="outline-4">
+<h4 id="h-Detect-long-lines"><span class="section-number-4">4.3.2.</span> Detect long lines</h4>
+<div class="outline-text-4" id="text-h-Detect-long-lines">
+<p>
+For code we tangle, we want lines to be roughly 80 characters. This limit is
+actually a bit difficult to enforce because sometimes the source code blocks we
+edit get placed into an indented location, and from the source code block itself
+we cannot tell how much this indentation is exactly. So set the maximum line
+length for tangled text to be 90 characters.
+</p>
+
+<p>
+We have to wrap the <code>find ...</code> invocation with <code>|| true</code> because <code>xargs</code> will
+exit with <code>123</code> if the last <code>grep</code> call can't find a match. That is, in our case
+not finding a match is a <b>good</b> thing but the inner <code>grep</code> doesn't know that.
+</p>
+
+<p>
+This code detects which files to look at by looking at lines in Org files that
+start with <code>#+begin_src</code> and end with <code>:tangle foo</code>, where <code>foo</code> is the last
+word in the line.
+</p>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#Makefile">Makefile-linelength</a></span><span class="lilac-caption-link-symbol"><a href="#__NREF__Makefile-linelength">&#x1f517;</a></span></div><pre class="src src-makefile" id="__NREF__Makefile-linelength"><span class="org-makefile-targets">linelength.verified</span>: $(<span class="org-variable-name">ORG_FILES</span>)
+    <span class="org-string">`find . -type f -name '*.org' \</span>
+<span class="org-string">        | grep -v '^./deps' \</span>
+<span class="org-string">        | xargs grep '^#+begin_src.\+ :tangle ' \</span>
+<span class="org-string">        | sed 's,[^/]\+.org.\+:tangle ,,' \</span>
+<span class="org-string">        | grep -v citations.bib \</span>
+<span class="org-string">        | xargs grep -n '^.\{90\}' &gt; linelength_offenders.log`</span> || true
+    test <span class="org-string">`wc --bytes linelength_offenders.log | cut -d\  -f1`</span> -eq 0
+    touch linelength.verified
+</pre></div></div>
+</div>
+</div>
+
+<div id="outline-container-h-Link-checker" class="outline-4">
+<h4 id="h-Link-checker"><span class="section-number-4">4.3.3.</span> Link checker</h4>
+<div class="outline-text-4" id="text-h-Link-checker">
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#Makefile">Makefile-linkcheck</a></span><span class="lilac-caption-link-symbol"><a href="#__NREF__Makefile-linkcheck">&#x1f517;</a></span></div><pre class="src src-makefile" id="__NREF__Makefile-linkcheck"><span class="org-variable-name">HTML_FILES</span> = $(<span class="org-variable-name">shell</span> find . -type f -name <span class="org-string">'*.html'</span> | grep -v <span class="org-string">'^./deps'</span>)
+
+<span class="org-makefile-targets">linkcheck.verified</span>: $(<span class="org-variable-name">HTML_FILES</span>)
+    lychee --offline $(<span class="org-variable-name">HTML_FILES</span>)
+    touch linkcheck.verified
+</pre></div></div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-Development-environment--Nix-shell" class="outline-3">
+<h3 id="h-Development-environment--Nix-shell"><span class="section-number-3">4.4.</span> Development environment (Nix shell)</h3>
+<div class="outline-text-3" id="text-h-Development-environment--Nix-shell">
+<p>
+This is taken from <a href="https://github.com/tweag/haskell-stack-nix-example/blob/b9383e35416a2b0e21fbc97ed079538f9f395b6a/shell.nix#L1">https://github.com/tweag/haskell-stack-nix-example/blob/b9383e35416a2b0e21fbc97ed079538f9f395b6a/shell.nix#L1</a>.
+</p>
+
+<p>
+This is the main development shell and brings in all of our dependencies to
+build all of our code. It's great for development and testing things out (such
+as running "make" to re-run any Python tests that have been updated when adding
+new problems).
+</p>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><label class="org-src-name">shell.nix</label><span class="lilac-caption-link-symbol"><a href="#shell-nix">&#x1f517;</a></span></div><pre class="src src-nix" id="shell-nix"><span class="org-nix-keyword">let</span>
+  <span class="org-comment"># Nixpkgs snapshot.</span>
+  <span class="org-nix-attribute">sources</span> = <span class="org-nix-builtin">import</span> <span class="org-nix-constant">./package/nix/sources.nix</span>;
+  <span class="org-comment"># The final "pkgs" attribute with all the bells and whistles of our overlays.</span>
+  <span class="org-nix-attribute">pkgs</span> = <span class="org-nix-builtin">import</span> sources.nixpkgs {};
+  <span class="org-comment"># This minimalist latex setup is adapted from https://nixos.wiki/wiki/TexLive.</span>
+  <span class="org-nix-attribute">tex_for_orgmode</span> = (pkgs.texlive.combine {
+    <span class="org-comment"># Start with scheme-basic.</span>
+    <span class="org-nix-keyword">inherit</span> (pkgs.texlive) scheme-basic
+      <span class="org-comment"># Add in additional TeX packages (think CTAN package names).</span>
+      wrapfig amsmath ulem hyperref capt-of
+
+      <span class="org-comment"># TikZ.</span>
+      pgf
+      xkeyval
+      fontspec
+      tikz-qtree
+
+      <span class="org-comment"># Source Sans Pro font.</span>
+      sourcesanspro
+      <span class="org-comment"># Source Code Pro font.</span>
+      sourcecodepro
+      ;
+  });
+
+<span class="org-nix-keyword">in</span>
+
+<span class="org-comment-delimiter"># </span><span class="org-comment">This is our development shell.</span>
+pkgs.mkShell ({
+  <span class="org-nix-attribute">buildInputs</span> = [
+    <span class="org-comment"># Tangling and weaving for Literate Programming.</span>
+    pkgs.emacs29-nox
+
+    <span class="org-comment"># Diagrams.</span>
+    pkgs.inkscape
+    pkgs.pdf2svg
+    tex_for_orgmode
+
+    <span class="org-comment"># Misc</span>
+    pkgs.git
+    pkgs.less
+
+    <span class="org-comment"># Update deps (bootstrap).</span>
+    pkgs.niv
+    pkgs.nix
+    pkgs.cacert
+
+    <span class="org-comment"># Spell checking.</span>
+    pkgs.typos
+
+    <span class="org-comment"># Link checker.</span>
+    pkgs.lychee
+
+    <span class="org-comment"># Python testing and linting.</span>
+    pkgs.python3Packages.hypothesis
+    pkgs.python3Packages.mypy
+    pkgs.ruff
+  ];
+})
+</pre></div></div>
+</div>
+
+<div id="outline-container-h-Update-Nix-dependencies" class="outline-4">
+<h4 id="h-Update-Nix-dependencies"><span class="section-number-4">4.4.1.</span> Update Nix dependencies</h4>
+<div class="outline-text-4" id="text-h-Update-Nix-dependencies">
+<p>
+This is based on Lilac's own code for updating Nix dependencies with <a href="https://github.com/nmattia/niv"><code>niv</code></a>.
+</p>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#Makefile">Makefile-update-deps</a></span><span class="lilac-caption-link-symbol"><a href="#__NREF__Makefile-update-deps">&#x1f517;</a></span></div><pre class="src src-makefile" id="__NREF__Makefile-update-deps"><span class="org-variable-name">nixpkgs_stable_channel</span> := nixos-23.11
+<span class="org-makefile-targets">update-deps</span>: package/nix/sources.json package/nix/sources.nix
+    cd package &amp;&amp; niv update nixpkgs --branch $(<span class="org-variable-name">nixpkgs_stable_channel</span>)
+    cd package &amp;&amp; niv update
+    touch update-deps
+</pre></div></div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-Elisp" class="outline-3">
+<h3 id="h-Elisp"><span class="section-number-3">4.5.</span> Elisp</h3>
+<div class="outline-text-3" id="text-h-Elisp">
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><label class="org-src-name">codex.el</label><span class="lilac-caption-link-symbol"><a href="#codex-el">&#x1f517;</a></span></div><pre class="src src-emacs-lisp" id="codex-el">(<span class="org-keyword">setq</span> org-cite-csl-styles-dir
+      (concat (getenv <span class="org-string">"LILAC_ROOT"</span>) <span class="org-string">"/deps/styles/"</span>))
+
+(<span class="org-keyword">setq</span> org-latex-pdf-process
+  '(<span class="org-string">"lualatex --shell-escape --interaction nonstopmode --output-directory=%o %f"</span>))
+
+<span class="lilac-child-link-from-parent"><a href="#__NREF__codex-html-head">codex-html-head</a></span>
+</pre></div></div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-References" class="outline-2">
+<h2 id="h-References"><span class="section-number-2">5.</span> References</h2>
+<div class="outline-text-2" id="text-h-References">
+<style>.csl-left-margin{float: left; padding-right: 0em;}
+ .csl-right-inline{margin: 0 0 0 2em;}</style><div class="csl-bib-body">
+  <div class="csl-entry" id="citeproc_bib_item_1">
+    <div class="csl-left-margin">[1]</div><div class="csl-right-inline">A. Aziz, T.-H. Lee, and A. Prakash, <i>Elements of Programming Interviews in Python: The Insiders’ Guide</i>. CreateSpace Independent Publishing Platform (25 July. 2018), 2018.</div>
+  </div>
+  <div class="csl-entry" id="citeproc_bib_item_2">
+    <div class="csl-left-margin">[2]</div><div class="csl-right-inline">H. S. Warren, <i>Hacker’s Delight</i>, 2nd ed. Upper Saddle River, NJ: Addison-Wesley, 2013.</div>
+  </div>
+  <div class="csl-entry" id="citeproc_bib_item_3">
+    <div class="csl-left-margin">[3]</div><div class="csl-right-inline">A. Levitin and M. Levitin, <i>Algorithmic Puzzles</i>. Oxford ; New York: Oxford University Press, 2011.</div>
+  </div>
+  <div class="csl-entry" id="citeproc_bib_item_4">
+    <div class="csl-left-margin">[4]</div><div class="csl-right-inline">R. Sedgewick and K. D. Wayne, <i>Algorithms</i>, 4th ed. Upper Saddle River, NJ: Addison-Wesley, 2011.</div>
+  </div>
+  <div class="csl-entry" id="citeproc_bib_item_5">
+    <div class="csl-left-margin">[5]</div><div class="csl-right-inline">J. L. Bentley, <i>Programming Pearls</i>, 2nd ed. Reading, Mass: Addison-Wesley, 2000.</div>
+  </div>
+  <div class="csl-entry" id="citeproc_bib_item_6">
+    <div class="csl-left-margin">[6]</div><div class="csl-right-inline">T. H. Cormen, C. E. Leiserson, R. L. Rivest, and C. Stein, <i>Introduction to Algorithms</i>, 3rd ed. Cambridge, Mass: MIT Press, 2009.</div>
+  </div>
+  <div class="csl-entry" id="citeproc_bib_item_7">
+    <div class="csl-left-margin">[7]</div><div class="csl-right-inline">S. S. Skiena, <i>The Algorithm Design Manual</i>, 2nd ed. London: Springer, 2008.</div>
+  </div>
+  <div class="csl-entry" id="citeproc_bib_item_8">
+    <div class="csl-left-margin">[8]</div><div class="csl-right-inline">D. E. Knuth, <i>The Art of Computer Programming: Fundamental Algorithms</i>, 3rd ed. Reading, Mass: Addison-Wesley, 1997.</div>
+  </div>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

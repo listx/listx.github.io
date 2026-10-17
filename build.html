@@ -1,0 +1,395 @@
+<!DOCTYPE HTML><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>About this site</title><link rel="stylesheet" href="/css/default.css"><link rel="shortcut icon" type="image/png" href="/favicon.png"><link rel="stylesheet" href="/vendor/source-fonts/source-fonts.css">
+<script>
+  window.MathJax = {
+      loader: { paths: { "mathjax-newcm": "/vendor/mathjax-newcm-font" } },
+      output: { font: "mathjax-newcm" },
+  tex: {
+      tags: 'ams'
+  },
+  options: {
+      ignoreHtmlClass: 'verbatim|code'
+  }
+};
+</script>
+<script id="MathJax-script" async="" src="/vendor/mathjax/tex-mml-chtml.js"></script>
+</head><body><div class="navbar"><button id="hamburger" class="tocs-toggle-button" aria-label="Toggle table of contents sidebar">&#x2630;</button><div class="breadcrumbs"><a href="https://funloop.org"><span class="breadcrumb">Linus Arver&#39;s Website</span></a> <span class="breadcrumb-separator">/</span> <a href="#top"><span class="breadcrumb">build.org</span></a></div></div><nav id="tocs"><p class="widget-title gtoc-title">Site contents</p><nav class="gtoc"><ul><li><a href="/index.html">Home</a></li><li><a href="/post/index.html">Blog</a></li><li><a href="/projects.html">Projects</a></li><li><a href="/build.html" class="bold">About this site</a></li></ul></nav><p class="widget-title toc-title">Page contents</p><nav class="toc"><div class="toc-entries"><ol><li class="toc-level-1"><div class="toc-entry"><span class="toc-counter">1</span><a href="#h-1-Overview">Overview</a></div><ol><li class="toc-level-2"><div class="toc-entry"><span class="toc-counter">1.1</span><a href="#h-1.1-GitHub-Hakyll-vs-SourceHut-Lilac">GitHub+Hakyll vs SourceHut+Lilac</a></div></li></ol></li><li class="toc-level-1"><div class="toc-entry"><span class="toc-counter">2</span><a href="#h-2-Lilac-configuration">Lilac configuration</a></div></li><li class="toc-level-1"><div class="toc-entry"><span class="toc-counter">3</span><a href="#h-3-Publish-locally">Publish locally</a></div></li><li class="toc-level-1"><div class="toc-entry"><span class="toc-counter">4</span><a href="#h-4-Publish-to-GitHub">Publish to GitHub</a></div><ol><li class="toc-level-2"><div class="toc-entry"><span class="toc-counter">4.1</span><a href="#h-4.1-Old-content">Old content</a></div></li><li class="toc-level-2"><div class="toc-entry"><span class="toc-counter">4.2</span><a href="#h-4.2-Makefile">Makefile</a></div><ol><li class="toc-level-3"><div class="toc-entry"><span class="toc-counter">4.2.1</span><a href="#h-4.2.1-Fix-MathJax">Fix MathJax</a></div></li><li class="toc-level-3"><div class="toc-entry"><span class="toc-counter">4.2.2</span><a href="#h-4.2.2-Fix-jQuery">Fix <span class="code">jQuery</span></a></div></li><li class="toc-level-3"><div class="toc-entry"><span class="toc-counter">4.2.3</span><a href="#h-4.2.3-Fix-Google-web-fonts">Fix Google web fonts</a></div></li><li class="toc-level-3"><div class="toc-entry"><span class="toc-counter">4.2.4</span><a href="#h-4.2.4-Reference-vendored-assets">Reference vendored assets</a></div></li></ol></li></ol></li><li class="toc-level-1"><div class="toc-entry"><span class="toc-counter">5</span><a href="#h-5-Hakyll-setup">Hakyll setup</a></div></li><li class="toc-level-1"><div class="toc-entry"><span class="toc-counter">6</span><a href="#h-6-Miscellaneous">Miscellaneous</a></div></li><li class="toc-level-1"><div class="toc-entry"><a href="#h--Page-metrics">Page metrics</a></div><ol><li class="toc-level-2"><div class="toc-entry"><a href="#h--Backlinks">Backlinks</a></div></li><li class="toc-level-2"><div class="toc-entry"><a href="#h--Tangled-files">Tangled files</a></div></li><li class="toc-level-2"><div class="toc-entry"><a href="#h--Named-cells">Named cells</a></div></li></ol></li></ol></div></nav></nav><main><h1 id="top">About this site</h1><hr class="title-underline"><div id="heading-container-h-1-Overview" class="heading-container"><h2 id="h-1-Overview"><span id="c-0" class="cell-idx"><a href="#h-1-Overview">1&ensp;Overview</a></span></h2><p><span id="c-1" class="cell-idx">I originally started a blog about various programming-related things <a href="https://zuttobenkyou.wordpress.com/" class="external-link" id="linkNumber-1">here</a> (late 2000s), but I wanted more control over how the content is generated/stored, and so I created <a href="https://github.com/listx/listx_blog" class="external-link" id="linkNumber-2">a different blog</a> in 2013. This version used <a href="https://jaspervdj.be/hakyll/" class="external-link" id="linkNumber-3">Hakyll</a> as the static site generator. In 2026, I switched away from Hakyll to <a href="https://lilac.funloop.org" class="external-link" id="linkNumber-4">Lilac</a>, a custom literate programming tool I developed, while retaining most of the original content as is. The source code of the latest version is also hosted in SourceHut <a href="https://git.sr.ht/~listx/personal-website" class="external-link" id="linkNumber-5">here</a>.</span></p></div><div id="heading-container-h-1.1-GitHub-Hakyll-vs-SourceHut-Lilac" class="heading-container"><h3 id="h-1.1-GitHub-Hakyll-vs-SourceHut-Lilac"><span id="c-2" class="cell-idx"><a href="#h-1.1-GitHub-Hakyll-vs-SourceHut-Lilac">1.1&ensp;GitHub+Hakyll vs SourceHut+Lilac</a></span></h3><p><span id="c-3" class="cell-idx">When we used Hakyll, we would generate the site, then commit all of the generated HTML and other static artifacts to a separate Git repo, and then host that on GitHub Pages.</span></p><p><span id="c-4" class="cell-idx">However, we&#39;ve since moved to SourceHut for hosting. SourceHut&#39;s model is slightly different because it just hosts a tarball of content, which is uploaded to their server. So the key difference is that the generated site is <span class="italic">not</span> a Git repo.</span></p><p><span id="c-5" class="cell-idx">Another difference is that we use Lilac to generate the HTML. It is straightforward enough to use Lilac to write new content, but the Hakyll-era content still needs to be included in the tarball because there are old URLs out there that still reference it. See <a href="#h-4.1-Old-content" class="internal-link" id="linkNumber-6">Old content</a>.</span></p></div><div id="heading-container-h-2-Lilac-configuration" class="heading-container"><h2 id="h-2-Lilac-configuration"><span id="c-6" class="cell-idx"><a href="#h-2-Lilac-configuration">2&ensp;Lilac configuration</a></span></h2><div id="c-7" class="cell-idx"><div class="block-container src" id="b-1"><div class="block-controls"><button class="toggle-block-meta-other" data-action="toggle-block-meta-other"></button><a href="#b-1">&#x1F517;</a></div><div class="block-meta"><code><span class="bold">&#x1F3AF; Lilac.toml</span></code></div><div class="block-meta-other hidden"><p>Other metadata key/value pairs:</p><ul><li><p><span class="code">__anon_block_number</span> = <span class="code">1</span></p></li><li><p><span class="code">__block_type</span> = <span class="code">src</span></p></li><li><p><span class="code">__src_language</span> = <span class="code">toml</span></p></li></ul></div><pre class="block-body"><code class="sourceCode"><span class="dt">name</span> <span class="op">=</span> <span class="st">&quot;Linus Arver&#39;s Website&quot;</span>
+<span class="dt">homepage</span> <span class="op">=</span> <span class="st">&quot;https://funloop.org&quot;</span>
+<span class="dt">repo</span> <span class="op">=</span> <span class="st">&quot;https://git.sr.ht/~listx/personal-website&quot;</span>
+<span class="dt">version</span> <span class="op">=</span> <span class="st">&quot;&quot;</span>
+<span class="dt">nonTangledPathspecs</span> <span class="op">=</span> <span class="op">[</span>
+   <span class="st">&quot;:(exclude,top).gitmodules&quot;</span><span class="op">,</span>
+   <span class="st">&quot;:(exclude,top)*.org&quot;</span><span class="op">,</span>
+   <span class="st">&quot;:(exclude,top)LICENSE&quot;</span><span class="op">,</span>
+   <span class="st">&quot;:(exclude,top)art.md&quot;</span><span class="op">,</span>
+   <span class="st">&quot;:(exclude,top)code/&quot;</span><span class="op">,</span>
+   <span class="st">&quot;:(exclude,top)codex/&quot;</span><span class="op">,</span>
+   <span class="st">&quot;:(exclude,top)favicon*&quot;</span><span class="op">,</span>
+   <span class="st">&quot;:(exclude,top)file/&quot;</span><span class="op">,</span>
+   <span class="st">&quot;:(exclude,top)img/&quot;</span><span class="op">,</span>
+   <span class="st">&quot;:(exclude,top)legacy-generated-repo/&quot;</span><span class="op">,</span>
+   <span class="st">&quot;:(exclude,top)post/2013-*.org&quot;</span><span class="op">,</span>
+   <span class="st">&quot;:(exclude,top)post/2014-*.org&quot;</span><span class="op">,</span>
+   <span class="st">&quot;:(exclude,top)post/2015-*.org&quot;</span><span class="op">,</span>
+   <span class="st">&quot;:(exclude,top)post/2016-*.org&quot;</span><span class="op">,</span>
+   <span class="st">&quot;:(exclude,top)post/2017-*.org&quot;</span><span class="op">,</span>
+   <span class="st">&quot;:(exclude,top)post/2018-*.org&quot;</span><span class="op">,</span>
+   <span class="st">&quot;:(exclude,top)post/2019-*.org&quot;</span><span class="op">,</span>
+   <span class="st">&quot;:(exclude,top)post/2020-*.org&quot;</span><span class="op">,</span>
+   <span class="st">&quot;:(exclude,top)post/2021-*.org&quot;</span><span class="op">,</span>
+   <span class="st">&quot;:(exclude,top)post/2023-*.org&quot;</span><span class="op">,</span>
+   <span class="st">&quot;:(exclude,top)post/2024-*.org&quot;</span><span class="op">,</span>
+   <span class="st">&quot;:(exclude,top)post/2025-*.org&quot;</span><span class="op">,</span>
+   <span class="st">&quot;:(exclude,top)rust-js/&quot;</span><span class="op">,</span>
+   <span class="st">&quot;:(exclude,top)vendor/&quot;</span>
+<span class="op">]</span>
+
+<span class="er"><a href="#b-custom-html-head" class="internal-link" id="b-1-b-custom-html-head">custom-html-head</a></span></code></pre></div></div></div><div id="heading-container-h-3-Publish-locally" class="heading-container"><h2 id="h-3-Publish-locally"><span id="c-8" class="cell-idx"><a href="#h-3-Publish-locally">3&ensp;Publish locally</a></span></h2><div id="c-9" class="cell-idx"><div class="block-container src" id="b-2"><div class="block-controls"><button class="toggle-block-meta-other" data-action="toggle-block-meta-other"></button><a href="#b-2">&#x1F517;</a></div><div class="block-meta"><code><span class="bold">&#x1F3AF; Makefile</span></code></div><div class="block-meta-other hidden"><p>Other metadata key/value pairs:</p><ul><li><p><span class="code">__anon_block_number</span> = <span class="code">2</span></p></li><li><p><span class="code">__block_type</span> = <span class="code">src</span></p></li><li><p><span class="code">__src_language</span> = <span class="code">makefile</span></p></li></ul></div><pre class="block-body"><code class="sourceCode"><span class="dt">org_files</span> <span class="ch">:=</span><span class="st"> </span><span class="ch">$(</span><span class="kw">shell</span><span class="st"> find . \</span>
+<span class="st">	\( -path &quot;./codex&quot; \) -prune -o \</span>
+<span class="st">	-name &quot;*.org&quot; -exec grep -l &quot;^:ID: &quot; {} +</span><span class="ch">)</span>
+
+<span class="dt">obj_files</span> <span class="ch">:=</span><span class="st"> </span><span class="ch">$(</span><span class="dt">org_files</span><span class="kw">:</span><span class="ss">%.org</span><span class="kw">=</span><span class="ss">%.lobj</span><span class="ch">)</span>
+
+<span class="dt">archive_file</span> <span class="ch">:=</span><span class="st"> site.larc</span>
+
+<span class="dv">all:</span><span class="dt"> tangle weave lint</span>
+<span class="ot">.PHONY:</span><span class="dt"> all</span>
+
+<span class="dv">$(obj_files) &amp;:</span><span class="dt"> </span><span class="ch">$(</span><span class="dt">org_files</span><span class="ch">)</span>
+	lilac compile <span class="ch">$?</span>
+	touch <span class="ch">$(</span><span class="dt">obj_files</span><span class="ch">)</span>
+
+<span class="dv">$(archive_file):</span><span class="dt"> </span><span class="ch">$(</span><span class="dt">obj_files</span><span class="ch">)</span>
+	lilac archive <span class="ch">$^</span> --out-file <span class="ch">$@</span>
+
+<span class="dv">tangle:</span><span class="dt"> </span><span class="ch">$(</span><span class="dt">archive_file</span><span class="ch">)</span>
+	lilac tangle <span class="ch">$&lt;</span> --out-dir .
+	touch tangle
+
+<span class="dv">weave:</span><span class="dt"> </span><span class="ch">$(</span><span class="dt">archive_file</span><span class="ch">)</span>
+	lilac weave <span class="ch">$&lt;</span> --out-dir ./site --write-css --write-js
+	touch weave
+
+<span class="dv">lint:</span><span class="dt"> </span><span class="ch">$(</span><span class="dt">archive_file</span><span class="ch">)</span>
+	lilac lint <span class="ch">$&lt;</span>
+	touch lint
+
+<a href="#b-Makefile:publish" class="internal-link" id="b-2-b-Makefile:publish">Makefile:publish</a>
+
+<span class="dv">gitconfig:</span>
+	git config diff.orderfile .git-orderfile
+<span class="ot">.PHONY:</span><span class="dt"> gitconfig</span>
+
+<span class="dv">update:</span>
+	niv update nixpkgs --branch nixos-25.11
+<span class="ot">.PHONY:</span><span class="dt"> update</span>
+
+<span class="dv">clean:</span>
+	git -C legacy-generated-repo reset --hard
+	git -C codex reset --hard
+	rm -rf <span class="ch">\</span>
+		<span class="ch">$(</span><span class="dt">archive_file</span><span class="ch">)</span> <span class="ch">\</span>
+		<span class="ch">$(</span><span class="dt">obj_files</span><span class="ch">)</span> <span class="ch">\</span>
+		site.tar site.tar.gz <span class="ch">\</span>
+		site/* <span class="ch">\</span>
+.PHONY: clean</code></pre></div></div></div><div id="heading-container-h-4-Publish-to-GitHub" class="heading-container"><h2 id="h-4-Publish-to-GitHub"><span id="c-10" class="cell-idx"><a href="#h-4-Publish-to-GitHub">4&ensp;Publish to GitHub</a></span></h2></div><div id="heading-container-h-4.1-Old-content" class="heading-container"><h3 id="h-4.1-Old-content"><span id="c-11" class="cell-idx"><a href="#h-4.1-Old-content">4.1&ensp;Old content</a></span></h3><p><span id="c-12" class="cell-idx">Until we migrate all old posts (pre-2026) to use Lilac, we will have a body of work which we&#39;ll need to still publish the old way. We don&#39;t want to maintain the Hakyll build dependencies, so instead we just pull in the old statically generated repo, then we overwrite it with any content generated by Lilac. Then we add it to a branch and deploy to GitHub. That way the old content won&#39;t be broken (all of the old URLs will still work).</span></p></div><div id="heading-container-h-4.2-Makefile" class="heading-container"><h3 id="h-4.2-Makefile"><span id="c-13" class="cell-idx"><a href="#h-4.2-Makefile">4.2&ensp;Makefile</a></span></h3><div id="c-14" class="cell-idx"><div class="block-container src" id="b-Makefile:publish"><div class="block-controls"><button class="toggle-block-meta-other" data-action="toggle-block-meta-other"></button><a href="#b-Makefile:publish">&#x1F517;</a></div><div class="block-meta"><code>Makefile:publish</code></div><div class="block-meta-other hidden"><p>Used by <a href="#b-2-b-Makefile:publish" class="internal-link">Anonymous BlockCell 9</a>.</p><p>Other metadata key/value pairs:</p><ul><li><p><span class="code">__block_type</span> = <span class="code">src</span></p></li><li><p><span class="code">__src_language</span> = <span class="code">makefile</span></p></li></ul></div><pre class="block-body"><code class="sourceCode"><span class="dv">site.tar.gz:</span><span class="dt"> </span><span class="ch">$(</span><span class="dt">archive_file</span><span class="ch">)</span><span class="dt"> weave vendor/mathjax vendor/<a href="#b-mathjax-font" class="internal-link" id="b-Makefile:publish-b-mathjax-font">mathjax-font</a>-font vendor/source-fonts</span>
+	rm -f site.tar site.tar.gz
+	git -C legacy-generated-repo reset --hard
+	git -C codex reset --hard
+	cd codex &amp;&amp; git submodule update --init --recursive
+
+	<span class="co"># <a href="#ll--Makefile:publish-fix-mathjax-" class="internal-link" id="ll--Makefile:publish-fix-mathjax-"><span class="bold">1</span></a> <a class="button-popup-backlinks" data-backlinks="[[&quot;#linkNumber-13&quot;,&quot;§ 4.2.1 Fix MathJax ~ ¶ (&lt;span class=\&quot;verbatim\&quot;&gt;Cell 21&lt;/span&gt;)&quot;]]">←</a></span>
+	<a href="#b-fix-mathjax" class="internal-link" id="b-Makefile:publish-b-fix-mathjax">fix-mathjax</a>
+	<a href="#b-fix-jquery" class="internal-link" id="b-Makefile:publish-b-fix-jquery">fix-jquery</a>
+	<a href="#b-fix-google-fonts" class="internal-link" id="b-Makefile:publish-b-fix-google-fonts">fix-google-fonts</a>
+
+	<span class="co"># <a href="#ll--Makefile:publish-legacy-" class="internal-link" id="ll--Makefile:publish-legacy-"><span class="bold">2</span></a> <a class="button-popup-backlinks" data-backlinks="[[&quot;#linkNumber-9&quot;,&quot;§ 4.2 Makefile ~ ¶ (&lt;span class=\&quot;verbatim\&quot;&gt;Cell 16&lt;/span&gt;)&quot;],[&quot;#linkNumber-7&quot;,&quot;§ 4.2 Makefile ~ ¶ (&lt;span class=\&quot;verbatim\&quot;&gt;Cell 15&lt;/span&gt;)&quot;]]">←</a></span>
+	tar cvf site.tar -C legacy-generated-repo --exclude=<span class="st">&#39;**/.*&#39;</span> .
+
+	<span class="co"># <a href="#ll--Makefile:publish-site-" class="internal-link" id="ll--Makefile:publish-site-"><span class="bold">3</span></a> <a class="button-popup-backlinks" data-backlinks="[[&quot;#linkNumber-8&quot;,&quot;§ 4.2 Makefile ~ ¶ (&lt;span class=\&quot;verbatim\&quot;&gt;Cell 16&lt;/span&gt;)&quot;]]">←</a></span>
+	tar rvf site.tar -C site .
+
+	<span class="co"># <a href="#ll--Makefile:publish-codex-" class="internal-link" id="ll--Makefile:publish-codex-"><span class="bold">4</span></a> <a class="button-popup-backlinks" data-backlinks="[[&quot;#linkNumber-10&quot;,&quot;§ 4.2 Makefile ~ ¶ (&lt;span class=\&quot;verbatim\&quot;&gt;Cell 17&lt;/span&gt;)&quot;]]">←</a></span>
+	find -L codex -path <span class="st">&#39;codex/deps/elisp/lilac/deps&#39;</span> -prune -o <span class="ch">\</span>
+		-type f <span class="ch">\</span>
+		-not -path <span class="st">&#39;*/.*&#39;</span> <span class="ch">\</span>
+		\( -name <span class="st">&#39;*.html&#39;</span> -o -name <span class="st">&#39;*.css&#39;</span> -o -name <span class="st">&#39;*.js&#39;</span> -o -name <span class="st">&#39;*.svg&#39;</span> \) <span class="ch">\</span>
+		| tar rvhf site.tar --hard-dereference --exclude=<span class="st">&#39;codex/deps/elisp/lilac/deps&#39;</span> -T -
+
+	<span class="co"># <a href="#ll--Makefile:publish-mathjax-" class="internal-link" id="ll--Makefile:publish-mathjax-"><span class="bold">5</span></a> <a class="button-popup-backlinks" data-backlinks="[[&quot;#linkNumber-15&quot;,&quot;§ 4.2.1 Fix MathJax ~ ¶ (&lt;span class=\&quot;verbatim\&quot;&gt;Cell 21&lt;/span&gt;)&quot;]]">←</a></span>
+	tar rvf site.tar vendor
+	gzip site.tar
+
+	<span class="co"># <a href="#ll--Makefile:publish-cleanup-" class="internal-link" id="ll--Makefile:publish-cleanup-"><span class="bold">6</span></a> <a class="button-popup-backlinks" data-backlinks="[[&quot;#linkNumber-12&quot;,&quot;§ 4.2 Makefile ~ ¶ (&lt;span class=\&quot;verbatim\&quot;&gt;Cell 19&lt;/span&gt;)&quot;]]">←</a></span>
+	git -C legacy-generated-repo reset --hard
+	git -C codex reset --hard
+
+<span class="co"># <a href="#ll--Makefile:publish-get-mathjax-fonts-" class="internal-link" id="ll--Makefile:publish-get-mathjax-fonts-"><span class="bold">7</span></a> <a class="button-popup-backlinks" data-backlinks="[]">←</a></span>
+<span class="dv">vendor/mathjax vendor/mathjax-newcm-font &amp;:</span>
+	./vendor-mathjax.sh
+
+<span class="dv">vendor/source-fonts:</span>
+	./vendor-source-fonts.sh
+
+<span class="dt">PAGES_DIR</span> <span class="ch">:=</span><span class="st"> listx.github.io</span>
+
+<span class="dv">publish:</span><span class="dt"> site.tar.gz</span>
+	<span class="ch">@</span><span class="fu">test -d </span><span class="ch">$(</span><span class="dt">PAGES_DIR</span><span class="ch">)</span><span class="fu">/.git || { echo </span><span class="st">&quot;Error: </span><span class="ch">$(</span><span class="dt">PAGES_DIR</span><span class="ch">)</span><span class="st"> is not a git repo.&quot;</span><span class="fu"> &gt;&amp;2; exit 1; }</span>
+	<span class="co"># Remove everything except .git so deleted files disappear from the site.</span>
+	find <span class="ch">$(</span><span class="dt">PAGES_DIR</span><span class="ch">)</span> -mindepth 1 -maxdepth 1 -not -name .git -exec rm -rf {} +
+	tar -xzf site.tar.gz -C <span class="ch">$(</span><span class="dt">PAGES_DIR</span><span class="ch">)</span>
+	<span class="co"># The tarball excludes dotfiles, so add these back.</span>
+	touch <span class="ch">$(</span><span class="dt">PAGES_DIR</span><span class="ch">)</span>/.nojekyll
+	cd <span class="ch">$(</span><span class="dt">PAGES_DIR</span><span class="ch">)</span> &amp;&amp; <span class="ch">\</span>
+		git add -A &amp;&amp; <span class="ch">\</span>
+		{ git diff --cached --quiet || git commit -m <span class="st">&quot;update&quot;</span>; } &amp;&amp; <span class="ch">\</span>
+		git push
+	touch publish</code></pre></div></div><p><span id="c-15" class="cell-idx"><a href="#ll--Makefile:publish-legacy-" class="internal-link" id="linkNumber-7"><span class="bold">2</span></a> bundles up the old legacy content into a tar file, after which we tar up Lilac&#39;s woven content into the same tar file.</span></p><p><span id="c-16" class="cell-idx"><a href="#ll--Makefile:publish-site-" class="internal-link" id="linkNumber-8"><span class="bold">3</span></a> publishes the main site; this comes after <a href="#ll--Makefile:publish-legacy-" class="internal-link" id="linkNumber-9"><span class="bold">2</span></a> just in case we want to overwrite any old pages.</span></p><p><span id="c-17" class="cell-idx"><a href="#ll--Makefile:publish-codex-" class="internal-link" id="linkNumber-10"><span class="bold">4</span></a> publishes the <a href="https://git.sr.ht/~listx/codex" class="external-link" id="linkNumber-11">https://git.sr.ht/~listx/codex</a> repo.</span></p><p><span id="c-18" class="cell-idx">Publishing the site requires a personal access token from SourceHut, which we ignore from our repo (checking it into Git would be a disaster!). The actual command to publish is quite straightforward though, as we just need to invoke a single <span class="code">curl</span> command.</span></p><p><span id="c-19" class="cell-idx"><a href="#ll--Makefile:publish-cleanup-" class="internal-link" id="linkNumber-12"><span class="bold">6</span></a> cleans up the submodule directories, because fixing the MathJax (by modifying their HTML files to refer to our vendored versions) results in modifying tracked files. This way we reduce the chance of accidentally commiting those changes to the main repo (because Git tracks whether a submodule is &quot;dirty&quot;).</span></p></div><div id="heading-container-h-4.2.1-Fix-MathJax" class="heading-container"><h4 id="h-4.2.1-Fix-MathJax"><span id="c-20" class="cell-idx"><a href="#h-4.2.1-Fix-MathJax">4.2.1&ensp;Fix MathJax</a></span></h4><p><span id="c-21" class="cell-idx">Because SourceHut does not allow pulling in MathJax over a CDN, we have to modify the HTML files to use a locally vendored version <a href="#ll--Makefile:publish-fix-mathjax-" class="internal-link" id="linkNumber-13"><span class="bold">1</span></a> via <a href="#b-fix-mathjax" class="internal-link" id="linkNumber-14">fix-mathjax</a>, and also include MathJax dependencies in the tarball <a href="#ll--Makefile:publish-mathjax-" class="internal-link" id="linkNumber-15"><span class="bold">5</span></a>.</span></p><p><span id="c-22" class="cell-idx">First we download MathJax using <a href="#b-vendor-mathjax.sh" class="internal-link" id="linkNumber-16">vendor-mathjax.sh</a></span></p><div id="c-23" class="cell-idx"><div class="block-container src" id="b-vendor-mathjax.sh"><div class="block-controls"><button class="toggle-block-meta-other" data-action="toggle-block-meta-other"></button><a href="#b-vendor-mathjax.sh">&#x1F517;</a></div><div class="block-meta"><code>vendor-mathjax.sh</code><br><code><span class="bold">&#x1F3AF; vendor-mathjax.sh</span></code></div><div class="block-meta-other hidden"><p>Other metadata key/value pairs:</p><ul><li><p><span class="code">__block_type</span> = <span class="code">src</span></p></li><li><p><span class="code">__src_language</span> = <span class="code">bash</span></p></li><li><p><span class="code">shebang</span> = <span class="code">#!/usr/bin/env bash</span></p></li></ul></div><pre class="block-body"><code class="sourceCode"><span class="bu">set</span> <span class="at">-euo</span> pipefail
+
+<span class="va">MAIN_PACKAGE</span><span class="op">=</span><span class="st">&quot;mathjax&quot;</span>
+<span class="va">FONT_PACKAGE</span><span class="op">=</span><span class="st">&quot;mathjax-newcm-font&quot;</span>
+<span class="va">VERSION</span><span class="op">=</span><span class="st">&quot;4.1.2&quot;</span>
+
+<span class="fu">mkdir</span> <span class="at">-p</span> vendor
+<span class="bu">pushd</span> vendor
+
+<span class="fu">download_tarball()</span>
+<span class="kw">{</span>
+	<span class="bu">local</span> <span class="va">package</span>
+	<span class="bu">local</span> <span class="va">version</span>
+	<span class="bu">local</span> <span class="va">url_prefix</span>
+	<span class="bu">local</span> <span class="va">tarball</span>
+	<span class="va">package</span><span class="op">=</span><span class="st">&quot;</span><span class="va">${1</span><span class="op">:-</span><span class="va">}</span><span class="st">&quot;</span>
+	<span class="va">version</span><span class="op">=</span><span class="st">&quot;</span><span class="va">${2</span><span class="op">:-</span><span class="va">}</span><span class="st">&quot;</span>
+	<span class="va">tarball</span><span class="op">=</span><span class="st">&quot;</span><span class="va">${package}</span><span class="st">-</span><span class="va">${version}</span><span class="st">.tgz&quot;</span>
+	<span class="va">url_prefix</span><span class="op">=</span><span class="st">&quot;</span><span class="va">${3</span><span class="op">:-</span><span class="va">}</span><span class="st">&quot;</span>
+
+	<span class="cf">if</span> <span class="kw">[[</span> <span class="ot">-d</span> <span class="st">&quot;</span><span class="va">${package}</span><span class="st">&quot;</span> <span class="kw">]];</span> <span class="cf">then</span>
+		<span class="bu">echo</span> <span class="st">&quot;</span><span class="va">${package}</span><span class="st"> directory already exists&quot;</span>
+		<span class="cf">return</span> <span class="dv">1</span>
+	<span class="cf">fi</span>
+
+	<span class="ex">curl</span> <span class="at">-OL</span> <span class="st">&quot;</span><span class="va">${url_prefix}</span><span class="st">/-/</span><span class="va">${tarball}</span><span class="st">&quot;</span>
+	<span class="fu">tar</span> xzvf <span class="st">&quot;</span><span class="va">${tarball}</span><span class="st">&quot;</span>
+	<span class="fu">mv</span> package <span class="st">&quot;</span><span class="va">${package}</span><span class="st">&quot;</span>
+	<span class="fu">rm</span> <span class="st">&quot;</span><span class="va">${tarball}</span><span class="st">&quot;</span>
+<span class="kw">}</span>
+
+<span class="ex">download_tarball</span> <span class="dt">\</span>
+	<span class="st">&quot;</span><span class="va">${MAIN_PACKAGE}</span><span class="st">&quot;</span> <span class="dt">\</span>
+	<span class="st">&quot;</span><span class="va">${VERSION}</span><span class="st">&quot;</span> <span class="dt">\</span>
+	<span class="st">&quot;https://registry.npmjs.org/mathjax&quot;</span>
+<span class="ex">download_tarball</span> <span class="dt">\</span>
+	<span class="st">&quot;</span><span class="va">${FONT_PACKAGE}</span><span class="st">&quot;</span> <span class="dt">\</span>
+	<span class="st">&quot;</span><span class="va">${VERSION}</span><span class="st">&quot;</span> <span class="dt">\</span>
+	<span class="st">&quot;https://registry.npmjs.org/@mathjax/</span><span class="va">${FONT_PACKAGE}</span><span class="st">&quot;</span></code></pre></div></div><p><span id="c-24" class="cell-idx">Nowe we make the old content refer to this newer version in <a href="#b-fix-mathjax" class="internal-link" id="linkNumber-17">fix-mathjax</a>.</span></p><div id="c-25" class="cell-idx"><div class="block-container src" id="b-fix-mathjax"><div class="block-controls"><button class="toggle-block-meta-other" data-action="toggle-block-meta-other"></button><a href="#b-fix-mathjax">&#x1F517;</a></div><div class="block-meta"><code>fix-mathjax</code></div><div class="block-meta-other hidden"><p>Used by <a href="#b-Makefile:publish-b-fix-mathjax" class="internal-link"><span class="verbatim">Makefile:publish</span></a>.</p><p>Other metadata key/value pairs:</p><ul><li><p><span class="code">__block_type</span> = <span class="code">src</span></p></li><li><p><span class="code">__src_language</span> = <span class="code">sh</span></p></li></ul></div><pre class="block-body"><code class="sourceCode"><span class="fu">find</span> legacy-generated-repo <span class="at">-type</span> f <span class="at">-name</span> <span class="st">&quot;*.html&quot;</span> <span class="dt">\</span>
+	<span class="at">-exec</span> sed <span class="at">-i</span> <span class="st">&#39;s|https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML|/vendor/mathjax/tex-mml-chtml.js|g&#39;</span> {} +
+<span class="fu">find</span> codex <span class="at">-path</span> <span class="st">&#39;codex/deps&#39;</span> <span class="at">-prune</span> <span class="at">-o</span> <span class="dt">\</span>
+	<span class="at">-type</span> f <span class="at">-name</span> <span class="st">&quot;*.html&quot;</span> <span class="dt">\</span>
+	<span class="at">-exec</span> sed <span class="at">-i</span> <span class="st">&#39;s|https://cdn.jsdelivr.net/npm/mathjax@4.0.0-beta.4/tex-mml-chtml.js|/vendor/mathjax/tex-mml-chtml.js|g&#39;</span> {} +
+
+<span class="fu">find</span> codex <span class="at">-path</span> <span class="st">&#39;codex/deps&#39;</span> <span class="at">-prune</span> <span class="at">-o</span> <span class="at">-type</span> f <span class="at">-name</span> <span class="st">&quot;*.html&quot;</span> <span class="at">-exec</span> <span class="dt">\</span>
+	<a href="#b-sed-inject-mathjax-font-codex" class="internal-link" id="b-fix-mathjax-b-sed-inject-mathjax-font-codex">sed-inject-mathjax-font-codex</a> {} +
+
+<span class="fu">find</span> legacy-generated-repo <span class="at">-type</span> f <span class="at">-name</span> <span class="st">&quot;*.html&quot;</span> <span class="at">-exec</span> <span class="dt">\</span>
+	<a href="#b-sed-inject-mathjax-font-legacy" class="internal-link" id="b-fix-mathjax-b-sed-inject-mathjax-font-legacy">sed-inject-mathjax-font-legacy</a> {} +</code></pre></div></div><p><span id="c-26" class="cell-idx">Below we modify the HTML files depending on their &quot;flavor&quot;. The critical piece in each of the code blocks below is telling MathJax to load the fonts from the local <span class="code">/vendor/&lt;&lt;mathjax-font&gt;&gt;-font</span> directory. If we don&#39;t do this, then MathJax still tries to load fonts from a CDN, which will break for SourceHut.</span></p><div id="c-27" class="cell-idx"><div class="block-container src" id="b-mathjax-font"><div class="block-controls"><button class="toggle-block-meta-other" data-action="toggle-block-meta-other"></button><a href="#b-mathjax-font">&#x1F517;</a></div><div class="block-meta"><code>mathjax-font</code></div><div class="block-meta-other hidden"><p>Used by <a href="#b-Makefile:publish-b-mathjax-font" class="internal-link"><span class="verbatim">Makefile:publish</span></a>, <a href="#b-sed-inject-mathjax-font-codex-b-mathjax-font" class="internal-link"><span class="verbatim">sed-inject-mathjax-font-codex</span></a>, <a href="#b-sed-inject-mathjax-font-legacy-b-mathjax-font" class="internal-link"><span class="verbatim">sed-inject-mathjax-font-legacy</span></a>.</p><p>Other metadata key/value pairs:</p><ul><li><p><span class="code">__block_type</span> = <span class="code">src</span></p></li><li><p><span class="code">__src_language</span> = <span class="code">txt</span></p></li></ul></div><pre class="block-body"><code class="sourceCode">mathjax-newcm</code></pre></div></div><div id="c-28" class="cell-idx"><div class="block-container src" id="b-sed-inject-mathjax-font-codex"><div class="block-controls"><button class="toggle-block-meta-other" data-action="toggle-block-meta-other"></button><a href="#b-sed-inject-mathjax-font-codex">&#x1F517;</a></div><div class="block-meta"><code>sed-inject-mathjax-font-codex</code></div><div class="block-meta-other hidden"><p>Used by <a href="#b-fix-mathjax-b-sed-inject-mathjax-font-codex" class="internal-link"><span class="verbatim">fix-mathjax</span></a>.</p><p>Other metadata key/value pairs:</p><ul><li><p><span class="code">__block_type</span> = <span class="code">src</span></p></li><li><p><span class="code">__src_language</span> = <span class="code">sh</span></p></li></ul></div><pre class="block-body"><code class="sourceCode"><span class="fu">sed</span> <span class="at">-i</span> <span class="st">&#39;s|output:[[:space:]]*{|loader: { paths: { &quot;<a href="#b-mathjax-font" class="internal-link" id="b-sed-inject-mathjax-font-codex-b-mathjax-font">mathjax-font</a>&quot;: &quot;/vendor/<a href="#b-mathjax-font" class="internal-link" id="b-sed-inject-mathjax-font-codex-b-mathjax-font">mathjax-font</a>-font&quot; } },\</span>
+<span class="st">output: {|&#39;</span></code></pre></div></div><div id="c-29" class="cell-idx"><div class="block-container src" id="b-sed-inject-mathjax-font-legacy"><div class="block-controls"><button class="toggle-block-meta-other" data-action="toggle-block-meta-other"></button><a href="#b-sed-inject-mathjax-font-legacy">&#x1F517;</a></div><div class="block-meta"><code>sed-inject-mathjax-font-legacy</code></div><div class="block-meta-other hidden"><p>Used by <a href="#b-fix-mathjax-b-sed-inject-mathjax-font-legacy" class="internal-link"><span class="verbatim">fix-mathjax</span></a>.</p><p>Other metadata key/value pairs:</p><ul><li><p><span class="code">__block_type</span> = <span class="code">src</span></p></li><li><p><span class="code">__src_language</span> = <span class="code">sh</span></p></li></ul></div><pre class="block-body"><code class="sourceCode"><span class="fu">sed</span> <span class="at">-i</span> <span class="st">&#39;/&lt;script type=&quot;text\/x-mathjax-config&quot;&gt;/,/&lt;\/script&gt;/c\</span>
+<span class="st">&lt;script&gt;\</span>
+<span class="st">  window.MathJax = {\</span>
+<span class="st">    tex: {\</span>
+<span class="st">      ams: {\</span>
+<span class="st">        multlineWidth: &#39;</span><span class="dt">\&#39;</span><span class="st">&#39;85%&#39;</span><span class="dt">\&#39;</span><span class="st">&#39;\</span>
+<span class="st">      },\</span>
+<span class="st">      tags: &#39;</span><span class="dt">\&#39;</span><span class="st">&#39;ams&#39;</span><span class="dt">\&#39;</span><span class="st">&#39;,\</span>
+<span class="st">      tagSide: &#39;</span><span class="dt">\&#39;</span><span class="st">&#39;right&#39;</span><span class="dt">\&#39;</span><span class="st">&#39;,\</span>
+<span class="st">      tagIndent: &#39;</span><span class="dt">\&#39;</span><span class="st">&#39;.8em&#39;</span><span class="dt">\&#39;</span><span class="st">&#39;\</span>
+<span class="st">    },\</span>
+<span class="st">    chtml: {\</span>
+<span class="st">      scale: 1.0,\</span>
+<span class="st">      displayAlign: &#39;</span><span class="dt">\&#39;</span><span class="st">&#39;center&#39;</span><span class="dt">\&#39;</span><span class="st">&#39;,\</span>
+<span class="st">      displayIndent: &#39;</span><span class="dt">\&#39;</span><span class="st">&#39;0em&#39;</span><span class="dt">\&#39;</span><span class="st">&#39;\</span>
+<span class="st">    },\</span>
+<span class="st">    svg: {\</span>
+<span class="st">      scale: 1.0,\</span>
+<span class="st">      displayAlign: &#39;</span><span class="dt">\&#39;</span><span class="st">&#39;center&#39;</span><span class="dt">\&#39;</span><span class="st">&#39;,\</span>
+<span class="st">      displayIndent: &#39;</span><span class="dt">\&#39;</span><span class="st">&#39;0em&#39;</span><span class="dt">\&#39;</span><span class="st">&#39;\</span>
+<span class="st">    },\</span>
+<span class="st">    loader: { paths: { &quot;<a href="#b-mathjax-font" class="internal-link" id="b-sed-inject-mathjax-font-legacy-b-mathjax-font">mathjax-font</a>&quot;: &quot;/vendor/<a href="#b-mathjax-font" class="internal-link" id="b-sed-inject-mathjax-font-legacy-b-mathjax-font">mathjax-font</a>-font&quot; } },\</span>
+<span class="st">    output: {\</span>
+<span class="st">      font: &#39;</span><span class="dt">\&#39;</span><span class="st">&#39;<a href="#b-mathjax-font" class="internal-link" id="b-sed-inject-mathjax-font-legacy-b-mathjax-font">mathjax-font</a>&#39;</span><span class="dt">\&#39;</span><span class="st">&#39;,\</span>
+<span class="st">      displayOverflow: &#39;</span><span class="dt">\&#39;</span><span class="st">&#39;overflow&#39;</span><span class="dt">\&#39;</span><span class="st">&#39;\</span>
+<span class="st">    }\</span>
+<span class="st">  };\</span>
+<span class="st">&lt;/script&gt;&#39;</span></code></pre></div></div></div><div id="heading-container-h-4.2.2-Fix-jQuery" class="heading-container"><h4 id="h-4.2.2-Fix-jQuery"><span id="c-30" class="cell-idx"><a href="#h-4.2.2-Fix-jQuery">4.2.2&ensp;Fix <span class="code">jQuery</span></a></span></h4><p><span id="c-31" class="cell-idx">Some of the pages pull in <span class="code">jQuery</span> from upstream; we have to host these locally as well. They are vendored inside <span class="code">vendor</span>, but we need to make some more <span class="code">sed</span> replacements to make the relevant pages refer to the vendored version.</span></p><div id="c-32" class="cell-idx"><div class="block-container src" id="b-fix-jquery"><div class="block-controls"><button class="toggle-block-meta-other" data-action="toggle-block-meta-other"></button><a href="#b-fix-jquery">&#x1F517;</a></div><div class="block-meta"><code>fix-jquery</code></div><div class="block-meta-other hidden"><p>Used by <a href="#b-Makefile:publish-b-fix-jquery" class="internal-link"><span class="verbatim">Makefile:publish</span></a>.</p><p>Other metadata key/value pairs:</p><ul><li><p><span class="code">__block_type</span> = <span class="code">src</span></p></li><li><p><span class="code">__src_language</span> = <span class="code">sh</span></p></li></ul></div><pre class="block-body"><code class="sourceCode"><span class="fu">find</span> codex <span class="at">-path</span> <span class="st">&#39;codex/deps&#39;</span> <span class="at">-prune</span> <span class="at">-o</span> <span class="at">-type</span> f <span class="at">-name</span> <span class="st">&quot;*.html&quot;</span> <span class="at">-exec</span> <span class="dt">\</span>
+	<a href="#b-sed-inject-local-jquery-codex" class="internal-link" id="b-fix-jquery-b-sed-inject-local-jquery-codex">sed-inject-local-jquery-codex</a> {} +
+<span class="fu">find</span> legacy-generated-repo <span class="at">-type</span> f <span class="at">-name</span> <span class="st">&quot;*.html&quot;</span> <span class="at">-exec</span> <span class="dt">\</span>
+	<a href="#b-sed-inject-local-jquery-legacy" class="internal-link" id="b-fix-jquery-b-sed-inject-local-jquery-legacy">sed-inject-local-jquery-legacy</a> {} +</code></pre></div></div><div id="c-33" class="cell-idx"><div class="block-container src" id="b-sed-inject-local-jquery-codex"><div class="block-controls"><button class="toggle-block-meta-other" data-action="toggle-block-meta-other"></button><a href="#b-sed-inject-local-jquery-codex">&#x1F517;</a></div><div class="block-meta"><code>sed-inject-local-jquery-codex</code></div><div class="block-meta-other hidden"><p>Used by <a href="#b-fix-jquery-b-sed-inject-local-jquery-codex" class="internal-link"><span class="verbatim">fix-jquery</span></a>.</p><p>Other metadata key/value pairs:</p><ul><li><p><span class="code">__block_type</span> = <span class="code">src</span></p></li><li><p><span class="code">__src_language</span> = <span class="code">sh</span></p></li></ul></div><pre class="block-body"><code class="sourceCode"><span class="fu">sed</span> <span class="at">-i</span> <span class="st">&#39;s|src=&quot;https://code.jquery.com/jquery-3.6.4.min.js&quot;|src=&quot;/vendor/jquery-3.6.4.min.js&quot;|g&#39;</span></code></pre></div></div><div id="c-34" class="cell-idx"><div class="block-container src" id="b-sed-inject-local-jquery-legacy"><div class="block-controls"><button class="toggle-block-meta-other" data-action="toggle-block-meta-other"></button><a href="#b-sed-inject-local-jquery-legacy">&#x1F517;</a></div><div class="block-meta"><code>sed-inject-local-jquery-legacy</code></div><div class="block-meta-other hidden"><p>Used by <a href="#b-fix-jquery-b-sed-inject-local-jquery-legacy" class="internal-link"><span class="verbatim">fix-jquery</span></a>.</p><p>Other metadata key/value pairs:</p><ul><li><p><span class="code">__block_type</span> = <span class="code">src</span></p></li><li><p><span class="code">__src_language</span> = <span class="code">sh</span></p></li></ul></div><pre class="block-body"><code class="sourceCode"><span class="fu">sed</span> <span class="at">-i</span> <span class="st">&#39;s|src=&quot;https://code.jquery.com/jquery-2.1.4.min.js&quot;|src=&quot;/vendor/jquery-2.1.4.min.js&quot;|g&#39;</span></code></pre></div></div></div><div id="heading-container-h-4.2.3-Fix-Google-web-fonts" class="heading-container"><h4 id="h-4.2.3-Fix-Google-web-fonts"><span id="c-35" class="cell-idx"><a href="#h-4.2.3-Fix-Google-web-fonts">4.2.3&ensp;Fix Google web fonts</a></span></h4><p><span id="c-36" class="cell-idx">We have to host the Source family of fonts directly as well, instead of pulling them over the network from Google web fonts.</span></p><div id="c-37" class="cell-idx"><div class="block-container src" id="b-vendor-source-fonts.sh"><div class="block-controls"><button class="toggle-block-meta-other" data-action="toggle-block-meta-other"></button><a href="#b-vendor-source-fonts.sh">&#x1F517;</a></div><div class="block-meta"><code>vendor-source-fonts.sh</code><br><code><span class="bold">&#x1F3AF; vendor-source-fonts.sh</span></code></div><div class="block-meta-other hidden"><p>Other metadata key/value pairs:</p><ul><li><p><span class="code">__block_type</span> = <span class="code">src</span></p></li><li><p><span class="code">__src_language</span> = <span class="code">bash</span></p></li><li><p><span class="code">shebang</span> = <span class="code">#!/usr/bin/env bash</span></p></li></ul></div><pre class="block-body"><code class="sourceCode"><span class="bu">set</span> <span class="at">-euo</span> pipefail
+
+<span class="va">url_sans</span><span class="op">=</span><span class="st">&quot;https://raw.githubusercontent.com/adobe-fonts/source-sans/3.052R&quot;</span>
+<span class="va">url_serif</span><span class="op">=</span><span class="st">&quot;https://raw.githubusercontent.com/adobe-fonts/source-serif/4.005R&quot;</span>
+<span class="va">url_code</span><span class="op">=</span><span class="st">&quot;https://raw.githubusercontent.com/adobe-fonts/source-code-pro/2.042R-u%2F1.062R-i%2F1.026R-vf&quot;</span>
+
+<span class="fu">mkdir</span> <span class="at">-p</span> vendor/source-fonts
+<span class="bu">pushd</span> vendor/source-fonts
+
+<span class="ex">curl</span> <span class="at">-OL</span> <span class="st">&quot;</span><span class="va">${url_sans}</span><span class="st">/WOFF2/VF/SourceSans3VF-Italic.otf.woff2&quot;</span>
+<span class="ex">curl</span> <span class="at">-OL</span> <span class="st">&quot;</span><span class="va">${url_sans}</span><span class="st">/WOFF2/VF/SourceSans3VF-Upright.otf.woff2&quot;</span>
+
+<span class="ex">curl</span> <span class="at">-OL</span> <span class="st">&quot;</span><span class="va">${url_serif}</span><span class="st">/WOFF2/VAR/SourceSerif4Variable-Italic.otf.woff2&quot;</span>
+<span class="ex">curl</span> <span class="at">-OL</span> <span class="st">&quot;</span><span class="va">${url_serif}</span><span class="st">/WOFF2/VAR/SourceSerif4Variable-Roman.otf.woff2&quot;</span>
+
+<span class="ex">curl</span> <span class="at">-OL</span> <span class="st">&quot;</span><span class="va">${url_code}</span><span class="st">/WOFF2/VF/SourceCodeVF-Italic.otf.woff2&quot;</span>
+<span class="ex">curl</span> <span class="at">-OL</span> <span class="st">&quot;</span><span class="va">${url_code}</span><span class="st">/WOFF2/VF/SourceCodeVF-Upright.otf.woff2&quot;</span>
+
+<span class="fu">cat</span> <span class="op">&lt;&lt; EOF</span> <span class="op">&gt;</span> source-fonts.css
+<span class="st">@font-face{</span>
+<span class="st">    font-family: &#39;Source Code Pro&#39;;</span>
+<span class="st">    font-weight: 200 900;</span>
+<span class="st">    font-style: normal;</span>
+<span class="st">    font-stretch: normal;</span>
+<span class="st">    src: url(&#39;SourceCodeVF-Upright.otf.woff2&#39;) format(&#39;woff2&#39;);</span>
+<span class="st">}</span>
+
+<span class="st">@font-face{</span>
+<span class="st">    font-family: &#39;Source Code Pro&#39;;</span>
+<span class="st">    font-weight: 200 900;</span>
+<span class="st">    font-style: italic;</span>
+<span class="st">    font-stretch: normal;</span>
+<span class="st">    src: url(&#39;SourceCodeVF-Italic.otf.woff2&#39;) format(&#39;woff2&#39;);</span>
+<span class="st">}</span>
+
+<span class="st">@font-face{</span>
+<span class="st">    font-family: &#39;Source Sans 3&#39;;</span>
+<span class="st">    font-weight: 200 900;</span>
+<span class="st">    font-style: normal;</span>
+<span class="st">    font-stretch: normal;</span>
+<span class="st">    src: url(&#39;SourceSans3VF-Upright.otf.woff2&#39;) format(&#39;woff2&#39;);</span>
+<span class="st">}</span>
+
+<span class="st">@font-face{</span>
+<span class="st">    font-family: &#39;Source Sans 3&#39;;</span>
+<span class="st">    font-weight: 200 900;</span>
+<span class="st">    font-style: italic;</span>
+<span class="st">    font-stretch: normal;</span>
+<span class="st">    src: url(&#39;SourceSans3VF-Italic.otf.woff2&#39;) format(&#39;woff2&#39;);</span>
+<span class="st">}</span>
+
+<span class="st">@font-face{</span>
+<span class="st">    font-family: &#39;Source Serif 4&#39;;</span>
+<span class="st">    font-weight: 200 900;</span>
+<span class="st">    font-style: normal;</span>
+<span class="st">    font-stretch: normal;</span>
+<span class="st">    src: url(&#39;SourceSerif4Variable-Roman.otf.woff2&#39;) format(&#39;woff2&#39;);</span>
+<span class="st">}</span>
+
+<span class="st">@font-face{</span>
+<span class="st">    font-family: &#39;Source Serif 4&#39;;</span>
+<span class="st">    font-weight: 200 900;</span>
+<span class="st">    font-style: italic;</span>
+<span class="st">    font-stretch: normal;</span>
+<span class="st">    src: url(&#39;SourceSerif4Variable-Italic.otf.woff2&#39;) format(&#39;woff2&#39;);</span>
+<span class="st">}</span>
+<span class="op">EOF</span></code></pre></div></div><p><span id="c-38" class="cell-idx">Now make the HTML content refer to the local fonts. <a href="#ll--fix-google-fonts-use-source-serif-4-" class="internal-link" id="linkNumber-18"><span class="bold">8</span></a> makes the old blog posts use &quot;Source Serif 4&quot;, not &quot;Source Serif Pro&quot; (because the former is what we download).</span></p><div id="c-39" class="cell-idx"><div class="block-container src" id="b-fix-google-fonts"><div class="block-controls"><button class="toggle-block-meta-other" data-action="toggle-block-meta-other"></button><a href="#b-fix-google-fonts">&#x1F517;</a></div><div class="block-meta"><code>fix-google-fonts</code></div><div class="block-meta-other hidden"><p>Used by <a href="#b-Makefile:publish-b-fix-google-fonts" class="internal-link"><span class="verbatim">Makefile:publish</span></a>.</p><p>Other metadata key/value pairs:</p><ul><li><p><span class="code">__block_type</span> = <span class="code">src</span></p></li><li><p><span class="code">__src_language</span> = <span class="code">sh</span></p></li></ul></div><pre class="block-body"><code class="sourceCode"><span class="fu">find</span> codex legacy-generated-repo <span class="at">-path</span> <span class="st">&#39;codex/deps&#39;</span> <span class="at">-prune</span> <span class="at">-o</span> <span class="dt">\</span>
+	<span class="at">-type</span> f <span class="at">-name</span> <span class="st">&quot;*.html&quot;</span> <span class="at">-exec</span> <span class="dt">\</span>
+	<a href="#b-sed-use-local-google-fonts" class="internal-link" id="b-fix-google-fonts-b-sed-use-local-google-fonts">sed-use-local-google-fonts</a> {} +
+
+<span class="co"># <a href="#ll--fix-google-fonts-use-source-serif-4-" class="internal-link" id="ll--fix-google-fonts-use-source-serif-4-"><span class="bold">8</span></a> <a class="button-popup-backlinks" data-backlinks="[[&quot;#linkNumber-18&quot;,&quot;§ 4.2.3 Fix Google web fonts ~ ¶ (&lt;span class=\&quot;verbatim\&quot;&gt;Cell 38&lt;/span&gt;)&quot;]]">←</a></span>
+<span class="fu">sed</span> <span class="at">-i</span> <span class="st">&#39;s|Source Serif Pro|Source Serif 4|g&#39;</span> legacy-generated-repo/css/base.css</code></pre></div></div><div id="c-40" class="cell-idx"><div class="block-container src" id="b-sed-use-local-google-fonts"><div class="block-controls"><button class="toggle-block-meta-other" data-action="toggle-block-meta-other"></button><a href="#b-sed-use-local-google-fonts">&#x1F517;</a></div><div class="block-meta"><code>sed-use-local-google-fonts</code></div><div class="block-meta-other hidden"><p>Used by <a href="#b-fix-google-fonts-b-sed-use-local-google-fonts" class="internal-link"><span class="verbatim">fix-google-fonts</span></a>.</p><p>Other metadata key/value pairs:</p><ul><li><p><span class="code">__block_type</span> = <span class="code">src</span></p></li><li><p><span class="code">__src_language</span> = <span class="code">sh</span></p></li></ul></div><pre class="block-body"><code class="sourceCode"><span class="fu">sed</span> <span class="at">-i</span> <span class="dt">\</span>
+<span class="st">&#39;s|href=&quot;https://fonts\.googleapis\.com[^&quot;]*&quot;|href=&quot;/vendor/source-fonts/source-fonts.css&quot;|g&#39;</span></code></pre></div></div></div><div id="heading-container-h-4.2.4-Reference-vendored-assets" class="heading-container"><h4 id="h-4.2.4-Reference-vendored-assets"><span id="c-41" class="cell-idx"><a href="#h-4.2.4-Reference-vendored-assets">4.2.4&ensp;Reference vendored assets</a></span></h4><p><span id="c-42" class="cell-idx">Finally we need to actually use these vendored assets by referring to them in every woven HTML file. That&#39;s what we do in <a href="#b-custom-html-head" class="internal-link" id="linkNumber-19">custom-html-head</a>.</span></p><div id="c-43" class="cell-idx"><div class="block-container src" id="b-custom-html-head"><div class="block-controls"><button class="toggle-block-meta-other" data-action="toggle-block-meta-other"></button><a href="#b-custom-html-head">&#x1F517;</a></div><div class="block-meta"><code>custom-html-head</code></div><div class="block-meta-other hidden"><p>Used by <a href="#b-1-b-custom-html-head" class="internal-link">Anonymous BlockCell 7</a>.</p><p>Other metadata key/value pairs:</p><ul><li><p><span class="code">__block_type</span> = <span class="code">src</span></p></li><li><p><span class="code">__src_language</span> = <span class="code">toml</span></p></li></ul></div><pre class="block-body"><code class="sourceCode"><span class="kw">[htmlHead]</span>
+<span class="dt">onlyLocalImports</span> <span class="op">=</span> <span class="cn">true</span>
+<span class="dt">injection</span> <span class="op">=</span> <span class="st">&quot;&quot;&quot;</span>
+<span class="st">&lt;link rel=&quot;stylesheet&quot; href=&quot;/vendor/source-fonts/source-fonts.css&quot;&gt;</span>
+<span class="st">&lt;script&gt;</span>
+<span class="st">  window.MathJax = {</span>
+<span class="st">      loader: { paths: { &quot;mathjax-newcm&quot;: &quot;/vendor/mathjax-newcm-font&quot; } },</span>
+<span class="st">      output: { font: &quot;mathjax-newcm&quot; },</span>
+<span class="st">  tex: {</span>
+<span class="st">      tags: &#39;ams&#39;</span>
+<span class="st">  },</span>
+<span class="st">  options: {</span>
+<span class="st">      ignoreHtmlClass: &#39;verbatim|code&#39;</span>
+<span class="st">  }</span>
+<span class="st">};</span>
+<span class="st">&lt;/script&gt;</span>
+<span class="st">&lt;script id=&quot;MathJax-script&quot; async=&quot;&quot; src=&quot;/vendor/mathjax/tex-mml-chtml.js&quot;&gt;&lt;/script&gt;</span>
+<span class="st">&quot;&quot;&quot;</span></code></pre></div></div></div><div id="heading-container-h-5-Hakyll-setup" class="heading-container"><h2 id="h-5-Hakyll-setup"><span id="c-44" class="cell-idx"><a href="#h-5-Hakyll-setup">5&ensp;Hakyll setup</a></span></h2><p><span id="c-45" class="cell-idx">Below is a record of how the old content used to be built with Hakyll. This is here mainly for historical interest. It will be removed after we&#39;ve fully transitioned away to the new publishing step with Lilac.</span></p><div id="c-46" class="cell-idx"><div class="block-container src" id="b-Makefile:Hakyll"><div class="block-controls"><button class="toggle-block-meta-other" data-action="toggle-block-meta-other"></button><a href="#b-Makefile:Hakyll">&#x1F517;</a></div><div class="block-meta"><code>Makefile:Hakyll</code></div><div class="block-meta-other hidden"><p>Other metadata key/value pairs:</p><ul><li><p><span class="code">__block_type</span> = <span class="code">src</span></p></li><li><p><span class="code">__src_language</span> = <span class="code">makefile</span></p></li></ul></div><pre class="block-body"><code class="sourceCode"><span class="co"># This Makefile is expected to be run inside a nix-shell.</span>
+
+<span class="dt">PROJ_ROOT</span> <span class="ch">:=</span><span class="st"> </span><span class="ch">$(</span><span class="kw">shell</span><span class="st"> git rev-parse --show-toplevel</span><span class="ch">)</span>
+<span class="dt">BLOG_ADDR</span><span class="ch">?=</span><span class="st">localhost</span>
+<span class="dt">BLOG_PORT</span><span class="ch">?=</span><span class="st">8020</span>
+
+<span class="dv">all:</span><span class="dt"> sync</span>
+<span class="ot">.PHONY:</span><span class="dt"> all</span>
+
+<span class="co"># Check for broken links.</span>
+<span class="dv">check:</span>
+	cabal run -- blog check
+<span class="ot">.PHONY:</span><span class="dt"> check</span>
+
+<span class="dv">gen-css:</span>
+	cabal build -- base &gt;/dev/null
+	cabal exec -- base
+<span class="ot">.PHONY:</span><span class="dt"> gen-css</span>
+
+<span class="co"># JavaScript generated from Rust.</span>
+<span class="dv">gen-js:</span>
+	rustup default stable
+	make -C rust-js build
+<span class="ot">.PHONY:</span><span class="dt"> gen-js</span>
+
+<span class="dv">sync:</span><span class="dt"> build-site</span>
+	./sync.sh
+<span class="ot">.PHONY:</span><span class="dt"> sync</span>
+
+<span class="dv">cabal-update:</span>
+	cabal update
+<span class="ot">.PHONY:</span><span class="dt"> cabal-update</span>
+
+<span class="dv">build-binaries:</span>
+	cabal build
+<span class="ot">.PHONY:</span><span class="dt"> build-binaries</span>
+
+<span class="dv">build-site:</span><span class="dt"> build-binaries</span>
+	cabal run -- blog rebuild
+<span class="ot">.PHONY:</span><span class="dt"> build-site</span>
+
+<span class="dv">watch:</span><span class="dt"> build-binaries</span>
+	cabal run -- blog watch --host <span class="ch">$(</span><span class="dt">BLOG_ADDR</span><span class="ch">)</span> --port <span class="ch">$(</span><span class="dt">BLOG_PORT</span><span class="ch">)</span>
+<span class="ot">.PHONY:</span><span class="dt"> watch</span>
+
+<span class="dt">nixpkgs_stable_channel</span> <span class="ch">:=</span><span class="st"> nixos-24.05</span>
+<span class="dv">update-deps:</span><span class="dt"> nix/sources.json nix/sources.nix</span>
+	niv update nixpkgs --branch <span class="ch">$(</span><span class="dt">nixpkgs_stable_channel</span><span class="ch">)</span>
+	niv update
+	touch update-deps</code></pre></div></div><p><span id="c-47" class="cell-idx">The local <span class="code">listx.github.io</span> folder used to have the Github repo which held the generated content. Hakyll would by default publish to <span class="code">_site</span>, so the script below would sync these two with <span class="code">rsync</span>.</span></p><div id="c-48" class="cell-idx"><div class="block-container src" id="b-3"><div class="block-controls"><button class="toggle-block-meta-other" data-action="toggle-block-meta-other"></button><a href="#b-3">&#x1F517;</a></div><div class="block-meta-other hidden top-rounded"><p>Other metadata key/value pairs:</p><ul><li><p><span class="code">__anon_block_number</span> = <span class="code">3</span></p></li><li><p><span class="code">__block_type</span> = <span class="code">src</span></p></li><li><p><span class="code">__src_language</span> = <span class="code">bash</span></p></li></ul></div><pre class="block-body anonymous fully-rounded"><code class="sourceCode"><span class="va">dest</span><span class="op">=</span><span class="st">&#39;listx.github.io/&#39;</span>
+<span class="va">targ</span><span class="op">=</span><span class="st">&#39;_site/&#39;</span>
+
+<span class="cf">if</span> <span class="kw">[[</span> <span class="ot">!</span> <span class="ot">-d</span> <span class="va">$targ</span> <span class="kw">]];</span> <span class="cf">then</span>
+    <span class="bu">echo</span> <span class="st">&quot;</span><span class="dt">\`</span><span class="va">$targ</span><span class="st">&#39; directory missing&quot;</span>
+    <span class="bu">exit</span> 1
+<span class="cf">elif</span> <span class="kw">[[</span> <span class="ot">!</span> <span class="ot">-d</span> <span class="va">$dest</span> <span class="kw">]];</span> <span class="cf">then</span>
+    <span class="bu">echo</span> <span class="st">&quot;</span><span class="dt">\`</span><span class="va">$dest</span><span class="st">&#39; directory missing&quot;</span>
+    <span class="bu">exit</span> 1
+<span class="cf">fi</span>
+
+<span class="fu">rsync</span> <span class="at">-ahP</span> <span class="at">--no-whole-file</span> <span class="at">--inplace</span> <span class="at">--delete</span> <span class="at">--exclude</span><span class="op">=</span>.git<span class="dt">\*</span> <span class="va">$targ</span> <span class="va">$dest</span></code></pre></div></div></div><div id="heading-container-h-6-Miscellaneous" class="heading-container"><h2 id="h-6-Miscellaneous"><span id="c-49" class="cell-idx"><a href="#h-6-Miscellaneous">6&ensp;Miscellaneous</a></span></h2><div id="c-50" class="cell-idx"><div class="block-container src" id="b-4"><div class="block-controls"><button class="toggle-block-meta-other" data-action="toggle-block-meta-other"></button><a href="#b-4">&#x1F517;</a></div><div class="block-meta"><code><span class="bold">&#x1F3AF; .gitignore</span></code></div><div class="block-meta-other hidden"><p>Other metadata key/value pairs:</p><ul><li><p><span class="code">__anon_block_number</span> = <span class="code">4</span></p></li><li><p><span class="code">__block_type</span> = <span class="code">src</span></p></li><li><p><span class="code">__src_language</span> = <span class="code">gitignore</span></p></li></ul></div><pre class="block-body"><code>*.hi
+*.html
+*.o
+*.lobj
+*.larc
+*.tar
+*.tar.gz
+**/__pycache__/
+code/2017-04-02-calling-c-from-haskell/hs/ffi
+code/2021-03-15-bresenham-circle-drawing-algorithm/golden.yaml
+code/toy/binary-search-c
+code/toy/binary-search-hs
+.direnv
+site
+listx.github.io
+.srht-pages-token
+update-deps
+tangle
+weave
+lint
+publish
+vendor/</code></pre></div></div><div id="c-51" class="cell-idx"><div class="block-container src" id="b-.gitattributes"><div class="block-controls"><button class="toggle-block-meta-other" data-action="toggle-block-meta-other"></button><a href="#b-.gitattributes">&#x1F517;</a></div><div class="block-meta"><code>.gitattributes</code><br><code><span class="bold">&#x1F3AF; .gitattributes</span></code></div><div class="block-meta-other hidden"><p>Other metadata key/value pairs:</p><ul><li><p><span class="code">__block_type</span> = <span class="code">src</span></p></li><li><p><span class="code">__src_language</span> = <span class="code">gitattributes</span></p></li></ul></div><pre class="block-body"><code>vendor/*.js binary</code></pre></div></div></div><div id="heading-container-h--Page-metrics" class="heading-container page-metrics"><h2 id="h--Page-metrics"><a href="#h--Page-metrics">Page metrics</a></h2></div><div id="heading-container-h--Backlinks" class="heading-container backlinks"><h3 id="h--Backlinks"><a href="#h--Backlinks">Backlinks (0)</a></h3></div><div id="heading-container-h--Tangled-files" class="heading-container tangled-blocks"><h3 id="h--Tangled-files"><a href="#h--Tangled-files">Tangled files (6)</a></h3><ol><li><a href="#b-.gitattributes" class="verbatim">.gitattributes</a></li><li><a href="#b-4" class="verbatim">.gitignore</a></li><li><a href="#b-1" class="verbatim">Lilac.toml</a></li><li><a href="#b-2" class="verbatim">Makefile</a></li><li><a href="#b-vendor-mathjax.sh" class="verbatim">vendor-mathjax.sh</a></li><li><a href="#b-vendor-source-fonts.sh" class="verbatim">vendor-source-fonts.sh</a></li></ol></div><div id="heading-container-h--Named-cells" class="heading-container named-cells"><h3 id="h--Named-cells"><a href="#h--Named-cells">Named cells (15)</a></h3><ol><li><a href="#b-.gitattributes"><span class="verbatim">.gitattributes</span></a></li><li><a href="#b-Makefile:Hakyll"><span class="verbatim">Makefile:Hakyll</span></a></li><li><a href="#b-Makefile:publish"><span class="verbatim">Makefile:publish</span></a></li><li><a href="#b-custom-html-head"><span class="verbatim">custom-html-head</span></a></li><li><a href="#b-fix-google-fonts"><span class="verbatim">fix-google-fonts</span></a></li><li><a href="#b-fix-jquery"><span class="verbatim">fix-jquery</span></a></li><li><a href="#b-fix-mathjax"><span class="verbatim">fix-mathjax</span></a></li><li><a href="#b-mathjax-font"><span class="verbatim">mathjax-font</span></a></li><li><a href="#b-sed-inject-local-jquery-codex"><span class="verbatim">sed-inject-local-jquery-codex</span></a></li><li><a href="#b-sed-inject-local-jquery-legacy"><span class="verbatim">sed-inject-local-jquery-legacy</span></a></li><li><a href="#b-sed-inject-mathjax-font-codex"><span class="verbatim">sed-inject-mathjax-font-codex</span></a></li><li><a href="#b-sed-inject-mathjax-font-legacy"><span class="verbatim">sed-inject-mathjax-font-legacy</span></a></li><li><a href="#b-sed-use-local-google-fonts"><span class="verbatim">sed-use-local-google-fonts</span></a></li><li><a href="#b-vendor-mathjax.sh"><span class="verbatim">vendor-mathjax.sh</span></a></li><li><a href="#b-vendor-source-fonts.sh"><span class="verbatim">vendor-source-fonts.sh</span></a></li></ol></div><footer><div class="lilac-stamp">Generated by <a href="https://funloop.org" class="external-link" target="_blank" rel="noopener noreferrer">Lilac</a></div></footer></main><script id="heading-ancestry" type="application/json">{"h--Backlinks":["h--Page-metrics"],"h--Named-cells":["h--Page-metrics"],"h--Page-metrics":[],"h--Tangled-files":["h--Page-metrics"],"h-1-Overview":[],"h-1.1-GitHub-Hakyll-vs-SourceHut-Lilac":["h-1-Overview"],"h-2-Lilac-configuration":[],"h-3-Publish-locally":[],"h-4-Publish-to-GitHub":[],"h-4.1-Old-content":["h-4-Publish-to-GitHub"],"h-4.2-Makefile":["h-4-Publish-to-GitHub"],"h-4.2.1-Fix-MathJax":["h-4.2-Makefile","h-4-Publish-to-GitHub"],"h-4.2.2-Fix-jQuery":["h-4.2-Makefile","h-4-Publish-to-GitHub"],"h-4.2.3-Fix-Google-web-fonts":["h-4.2-Makefile","h-4-Publish-to-GitHub"],"h-4.2.4-Reference-vendored-assets":["h-4.2-Makefile","h-4-Publish-to-GitHub"],"h-5-Hakyll-setup":[],"h-6-Miscellaneous":[]}</script><script id="lilac-fe-script" src="/js/lilac.js"></script></body></html>

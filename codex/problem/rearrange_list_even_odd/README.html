@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Rearrange list (2-way partitioning)</title>
+<meta name="author" content="Linus Arver" />
+<meta name="generator" content="Org Mode" />
+<style>
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { }
+</style>
+<link rel="preconnect" href="/vendor/source-fonts/source-fonts.css" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="/vendor/source-fonts/source-fonts.css">
+<script src="/vendor/jquery-3.6.4.min.js"></script>
+<script src="lilac.js"></script>
+<link rel="stylesheet" type="text/css" href="syntax-highlighting.css"/>
+<link rel="stylesheet" type="text/css" href="lilac.css" />
+<link rel="stylesheet" type="text/css" href="codex.css" />
+<link rel="stylesheet" href="/vendor/source-fonts/source-fonts.css">
+<script>
+// @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&amp;dn=gpl-3.0.txt GPL-v3-or-Later
+     function CodeHighlightOn(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.add("code-highlighted");
+         target.classList.add("code-highlighted");
+       }
+     }
+     function CodeHighlightOff(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.remove("code-highlighted");
+         target.classList.remove("code-highlighted");
+       }
+     }
+// @license-end
+</script>
+</head>
+<body>
+<div id="content" class="content">
+<h1 class="title">Rearrange list (2-way partitioning)</h1>
+<div id="table-of-contents" role="doc-toc">
+
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#h-Problem-statement">1. Problem statement</a></li>
+<li><a href="#h-Insights">2. Insights</a></li>
+<li><a href="#h-Solution">3. Solution</a></li>
+<li><a href="#h-Tests">4. Tests</a></li>
+<li><a href="#h-References">5. References</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h-Problem-statement" class="outline-2">
+<h2 id="h-Problem-statement"><span class="section-number-2">1.</span> Problem statement</h2>
+<div class="outline-text-2" id="text-h-Problem-statement">
+<p>
+Given a list of numbers, rearrange the elements so that the even numbers appear
+first (<a href="#citeproc_bib_item_1">Aziz et al., 2018, p. 41</a>). Return the number of even numbers found.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-Insights" class="outline-2">
+<h2 id="h-Insights"><span class="section-number-2">2.</span> Insights</h2>
+<div class="outline-text-2" id="text-h-Insights">
+<p>
+With a list, we can operate efficiently on both ends at the same time (that is,
+instead of traversing only left-to-right, we can also traverse right-to-left at
+the same time).
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-Solution" class="outline-2">
+<h2 id="h-Solution"><span class="section-number-2">3.</span> Solution</h2>
+<div class="outline-text-2" id="text-h-Solution">
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#Tests">rearrange_list_even_odd</a></span><span class="lilac-caption-link-symbol"><a href="#__NREF__rearrange_list_even_odd">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__rearrange_list_even_odd"><span class="org-keyword">def</span> <span class="org-function-name">even_odd</span>(ints):
+    <span class="org-variable-name">idx_even</span> <span class="org-operator">=</span> 0
+    <span class="org-variable-name">idx_odd</span> <span class="org-operator">=</span> <span class="org-builtin">len</span>(ints) <span class="org-operator">-</span> 1
+
+    <span class="org-keyword">while</span> idx_even <span class="org-operator">&lt;</span> idx_odd:
+        <span class="org-keyword">if</span> ints[idx_odd] <span class="org-operator">&amp;</span> 1:
+            <span class="org-variable-name">idx_odd</span> <span class="org-operator">-=</span> 1
+        <span class="org-keyword">else</span>:
+            <span class="org-variable-name">ints</span>[<span class="org-variable-name">idx_even</span>], <span class="org-variable-name">ints</span>[idx_odd] <span class="org-operator">=</span> ints[idx_odd], ints[idx_even]
+            <span class="org-variable-name">idx_even</span> <span class="org-operator">+=</span> 1
+
+    <span class="org-comment-delimiter"># </span><span class="org-comment">Return the number of even numbers found.</span>
+    <span class="org-keyword">if</span> ints <span class="org-keyword">and</span> ints[idx_even] <span class="org-operator">&amp;</span> 1 <span class="org-operator">==</span> 0:
+        <span class="org-variable-name">idx_even</span> <span class="org-operator">+=</span> 1
+    <span class="org-keyword">return</span> idx_even
+</pre></div></div><p>
+In <code>even_odd()</code>, the given list of numbers is modified in-place so that all the
+even numbers are placed in front of the list. We use 2 indices, <code>idx_even</code> and
+<code>idx_odd</code>, and they are set to the left-edge and right-edge of the list,
+respectively. Below is an example with the list <code>[13, 40, 20, 18, 7,  9,  8]</code>.
+</p>
+
+<pre class="example" id="org0000004">
+13 40 20 18 7  9  11  (numbers)
+0  1  2  3  4  5  6   (list index)
+|                 |
+`- idx_even       `- idx_odd
+</pre>
+
+<p>
+The element <code>11</code> is odd, so we decrement <code>idx_odd</code>. This happens a couple more
+times because both <code>9</code> and <code>7</code> are odd.
+</p>
+
+<pre class="example" id="org0000005">
+13 40 20 18 7  9  11  (numbers)
+0  1  2  3  4  5  6   (list index)
+|        |
+`- idx_even
+         |
+         `- idx_odd
+</pre>
+
+<p>
+Now <code>ints[idx_odd]</code> is <code>18</code> and it is not odd. So we must swap (and increment
+<code>idx_even</code>).
+</p>
+
+<pre class="example" id="org0000006">
+18 40 20 13 7  9  11  (numbers)
+0  1  2  3  4  5  6   (list index)
+   |     |
+   `- idx_even
+         |
+         `- idx_odd
+</pre>
+
+
+<p>
+<code>40</code> is even (and so is <code>20</code>) so we end up hitting this code path a couple more
+times, so <code>idx_even</code> eventually gets incremented to <code>3</code>, and at this point the
+<code>while</code> loop terminates.
+</p>
+
+<p>
+Let's have a closer look at the <code>while</code> loop inside <code>even_odd()</code>.
+</p>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><label class="org-src-name">while loop</label><span class="lilac-caption-link-symbol"><a href="#while-loop">&#x1f517;</a></span></div><pre class="src src-python" id="while-loop">    <span class="org-keyword">while</span> idx_even <span class="org-operator">&lt;</span> idx_odd:
+        ...
+</pre></div></div><p>
+The <code>idx_even &lt; idx_odd</code> just means to stop processing whenever the two indices
+cross over each other (because we must uphold the guarantee of having the odd
+numbers on the right side of the list when we're done processing).
+</p>
+
+<p>
+Now let's check the <code>if</code> condition.
+</p>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><label class="org-src-name">first if-condition</label><span class="lilac-caption-link-symbol"><a href="#first-if-condition">&#x1f517;</a></span></div><pre class="src src-python" id="first-if-condition">        <span class="org-keyword">if</span> ints[idx_odd] <span class="org-operator">&amp;</span> 1:
+            <span class="org-variable-name">idx_odd</span> <span class="org-operator">-=</span> 1
+</pre></div></div><p>
+This part is straightforward &#x2014; if we observe that the number which <code>idx_odd</code>
+is pointing to is already odd, it's already in the correct position. So the only
+thing left to do is to decrement <code>idx_odd</code> so that we can consider the next
+number to the left.
+</p>
+
+<p>
+Now comes the swapping behavior.
+</p>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><label class="org-src-name">else-condition</label><span class="lilac-caption-link-symbol"><a href="#else-condition">&#x1f517;</a></span></div><pre class="src src-python" id="else-condition">        <span class="org-keyword">else</span>:
+            <span class="org-variable-name">ints</span>[<span class="org-variable-name">idx_even</span>], <span class="org-variable-name">ints</span>[idx_odd] <span class="org-operator">=</span> ints[idx_odd], ints[idx_even]
+            <span class="org-variable-name">idx_even</span> <span class="org-operator">+=</span> 1
+</pre></div></div><p>
+We hit this branch if <code>idx_odd</code> is pointing to an <b>even</b> number. We know that
+because this number is even, we want to push it to the left edge of the list.
+Luckily we already have a pointer for this, <code>idx_even</code>. So we perform a swap to
+throw over the number we just looked at (<code>ints[idx_odd]</code>) over to the "even"
+side. The number that we get in return as a result of the swap (namely,
+<code>ints[idx_even]</code>) may or may not be odd. However it doesn't matter because we'll
+check it in the next iteration of the loop.
+</p>
+
+<p>
+Lastly we have to increment <code>idx_even</code> because we know that we just gave it an
+even number (the one we threw over to the even side). In other words the even
+side grew by 1 number, so it makes sense to increment <code>idx_even</code> to reflect this
+growth.
+</p>
+
+<p>
+So much for the <code>while</code> loop. As for the calculation of the number of even
+numbers, this is just the <code>idx_even</code> index, plus 1 if <code>idx_even</code> is currently
+looking at an even number (after the loop is done incrementing it).
+</p>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><label class="org-src-name"><code>idx_even</code> (off-by-1)</label><span class="lilac-caption-link-symbol"><a href="#code-idx-even--code---off-by-1">&#x1f517;</a></span></div><pre class="src src-python" id="code-idx-even--code---off-by-1">    <span class="org-keyword">if</span> ints <span class="org-keyword">and</span> ints[idx_even] <span class="org-operator">&amp;</span> 1 <span class="org-operator">==</span> 0:
+        <span class="org-variable-name">idx_even</span> <span class="org-operator">+=</span> 1
+</pre></div></div><p>
+We have to increment <code>idx_even</code> in such a case because this means that the
+number it is looking at after the <code>while</code> loop finished was <b>not</b> "thrown over"
+explicitly by the swapping code path in the loop. This can happen for the case
+where every number is even &#x2014; in this case we end up incrementing <code>idx_even</code>
+until it equals <code>idx_odd</code> (at the tail end of the list), when the loop
+terminates. Example:
+</p>
+
+<pre class="example" id="org000000f">
+0  2  4  6  8  10 12  (numbers)
+0  1  2  3  4  5  6   (list index)
+                  |
+                  `- idx_odd
+                  `- idx_even
+</pre>
+
+<p>
+In this case, <code>idx_even</code> is 6, but there are 7 even numbers in the list. So we
+have to add 1 to get the correct answer. For all other cases, where <code>idx_even</code>
+is looking at an odd number, this means that the number immediately to the left
+of <code>idx_even</code> is the last even number. So there's nothing more to adjust and we
+already have the correct value, so we do nothing.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-Tests" class="outline-2">
+<h2 id="h-Tests"><span class="section-number-2">4.</span> Tests</h2>
+<div class="outline-text-2" id="text-h-Tests">
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><label class="org-src-name">Tests</label><span class="lilac-caption-link-symbol"><a href="#Tests">&#x1f517;</a></span></div><pre class="src src-python" id="Tests"><span class="org-keyword">from</span> hypothesis <span class="org-keyword">import</span> given, strategies <span class="org-keyword">as</span> st
+<span class="org-keyword">import</span> unittest
+
+<span class="lilac-child-link-from-parent"><a href="#__NREF__rearrange_list_even_odd">rearrange_list_even_odd</a></span>
+
+<span class="org-keyword">class</span> <span class="org-type">Test</span>(unittest.TestCase):
+    <span class="org-variable-name">cases</span> <span class="org-operator">=</span> [
+        ([],        [],        0),
+        ([0],       [0],       1),
+        ([1],       [1],       0),
+        ([0, 2],    [2, 0],    2),
+        ([1, 2],    [2, 1],    1),
+        ([0, 2, 3], [2, 0, 3], 2),
+        ([0, 3, 2], [2, 0, 3], 2),
+        ([1, 3, 5], [1, 3, 5], 0),
+        ([2, 4, 6], [6, 2, 4], 3),
+    ]
+
+    <span class="org-keyword">def</span> <span class="org-function-name">test_simple_cases</span>(<span class="org-keyword">self</span>):
+        <span class="org-keyword">for</span> given_ints, expected_ints, expected_evens <span class="org-keyword">in</span> <span class="org-keyword">self</span>.cases:
+            <span class="org-variable-name">got_evens</span> <span class="org-operator">=</span> even_odd(given_ints)
+
+            <span class="org-keyword">self</span>.assertEqual(given_ints, expected_ints)
+            <span class="org-keyword">self</span>.assertEqual(got_evens, expected_evens)
+
+    <span class="org-type">@given</span>(st.lists(st.integers(min_value<span class="org-operator">=</span>0, max_value<span class="org-operator">=</span>100), min_size<span class="org-operator">=</span>0,
+                    max_size<span class="org-operator">=</span>16))
+    <span class="org-keyword">def</span> <span class="org-function-name">test_random</span>(<span class="org-keyword">self</span>, given_ints):
+        <span class="org-variable-name">even_nums</span> <span class="org-operator">=</span> even_odd(given_ints)
+        <span class="org-comment-delimiter"># </span><span class="org-comment">If we found some even numbers, these elements must actually all be</span>
+        <span class="org-comment-delimiter"># </span><span class="org-comment">even. And the remaining elements (if any) must all be odd.</span>
+        <span class="org-keyword">if</span> even_nums <span class="org-operator">&gt;</span> 0:
+            <span class="org-keyword">for</span> i <span class="org-keyword">in</span> <span class="org-builtin">range</span>(0, even_nums):
+                <span class="org-keyword">self</span>.assertFalse(given_ints[i] <span class="org-operator">&amp;</span> 1)
+            <span class="org-keyword">for</span> j <span class="org-keyword">in</span> <span class="org-builtin">range</span>(even_nums, <span class="org-builtin">len</span>(given_ints)):
+                <span class="org-keyword">self</span>.assertTrue(given_ints[j] <span class="org-operator">&amp;</span> 1)
+        <span class="org-comment-delimiter"># </span><span class="org-comment">If we did not find any even numbers, but the given list was not empty,</span>
+        <span class="org-comment-delimiter"># </span><span class="org-comment">then it means that all numbers in the list are odd.</span>
+        <span class="org-keyword">elif</span> given_ints:
+            <span class="org-keyword">for</span> j <span class="org-keyword">in</span> <span class="org-builtin">range</span>(0, <span class="org-builtin">len</span>(given_ints)):
+                <span class="org-keyword">self</span>.assertTrue(given_ints[j] <span class="org-operator">&amp;</span> 1)
+
+<span class="org-keyword">if</span> <span class="org-builtin">__name__</span> <span class="org-operator">==</span> <span class="org-string">"__main__"</span>:
+    unittest.main(<span class="org-constant">exit</span><span class="org-operator">=</span><span class="org-constant">False</span>)
+</pre></div></div>
+</div>
+</div>
+
+<div id="outline-container-h-References" class="outline-2">
+<h2 id="h-References"><span class="section-number-2">5.</span> References</h2>
+<div class="outline-text-2" id="text-h-References">
+<style>.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}</style><div class="csl-bib-body">
+  <div class="csl-entry" id="citeproc_bib_item_1">Aziz, A., Lee, T.-H., &#38; Prakash, A. (2018). <i>Elements of Programming Interviews in Python: The Insiders’ Guide</i>. CreateSpace Independent Publishing Platform (25 July. 2018).</div>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

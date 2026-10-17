@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Rectangle overlap (intersection)</title>
+<meta name="author" content="Linus Arver" />
+<meta name="generator" content="Org Mode" />
+<style>
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { }
+</style>
+<link rel="preconnect" href="/vendor/source-fonts/source-fonts.css" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="/vendor/source-fonts/source-fonts.css">
+<script src="/vendor/jquery-3.6.4.min.js"></script>
+<script src="lilac.js"></script>
+<link rel="stylesheet" type="text/css" href="syntax-highlighting.css"/>
+<link rel="stylesheet" type="text/css" href="lilac.css" />
+<link rel="stylesheet" type="text/css" href="codex.css" />
+<link rel="stylesheet" href="/vendor/source-fonts/source-fonts.css">
+<script>
+// @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&amp;dn=gpl-3.0.txt GPL-v3-or-Later
+     function CodeHighlightOn(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.add("code-highlighted");
+         target.classList.add("code-highlighted");
+       }
+     }
+     function CodeHighlightOff(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.remove("code-highlighted");
+         target.classList.remove("code-highlighted");
+       }
+     }
+// @license-end
+</script>
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    loader: { paths: { "mathjax-newcm": "/vendor/mathjax-newcm-font" } },
+	output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="/vendor/mathjax/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<div id="content" class="content">
+<h1 class="title">Rectangle overlap (intersection)</h1>
+<div id="table-of-contents" role="doc-toc">
+
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#h-Introduction">1. Introduction</a></li>
+<li><a href="#h-Problem-statement">2. Problem statement</a></li>
+<li><a href="#h-Insights">3. Insights</a></li>
+<li><a href="#h-Solution">4. Solution</a></li>
+<li><a href="#h-Tests">5. Tests</a></li>
+<li><a href="#h-References">6. References</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h-Introduction" class="outline-2">
+<h2 id="h-Introduction"><span class="section-number-2">1.</span> Introduction</h2>
+<div class="outline-text-2" id="text-h-Introduction">
+<p>
+Consider rectangles whose sides are parallel to the X and Y axes. Let a
+rectangle be defined by 4 fields: the X and Y coordinate of its bottom-left
+corner, and its width and height.
+</p>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#Tests">overlapping_rectangle</a></span>(1/5) <span class="lilac-caption-link-symbol"><a href="#__NREF__overlapping_rectangle-1">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__overlapping_rectangle-1"><span class="org-keyword">import</span> collections
+<span class="org-variable-name">Rect</span> <span class="org-operator">=</span> collections.namedtuple(<span class="org-string">'Rect'</span>, (<span class="org-string">'x'</span>, <span class="org-string">'y'</span>, <span class="org-string">'width'</span>, <span class="org-string">'height'</span>))
+</pre></div></div><p>
+For a diagram of the various kinds of overlap we can expect, see (<a href="#citeproc_bib_item_1">Aziz et al., 2018, p. 39</a>).
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-Problem-statement" class="outline-2">
+<h2 id="h-Problem-statement"><span class="section-number-2">2.</span> Problem statement</h2>
+<div class="outline-text-2" id="text-h-Problem-statement">
+<p>
+Write a function which checks if two rectangles have a nonempty overlap; if the
+overlap is nonempty, return the rectangle formed by their overlap (<a href="#citeproc_bib_item_1">Aziz et al., 2018, p. 39</a>). Two rectangles are considered to be overlapping if they share the same
+side.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-Insights" class="outline-2">
+<h2 id="h-Insights"><span class="section-number-2">3.</span> Insights</h2>
+<div class="outline-text-2" id="text-h-Insights">
+<p>
+Enumerating all the ways in which two rectangles can overlap is rather
+difficult. Instead we can just check if there is no overlap horizontally and
+vertically, separately.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-Solution" class="outline-2">
+<h2 id="h-Solution"><span class="section-number-2">4.</span> Solution</h2>
+<div class="outline-text-2" id="text-h-Solution">
+<p>
+First just consider horizontal overlap. The check to see if there is <b>no</b>
+overlap is simple: if the rightmost point of Rect A is less than the leftmost
+point of Rect B, there is no overlap. We can encode this as <code>a_R &lt; b_L</code>. Of
+course, it may be the case that Rect A is further right on the X axis than
+Rectnagle B, in which case the roles are reversed and we have to check if Rect
+A's leftmost point is indeed greater than the rightmost point of Rect B (<code>a_L &gt;
+b_R</code>). These two conditions form the basis of <code>no_horizontal_overlap()</code> below.
+</p>
+
+<p>
+By symmetry, the code for <code>no_vertical_overlap()</code> is rather similar.
+</p>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#Tests">overlapping_rectangle</a></span>(2/5) <span class="lilac-caption-link-symbol"><a href="#__NREF__overlapping_rectangle-2">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__overlapping_rectangle-2"><span class="org-keyword">def</span> <span class="org-function-name">no_horizontal_overlap</span>(a, b):
+    <span class="org-comment-delimiter"># </span><span class="org-comment">"L" means leftmost point</span>
+    <span class="org-comment-delimiter"># </span><span class="org-comment">"R" means rightmost point</span>
+    <span class="org-variable-name">a_L</span> <span class="org-operator">=</span> a.x
+    <span class="org-variable-name">a_R</span> <span class="org-operator">=</span> a.x <span class="org-operator">+</span> a.width
+    <span class="org-variable-name">b_L</span> <span class="org-operator">=</span> b.x
+    <span class="org-variable-name">b_R</span> <span class="org-operator">=</span> b.x <span class="org-operator">+</span> b.width
+    <span class="org-keyword">return</span> a_R <span class="org-operator">&lt;</span> b_L <span class="org-keyword">or</span> a_L <span class="org-operator">&gt;</span> b_R
+<span class="org-keyword">def</span> <span class="org-function-name">no_vertical_overlap</span>(a, b):
+    <span class="org-comment-delimiter"># </span><span class="org-comment">"B" means bottommost point</span>
+    <span class="org-comment-delimiter"># </span><span class="org-comment">"T" means topmost point</span>
+    <span class="org-variable-name">a_B</span> <span class="org-operator">=</span> a.y
+    <span class="org-variable-name">a_T</span> <span class="org-operator">=</span> a.y <span class="org-operator">+</span> a.height
+    <span class="org-variable-name">b_B</span> <span class="org-operator">=</span> b.y
+    <span class="org-variable-name">b_T</span> <span class="org-operator">=</span> b.y <span class="org-operator">+</span> b.height
+    <span class="org-keyword">return</span> a_T <span class="org-operator">&lt;</span> b_B <span class="org-keyword">or</span> a_B <span class="org-operator">&gt;</span> b_T
+<span class="org-keyword">def</span> <span class="org-function-name">no_overlap</span>(a, b):
+    <span class="org-keyword">return</span> no_horizontal_overlap(a, b) <span class="org-keyword">or</span> no_vertical_overlap(a, b)
+</pre></div></div><p>
+The code in (<a href="#citeproc_bib_item_1">Aziz et al., 2018, p. 40</a>) actually does the opposite to check for overlap
+(instead of no-overlap). And so they use <code>a_R &gt;= b_L and a_L &lt;= b_R</code> instead.
+However that code is a tiny bit slower because of the use of <code>and</code> instead of
+<code>or</code> as we've done here.
+</p>
+
+<p>
+Now that we can check if there is no overlap, we can proceed to calculating the
+actual overlapping (smaller) rectangle.
+</p>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#Tests">overlapping_rectangle</a></span>(3/5) <span class="lilac-caption-link-symbol"><a href="#__NREF__overlapping_rectangle-3">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__overlapping_rectangle-3"><span class="org-keyword">def</span> <span class="org-function-name">overlapping_rectangle</span>(a, b):
+    <span class="org-keyword">if</span> no_overlap(a, b):
+        <span class="org-keyword">return</span> <span class="org-constant">None</span>
+    <span class="org-variable-name">a_L</span> <span class="org-operator">=</span> a.x
+    <span class="org-variable-name">a_R</span> <span class="org-operator">=</span> a.x <span class="org-operator">+</span> a.width
+    <span class="org-variable-name">b_L</span> <span class="org-operator">=</span> b.x
+    <span class="org-variable-name">b_R</span> <span class="org-operator">=</span> b.x <span class="org-operator">+</span> b.width
+    <span class="org-variable-name">a_B</span> <span class="org-operator">=</span> a.y
+    <span class="org-variable-name">a_T</span> <span class="org-operator">=</span> a.y <span class="org-operator">+</span> a.height
+    <span class="org-variable-name">b_B</span> <span class="org-operator">=</span> b.y
+    <span class="org-variable-name">b_T</span> <span class="org-operator">=</span> b.y <span class="org-operator">+</span> b.height
+</pre></div></div><p>
+Now that we have all of our points defined, first consider the \((X, Y)\)
+coordinate (lower-left corner) of the overlapping rectangle (let's call this
+rectangle <code>v</code>). What is the leftmost side of <code>v</code>? It's just the max of either
+<code>a</code> or <code>b</code>, because we already know that they overlap:
+</p>
+
+<pre class="example" id="org0000008">
+aaaaaaa
+     bbbb
+     |
+     `- this point, b_L, is what we want
+</pre>
+
+<p>
+Again, we have to account for the case where the rectangles are reversed, where
+Rect B is on the left:
+</p>
+
+<pre class="example" id="org0000009">
+bbbbbbb
+     aaaa
+     |
+     `- this point, a_L, is what we want
+</pre>
+
+<p>
+So we need to get either <code>a_L</code> or <code>b_L</code>. In both cases, this value is <code>max(a_L,
+b_L)</code>. For the Y axis, similar logic follows and we need to use <code>max(a_B, b_B)</code>.
+</p>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#Tests">overlapping_rectangle</a></span>(4/5) <span class="lilac-caption-link-symbol"><a href="#__NREF__overlapping_rectangle-4">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__overlapping_rectangle-4">    <span class="org-variable-name">v_x</span> <span class="org-operator">=</span> <span class="org-builtin">max</span>(a_L, b_L)
+    <span class="org-variable-name">v_y</span> <span class="org-operator">=</span> <span class="org-builtin">max</span>(a_B, b_B)
+</pre></div></div><p>
+What about width the width? The width is the rightmost point subtracted by the
+leftmost point. We already know the leftmost point of <code>v</code>, <code>v_x</code>. So we just
+need to calculate the rightmost point. We can get the rightmost point by taking
+the minimum of the rightmost points of either <code>a</code> or <code>b</code>. Using the same
+examples from above, we have
+</p>
+
+<pre class="example" id="org000000c">
+      ,- this point, a_R, is what we want
+      |
+aaaaaaa
+     bbbb
+</pre>
+
+<p>
+and also the reversed case
+</p>
+
+<pre class="example" id="org000000d">
+      ,- this point, b_R, is what we want
+      |
+bbbbbbb
+     aaaa
+</pre>
+
+<p>
+where in both cases, the value is <code>min(a_R, b_R)</code>. Then we can just subtract
+<code>v_x</code> from it to get the width. By symmetry, the calculation of v<sub>height</sub> is
+essentially the same.
+</p>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#Tests">overlapping_rectangle</a></span>(5/5) <span class="lilac-caption-link-symbol"><a href="#__NREF__overlapping_rectangle-5">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__overlapping_rectangle-5">    <span class="org-variable-name">v_width</span> <span class="org-operator">=</span> <span class="org-builtin">min</span>(a_R, b_R) <span class="org-operator">-</span> v_x
+    <span class="org-variable-name">v_height</span> <span class="org-operator">=</span> <span class="org-builtin">min</span>(a_T, b_T) <span class="org-operator">-</span> v_y
+    <span class="org-keyword">return</span> Rect(v_x, v_y, v_width, v_height)
+</pre></div></div>
+</div>
+</div>
+
+<div id="outline-container-h-Tests" class="outline-2">
+<h2 id="h-Tests"><span class="section-number-2">5.</span> Tests</h2>
+<div class="outline-text-2" id="text-h-Tests">
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><label class="org-src-name">Tests</label><span class="lilac-caption-link-symbol"><a href="#Tests">&#x1f517;</a></span></div><pre class="src src-python" id="Tests"><span class="org-keyword">import</span> unittest
+
+<span class="lilac-child-link-from-parent"><a href="#__NREF__overlapping_rectangle-1">overlapping_rectangle</a></span>
+
+<span class="org-keyword">class</span> <span class="org-type">TestOverlappingRect</span>(unittest.TestCase):
+    <span class="org-variable-name">cases</span> <span class="org-operator">=</span> [
+        (Rect(0, 0, 1, 1), Rect(2, 2, 0, 0), <span class="org-constant">None</span>),
+        (Rect(0, 0, 1, 1), Rect(2, 2, 0, 0), <span class="org-constant">None</span>),
+        (Rect(0, 0, 1, 1), Rect(1, 1, 0, 0), Rect(1, 1, 0, 0)),
+        (Rect(0, 0, 5, 5), Rect(1, 1, 2, 6), Rect(1, 1, 2, 4)),
+    ]
+
+    <span class="org-keyword">def</span> <span class="org-function-name">test_simple_cases</span>(<span class="org-keyword">self</span>):
+        <span class="org-keyword">for</span> a, b, result <span class="org-keyword">in</span> <span class="org-keyword">self</span>.cases:
+            <span class="org-keyword">self</span>.assertEqual(overlapping_rectangle(a, b), result)
+            <span class="org-comment-delimiter"># </span><span class="org-comment">Also check the reverse (when we swap the order of the rectangles).</span>
+            <span class="org-keyword">self</span>.assertEqual(overlapping_rectangle(b, a), result)
+
+<span class="org-keyword">if</span> <span class="org-builtin">__name__</span> <span class="org-operator">==</span> <span class="org-string">"__main__"</span>:
+    unittest.main(<span class="org-constant">exit</span><span class="org-operator">=</span><span class="org-constant">False</span>)
+</pre></div></div>
+</div>
+</div>
+
+<div id="outline-container-h-References" class="outline-2">
+<h2 id="h-References"><span class="section-number-2">6.</span> References</h2>
+<div class="outline-text-2" id="text-h-References">
+<style>.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}</style><div class="csl-bib-body">
+  <div class="csl-entry" id="citeproc_bib_item_1">Aziz, A., Lee, T.-H., &#38; Prakash, A. (2018). <i>Elements of Programming Interviews in Python: The Insiders’ Guide</i>. CreateSpace Independent Publishing Platform (25 July. 2018).</div>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

@@ -4,25 +4,39 @@
 		<meta charset="utf-8">
 		<title>Linus’s Blog - Lilac and Codex</title>
 		<link rel="stylesheet" href="../css/base.css">
-		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Serif+Pro">
+		<link rel="stylesheet" href="/vendor/source-fonts/source-fonts.css">
 		<link rel="shortcut icon" type="image/png" href="../favicon.png">
-		<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+		<script src="/vendor/jquery-2.1.4.min.js"></script>
 		<script src="../misc.js"></script>
 		<!-- https://github.com/mreid/markreidname-hakyll/blob/master/_templates/mathjax.html -->
-<script type="text/x-mathjax-config">
-	MathJax.Hub.Config({
-		extensions: ["tex2jax.js"],
-		jax: ["input/TeX", "output/HTML-CSS"],
-		tex2jax: {
-			inlineMath: [ ["\\(","\\)"] ],
-			displayMath: [ ["\\[","\\]"] ],
-			processEscapes: true
-		},
-		TeX: { equationNumbers: { autoNumber: "AMS" } },
-		"HTML-CSS": { availableFonts: ["TeX"] }
-	});
-</script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"> </script>
+	<script>
+	  window.MathJax = {
+	    tex: {
+	      ams: {
+	        multlineWidth: '85%'
+	      },
+	      tags: 'ams',
+	      tagSide: 'right',
+	      tagIndent: '.8em'
+	    },
+	    chtml: {
+	      scale: 1.0,
+	      displayAlign: 'center',
+	      displayIndent: '0em'
+	    },
+	    svg: {
+	      scale: 1.0,
+	      displayAlign: 'center',
+	      displayIndent: '0em'
+	    },
+	    loader: { paths: { "mathjax-newcm": "/vendor/mathjax-newcm-font" } },
+	    output: {
+	      font: 'mathjax-newcm',
+	      displayOverflow: 'overflow'
+	    }
+	  };
+	</script>
+<script type="text/javascript" src="/vendor/mathjax/tex-mml-chtml.js"> </script>
 
 	</head>
 	<body>

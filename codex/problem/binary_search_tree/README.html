@@ -1,0 +1,1169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Binary search tree</title>
+<meta name="author" content="Linus Arver" />
+<meta name="generator" content="Org Mode" />
+<style>
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { }
+</style>
+<link rel="preconnect" href="/vendor/source-fonts/source-fonts.css" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="/vendor/source-fonts/source-fonts.css">
+<script src="/vendor/jquery-3.6.4.min.js"></script>
+<script src="lilac.js"></script>
+<link rel="stylesheet" type="text/css" href="syntax-highlighting.css"/>
+<link rel="stylesheet" type="text/css" href="lilac.css" />
+<link rel="stylesheet" type="text/css" href="codex.css" />
+<link rel="stylesheet" href="/vendor/source-fonts/source-fonts.css">
+<script>
+// @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&amp;dn=gpl-3.0.txt GPL-v3-or-Later
+     function CodeHighlightOn(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.add("code-highlighted");
+         target.classList.add("code-highlighted");
+       }
+     }
+     function CodeHighlightOff(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.remove("code-highlighted");
+         target.classList.remove("code-highlighted");
+       }
+     }
+// @license-end
+</script>
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    loader: { paths: { "mathjax-newcm": "/vendor/mathjax-newcm-font" } },
+	output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="/vendor/mathjax/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<div id="content" class="content">
+<h1 class="title">Binary search tree</h1>
+<div id="table-of-contents" role="doc-toc">
+
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#h-Problem-statement">1. Problem statement</a></li>
+<li><a href="#h-Insights">2. Insights</a>
+<ul>
+<li><a href="#h-Sorted-binary-trees">2.1. Sorted binary trees</a></li>
+<li><a href="#h-Insertion-order-determines-structure">2.2. Insertion order determines structure</a></li>
+</ul>
+</li>
+<li><a href="#h-Solution">3. Solution</a>
+<ul>
+<li><a href="#h-Initialization">3.1. Initialization</a>
+<ul>
+<li><a href="#h-Node-initialization">3.1.1. Node initialization</a></li>
+<li><a href="#h-BST-initialization">3.1.2. BST initialization</a></li>
+</ul>
+</li>
+<li><a href="#h-Insertion">3.2. Insertion</a>
+<ul>
+<li><a href="#h-Convenient-integer-only-insertion">3.2.1. Convenient integer-only insertion</a></li>
+</ul>
+</li>
+<li><a href="#h-Size">3.3. Size</a></li>
+<li><a href="#h-Lookup">3.4. Lookup</a></li>
+<li><a href="#h-Deletion">3.5. Deletion</a></li>
+<li><a href="#h-Traversal">3.6. Traversal</a>
+<ul>
+<li><a href="#h-BFS">3.6.1. BFS</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#h-Tests">4. Tests</a>
+<ul>
+<li><a href="#h-Initialization-1">4.1. Initialization</a></li>
+<li><a href="#h-Insertion-1">4.2. Insertion</a></li>
+<li><a href="#h-Lookup-1">4.3. Lookup</a></li>
+<li><a href="#h-Deletion-1">4.4. Deletion</a>
+<ul>
+<li><a href="#h-Property-based-tests">4.4.1. Property based tests</a></li>
+</ul>
+</li>
+<li><a href="#h-Traversal-1">4.5. Traversal</a>
+<ul>
+<li><a href="#h-Property-based-tests-1">4.5.1. Property based tests</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#h-Export">5. Export</a></li>
+<li><a href="#h-References">6. References</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h-Problem-statement" class="outline-2">
+<h2 id="h-Problem-statement"><span class="section-number-2">1.</span> Problem statement</h2>
+<div class="outline-text-2" id="text-h-Problem-statement">
+<p>
+Implement a binary search tree (BST) (<a href="#citeproc_bib_item_1">Sedgewick &#38; Wayne, 2011, p. 396</a>).
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-Insights" class="outline-2">
+<h2 id="h-Insights"><span class="section-number-2">2.</span> Insights</h2>
+<div class="outline-text-2" id="text-h-Insights">
+</div>
+
+<div id="outline-container-h-Sorted-binary-trees" class="outline-3">
+<h3 id="h-Sorted-binary-trees"><span class="section-number-3">2.1.</span> Sorted binary trees</h3>
+<div class="outline-text-3" id="text-h-Sorted-binary-trees">
+<p>
+Binary search trees are basically <a href="../binary_tree/README.html">binary trees</a> with one major difference:
+instead of manually controlling exactly where nodes should go in the structure
+of the tree (during insertion), we give up this control in exchange for
+predictable (and typically very fast) performance.
+</p>
+
+<p>
+How do we give up control? We assign a <i>key</i> to every value we want to store in
+the BST, and let the BST decide where to store the key/value pair. The key's
+type must be comparable (can be greater or less than other keys). Then whenever
+we want to add a particular key (and associated value) into the BST, we start at
+the root node and see if the key is smaller than the key at the root. If so, we
+go down to the left subtree. If not, we go down the right subtree. If it is
+equal to the key at the root, we replace it with the new value. Then we do the
+comparison again until we arrive at a leaf node's child (when no more
+comparisons can be made to an existing key in the BST).
+</p>
+
+<div class="sidenote" id="org0000000">
+<p>
+If you perform an in-order traversal of a BST, you get back all the keys in
+sorted order.
+</p>
+
+</div>
+
+<p>
+In a large BST with many children, each time we go down one level into the tree
+we eliminate about half of the search space. This is because, if the tree is
+roughly balanced, we'll only need to do \(\log_2N\) comparisons to find the right
+key in a BST with \(N\) nodes. This is a powerful property, pretty much identical
+to how binary search works for sorted arrays. Indeed, the BST is already sorted
+&#x2014; the way in which we insert new nodes described in the above paragraph
+ensures that the BST maintains its sorted nature.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-Insertion-order-determines-structure" class="outline-3">
+<h3 id="h-Insertion-order-determines-structure"><span class="section-number-3">2.2.</span> Insertion order determines structure</h3>
+<div class="outline-text-3" id="text-h-Insertion-order-determines-structure">
+<p>
+Let's consider the keys <code>[3, 4, 1, 5, 2]</code>. The shape of the final BST will
+depend on the insertion order.
+</p>
+
+<pre class="example" id="org0000001">
+t = BinarySearchTree()
+t.insert(3) # Empty tree, so 3 becomes root node.
+t.insert(4) # 4 is greater than 3, so insert to right child of 3.
+t.insert(1) # 1 becomes 3's left child.
+t.insert(5) # 5 becomes 4's right child.
+t.insert(2) # 2 becomes 1's right child.
+</pre>
+
+<p>
+Pictorially it will look like this:
+</p>
+
+
+<div id="org0000002" class="figure">
+<p><img src="./binary_search_tree_random_order_insertion.svg" alt="binary_search_tree_random_order_insertion.svg" class="org-svg" width="300px">
+</p>
+</div>
+
+<p>
+If we insert them in order, we only end up using the right child at each level
+of tree:
+</p>
+
+<pre class="example" id="org0000003">
+t = BinarySearchTree()
+t.insert(1) # Empty tree, so 1 becomes root node.
+t.insert(2) # 2 is greater than 1, so insert to right child of 1.
+t.insert(3) # 3 becomes 2's child (3 is greater than both 1 and 2).
+t.insert(4) # 4 becomes 3's child (3 is greater than 1, 2, and 3).
+t.insert(5) # 5 becomes 4's child (5 is greater than 1, 2, 3, and 4).
+</pre>
+
+
+<div id="org0000004" class="figure">
+<p><img src="./binary_search_tree_sorted_order_insertion.svg" alt="binary_search_tree_sorted_order_insertion.svg" class="org-svg" width="300px">
+</p>
+</div>
+
+<p>
+This means that we have to make sure that the keys we insert into the BST are
+not in sorted order if we want to take advantage of the \(\log_2N\) lookup speed.
+</p>
+
+<p>
+If the input is known to be random, then of course this pathological case can be
+ignored. If we know that the input can be non-random (but don't want to bother
+with messing with how the keys are fed into the BST), then self-balancing binary
+search trees may be more appropriate because they are resistant against sorted
+input by moving nodes around (if necessary) during each insertion operation, to
+ensure that we don't end up with a structure resembling a linked list.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-Solution" class="outline-2">
+<h2 id="h-Solution"><span class="section-number-2">3.</span> Solution</h2>
+<div class="outline-text-2" id="text-h-Solution">
+<p>
+We use two classes. One for the nodes (<code>Node</code>) and another for the overall API
+around binary trees (<code>BinarySearchTree</code>). Splitting things up this way makes the
+(recursive) insertion method easy.
+</p>
+
+<p>
+The algorithms presented here are taken largely from <i>Algorithms</i>
+(<a href="#citeproc_bib_item_1">Sedgewick &#38; Wayne, 2011, p. 396</a>).
+</p>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#org0000007">code</a></span><span class="lilac-caption-link-symbol"><a href="#__NREF__code">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__code"><span class="org-keyword">from</span> collections <span class="org-keyword">import</span> deque
+
+<span class="org-keyword">class</span> <span class="org-type">Node</span>:
+    <span class="lilac-child-link-from-parent"><a href="#__NREF__node_class_methods-1">node_class_methods</a></span>
+<span class="org-keyword">class</span> <span class="org-type">BinarySearchTree</span>:
+    <span class="lilac-child-link-from-parent"><a href="#__NREF__binary_search_tree_class_methods-1">binary_search_tree_class_methods</a></span>
+</pre></div></div>
+</div>
+
+<div id="outline-container-h-Initialization" class="outline-3">
+<h3 id="h-Initialization"><span class="section-number-3">3.1.</span> Initialization</h3>
+<div class="outline-text-3" id="text-h-Initialization">
+</div>
+
+<div id="outline-container-h-Node-initialization" class="outline-4">
+<h4 id="h-Node-initialization"><span class="section-number-4">3.1.1.</span> Node initialization</h4>
+<div class="outline-text-4" id="text-h-Node-initialization">
+<p>
+The initialization purposely leaves out initialization of the left and right
+subtrees. This way, we force users to use our API in order to guarantee that we
+construct the tree correctly.
+</p>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#__NREF__code">node_class_methods</a></span>(1/3) <span class="lilac-caption-link-symbol"><a href="#__NREF__node_class_methods-1">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__node_class_methods-1"><span class="org-keyword">def</span> <span class="org-function-name">__init__</span>(<span class="org-keyword">self</span>, key: <span class="org-builtin">int</span>, val: Any<span class="org-operator">=</span><span class="org-constant">None</span>):
+    <span class="org-keyword">self</span>.<span class="org-variable-name">key</span> <span class="org-operator">=</span> key
+    <span class="org-keyword">self</span>.<span class="org-variable-name">val</span> <span class="org-operator">=</span> val
+</pre></div></div><p>
+Note that earlier we said that the key is comparable and is associated with a
+value. Like a hashmap, our binary tree cannot hold duplicate keys (such that
+when we store a new value for the same key, we overwrite the value in the
+existing key).
+</p>
+
+<p>
+We set the left and right links to <code>None</code>. These point to other <code>Node</code>
+instances. Later when we add more nodes into this tree, these links will become
+populated.
+</p>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#__NREF__code">node_class_methods</a></span>(2/3) <span class="lilac-caption-link-symbol"><a href="#__NREF__node_class_methods-2">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__node_class_methods-2">    <span class="org-keyword">self</span>.<span class="org-variable-name">left</span>: Optional[Node] <span class="org-operator">=</span> <span class="org-constant">None</span>
+    <span class="org-keyword">self</span>.<span class="org-variable-name">right</span>: Optional[Node] <span class="org-operator">=</span> <span class="org-constant">None</span>
+</pre></div></div><p>
+Set the count to just 1. We'll update this when we insert new nodes into this
+tree.
+</p>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#__NREF__code">node_class_methods</a></span>(3/3) <span class="lilac-caption-link-symbol"><a href="#__NREF__node_class_methods-3">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__node_class_methods-3">    <span class="org-keyword">self</span>.<span class="org-variable-name">count</span> <span class="org-operator">=</span> 1
+</pre></div></div>
+</div>
+</div>
+
+<div id="outline-container-h-BST-initialization" class="outline-4">
+<h4 id="h-BST-initialization"><span class="section-number-4">3.1.2.</span> BST initialization</h4>
+<div class="outline-text-4" id="text-h-BST-initialization">
+<p>
+A new binary tree is empty, so it doesn't require much. The only optional input
+is what the new root node will look like (if the caller has already constructed
+such a node).
+</p>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#__NREF__code">binary_search_tree_class_methods</a></span>(1/9) <span class="lilac-caption-link-symbol"><a href="#__NREF__binary_search_tree_class_methods-1">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__binary_search_tree_class_methods-1"><span class="org-keyword">def</span> <span class="org-function-name">__init__</span>(<span class="org-keyword">self</span>, root: Optional[Node]<span class="org-operator">=</span><span class="org-constant">None</span>):
+    <span class="org-keyword">self</span>.<span class="org-variable-name">root</span> <span class="org-operator">=</span> root
+</pre></div></div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-Insertion" class="outline-3">
+<h3 id="h-Insertion"><span class="section-number-3">3.2.</span> Insertion</h3>
+<div class="outline-text-3" id="text-h-Insertion">
+<p>
+Insertion requires us to compare the given key with what we already have in the
+tree. If the key does not exist, we have to add it to the correct spot. If it
+exists, we overwrite the existing entry.
+</p>
+
+<p>
+The "correct spot" is to put the key/value into the left subtree if it's smaller
+than the current (root) key. It goes into the right subtree if greater. If the
+key is the same as the current key, replace it. This selection process is done
+recursively as many times as necessary until we end up replacing an existing
+node or adding a new one (left or right subtree is empty).
+</p>
+
+<p>
+For simplicity, we use integers for the keys.
+</p>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#__NREF__code">binary_search_tree_class_methods</a></span>(2/9) <span class="lilac-caption-link-symbol"><a href="#__NREF__binary_search_tree_class_methods-2">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__binary_search_tree_class_methods-2"><span class="org-keyword">def</span> <span class="org-function-name">insert</span>(<span class="org-keyword">self</span>, key: <span class="org-builtin">int</span>, val: Any<span class="org-operator">=</span><span class="org-constant">None</span>):
+    <span class="org-keyword">self</span>.<span class="org-variable-name">root</span> <span class="org-operator">=</span> <span class="org-keyword">self</span>._insert(<span class="org-keyword">self</span>.root, key, val)
+
+<span class="org-keyword">def</span> <span class="org-function-name">_insert</span>(<span class="org-keyword">self</span>, x: Optional[Node], key: <span class="org-builtin">int</span>, val: Any<span class="org-operator">=</span><span class="org-constant">None</span>):
+    <span class="org-keyword">if</span> x <span class="org-keyword">is</span> <span class="org-constant">None</span>:
+        <span class="org-keyword">return</span> Node(key, val)
+    <span class="org-keyword">if</span> key <span class="org-operator">&lt;</span> x.key:
+        x.<span class="org-variable-name">left</span> <span class="org-operator">=</span> <span class="org-keyword">self</span>._insert(x.left, key, val)
+    <span class="org-keyword">elif</span> key <span class="org-operator">&gt;</span> x.key:
+        x.<span class="org-variable-name">right</span> <span class="org-operator">=</span> <span class="org-keyword">self</span>._insert(x.right, key, val)
+    <span class="org-keyword">else</span>:
+        x.<span class="org-variable-name">val</span> <span class="org-operator">=</span> val
+    x.<span class="org-variable-name">count</span> <span class="org-operator">=</span> <span class="org-keyword">self</span>._size(x.left) <span class="org-operator">+</span> <span class="org-keyword">self</span>._size(x.right) <span class="org-operator">+</span> 1
+    <span class="org-keyword">return</span> x
+</pre></div></div><p>
+Note that we have two methods, <code>insert()</code> and <code>_insert()</code>. The second (private)
+one is recursive and calls itself as many times as necessary to check for the
+existence of the given key. The first (public) one simply starts off this
+recursive search using the current root node of the tree.
+</p>
+</div>
+
+<div id="outline-container-h-Convenient-integer-only-insertion" class="outline-4">
+<h4 id="h-Convenient-integer-only-insertion"><span class="section-number-4">3.2.1.</span> Convenient integer-only insertion</h4>
+<div class="outline-text-4" id="text-h-Convenient-integer-only-insertion">
+<p>
+While our default <code>insert()</code> implementation above accounts for having distinct
+keys and values, for our purposes of demonstrating how the various binary tree
+algorithms behave we don't really care about what the values look like
+(everything is based on the keys). So to that end, we define a <code>insert_int()</code>
+method that only allows insertion of integers; it sets the value to a string
+representation of the key with a <code>val=</code> prefix to drive home the point that the
+values are distinct from the keys.
+</p>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#__NREF__code">binary_search_tree_class_methods</a></span>(3/9) <span class="lilac-caption-link-symbol"><a href="#__NREF__binary_search_tree_class_methods-3">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__binary_search_tree_class_methods-3"><span class="org-keyword">def</span> <span class="org-function-name">insert_int</span>(<span class="org-keyword">self</span>, <span class="org-operator">*</span>args: <span class="org-builtin">int</span>):
+    <span class="org-keyword">for</span> i, arg <span class="org-keyword">in</span> <span class="org-builtin">enumerate</span>(args):
+        <span class="org-keyword">self</span>.<span class="org-variable-name">root</span> <span class="org-operator">=</span> <span class="org-keyword">self</span>._insert(<span class="org-keyword">self</span>.root, arg, f<span class="org-string">"val=</span>{arg}<span class="org-string">"</span>)
+</pre></div></div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-Size" class="outline-3">
+<h3 id="h-Size"><span class="section-number-3">3.3.</span> Size</h3>
+<div class="outline-text-3" id="text-h-Size">
+<p>
+Just like we did for <a href="../binary_tree/README.html">binary trees</a>, getting the size is just a field lookup.
+During insertion and deletion we make sure that the <code>count</code> field is updated.
+</p>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#__NREF__code">binary_search_tree_class_methods</a></span>(4/9) <span class="lilac-caption-link-symbol"><a href="#__NREF__binary_search_tree_class_methods-4">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__binary_search_tree_class_methods-4"><span class="org-keyword">def</span> <span class="org-function-name">size</span>(<span class="org-keyword">self</span>):
+    <span class="org-keyword">return</span> <span class="org-keyword">self</span>._size(<span class="org-keyword">self</span>.root)
+<span class="org-keyword">def</span> <span class="org-function-name">_size</span>(<span class="org-keyword">self</span>, x: Optional[Node]):
+    <span class="org-keyword">if</span> x <span class="org-keyword">is</span> <span class="org-constant">None</span>:
+        <span class="org-keyword">return</span> 0
+    <span class="org-keyword">return</span> x.count
+</pre></div></div>
+</div>
+</div>
+
+<div id="outline-container-h-Lookup" class="outline-3">
+<h3 id="h-Lookup"><span class="section-number-3">3.4.</span> Lookup</h3>
+<div class="outline-text-3" id="text-h-Lookup">
+<p>
+Lookup is almost identical to insertion &#x2014; we recursively check for the
+existence of the given key. And just like for insertion, we have to start off
+the recursive search with the root of the tree.
+</p>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#__NREF__code">binary_search_tree_class_methods</a></span>(5/9) <span class="lilac-caption-link-symbol"><a href="#__NREF__binary_search_tree_class_methods-5">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__binary_search_tree_class_methods-5"><span class="org-keyword">def</span> <span class="org-function-name">lookup</span>(<span class="org-keyword">self</span>, key: <span class="org-builtin">int</span>):
+    <span class="org-keyword">return</span> <span class="org-keyword">self</span>._lookup(<span class="org-keyword">self</span>.root, key)
+
+<span class="org-keyword">def</span> <span class="org-function-name">_lookup</span>(<span class="org-keyword">self</span>, x: Optional[Node], key: <span class="org-builtin">int</span>):
+    <span class="org-keyword">if</span> x <span class="org-keyword">is</span> <span class="org-constant">None</span>:
+        <span class="org-keyword">return</span> <span class="org-constant">None</span>
+    <span class="org-keyword">if</span> key <span class="org-operator">&lt;</span> x.key:
+        <span class="org-keyword">return</span> <span class="org-keyword">self</span>._lookup(x.left, key)
+    <span class="org-keyword">elif</span> key <span class="org-operator">&gt;</span> x.key:
+        <span class="org-keyword">return</span> <span class="org-keyword">self</span>._lookup(x.right, key)
+    <span class="org-keyword">else</span>:
+        <span class="org-keyword">return</span> x.val
+</pre></div></div>
+</div>
+</div>
+
+<div id="outline-container-h-Deletion" class="outline-3">
+<h3 id="h-Deletion"><span class="section-number-3">3.5.</span> Deletion</h3>
+<div class="outline-text-3" id="text-h-Deletion">
+<p>
+Deletion is tricky, for the same reasons that we had for <a href="../binary_tree/README.html">binary trees</a>.
+</p>
+
+<p>
+When we want to delete a node, we have to first search for the node we want to
+delete. Then once we find the node we want to delete, we again have 3 cases:
+</p>
+
+<ol class="org-ol">
+<li>the node to delete has 0 children (leaf node),</li>
+<li>the node to delete has 1 child, or</li>
+<li>the node to delete has 2 children.</li>
+</ol>
+
+<p>
+If the node we want to delete is a leaf node, there's no extra work. If it has a
+single child, we just make that child the replacement. If it has 2 children, we
+have to pick a child to be the replacement.
+</p>
+
+<div class="sidenote" id="org0000019">
+<p>
+The "successor" <i>s</i> of a key <i>k</i> in a BST is a key with the smallest value that
+is still greater than <i>k</i>. In other words, if we were to print all the keys in
+order, <i>s</i> would immediately follow after <i>k</i>.
+</p>
+
+<p>
+Similarly, the "predecessor" <i>p</i> is the largest key that is still smaller than
+<i>k</i>, and would be printed just before <i>k</i>.
+</p>
+
+</div>
+
+<p>
+For plain binary trees, we decided to choose the leftmost leaf node as the
+replacement. For BSTs, we choose the node with the smallest key in the right
+child. This is also known as the "successor", because it's guaranteed to be the
+next-largest key in the BST after the to-be-deleted node. Due to the way BSTs
+are already ordered, choosing this child as the replacement preserves the order
+in the BST (such that after the deletion, the tree remains as a proper BST).
+This is because the smallest key in the right child is still larger than the key
+in the left child.
+</p>
+
+<p>
+When we are deleting a node with 2 children, it is advised in
+Sedgewick &#38; Wayne (<a href="#citeproc_bib_item_1">2011, p. 410</a>), to choose randomly between the successor and
+prdecessor as the replacement (it's more "balanced" and thus leads to better
+tree structure over time). For our purposes we just stick to choosing the
+successor because it is predictable, allowing us to test more easily in unit
+tests.
+</p>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#__NREF__code">binary_search_tree_class_methods</a></span>(6/9) <span class="lilac-caption-link-symbol"><a href="#__NREF__binary_search_tree_class_methods-6">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__binary_search_tree_class_methods-6"><span class="org-keyword">def</span> <span class="org-function-name">delete</span>(<span class="org-keyword">self</span>, key: <span class="org-builtin">int</span>):
+    <span class="org-keyword">self</span>.<span class="org-variable-name">root</span> <span class="org-operator">=</span> <span class="org-keyword">self</span>._delete(<span class="org-keyword">self</span>.root, key)
+<span class="org-keyword">def</span> <span class="org-function-name">_delete</span>(<span class="org-keyword">self</span>, x: Optional[Node], key: <span class="org-builtin">int</span>):
+    <span class="org-comment-delimiter"># </span><span class="org-comment">If there is no node to delete (because we could not find the node we</span>
+    <span class="org-comment-delimiter"># </span><span class="org-comment">wanted to delete), then deletion is a NOP.</span>
+    <span class="org-keyword">if</span> x <span class="org-keyword">is</span> <span class="org-constant">None</span>:
+        <span class="org-keyword">return</span> <span class="org-constant">None</span>
+    <span class="org-comment-delimiter"># </span><span class="org-comment">If the key doesn't match for the current node, keep searching.</span>
+    <span class="org-keyword">if</span> key <span class="org-operator">&lt;</span> x.key:
+        x.<span class="org-variable-name">left</span> <span class="org-operator">=</span> <span class="org-keyword">self</span>._delete(x.left, key)
+    <span class="org-comment-delimiter"># </span><span class="org-comment">Ditto.</span>
+    <span class="org-keyword">elif</span> key <span class="org-operator">&gt;</span> x.key:
+        x.<span class="org-variable-name">right</span> <span class="org-operator">=</span> <span class="org-keyword">self</span>._delete(x.right, key)
+    <span class="org-comment-delimiter"># </span><span class="org-comment">Found the node we want to delete.</span>
+    <span class="org-keyword">else</span>:
+        <span class="org-comment-delimiter"># </span><span class="org-comment">If either the left or right child is None, return the other child. If</span>
+        <span class="org-comment-delimiter"># </span><span class="org-comment">the other child is None, then this means that this node had no</span>
+        <span class="org-comment-delimiter"># </span><span class="org-comment">children. If the other child is not None, this means this node only</span>
+        <span class="org-comment-delimiter"># </span><span class="org-comment">had 1 child (which means we're done).</span>
+        <span class="org-keyword">if</span> x.left <span class="org-keyword">is</span> <span class="org-constant">None</span>:
+            <span class="org-keyword">return</span> x.right
+        <span class="org-keyword">if</span> x.right <span class="org-keyword">is</span> <span class="org-constant">None</span>:
+            <span class="org-keyword">return</span> x.left
+
+        <span class="org-comment-delimiter"># </span><span class="org-comment">We have two children. We need to pick a replacement (smallest key</span>
+        <span class="org-comment-delimiter"># </span><span class="org-comment">greater than the current key).</span>
+
+        <span class="org-comment-delimiter"># </span><span class="org-comment">Save a link to the node to be deleted, because we want links to the</span>
+        <span class="org-comment-delimiter"># </span><span class="org-comment">original children of x.</span>
+        <span class="org-variable-name">y</span> <span class="org-operator">=</span> x
+
+        <span class="org-comment-delimiter"># </span><span class="org-comment">Get the successor node with the lowest key greater than x.key.</span>
+        <span class="org-variable-name">x</span> <span class="org-operator">=</span> <span class="org-keyword">self</span>._min(x.right)
+
+        <span class="org-comment-delimiter"># </span><span class="org-comment">We can't just do "x.right = y.right" because y.right contains x</span>
+        <span class="org-comment-delimiter"># </span><span class="org-comment">(self._min(x.right) is a read operation). So delete the successor out</span>
+        <span class="org-comment-delimiter"># </span><span class="org-comment">of the right subtree, and assign this pruned subtree to be the</span>
+        <span class="org-comment-delimiter"># </span><span class="org-comment">successor's right child.</span>
+        x.<span class="org-variable-name">right</span> <span class="org-operator">=</span> <span class="org-keyword">self</span>._delete_min(y.right)
+
+        <span class="org-comment-delimiter"># </span><span class="org-comment">The original left child of (the now-deleted) x is now the left child</span>
+        <span class="org-comment-delimiter"># </span><span class="org-comment">of x's successor. We have to do this operation last because otherwise</span>
+        <span class="org-comment-delimiter"># </span><span class="org-comment">this left child interferes with the algorithm in _delete_min().</span>
+        x.<span class="org-variable-name">left</span> <span class="org-operator">=</span> y.left
+
+    x.<span class="org-variable-name">count</span> <span class="org-operator">=</span> <span class="org-keyword">self</span>._size(x.left) <span class="org-operator">+</span> <span class="org-keyword">self</span>._size(x.right) <span class="org-operator">+</span> 1
+
+    <span class="org-keyword">return</span> x
+
+<span class="org-keyword">def</span> <span class="org-function-name">min</span>(<span class="org-keyword">self</span>) <span class="org-operator">-&gt;</span> Optional[<span class="org-builtin">int</span>]:
+    <span class="org-keyword">if</span> <span class="org-keyword">self</span>.root <span class="org-keyword">is</span> <span class="org-constant">None</span>:
+        <span class="org-keyword">return</span> <span class="org-constant">None</span>
+    <span class="org-variable-name">x</span> <span class="org-operator">=</span> <span class="org-keyword">self</span>._min(<span class="org-keyword">self</span>.root)
+    <span class="org-keyword">if</span> x <span class="org-keyword">is</span> <span class="org-constant">None</span>:
+        <span class="org-keyword">return</span> <span class="org-constant">None</span>
+    <span class="org-keyword">return</span> x.key
+
+<span class="org-comment-delimiter"># </span><span class="org-comment">Find the node with the smallest key in the given tree, rooted at node x.</span>
+<span class="org-keyword">def</span> <span class="org-function-name">_min</span>(<span class="org-keyword">self</span>, x: Node) <span class="org-operator">-&gt;</span> Node:
+    <span class="org-keyword">while</span> <span class="org-constant">True</span>:
+        <span class="org-comment-delimiter"># </span><span class="org-comment">If we have nothing smaller than x, this is the minimum.</span>
+        <span class="org-keyword">if</span> x.left <span class="org-keyword">is</span> <span class="org-constant">None</span>:
+            <span class="org-keyword">break</span>
+        <span class="org-variable-name">x</span> <span class="org-operator">=</span> x.left
+    <span class="org-keyword">return</span> x
+
+<span class="org-keyword">def</span> <span class="org-function-name">delete_min</span>(<span class="org-keyword">self</span>):
+    <span class="org-keyword">self</span>.<span class="org-variable-name">root</span> <span class="org-operator">=</span> <span class="org-keyword">self</span>._delete_min(<span class="org-keyword">self</span>.root)
+
+<span class="org-comment-delimiter"># </span><span class="org-comment">Return a tree rooted at node x, but with the node containing the smallest key</span>
+<span class="org-comment-delimiter"># </span><span class="org-comment">in it removed from this tree.</span>
+<span class="org-keyword">def</span> <span class="org-function-name">_delete_min</span>(<span class="org-keyword">self</span>, x: Optional[Node]) <span class="org-operator">-&gt;</span> Optional[Node]:
+    <span class="org-keyword">if</span> x <span class="org-keyword">is</span> <span class="org-constant">None</span>:
+        <span class="org-keyword">return</span> <span class="org-constant">None</span>
+    <span class="org-keyword">if</span> x.left <span class="org-keyword">is</span> <span class="org-constant">None</span>:
+        <span class="org-keyword">return</span> x.right
+    x.<span class="org-variable-name">left</span> <span class="org-operator">=</span> <span class="org-keyword">self</span>._delete_min(x.left)
+    x.<span class="org-variable-name">count</span> <span class="org-operator">=</span> <span class="org-keyword">self</span>._size(x.left) <span class="org-operator">+</span> <span class="org-keyword">self</span>._size(x.right) <span class="org-operator">+</span> 1
+    <span class="org-keyword">return</span> x
+</pre></div></div>
+</div>
+</div>
+
+<div id="outline-container-h-Traversal" class="outline-3">
+<h3 id="h-Traversal"><span class="section-number-3">3.6.</span> Traversal</h3>
+<div class="outline-text-3" id="text-h-Traversal">
+<p>
+The code here is identical to the code for <a href="../binary_tree/README.html">binary trees</a>. See the discussion
+around traversal there.
+</p>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#__NREF__code">binary_search_tree_class_methods</a></span>(7/9) <span class="lilac-caption-link-symbol"><a href="#__NREF__binary_search_tree_class_methods-7">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__binary_search_tree_class_methods-7"><span class="org-keyword">def</span> <span class="org-function-name">traverse_preorder</span>(<span class="org-keyword">self</span>, func: Callable[[Node], <span class="org-constant">None</span>]):
+    <span class="org-keyword">return</span> <span class="org-keyword">self</span>._traverse_preorder(<span class="org-keyword">self</span>.root, func)
+
+<span class="org-keyword">def</span> <span class="org-function-name">_traverse_preorder</span>(<span class="org-keyword">self</span>, x: Optional[Node], func: Callable[[Node], <span class="org-constant">None</span>]):
+    <span class="org-keyword">if</span> x <span class="org-keyword">is</span> <span class="org-constant">None</span>:
+        <span class="org-keyword">return</span>
+    func(x)
+    <span class="org-keyword">self</span>._traverse_preorder(x.left, func)
+    <span class="org-keyword">self</span>._traverse_preorder(x.right, func)
+
+<span class="org-keyword">def</span> <span class="org-function-name">traverse_inorder</span>(<span class="org-keyword">self</span>, func: Callable[[Node], <span class="org-constant">None</span>]):
+    <span class="org-keyword">return</span> <span class="org-keyword">self</span>._traverse_inorder(<span class="org-keyword">self</span>.root, func)
+
+<span class="org-keyword">def</span> <span class="org-function-name">_traverse_inorder</span>(<span class="org-keyword">self</span>, x: Optional[Node], func: Callable[[Node], <span class="org-constant">None</span>]):
+    <span class="org-keyword">if</span> x <span class="org-keyword">is</span> <span class="org-constant">None</span>:
+        <span class="org-keyword">return</span>
+    <span class="org-keyword">self</span>._traverse_inorder(x.left, func)
+    func(x)
+    <span class="org-keyword">self</span>._traverse_inorder(x.right, func)
+
+<span class="org-keyword">def</span> <span class="org-function-name">traverse_postorder</span>(<span class="org-keyword">self</span>, func: Callable[[Node], <span class="org-constant">None</span>]):
+    <span class="org-keyword">return</span> <span class="org-keyword">self</span>._traverse_postorder(<span class="org-keyword">self</span>.root, func)
+
+<span class="org-keyword">def</span> <span class="org-function-name">_traverse_postorder</span>(<span class="org-keyword">self</span>, x: Optional[Node], func: Callable[[Node], <span class="org-constant">None</span>]):
+    <span class="org-keyword">if</span> x <span class="org-keyword">is</span> <span class="org-constant">None</span>:
+        <span class="org-keyword">return</span>
+    <span class="org-keyword">self</span>._traverse_postorder(x.left, func)
+    <span class="org-keyword">self</span>._traverse_postorder(x.right, func)
+    func(x)
+</pre></div></div>
+</div>
+
+<div id="outline-container-h-BFS" class="outline-4">
+<h4 id="h-BFS"><span class="section-number-4">3.6.1.</span> BFS</h4>
+<div class="outline-text-4" id="text-h-BFS">
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#__NREF__code">binary_search_tree_class_methods</a></span>(8/9) <span class="lilac-caption-link-symbol"><a href="#__NREF__binary_search_tree_class_methods-8">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__binary_search_tree_class_methods-8"><span class="org-keyword">def</span> <span class="org-function-name">bfs</span>(<span class="org-keyword">self</span>, func: Callable[[Node], <span class="org-constant">None</span>]):
+    <span class="org-keyword">return</span> <span class="org-keyword">self</span>._bfs(<span class="org-keyword">self</span>.root, func)
+
+<span class="org-keyword">def</span> <span class="org-function-name">_bfs</span>(<span class="org-keyword">self</span>, x: Optional[Node], func: Callable[[Node], <span class="org-constant">None</span>]):
+    <span class="org-keyword">if</span> x <span class="org-keyword">is</span> <span class="org-constant">None</span>:
+        <span class="org-keyword">return</span>
+
+    <span class="org-variable-name">nodes_at_current_depth</span> <span class="org-operator">=</span> [x]
+    <span class="org-keyword">while</span> nodes_at_current_depth:
+        <span class="org-comment-delimiter"># </span><span class="org-comment">Process all nodes at current depth.</span>
+        <span class="org-keyword">for</span> node <span class="org-keyword">in</span> nodes_at_current_depth:
+            func(node)
+
+        <span class="org-comment-delimiter"># </span><span class="org-comment">Now add all nodes at the next depth.</span>
+        <span class="org-variable-name">children</span> <span class="org-operator">=</span> []
+        <span class="org-keyword">for</span> node <span class="org-keyword">in</span> nodes_at_current_depth:
+            <span class="org-keyword">if</span> <span class="org-keyword">not</span> node:
+                <span class="org-keyword">continue</span>
+            <span class="org-keyword">if</span> node.left:
+                children.append(node.left)
+            <span class="org-keyword">if</span> node.right:
+                children.append(node.right)
+
+        <span class="org-comment-delimiter"># </span><span class="org-comment">Repeat the loop at the next depth.</span>
+        <span class="org-variable-name">nodes_at_current_depth</span> <span class="org-operator">=</span> children
+</pre></div></div><div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#__NREF__code">binary_search_tree_class_methods</a></span>(9/9) <span class="lilac-caption-link-symbol"><a href="#__NREF__binary_search_tree_class_methods-9">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__binary_search_tree_class_methods-9"><span class="org-keyword">def</span> <span class="org-function-name">bfs_single_pass</span>(<span class="org-keyword">self</span>, func: Callable[[Node], <span class="org-constant">None</span>]):
+    <span class="org-keyword">return</span> <span class="org-keyword">self</span>._bfs(<span class="org-keyword">self</span>.root, func)
+
+<span class="org-keyword">def</span> <span class="org-function-name">_bfs_single_pass</span>(<span class="org-keyword">self</span>, x: Optional[Node], func: Callable[[Node], <span class="org-constant">None</span>]):
+    <span class="org-keyword">if</span> x <span class="org-keyword">is</span> <span class="org-constant">None</span>:
+        <span class="org-keyword">return</span>
+
+    <span class="org-variable-name">q</span> <span class="org-operator">=</span> deque([x])
+    <span class="org-keyword">while</span> q:
+        <span class="org-comment-delimiter"># </span><span class="org-comment">Process the head of the queue. As we process each one, just before we</span>
+        <span class="org-comment-delimiter"># </span><span class="org-comment">discard it we check if it has children, and if so, add them to the end</span>
+        <span class="org-comment-delimiter"># </span><span class="org-comment">of the queue.</span>
+
+        <span class="org-variable-name">node</span> <span class="org-operator">=</span> q.popleft()
+        <span class="org-keyword">if</span> <span class="org-keyword">not</span> node:
+            <span class="org-keyword">continue</span>
+
+        func(node)
+
+        <span class="org-comment-delimiter"># </span><span class="org-comment">Add this node's children, if any.</span>
+        <span class="org-keyword">if</span> node.left:
+            q.append(node.left)
+        <span class="org-keyword">if</span> node.right:
+            q.append(node.right)
+</pre></div></div>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-Tests" class="outline-2">
+<h2 id="h-Tests"><span class="section-number-2">4.</span> Tests</h2>
+<div class="outline-text-2" id="text-h-Tests">
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><label class="org-src-name">Tests</label><span class="lilac-caption-link-symbol"><a href="#Tests">&#x1f517;</a></span></div><pre class="src src-python" id="Tests"><span class="org-keyword">from</span> __future__ <span class="org-keyword">import</span> annotations
+<span class="org-keyword">from</span> hypothesis <span class="org-keyword">import</span> given, strategies <span class="org-keyword">as</span> st
+<span class="org-keyword">import</span> unittest
+
+<span class="org-keyword">from</span> .binary_search_tree <span class="org-keyword">import</span> BinarySearchTree, Node
+
+<span class="org-keyword">class</span> <span class="org-type">Test</span>(unittest.TestCase):
+    <span class="lilac-child-link-from-parent"><a href="#__NREF__test_cases-1">test_cases</a></span>
+
+<span class="org-keyword">if</span> <span class="org-builtin">__name__</span> <span class="org-operator">==</span> <span class="org-string">"__main__"</span>:
+    unittest.main(<span class="org-constant">exit</span><span class="org-operator">=</span><span class="org-constant">False</span>)
+</pre></div></div>
+</div>
+
+<div id="outline-container-h-Initialization-1" class="outline-3">
+<h3 id="h-Initialization-1"><span class="section-number-3">4.1.</span> Initialization</h3>
+<div class="outline-text-3" id="text-h-Initialization-1">
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#Tests">test_cases</a></span>(1/8) <span class="lilac-caption-link-symbol"><a href="#__NREF__test_cases-1">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__test_cases-1"><span class="org-keyword">def</span> <span class="org-function-name">test_init_empty</span>(<span class="org-keyword">self</span>):
+    <span class="org-variable-name">t</span> <span class="org-operator">=</span> BinarySearchTree()
+    <span class="org-keyword">self</span>.assertEqual(0, t.size())
+
+<span class="org-keyword">def</span> <span class="org-function-name">test_init_nonempty</span>(<span class="org-keyword">self</span>):
+    <span class="org-variable-name">root</span> <span class="org-operator">=</span> Node(50, <span class="org-string">"a"</span>)
+    <span class="org-variable-name">t</span> <span class="org-operator">=</span> BinarySearchTree(root)
+    <span class="org-keyword">self</span>.assertEqual(1, t.size())
+</pre></div></div>
+</div>
+</div>
+
+<div id="outline-container-h-Insertion-1" class="outline-3">
+<h3 id="h-Insertion-1"><span class="section-number-3">4.2.</span> Insertion</h3>
+<div class="outline-text-3" id="text-h-Insertion-1">
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#Tests">test_cases</a></span>(2/8) <span class="lilac-caption-link-symbol"><a href="#__NREF__test_cases-2">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__test_cases-2"><span class="org-keyword">def</span> <span class="org-function-name">test_insertion</span>(<span class="org-keyword">self</span>):
+    <span class="org-variable-name">t</span> <span class="org-operator">=</span> BinarySearchTree()
+    <span class="org-keyword">self</span>.assertEqual(0, t.size())
+    t.insert(50, <span class="org-string">"foo"</span>)
+    <span class="org-keyword">self</span>.assertEqual(1, t.size())
+    <span class="org-comment-delimiter"># </span><span class="org-comment">Inserting the same key (different value) results in the same size, because</span>
+    <span class="org-comment-delimiter"># </span><span class="org-comment">the old node with the same key is replaced.</span>
+    t.insert(50, <span class="org-string">"bar"</span>)
+    <span class="org-keyword">self</span>.assertEqual(1, t.size())
+    <span class="org-comment-delimiter"># </span><span class="org-comment">Inserting a different key grows the tree by 1 node.</span>
+    t.insert_int(51)
+    <span class="org-keyword">self</span>.assertEqual(2, t.size())
+    t.insert_int(52)
+    <span class="org-keyword">self</span>.assertEqual(3, t.size())
+</pre></div></div>
+</div>
+</div>
+
+<div id="outline-container-h-Lookup-1" class="outline-3">
+<h3 id="h-Lookup-1"><span class="section-number-3">4.3.</span> Lookup</h3>
+<div class="outline-text-3" id="text-h-Lookup-1">
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#Tests">test_cases</a></span>(3/8) <span class="lilac-caption-link-symbol"><a href="#__NREF__test_cases-3">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__test_cases-3"><span class="org-keyword">def</span> <span class="org-function-name">test_lookup</span>(<span class="org-keyword">self</span>):
+    <span class="org-variable-name">t</span> <span class="org-operator">=</span> BinarySearchTree()
+    <span class="org-keyword">self</span>.assertEqual(t.lookup(5), <span class="org-constant">None</span>)
+    t.insert_int(100)
+    <span class="org-keyword">self</span>.assertEqual(t.lookup(100), <span class="org-string">"val=100"</span>)
+    <span class="org-comment-delimiter"># </span><span class="org-comment">Manual insertion (bypassing insert_int()) allows us to set the value</span>
+    <span class="org-comment-delimiter"># </span><span class="org-comment">directly.</span>
+    t.insert(100, <span class="org-string">"b"</span>)
+    <span class="org-keyword">self</span>.assertEqual(t.lookup(100), <span class="org-string">"b"</span>)
+</pre></div></div>
+</div>
+</div>
+
+<div id="outline-container-h-Deletion-1" class="outline-3">
+<h3 id="h-Deletion-1"><span class="section-number-3">4.4.</span> Deletion</h3>
+<div class="outline-text-3" id="text-h-Deletion-1">
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#Tests">test_cases</a></span>(4/8) <span class="lilac-caption-link-symbol"><a href="#__NREF__test_cases-4">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__test_cases-4"><span class="org-keyword">def</span> <span class="org-function-name">test_deletion</span>(<span class="org-keyword">self</span>):
+    <span class="org-comment-delimiter"># </span><span class="org-comment">Deletion on an empty tree is a NOP.</span>
+    <span class="org-variable-name">t</span> <span class="org-operator">=</span> BinarySearchTree()
+    <span class="org-keyword">self</span>.assertEqual(t.size(), 0)
+    t.delete(5)
+    <span class="org-keyword">self</span>.assertEqual(t.size(), 0)
+
+    <span class="org-comment-delimiter"># </span><span class="org-comment">Delete the root node (no child).</span>
+    <span class="org-variable-name">t</span> <span class="org-operator">=</span> BinarySearchTree()
+    t.insert_int(3)
+    t.delete(3)
+    <span class="org-keyword">self</span>.assertEqual(t.size(), 0)
+
+    <span class="org-comment-delimiter"># </span><span class="org-comment">Delete the root node (successor is left child).</span>
+    <span class="org-variable-name">t</span> <span class="org-operator">=</span> BinarySearchTree()
+    t.insert_int(3, 1)
+    <span class="org-keyword">self</span>.assertEqual(t.size(), 2)
+    t.delete(3)
+    <span class="org-keyword">self</span>.assertEqual(t.size(), 1)
+    <span class="org-keyword">self</span>.assertEqual(t.root.val, <span class="org-string">"val=1"</span>)
+
+    <span class="org-comment-delimiter"># </span><span class="org-comment">Delete the root node (successor is right child).</span>
+    <span class="org-variable-name">t</span> <span class="org-operator">=</span> BinarySearchTree()
+    t.insert_int(3, 4)
+    <span class="org-keyword">self</span>.assertEqual(t.size(), 2)
+    t.delete(3)
+    <span class="org-keyword">self</span>.assertEqual(t.size(), 1)
+    <span class="org-keyword">self</span>.assertEqual(t.root.val, <span class="org-string">"val=4"</span>)
+
+    <span class="org-comment-delimiter"># </span><span class="org-comment">Delete the root node (has 2 children; replacement is successor of right</span>
+    <span class="org-comment-delimiter"># </span><span class="org-comment">child, but the right child itself is the successor because it has no</span>
+    <span class="org-comment-delimiter"># </span><span class="org-comment">children on the left).</span>
+    <span class="org-variable-name">t</span> <span class="org-operator">=</span> BinarySearchTree()
+    t.insert_int(3, 4, 1, 5, 2)
+    <span class="org-keyword">self</span>.assertEqual(t.size(), 5)
+    <span class="org-keyword">self</span>.assertEqual(t.root.val, <span class="org-string">"val=3"</span>)
+    <span class="org-keyword">self</span>.assertEqual(t.root.left.val, <span class="org-string">"val=1"</span>)
+    <span class="org-keyword">self</span>.assertEqual(t.root.left.right.val, <span class="org-string">"val=2"</span>)
+    <span class="org-keyword">self</span>.assertEqual(t.root.right.val, <span class="org-string">"val=4"</span>)
+    <span class="org-keyword">self</span>.assertEqual(t.root.right.right.val, <span class="org-string">"val=5"</span>)
+    t.delete(3)
+    <span class="org-keyword">self</span>.assertEqual(t.size(), 4)
+    <span class="org-keyword">self</span>.assertEqual(t.root.val, <span class="org-string">"val=4"</span>)
+    <span class="org-keyword">self</span>.assertEqual(t.root.left.val, <span class="org-string">"val=1"</span>)
+    <span class="org-keyword">self</span>.assertEqual(t.root.left.right.val, <span class="org-string">"val=2"</span>)
+    <span class="org-keyword">self</span>.assertEqual(t.root.right.val, <span class="org-string">"val=5"</span>)
+
+    <span class="org-variable-name">t</span> <span class="org-operator">=</span> BinarySearchTree()
+    t.insert_int(3, 5, 1, 4, 2, 6)
+    <span class="org-keyword">self</span>.assertEqual(t.size(), 6)
+    <span class="org-keyword">self</span>.assertEqual(t.root.val, <span class="org-string">"val=3"</span>)
+    <span class="org-keyword">self</span>.assertEqual(t.root.left.val, <span class="org-string">"val=1"</span>)
+    <span class="org-keyword">self</span>.assertEqual(t.root.left.right.val, <span class="org-string">"val=2"</span>)
+    <span class="org-keyword">self</span>.assertEqual(t.root.right.val, <span class="org-string">"val=5"</span>)
+    <span class="org-keyword">self</span>.assertEqual(t.root.right.left.val, <span class="org-string">"val=4"</span>)
+    <span class="org-keyword">self</span>.assertEqual(t.root.right.right.val, <span class="org-string">"val=6"</span>)
+    t.delete(5)
+    <span class="org-keyword">self</span>.assertEqual(t.size(), 5)
+    <span class="org-keyword">self</span>.assertEqual(t.root.val, <span class="org-string">"val=3"</span>)
+    <span class="org-keyword">self</span>.assertEqual(t.root.left.val, <span class="org-string">"val=1"</span>)
+    <span class="org-keyword">self</span>.assertEqual(t.root.left.left, <span class="org-constant">None</span>)
+    <span class="org-keyword">self</span>.assertEqual(t.root.left.right.val, <span class="org-string">"val=2"</span>)
+    <span class="org-keyword">self</span>.assertEqual(t.root.right.val, <span class="org-string">"val=6"</span>)
+    <span class="org-keyword">self</span>.assertEqual(t.root.right.left.val, <span class="org-string">"val=4"</span>)
+    <span class="org-keyword">self</span>.assertEqual(t.root.right.right, <span class="org-constant">None</span>)
+
+    <span class="org-variable-name">t</span> <span class="org-operator">=</span> BinarySearchTree()
+    t.insert_int(2, 5, 7, 4, 3, 9, 1, 6)
+    <span class="org-keyword">self</span>.assertEqual(t.size(), 8)
+    <span class="org-keyword">self</span>.assertEqual(t.root.val, <span class="org-string">"val=2"</span>)
+    <span class="org-keyword">self</span>.assertEqual(t.root.left.val, <span class="org-string">"val=1"</span>)
+    <span class="org-keyword">self</span>.assertEqual(t.root.right.val, <span class="org-string">"val=5"</span>)
+    <span class="org-keyword">self</span>.assertEqual(t.root.right.left.val, <span class="org-string">"val=4"</span>)
+    <span class="org-keyword">self</span>.assertEqual(t.root.right.left.left.val, <span class="org-string">"val=3"</span>)
+    <span class="org-keyword">self</span>.assertEqual(t.root.right.right.val, <span class="org-string">"val=7"</span>)
+    <span class="org-keyword">self</span>.assertEqual(t.root.right.right.left.val, <span class="org-string">"val=6"</span>)
+    <span class="org-keyword">self</span>.assertEqual(t.root.right.right.right.val, <span class="org-string">"val=9"</span>)
+    t.delete(5)
+    <span class="org-keyword">self</span>.assertEqual(t.size(), 7)
+    <span class="org-keyword">self</span>.assertEqual(t.root.val, <span class="org-string">"val=2"</span>)
+    <span class="org-keyword">self</span>.assertEqual(t.root.left.val, <span class="org-string">"val=1"</span>)
+    <span class="org-keyword">self</span>.assertEqual(t.root.right.val, <span class="org-string">"val=6"</span>)
+    <span class="org-keyword">self</span>.assertEqual(t.root.right.left.val, <span class="org-string">"val=4"</span>)
+    <span class="org-keyword">self</span>.assertEqual(t.root.right.left.left.val, <span class="org-string">"val=3"</span>)
+    <span class="org-keyword">self</span>.assertEqual(t.root.right.right.val, <span class="org-string">"val=7"</span>)
+    <span class="org-keyword">self</span>.assertEqual(t.root.right.right.right.val, <span class="org-string">"val=9"</span>)
+</pre></div></div>
+</div>
+
+<div id="outline-container-h-Property-based-tests" class="outline-4">
+<h4 id="h-Property-based-tests"><span class="section-number-4">4.4.1.</span> Property based tests</h4>
+<div class="outline-text-4" id="text-h-Property-based-tests">
+<p>
+Randomly generate keys to insert, and randomly delete some of them.
+</p>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#Tests">test_cases</a></span>(5/8) <span class="lilac-caption-link-symbol"><a href="#__NREF__test_cases-5">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__test_cases-5"><span class="org-type">@given</span>(st.lists(st.integers(min_value<span class="org-operator">=</span>0, max_value<span class="org-operator">=</span>64),
+                min_size<span class="org-operator">=</span>0,
+                max_size<span class="org-operator">=</span>64),
+       st.lists(st.integers(min_value<span class="org-operator">=</span>0, max_value<span class="org-operator">=</span>32),
+                min_size<span class="org-operator">=</span>0,
+                max_size<span class="org-operator">=</span>32))
+<span class="org-keyword">def</span> <span class="org-function-name">test_delete_random_at_random</span>(<span class="org-keyword">self</span>, keys: <span class="org-builtin">list</span>[<span class="org-builtin">int</span>], to_delete: <span class="org-builtin">list</span>[<span class="org-builtin">int</span>]):
+    <span class="org-variable-name">keys_unique</span> <span class="org-operator">=</span> <span class="org-builtin">list</span>(<span class="org-builtin">dict</span>.fromkeys(keys))
+    <span class="org-variable-name">to_delete_unique</span> <span class="org-operator">=</span> <span class="org-builtin">list</span>(<span class="org-builtin">dict</span>.fromkeys(to_delete))
+    <span class="org-variable-name">starting_size</span> <span class="org-operator">=</span> <span class="org-builtin">len</span>(keys_unique)
+    <span class="org-variable-name">t</span> <span class="org-operator">=</span> BinarySearchTree()
+    t.insert_int(<span class="org-operator">*</span>keys)
+    <span class="org-keyword">self</span>.assertEqual(t.size(), starting_size)
+
+    <span class="org-comment-delimiter"># </span><span class="org-comment">Repeatedly delete from a random node in the tree.</span>
+    <span class="org-variable-name">deleted_count</span> <span class="org-operator">=</span> 0
+    <span class="org-keyword">for</span> delete_me <span class="org-keyword">in</span> to_delete_unique:
+        <span class="org-variable-name">size_before</span> <span class="org-operator">=</span> t.size()
+        t.delete(delete_me)
+        <span class="org-variable-name">size_after</span> <span class="org-operator">=</span> t.size()
+        <span class="org-comment-delimiter"># </span><span class="org-comment">Only count the deletion if we actually deleted a node. The presumption</span>
+        <span class="org-comment-delimiter"># </span><span class="org-comment">here is that t.delete() only deletes a single node if it does delete</span>
+        <span class="org-comment-delimiter"># </span><span class="org-comment">it (that it doesn't grow the tree, for example).</span>
+        <span class="org-keyword">if</span> size_before <span class="org-operator">!=</span> size_after:
+            <span class="org-variable-name">deleted_count</span> <span class="org-operator">+=</span> 1
+    <span class="org-keyword">self</span>.assertEqual(t.size(), starting_size <span class="org-operator">-</span> deleted_count)
+</pre></div></div><p>
+If we delete every node, then the tree should have size 0.
+</p>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#Tests">test_cases</a></span>(6/8) <span class="lilac-caption-link-symbol"><a href="#__NREF__test_cases-6">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__test_cases-6"><span class="org-type">@given</span>(st.lists(st.integers(min_value<span class="org-operator">=</span>0, max_value<span class="org-operator">=</span>32),
+                min_size<span class="org-operator">=</span>0,
+                max_size<span class="org-operator">=</span>32))
+<span class="org-keyword">def</span> <span class="org-function-name">test_delete_random_tree_drain_all_keys</span>(<span class="org-keyword">self</span>, keys: <span class="org-builtin">list</span>[<span class="org-builtin">int</span>]):
+    <span class="org-variable-name">keys_unique</span> <span class="org-operator">=</span> <span class="org-builtin">list</span>(<span class="org-builtin">dict</span>.fromkeys(keys))
+    <span class="org-variable-name">t</span> <span class="org-operator">=</span> BinarySearchTree()
+    t.insert_int(<span class="org-operator">*</span>keys)
+    <span class="org-keyword">self</span>.assertEqual(t.size(), <span class="org-builtin">len</span>(keys_unique))
+
+    <span class="org-keyword">for</span> key <span class="org-keyword">in</span> keys:
+        t.delete(key)
+    <span class="org-keyword">self</span>.assertEqual(t.size(), 0)
+</pre></div></div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-Traversal-1" class="outline-3">
+<h3 id="h-Traversal-1"><span class="section-number-3">4.5.</span> Traversal</h3>
+<div class="outline-text-3" id="text-h-Traversal-1">
+<p>
+For these traversals, we construct the following binary tree (the keys are
+integers and the values are just the string representations of the keys, and so
+these redundant values are omitted from the illustration)
+</p>
+
+
+<div id="org0000030" class="figure">
+<p><img src="./binary_search_tree.svg" alt="binary_search_tree.svg" class="org-svg" width="400px">
+</p>
+</div>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#Tests">test_cases</a></span>(7/8) <span class="lilac-caption-link-symbol"><a href="#__NREF__test_cases-7">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__test_cases-7"><span class="org-keyword">def</span> <span class="org-function-name">test_traversal</span>(<span class="org-keyword">self</span>):
+    <span class="org-variable-name">traversal_history</span> <span class="org-operator">=</span> []
+    <span class="org-keyword">def</span> <span class="org-function-name">record_traversal_history</span>(x: Node):
+        traversal_history.append(x.key)
+
+    <span class="org-variable-name">t</span> <span class="org-operator">=</span> BinarySearchTree()
+    t.insert_int(5, 1, 9, 4, 7, 2, 10, 0)
+
+    t.traverse_preorder(record_traversal_history)
+    <span class="org-keyword">self</span>.assertEqual(traversal_history, [5, 1, 0, 4, 2, 9, 7, 10])
+
+    <span class="org-variable-name">traversal_history</span> <span class="org-operator">=</span> []
+    t.traverse_inorder(record_traversal_history)
+    <span class="org-keyword">self</span>.assertEqual(traversal_history, [0, 1, 2, 4, 5, 7, 9, 10])
+
+    <span class="org-variable-name">traversal_history</span> <span class="org-operator">=</span> []
+    t.traverse_postorder(record_traversal_history)
+    <span class="org-keyword">self</span>.assertEqual(traversal_history, [0, 2, 4, 1, 7, 10, 9, 5])
+
+    <span class="org-variable-name">traversal_history</span> <span class="org-operator">=</span> []
+    t.bfs(record_traversal_history)
+    <span class="org-keyword">self</span>.assertEqual(traversal_history, [5, 1, 9, 0, 4, 7, 10, 2])
+
+    <span class="org-variable-name">traversal_history</span> <span class="org-operator">=</span> []
+    t.bfs_single_pass(record_traversal_history)
+    <span class="org-keyword">self</span>.assertEqual(traversal_history, [5, 1, 9, 0, 4, 7, 10, 2])
+</pre></div></div>
+</div>
+
+<div id="outline-container-h-Property-based-tests-1" class="outline-4">
+<h4 id="h-Property-based-tests-1"><span class="section-number-4">4.5.1.</span> Property based tests</h4>
+<div class="outline-text-4" id="text-h-Property-based-tests-1">
+<p>
+But when we do an in-order traversal, we should still get back out the elements
+in order, regardless of what keys were inserted in whichever order.
+</p>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#Tests">test_cases</a></span>(8/8) <span class="lilac-caption-link-symbol"><a href="#__NREF__test_cases-8">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__test_cases-8"><span class="org-type">@given</span>(st.lists(st.integers(min_value<span class="org-operator">=</span>0, max_value<span class="org-operator">=</span>32),
+                min_size<span class="org-operator">=</span>0,
+                max_size<span class="org-operator">=</span>32))
+<span class="org-keyword">def</span> <span class="org-function-name">test_delete_random_keys_are_always_sorted</span>(<span class="org-keyword">self</span>, keys: <span class="org-builtin">list</span>[<span class="org-builtin">int</span>]):
+    <span class="org-variable-name">t</span> <span class="org-operator">=</span> BinarySearchTree()
+    t.insert_int(<span class="org-operator">*</span>keys)
+
+    <span class="org-variable-name">traversal_history</span> <span class="org-operator">=</span> []
+    <span class="org-keyword">def</span> <span class="org-function-name">record_traversal_history</span>(x: Node):
+        traversal_history.append(x.key)
+    t.traverse_inorder(record_traversal_history)
+    <span class="org-variable-name">sorted_traversal_history</span> <span class="org-operator">=</span> <span class="org-builtin">list</span>(<span class="org-builtin">sorted</span>(traversal_history))
+    <span class="org-keyword">self</span>.assertEqual(traversal_history, sorted_traversal_history)
+</pre></div></div>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-Export" class="outline-2">
+<h2 id="h-Export"><span class="section-number-2">5.</span> Export</h2>
+<div class="outline-text-2" id="text-h-Export">
+<div class="org-src-container"><pre class="src src-python" id="org0000007"><span class="org-keyword">from</span> __future__ <span class="org-keyword">import</span> annotations
+<span class="org-keyword">from</span> typing <span class="org-keyword">import</span> Any, Callable, Optional
+<span class="lilac-child-link-from-parent"><a href="#__NREF__code">code</a></span>
+</pre></div>
+</div>
+</div>
+
+<div id="outline-container-h-References" class="outline-2">
+<h2 id="h-References"><span class="section-number-2">6.</span> References</h2>
+<div class="outline-text-2" id="text-h-References">
+<style>.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}</style><div class="csl-bib-body">
+  <div class="csl-entry" id="citeproc_bib_item_1">Sedgewick, R., &#38; Wayne, K. D. (2011). <i>Algorithms</i> (4th ed). Addison-Wesley.</div>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

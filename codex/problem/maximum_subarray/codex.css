@@ -1,0 +1,10 @@
+h1.title {
+    font-family: "Source Serif Pro", serif;
+}
+table.monospace-except-header {
+    font-family: monospace;
+}
+
+table.monospace-except-header thead {
+    font-family: var(--font-serif);
+}

@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Buy and sell stock once</title>
+<meta name="author" content="Linus Arver" />
+<meta name="generator" content="Org Mode" />
+<style>
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { }
+</style>
+<link rel="preconnect" href="/vendor/source-fonts/source-fonts.css" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="/vendor/source-fonts/source-fonts.css">
+<script src="/vendor/jquery-3.6.4.min.js"></script>
+<script src="lilac.js"></script>
+<link rel="stylesheet" type="text/css" href="syntax-highlighting.css"/>
+<link rel="stylesheet" type="text/css" href="lilac.css" />
+<link rel="stylesheet" type="text/css" href="codex.css" />
+<link rel="stylesheet" href="/vendor/source-fonts/source-fonts.css">
+<script>
+// @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&amp;dn=gpl-3.0.txt GPL-v3-or-Later
+     function CodeHighlightOn(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.add("code-highlighted");
+         target.classList.add("code-highlighted");
+       }
+     }
+     function CodeHighlightOff(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.remove("code-highlighted");
+         target.classList.remove("code-highlighted");
+       }
+     }
+// @license-end
+</script>
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    loader: { paths: { "mathjax-newcm": "/vendor/mathjax-newcm-font" } },
+	output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="/vendor/mathjax/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<div id="content" class="content">
+<h1 class="title">Buy and sell stock once</h1>
+<div id="table-of-contents" role="doc-toc">
+
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#h-Problem-statement">1. Problem statement</a>
+<ul>
+<li><a href="#h-Inputs-and-outputs">1.1. Inputs and outputs</a></li>
+</ul>
+</li>
+<li><a href="#h-Insights">2. Insights</a></li>
+<li><a href="#h-Solutions">3. Solutions</a>
+<ul>
+<li><a href="#h-Brute-force">3.1. Brute force</a></li>
+<li><a href="#h-Optimal">3.2. Optimal</a>
+<ul>
+<li><a href="#h-As-maximum-subarray">3.2.1. As maximum subarray</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#h-Tests">4. Tests</a></li>
+<li><a href="#h-References">5. References</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h-Problem-statement" class="outline-2">
+<h2 id="h-Problem-statement"><span class="section-number-2">1.</span> Problem statement</h2>
+<div class="outline-text-2" id="text-h-Problem-statement">
+<p>
+Given a list of prices for a stock over the past N days (one price per day),
+determine the optimum days to buy and sell the stock once to maximize profit
+(<a href="#citeproc_bib_item_1">Aziz et al., 2018, p. 51</a>).
+</p>
+</div>
+
+<div id="outline-container-h-Inputs-and-outputs" class="outline-3">
+<h3 id="h-Inputs-and-outputs"><span class="section-number-3">1.1.</span> Inputs and outputs</h3>
+<div class="outline-text-3" id="text-h-Inputs-and-outputs">
+<ul class="org-ul">
+<li>Input: list of stock prices (positive numbers)</li>
+<li>Output: day to buy the stock, day to sell the stock, and the realized profit
+margin</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-Insights" class="outline-2">
+<h2 id="h-Insights"><span class="section-number-2">2.</span> Insights</h2>
+<div class="outline-text-2" id="text-h-Insights">
+<p>
+Simply taking the minimum and maximum values of the entire range, and comparing
+these two numbers, won't work. Example: <code>[10, 5]</code>. Here the only possible buy
+and sale is to buy at price <code>10</code> and sell on the next day at price <code>5</code>. But
+doing so would result in a loss. If the price is decreasing each day, then
+<i>every</i> possible buy/sell combination will result in a loss. In this situation
+the algorithm should not recommend a buy/sell transaction at all (do nothing).
+</p>
+
+<p>
+Here's another example: <code>[10, 9, 8, 1, 2, 6]</code>. Here the maximum possible profit
+is to buy at <code>1</code> and sell at <code>6</code>, for a profit margin of <code>5</code>. The minimum and
+maximum prices are <code>1</code> and <code>10</code>, which are interesting but don't give us the
+answer.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-Solutions" class="outline-2">
+<h2 id="h-Solutions"><span class="section-number-2">3.</span> Solutions</h2>
+<div class="outline-text-2" id="text-h-Solutions">
+</div>
+
+<div id="outline-container-h-Brute-force" class="outline-3">
+<h3 id="h-Brute-force"><span class="section-number-3">3.1.</span> Brute force</h3>
+<div class="outline-text-3" id="text-h-Brute-force">
+<p>
+Compare every number in the list with every other number. That is, compute every
+possible combinationa of buy/sell dates, and just return the best (max profit)
+dates found.
+</p>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#Tests">brute_force</a></span><span class="lilac-caption-link-symbol"><a href="#__NREF__brute_force">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__brute_force"><span class="org-keyword">def</span> <span class="org-function-name">brute_force</span>(prices: <span class="org-builtin">list</span>[<span class="org-builtin">int</span>]) <span class="org-operator">-&gt;</span> Optional[<span class="org-builtin">tuple</span>[<span class="org-builtin">int</span>, <span class="org-builtin">int</span>, <span class="org-builtin">int</span>]]:
+    <span class="org-keyword">if</span> <span class="org-keyword">not</span> prices:
+        <span class="org-keyword">return</span> <span class="org-constant">None</span>
+
+    <span class="org-variable-name">max_profit_so_far</span> <span class="org-operator">=</span> 0
+    <span class="org-keyword">for</span> buy_date, price_buy <span class="org-keyword">in</span> <span class="org-builtin">enumerate</span>(prices):
+        <span class="org-keyword">for</span> sell_date <span class="org-keyword">in</span> <span class="org-builtin">range</span>(buy_date <span class="org-operator">+</span> 1, <span class="org-builtin">len</span>(prices)):
+            <span class="org-variable-name">profit</span> <span class="org-operator">=</span> prices[sell_date] <span class="org-operator">-</span> price_buy
+            <span class="org-keyword">if</span> profit <span class="org-operator">&gt;</span> max_profit_so_far:
+                <span class="org-variable-name">max_profit_so_far</span> <span class="org-operator">=</span> profit
+                <span class="org-variable-name">transaction_dates</span> <span class="org-operator">=</span> (buy_date, sell_date, profit)
+
+    <span class="org-keyword">if</span> max_profit_so_far:
+        <span class="org-keyword">return</span> transaction_dates
+
+    <span class="org-comment-delimiter"># </span><span class="org-comment">If no profitable trade found, return None.</span>
+    <span class="org-keyword">return</span> <span class="org-constant">None</span>
+</pre></div></div><p>
+The time complexity is \(O(n^2)\) where \(n\) is the length of the list of prices.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-Optimal" class="outline-3">
+<h3 id="h-Optimal"><span class="section-number-3">3.2.</span> Optimal</h3>
+<div class="outline-text-3" id="text-h-Optimal">
+<p>
+For the optimal solution, the key is to pretend to sell on that day, using the
+minimum price found in the previous days as the buying point. The trick here is
+that the previous minimum price calculation can be updated on each iteration
+with just a single <code>min()</code> comparison.
+</p>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#Tests">optimal</a></span><span class="lilac-caption-link-symbol"><a href="#__NREF__optimal">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__optimal"><span class="org-keyword">def</span> <span class="org-function-name">optimal</span>(prices: <span class="org-builtin">list</span>[<span class="org-builtin">int</span>]) <span class="org-operator">-&gt;</span> Optional[<span class="org-builtin">tuple</span>[<span class="org-builtin">int</span>, <span class="org-builtin">int</span>, <span class="org-builtin">int</span>]]:
+    <span class="org-keyword">if</span> <span class="org-keyword">not</span> prices:
+        <span class="org-keyword">return</span> <span class="org-constant">None</span>
+
+    <span class="org-variable-name">min_price_so_far</span> <span class="org-operator">=</span> <span class="org-builtin">float</span>(<span class="org-string">'inf'</span>)
+    <span class="org-variable-name">max_profit</span> <span class="org-operator">=</span> 0
+
+    <span class="org-keyword">for</span> date, price <span class="org-keyword">in</span> <span class="org-builtin">enumerate</span>(prices):
+        <span class="org-keyword">if</span> price <span class="org-operator">&lt;</span> min_price_so_far:
+            <span class="org-variable-name">buy_date</span> <span class="org-operator">=</span> date
+            <span class="org-variable-name">min_price_so_far</span> <span class="org-operator">=</span> <span class="org-builtin">min</span>(price, min_price_so_far)
+
+        <span class="org-variable-name">max_profit_if_sell_now</span> <span class="org-operator">=</span> price <span class="org-operator">-</span> min_price_so_far
+        <span class="org-variable-name">max_profit_prev</span> <span class="org-operator">=</span> max_profit
+        <span class="org-variable-name">max_profit</span> <span class="org-operator">=</span> <span class="org-builtin">max</span>(<span class="org-builtin">int</span>(max_profit_if_sell_now), max_profit)
+
+        <span class="org-keyword">if</span> max_profit <span class="org-operator">&gt;</span> max_profit_prev:
+            <span class="org-variable-name">transaction_dates</span> <span class="org-operator">=</span> (buy_date, date, max_profit)
+
+    <span class="org-keyword">if</span> max_profit:
+        <span class="org-keyword">return</span> transaction_dates
+
+    <span class="org-comment-delimiter"># </span><span class="org-comment">If no profitable trade found, return None.</span>
+    <span class="org-keyword">return</span> <span class="org-constant">None</span>
+</pre></div></div><p>
+The time complexity is \(O(n)\).
+</p>
+</div>
+
+<div id="outline-container-h-As-maximum-subarray" class="outline-4">
+<h4 id="h-As-maximum-subarray"><span class="section-number-4">3.2.1.</span> As maximum subarray</h4>
+<div class="outline-text-4" id="text-h-As-maximum-subarray">
+<p>
+As Cormen et al. (<a href="#citeproc_bib_item_2">2009, p. 69</a>) point out, if we look at stock prices not as the prices
+themselves but as <i>changes</i> in price on each day, then the problem of finding
+the best buy/sell dates is the same as finding the maximum subarray.
+</p>
+
+<p>
+The only annoying thing though, is that the indices are off by 1 (either the
+buy or sell date) because we lose 1 element to construct the <code>changes</code> array
+(the transformation of data from the list of prices to the list of changes is
+lossy). Still, the maximum achievable profit is accurate, and agrees with our
+<code>optimal</code> solution.
+</p>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#Tests">via_max_subarray</a></span><span class="lilac-caption-link-symbol"><a href="#__NREF__via_max_subarray">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__via_max_subarray"><span class="org-keyword">def</span> <span class="org-function-name">via_max_subarray</span>(prices: <span class="org-builtin">list</span>[<span class="org-builtin">int</span>]) <span class="org-operator">-&gt;</span> Optional[<span class="org-builtin">tuple</span>[<span class="org-builtin">int</span>, <span class="org-builtin">int</span>, <span class="org-builtin">int</span>]]:
+    <span class="org-keyword">if</span> <span class="org-keyword">not</span> prices:
+        <span class="org-keyword">return</span> <span class="org-constant">None</span>
+
+    <span class="org-variable-name">changes</span> <span class="org-operator">=</span> [b <span class="org-operator">-</span> a <span class="org-keyword">for</span> (a, b) <span class="org-keyword">in</span> <span class="org-builtin">zip</span>(prices, prices[1:])]
+    <span class="org-variable-name">max_subarray</span> <span class="org-operator">=</span> dp(changes)
+    <span class="org-keyword">if</span> max_subarray <span class="org-keyword">is</span> <span class="org-constant">None</span>:
+        <span class="org-keyword">return</span> <span class="org-constant">None</span>
+
+    <span class="org-keyword">return</span> (max_subarray.end, max_subarray.end, max_subarray.<span class="org-builtin">sum</span>)
+</pre></div></div>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-Tests" class="outline-2">
+<h2 id="h-Tests"><span class="section-number-2">4.</span> Tests</h2>
+<div class="outline-text-2" id="text-h-Tests">
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><label class="org-src-name">Tests</label><span class="lilac-caption-link-symbol"><a href="#Tests">&#x1f517;</a></span></div><pre class="src src-python" id="Tests"><span class="org-keyword">from</span> hypothesis <span class="org-keyword">import</span> given, strategies <span class="org-keyword">as</span> st
+<span class="org-keyword">import</span> unittest
+
+<span class="org-keyword">from</span> typing <span class="org-keyword">import</span> Optional
+
+<span class="org-keyword">from</span> maximum_subarray.maximum_subarray <span class="org-keyword">import</span> dp
+
+<span class="lilac-child-link-from-parent"><a href="#__NREF__brute_force">brute_force</a></span>
+
+<span class="lilac-child-link-from-parent"><a href="#__NREF__optimal">optimal</a></span>
+
+<span class="lilac-child-link-from-parent"><a href="#__NREF__via_max_subarray">via_max_subarray</a></span>
+
+<span class="org-keyword">class</span> <span class="org-type">Test</span>(unittest.TestCase):
+    <span class="org-variable-name">cases</span> <span class="org-operator">=</span> [
+        ([],                      <span class="org-constant">None</span>),
+        ([0],                     <span class="org-constant">None</span>),
+        ([0, 0, 0, 0],            <span class="org-constant">None</span>),
+        ([3, 2, 1],               <span class="org-constant">None</span>),
+        ([5, 25, 100, 50],        (0, 2, 95)),
+        ([5, 25, 100, 1, 50, 99], (3, 5, 98)),
+    ]
+
+    <span class="org-keyword">def</span> <span class="org-function-name">test_simple_cases</span>(<span class="org-keyword">self</span>):
+        <span class="org-keyword">for</span> given_prices, expected <span class="org-keyword">in</span> <span class="org-keyword">self</span>.cases:
+            <span class="org-keyword">self</span>.assertEqual(brute_force(given_prices), expected)
+            <span class="org-keyword">self</span>.assertEqual(optimal(given_prices), expected)
+
+            <span class="org-comment-delimiter"># </span><span class="org-comment">Check via_max_subarray() (partial) solution. We can't check the</span>
+            <span class="org-comment-delimiter"># </span><span class="org-comment">exact buy/sell dates because of off-by-1 errors.</span>
+            <span class="org-variable-name">result</span> <span class="org-operator">=</span> via_max_subarray(given_prices)
+            <span class="org-keyword">if</span> expected <span class="org-keyword">is</span> <span class="org-keyword">not</span> <span class="org-constant">None</span> <span class="org-keyword">and</span> result <span class="org-keyword">is</span> <span class="org-keyword">not</span> <span class="org-constant">None</span>:
+                <span class="org-keyword">self</span>.assertEqual(result[2], expected[2])
+            <span class="org-keyword">else</span>:
+                <span class="org-keyword">self</span>.assertEqual(result, expected)
+
+    <span class="org-type">@given</span>(st.lists(st.integers(min_value<span class="org-operator">=</span>1, max_value<span class="org-operator">=</span>100), min_size<span class="org-operator">=</span>0,
+                    max_size<span class="org-operator">=</span>14))
+    <span class="org-keyword">def</span> <span class="org-function-name">test_random</span>(<span class="org-keyword">self</span>, given_prices: <span class="org-builtin">list</span>[<span class="org-builtin">int</span>]):
+        <span class="org-variable-name">got</span> <span class="org-operator">=</span> brute_force(given_prices)
+
+        <span class="org-comment-delimiter"># </span><span class="org-comment">If the prices were not always decreasing, then there must have been</span>
+        <span class="org-comment-delimiter"># </span><span class="org-comment">some optimum buy/sell date.</span>
+        <span class="org-keyword">if</span> given_prices <span class="org-keyword">and</span> <span class="org-builtin">max</span>(given_prices) <span class="org-operator">&gt;</span> given_prices[0]:
+            <span class="org-keyword">self</span>.assertNotEqual(got, <span class="org-constant">None</span>)
+
+        <span class="org-comment-delimiter"># </span><span class="org-comment">Check that the optimal solution agrees with brute force.</span>
+        <span class="org-keyword">self</span>.assertEqual(optimal(given_prices), got)
+
+        <span class="org-comment-delimiter"># </span><span class="org-comment">Check via_max_subarray() (partial) solution, like we did for</span>
+        <span class="org-comment-delimiter"># </span><span class="org-comment">test_simple_cases().</span>
+        <span class="org-variable-name">result</span> <span class="org-operator">=</span> via_max_subarray(given_prices)
+        <span class="org-keyword">if</span> got <span class="org-keyword">is</span> <span class="org-keyword">not</span> <span class="org-constant">None</span> <span class="org-keyword">and</span> result <span class="org-keyword">is</span> <span class="org-keyword">not</span> <span class="org-constant">None</span>:
+            <span class="org-keyword">self</span>.assertEqual(result[2], got[2])
+        <span class="org-keyword">else</span>:
+            <span class="org-keyword">self</span>.assertEqual(result, got)
+
+<span class="org-keyword">if</span> <span class="org-builtin">__name__</span> <span class="org-operator">==</span> <span class="org-string">"__main__"</span>:
+    unittest.main(<span class="org-constant">exit</span><span class="org-operator">=</span><span class="org-constant">False</span>)
+</pre></div></div>
+</div>
+</div>
+
+<div id="outline-container-h-References" class="outline-2">
+<h2 id="h-References"><span class="section-number-2">5.</span> References</h2>
+<div class="outline-text-2" id="text-h-References">
+<style>.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}</style><div class="csl-bib-body">
+  <div class="csl-entry" id="citeproc_bib_item_1">Aziz, A., Lee, T.-H., &#38; Prakash, A. (2018). <i>Elements of Programming Interviews in Python: The Insiders’ Guide</i>. CreateSpace Independent Publishing Platform (25 July. 2018).</div>
+  <div class="csl-entry" id="citeproc_bib_item_2">Cormen, T. H., Leiserson, C. E., Rivest, R. L., &#38; Stein, C. (2009). <i>Introduction to Algorithms</i> (3rd ed). MIT Press.</div>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

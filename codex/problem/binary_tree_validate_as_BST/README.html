@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Validate binary tree as BST</title>
+<meta name="author" content="Linus Arver" />
+<meta name="generator" content="Org Mode" />
+<style>
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { }
+</style>
+<link rel="preconnect" href="/vendor/source-fonts/source-fonts.css" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="/vendor/source-fonts/source-fonts.css">
+<script src="/vendor/jquery-3.6.4.min.js"></script>
+<script src="lilac.js"></script>
+<link rel="stylesheet" type="text/css" href="syntax-highlighting.css"/>
+<link rel="stylesheet" type="text/css" href="lilac.css" />
+<link rel="stylesheet" type="text/css" href="codex.css" />
+<link rel="stylesheet" href="/vendor/source-fonts/source-fonts.css">
+<script>
+// @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&amp;dn=gpl-3.0.txt GPL-v3-or-Later
+     function CodeHighlightOn(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.add("code-highlighted");
+         target.classList.add("code-highlighted");
+       }
+     }
+     function CodeHighlightOff(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.remove("code-highlighted");
+         target.classList.remove("code-highlighted");
+       }
+     }
+// @license-end
+</script>
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    loader: { paths: { "mathjax-newcm": "/vendor/mathjax-newcm-font" } },
+	output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="/vendor/mathjax/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<div id="content" class="content">
+<h1 class="title">Validate binary tree as BST</h1>
+<div id="table-of-contents" role="doc-toc">
+
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#h-Problem-statement">1. Problem statement</a></li>
+<li><a href="#h-Insights">2. Insights</a>
+<ul>
+<li><a href="#h-Acceptable-ranges">2.1. Acceptable ranges</a></li>
+</ul>
+</li>
+<li><a href="#h-Solution">3. Solution</a>
+<ul>
+<li><a href="#h-Brute-force">3.1. Brute force?</a></li>
+<li><a href="#h-DFS">3.2. DFS</a>
+<ul>
+<li><a href="#h-By-recording-traversal-history">3.2.1. By recording traversal history</a></li>
+<li><a href="#h-Without-recording-traversal-history">3.2.2. Without recording traversal history</a></li>
+<li><a href="#h-Using-ranges">3.2.3. Using ranges</a></li>
+</ul>
+</li>
+<li><a href="#h-Optimal--BFS">3.3. Optimal (BFS)</a></li>
+</ul>
+</li>
+<li><a href="#h-Tests">4. Tests</a>
+<ul>
+<li><a href="#h-Basic-tests">4.1. Basic tests</a></li>
+<li><a href="#h-Property-based-tests">4.2. Property-based tests</a></li>
+</ul>
+</li>
+<li><a href="#h-References">5. References</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h-Problem-statement" class="outline-2">
+<h2 id="h-Problem-statement"><span class="section-number-2">1.</span> Problem statement</h2>
+<div class="outline-text-2" id="text-h-Problem-statement">
+<p>
+Check if a given binary tree is also (already) a binary search tree (BST) (<a href="#citeproc_bib_item_1">Aziz et al., 2018, p. 213</a>).
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-Insights" class="outline-2">
+<h2 id="h-Insights"><span class="section-number-2">2.</span> Insights</h2>
+<div class="outline-text-2" id="text-h-Insights">
+</div>
+
+<div id="outline-container-h-Acceptable-ranges" class="outline-3">
+<h3 id="h-Acceptable-ranges"><span class="section-number-3">2.1.</span> Acceptable ranges</h3>
+<div class="outline-text-3" id="text-h-Acceptable-ranges">
+<p>
+Each node holds a value, and there is a special relationship between the parent
+and its left and right children. Namely, the left child cannot hold any value
+that is greater than the parent. Likewise, the right child cannot hold a value
+that is smaller than the parent value. These ranges (called "intervals" in math)
+must be respected by all subsequent child nodes.
+</p>
+
+
+<div id="org0000000" class="figure">
+<p><img src="./bst_subtree_ranges.svg" alt="bst_subtree_ranges.svg" class="org-svg" width="600px">
+</p>
+<p><span class="figure-number">Figure 1: </span>Ranges for BST subtrees</p>
+</div>
+
+<p>
+In Figure 1, node <b>A</b> can contain nodes from negative infinity (assuming we have
+infinite memory) all the way up to 24. Similar rules apply for all other nodes.
+We can summarise the acceptable interval ranges as follows:
+</p>
+
+\begin{align*}
+A &= ({-\infty},{25}) \\
+B &= (25,50) \\
+C &= (50,75) \\
+D &= (75, {\infty}).
+\end{align*}
+
+<p>
+In Aziz et al. (<a href="#citeproc_bib_item_1">2018, p. 213</a>), the authors use closed interval ranges, such that the
+above would instead look like this:
+</p>
+
+\begin{align*}
+A &= ({-\infty},{25}] \\
+B &= [25,50] \\
+C &= [50,75] \\
+D &= [75, {\infty}).
+\end{align*}
+
+<div class="sidenote" id="org0000001">
+<p>
+The square brackets denote that the number it is next to is <i>included</i> in the
+range. For example, assuming we're using integers and not real numbers,
+\([25,50]\) means the range [25, 26, &#x2026;, 50], whereas \((25,50)\) means the range
+[26, 27, &#x2026;, 49].
+</p>
+
+</div>
+
+<p>
+But, we don't use this definition because, for simplicity, we assume that our
+BST does not allow the same key to appear on different nodes (i.e., duplicate
+keys are not allowed in our BST).
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-Solution" class="outline-2">
+<h2 id="h-Solution"><span class="section-number-2">3.</span> Solution</h2>
+<div class="outline-text-2" id="text-h-Solution">
+<p>
+We'll be using our <a href="../binary_tree/README.html">binary tree</a>
+implementation to solve this problem.
+</p>
+</div>
+
+<div id="outline-container-h-Brute-force" class="outline-3">
+<h3 id="h-Brute-force"><span class="section-number-3">3.1.</span> Brute force?</h3>
+<div class="outline-text-3" id="text-h-Brute-force">
+<p>
+In Aziz et al. (<a href="#citeproc_bib_item_1">2018, p. 213</a>), the authors describe a brute force approach where we
+essentially pick out the maximum or minimum values in each node of the tree
+(treating each node as its own independent binary tree), and then check that
+those minimums and maximums are in line with the value at the corresponding root
+node.
+</p>
+
+<div class="sidenote" id="org0000002">
+<p>
+Ease of implementation, and the ensuing trust that the code is obviously free of
+bugs, is the most important consideration for any brute force solution.
+</p>
+
+</div>
+
+<p>
+This could be considered "brute force" but it seems overly contrived. The
+problem with this approach is that it appears more difficult to code than the
+better alternatives presented in the text. Therefore we skip implementing this
+solution.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-DFS" class="outline-3">
+<h3 id="h-DFS"><span class="section-number-3">3.2.</span> DFS</h3>
+<div class="outline-text-3" id="text-h-DFS">
+</div>
+
+<div id="outline-container-h-By-recording-traversal-history" class="outline-4">
+<h4 id="h-By-recording-traversal-history"><span class="section-number-4">3.2.1.</span> By recording traversal history</h4>
+<div class="outline-text-4" id="text-h-By-recording-traversal-history">
+<p>
+A fundamental property of BSTs is that if you do an in-order traversal
+(depth-first search (DFS) where we visit the left child, current node, then the
+right child, recursively), you'll get keys in sorted order. So then we can do an
+in-order traversal, checking if we are visiting nodes in equal or increasing
+value than the previously visited node.
+</p>
+
+<div class="sidenote" id="org0000003">
+<p>
+We write <code>x.val</code> to get the "key" of the node, because this is a regular
+<code>BinaryTree</code>, not a <code>BinarySearchTree</code> that has both <code>key</code> and <code>val</code> fields. For
+a discussion about why we need keys and values for BSTs but not regular binary
+trees, see the discussion about
+<a href="../binary_search_tree/README.html#h-Sorted-binary-trees">binary search trees</a>.
+</p>
+
+</div>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#Tests">solution</a></span>(1/4) <span class="lilac-caption-link-symbol"><a href="#__NREF__solution-1">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__solution-1"><span class="org-keyword">def</span> <span class="org-function-name">is_sorted</span>(lst: List[<span class="org-builtin">int</span>]) <span class="org-operator">-&gt;</span> <span class="org-builtin">bool</span>:
+    <span class="org-keyword">return</span> <span class="org-builtin">all</span>(a <span class="org-operator">&lt;=</span> b <span class="org-keyword">for</span> a, b <span class="org-keyword">in</span> <span class="org-builtin">zip</span>(lst, lst[1:]))
+
+<span class="org-keyword">def</span> <span class="org-function-name">dfs_inorder</span>(t: BinaryTree) <span class="org-operator">-&gt;</span> <span class="org-builtin">bool</span>:
+    <span class="org-variable-name">traversal_history</span> <span class="org-operator">=</span> []
+    <span class="org-keyword">def</span> <span class="org-function-name">record</span>(x: Node):
+        traversal_history.append(x.val)
+    t.traverse_inorder(record)
+
+    <span class="org-keyword">return</span> is_sorted(traversal_history)
+</pre></div></div><p>
+The time complexity is \(O(n)\) where \(n\) is the number of nodes in the tree. This
+version needs additional \(O(n)\) space complexity because it stores all nodes it
+visits before doing the check with <code>is_sorted()</code>.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-Without-recording-traversal-history" class="outline-4">
+<h4 id="h-Without-recording-traversal-history"><span class="section-number-4">3.2.2.</span> Without recording traversal history</h4>
+<div class="outline-text-4" id="text-h-Without-recording-traversal-history">
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#Tests">solution</a></span>(2/4) <span class="lilac-caption-link-symbol"><a href="#__NREF__solution-2">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__solution-2"><span class="org-keyword">def</span> <span class="org-function-name">dfs_inorder_manual</span>(t: BinaryTree) <span class="org-operator">-&gt;</span> <span class="org-builtin">bool</span>:
+    <span class="org-keyword">if</span> t.root <span class="org-keyword">is</span> <span class="org-constant">None</span>:
+        <span class="org-keyword">return</span> <span class="org-constant">True</span>
+
+    <span class="org-variable-name">last</span> <span class="org-operator">=</span> <span class="org-constant">None</span>
+    <span class="org-keyword">def</span> <span class="org-function-name">helper</span>(x: Optional[Node]) <span class="org-operator">-&gt;</span> <span class="org-builtin">bool</span>:
+        <span class="org-keyword">nonlocal</span> last
+
+        <span class="org-keyword">if</span> x <span class="org-keyword">is</span> <span class="org-constant">None</span>:
+            <span class="org-keyword">return</span> <span class="org-constant">True</span>
+
+        <span class="org-keyword">if</span> <span class="org-keyword">not</span> helper(x.left):
+            <span class="org-keyword">return</span> <span class="org-constant">False</span>
+
+        <span class="org-keyword">if</span> last <span class="org-keyword">is</span> <span class="org-keyword">not</span> <span class="org-constant">None</span> <span class="org-keyword">and</span> last <span class="org-operator">&gt;</span> x.val:
+            <span class="org-keyword">return</span> <span class="org-constant">False</span>
+        <span class="org-variable-name">last</span> <span class="org-operator">=</span> x.val
+
+        <span class="org-keyword">if</span> <span class="org-keyword">not</span> helper(x.right):
+            <span class="org-keyword">return</span> <span class="org-constant">False</span>
+
+        <span class="org-keyword">return</span> <span class="org-constant">True</span>
+
+    <span class="org-keyword">return</span> helper(t.root)
+</pre></div></div><p>
+This solution improves on the space complexity, by using a fixed <code>last</code>
+variable. So the space complexity drops to just \(O(1)\).
+</p>
+
+<p>
+Sadly, problem with both <code>dfs_inorder_manual()</code> and <code>dfs_inorder()</code> is that they
+will traverse the left subtree <i>completely</i> before traversing the right subtree.
+So if the problematic node is near the top of the tree on the right, we might
+potentially waste a lot of CPU cycles before detecting the (obvious) issue.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-Using-ranges" class="outline-4">
+<h4 id="h-Using-ranges"><span class="section-number-4">3.2.3.</span> Using ranges</h4>
+<div class="outline-text-4" id="text-h-Using-ranges">
+<p>
+As mentioned in <a href="#h-Insights">2</a>, the key to this problem is to check if
+each node satisfies the range constraints imposed by the parent nodes. We can do
+this with a depth-first search (DFS) by recursing down the subtrees and checking
+that the nodes encountered fall within the expected range. As we descend down
+the tree, we continually refine our intervals as needed. When we are done
+traversing the entire tree, we're done.
+</p>
+
+<p>
+The DFS should be a preorder traversal, because we should check the node that we
+are currently on as soon as possible <i>before</i> descending down to the subtrees.
+</p>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#Tests">solution</a></span>(3/4) <span class="lilac-caption-link-symbol"><a href="#__NREF__solution-3">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__solution-3"><span class="org-keyword">def</span> <span class="org-function-name">dfs_preorder_range</span>(t: BinaryTree) <span class="org-operator">-&gt;</span> <span class="org-builtin">bool</span>:
+    <span class="org-keyword">def</span> <span class="org-function-name">helper</span>(x: Optional[Node], lo<span class="org-operator">=</span><span class="org-constant">None</span>, hi<span class="org-operator">=</span><span class="org-constant">None</span>) <span class="org-operator">-&gt;</span> <span class="org-builtin">bool</span>:
+        <span class="org-keyword">if</span> x <span class="org-keyword">is</span> <span class="org-constant">None</span>:
+            <span class="org-keyword">return</span> <span class="org-constant">True</span>
+
+        <span class="org-comment-delimiter"># </span><span class="org-comment">Root node. Check children directly, because our starting ranges lo and</span>
+        <span class="org-comment-delimiter"># </span><span class="org-comment">hi are both None (rendering our checks useless).</span>
+        <span class="org-keyword">if</span> <span class="org-keyword">not</span> lo <span class="org-keyword">and</span> <span class="org-keyword">not</span> hi:
+            <span class="org-keyword">if</span> x.left <span class="org-keyword">and</span> <span class="org-keyword">not</span> x.left.val <span class="org-operator">&lt;</span> x.val:
+                <span class="org-keyword">return</span> <span class="org-constant">False</span>
+            <span class="org-keyword">if</span> x.right <span class="org-keyword">and</span> <span class="org-keyword">not</span> x.val <span class="org-operator">&lt;</span> x.right.val:
+                <span class="org-keyword">return</span> <span class="org-constant">False</span>
+
+        <span class="org-comment-delimiter"># </span><span class="org-comment">Non-root node.</span>
+        <span class="org-keyword">if</span> lo <span class="org-keyword">and</span> <span class="org-keyword">not</span> lo <span class="org-operator">&lt;</span> x.val:
+            <span class="org-keyword">return</span> <span class="org-constant">False</span>
+        <span class="org-keyword">if</span> hi <span class="org-keyword">and</span> <span class="org-keyword">not</span> x.val <span class="org-operator">&lt;</span> hi:
+            <span class="org-keyword">return</span> <span class="org-constant">False</span>
+        <span class="org-keyword">return</span> (helper(x.left, lo, x.val) <span class="org-keyword">and</span>
+                helper(x.right, x.val, hi))
+
+    <span class="org-keyword">return</span> helper(t.root)
+</pre></div></div><p>
+While we are using the ranges idea here, we still perform DFS where the left
+subtree is computed first. And so it suffers from the same issues described for
+the DFS solution described in <a href="#h-Without-recording-traversal-history">3.2.2</a> above.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-Optimal--BFS" class="outline-3">
+<h3 id="h-Optimal--BFS"><span class="section-number-3">3.3.</span> Optimal (BFS)</h3>
+<div class="outline-text-3" id="text-h-Optimal--BFS">
+<p>
+Using breadth-first search (BFS), we can check each level of the binary tree,
+top to bottom. For each node we visit, we just check that its key fits within
+the range that we expect it to be in.
+</p>
+
+<p>
+We also simplify the code a bit by using floats instead of integers, which lets
+us use negative and positive infinity. This avoids the extra stanza we need for
+the root node if we're only using integer types and using <code>None</code> to represent
+these infinite values.
+</p>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#Tests">solution</a></span>(4/4) <span class="lilac-caption-link-symbol"><a href="#__NREF__solution-4">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__solution-4"><span class="org-keyword">def</span> <span class="org-function-name">bfs</span>(t: BinaryTree) <span class="org-operator">-&gt;</span> <span class="org-builtin">bool</span>:
+
+    <span class="org-keyword">class</span> <span class="org-type">QueueEntry</span>(NamedTuple):
+        node: Optional[Node]
+        lo: <span class="org-builtin">float</span>
+        hi: <span class="org-builtin">float</span>
+
+    <span class="org-variable-name">q</span> <span class="org-operator">=</span> collections.deque([QueueEntry(t.root, <span class="org-builtin">float</span>(<span class="org-string">"-inf"</span>), <span class="org-builtin">float</span>(<span class="org-string">"inf"</span>))])
+
+    <span class="org-keyword">while</span> q:
+        <span class="org-variable-name">x</span>, <span class="org-variable-name">lo</span>, <span class="org-variable-name">hi</span> <span class="org-operator">=</span> q.popleft()
+
+        <span class="org-keyword">if</span> x:
+            <span class="org-keyword">if</span> <span class="org-keyword">not</span> lo <span class="org-operator">&lt;</span> x.val <span class="org-operator">&lt;</span> hi:
+                <span class="org-keyword">return</span> <span class="org-constant">False</span>
+
+            q.append(QueueEntry(x.left, lo, x.val))
+            q.append(QueueEntry(x.right, x.val, hi))
+
+    <span class="org-keyword">return</span> <span class="org-constant">True</span>
+</pre></div></div><p>
+Time complexity is still \(O(n)\), but we solve the problem of traversing the left
+subtree needlessly in situations where we only need to check something in the
+right subtree.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-Tests" class="outline-2">
+<h2 id="h-Tests"><span class="section-number-2">4.</span> Tests</h2>
+<div class="outline-text-2" id="text-h-Tests">
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><label class="org-src-name">Tests</label><span class="lilac-caption-link-symbol"><a href="#Tests">&#x1f517;</a></span></div><pre class="src src-python" id="Tests"><span class="org-keyword">from</span> binary_tree.binary_tree <span class="org-keyword">import</span> BinaryTree, Node
+<span class="org-keyword">import</span> binary_search_tree.binary_search_tree <span class="org-keyword">as</span> BST
+<span class="org-keyword">import</span> collections
+<span class="org-keyword">from</span> hypothesis <span class="org-keyword">import</span> given, strategies <span class="org-keyword">as</span> st
+<span class="org-keyword">from</span> typing <span class="org-keyword">import</span> List, NamedTuple, Optional
+<span class="org-keyword">import</span> unittest
+
+<span class="lilac-child-link-from-parent"><a href="#__NREF__solution-1">solution</a></span>
+
+<span class="org-comment-delimiter"># </span><span class="org-comment">Utility function for property-based tests.</span>
+<span class="lilac-child-link-from-parent"><a href="#__NREF__bst_converter">bst_converter</a></span>
+
+<span class="org-keyword">class</span> <span class="org-type">Test</span>(unittest.TestCase):
+    <span class="lilac-child-link-from-parent"><a href="#__NREF__test_cases-1">test_cases</a></span>
+
+<span class="org-keyword">if</span> <span class="org-builtin">__name__</span> <span class="org-operator">==</span> <span class="org-string">"__main__"</span>:
+    unittest.main(<span class="org-constant">exit</span><span class="org-operator">=</span><span class="org-constant">False</span>)
+</pre></div></div>
+</div>
+
+<div id="outline-container-h-Basic-tests" class="outline-3">
+<h3 id="h-Basic-tests"><span class="section-number-3">4.1.</span> Basic tests</h3>
+<div class="outline-text-3" id="text-h-Basic-tests">
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#Tests">test_cases</a></span>(1/4) <span class="lilac-caption-link-symbol"><a href="#__NREF__test_cases-1">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__test_cases-1"><span class="org-keyword">def</span> <span class="org-function-name">test_basic</span>(<span class="org-keyword">self</span>):
+    <span class="org-comment-delimiter"># </span><span class="org-comment">Empty tree is a valid BST.</span>
+    <span class="org-variable-name">t</span> <span class="org-operator">=</span> BinaryTree()
+    <span class="org-variable-name">result</span> <span class="org-operator">=</span> dfs_inorder(t)
+    <span class="org-keyword">self</span>.assertEqual(result, <span class="org-constant">True</span>)
+
+    <span class="org-comment-delimiter"># </span><span class="org-comment">Basic happy case.</span>
+    <span class="org-variable-name">t</span> <span class="org-operator">=</span> BinaryTree()
+    t.insert(50, [])
+    t.insert(25, [0])
+    t.insert(75, [1])
+    <span class="org-variable-name">result</span> <span class="org-operator">=</span> dfs_inorder(t)
+    <span class="org-keyword">self</span>.assertEqual(result, <span class="org-constant">True</span>)
+
+    <span class="org-comment-delimiter"># </span><span class="org-comment">Basic unhappy cases.</span>
+    <span class="org-variable-name">t</span> <span class="org-operator">=</span> BinaryTree()
+    t.insert(1, [])
+    t.insert(0, [1])
+    <span class="org-variable-name">result</span> <span class="org-operator">=</span> dfs_inorder(t)
+    <span class="org-keyword">self</span>.assertEqual(result, <span class="org-constant">False</span>)
+    <span class="org-variable-name">t</span> <span class="org-operator">=</span> BinaryTree()
+    t.insert(100, [])
+    t.insert(25, [0])
+    t.insert(75, [1])
+    <span class="org-variable-name">result</span> <span class="org-operator">=</span> dfs_inorder(t)
+    <span class="org-keyword">self</span>.assertEqual(result, <span class="org-constant">False</span>)
+</pre></div></div>
+</div>
+</div>
+
+<div id="outline-container-h-Property-based-tests" class="outline-3">
+<h3 id="h-Property-based-tests"><span class="section-number-3">4.2.</span> Property-based tests</h3>
+<div class="outline-text-3" id="text-h-Property-based-tests">
+<p>
+First we need a converter that can convert a <code>BinarySearchTree</code> into a
+<code>BinaryTree</code>.
+</p>
+
+<p>
+By using our <a href="../binary_search_tree/README.html">binary search tree</a>
+implementation, we can confidently generate any random number of BSTs, convert
+them to regular binary trees, and then check whether they pass our validation
+functions.
+</p>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#Tests">bst_converter</a></span><span class="lilac-caption-link-symbol"><a href="#__NREF__bst_converter">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__bst_converter"><span class="org-comment-delimiter"># </span><span class="org-comment">Convert BST into a binary tree. Of the "key" and "val" of each BST node, we</span>
+<span class="org-comment-delimiter"># </span><span class="org-comment">only preserve the "key".</span>
+<span class="org-keyword">def</span> <span class="org-function-name">convert_keys_to_bt</span>(bst: BST.BinarySearchTree) <span class="org-operator">-&gt;</span> BinaryTree:
+    <span class="org-variable-name">bt</span> <span class="org-operator">=</span> BinaryTree()
+
+    <span class="org-keyword">if</span> bst.root <span class="org-keyword">is</span> <span class="org-constant">None</span>:
+        <span class="org-keyword">return</span> bt
+
+    bt.<span class="org-variable-name">root</span> <span class="org-operator">=</span> Node()
+
+    <span class="org-keyword">def</span> <span class="org-function-name">helper</span>(x: Optional[BST.Node], cursor: Optional[Node]):
+        <span class="org-keyword">if</span> x <span class="org-keyword">is</span> <span class="org-constant">None</span>:
+            <span class="org-keyword">return</span>
+        <span class="org-keyword">if</span> cursor <span class="org-keyword">is</span> <span class="org-constant">None</span>:
+            <span class="org-keyword">return</span>
+
+        <span class="org-comment-delimiter"># </span><span class="org-comment">A binary tree node's value is actually the "key" of the BST.</span>
+        cursor.<span class="org-variable-name">val</span> <span class="org-operator">=</span> x.key
+
+        <span class="org-keyword">if</span> x.left <span class="org-keyword">is</span> <span class="org-keyword">not</span> <span class="org-constant">None</span>:
+            cursor.<span class="org-variable-name">left</span> <span class="org-operator">=</span> Node()
+            helper(x.left, cursor.left)
+
+        <span class="org-keyword">if</span> x.right <span class="org-keyword">is</span> <span class="org-keyword">not</span> <span class="org-constant">None</span>:
+            cursor.<span class="org-variable-name">right</span> <span class="org-operator">=</span> Node()
+            helper(x.right, cursor.right)
+
+    helper(bst.root, bt.root)
+
+    <span class="org-keyword">return</span> bt
+</pre></div></div><p>
+Let's check that our converter works, by doing the same preorder traversal and
+checking that we get the same values (keys for BSTs) back for both trees.
+</p>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#Tests">test_cases</a></span>(2/4) <span class="lilac-caption-link-symbol"><a href="#__NREF__test_cases-2">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__test_cases-2"><span class="org-type">@given</span>(st.lists(st.integers(min_value<span class="org-operator">=</span>1, max_value<span class="org-operator">=</span>50),
+                min_size<span class="org-operator">=</span>1,
+                max_size<span class="org-operator">=</span>50))
+<span class="org-keyword">def</span> <span class="org-function-name">test_converter</span>(<span class="org-keyword">self</span>, keys: List[<span class="org-builtin">int</span>]):
+    <span class="org-variable-name">bst</span> <span class="org-operator">=</span> BST.BinarySearchTree()
+    <span class="org-keyword">for</span> key <span class="org-keyword">in</span> keys:
+        bst.insert(key)
+
+    <span class="org-variable-name">traversal_history_bst</span> <span class="org-operator">=</span> []
+    <span class="org-keyword">def</span> <span class="org-function-name">record_traversal_history_bst</span>(x: BST.Node):
+        traversal_history_bst.append(x.key)
+    bst.traverse_preorder(record_traversal_history_bst)
+
+    <span class="org-variable-name">bt</span> <span class="org-operator">=</span> convert_keys_to_bt(bst)
+
+    <span class="org-variable-name">traversal_history_bt</span> <span class="org-operator">=</span> []
+    <span class="org-keyword">def</span> <span class="org-function-name">record_traversal_history_bt</span>(x: Node):
+        traversal_history_bt.append(x.val)
+    bt.traverse_preorder(record_traversal_history_bt)
+
+    <span class="org-keyword">self</span>.assertEqual(traversal_history_bt, traversal_history_bst)
+</pre></div></div><p>
+Generate random BSTs, and convert them to binary trees. Our validation functions
+are all expected to pass for these inputs.
+</p>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#Tests">test_cases</a></span>(3/4) <span class="lilac-caption-link-symbol"><a href="#__NREF__test_cases-3">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__test_cases-3"><span class="org-type">@given</span>(st.lists(st.integers(min_value<span class="org-operator">=</span>1, max_value<span class="org-operator">=</span>50),
+                min_size<span class="org-operator">=</span>1,
+                max_size<span class="org-operator">=</span>50))
+<span class="org-keyword">def</span> <span class="org-function-name">test_random_BSTs_are_all_valid_BSTs</span>(<span class="org-keyword">self</span>, keys: List[<span class="org-builtin">int</span>]):
+    <span class="org-variable-name">bst</span> <span class="org-operator">=</span> BST.BinarySearchTree()
+    <span class="org-keyword">for</span> key <span class="org-keyword">in</span> keys:
+        bst.insert(key)
+
+    <span class="org-variable-name">bt</span> <span class="org-operator">=</span> convert_keys_to_bt(bst)
+
+    <span class="org-keyword">self</span>.assertEqual(<span class="org-constant">True</span>, dfs_inorder(bt))
+    <span class="org-keyword">self</span>.assertEqual(<span class="org-constant">True</span>, dfs_inorder_manual(bt))
+    <span class="org-keyword">self</span>.assertEqual(<span class="org-constant">True</span>, dfs_preorder_range(bt))
+    <span class="org-keyword">self</span>.assertEqual(<span class="org-constant">True</span>, bfs(bt))
+</pre></div></div><p>
+Now let's check the opposite. Construct BSTs. Convert them to binary trees. But
+then tweak one of the nodes in the tree at random to be out of line to break the
+BST property. All such trees should fail BST validation.
+</p>
+
+<p>
+Note that breaking the BST property involves choosing a very high or very low
+value. Even if we know that our BST keys are all positive numbers, we cannot
+always choose a minimum value like "-1" because if we assign this value to the
+leftmost child, the tree will still be valid.
+</p>
+
+<p>
+Note that all BSTs generated here should be at least 2 nodes, because the root
+node can be of any value.
+</p>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#Tests">test_cases</a></span>(4/4) <span class="lilac-caption-link-symbol"><a href="#__NREF__test_cases-4">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__test_cases-4"><span class="org-type">@given</span>(st.lists(st.integers(min_value<span class="org-operator">=</span>1, max_value<span class="org-operator">=</span>50),
+                min_size<span class="org-operator">=</span>2, <span class="org-comment-delimiter"># </span><span class="org-comment">The root must have at least 1 child.</span>
+                max_size<span class="org-operator">=</span>50,
+                unique<span class="org-operator">=</span><span class="org-constant">True</span>),
+       st.randoms())
+<span class="org-keyword">def</span> <span class="org-function-name">test_invalid_BSTs</span>(<span class="org-keyword">self</span>, keys: List[<span class="org-builtin">int</span>], rand):
+    <span class="org-variable-name">bst</span> <span class="org-operator">=</span> BST.BinarySearchTree()
+    <span class="org-keyword">for</span> key <span class="org-keyword">in</span> keys:
+        bst.insert(key)
+
+    <span class="org-variable-name">bt</span> <span class="org-operator">=</span> convert_keys_to_bt(bst)
+
+    <span class="org-comment-delimiter"># </span><span class="org-comment">Pick a random index. This index will be used to pick a node in the binary</span>
+    <span class="org-comment-delimiter"># </span><span class="org-comment">tree at random, to assign a BST-property-breaking value. Because our BST</span>
+    <span class="org-comment-delimiter"># </span><span class="org-comment">keys are in the range 1 to 50, we choose 0 and 51 as the special</span>
+    <span class="org-comment-delimiter"># </span><span class="org-comment">BST-property-breaking values.</span>
+    <span class="org-variable-name">chosen_idx</span> <span class="org-operator">=</span> rand.randint(0, bst.size() <span class="org-operator">-</span> 1)
+
+    <span class="org-variable-name">bad_lo</span> <span class="org-operator">=</span> 0
+    <span class="org-variable-name">bad_hi</span> <span class="org-operator">=</span> 51
+    <span class="org-variable-name">seen_idx</span> <span class="org-operator">=</span> 0
+    <span class="org-variable-name">stop</span> <span class="org-operator">=</span> <span class="org-constant">False</span>
+
+    <span class="org-comment-delimiter"># </span><span class="org-comment">direction_hist is a 2-bit number, the first bit meaning "I went left", and</span>
+    <span class="org-comment-delimiter"># </span><span class="org-comment">the second bit meaning "I went right". We use this to check the overall</span>
+    <span class="org-comment-delimiter"># </span><span class="org-comment">history of which child nodes we've followed to reach the current node</span>
+    <span class="org-comment-delimiter"># </span><span class="org-comment">under consideration.</span>
+    <span class="org-keyword">def</span> <span class="org-function-name">mutate</span>(x: Optional[Node], direction_hist: <span class="org-builtin">int</span>):
+        <span class="org-keyword">nonlocal</span> seen_idx
+        <span class="org-keyword">nonlocal</span> stop
+
+        <span class="org-keyword">if</span> <span class="org-keyword">not</span> x:
+            <span class="org-keyword">return</span>
+
+        <span class="org-keyword">if</span> stop:
+            <span class="org-keyword">return</span>
+
+        <span class="org-keyword">if</span> seen_idx <span class="org-operator">==</span> chosen_idx:
+            <span class="org-comment-delimiter"># </span><span class="org-comment">Our mutate() function depends on direction_hist, but for the root</span>
+            <span class="org-comment-delimiter"># </span><span class="org-comment">node this will always be empty. Sometimes the root node may only</span>
+            <span class="org-comment-delimiter"># </span><span class="org-comment">have one child, instead of two (as basic BSTs are not</span>
+            <span class="org-comment-delimiter"># </span><span class="org-comment">self-balancing). So if we chose the root node to mutate, take care</span>
+            <span class="org-comment-delimiter"># </span><span class="org-comment">to check if we only have one child, and choose the bad value</span>
+            <span class="org-comment-delimiter"># </span><span class="org-comment">accordingly.</span>
+            <span class="org-keyword">if</span> chosen_idx <span class="org-operator">==</span> 0:
+                <span class="org-keyword">if</span> x.left <span class="org-keyword">is</span> <span class="org-constant">None</span>:
+                    x.<span class="org-variable-name">val</span> <span class="org-operator">=</span> bad_hi
+                <span class="org-keyword">else</span>:
+                    x.<span class="org-variable-name">val</span> <span class="org-operator">=</span> bad_lo
+            <span class="org-keyword">else</span>:
+                <span class="org-comment-delimiter"># </span><span class="org-comment">Non-root node.</span>
+
+                <span class="org-comment-delimiter"># </span><span class="org-comment">We only went left so far. There is a chance that we're at the</span>
+                <span class="org-comment-delimiter"># </span><span class="org-comment">leftmost child node. In all other cases setting a min value (0)</span>
+                <span class="org-comment-delimiter"># </span><span class="org-comment">would work to break this tree's BST property, but not for this</span>
+                <span class="org-comment-delimiter"># </span><span class="org-comment">leftmost leaf node. So assign the opposite (just beyond max)</span>
+                <span class="org-comment-delimiter"># </span><span class="org-comment">value.</span>
+                <span class="org-keyword">if</span> direction_hist <span class="org-operator">==</span> 1:
+                    x.<span class="org-variable-name">val</span> <span class="org-operator">=</span> bad_hi
+                <span class="org-comment-delimiter"># </span><span class="org-comment">If we've visited both left and child nodes so far, then we can</span>
+                <span class="org-comment-delimiter"># </span><span class="org-comment">assign either bad_lo or bad_hi --- it doesn't matter. This</span>
+                <span class="org-comment-delimiter"># </span><span class="org-comment">else-condition also covers the case where we only went right, so</span>
+                <span class="org-comment-delimiter"># </span><span class="org-comment">our hand is forced to choose bad_lo here.</span>
+                <span class="org-keyword">else</span>:
+                    x.<span class="org-variable-name">val</span> <span class="org-operator">=</span> bad_lo
+
+            <span class="org-comment-delimiter"># </span><span class="org-comment">We've performed the mutation we wanted, so stop traversing the</span>
+            <span class="org-comment-delimiter"># </span><span class="org-comment">tree.</span>
+            <span class="org-variable-name">stop</span> <span class="org-operator">=</span> <span class="org-constant">True</span>
+
+        <span class="org-variable-name">seen_idx</span> <span class="org-operator">+=</span> 1
+
+        mutate(x.left, direction_hist <span class="org-operator">|</span> 1)
+        mutate(x.right, direction_hist <span class="org-operator">|</span> 2)
+
+    mutate(bt.root, 0)
+
+    <span class="org-keyword">self</span>.assertEqual(<span class="org-constant">False</span>, dfs_inorder(bt))
+    <span class="org-keyword">self</span>.assertEqual(<span class="org-constant">False</span>, dfs_inorder_manual(bt))
+    <span class="org-keyword">self</span>.assertEqual(<span class="org-constant">False</span>, dfs_preorder_range(bt))
+    <span class="org-keyword">self</span>.assertEqual(<span class="org-constant">False</span>, bfs(bt))
+</pre></div></div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-References" class="outline-2">
+<h2 id="h-References"><span class="section-number-2">5.</span> References</h2>
+<div class="outline-text-2" id="text-h-References">
+<style>.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}</style><div class="csl-bib-body">
+  <div class="csl-entry" id="citeproc_bib_item_1">Aziz, A., Lee, T.-H., &#38; Prakash, A. (2018). <i>Elements of Programming Interviews in Python: The Insiders’ Guide</i>. CreateSpace Independent Publishing Platform (25 July. 2018).</div>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,1385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Making Change</title>
+<meta name="author" content="Linus Arver" />
+<meta name="generator" content="Org Mode" />
+<style>
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { }
+</style>
+<link rel="preconnect" href="/vendor/source-fonts/source-fonts.css" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="/vendor/source-fonts/source-fonts.css">
+<script src="/vendor/jquery-3.6.4.min.js"></script>
+<script src="lilac.js"></script>
+<link rel="stylesheet" type="text/css" href="syntax-highlighting.css"/>
+<link rel="stylesheet" type="text/css" href="lilac.css" />
+<link rel="stylesheet" type="text/css" href="codex.css" />
+<link rel="stylesheet" href="/vendor/source-fonts/source-fonts.css">
+<script>
+// @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&amp;dn=gpl-3.0.txt GPL-v3-or-Later
+     function CodeHighlightOn(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.add("code-highlighted");
+         target.classList.add("code-highlighted");
+       }
+     }
+     function CodeHighlightOff(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.remove("code-highlighted");
+         target.classList.remove("code-highlighted");
+       }
+     }
+// @license-end
+</script>
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    loader: { paths: { "mathjax-newcm": "/vendor/mathjax-newcm-font" } },
+	output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="/vendor/mathjax/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<div id="content" class="content">
+<h1 class="title">Making Change</h1>
+<div id="table-of-contents" role="doc-toc">
+
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#h-Problem-statement">1. Problem statement</a></li>
+<li><a href="#h-Insights">2. Insights</a></li>
+<li><a href="#h-Solution">3. Solution</a>
+<ul>
+<li><a href="#h-Brute-force">3.1. Brute force</a></li>
+<li><a href="#h-Brute-force-using-DFS">3.2. Brute force using DFS</a></li>
+<li><a href="#h-Dynamic-programming--DP">3.3. Dynamic programming (DP)</a></li>
+<li><a href="#h-Using--O-a---space">3.4. Using \(O(a)\) space</a></li>
+<li><a href="#h-Generating-functions">3.5. Generating functions</a></li>
+</ul>
+</li>
+<li><a href="#h-Tests">4. Tests</a>
+<ul>
+<li><a href="#h-Basic-tests">4.1. Basic tests</a></li>
+<li><a href="#h-Property-based-tests">4.2. Property-based tests</a></li>
+</ul>
+</li>
+<li><a href="#h-References">5. References</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h-Problem-statement" class="outline-2">
+<h2 id="h-Problem-statement"><span class="section-number-2">1.</span> Problem statement</h2>
+<div class="outline-text-2" id="text-h-Problem-statement">
+<div class="sidenote" id="org0000000">
+<p>
+Aziz et al. (<a href="#citeproc_bib_item_1">2018, p. 253</a>) mentions this problem but uses the analogy of points scored
+in a sports game, where the game has some number of "plays" defined and each
+play is worth a fixed number of points. The problem remains the same.
+</p>
+
+</div>
+
+<p>
+Given some US monetary amount \(A\), count how many different combination of coins
+can be used to reach that sum. The recognized coins are pennies, nickels, dimes,
+and quarters.
+</p>
+
+<pre class="example" id="org0000001">
+Input: $0.10
+Output: 4 (1 dime, 2 nickels, 1 nickel and 5 pennies, 10 pennies)
+</pre>
+</div>
+</div>
+
+<div id="outline-container-h-Insights" class="outline-2">
+<h2 id="h-Insights"><span class="section-number-2">2.</span> Insights</h2>
+<div class="outline-text-2" id="text-h-Insights">
+<p>
+This problem is a special case of the integer partitioning problem, where the
+problem is to find all the ways of partitioning a positive integer into other
+integers whose sum equals the starting integer. In this case we are given only a
+particular set of integers \(\{1, 5, 10, 25\}\) that we can use, whereas the
+integer partitioning problem considers the set of all positive integers \(\{1, 2,
+3, 4, 5, \cdots{}\}\).
+</p>
+
+<p>
+The key to using dynamic programming in this problem is to recognize that
+computing the solution for the amount \(A\) is related to finding the solution for
+the sum \(A-1\) (successively smaller amounts), and also the solution for the
+cases with fewer and fewer coins available (down to the empty set of coins).
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-Solution" class="outline-2">
+<h2 id="h-Solution"><span class="section-number-2">3.</span> Solution</h2>
+<div class="outline-text-2" id="text-h-Solution">
+</div>
+
+<div id="outline-container-h-Brute-force" class="outline-3">
+<h3 id="h-Brute-force"><span class="section-number-3">3.1.</span> Brute force</h3>
+<div class="outline-text-3" id="text-h-Brute-force">
+<p>
+You could rewrite the problem statement as the following equation
+</p>
+
+<p>
+\[
+A = p + 5n + 10d + 25q
+\]
+</p>
+
+<p>
+such the question could be rephrased as finding all non-negative integer
+variables \(p\), \(n\), \(d\), \(q\) that sum up to \(A\).
+</p>
+
+<p>
+The obvious brute force approach would be to enumerate across each of these coin
+types (4 <code>for</code> loops, nested together), where the lower bound is <code>0</code> and the
+upper bound is \(A\). And then whenever we find a set of variables that work,
+we can save this in a hash table to remember that winning combination. Then when
+we're done iterating, we can just count how many entries there are in the hash
+table to get the total number of combinations of coins that sum to \(A\).
+</p>
+
+<p>
+It's a bit tricky to use a dynamic number of nested loops though (we don't know
+how many number of coins we'll be given), so instead we can use a composite
+counter variable. For the case of coins \(\{1, 5, 10, 25\}\), we have a list of 4
+zeroes (one for each variable). We count from <code>[0, 0, 0, 0]</code> to the point we
+are "maxed out," where "maxed out" means that we have tried out all possible
+combinations of coins.  Assuming the target amount is 100 cents, we would
+increment the variables like this:
+</p>
+
+<pre class="example" id="org0000002">
+[0, 0, 0, 0]
+[1, 0, 0, 0]
+[2, 0, 0, 0]
+[3, 0, 0, 0]
+...
+[100, 0, 0, 0]
+[0, 1, 0, 0]
+[1, 1, 0, 0]
+[2, 1, 0, 0]
+[3, 1, 0, 0]
+...
+[100, 1, 0, 0]
+[0, 2, 0, 0]
+[1, 2, 0, 0]
+[2, 2, 0, 0]
+[3, 2, 0, 0] # 3 pennies, 2 nickels
+...
+[100, 20, 0, 0]
+[0, 0, 1, 0]
+[1, 0, 1, 0]
+[2, 0, 1, 0]
+...
+[100, 20, 10, 0] # 100 pennies, 20 nickels, 10 dimes
+[0, 0, 0, 1]
+[1, 0, 0, 1]
+[2, 0, 0, 1]
+[3, 0, 0, 1]
+...
+[100, 20, 10, 4] # Maxed out (each coin denomination totals 100 cents)
+</pre>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#Tests">solution</a></span>(1/4) <span class="lilac-caption-link-symbol"><a href="#__NREF__solution-1">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__solution-1"><span class="org-keyword">def</span> <span class="org-function-name">brute_exponential</span>(amount: <span class="org-builtin">int</span>, coins: List[<span class="org-builtin">int</span>]) <span class="org-operator">-&gt;</span> <span class="org-builtin">int</span>:
+    <span class="org-variable-name">combinations</span> <span class="org-operator">=</span> 0
+
+    <span class="org-comment-delimiter"># </span><span class="org-comment">Assume that coins is sorted already (e.g., [1, 5, 10, 25]).</span>
+    <span class="org-variable-name">variables</span> <span class="org-operator">=</span> [0] <span class="org-operator">*</span> <span class="org-builtin">len</span>(coins)
+
+    <span class="org-keyword">def</span> <span class="org-function-name">maxed_out</span>(variables):
+        <span class="org-variable-name">bools</span> <span class="org-operator">=</span> [<span class="org-constant">False</span>] <span class="org-operator">*</span> <span class="org-builtin">len</span>(variables)
+        <span class="org-keyword">for</span> i, coin <span class="org-keyword">in</span> <span class="org-builtin">enumerate</span>(coins):
+            <span class="org-keyword">if</span> variables[i] <span class="org-operator">*</span> coin <span class="org-operator">&gt;=</span> amount:
+                <span class="org-variable-name">bools</span>[i] <span class="org-operator">=</span> <span class="org-constant">True</span>
+        <span class="org-keyword">return</span> <span class="org-builtin">all</span>(bools)
+
+    <span class="org-keyword">def</span> <span class="org-function-name">increment</span>(variables):
+        <span class="org-keyword">for</span> i, coin <span class="org-keyword">in</span> <span class="org-builtin">enumerate</span>(coins):
+            <span class="org-keyword">if</span> variables[i] <span class="org-operator">*</span> coin <span class="org-operator">&lt;</span> amount:
+                <span class="org-variable-name">variables</span>[i] <span class="org-operator">+=</span> 1
+                <span class="org-comment-delimiter"># </span><span class="org-comment">If we increment a higher base, we need to reset all lower</span>
+                <span class="org-comment-delimiter"># </span><span class="org-comment">bases.</span>
+                <span class="org-keyword">if</span> i <span class="org-operator">&gt;</span> 0:
+                    <span class="org-keyword">for</span> x <span class="org-keyword">in</span> <span class="org-builtin">range</span>(i):
+                        <span class="org-variable-name">variables</span>[x] <span class="org-operator">=</span> 0
+                <span class="org-keyword">break</span>
+        <span class="org-keyword">return</span> variables
+
+    <span class="org-keyword">while</span> <span class="org-keyword">not</span> maxed_out(variables):
+        <span class="org-variable-name">variables</span> <span class="org-operator">=</span> increment(variables)
+        <span class="org-variable-name">got</span> <span class="org-operator">=</span> 0
+        <span class="org-keyword">for</span> i, coin <span class="org-keyword">in</span> <span class="org-builtin">enumerate</span>(coins):
+            <span class="org-variable-name">got</span> <span class="org-operator">+=</span> (variables[i] <span class="org-operator">*</span> coin)
+
+        <span class="org-keyword">if</span> got <span class="org-operator">==</span> amount:
+            <span class="org-variable-name">combinations</span> <span class="org-operator">+=</span> 1
+
+    <span class="org-keyword">return</span> combinations
+</pre></div></div><p>
+You can see how this solution, while correct, has terrible performance because
+every additional coin denomination will essentially give us another "nested
+loop". So the time complexity is \(O(a^d)\) where \(a\) is the target amount and \(d\)
+is the number of coin denominations.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-Brute-force-using-DFS" class="outline-3">
+<h3 id="h-Brute-force-using-DFS"><span class="section-number-3">3.2.</span> Brute force using DFS</h3>
+<div class="outline-text-3" id="text-h-Brute-force-using-DFS">
+<p>
+This approach treats the problem as a tree problem; you can use depth-first
+search over a decision tree. The root node of this tree is the target amount.
+Then you have child nodes equal to the number of coin types, such that picking a
+coin reduces the value from the root node by the value of the chosen coin. You
+do this repeatedly at each level, reducing the value you've started with from
+the root node. When you reach a child node of zero value, the coins you've
+picked to get there are solutions to the equation.
+</p>
+
+<p>
+You can use a hash table to speed up the search here by memoizing (remembering)
+previously seen results (child nodes). This way, you won't recompute
+already-computed values all over again.
+</p>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#Tests">solution</a></span>(2/4) <span class="lilac-caption-link-symbol"><a href="#__NREF__solution-2">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__solution-2"><span class="org-keyword">def</span> <span class="org-function-name">brute_dfs</span>(amount: <span class="org-builtin">int</span>, coins: List[<span class="org-builtin">int</span>]) <span class="org-operator">-&gt;</span> <span class="org-builtin">int</span>:
+    <span class="org-variable-name">cache</span>: Dict[<span class="org-builtin">int</span>, <span class="org-builtin">int</span>] <span class="org-operator">=</span> {}
+
+    <span class="org-keyword">def</span> <span class="org-function-name">dfs</span>(amt, i):
+        <span class="org-keyword">if</span> i <span class="org-operator">==</span> <span class="org-builtin">len</span>(coins):
+            <span class="org-keyword">return</span> 0
+        <span class="org-keyword">if</span> amt <span class="org-operator">-</span> coins[i] <span class="org-operator">==</span> 0:
+            <span class="org-keyword">return</span> 1
+        <span class="org-keyword">if</span> amt <span class="org-operator">&lt;</span> 0:
+            <span class="org-keyword">return</span> 0
+        <span class="org-keyword">if</span> (amt, i) <span class="org-keyword">in</span> cache:
+            <span class="org-keyword">return</span> cache[(amt, i)]
+
+        <span class="org-comment-delimiter"># </span><span class="org-comment">Include all ways to reach an amount that is smaller than the current</span>
+        <span class="org-comment-delimiter"># </span><span class="org-comment">coin value, but using the same coin (index "i" is unchanged in this</span>
+        <span class="org-comment-delimiter"># </span><span class="org-comment">call).</span>
+        <span class="org-variable-name">combos</span> <span class="org-operator">=</span> dfs(amt <span class="org-operator">-</span> coins[i], i)
+
+        <span class="org-comment-delimiter"># </span><span class="org-comment">Include all ways to get the current amount using other coins other</span>
+        <span class="org-comment-delimiter"># </span><span class="org-comment">than this one (because using the current one does not get us to zero</span>
+        <span class="org-comment-delimiter"># </span><span class="org-comment">(if it did, we would've returned early above)).</span>
+        <span class="org-variable-name">combos</span> <span class="org-operator">+=</span> dfs(amt, i <span class="org-operator">+</span> 1)
+
+        <span class="org-comment-delimiter"># </span><span class="org-comment">Remember the result in the cache (memoization).</span>
+        <span class="org-variable-name">cache</span>[(amt, i)] <span class="org-operator">=</span> combos
+
+        <span class="org-keyword">return</span> combos
+
+    <span class="org-keyword">return</span> dfs(amount, 0)
+</pre></div></div><p>
+The time complexity is \(O(a*d)\), because we only do work for each unique
+possible <code>(amt, i)</code> argument for the <code>dfs()</code> helper function <i>once</i> because
+every repeated call with a previously seen argument will be cached. Because
+there are \(amt * i\) different possible arguments, the time complexity is also
+\(O(a*d)\).
+</p>
+
+
+<div id="org0000009" class="figure">
+<p><img src="./decision_tree.svg" alt="decision_tree.svg" class="org-svg" width="600px">
+</p>
+<p><span class="figure-number">Figure 1: </span>Decision tree (partially drawn) for \(A = 10\) and coins \(\{1, 5, 10\}\).</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-Dynamic-programming--DP" class="outline-3">
+<h3 id="h-Dynamic-programming--DP"><span class="section-number-3">3.3.</span> Dynamic programming (DP)</h3>
+<div class="outline-text-3" id="text-h-Dynamic-programming--DP">
+<p>
+The tree-driven approach above gives us a clue about breaking down the original
+problem into sub-problems. What if starting with the target sum and choosing
+among all possible coin denominations, we started out with 0 and no coins,
+successively building up these smaller problems, slowing increasing the sum on
+one dimension and the number of coin types allowed in the other dimension? This
+is the key to the dynamic programming approach.
+</p>
+
+<p>
+To be fair, the DFS solution above could also be solved the same way (start from
+amount 0, then build out our tree to find all sums that reach the amount we
+want) &#x2014; but the downside is that the shape of the final tree (search paths)
+is not really predictable. The advantage of the DP solution is that the data
+structure we use (a 2D array) is always consistent and simple, making it also
+much easier to reason about. Plus, we don't need to keep a hash table around,
+further simplifying the data structures involved.
+</p>
+
+<p>
+Let's talk about the table. For the case of 10 cents and pennies, nickels, and
+dimes (we'll skip quarters because the amount of 10 cents is too small to
+consider quarters), we first begin constructing the table with the columns set
+to the amounts leading up to 10 cents and the rows describing the different ways
+in which we can get the amount using the coin.
+</p>
+
+<table>
+<caption class="t-above"><span class="table-number">Table 1:</span> Ways to reach amounts (in cents) using only pennies.</caption>
+
+<colgroup>
+<col  class="org-left">
+
+<col  class="org-right">
+
+<col  class="org-right">
+
+<col  class="org-right">
+
+<col  class="org-right">
+
+<col  class="org-right">
+
+<col  class="org-right">
+
+<col  class="org-right">
+
+<col  class="org-right">
+
+<col  class="org-right">
+
+<col  class="org-right">
+
+<col  class="org-right">
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">&#xa0;</th>
+<th scope="col" class="org-right">0</th>
+<th scope="col" class="org-right">1</th>
+<th scope="col" class="org-right">2</th>
+<th scope="col" class="org-right">3</th>
+<th scope="col" class="org-right">4</th>
+<th scope="col" class="org-right">5</th>
+<th scope="col" class="org-right">6</th>
+<th scope="col" class="org-right">7</th>
+<th scope="col" class="org-right">8</th>
+<th scope="col" class="org-right">9</th>
+<th scope="col" class="org-right">10</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">p</td>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+This table says "no matter what amount, if we're only using pennies, there is
+always only 1 combination of coins we can use to reach that amount &#x2014; all
+pennies, every time". Note that also the amount 0 has a value of 1; this
+encodes the act of being unable to use pennies to get to a sum of 0 cents, by
+using <b>no</b> pennies.
+</p>
+
+<p>
+The mathematics here are subtle, but suffice it to say that
+we need to use a value of 1 for the case of 0 cents, to act as our base case. In
+fact, this is how we would start filling in the table for the very first coin
+&#x2014; by starting out with this initial cell value of 1 for amount 0. The
+algorithm is then as follows: for each empty cell on the right, use the column
+that is <i>penny</i> spaces away on the left. Because the penny has a value of 1, we
+use the column immediately to the left. This is why all cells have the same
+value of 1 because the initial 1 value is copied over to the right.
+</p>
+
+<p>
+The above description is a mechanical description of how we can construct this
+table when only pennies are involved, but there's a deeper explanation. The
+point is that to fill out the current cell \(p_a\) where \(a\) is the amount, we
+use the following formula:
+</p>
+
+<p>
+\[
+p_a = p_{a - 1} + x_a
+\]
+</p>
+
+<p>
+where \(p_{a - 1}\) is the number of combinations to make change for an amount
+reduced by the value of the penny (\(a - 1\) because the penny is worth \(1\)) and
+\(x_a\) is the answer for the total number of combinations of making change with
+the set of coins without the penny for the same amount. The \(p_{a - 1}\) is what
+we described  in the previous paragraph &#x2014; it's the column to the immediate
+left. But what about \(x_a\)? Well actually, the table starts out with a default
+row, the <i>empty set</i> of coins (where we have no coins). So the real table looks
+like this initially:
+</p>
+
+<table>
+<caption class="t-above"><span class="table-number">Table 2:</span> Default "base case" row for the set of no coins.</caption>
+
+<colgroup>
+<col  class="org-left">
+
+<col  class="org-right">
+
+<col  class="org-right">
+
+<col  class="org-right">
+
+<col  class="org-right">
+
+<col  class="org-right">
+
+<col  class="org-right">
+
+<col  class="org-right">
+
+<col  class="org-right">
+
+<col  class="org-right">
+
+<col  class="org-right">
+
+<col  class="org-right">
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">&#xa0;</th>
+<th scope="col" class="org-right">0</th>
+<th scope="col" class="org-right">1</th>
+<th scope="col" class="org-right">2</th>
+<th scope="col" class="org-right">3</th>
+<th scope="col" class="org-right">4</th>
+<th scope="col" class="org-right">5</th>
+<th scope="col" class="org-right">6</th>
+<th scope="col" class="org-right">7</th>
+<th scope="col" class="org-right">8</th>
+<th scope="col" class="org-right">9</th>
+<th scope="col" class="org-right">10</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">\(\{\}\)</td>
+<td class="org-right">1</td>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+This table reads: if there are no coins available, then if the amount we need is
+0, there is 1 way to make change &#x2014; by choosing nothing. However, if we need to
+make change for some amount greater than 0, we are unable to fulfill that
+request because we don't have any coins we can use. So because we are unable to
+honor the request, we put in a \(0\) for those positive sums.
+</p>
+
+<p>
+Now let's go back to filling out the row for the pennies.
+</p>
+
+<table>
+<caption class="t-above"><span class="table-number">Table 3:</span> Filling out the pennies row.</caption>
+
+<colgroup>
+<col  class="org-left">
+
+<col  class="org-right">
+
+<col  class="org-right">
+
+<col  class="org-right">
+
+<col  class="org-right">
+
+<col  class="org-right">
+
+<col  class="org-right">
+
+<col  class="org-right">
+
+<col  class="org-right">
+
+<col  class="org-right">
+
+<col  class="org-right">
+
+<col  class="org-right">
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">&#xa0;</th>
+<th scope="col" class="org-right">0</th>
+<th scope="col" class="org-right">1</th>
+<th scope="col" class="org-right">2</th>
+<th scope="col" class="org-right">3</th>
+<th scope="col" class="org-right">4</th>
+<th scope="col" class="org-right">5</th>
+<th scope="col" class="org-right">6</th>
+<th scope="col" class="org-right">7</th>
+<th scope="col" class="org-right">8</th>
+<th scope="col" class="org-right">9</th>
+<th scope="col" class="org-right">10</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">\(\{\}\)</td>
+<td class="org-right">1</td>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+</tr>
+
+<tr>
+<td class="org-left">\(\{p\}\)</td>
+<td class="org-right">1</td>
+<td class="org-right">?</td>
+<td class="org-right">?</td>
+<td class="org-right">?</td>
+<td class="org-right">?</td>
+<td class="org-right">?</td>
+<td class="org-right">?</td>
+<td class="org-right">?</td>
+<td class="org-right">?</td>
+<td class="org-right">?</td>
+<td class="org-right">?</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+For amount 0, the answer is always 1 (as discussed previously). For amount 1, we
+use the formula \(p_{a - 1} + x_a\), which in this case is \(1 + 0\) (the 1 comes
+from the answer for amount \(1 - 1 = 0\), and the 0 comes from the row above, for
+the empty set which does not have the penny available). In this fashion, we can
+fill out the row again, one cell at a time, and each time the solution is \(1 +
+0 = 1\). So now we get the following:
+</p>
+
+<table>
+<caption class="t-above"><span class="table-number">Table 4:</span> Pennies row filled out.</caption>
+
+<colgroup>
+<col  class="org-left">
+
+<col  class="org-right">
+
+<col  class="org-right">
+
+<col  class="org-right">
+
+<col  class="org-right">
+
+<col  class="org-right">
+
+<col  class="org-right">
+
+<col  class="org-right">
+
+<col  class="org-right">
+
+<col  class="org-right">
+
+<col  class="org-right">
+
+<col  class="org-right">
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">&#xa0;</th>
+<th scope="col" class="org-right">0</th>
+<th scope="col" class="org-right">1</th>
+<th scope="col" class="org-right">2</th>
+<th scope="col" class="org-right">3</th>
+<th scope="col" class="org-right">4</th>
+<th scope="col" class="org-right">5</th>
+<th scope="col" class="org-right">6</th>
+<th scope="col" class="org-right">7</th>
+<th scope="col" class="org-right">8</th>
+<th scope="col" class="org-right">9</th>
+<th scope="col" class="org-right">10</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">\(\{\}\)</td>
+<td class="org-right">1</td>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+</tr>
+
+<tr>
+<td class="org-left">\(\{p\}\)</td>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+What about nickels? Let's see how nickel behave in isolation first, and then
+let's consider them in conjunction with pennies.
+</p>
+
+<table>
+<caption class="t-above"><span class="table-number">Table 5:</span> Nickels row filled out.</caption>
+
+<colgroup>
+<col  class="org-left">
+
+<col  class="org-right">
+
+<col  class="org-right">
+
+<col  class="org-right">
+
+<col  class="org-right">
+
+<col  class="org-right">
+
+<col  class="org-right">
+
+<col  class="org-right">
+
+<col  class="org-right">
+
+<col  class="org-right">
+
+<col  class="org-right">
+
+<col  class="org-right">
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">&#xa0;</th>
+<th scope="col" class="org-right">0</th>
+<th scope="col" class="org-right">1</th>
+<th scope="col" class="org-right">2</th>
+<th scope="col" class="org-right">3</th>
+<th scope="col" class="org-right">4</th>
+<th scope="col" class="org-right">5</th>
+<th scope="col" class="org-right">6</th>
+<th scope="col" class="org-right">7</th>
+<th scope="col" class="org-right">8</th>
+<th scope="col" class="org-right">9</th>
+<th scope="col" class="org-right">10</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">\(\{\}\)</td>
+<td class="org-right">1</td>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+</tr>
+
+<tr>
+<td class="org-left">\(\{n\}\)</td>
+<td class="org-right">1</td>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+<td class="org-right">1</td>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+<td class="org-right">1</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+The table tells us that nickels can only make change (with itself) if the amount
+is divisible evenly by 5, or if the amount is 0. If we add in pennies to the
+mix, then the table gets more interesting because we gain the ability to make
+change for amounts that are not divisible by 5 (by using pennies).
+</p>
+
+<table>
+<caption class="t-above"><span class="table-number">Table 6:</span> Nickels row filled out with pennies.</caption>
+
+<colgroup>
+<col  class="org-left">
+
+<col  class="org-right">
+
+<col  class="org-right">
+
+<col  class="org-right">
+
+<col  class="org-right">
+
+<col  class="org-right">
+
+<col  class="org-right">
+
+<col  class="org-right">
+
+<col  class="org-right">
+
+<col  class="org-right">
+
+<col  class="org-right">
+
+<col  class="org-right">
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">&#xa0;</th>
+<th scope="col" class="org-right">0</th>
+<th scope="col" class="org-right">1</th>
+<th scope="col" class="org-right">2</th>
+<th scope="col" class="org-right">3</th>
+<th scope="col" class="org-right">4</th>
+<th scope="col" class="org-right">5</th>
+<th scope="col" class="org-right">6</th>
+<th scope="col" class="org-right">7</th>
+<th scope="col" class="org-right">8</th>
+<th scope="col" class="org-right">9</th>
+<th scope="col" class="org-right">10</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">\(\{\}\)</td>
+<td class="org-right">1</td>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+</tr>
+
+<tr>
+<td class="org-left">\(\{p\}\)</td>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+</tr>
+
+<tr>
+<td class="org-left">\(\{p, n\}\)</td>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+<td class="org-right">2</td>
+<td class="org-right">2</td>
+<td class="org-right">2</td>
+<td class="org-right">2</td>
+<td class="org-right">2</td>
+<td class="org-right">3</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+For nickels, our formula is
+</p>
+
+<p>
+\[
+n_a = n_{a - 5} + p_a.
+\]
+</p>
+
+<p>
+The \(p_a\) is there because, we want to consider all the ways we can make the
+amount \(a\) using pennies (we're building on top of that answer). For the \(n_{a -
+5}\), we are also building on top of a previous answer &#x2014; the case where the
+amount was exactly one nickel's worth smaller than the current amount. Again for
+the first column (amount 0), the answer is 1 by definition. But for all
+subsequent amounts we have to use our formula. For amounts 1 through 4, the
+\(n_{a-5}\) term is zero because there is no corresponding value (it would point
+to a negative amount also, which is not valid). But for the amount of 5 cents,
+we can use the nickel as the amount is big enough.
+</p>
+
+<p>
+It's worth repeating the meaning of the formula in plain English. The formula
+written above means, "the count of all combinations of nickels and pennies for
+an amount \(a\) is equal to (1) the number of combinations without using nickels
+for the same amount (\(p_a\)) and (2) the number of combinations of using a nickel
+to reduce the amount by 5 cents and whatever the overall answer is for that
+reduced amount (\(n_{a - 5}\))." The second step might be a bit unintuitive, but
+it makes sense if you think about the DFS solution. There, each time we decide
+to use a coin of some value, we reduced the amount by that value and we had to
+choose all over again at the next tree depth down. Going left on the table is
+akin to choosing to use the current coin denomination (because the amount is
+large enough) in DFS, but which in and of itself doesn't give us any answers (we
+still need to solve for the subproblem of the reduced amount using nickels and
+pennies).
+</p>
+
+<p>
+We can use the same reasoning to fill out the rest of the table with dimes and
+quarters. The table below uses increments of 5 to save space, but the ideas are
+the same as before.
+</p>
+
+<table>
+<caption class="t-above"><span class="table-number">Table 7:</span> Table for  quarters, dimes, nickels, and pennies.</caption>
+
+<colgroup>
+<col  class="org-left">
+
+<col  class="org-right">
+
+<col  class="org-right">
+
+<col  class="org-right">
+
+<col  class="org-right">
+
+<col  class="org-right">
+
+<col  class="org-right">
+
+<col  class="org-right">
+
+<col  class="org-right">
+
+<col  class="org-right">
+
+<col  class="org-right">
+
+<col  class="org-right">
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">&#xa0;</th>
+<th scope="col" class="org-right">0</th>
+<th scope="col" class="org-right">5</th>
+<th scope="col" class="org-right">10</th>
+<th scope="col" class="org-right">15</th>
+<th scope="col" class="org-right">20</th>
+<th scope="col" class="org-right">25</th>
+<th scope="col" class="org-right">30</th>
+<th scope="col" class="org-right">35</th>
+<th scope="col" class="org-right">40</th>
+<th scope="col" class="org-right">45</th>
+<th scope="col" class="org-right">50</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">\(\{\}\)</td>
+<td class="org-right">1</td>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+</tr>
+
+<tr>
+<td class="org-left">\(\{p\}\)</td>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+</tr>
+
+<tr>
+<td class="org-left">\(\{p, n\}\)</td>
+<td class="org-right">1</td>
+<td class="org-right">2</td>
+<td class="org-right">3</td>
+<td class="org-right">4</td>
+<td class="org-right">5</td>
+<td class="org-right">6</td>
+<td class="org-right">7</td>
+<td class="org-right">8</td>
+<td class="org-right">9</td>
+<td class="org-right">10</td>
+<td class="org-right">11</td>
+</tr>
+
+<tr>
+<td class="org-left">\(\{p, n, d\}\)</td>
+<td class="org-right">1</td>
+<td class="org-right">2</td>
+<td class="org-right">4</td>
+<td class="org-right">6</td>
+<td class="org-right">9</td>
+<td class="org-right">12</td>
+<td class="org-right">16</td>
+<td class="org-right">20</td>
+<td class="org-right">25</td>
+<td class="org-right">30</td>
+<td class="org-right">36</td>
+</tr>
+
+<tr>
+<td class="org-left">\(\{p, n, d, q\}\)</td>
+<td class="org-right">1</td>
+<td class="org-right">2</td>
+<td class="org-right">4</td>
+<td class="org-right">6</td>
+<td class="org-right">9</td>
+<td class="org-right">13</td>
+<td class="org-right">18</td>
+<td class="org-right">24</td>
+<td class="org-right">31</td>
+<td class="org-right">39</td>
+<td class="org-right">49</td>
+</tr>
+</tbody>
+</table>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#Tests">solution</a></span>(3/4) <span class="lilac-caption-link-symbol"><a href="#__NREF__solution-3">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__solution-3"><span class="org-keyword">def</span> <span class="org-function-name">dp</span>(amount: <span class="org-builtin">int</span>, coins: List[<span class="org-builtin">int</span>]) <span class="org-operator">-&gt;</span> <span class="org-builtin">int</span>:
+    <span class="org-comment-delimiter"># </span><span class="org-comment">These are special condition to match the behavior of our brute force and</span>
+    <span class="org-comment-delimiter"># </span><span class="org-comment">DFS solutions.</span>
+    <span class="org-keyword">if</span> <span class="org-keyword">not</span> coins:
+        <span class="org-keyword">return</span> 0
+    <span class="org-keyword">if</span> <span class="org-keyword">not</span> amount:
+        <span class="org-keyword">return</span> 0
+
+    <span class="org-variable-name">table</span> <span class="org-operator">=</span> [[1] <span class="org-operator">+</span> [0] <span class="org-operator">*</span> amount
+             <span class="org-keyword">for</span> _ <span class="org-keyword">in</span> coins]
+
+    <span class="org-keyword">for</span> i, coin <span class="org-keyword">in</span> <span class="org-builtin">enumerate</span>(coins):
+        <span class="org-keyword">for</span> amt <span class="org-keyword">in</span> <span class="org-builtin">range</span>(1, amount <span class="org-operator">+</span> 1):
+            <span class="org-variable-name">with_coin</span> <span class="org-operator">=</span> table[i][amt <span class="org-operator">-</span> coin] <span class="org-keyword">if</span> amt <span class="org-operator">&gt;=</span> coin <span class="org-keyword">else</span> 0
+            <span class="org-variable-name">without_coin</span> <span class="org-operator">=</span> table[i <span class="org-operator">-</span> 1][amt] <span class="org-keyword">if</span> i <span class="org-operator">&gt;</span> 0 <span class="org-keyword">else</span> 0
+            table[i][amt] <span class="org-operator">=</span> with_coin <span class="org-operator">+</span> without_coin
+
+    <span class="org-keyword">return</span> table[<span class="org-operator">-</span>1][amount]
+</pre></div></div><p>
+The time complexity is \(O(a*d)\) because there are two loops, one for the number
+of coins \(d\) and another nested one inside it for the amount \(a\). The space
+complexity is also \(O(a*d)\) because we create a about \(a*d\) cells (not counting
+the initial <code>[1]</code> cell for each row's first column).
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-Using--O-a---space" class="outline-3">
+<h3 id="h-Using--O-a---space"><span class="section-number-3">3.4.</span> Using \(O(a)\) space</h3>
+<div class="outline-text-3" id="text-h-Using--O-a---space">
+<p>
+The solution below only uses one row of the table at a time, essentially
+collapsing the rows as we build up to the last row.
+</p>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#Tests">solution</a></span>(4/4) <span class="lilac-caption-link-symbol"><a href="#__NREF__solution-4">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__solution-4"><span class="org-keyword">def</span> <span class="org-function-name">dp_optimized</span>(amount: <span class="org-builtin">int</span>, coins: List[<span class="org-builtin">int</span>]) <span class="org-operator">-&gt;</span> <span class="org-builtin">int</span>:
+    <span class="org-comment-delimiter"># </span><span class="org-comment">These are special condition to match the behavior of our brute force and</span>
+    <span class="org-comment-delimiter"># </span><span class="org-comment">DFS solutions.</span>
+    <span class="org-keyword">if</span> <span class="org-keyword">not</span> coins:
+        <span class="org-keyword">return</span> 0
+    <span class="org-keyword">if</span> <span class="org-keyword">not</span> amount:
+        <span class="org-keyword">return</span> 0
+
+    <span class="org-variable-name">table</span> <span class="org-operator">=</span> [1] <span class="org-operator">+</span> [0] <span class="org-operator">*</span> amount
+
+    <span class="org-keyword">for</span> coin <span class="org-keyword">in</span> coins:
+        <span class="org-keyword">for</span> amt <span class="org-keyword">in</span> <span class="org-builtin">range</span>(amount <span class="org-operator">+</span> 1):
+            <span class="org-comment-delimiter"># </span><span class="org-comment">Skip over negative sums.</span>
+            <span class="org-keyword">if</span> amt <span class="org-operator">-</span> coin <span class="org-operator">&lt;</span> 0:
+                <span class="org-keyword">continue</span>
+            <span class="org-variable-name">table</span>[amt] <span class="org-operator">+=</span> table[amt <span class="org-operator">-</span> coin]
+
+    <span class="org-keyword">return</span> table[amount]
+</pre></div></div>
+</div>
+</div>
+
+<div id="outline-container-h-Generating-functions" class="outline-3">
+<h3 id="h-Generating-functions"><span class="section-number-3">3.5.</span> Generating functions</h3>
+<div class="outline-text-3" id="text-h-Generating-functions">
+<p>
+Generating functions (<a href="#citeproc_bib_item_2">Knuth, 1997, sec. 1.2.9</a>) give us a \(O(1)\) time solution, but the implementation is
+omitted here because the solution boils down to a series of algebraic
+manipulations. It is purely mathematical and would require implementing
+functionality found in computer algebra systems, which transcends the original
+spirit of this problem from a coding sense.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-Tests" class="outline-2">
+<h2 id="h-Tests"><span class="section-number-2">4.</span> Tests</h2>
+<div class="outline-text-2" id="text-h-Tests">
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><label class="org-src-name">Tests</label><span class="lilac-caption-link-symbol"><a href="#Tests">&#x1f517;</a></span></div><pre class="src src-python" id="Tests"><span class="org-keyword">from</span> hypothesis <span class="org-keyword">import</span> given, strategies <span class="org-keyword">as</span> st
+<span class="org-keyword">from</span> typing <span class="org-keyword">import</span> Dict, List
+<span class="org-keyword">import</span> unittest
+
+<span class="lilac-child-link-from-parent"><a href="#__NREF__solution-1">solution</a></span>
+
+<span class="org-keyword">class</span> <span class="org-type">Test</span>(unittest.TestCase):
+    <span class="lilac-child-link-from-parent"><a href="#__NREF__test_cases-1">test_cases</a></span>
+
+<span class="org-keyword">if</span> <span class="org-builtin">__name__</span> <span class="org-operator">==</span> <span class="org-string">"__main__"</span>:
+    unittest.main(<span class="org-constant">exit</span><span class="org-operator">=</span><span class="org-constant">False</span>)
+</pre></div></div>
+</div>
+
+<div id="outline-container-h-Basic-tests" class="outline-3">
+<h3 id="h-Basic-tests"><span class="section-number-3">4.1.</span> Basic tests</h3>
+<div class="outline-text-3" id="text-h-Basic-tests">
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#Tests">test_cases</a></span>(1/2) <span class="lilac-caption-link-symbol"><a href="#__NREF__test_cases-1">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__test_cases-1"><span class="org-keyword">def</span> <span class="org-function-name">test_basic</span>(<span class="org-keyword">self</span>):
+    <span class="org-variable-name">cases</span> <span class="org-operator">=</span> [
+        <span class="org-comment-delimiter"># </span><span class="org-comment">No combination to make sum of 0, with no coins.</span>
+        (0,     0,      []),
+        <span class="org-comment-delimiter"># </span><span class="org-comment">No combination to make sum of 0, with smallest possible coin (penny).</span>
+        (0,     0,      [1]),
+        <span class="org-comment-delimiter"># </span><span class="org-comment">Some basic cases.</span>
+        (1,     1,      [1]),
+        (4,     12,     [2, 3, 7]),
+        <span class="org-comment-delimiter"># </span><span class="org-comment">Some values from Table 7 in the text.</span>
+        (9,     20,     [1, 5, 10, 25]),
+        (18,    30,     [1, 5, 10, 25]),
+        (24,    35,     [1, 5, 10, 25]),
+        (31,    40,     [1, 5, 10, 25]),
+        (39,    45,     [1, 5, 10, 25]),
+        (49,    50,     [1, 5, 10, 25]),
+        (293,   100,    [1, 5, 10, 25, 50, 100]),
+    ]
+    <span class="org-keyword">for</span> want, amount, coins <span class="org-keyword">in</span> cases:
+        <span class="org-keyword">self</span>.assertEqual(want, brute_exponential(amount, coins))
+        <span class="org-keyword">self</span>.assertEqual(want, brute_dfs(amount, coins))
+        <span class="org-keyword">self</span>.assertEqual(want, dp(amount, coins))
+        <span class="org-keyword">self</span>.assertEqual(want, dp_optimized(amount, coins))
+</pre></div></div>
+</div>
+</div>
+
+<div id="outline-container-h-Property-based-tests" class="outline-3">
+<h3 id="h-Property-based-tests"><span class="section-number-3">4.2.</span> Property-based tests</h3>
+<div class="outline-text-3" id="text-h-Property-based-tests">
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#Tests">test_cases</a></span>(2/2) <span class="lilac-caption-link-symbol"><a href="#__NREF__test_cases-2">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__test_cases-2"><span class="org-type">@given</span>(st.integers(min_value<span class="org-operator">=</span>0, max_value<span class="org-operator">=</span>50),
+       st.lists(st.integers(min_value<span class="org-operator">=</span>1, max_value<span class="org-operator">=</span>50),
+                min_size<span class="org-operator">=</span>0,
+                max_size<span class="org-operator">=</span>4,
+                unique<span class="org-operator">=</span><span class="org-constant">True</span>))
+<span class="org-keyword">def</span> <span class="org-function-name">test_random</span>(<span class="org-keyword">self</span>, amount: <span class="org-builtin">int</span>, coins: List[<span class="org-builtin">int</span>]):
+    <span class="org-comment-delimiter"># </span><span class="org-comment">Sort the coins.</span>
+    coins.sort()
+
+    <span class="org-variable-name">result_brute</span> <span class="org-operator">=</span> brute_exponential(amount, coins)
+
+    <span class="org-comment-delimiter"># </span><span class="org-comment">Do the solutions agree with each other?</span>
+    <span class="org-keyword">self</span>.assertEqual(result_brute, brute_dfs(amount, coins))
+    <span class="org-keyword">self</span>.assertEqual(result_brute, dp(amount, coins))
+    <span class="org-keyword">self</span>.assertEqual(result_brute, dp_optimized(amount, coins))
+</pre></div></div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-References" class="outline-2">
+<h2 id="h-References"><span class="section-number-2">5.</span> References</h2>
+<div class="outline-text-2" id="text-h-References">
+<style>.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}</style><div class="csl-bib-body">
+  <div class="csl-entry" id="citeproc_bib_item_1">Aziz, A., Lee, T.-H., &#38; Prakash, A. (2018). <i>Elements of Programming Interviews in Python: The Insiders’ Guide</i>. CreateSpace Independent Publishing Platform (25 July. 2018).</div>
+  <div class="csl-entry" id="citeproc_bib_item_2">Knuth, D. E. (1997). <i>The Art of Computer Programming: Fundamental Algorithms</i> (3rd ed). Addison-Wesley.</div>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

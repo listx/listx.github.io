@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Intersection of two sorted arrays</title>
+<meta name="author" content="Linus Arver" />
+<meta name="generator" content="Org Mode" />
+<style>
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { }
+</style>
+<link rel="preconnect" href="/vendor/source-fonts/source-fonts.css" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="/vendor/source-fonts/source-fonts.css">
+<script src="/vendor/jquery-3.6.4.min.js"></script>
+<script src="lilac.js"></script>
+<link rel="stylesheet" type="text/css" href="syntax-highlighting.css"/>
+<link rel="stylesheet" type="text/css" href="lilac.css" />
+<link rel="stylesheet" type="text/css" href="codex.css" />
+<link rel="stylesheet" href="/vendor/source-fonts/source-fonts.css">
+<script>
+// @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&amp;dn=gpl-3.0.txt GPL-v3-or-Later
+     function CodeHighlightOn(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.add("code-highlighted");
+         target.classList.add("code-highlighted");
+       }
+     }
+     function CodeHighlightOff(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.remove("code-highlighted");
+         target.classList.remove("code-highlighted");
+       }
+     }
+// @license-end
+</script>
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    loader: { paths: { "mathjax-newcm": "/vendor/mathjax-newcm-font" } },
+	output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="/vendor/mathjax/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<div id="content" class="content">
+<h1 class="title">Intersection of two sorted arrays</h1>
+<div id="table-of-contents" role="doc-toc">
+
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#h-Problem-statement">1. Problem statement</a></li>
+<li><a href="#h-Insights">2. Insights</a>
+<ul>
+<li><a href="#h-Sorted-inputs">2.1. Sorted inputs</a></li>
+</ul>
+</li>
+<li><a href="#h-Solution">3. Solution</a>
+<ul>
+<li><a href="#h-Hash-tables">3.1. Hash tables</a></li>
+<li><a href="#h-Brute-force">3.2. Brute force</a></li>
+<li><a href="#h-Binary-search">3.3. Binary search</a></li>
+<li><a href="#h-Optimal">3.4. Optimal</a></li>
+</ul>
+</li>
+<li><a href="#h-Tests">4. Tests</a>
+<ul>
+<li><a href="#h-Basic-tests">4.1. Basic tests</a></li>
+<li><a href="#h-Property-based-tests">4.2. Property-based tests</a></li>
+</ul>
+</li>
+<li><a href="#h-References">5. References</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h-Problem-statement" class="outline-2">
+<h2 id="h-Problem-statement"><span class="section-number-2">1.</span> Problem statement</h2>
+<div class="outline-text-2" id="text-h-Problem-statement">
+<p>
+Compute the intersection of two sorted arrays (<a href="#citeproc_bib_item_1">Aziz et al., 2018, p. 194</a>). Deduplicate the
+output.
+</p>
+
+<pre class="example" id="org0000000">
+Input: [1, 2] [3, 4]
+Output: []
+
+Input: [1, 1, 1, 2] [1, 2, 2, 3]
+Output: [1, 2]
+</pre>
+</div>
+</div>
+
+<div id="outline-container-h-Insights" class="outline-2">
+<h2 id="h-Insights"><span class="section-number-2">2.</span> Insights</h2>
+<div class="outline-text-2" id="text-h-Insights">
+</div>
+
+<div id="outline-container-h-Sorted-inputs" class="outline-3">
+<h3 id="h-Sorted-inputs"><span class="section-number-3">2.1.</span> Sorted inputs</h3>
+<div class="outline-text-3" id="text-h-Sorted-inputs">
+<p>
+This problem is begging us to exploit the fact that the inputs are already
+sorted.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-Solution" class="outline-2">
+<h2 id="h-Solution"><span class="section-number-2">3.</span> Solution</h2>
+<div class="outline-text-2" id="text-h-Solution">
+</div>
+
+<div id="outline-container-h-Hash-tables" class="outline-3">
+<h3 id="h-Hash-tables"><span class="section-number-3">3.1.</span> Hash tables</h3>
+<div class="outline-text-3" id="text-h-Hash-tables">
+<p>
+We could use hash tables. We simply create two <code>set()</code> objects (essentially hash
+tables that only have keys, without associated values), and then get the
+intersection between them.
+</p>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#Tests">solution</a></span>(1/4) <span class="lilac-caption-link-symbol"><a href="#__NREF__solution-1">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__solution-1"><span class="org-keyword">def</span> <span class="org-function-name">brute1</span>(xs: List[<span class="org-builtin">int</span>], ys: List[<span class="org-builtin">int</span>]) <span class="org-operator">-&gt;</span> List[<span class="org-builtin">int</span>]:
+    <span class="org-variable-name">result</span> <span class="org-operator">=</span> <span class="org-builtin">list</span>(<span class="org-builtin">set</span>(xs) <span class="org-operator">&amp;</span> <span class="org-builtin">set</span>(ys))
+    result.sort()
+    <span class="org-keyword">return</span> result
+</pre></div></div><p>
+The downside is the space complexity, which is \(O(mn)\) to store the additional
+sets for each of the arrays, not to mention the <code>sort()</code> we have to run because
+the <code>set()</code> function does not preserve order.
+</p>
+
+<p>
+Also, using a hash table here is wasteful, because we are not taking advatage of
+the fact that the inputs are sorted.
+</p>
+
+<p>
+We should try to find a solution that tries to avoid prohibitively expensive
+space complexity.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-Brute-force" class="outline-3">
+<h3 id="h-Brute-force"><span class="section-number-3">3.2.</span> Brute force</h3>
+<div class="outline-text-3" id="text-h-Brute-force">
+<p>
+We can compare all letters with overy other letter, by looping over twice.
+</p>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#Tests">solution</a></span>(2/4) <span class="lilac-caption-link-symbol"><a href="#__NREF__solution-2">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__solution-2"><span class="org-keyword">def</span> <span class="org-function-name">brute2</span>(xs: List[<span class="org-builtin">int</span>], ys: List[<span class="org-builtin">int</span>]) <span class="org-operator">-&gt;</span> List[<span class="org-builtin">int</span>]:
+    <span class="org-variable-name">result</span> <span class="org-operator">=</span> []
+    <span class="org-keyword">for</span> x <span class="org-keyword">in</span> xs:
+        <span class="org-comment-delimiter"># </span><span class="org-comment">Go to next x if it's a dupe.</span>
+        <span class="org-keyword">if</span> x <span class="org-keyword">in</span> result:
+            <span class="org-keyword">continue</span>
+        <span class="org-keyword">for</span> y <span class="org-keyword">in</span> ys:
+            <span class="org-comment-delimiter"># </span><span class="org-comment">Similarly, skip over dupes in y.</span>
+            <span class="org-keyword">if</span> y <span class="org-keyword">in</span> result:
+                <span class="org-keyword">continue</span>
+            <span class="org-keyword">if</span> x <span class="org-operator">==</span> y:
+                result.append(x)
+                <span class="org-keyword">break</span>
+    <span class="org-keyword">return</span> result
+</pre></div></div><p>
+This has time complexity \(O(xy)\) where \(x\) and \(y\) are lengths of the <code>xs</code> and
+<code>ys</code> arrays. It's actually worse than this because we're assuming that the
+expressions <code>x in result</code> and <code>y in result</code> run in constant time, which is
+simply not true. But as the time complexity is already bad, we leave it at that.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-Binary-search" class="outline-3">
+<h3 id="h-Binary-search"><span class="section-number-3">3.3.</span> Binary search</h3>
+<div class="outline-text-3" id="text-h-Binary-search">
+<p>
+Instead of a nested loop, we can remove the inner loop with explicit binary
+search using the <code>bisect</code> module.
+</p>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#Tests">solution</a></span>(3/4) <span class="lilac-caption-link-symbol"><a href="#__NREF__solution-3">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__solution-3"><span class="org-keyword">def</span> <span class="org-function-name">better</span>(xs: List[<span class="org-builtin">int</span>], ys: List[<span class="org-builtin">int</span>]) <span class="org-operator">-&gt;</span> List[<span class="org-builtin">int</span>]:
+    <span class="org-keyword">def</span> <span class="org-function-name">has</span>(needle: <span class="org-builtin">int</span>, haystack: List[<span class="org-builtin">int</span>]):
+        <span class="org-variable-name">i</span> <span class="org-operator">=</span> bisect.bisect_left(haystack, needle)
+        <span class="org-keyword">return</span> i <span class="org-operator">&lt;</span> <span class="org-builtin">len</span>(haystack) <span class="org-keyword">and</span> haystack[i] <span class="org-operator">==</span> needle
+
+    <span class="org-variable-name">result</span> <span class="org-operator">=</span> []
+    <span class="org-keyword">for</span> i, x <span class="org-keyword">in</span> <span class="org-builtin">enumerate</span>(xs):
+        <span class="org-comment-delimiter"># </span><span class="org-comment">Only add this element if it is inside ys (intersection confirmed) and</span>
+        <span class="org-comment-delimiter"># </span><span class="org-comment">if it is not a duplicate.</span>
+        <span class="org-keyword">if</span> has(x, ys) <span class="org-keyword">and</span> (i <span class="org-operator">==</span> 0 <span class="org-keyword">or</span> x <span class="org-operator">!=</span> xs[i <span class="org-operator">-</span> 1]):
+            result.append(x)
+    <span class="org-keyword">return</span> result
+</pre></div></div><p>
+The condition <code>(i == 0 or x != xs[i - 1])</code> avoids using duplicate <code>x</code> entries,
+by ensuring that the current <code>x</code> is not the same as the previous element in
+<code>xs</code>. The <code>i == 0</code> merely bypasses this filtering of duplicates because there's
+no point in checking for duplicates for the very first element under
+consideration.
+</p>
+
+<p>
+The time complexity is \(O(m \log_{n})\) where \(m\) is the length of the outer
+array we iterate over (<code>xs</code>). The \(\log_{n}\) comes from the time complexity of
+binary search over the searched array, <code>ys</code>.
+</p>
+
+<p>
+We can squeeze more performance out of this by using the shorter of the two
+arrays, <code>xs</code> and <code>ys</code>, as the array to loop over. This way, we can iterate a
+small number of times and then use the logarithmic power of binary search
+against the larger array. Otherwise we'd be iterating over a large number of
+items while binary searching over a small (tiny) array, where the performance
+benefits of binary search won't be as apparent.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-Optimal" class="outline-3">
+<h3 id="h-Optimal"><span class="section-number-3">3.4.</span> Optimal</h3>
+<div class="outline-text-3" id="text-h-Optimal">
+<p>
+In <a href="../merge_sorted_linked_lists/README.html">merged linked lists together</a>, we saw that we only needed to traverse through
+the two linked lists once because they were already sorted. We can apply the
+same principle here and only traverse through the <code>xs</code> and <code>ys</code> lists once. The
+trick is to have a generic loop and within this loop, have two separate indices
+for each array. Then we advance the index for <code>xs</code> or <code>ys</code> depending on how we
+process the current item pointed to by each of these indices.
+</p>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#Tests">solution</a></span>(4/4) <span class="lilac-caption-link-symbol"><a href="#__NREF__solution-4">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__solution-4"><span class="org-keyword">def</span> <span class="org-function-name">optimal</span>(xs: List[<span class="org-builtin">int</span>], ys: List[<span class="org-builtin">int</span>]) <span class="org-operator">-&gt;</span> List[<span class="org-builtin">int</span>]:
+    <span class="org-variable-name">i</span> <span class="org-operator">=</span> 0
+    <span class="org-variable-name">j</span> <span class="org-operator">=</span> 0
+    <span class="org-variable-name">result</span> <span class="org-operator">=</span> []
+
+    <span class="org-keyword">while</span> i <span class="org-operator">&lt;</span> <span class="org-builtin">len</span>(xs) <span class="org-keyword">and</span> j <span class="org-operator">&lt;</span> <span class="org-builtin">len</span>(ys):
+        <span class="org-comment-delimiter"># </span><span class="org-comment">Skip over non-matching items (including duplicates).</span>
+        <span class="org-keyword">if</span> xs[i] <span class="org-operator">&lt;</span> ys[j]:
+            <span class="org-variable-name">i</span> <span class="org-operator">+=</span> 1
+        <span class="org-keyword">elif</span> xs[i] <span class="org-operator">&gt;</span> ys[j]:
+            <span class="org-variable-name">j</span> <span class="org-operator">+=</span> 1
+        <span class="org-comment-delimiter"># </span><span class="org-comment">We have a match.</span>
+        <span class="org-keyword">else</span>:
+            <span class="org-comment-delimiter"># </span><span class="org-comment">Again, avoid adding the same item twice into the result.</span>
+            <span class="org-keyword">if</span> i <span class="org-operator">==</span> 0 <span class="org-keyword">or</span> xs[i] <span class="org-operator">!=</span> xs[i <span class="org-operator">-</span> 1]:
+                result.append(xs[i])
+
+            <span class="org-comment-delimiter"># </span><span class="org-comment">We've consumed the information pointed to by both pointers, so</span>
+            <span class="org-comment-delimiter"># </span><span class="org-comment">they are useless now. Advance the pointers to fetch new content</span>
+            <span class="org-comment-delimiter"># </span><span class="org-comment">for the next iteration.</span>
+            <span class="org-variable-name">i</span> <span class="org-operator">+=</span> 1
+            <span class="org-variable-name">j</span> <span class="org-operator">+=</span> 1
+
+    <span class="org-keyword">return</span> result
+</pre></div></div><p>
+Time complexity is \(O(m+n)\), because we spend \(O(1)\) time per element across
+both inputs.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-Tests" class="outline-2">
+<h2 id="h-Tests"><span class="section-number-2">4.</span> Tests</h2>
+<div class="outline-text-2" id="text-h-Tests">
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><label class="org-src-name">Tests</label><span class="lilac-caption-link-symbol"><a href="#Tests">&#x1f517;</a></span></div><pre class="src src-python" id="Tests"><span class="org-keyword">import</span> bisect
+<span class="org-keyword">from</span> hypothesis <span class="org-keyword">import</span> given, strategies <span class="org-keyword">as</span> st
+<span class="org-keyword">from</span> typing <span class="org-keyword">import</span> List
+<span class="org-keyword">import</span> unittest
+
+<span class="lilac-child-link-from-parent"><a href="#__NREF__solution-1">solution</a></span>
+
+<span class="org-keyword">class</span> <span class="org-type">Test</span>(unittest.TestCase):
+    <span class="lilac-child-link-from-parent"><a href="#__NREF__test_cases-1">test_cases</a></span>
+
+<span class="org-keyword">if</span> <span class="org-builtin">__name__</span> <span class="org-operator">==</span> <span class="org-string">"__main__"</span>:
+    unittest.main(<span class="org-constant">exit</span><span class="org-operator">=</span><span class="org-constant">False</span>)
+</pre></div></div>
+</div>
+
+<div id="outline-container-h-Basic-tests" class="outline-3">
+<h3 id="h-Basic-tests"><span class="section-number-3">4.1.</span> Basic tests</h3>
+<div class="outline-text-3" id="text-h-Basic-tests">
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#Tests">test_cases</a></span>(1/2) <span class="lilac-caption-link-symbol"><a href="#__NREF__test_cases-1">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__test_cases-1"><span class="org-keyword">def</span> <span class="org-function-name">test_basic</span>(<span class="org-keyword">self</span>):
+    <span class="org-comment-delimiter"># </span><span class="org-comment">Empty inputs.</span>
+    <span class="org-variable-name">xs</span> <span class="org-operator">=</span> []
+    <span class="org-variable-name">ys</span> <span class="org-operator">=</span> []
+    <span class="org-variable-name">result</span> <span class="org-operator">=</span> brute1(xs, ys)
+    <span class="org-keyword">self</span>.assertEqual(result, [])
+
+    <span class="org-comment-delimiter"># </span><span class="org-comment">Basic examples, as described in the problem statement.</span>
+    <span class="org-variable-name">xs</span> <span class="org-operator">=</span> [1, 2]
+    <span class="org-variable-name">ys</span> <span class="org-operator">=</span> [3, 4]
+    <span class="org-variable-name">result</span> <span class="org-operator">=</span> brute1(xs, ys)
+    <span class="org-keyword">self</span>.assertEqual(result, [])
+    <span class="org-variable-name">xs</span> <span class="org-operator">=</span> [1, 1, 1, 2]
+    <span class="org-variable-name">ys</span> <span class="org-operator">=</span> [1, 2, 2, 3]
+    <span class="org-variable-name">result</span> <span class="org-operator">=</span> brute1(xs, ys)
+    <span class="org-keyword">self</span>.assertEqual(result, [1, 2])
+</pre></div></div>
+</div>
+</div>
+
+<div id="outline-container-h-Property-based-tests" class="outline-3">
+<h3 id="h-Property-based-tests"><span class="section-number-3">4.2.</span> Property-based tests</h3>
+<div class="outline-text-3" id="text-h-Property-based-tests">
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#Tests">test_cases</a></span>(2/2) <span class="lilac-caption-link-symbol"><a href="#__NREF__test_cases-2">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__test_cases-2"><span class="org-type">@given</span>(st.lists(st.integers(min_value<span class="org-operator">=</span>1, max_value<span class="org-operator">=</span>50),
+                min_size<span class="org-operator">=</span>1,
+                max_size<span class="org-operator">=</span>50),
+       st.lists(st.integers(min_value<span class="org-operator">=</span>1, max_value<span class="org-operator">=</span>50),
+                min_size<span class="org-operator">=</span>1,
+                max_size<span class="org-operator">=</span>50))
+<span class="org-keyword">def</span> <span class="org-function-name">test_random</span>(<span class="org-keyword">self</span>, xs: List[<span class="org-builtin">int</span>], ys: List[<span class="org-builtin">int</span>]):
+    xs.sort()
+    ys.sort()
+
+    <span class="org-variable-name">result_brute1</span> <span class="org-operator">=</span> brute1(xs, ys)
+    <span class="org-variable-name">result_brute2</span> <span class="org-operator">=</span> brute2(xs, ys)
+    <span class="org-variable-name">result_better</span> <span class="org-operator">=</span> better(xs, ys)
+    <span class="org-variable-name">result_optimal</span> <span class="org-operator">=</span> optimal(xs, ys)
+
+    <span class="org-comment-delimiter"># </span><span class="org-comment">Do the solutions agree with each other?</span>
+    <span class="org-keyword">self</span>.assertEqual(result_brute1, result_brute2)
+    <span class="org-keyword">self</span>.assertEqual(result_brute2, result_better)
+    <span class="org-keyword">self</span>.assertEqual(result_better, result_optimal)
+</pre></div></div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-References" class="outline-2">
+<h2 id="h-References"><span class="section-number-2">5.</span> References</h2>
+<div class="outline-text-2" id="text-h-References">
+<style>.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}</style><div class="csl-bib-body">
+  <div class="csl-entry" id="citeproc_bib_item_1">Aziz, A., Lee, T.-H., &#38; Prakash, A. (2018). <i>Elements of Programming Interviews in Python: The Insiders’ Guide</i>. CreateSpace Independent Publishing Platform (25 July. 2018).</div>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

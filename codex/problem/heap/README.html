@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Heaps</title>
+<meta name="author" content="Linus Arver" />
+<meta name="generator" content="Org Mode" />
+<style>
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { }
+</style>
+<link rel="preconnect" href="/vendor/source-fonts/source-fonts.css" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="/vendor/source-fonts/source-fonts.css">
+<script src="/vendor/jquery-3.6.4.min.js"></script>
+<script src="lilac.js"></script>
+<link rel="stylesheet" type="text/css" href="syntax-highlighting.css"/>
+<link rel="stylesheet" type="text/css" href="lilac.css" />
+<link rel="stylesheet" type="text/css" href="codex.css" />
+<link rel="stylesheet" href="/vendor/source-fonts/source-fonts.css">
+<script>
+// @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&amp;dn=gpl-3.0.txt GPL-v3-or-Later
+     function CodeHighlightOn(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.add("code-highlighted");
+         target.classList.add("code-highlighted");
+       }
+     }
+     function CodeHighlightOff(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.remove("code-highlighted");
+         target.classList.remove("code-highlighted");
+       }
+     }
+// @license-end
+</script>
+</head>
+<body>
+<div id="content" class="content">
+<h1 class="title">Heaps</h1>
+<div id="table-of-contents" role="doc-toc">
+
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#h-Problem-statement">1. Problem statement</a></li>
+<li><a href="#h-Insights">2. Insights</a>
+<ul>
+<li><a href="#h-What-is-a-priority-queue">2.1. What is a priority queue?</a>
+<ul>
+<li><a href="#h-Practical-applications">2.1.1. Practical applications</a></li>
+</ul>
+</li>
+<li><a href="#h-What-are-heaps">2.2. What are heaps?</a>
+<ul>
+<li><a href="#h-Performance">2.2.1. Performance</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#h-Solution">3. Solution</a>
+<ul>
+<li><a href="#h-Brute-force">3.1. Brute force</a></li>
+<li><a href="#h-Heap-based-on-complete-binary-trees">3.2. Heap based on complete binary trees</a></li>
+<li><a href="#h-Optimal-solution--array-based-heap">3.3. Optimal solution: array-based heap</a>
+<ul>
+<li><a href="#h-Initialization">3.3.1. Initialization</a></li>
+<li><a href="#h-Get-max">3.3.2. Get max</a></li>
+<li><a href="#h-Insertion">3.3.3. Insertion</a></li>
+<li><a href="#h-Pop-max">3.3.4. Pop max</a></li>
+<li><a href="#h-MinHeap">3.3.5. MinHeap</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#h-Tests">4. Tests</a>
+<ul>
+<li><a href="#h-Initialization-1">4.1. Initialization</a></li>
+<li><a href="#h-Get-max-1">4.2. Get max</a></li>
+<li><a href="#h-Insertion-1">4.3. Insertion</a></li>
+<li><a href="#h-Pop-max-1">4.4. Pop max</a></li>
+<li><a href="#h-Property-based-tests">4.5. Property-based tests</a></li>
+</ul>
+</li>
+<li><a href="#h-Export">5. Export</a></li>
+<li><a href="#h-References">6. References</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h-Problem-statement" class="outline-2">
+<h2 id="h-Problem-statement"><span class="section-number-2">1.</span> Problem statement</h2>
+<div class="outline-text-2" id="text-h-Problem-statement">
+<p>
+Implement a priority queue, using a heap.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-Insights" class="outline-2">
+<h2 id="h-Insights"><span class="section-number-2">2.</span> Insights</h2>
+<div class="outline-text-2" id="text-h-Insights">
+</div>
+
+<div id="outline-container-h-What-is-a-priority-queue" class="outline-3">
+<h3 id="h-What-is-a-priority-queue"><span class="section-number-3">2.1.</span> What is a priority queue?</h3>
+<div class="outline-text-3" id="text-h-What-is-a-priority-queue">
+<div class="sidenote" id="org0000000">
+<p>
+Another example of an abstract data structure is a <i>list</i>. Possible concrete
+implementations include <i>arrays</i> and <i>linked lists</i>.
+</p>
+
+</div>
+
+<p>
+A priority queue is an abstract data structure. <i>Abstract</i> here means that
+there can be multiple different (concrete) implementations, each with their own
+advantages.
+</p>
+
+<p>
+A priority queue maintains a set <i>S</i> of elements, and requires the following
+operations:
+</p>
+
+<dl class="org-dl">
+<div class="lilac-description-list-entry"><dt>insert(S, x)</dt><dd>add the element <i>x</i> into the set</dd></div>
+<div class="lilac-description-list-entry"><dt>get_max(S)</dt><dd>return the element with the largest key</dd></div>
+<div class="lilac-description-list-entry"><dt>pop_max(S)</dt><dd>same as <code>get_max(S)</code>, but also delete the returned element from
+the set</dd></div>
+</dl>
+
+<p>
+The following are additional operations that may be useful depending on the
+application:
+</p>
+
+<dl class="org-dl">
+<div class="lilac-description-list-entry"><dt>increase_key(S, x, k)</dt><dd>increases the value of <i>x</i>'s key to <i>k</i>
+(assumed to be at least as large as <i>x</i>'s current key value)</dd></div>
+<div class="lilac-description-list-entry"><dt>merge(S1, S2)</dt><dd>merge two sets together</dd></div>
+</dl>
+
+<p>
+We use the word <i>key</i> to mean "a standard unit of measurement that is comparable
+and which is present for every node in the set".
+</p>
+</div>
+
+<div id="outline-container-h-Practical-applications" class="outline-4">
+<h4 id="h-Practical-applications"><span class="section-number-4">2.1.1.</span> Practical applications</h4>
+<div class="outline-text-4" id="text-h-Practical-applications">
+<p>
+Priority queues are great any time you need to build up a list of "seen" items,
+and when you also need to examine the largest items. In a sense, a priority
+queue is like a regular queue. Whereas a regular queue "gets" or "pops" the
+oldest-inserted item first (priority determined by <i>when</i> the item was inserted
+into the queue), a priority queue gets or pops items based on their <i>key</i> value,
+independent of when they were inserted into the priority queue.
+</p>
+
+<p>
+With a priority queue, you could for example efficiently maintain a task
+scheduler that needs to process the most important (heavily weighted) task
+first. New tasks could be coming in with <code>insert()</code>, but at any given point in
+time, we can get to the most important task with <code>get_max()</code> and run <code>pop_max()</code>
+when we're finished with it.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-What-are-heaps" class="outline-3">
+<h3 id="h-What-are-heaps"><span class="section-number-3">2.2.</span> What are heaps?</h3>
+<div class="outline-text-3" id="text-h-What-are-heaps">
+<p>
+Heaps are concrete data structures typically used to implement priority queues,
+because they are a natural fit. They have the best performance compared to other
+alternatives.
+</p>
+
+<p>
+<b>Heaps</b> are a tree-based data structure, that come in two (symmetric) flavors:
+<i>max-heaps</i> and <i>min-heaps</i>. Max-heaps have the following <b>heap property</b>: child
+nodes cannot be greater than its parent (nodes get smaller as you go down each
+level of the tree). In a min-heap, it's the opposite: child nodes cannot be
+smaller than its parent (nodes get bigger as you go down each level of the
+tree).
+</p>
+
+<div class="sidenote" id="org0000001">
+<p>
+A tree with just one child per node wouldn't be considered a tree any more,
+because it would be exactly the same as a linked list.
+</p>
+
+</div>
+
+<p>
+Note that heaps could technically be implement using any type of tree, but in
+practice binary trees are used because they are the simplest (they have the
+minimum number of children at each node to be considered a tree).
+</p>
+</div>
+
+<div id="outline-container-h-Performance" class="outline-4">
+<h4 id="h-Performance"><span class="section-number-4">2.2.1.</span> Performance</h4>
+<div class="outline-text-4" id="text-h-Performance">
+<p>
+The maximum value in a max-heap is simply the root node. If we are using a
+binary tree, and also building it up as a complete tree (all levels are filled
+up left-to-right, top-down, as we insert new nodes), then the minimum value is
+somewhere along the lowest (bottom) level of the tree. As you can see, finding
+the minimum value in a max-heap would require some extra work (either traversing
+the bottom level, or doing additional bookkeeping during tree modifications
+(insertions/deletions)). The same performance penalty would exist for finding
+the maximum in a min-heap.
+</p>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-Solution" class="outline-2">
+<h2 id="h-Solution"><span class="section-number-2">3.</span> Solution</h2>
+<div class="outline-text-2" id="text-h-Solution">
+<p>
+We'll look at two solutions, a brute force approach and another one using an
+array but using a clever power-of-two indexing scheme to represent a complete
+binary tree. We use the word "array" in this section, because that's the
+preferred term in the existing computer science literature. But in both our
+brute force and optimal implementations, we use Python lists (because Python
+calls arrays "lists").
+</p>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#org0000004">code</a></span><span class="lilac-caption-link-symbol"><a href="#__NREF__code">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__code"><span class="lilac-child-link-from-parent"><a href="#__NREF__brute_force">brute_force</a></span>
+<span class="lilac-child-link-from-parent"><a href="#__NREF__optimal">optimal</a></span>
+</pre></div></div>
+</div>
+
+<div id="outline-container-h-Brute-force" class="outline-3">
+<h3 id="h-Brute-force"><span class="section-number-3">3.1.</span> Brute force</h3>
+<div class="outline-text-3" id="text-h-Brute-force">
+<p>
+The simplest way to implement a priority queue (without a heap) is to just use a
+sorted array. The <code>get_max()</code> and <code>pop_max()</code> operations are just array lookups
+at the end of the sorted array.
+</p>
+
+<p>
+The <code>insert()</code> operation would be slow though, because we'd have to make sure to
+insert the element in the correct (sorted) location.
+</p>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#__NREF__code">brute_force</a></span>(1/1) <span class="lilac-caption-link-symbol"><a href="#__NREF__brute_force">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__brute_force"><span class="org-keyword">class</span> <span class="org-type">MaxHeapBruteForce</span>:
+    <span class="org-keyword">def</span> <span class="org-function-name">__init__</span>(<span class="org-keyword">self</span>):
+        <span class="org-keyword">self</span>.<span class="org-variable-name">items</span> <span class="org-operator">=</span> []
+        <span class="org-keyword">self</span>.<span class="org-variable-name">_count</span> <span class="org-operator">=</span> 0
+
+    <span class="org-keyword">def</span> <span class="org-function-name">__len__</span>(<span class="org-keyword">self</span>):
+        <span class="org-keyword">return</span> <span class="org-keyword">self</span>._count
+
+    <span class="org-comment-delimiter"># </span><span class="org-comment">Insertion is slow because we have to sort all items *every* time.</span>
+    <span class="org-keyword">def</span> <span class="org-function-name">insert</span>(<span class="org-keyword">self</span>, x: Any):
+        <span class="org-keyword">self</span>.items.append(x)
+        <span class="org-keyword">self</span>.items.sort()
+        <span class="org-keyword">self</span>.<span class="org-variable-name">_count</span> <span class="org-operator">+=</span> 1
+
+    <span class="org-keyword">def</span> <span class="org-function-name">get_max</span>(<span class="org-keyword">self</span>) <span class="org-operator">-&gt;</span> Any:
+        <span class="org-keyword">if</span> <span class="org-keyword">self</span>._count <span class="org-operator">==</span> 0:
+            <span class="org-keyword">raise</span> <span class="org-type">IndexError</span>(<span class="org-string">"get from an empty heap"</span>)
+
+        <span class="org-keyword">return</span> <span class="org-keyword">self</span>.items[<span class="org-operator">-</span>1]
+
+    <span class="org-keyword">def</span> <span class="org-function-name">pop_max</span>(<span class="org-keyword">self</span>) <span class="org-operator">-&gt;</span> Any:
+        <span class="org-keyword">if</span> <span class="org-keyword">self</span>._count <span class="org-operator">==</span> 0:
+            <span class="org-keyword">raise</span> <span class="org-type">IndexError</span>(<span class="org-string">"pop from an empty heap"</span>)
+
+        <span class="org-builtin">max</span> <span class="org-operator">=</span> <span class="org-keyword">self</span>.items[<span class="org-operator">-</span>1]
+        <span class="org-keyword">self</span>.<span class="org-variable-name">items</span> <span class="org-operator">=</span> <span class="org-keyword">self</span>.items[:<span class="org-operator">-</span>1]
+        <span class="org-keyword">self</span>.<span class="org-variable-name">_count</span> <span class="org-operator">-=</span> 1
+
+        <span class="org-keyword">return</span> <span class="org-builtin">max</span>
+</pre></div></div><p>
+The only downside is the slow speed of <code>insert()</code>. The other functions
+<code>get_max()</code> and <code>pop_max()</code> are straightforward enough.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-Heap-based-on-complete-binary-trees" class="outline-3">
+<h3 id="h-Heap-based-on-complete-binary-trees"><span class="section-number-3">3.2.</span> Heap based on complete binary trees</h3>
+<div class="outline-text-3" id="text-h-Heap-based-on-complete-binary-trees">
+<p>
+We can use a standard binary tree data structure, but make sure to always fill
+it up left-to-right at every level (and only move down to the next level when
+we're out of room at the current level). This way, we can minimize the depth of
+the tree. These types of binary trees are called <i>complete</i> binary trees.
+</p>
+
+<p>
+Why do we want to minimize the depth of the tree? It's because that way, we can
+minimize the depth of the heap as we grow it. Minimizing depth is important
+because it minimizes the cost of <code>insert()</code> and <code>pop_max()</code>.
+</p>
+
+<p>
+We won't be implementing a tree-based heap though, mainly because in order to do
+so we need to be able to go up to a parent node from a child node, and our
+existing <a href="../binary_tree/README.html">binary trees</a> implementation's nodes only has links to its children, not
+its parent.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-Optimal-solution--array-based-heap" class="outline-3">
+<h3 id="h-Optimal-solution--array-based-heap"><span class="section-number-3">3.3.</span> Optimal solution: array-based heap</h3>
+<div class="outline-text-3" id="text-h-Optimal-solution--array-based-heap">
+<p>
+Did you know that you could represent complete binary trees using an array? All
+you have to do is make sure to store each level of the tree contiguously in the
+array, with the upper levels on the left and the lower levels on the right.
+</p>
+
+<pre class="example" id="org0000008">
+Array indices:
+1 2 3 4 5 6 7 8 9 ...
+
+Tree representation:
+
+              1
+     2                 3
+4         5       6         7
+</pre>
+
+<p>
+We use 1-based indexing, because it makes the conversion between an array index
+and its location in the binary tree a little bit easier. Using the above scheme,
+it becomes easy to both represent the location of the array index in the binary
+tree, and also to figure out which index is the parent or left/right child.
+</p>
+
+<p>
+Consider the index 3. Its binary representation (this is the crux of the scheme)
+is <code>11</code>. We ignore the high-order bit (that is, the leftmost bit) to get just
+<code>1</code>. The "1" here means "go right" (and "0" means "go left"). The children of 3
+are 6 and 7. We just tack on an additional 0 and 1 to the original <code>11</code> to get
+the children (<code>110</code> and <code>111</code>). Again we ignore the leftmost bit, and arrive at
+<code>10</code> and <code>11</code>, which mean "right, left" and "right, right" from the root node,
+respectively.
+</p>
+
+<p>
+In summary we use binary digits to mean "go left" (0) or "go right" (1), and if
+we use 0-based indexing we can very easily associate a binary number with a
+position in the binary tree. This scheme is the one we used in our <a href="../binary_tree/README.html">binary trees</a>
+implementation to specify "directions" for figuring out the location of the node
+in the overall tree.
+</p>
+
+<p>
+For the following reasons, this array-based implementation is considered to be
+the optimal implementation for most scenarios:
+</p>
+
+<dl class="org-dl">
+<div class="lilac-description-list-entry"><dt>Space-efficient</dt><dd>No need to store links to other nodes &#x2014; every node just
+sits in an array.</dd></div>
+<div class="lilac-description-list-entry"><dt>Cache-friendly</dt><dd>Arrays live in contiguous blocks of memory, and are easier
+to load into (and stay in) the CPU's cache. Trees store links, and links can
+lead to random locations in memory, and are therefore less cache-friendly.</dd></div>
+<div class="lilac-description-list-entry"><dt>O(1) access to all nodes</dt><dd>Because we use an array, accessing any node in the
+heap takes constant time; contrast this with a tree-based heap that must jump
+through links starting from the root to get to the desired node.</dd></div>
+<div class="lilac-description-list-entry"><dt>Easy to know where the "end" of the heap is</dt><dd>The place where we can insert a
+new item in the node is just right of the last element in the array, and can
+be accessed in O(1) time.</dd></div>
+</dl>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#__NREF__code">optimal</a></span>(1/1) <span class="lilac-caption-link-symbol"><a href="#__NREF__optimal">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__optimal"><span class="org-keyword">class</span> <span class="org-type">MaxHeap</span>:
+    <span class="lilac-child-link-from-parent"><a href="#__NREF__optimal_max_heap_methods-1">optimal_max_heap_methods</a></span>
+
+<span class="org-keyword">class</span> <span class="org-type">MinHeap</span>(MaxHeap):
+    <span class="lilac-child-link-from-parent"><a href="#__NREF__optimal_min_heap_methods-1">optimal_min_heap_methods</a></span>
+</pre></div></div><p>
+The min-heap (<code>MinHeap</code>) is just a symmetric mirror of the max-heap. As such, we
+inherit from <code>MaxHeap</code> to reduce code duplication.
+</p>
+</div>
+
+<div id="outline-container-h-Initialization" class="outline-4">
+<h4 id="h-Initialization"><span class="section-number-4">3.3.1.</span> Initialization</h4>
+<div class="outline-text-4" id="text-h-Initialization">
+<p>
+Initialization is pretty simple. We just need an array and a <code>_count</code> field to
+know how many elements were inserted. Having the <code>_count</code> field allows us to
+quickly determine where the last element is.
+</p>
+
+<p>
+Note that because Python lists are already dynamic arrays, we could just use
+<code>len()</code> instead of a <code>_count</code> field (and there's also no need to set an explicit
+size). However, setting an explicit size and using a <code>_count</code> field will let us
+simulate using a fixed-size array, which would give the best performance (as
+long as we are operating within the allocated size of the array, we won't get
+hit with an array reallocation penalty if we needed to grow the array).
+</p>
+
+<div class="sidenote" id="org000000b">
+<p>
+Instead of using <code>_get_key()</code>, we could just expect the objects to implement a
+<code>__lt()__</code> method, making them inherently comparable without an explicit <i>key</i>.
+But then the author of the object, not the caller, would have control over how
+the objects are compared. This may be a deal-breaker for users of our heap if
+they don't have control over how the <code>__lt()__</code> method is implemented.
+</p>
+
+</div>
+
+<p>
+We also make use of a <code>_get_key()</code> function that returns the <i>key</i> of an item in
+the heap. The idea is that you can provide custom functions for this so that you
+can compare arbitrary objects against each other (that is, this heap
+implementation delegates the retrieval of some comparable, key-like property of
+items to the caller).
+</p>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#__NREF__optimal">optimal_max_heap_methods</a></span>(1/10) <span class="lilac-caption-link-symbol"><a href="#__NREF__optimal_max_heap_methods-1">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__optimal_max_heap_methods-1"><span class="org-keyword">def</span> <span class="org-function-name">__init__</span>(<span class="org-keyword">self</span>, size<span class="org-operator">=</span>1, get_key: Optional[Callable]<span class="org-operator">=</span><span class="org-constant">None</span>):
+    <span class="org-keyword">if</span> size <span class="org-operator">&lt;</span> 1:
+        <span class="org-variable-name">size</span> <span class="org-operator">=</span> 1
+    <span class="org-keyword">self</span>.<span class="org-variable-name">heap</span> <span class="org-operator">=</span> [<span class="org-constant">None</span>] <span class="org-operator">*</span> size
+    <span class="org-keyword">self</span>.<span class="org-variable-name">_count</span> <span class="org-operator">=</span> 0
+
+    <span class="org-comment-delimiter"># </span><span class="org-comment">get_key is a function used to return the "key" --- some aspect of the item</span>
+    <span class="org-comment-delimiter"># </span><span class="org-comment">that makes it comparable with other items. If this function is not</span>
+    <span class="org-comment-delimiter"># </span><span class="org-comment">specified we just return the item itself, which works for simple types</span>
+    <span class="org-comment-delimiter"># </span><span class="org-comment">like integers.</span>
+    <span class="org-keyword">def</span> <span class="org-function-name">identity</span>(item: Any) <span class="org-operator">-&gt;</span> Any:
+        <span class="org-keyword">if</span> item <span class="org-keyword">is</span> <span class="org-constant">None</span>:
+            <span class="org-keyword">raise</span> <span class="org-type">TypeError</span>(<span class="org-string">"cannot get key of None type"</span>)
+        <span class="org-keyword">return</span> item
+
+    <span class="org-keyword">if</span> get_key <span class="org-keyword">is</span> <span class="org-constant">None</span>:
+        <span class="org-variable-name">get_key</span> <span class="org-operator">=</span> identity
+    <span class="org-keyword">self</span>.<span class="org-variable-name">_get_key</span> <span class="org-operator">=</span> get_key
+</pre></div></div><p>
+Implementing <code>__len__()</code> allows us to use the <code>len()</code> built-in function against
+our <code>MaxHeap</code> object.
+</p>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#__NREF__optimal">optimal_max_heap_methods</a></span>(2/10) <span class="lilac-caption-link-symbol"><a href="#__NREF__optimal_max_heap_methods-2">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__optimal_max_heap_methods-2"><span class="org-keyword">def</span> <span class="org-function-name">__len__</span>(<span class="org-keyword">self</span>):
+    <span class="org-keyword">return</span> <span class="org-keyword">self</span>._count
+</pre></div></div><p>
+For completeness, let's also include a <code>grow_heap()</code> method to grow the heap if
+we run out of space. This way we take control of how often we need to reallocate
+the <code>bintree</code> array if we run out of room.
+</p>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#__NREF__optimal">optimal_max_heap_methods</a></span>(3/10) <span class="lilac-caption-link-symbol"><a href="#__NREF__optimal_max_heap_methods-3">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__optimal_max_heap_methods-3"><span class="org-keyword">def</span> <span class="org-function-name">_grow</span>(<span class="org-keyword">self</span>):
+    <span class="org-keyword">self</span>.heap.extend([<span class="org-constant">None</span>] <span class="org-operator">*</span> <span class="org-builtin">len</span>(<span class="org-keyword">self</span>.heap))
+
+<span class="org-comment-delimiter"># </span><span class="org-comment">Used to check if we need to grow the heap.</span>
+<span class="org-keyword">def</span> <span class="org-function-name">_full</span>(<span class="org-keyword">self</span>) <span class="org-operator">-&gt;</span> <span class="org-builtin">bool</span>:
+    <span class="org-keyword">return</span> <span class="org-keyword">self</span>._count <span class="org-operator">+</span> 1 <span class="org-operator">==</span> <span class="org-builtin">len</span>(<span class="org-keyword">self</span>.heap)
+</pre></div></div>
+</div>
+</div>
+
+<div id="outline-container-h-Get-max" class="outline-4">
+<h4 id="h-Get-max"><span class="section-number-4">3.3.2.</span> Get max</h4>
+<div class="outline-text-4" id="text-h-Get-max">
+<p>
+Getting the max in a max-heap is easy &#x2014; it's the first element. The hard part
+is just making sure that it is even a valid entry.
+</p>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#__NREF__optimal">optimal_max_heap_methods</a></span>(4/10) <span class="lilac-caption-link-symbol"><a href="#__NREF__optimal_max_heap_methods-4">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__optimal_max_heap_methods-4"><span class="org-keyword">def</span> <span class="org-function-name">get_max</span>(<span class="org-keyword">self</span>) <span class="org-operator">-&gt;</span> Any:
+    <span class="org-comment-delimiter"># </span><span class="org-comment">If the heap is empty, there's no max item.</span>
+    <span class="org-keyword">if</span> <span class="org-keyword">self</span>._count <span class="org-operator">==</span> 0:
+        <span class="org-keyword">return</span> <span class="org-constant">None</span>
+
+    <span class="org-keyword">return</span> <span class="org-keyword">self</span>.heap[1]
+</pre></div></div>
+</div>
+</div>
+
+<div id="outline-container-h-Insertion" class="outline-4">
+<h4 id="h-Insertion"><span class="section-number-4">3.3.3.</span> Insertion</h4>
+<div class="outline-text-4" id="text-h-Insertion">
+<p>
+When we insert an item into the max-heap, we must make sure that when we are
+done, all parents are greater or equal than their children. That is, we must
+maintain the heap property for max-heaps.
+</p>
+
+<p>
+Since we are using an array-backed heap, the simplest way of adding a new item
+is to add it to the end of the array. Then in order to ensure that we maintain
+the heap property, we just have to swap this item with its parent (up the
+tree) as many times as necessary. We would stop if either we don't have a
+parent (we're at the root node) or if the current parent is greater than or
+equal to us.
+</p>
+
+<p>
+The above operation is also known as "bottom-up reheapify", because the newly
+inserted item always starts out at the bottom of the tree, but is moved up the
+tree (if necessary) to preserve the heap property (essentially converting a
+non-heap back into a heap).
+</p>
+
+<p>
+The first thing we need to be able to do is to exchange the value of two nodes
+in the binary tree (parent with the child).
+</p>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#__NREF__optimal">optimal_max_heap_methods</a></span>(5/10) <span class="lilac-caption-link-symbol"><a href="#__NREF__optimal_max_heap_methods-5">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__optimal_max_heap_methods-5"><span class="org-keyword">def</span> <span class="org-function-name">_swap_heap_nodes</span>(<span class="org-keyword">self</span>, i: <span class="org-builtin">int</span>, j: <span class="org-builtin">int</span>):
+    <span class="org-keyword">self</span>.<span class="org-variable-name">heap</span>[<span class="org-variable-name">i</span>], <span class="org-keyword">self</span>.<span class="org-variable-name">heap</span>[j] <span class="org-operator">=</span> <span class="org-keyword">self</span>.heap[j], <span class="org-keyword">self</span>.heap[i]
+</pre></div></div><p>
+Speaking of the parent and child nodes, let's add some helper methods to figure
+out how to find their indices.
+</p>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#__NREF__optimal">optimal_max_heap_methods</a></span>(6/10) <span class="lilac-caption-link-symbol"><a href="#__NREF__optimal_max_heap_methods-6">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__optimal_max_heap_methods-6">@<span class="org-builtin">staticmethod</span>
+<span class="org-keyword">def</span> <span class="org-function-name">_parent_index</span>(i: <span class="org-builtin">int</span>) <span class="org-operator">-&gt;</span> <span class="org-builtin">int</span>:
+    <span class="org-keyword">return</span> i <span class="org-operator">&gt;&gt;</span> 1
+
+@<span class="org-builtin">staticmethod</span>
+<span class="org-keyword">def</span> <span class="org-function-name">_left_child_index</span>(i: <span class="org-builtin">int</span>) <span class="org-operator">-&gt;</span> <span class="org-builtin">int</span>:
+    <span class="org-keyword">return</span> i <span class="org-operator">&lt;&lt;</span> 1
+
+@<span class="org-builtin">staticmethod</span>
+<span class="org-keyword">def</span> <span class="org-function-name">_right_child_index</span>(i: <span class="org-builtin">int</span>) <span class="org-operator">-&gt;</span> <span class="org-builtin">int</span>:
+    <span class="org-keyword">return</span> (i <span class="org-operator">&lt;&lt;</span> 1) <span class="org-operator">+</span> 1
+</pre></div></div><p>
+Now let's implement bottom-up reheapification. Let's call it "reheapify_up" for
+short. Given some index in the heap, it will move the node at that index up the
+heap as many times as necessary.
+</p>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#__NREF__optimal">optimal_max_heap_methods</a></span>(7/10) <span class="lilac-caption-link-symbol"><a href="#__NREF__optimal_max_heap_methods-7">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__optimal_max_heap_methods-7"><span class="org-keyword">def</span> <span class="org-function-name">_reheapify_up</span>(<span class="org-keyword">self</span>, i: <span class="org-builtin">int</span>):
+    <span class="org-keyword">while</span> <span class="org-constant">True</span>:
+        <span class="org-comment-delimiter"># </span><span class="org-comment">We're already at the top; NOP.</span>
+        <span class="org-keyword">if</span> i <span class="org-operator">&lt;</span> 2:
+            <span class="org-keyword">break</span>
+
+        <span class="org-variable-name">parent_index</span> <span class="org-operator">=</span> <span class="org-keyword">self</span>._parent_index(i)
+        <span class="org-variable-name">parent_key</span> <span class="org-operator">=</span> <span class="org-keyword">self</span>._get_key(<span class="org-keyword">self</span>.heap[parent_index])
+
+        <span class="org-comment-delimiter"># </span><span class="org-comment">Abort if we satisfy the heap condition.</span>
+        <span class="org-keyword">if</span> parent_key <span class="org-operator">&gt;=</span> <span class="org-keyword">self</span>._get_key(<span class="org-keyword">self</span>.heap[i]):
+            <span class="org-keyword">break</span>
+
+        <span class="org-comment-delimiter"># </span><span class="org-comment">Swap upward.</span>
+        <span class="org-keyword">self</span>._swap_heap_nodes(parent_index, i)
+
+        <span class="org-variable-name">i</span> <span class="org-operator">=</span> parent_index
+</pre></div></div><p>
+We now have all the pieces to implement insertion.
+</p>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#__NREF__optimal">optimal_max_heap_methods</a></span>(8/10) <span class="lilac-caption-link-symbol"><a href="#__NREF__optimal_max_heap_methods-8">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__optimal_max_heap_methods-8"><span class="org-keyword">def</span> <span class="org-function-name">insert</span>(<span class="org-keyword">self</span>, x: Any):
+    <span class="org-comment-delimiter"># </span><span class="org-comment">Grow the heap first if we're out of room.</span>
+    <span class="org-keyword">if</span> <span class="org-keyword">self</span>._full():
+        <span class="org-keyword">self</span>._grow()
+
+    <span class="org-comment-delimiter"># </span><span class="org-comment">Insert at the end of the array (just after the last item).</span>
+    <span class="org-keyword">self</span>.<span class="org-variable-name">_count</span> <span class="org-operator">+=</span> 1
+    <span class="org-keyword">self</span>.<span class="org-variable-name">heap</span>[<span class="org-keyword">self</span>._count] <span class="org-operator">=</span> x
+
+    <span class="org-comment-delimiter"># </span><span class="org-comment">Reheapify.</span>
+    <span class="org-keyword">self</span>._reheapify_up(<span class="org-keyword">self</span>._count)
+</pre></div></div>
+</div>
+</div>
+
+<div id="outline-container-h-Pop-max" class="outline-4">
+<h4 id="h-Pop-max"><span class="section-number-4">3.3.4.</span> Pop max</h4>
+<div class="outline-text-4" id="text-h-Pop-max">
+<p>
+Removing the max item means deleting the root node, and then making sure to put
+a node (it doesn't matter which one exactly) in the root's position so that the
+tree structure stays intact. And then we also have to make sure that the new
+root node is the maximum value in the whole tree.
+</p>
+
+<p>
+First, which node should we use to replace the old root node? Well the easiest
+choice is the child at the end of the array &#x2014; this way the array can naturally
+"shrink" as we pop off the max items repeatedly (such that the array doesn't get
+any "holes" in it).
+</p>
+
+<p>
+For making sure that the new root node is the new max value, we have to
+repeatedly exchange it with the larger of its children. This is basically like
+<code>_reheapify_up()</code>, but in the opposite direction (top-down, instead of
+bottom-up).
+</p>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#__NREF__optimal">optimal_max_heap_methods</a></span>(9/10) <span class="lilac-caption-link-symbol"><a href="#__NREF__optimal_max_heap_methods-9">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__optimal_max_heap_methods-9"><span class="org-keyword">def</span> <span class="org-function-name">pop_max</span>(<span class="org-keyword">self</span>) <span class="org-operator">-&gt;</span> Any:
+    <span class="org-builtin">max</span> <span class="org-operator">=</span> <span class="org-keyword">self</span>.get_max()
+
+    <span class="org-comment-delimiter"># </span><span class="org-comment">The last item in the array is the new root node (for now).</span>
+    <span class="org-keyword">self</span>.<span class="org-variable-name">heap</span>[1] <span class="org-operator">=</span> <span class="org-keyword">self</span>.heap[<span class="org-keyword">self</span>._count]
+
+    <span class="org-comment-delimiter"># </span><span class="org-comment">Clear last item's old position in the heap (shrink the heap by 1.)</span>
+    <span class="org-keyword">self</span>.<span class="org-variable-name">heap</span>[<span class="org-keyword">self</span>._count] <span class="org-operator">=</span> <span class="org-constant">None</span>
+    <span class="org-keyword">self</span>.<span class="org-variable-name">_count</span> <span class="org-operator">-=</span> 1
+
+    <span class="org-comment-delimiter"># </span><span class="org-comment">Reheapify.</span>
+    <span class="org-keyword">self</span>._reheapify_down(1)
+
+    <span class="org-keyword">return</span> <span class="org-builtin">max</span>
+</pre></div></div><p>
+For reheapifiyng downward, we just need to make sure to get the larger of the
+two children.
+</p>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#__NREF__optimal">optimal_max_heap_methods</a></span>(10/10) <span class="lilac-caption-link-symbol"><a href="#__NREF__optimal_max_heap_methods-10">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__optimal_max_heap_methods-10"><span class="org-keyword">def</span> <span class="org-function-name">_reheapify_down</span>(<span class="org-keyword">self</span>, i: <span class="org-builtin">int</span>):
+    <span class="org-keyword">while</span> <span class="org-constant">True</span>:
+        <span class="org-comment-delimiter"># </span><span class="org-comment">If our children would be out of bounds, abort. "Out of bounds" here</span>
+        <span class="org-comment-delimiter"># </span><span class="org-comment">means outside of the tree, not the overall heap size (which includes</span>
+        <span class="org-comment-delimiter"># </span><span class="org-comment">unused parts of the array).</span>
+        <span class="org-keyword">if</span> <span class="org-keyword">self</span>._left_child_index(i) <span class="org-operator">&gt;</span> <span class="org-keyword">self</span>._count:
+            <span class="org-keyword">break</span>
+
+        <span class="org-variable-name">left_child_index</span> <span class="org-operator">=</span> <span class="org-keyword">self</span>._left_child_index(i)
+        <span class="org-variable-name">right_child_index</span> <span class="org-operator">=</span> <span class="org-keyword">self</span>._right_child_index(i)
+
+        <span class="org-comment-delimiter"># </span><span class="org-comment">Find the bigger child. It may be that we cannot look at both child</span>
+        <span class="org-comment-delimiter"># </span><span class="org-comment">indices, because one of them (the right child) might be out of bounds.</span>
+        <span class="org-comment-delimiter"># </span><span class="org-comment">In that case there is only 1 possible child (the left child), and so</span>
+        <span class="org-comment-delimiter"># </span><span class="org-comment">there's no need to compare children to see which one is bigger.</span>
+        <span class="org-keyword">if</span> right_child_index <span class="org-operator">&gt;</span> <span class="org-keyword">self</span>._count:
+            <span class="org-variable-name">bigger_child_index</span> <span class="org-operator">=</span> left_child_index
+        <span class="org-keyword">else</span>:
+            <span class="org-variable-name">left_child</span> <span class="org-operator">=</span> <span class="org-keyword">self</span>._get_key(<span class="org-keyword">self</span>.heap[left_child_index])
+            <span class="org-variable-name">right_child</span> <span class="org-operator">=</span> <span class="org-keyword">self</span>._get_key(<span class="org-keyword">self</span>.heap[right_child_index])
+
+            <span class="org-variable-name">bigger_child_index</span> <span class="org-operator">=</span> left_child_index
+            <span class="org-keyword">if</span> left_child <span class="org-operator">&lt;</span> right_child:
+                <span class="org-variable-name">bigger_child_index</span> <span class="org-operator">=</span> right_child_index
+        <span class="org-variable-name">bigger_child</span> <span class="org-operator">=</span> <span class="org-keyword">self</span>._get_key(<span class="org-keyword">self</span>.heap[bigger_child_index])
+
+        <span class="org-comment-delimiter"># </span><span class="org-comment">If we already satisfy the heap property, stop swapping.</span>
+        <span class="org-keyword">if</span> bigger_child <span class="org-operator">&lt;=</span> <span class="org-keyword">self</span>.heap[i]:
+            <span class="org-keyword">break</span>
+
+        <span class="org-comment-delimiter"># </span><span class="org-comment">Swap downward.</span>
+        <span class="org-keyword">self</span>._swap_heap_nodes(bigger_child_index, i)
+
+        <span class="org-variable-name">i</span> <span class="org-operator">=</span> bigger_child_index
+</pre></div></div>
+</div>
+</div>
+
+<div id="outline-container-h-MinHeap" class="outline-4">
+<h4 id="h-MinHeap"><span class="section-number-4">3.3.5.</span> MinHeap</h4>
+<div class="outline-text-4" id="text-h-MinHeap">
+<p>
+This is the mirror of <code>MaxHeap</code>. We have it here for completeness, but we don't
+bother with discussing the implementation because all of the previous discussion
+applies, but in "reverse".
+</p>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#__NREF__optimal">optimal_min_heap_methods</a></span>(1/2) <span class="lilac-caption-link-symbol"><a href="#__NREF__optimal_min_heap_methods-1">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__optimal_min_heap_methods-1"><span class="org-keyword">def</span> <span class="org-function-name">get_min</span>(<span class="org-keyword">self</span>) <span class="org-operator">-&gt;</span> Any:
+    <span class="org-keyword">if</span> <span class="org-keyword">self</span>._count <span class="org-operator">==</span> 0:
+        <span class="org-keyword">return</span> <span class="org-constant">None</span>
+
+    <span class="org-keyword">return</span> <span class="org-keyword">self</span>.heap[1]
+
+<span class="org-keyword">def</span> <span class="org-function-name">_reheapify_up</span>(<span class="org-keyword">self</span>, i: <span class="org-builtin">int</span>):
+    <span class="org-keyword">while</span> <span class="org-constant">True</span>:
+        <span class="org-keyword">if</span> i <span class="org-operator">&lt;</span> 2:
+            <span class="org-keyword">break</span>
+
+        <span class="org-variable-name">parent_index</span> <span class="org-operator">=</span> <span class="org-keyword">self</span>._parent_index(i)
+        <span class="org-variable-name">parent_key</span> <span class="org-operator">=</span> <span class="org-keyword">self</span>._get_key(<span class="org-keyword">self</span>.heap[parent_index])
+
+        <span class="org-keyword">if</span> parent_key <span class="org-operator">&lt;=</span> <span class="org-keyword">self</span>._get_key(<span class="org-keyword">self</span>.heap[i]):
+            <span class="org-keyword">break</span>
+
+        <span class="org-keyword">self</span>._swap_heap_nodes(parent_index, i)
+
+        <span class="org-variable-name">i</span> <span class="org-operator">=</span> parent_index
+
+<span class="org-keyword">def</span> <span class="org-function-name">pop_min</span>(<span class="org-keyword">self</span>) <span class="org-operator">-&gt;</span> Any:
+    <span class="org-builtin">min</span> <span class="org-operator">=</span> <span class="org-keyword">self</span>.get_min()
+
+    <span class="org-keyword">self</span>.<span class="org-variable-name">heap</span>[1] <span class="org-operator">=</span> <span class="org-keyword">self</span>.heap[<span class="org-keyword">self</span>._count]
+
+    <span class="org-keyword">self</span>.<span class="org-variable-name">heap</span>[<span class="org-keyword">self</span>._count] <span class="org-operator">=</span> <span class="org-constant">None</span>
+    <span class="org-keyword">self</span>.<span class="org-variable-name">_count</span> <span class="org-operator">-=</span> 1
+
+    <span class="org-keyword">self</span>._reheapify_down(1)
+
+    <span class="org-keyword">return</span> <span class="org-builtin">min</span>
+
+<span class="org-keyword">def</span> <span class="org-function-name">_reheapify_down</span>(<span class="org-keyword">self</span>, i: <span class="org-builtin">int</span>):
+    <span class="org-keyword">while</span> <span class="org-constant">True</span>:
+        <span class="org-keyword">if</span> <span class="org-keyword">self</span>._left_child_index(i) <span class="org-operator">&gt;</span> <span class="org-keyword">self</span>._count:
+            <span class="org-keyword">break</span>
+
+        <span class="org-variable-name">left_child_index</span> <span class="org-operator">=</span> <span class="org-keyword">self</span>._left_child_index(i)
+        <span class="org-variable-name">right_child_index</span> <span class="org-operator">=</span> <span class="org-keyword">self</span>._right_child_index(i)
+
+        <span class="org-keyword">if</span> right_child_index <span class="org-operator">&gt;</span> <span class="org-keyword">self</span>._count:
+            <span class="org-variable-name">smaller_child_index</span> <span class="org-operator">=</span> left_child_index
+        <span class="org-keyword">else</span>:
+            <span class="org-variable-name">left_child</span> <span class="org-operator">=</span> <span class="org-keyword">self</span>._get_key(<span class="org-keyword">self</span>.heap[left_child_index])
+            <span class="org-variable-name">right_child</span> <span class="org-operator">=</span> <span class="org-keyword">self</span>._get_key(<span class="org-keyword">self</span>.heap[right_child_index])
+
+            <span class="org-variable-name">smaller_child_index</span> <span class="org-operator">=</span> left_child_index
+            <span class="org-keyword">if</span> left_child <span class="org-operator">&gt;</span> right_child:
+                <span class="org-variable-name">smaller_child_index</span> <span class="org-operator">=</span> right_child_index
+        <span class="org-variable-name">smaller_child</span> <span class="org-operator">=</span> <span class="org-keyword">self</span>._get_key(<span class="org-keyword">self</span>.heap[smaller_child_index])
+
+        <span class="org-keyword">if</span> smaller_child <span class="org-operator">&gt;=</span> <span class="org-keyword">self</span>.heap[i]:
+            <span class="org-keyword">break</span>
+
+        <span class="org-keyword">self</span>._swap_heap_nodes(smaller_child_index, i)
+
+        <span class="org-variable-name">i</span> <span class="org-operator">=</span> smaller_child_index
+</pre></div></div><p>
+Lastly, we take care to invalidate the <code>get_max()</code> and <code>pop_max()</code> methods we've
+inherited from <code>MaxHeap</code>, because they don't make sense for a min-heap.
+</p>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#__NREF__optimal">optimal_min_heap_methods</a></span>(2/2) <span class="lilac-caption-link-symbol"><a href="#__NREF__optimal_min_heap_methods-2">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__optimal_min_heap_methods-2"><span class="org-keyword">def</span> <span class="org-function-name">get_max</span>(<span class="org-keyword">self</span>):
+    <span class="org-keyword">raise</span> <span class="org-type">AttributeError</span>(<span class="org-string">"get_max is not supported"</span>)
+<span class="org-keyword">def</span> <span class="org-function-name">pop_max</span>(<span class="org-keyword">self</span>):
+    <span class="org-keyword">raise</span> <span class="org-type">AttributeError</span>(<span class="org-string">"pop_max is not supported"</span>)
+</pre></div></div>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-Tests" class="outline-2">
+<h2 id="h-Tests"><span class="section-number-2">4.</span> Tests</h2>
+<div class="outline-text-2" id="text-h-Tests">
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><label class="org-src-name">Tests</label><span class="lilac-caption-link-symbol"><a href="#Tests">&#x1f517;</a></span></div><pre class="src src-python" id="Tests"><span class="org-keyword">import</span> heapq
+<span class="org-keyword">from</span> hypothesis <span class="org-keyword">import</span> given, strategies <span class="org-keyword">as</span> st
+<span class="org-keyword">from</span> typing <span class="org-keyword">import</span> List
+<span class="org-keyword">import</span> unittest
+
+<span class="org-keyword">from</span> .heap <span class="org-keyword">import</span> MaxHeapBruteForce, MaxHeap, MinHeap
+
+<span class="org-keyword">class</span> <span class="org-type">Test</span>(unittest.TestCase):
+    <span class="lilac-child-link-from-parent"><a href="#__NREF__test_cases-1">test_cases</a></span>
+
+<span class="org-keyword">if</span> <span class="org-builtin">__name__</span> <span class="org-operator">==</span> <span class="org-string">"__main__"</span>:
+    unittest.main(<span class="org-constant">exit</span><span class="org-operator">=</span><span class="org-constant">False</span>)
+</pre></div></div>
+</div>
+
+<div id="outline-container-h-Initialization-1" class="outline-3">
+<h3 id="h-Initialization-1"><span class="section-number-3">4.1.</span> Initialization</h3>
+<div class="outline-text-3" id="text-h-Initialization-1">
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#Tests">test_cases</a></span>(1/6) <span class="lilac-caption-link-symbol"><a href="#__NREF__test_cases-1">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__test_cases-1"><span class="org-keyword">def</span> <span class="org-function-name">test_init_bf</span>(<span class="org-keyword">self</span>):
+    <span class="org-variable-name">h</span> <span class="org-operator">=</span> MaxHeapBruteForce()
+    <span class="org-keyword">self</span>.assertEqual(<span class="org-builtin">len</span>(h), 0)
+</pre></div></div>
+</div>
+</div>
+
+<div id="outline-container-h-Get-max-1" class="outline-3">
+<h3 id="h-Get-max-1"><span class="section-number-3">4.2.</span> Get max</h3>
+<div class="outline-text-3" id="text-h-Get-max-1">
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#Tests">test_cases</a></span>(2/6) <span class="lilac-caption-link-symbol"><a href="#__NREF__test_cases-2">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__test_cases-2"><span class="org-keyword">def</span> <span class="org-function-name">test_get_max_bf</span>(<span class="org-keyword">self</span>):
+    <span class="org-variable-name">h</span> <span class="org-operator">=</span> MaxHeapBruteForce()
+    <span class="org-keyword">self</span>.assertEqual(<span class="org-builtin">len</span>(h), 0)
+    <span class="org-keyword">self</span>.assertRaises(<span class="org-type">IndexError</span>, h.get_max)
+    h.insert(1)
+    <span class="org-keyword">self</span>.assertEqual(h.get_max(), 1)
+    h.insert(2)
+    <span class="org-keyword">self</span>.assertEqual(h.get_max(), 2)
+</pre></div></div>
+</div>
+</div>
+
+<div id="outline-container-h-Insertion-1" class="outline-3">
+<h3 id="h-Insertion-1"><span class="section-number-3">4.3.</span> Insertion</h3>
+<div class="outline-text-3" id="text-h-Insertion-1">
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#Tests">test_cases</a></span>(3/6) <span class="lilac-caption-link-symbol"><a href="#__NREF__test_cases-3">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__test_cases-3"><span class="org-keyword">def</span> <span class="org-function-name">test_insertion_bf</span>(<span class="org-keyword">self</span>):
+    <span class="org-variable-name">h</span> <span class="org-operator">=</span> MaxHeapBruteForce()
+    h.insert(1)
+    h.insert(2)
+    h.insert(3)
+    <span class="org-keyword">self</span>.assertEqual(<span class="org-builtin">len</span>(h), 3)
+</pre></div></div>
+</div>
+</div>
+
+<div id="outline-container-h-Pop-max-1" class="outline-3">
+<h3 id="h-Pop-max-1"><span class="section-number-3">4.4.</span> Pop max</h3>
+<div class="outline-text-3" id="text-h-Pop-max-1">
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#Tests">test_cases</a></span>(4/6) <span class="lilac-caption-link-symbol"><a href="#__NREF__test_cases-4">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__test_cases-4"><span class="org-keyword">def</span> <span class="org-function-name">test_pop_max_bf</span>(<span class="org-keyword">self</span>):
+    <span class="org-variable-name">h</span> <span class="org-operator">=</span> MaxHeapBruteForce()
+    h.insert(1)
+    h.insert(2)
+    h.insert(3)
+    <span class="org-keyword">self</span>.assertEqual(<span class="org-builtin">len</span>(h), 3)
+
+    <span class="org-variable-name">x</span> <span class="org-operator">=</span> h.pop_max()
+    <span class="org-keyword">self</span>.assertEqual(x, 3)
+    <span class="org-keyword">self</span>.assertEqual(<span class="org-builtin">len</span>(h), 2)
+
+    <span class="org-variable-name">x</span> <span class="org-operator">=</span> h.pop_max()
+    <span class="org-keyword">self</span>.assertEqual(x, 2)
+    <span class="org-keyword">self</span>.assertEqual(<span class="org-builtin">len</span>(h), 1)
+
+    <span class="org-variable-name">x</span> <span class="org-operator">=</span> h.pop_max()
+    <span class="org-keyword">self</span>.assertEqual(x, 1)
+    <span class="org-keyword">self</span>.assertEqual(<span class="org-builtin">len</span>(h), 0)
+</pre></div></div>
+</div>
+</div>
+
+<div id="outline-container-h-Property-based-tests" class="outline-3">
+<h3 id="h-Property-based-tests"><span class="section-number-3">4.5.</span> Property-based tests</h3>
+<div class="outline-text-3" id="text-h-Property-based-tests">
+<div class="sidenote" id="org000002e">
+<p>
+Traditional heapsort actually does not use extra space. It "heapifies" the given
+array of items in-place. This is obviously an improvement over using an
+auxiliary heap as we do in <code>test_heap_sort()</code>.
+</p>
+
+</div>
+
+<p>
+Check that we can use the heap to sort items (aka "heapsort"). We also check
+that the optimal version agrees with the brute force version.
+</p>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#Tests">test_cases</a></span>(5/6) <span class="lilac-caption-link-symbol"><a href="#__NREF__test_cases-5">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__test_cases-5"><span class="org-type">@given</span>(st.lists(st.integers(min_value<span class="org-operator">=</span>1, max_value<span class="org-operator">=</span>1000),
+                min_size<span class="org-operator">=</span>1,
+                max_size<span class="org-operator">=</span>50))
+<span class="org-keyword">def</span> <span class="org-function-name">test_heap_sort</span>(<span class="org-keyword">self</span>, to_insert: <span class="org-builtin">list</span>[<span class="org-builtin">int</span>]):
+    <span class="org-variable-name">max_heap_bf</span> <span class="org-operator">=</span> MaxHeapBruteForce()
+    <span class="org-variable-name">max_heap_optimal</span> <span class="org-operator">=</span> MaxHeap()
+    <span class="org-keyword">self</span>.assertEqual(<span class="org-builtin">len</span>(max_heap_bf), <span class="org-builtin">len</span>(max_heap_optimal))
+
+    <span class="org-comment-delimiter"># </span><span class="org-comment">Populate heaps.</span>
+    <span class="org-keyword">for</span> item <span class="org-keyword">in</span> to_insert:
+        max_heap_bf.insert(item)
+        max_heap_optimal.insert(item)
+    <span class="org-keyword">self</span>.assertEqual(<span class="org-builtin">len</span>(max_heap_bf), <span class="org-builtin">len</span>(max_heap_optimal))
+
+    <span class="org-comment-delimiter"># </span><span class="org-comment">Drain heaps.</span>
+    <span class="org-variable-name">output_bf</span> <span class="org-operator">=</span> []
+    <span class="org-variable-name">output_optimal</span> <span class="org-operator">=</span> []
+    <span class="org-keyword">for</span> _ <span class="org-keyword">in</span> <span class="org-builtin">range</span>(<span class="org-builtin">len</span>(to_insert)):
+        <span class="org-variable-name">x</span> <span class="org-operator">=</span> max_heap_bf.pop_max()
+        <span class="org-variable-name">y</span> <span class="org-operator">=</span> max_heap_optimal.pop_max()
+        output_bf.append(x)
+        output_optimal.append(y)
+    <span class="org-keyword">self</span>.assertEqual(output_bf, output_optimal)
+    <span class="org-keyword">self</span>.assertEqual(<span class="org-builtin">len</span>(max_heap_bf), <span class="org-builtin">len</span>(max_heap_optimal))
+
+    <span class="org-comment-delimiter"># </span><span class="org-comment">Are the outputs sorted (in reverse, because it's a max-heap)?</span>
+    <span class="org-variable-name">s</span> <span class="org-operator">=</span> <span class="org-builtin">list</span>(<span class="org-builtin">sorted</span>(to_insert))
+    <span class="org-keyword">self</span>.assertEqual(s, <span class="org-builtin">list</span>(<span class="org-builtin">reversed</span>(output_bf)))
+    <span class="org-keyword">self</span>.assertEqual(s, <span class="org-builtin">list</span>(<span class="org-builtin">reversed</span>(output_optimal)))
+</pre></div></div><p>
+For our <code>MinHeap</code> implementation, check that it performs the same way as
+Python's <code>heapq</code> module (which implements a min-heap).
+</p>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#Tests">test_cases</a></span>(6/6) <span class="lilac-caption-link-symbol"><a href="#__NREF__test_cases-6">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__test_cases-6"><span class="org-type">@given</span>(st.lists(st.integers(min_value<span class="org-operator">=</span>1, max_value<span class="org-operator">=</span>1000),
+                min_size<span class="org-operator">=</span>1,
+                max_size<span class="org-operator">=</span>50))
+<span class="org-keyword">def</span> <span class="org-function-name">test_min_heap</span>(<span class="org-keyword">self</span>, to_insert: <span class="org-builtin">list</span>[<span class="org-builtin">int</span>]):
+    <span class="org-variable-name">min_heap</span> <span class="org-operator">=</span> MinHeap()
+    <span class="org-variable-name">min_heap_std</span>: List[<span class="org-builtin">int</span>] <span class="org-operator">=</span> []
+
+    <span class="org-comment-delimiter"># </span><span class="org-comment">Populate heaps.</span>
+    <span class="org-keyword">for</span> item <span class="org-keyword">in</span> to_insert:
+        min_heap.insert(item)
+        heapq.heappush(min_heap_std, item)
+    <span class="org-keyword">self</span>.assertEqual(<span class="org-builtin">len</span>(min_heap), <span class="org-builtin">len</span>(min_heap_std))
+
+    <span class="org-comment-delimiter"># </span><span class="org-comment">Drain heaps.</span>
+    <span class="org-variable-name">output</span> <span class="org-operator">=</span> []
+    <span class="org-variable-name">output_std</span> <span class="org-operator">=</span> []
+    <span class="org-keyword">for</span> _ <span class="org-keyword">in</span> <span class="org-builtin">range</span>(<span class="org-builtin">len</span>(to_insert)):
+        <span class="org-variable-name">x</span> <span class="org-operator">=</span> min_heap.pop_min()
+        <span class="org-variable-name">y</span> <span class="org-operator">=</span> heapq.heappop(min_heap_std)
+        output.append(x)
+        output_std.append(y)
+
+    <span class="org-comment-delimiter"># </span><span class="org-comment">Check drained output (should be in agreement with heapq output).</span>
+    <span class="org-keyword">self</span>.assertEqual(output, output)
+    <span class="org-keyword">self</span>.assertEqual(<span class="org-builtin">len</span>(min_heap), <span class="org-builtin">len</span>(min_heap_std))
+</pre></div></div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-Export" class="outline-2">
+<h2 id="h-Export"><span class="section-number-2">5.</span> Export</h2>
+<div class="outline-text-2" id="text-h-Export">
+<div class="org-src-container"><pre class="src src-python" id="org0000004"><span class="org-keyword">from</span> __future__ <span class="org-keyword">import</span> annotations
+<span class="org-keyword">from</span> typing <span class="org-keyword">import</span> Any, Callable, Optional
+<span class="lilac-child-link-from-parent"><a href="#__NREF__code">code</a></span>
+</pre></div>
+</div>
+</div>
+
+<div id="outline-container-h-References" class="outline-2">
+<h2 id="h-References"><span class="section-number-2">6.</span> References</h2>
+<div class="outline-text-2" id="text-h-References">
+<style>.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}</style><div class="csl-bib-body">
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

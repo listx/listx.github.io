@@ -1,0 +1,1133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Parity</title>
+<meta name="author" content="Linus Arver" />
+<meta name="generator" content="Org Mode" />
+<style>
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { }
+</style>
+<link rel="preconnect" href="/vendor/source-fonts/source-fonts.css" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="/vendor/source-fonts/source-fonts.css">
+<script src="/vendor/jquery-3.6.4.min.js"></script>
+<script src="lilac.js"></script>
+<link rel="stylesheet" type="text/css" href="syntax-highlighting.css"/>
+<link rel="stylesheet" type="text/css" href="lilac.css" />
+<link rel="stylesheet" type="text/css" href="codex.css" />
+<link rel="stylesheet" href="/vendor/source-fonts/source-fonts.css">
+<script>
+// @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&amp;dn=gpl-3.0.txt GPL-v3-or-Later
+     function CodeHighlightOn(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.add("code-highlighted");
+         target.classList.add("code-highlighted");
+       }
+     }
+     function CodeHighlightOff(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.remove("code-highlighted");
+         target.classList.remove("code-highlighted");
+       }
+     }
+// @license-end
+</script>
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    loader: { paths: { "mathjax-newcm": "/vendor/mathjax-newcm-font" } },
+	output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="/vendor/mathjax/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<div id="content" class="content">
+<h1 class="title">Parity</h1>
+<div id="table-of-contents" role="doc-toc">
+
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#h-Introduction">1. Introduction</a></li>
+<li><a href="#h-Problem-statement">2. Problem statement</a></li>
+<li><a href="#h-Insights">3. Insights</a></li>
+<li><a href="#h-Solutions">4. Solutions</a>
+<ul>
+<li><a href="#h-Brute-force">4.1. Brute force</a>
+<ul>
+<li><a href="#h-Clear-lowest-set-bit">4.1.1. Clear lowest set bit</a></li>
+</ul>
+</li>
+<li><a href="#h-XOR-folding">4.2. XOR-folding</a></li>
+<li><a href="#h-XOR-folding-with-in-register-table-lookup">4.3. XOR-folding with in-register table lookup</a></li>
+<li><a href="#h-XOR-fold-by-nibbles">4.4. XOR-fold by nibbles</a></li>
+<li><a href="#h-16-bit-caching">4.5. 16-bit caching</a></li>
+<li><a href="#h-XOR-fold-with-caching">4.6. XOR-fold with caching</a></li>
+</ul>
+</li>
+<li><a href="#h-Tests">5. Tests</a></li>
+<li><a href="#h-References">6. References</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h-Introduction" class="outline-2">
+<h2 id="h-Introduction"><span class="section-number-2">1.</span> Introduction</h2>
+<div class="outline-text-2" id="text-h-Introduction">
+<p>
+<i>Parity</i> of a word is defined as <code>1</code> if there are an odd number of 1-bits in the
+word, and <code>0</code> otherwise.
+</p>
+
+<p>
+Examples:
+</p>
+
+<table>
+
+
+<colgroup>
+<col  class="org-right">
+
+<col  class="org-right">
+
+<col  class="org-left">
+
+<col  class="org-right">
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-right">Word</th>
+<th scope="col" class="org-right">Number of 1-bits</th>
+<th scope="col" class="org-left">Even or odd</th>
+<th scope="col" class="org-right">Parity</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-right">1011</td>
+<td class="org-right">3</td>
+<td class="org-left">odd</td>
+<td class="org-right">1</td>
+</tr>
+
+<tr>
+<td class="org-right">1000010000</td>
+<td class="org-right">2</td>
+<td class="org-left">even</td>
+<td class="org-right">0</td>
+</tr>
+
+<tr>
+<td class="org-right">11</td>
+<td class="org-right">2</td>
+<td class="org-left">even</td>
+<td class="org-right">0</td>
+</tr>
+
+<tr>
+<td class="org-right">11111</td>
+<td class="org-right">5</td>
+<td class="org-left">odd</td>
+<td class="org-right">1</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+<div id="outline-container-h-Problem-statement" class="outline-2">
+<h2 id="h-Problem-statement"><span class="section-number-2">2.</span> Problem statement</h2>
+<div class="outline-text-2" id="text-h-Problem-statement">
+<p>
+Design an algorithm for computing the parity of a large number of 64-bit words
+(<a href="#citeproc_bib_item_1">Aziz et al., 2018, p. 27</a>).
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-Insights" class="outline-2">
+<h2 id="h-Insights"><span class="section-number-2">3.</span> Insights</h2>
+<div class="outline-text-2" id="text-h-Insights">
+<p>
+Consider the simple case of the single bit. Computing the parity here is simple
+as there is nothing more to do. That is, the parity of a 1-bit is 1, and the
+parity of a 0-bit is 0.
+</p>
+
+<p>
+Now consider the next-simplest case of 2-bit words. There are 4 possible 2-bit
+words, <code>00</code>, <code>11</code>, <code>01</code>, and <code>10</code>. We can compute the parity by looking at a
+2-bit word as 2 separate 1-bit words. So in this case we can split up the 2-bit
+word into A and B, the high-order and low-order bits, respectively. Then comes
+the trick &#x2014; we can use the bitwise XOR (exclusive OR) instruction of <code>A XOR B</code>
+to compute the parity of the original 2-bit word.
+</p>
+
+<table>
+
+
+<colgroup>
+<col  class="org-right">
+
+<col  class="org-right">
+
+<col  class="org-right">
+
+<col  class="org-right">
+
+<col  class="org-right">
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-right">2-bit word</th>
+<th scope="col" class="org-right">Parity</th>
+<th scope="col" class="org-right">A</th>
+<th scope="col" class="org-right">B</th>
+<th scope="col" class="org-right">A XOR B</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-right">00</td>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+<td class="org-right">0</td>
+</tr>
+
+<tr>
+<td class="org-right">11</td>
+<td class="org-right">0</td>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+<td class="org-right">0</td>
+</tr>
+
+<tr>
+<td class="org-right">01</td>
+<td class="org-right">1</td>
+<td class="org-right">0</td>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+</tr>
+
+<tr>
+<td class="org-right">10</td>
+<td class="org-right">1</td>
+<td class="org-right">1</td>
+<td class="org-right">0</td>
+<td class="org-right">1</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+Seen another way, the XOR instruction can cancel out even numbers of bits (zeros
+them out) in a larger word. As you can imagine, we can use this property to
+compute the parity of 4-bit words, 8-bit words, etc.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-Solutions" class="outline-2">
+<h2 id="h-Solutions"><span class="section-number-2">4.</span> Solutions</h2>
+<div class="outline-text-2" id="text-h-Solutions">
+</div>
+
+<div id="outline-container-h-Brute-force" class="outline-3">
+<h3 id="h-Brute-force"><span class="section-number-3">4.1.</span> Brute force</h3>
+<div class="outline-text-3" id="text-h-Brute-force">
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#Tests">brute_force</a></span><span class="lilac-caption-link-symbol"><a href="#__NREF__brute_force">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__brute_force"><span class="org-keyword">def</span> <span class="org-function-name">brute_force</span>(word):
+    <span class="org-variable-name">parity_bit</span> <span class="org-operator">=</span> 0
+    <span class="org-keyword">while</span> word:
+        <span class="org-variable-name">parity_bit</span> <span class="org-operator">^=</span> word <span class="org-operator">&amp;</span> 1
+        <span class="org-variable-name">word</span> <span class="org-operator">&gt;&gt;=</span> 1
+    <span class="org-keyword">return</span> parity_bit
+</pre></div></div><p>
+This approach just computes the parity of a single word by examining every bit
+in the word. It also uses bitwise XOR to only store 1 or 0 (instead of actually
+storing the actual number of bits). Because of the way XOR works, when the
+number of bits is odd (starting with the very first 1-bit), the parity is set
+to 1. Then if another 1-bit comes along (even) it is XOR-ed against the
+previously-calculated parity bit 1 to become 0. Then if another bit (odd) comes
+along, the 0 is XOR-ed against it to become 1 again, and so forth.
+</p>
+
+<p>
+The space complexity is \(O(1)\) because we only store 0 or 1 for the parity bit.
+The time complexity is \(O(n)\) where \(n\) is the word size.
+</p>
+</div>
+
+<div id="outline-container-h-Clear-lowest-set-bit" class="outline-4">
+<h4 id="h-Clear-lowest-set-bit"><span class="section-number-4">4.1.1.</span> Clear lowest set bit</h4>
+<div class="outline-text-4" id="text-h-Clear-lowest-set-bit">
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#Tests">clear_lsb</a></span><span class="lilac-caption-link-symbol"><a href="#__NREF__clear_lsb">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__clear_lsb"><span class="org-keyword">def</span> <span class="org-function-name">clear_lsb</span>(word):
+    <span class="org-variable-name">parity_bit</span> <span class="org-operator">=</span> 0
+    <span class="org-keyword">while</span> word:
+        <span class="org-variable-name">parity_bit</span> <span class="org-operator">^=</span> 1
+        <span class="org-variable-name">word</span> <span class="org-operator">&amp;=</span> word <span class="org-operator">-</span> 1
+    <span class="org-keyword">return</span> parity_bit
+</pre></div></div><p>
+Here we use the <code>word &amp;= word - 1</code> trick to clear the lowest 1-bit in a word
+(aka the Least Significant Bit, or LSB). This is a classic bitwise trick. This
+is an improvement over <code>word &gt;&gt;= 1</code> because we no longer have to examine every
+single bit. So our time complexity drops to \(O(k)\) where \(k\) is the number of
+bits set.
+</p>
+
+<p>
+Our worst-case time complexity is still the same as the brute force approach
+though, because we'd run the <code>while</code> loop above 64 times if all 64 bits are set.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-XOR-folding" class="outline-3">
+<h3 id="h-XOR-folding"><span class="section-number-3">4.2.</span> XOR-folding</h3>
+<div class="outline-text-3" id="text-h-XOR-folding">
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#Tests">xor_fold</a></span><span class="lilac-caption-link-symbol"><a href="#__NREF__xor_fold">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__xor_fold"><span class="org-keyword">def</span> <span class="org-function-name">xor_fold</span>(word):
+    <span class="org-variable-name">word</span> <span class="org-operator">^=</span> word <span class="org-operator">&gt;&gt;</span> 32
+    <span class="org-variable-name">word</span> <span class="org-operator">^=</span> word <span class="org-operator">&gt;&gt;</span> 16
+    <span class="org-variable-name">word</span> <span class="org-operator">^=</span> word <span class="org-operator">&gt;&gt;</span> 8
+    <span class="org-variable-name">word</span> <span class="org-operator">^=</span> word <span class="org-operator">&gt;&gt;</span> 4
+    <span class="org-variable-name">word</span> <span class="org-operator">^=</span> word <span class="org-operator">&gt;&gt;</span> 2
+    <span class="org-variable-name">word</span> <span class="org-operator">^=</span> word <span class="org-operator">&gt;&gt;</span> 1
+    <span class="org-keyword">return</span> word <span class="org-operator">&amp;</span> 1
+</pre></div></div><p>
+The key to this solution (<a href="#citeproc_bib_item_1">Aziz et al., 2018, pp. 29–30</a>) is that we are essentially "folding"
+the word into itself over and over again until we just get a single bit left.
+Every "fold" is a XOR instruction, which is used to cancel out even pairs of
+1-bits.
+</p>
+
+<p>
+Basically, what we want to do is get rid of pairs of 1-bits set in the word. So
+imagine if there are 57 1-bits set in a 64-bit word. If we can keep subtracting
+by 2 over and over again (removing pairs of 1-bits), we'll eventually arrive at
+just "1", which is the parity. Or, if there are 48 bits set, continually
+subtracting 2 at a time will make us arrive at 0, which again is the parity. The
+interesting thing to note here is that we can perform multiple "subtract 2"
+operations in parallel, because of the way XOR-ing works.
+</p>
+
+<p>
+Let's use a real example below to see what this actually means with some
+pseudocode. The first line
+</p>
+
+<pre class="example" id="org0000008">
+word ^= word &gt;&gt; 32
+</pre>
+
+<p>
+takes the XOR of the top 32 bits and the lower 32 bits using a bit shift.
+Consider the following 64-bit word as an example, which has 30 1-bits set:
+</p>
+
+<pre class="example" id="org0000009">
+0100100001001110010001111000110010010111000010011110001010111101 (30 1-bits)
+</pre>
+
+<p>
+Let's stack it on top of itself, shifted down 32 bits. Label the first word A
+and the shifted-down word as B.
+</p>
+
+<pre class="example" id="org000000a">
+0100100001001110010001111000110010010111000010011110001010111101 = A
+                                0100100001001110010001111000110010010111000010011110001010111101 = B
+</pre>
+
+<p>
+For visual simplicity, let's "chop off" the bottom 32 bits of B and fill in the
+left side with 0's to complete the shift. We use the underscore instead of 0 to
+make it easier for us to track.
+</p>
+
+<pre class="example" id="org000000b">
+0100100001001110010001111000110010010111000010011110001010111101 = A
+________________________________01001000010011100100011110001100 = B
+</pre>
+
+<p>
+Now take the XOR of these 2 words. For the top half, because B has all zeroes
+(underscores), we get the same bits as in the top half of A. However, this top
+half does not matter as we will soon see.
+</p>
+
+<p>
+For the bottom half, we end up doing the equivalent of 32 1-bit XOR operations,
+but in parallel. The most important thing here to see is that the 1-bits in B
+that happen to line up with the 1-bits in A <b>are canceled out</b>. We can see this
+in C below. The 'x' represents garbage bits that are ignored for our folding
+operation.
+</p>
+
+<pre class="example" id="org000000c">
+0100100001001110010001111000110010010111000010011110001010111101 = A
+________________________________01001000010011100100011110001100 = B
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx11011111010001111010010100110001 = C (A XOR B, or 30 - (2 * 6) = 18 bits)
+</pre>
+
+<p>
+So in summary, what we've done here is take the top 32 bits and bottom 32 bits
+of a word, and used the XOR operation to get rid of matched <b>pairs</b> of 1-bits.
+We want to do this because even numbers (pairs) of 1-bits are essentially
+<b>ignored</b> for purposes of calculating parity. The <code>A XOR B</code> operation resulted
+in 6 pairs of 1-bits being canceled out, so we now have 18 bits set.
+</p>
+
+<p>
+The pseudocode below shows what happens with the rest of the shift and XOR
+operations. The main thing to keep in mind is that we "fold" the word into
+itself over and over again to get rid of pairs of 1-bits at each fold.
+Meanwhile, the region of bits we ignore keeps on growing.
+</p>
+
+<pre class="example" id="org000000d">
+# Shift 16.
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx11011111010001111010010100110001 = C
+________________xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx1101111101000111 = D
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx0111101001110110 = E (C XOR D, or 18 - (2 * 4) = 10 bits)
+
+# Shift 8.
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx0111101001110110 = E
+________xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx01111010 = F
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx00001100 = G (E XOR F, or 10 - (2 * 4) = 2 bits)
+
+# Shift 4.
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx00001100 = G
+____xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx0000 = H
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx1100 = I (G XOR H, or 2 bits)
+
+# Shift 2.
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx1100 = I
+__xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx11 = H
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx11 = J (I XOR J, or 2 bits)
+
+# Shift 1.
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx11 = J
+_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx1 = K
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx0 = L (J XOR K, or 2 - 2 = 0 (parity))
+</pre>
+
+<p>
+It should be obvious now why we do <code>word &amp; 1</code> at the end &#x2014; we really want to
+ignore all the garbage "x" bits on the left and only see if <code>L</code> has the lowest
+bit turned on.
+</p>
+
+<p>
+The time complexity is reduced to \(O(\log{}n)\) where \(n\) is the word size. This
+makes sense because whatever the word size, we repeatedly "fold" it in half
+until we get down to just 1 bit we care about. This is about 20% faster on
+random input than the previous version, although on sparse inputs the previous
+one is faster (<a href="#citeproc_bib_item_1">Aziz et al., 2018, p. 30</a>).
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-XOR-folding-with-in-register-table-lookup" class="outline-3">
+<h3 id="h-XOR-folding-with-in-register-table-lookup"><span class="section-number-3">4.3.</span> XOR-folding with in-register table lookup</h3>
+<div class="outline-text-3" id="text-h-XOR-folding-with-in-register-table-lookup">
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#Tests">xor_fold_lookup</a></span><span class="lilac-caption-link-symbol"><a href="#__NREF__xor_fold_lookup">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__xor_fold_lookup"><span class="org-keyword">def</span> <span class="org-function-name">xor_fold_lookup</span>(word):
+    <span class="org-variable-name">word</span> <span class="org-operator">^=</span> word <span class="org-operator">&gt;&gt;</span> 32
+    <span class="org-variable-name">word</span> <span class="org-operator">^=</span> word <span class="org-operator">&gt;&gt;</span> 16
+    <span class="org-variable-name">word</span> <span class="org-operator">^=</span> word <span class="org-operator">&gt;&gt;</span> 8
+    <span class="org-variable-name">word</span> <span class="org-operator">^=</span> word <span class="org-operator">&gt;&gt;</span> 4
+    <span class="org-variable-name">word</span> <span class="org-operator">=</span> 0x6996 <span class="org-operator">&gt;&gt;</span> (word <span class="org-operator">&amp;</span> 0xf)
+    <span class="org-keyword">return</span> word <span class="org-operator">&amp;</span> 1
+</pre></div></div><p>
+This is a small improvement over the previous version, noted in (<a href="#citeproc_bib_item_2">Warren, 2013, p. 97</a>).
+The use of the <code>0x6996</code> constant is called an "in-register table lookup".
+Basically, once we get down to 4 bits, there are only 16 possibilities left,
+because 4 bits can only represent \(2^{4} = 16\) unique numbers, 0 to 15. The
+<code>0x6996</code> constant is simply computed by looking at all possible numbers 0 to 15,
+computing their parity, and assigning this to a new bit string. We start with
+the 15th bit though and go down to 0, because we shift this constant to the
+right in <code>0x6996 &gt;&gt; (word &amp; 0xf)</code>. The <code>0x6996</code> is <code>0110 1001 1001 0110</code> in
+binary, and you can see how we got these binary bits by looking at the Parity
+column in the table below.
+</p>
+
+<table>
+
+
+<colgroup>
+<col  class="org-right">
+
+<col  class="org-right">
+
+<col  class="org-right">
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-right">Number (Decimal)</th>
+<th scope="col" class="org-right">Number (binary)</th>
+<th scope="col" class="org-right">Parity</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-right">15</td>
+<td class="org-right">1111</td>
+<td class="org-right">0</td>
+</tr>
+
+<tr>
+<td class="org-right">14</td>
+<td class="org-right">1110</td>
+<td class="org-right">1</td>
+</tr>
+
+<tr>
+<td class="org-right">13</td>
+<td class="org-right">1101</td>
+<td class="org-right">1</td>
+</tr>
+
+<tr>
+<td class="org-right">12</td>
+<td class="org-right">1100</td>
+<td class="org-right">0</td>
+</tr>
+
+<tr>
+<td class="org-right">11</td>
+<td class="org-right">1011</td>
+<td class="org-right">1</td>
+</tr>
+
+<tr>
+<td class="org-right">10</td>
+<td class="org-right">1010</td>
+<td class="org-right">0</td>
+</tr>
+
+<tr>
+<td class="org-right">9</td>
+<td class="org-right">1001</td>
+<td class="org-right">0</td>
+</tr>
+
+<tr>
+<td class="org-right">8</td>
+<td class="org-right">1000</td>
+<td class="org-right">1</td>
+</tr>
+
+<tr>
+<td class="org-right">7</td>
+<td class="org-right">0111</td>
+<td class="org-right">1</td>
+</tr>
+
+<tr>
+<td class="org-right">6</td>
+<td class="org-right">0110</td>
+<td class="org-right">0</td>
+</tr>
+
+<tr>
+<td class="org-right">5</td>
+<td class="org-right">0101</td>
+<td class="org-right">0</td>
+</tr>
+
+<tr>
+<td class="org-right">4</td>
+<td class="org-right">0100</td>
+<td class="org-right">1</td>
+</tr>
+
+<tr>
+<td class="org-right">3</td>
+<td class="org-right">0011</td>
+<td class="org-right">0</td>
+</tr>
+
+<tr>
+<td class="org-right">2</td>
+<td class="org-right">0010</td>
+<td class="org-right">1</td>
+</tr>
+
+<tr>
+<td class="org-right">1</td>
+<td class="org-right">0001</td>
+<td class="org-right">1</td>
+</tr>
+
+<tr>
+<td class="org-right">0</td>
+<td class="org-right">0000</td>
+<td class="org-right">0</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+<div id="outline-container-h-XOR-fold-by-nibbles" class="outline-3">
+<h3 id="h-XOR-fold-by-nibbles"><span class="section-number-3">4.4.</span> XOR-fold by nibbles</h3>
+<div class="outline-text-3" id="text-h-XOR-fold-by-nibbles">
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#Tests">xor_fold_nibbles</a></span><span class="lilac-caption-link-symbol"><a href="#__NREF__xor_fold_nibbles">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__xor_fold_nibbles"><span class="org-keyword">def</span> <span class="org-function-name">xor_fold_nibbles</span>(word):
+    <span class="org-variable-name">word</span> <span class="org-operator">^=</span> word <span class="org-operator">&gt;&gt;</span> 1
+    <span class="org-variable-name">word</span> <span class="org-operator">^=</span> word <span class="org-operator">&gt;&gt;</span> 2
+    <span class="org-variable-name">word</span> <span class="org-operator">&amp;=</span> 0x1111111111111111
+    <span class="org-variable-name">word</span> <span class="org-operator">*=</span> 0x1111111111111111
+    <span class="org-keyword">return</span> (word <span class="org-operator">&gt;&gt;</span> 60) <span class="org-operator">&amp;</span> 1
+</pre></div></div><p>
+This method is also from (<a href="#citeproc_bib_item_2">Warren, 2013, pp. 97–98</a>). It uses XOR-folding to get the parity
+of each nibble (4-bit word) with the first 3 lines. Then it uses a
+multiplication trick to get the sum of bits from each of these parity-of-nibble
+chunks into the high-order nibble, before finally AND-ing this nibble with 1 to
+check if it is even or odd.
+</p>
+
+<p>
+Let's break it down. The first 2 lines compute the parity of every nibble (4-bit
+word) in the 64-bit word. Here's an example, again using the same word from the
+XOR-folding section from above, but with the bits grouped by nibble boundaries:
+</p>
+
+<pre class="example" id="org0000012">
+# word ^= word &gt;&gt; 1
+0100 1000 0100 1110 0100 0111 1000 1100 1001 0111 0000 1001 1110 0010 1011 1101 = A
+_010 0100 0010 0111 0010 0011 1100 0110 0100 1011 1000 0100 1111 0001 0101 1110 = B
+x110 1100 0110 1001 0110 0100 0100 1010 1101 1100 1000 1101 0001 0011 1110 0011 = C (A XOR B)
+
+# word ^= word &gt;&gt; 2
+x110 1100 0110 1001 0110 0100 0100 1010 1101 1100 1000 1101 0001 0011 1110 0011 = C
+__x1 1011 0001 1010 0101 1001 0001 0010 1011 0111 0010 0011 0100 0100 1111 1000 = D
+xxx1 xxx1 xxx1 xxx1 xxx1 xxx1 xxx1 xxx0 xxx0 xxx1 xxx0 xxx0 xxx1 xxx1 xxx1 xxx1 = E (C XOR D)
+</pre>
+
+<p>
+The E word has lots of "x" bits in it because we treat each nibble boundary as
+its own independent word, in a sense. So instead of having 1 long string of "x"
+garbage bits like in "XOR-folding" above, we instead have 16 groups of garbage
+bits. But to restate, the "low" bit in each of the 16 nibbles in E calculate the
+parity of the original nibble from A.
+</p>
+
+<p>
+The next line, <code>word &amp;= 0x1111111111111111</code>, is pretty clear &#x2014; it zeroes out
+the garbage bits in each nibble (a <code>0x1</code> in hex is the same as <code>0b0001</code>):
+</p>
+
+<pre class="example" id="org0000013">
+# word &amp;= 0x1111111111111111
+xxx1 xxx1 xxx1 xxx1 xxx1 xxx1 xxx1 xxx0 xxx0 xxx1 xxx0 xxx0 xxx1 xxx1 xxx1 xxx1 = E
+0001 0001 0001 0001 0001 0001 0001 0001 0001 0001 0001 0001 0001 0001 0001 0001 = F (same as 0x1111111111111111)
+0001 0001 0001 0001 0001 0001 0001 0000 0000 0001 0000 0000 0001 0001 0001 0001 = G (E AND F)
+</pre>
+
+<p>
+It should now be obvious that we simply want to tally up the total number of 1
+bits in G. The interesting thing about G is that it has these 16 nibbles, and
+each nibble is either 0001 or 0000 in binary. What we want to do is just add
+these 16 nibbles together, like this:
+</p>
+
+<pre class="example" id="org0000014">
+0001 0001 0001 0001 0001 0001 0001 0000 0000 0001 0000 0000 0001 0001 0001 0001 (G)
+0001 0001 0001 0001 0001 0001 0000 0000 0001 0000 0000 0001 0001 0001 0001 ____ (G &lt;&lt; 4)
+0001 0001 0001 0001 0001 0000 0000 0001 0000 0000 0001 0001 0001 0001 ____ ____ (G &lt;&lt; 8)
+0001 0001 0001 0001 0000 0000 0001 0000 0000 0001 0001 0001 0001 ____ ____ ____ (G &lt;&lt; 12)
+0001 0001 0001 0000 0000 0001 0000 0000 0001 0001 0001 0001 ____ ____ ____ ____ (G &lt;&lt; 16)
+0001 0001 0000 0000 0001 0000 0000 0001 0001 0001 0001 ____ ____ ____ ____ ____ (G &lt;&lt; 20)
+0001 0000 0000 0001 0000 0000 0001 0001 0001 0001 ____ ____ ____ ____ ____ ____ (G &lt;&lt; 24)
+0000 0000 0001 0000 0000 0001 0001 0001 0001 ____ ____ ____ ____ ____ ____ ____ (G &lt;&lt; 28)
+0000 0001 0000 0000 0001 0001 0001 0001 ____ ____ ____ ____ ____ ____ ____ ____ (G &lt;&lt; 32)
+0001 0000 0000 0001 0001 0001 0001 ____ ____ ____ ____ ____ ____ ____ ____ ____ (G &lt;&lt; 36)
+0000 0000 0001 0001 0001 0001 ____ ____ ____ ____ ____ ____ ____ ____ ____ ____ (G &lt;&lt; 40)
+0000 0001 0001 0001 0001 ____ ____ ____ ____ ____ ____ ____ ____ ____ ____ ____ (G &lt;&lt; 44)
+0001 0001 0001 0001 ____ ____ ____ ____ ____ ____ ____ ____ ____ ____ ____ ____ (G &lt;&lt; 48)
+0001 0001 0001 ____ ____ ____ ____ ____ ____ ____ ____ ____ ____ ____ ____ ____ (G &lt;&lt; 52)
+0001 0001 ____ ____ ____ ____ ____ ____ ____ ____ ____ ____ ____ ____ ____ ____ (G &lt;&lt; 56)
+0001 ____ ____ ____ ____ ____ ____ ____ ____ ____ ____ ____ ____ ____ ____ ____ (G &lt;&lt; 60)
+ \
+  `- Tally up this first column with plain addition.
+</pre>
+
+<p>
+The column we want to tally up above is exactly what we want to do, because
+doing a plain addition on these bits will give us the total number of bits in G.
+Then we can just AND it with 1 to check if this total is odd to get the parity.
+Note that the partial sum of the second column can go up to a maximum of 15
+(because the last nibble from <code>G &lt;&lt; 60</code> is always 0), so there is no fear of a
+carry from the second column contaminating the first column. Similarly, note
+that none of the other columns can be greater than 15, so again there is no fear
+of any contamination from any carries.
+</p>
+
+<p>
+The naive way to sum up the first column is to literally write the shifts and
+additions. However we can do better, because the arithmetic operation of
+multiplication does precisely the same thing! This is why we multiply G by the
+same <code>0x1111111111111111</code> constant. This ends up adding the 1-bits in the first
+column together, putting the sum into the high-order hex digit. The sum is
+anything from 0 to 16 (each nibble's parity), so we just have to AND it with 1
+to check if this sum is even or odd.
+</p>
+
+<p>
+The multiplication by the constant <code>0x1111111111111111</code> can be thought of as 16
+different shifts and additions. Below is an illustration:
+</p>
+
+<pre class="example" id="org0000015">
+0x1111111111111111 * G is the same as ...
+------------------
+0x0000000000000001 * G, or G &lt;&lt; 0, plus
+0x0000000000000010 * G, or G &lt;&lt; 4, plus
+0x0000000000000100 * G, or G &lt;&lt; 8, plus
+0x0000000000001000 * G, or G &lt;&lt; 12, plus
+0x0000000000010000 * G, or G &lt;&lt; 16, plus
+0x0000000000100000 * G, or G &lt;&lt; 20, plus
+0x0000000001000000 * G, or G &lt;&lt; 24, plus
+0x0000000010000000 * G, or G &lt;&lt; 28, plus
+0x0000000100000000 * G, or G &lt;&lt; 32, plus
+0x0000001000000000 * G, or G &lt;&lt; 36, plus
+0x0000010000000000 * G, or G &lt;&lt; 40, plus
+0x0000100000000000 * G, or G &lt;&lt; 44, plus
+0x0001000000000000 * G, or G &lt;&lt; 48, plus
+0x0010000000000000 * G, or G &lt;&lt; 52, plus
+0x0100000000000000 * G, or G &lt;&lt; 56, plus
+0x1000000000000000 * G, or G &lt;&lt; 60
+</pre>
+
+<p>
+The above works because multiplying by a power-of-2 is the same as shifting the
+number to the left. Just to make sure, let's use a smaller example to illustrate
+the point. Consider the 16-bit binary number <code>0001 0001 0000 0001 = S</code>. Let's
+multiply this by <code>0x1111</code> (4 separate multiplications by <code>0x1</code>, <code>0x10</code>, <code>0x100</code>,
+and <code>0x1000</code>).
+</p>
+
+<pre class="example" id="org0000016">
+            # Multiply by 0x1 (same as S &lt;&lt; 0)
+              0001000100000001 = S
+            x                1 = 0x1
+            ------------------
+            = 0001000100000001 (same as S)
+
+            # Multiply by 0x10 (same as S &lt;&lt; 4).
+              0001000100000001 = S
+            x            10000 = 0x10 = 16
+            ------------------
+              0000000000000000
+             0000000000000000_
+            0000000000000000__
+           0000000000000000___
+          0001000100000001____ (same as S &lt;&lt; 4)
+            = 0001000000010000 (lost top 4 bits because we can only hold 16 bits)
+
+            # Multiply by 0x100 (same as S &lt;&lt; 8).
+              0001000100000001 = S
+            x        100000000 = 0x100 = 256
+            ------------------
+              0000000000000000
+             0000000000000000_
+            0000000000000000__
+           0000000000000000___
+          0000000000000000____
+         0000000000000000_____
+        0000000000000000______
+       0000000000000000_______
+      0001000100000001________ (same as S &lt;&lt; 8)
+            = 0000000100000000 (lost top 8 bits because we can only hold 16 bits)
+
+            # Multiply by 0x1000 (same as S &lt;&lt; 12).
+              0001000100000001 = S
+            x    1000000000000 = 0x1000 = 4096
+            ------------------
+              0000000000000000
+             0000000000000000_
+            0000000000000000__
+           0000000000000000___
+          0000000000000000____
+         0000000000000000_____
+        0000000000000000______
+       0000000000000000_______
+      0000000000000000________
+     0000000000000000_________
+    0000000000000000__________
+   0000000000000000___________
+  0001000100000001____________ (same as S &lt;&lt; 12)
+            = 0001000000000000 (lost top 12 bits because we can only hold 16 bits)
+</pre>
+
+<p>
+We can now add these 4 subtotals together. The bottom 12 bits don't matter (we
+only care about the high-order nibble), but we still do the addition for all
+numbers for sake of illustration.
+</p>
+
+<pre class="example" id="org0000017">
+              0001000100000001 (same as S)
+              0001000000010000
+              0000000100000000
+            + 0001000000000000
+            ------------------
+              0011001000010001
+</pre>
+
+<p>
+The high-order nibble is <code>0011 = 3</code>, so we have 3 bits. If we AND it with 1, we
+get 1, which is our parity.
+</p>
+
+<p>
+Going back to our 64-bit example, we can see that multiplying by
+<code>0x1111111111111111</code> will similarly end up summing the number of bits in each
+nibble into the high-order nibble. Note that if the sum is 16, we'll end up
+getting <code>0000</code> in the nibble because the <code>1</code> will carry over into the 65th bit
+index, out of range for our 64-bit word. However it doesn't matter because
+AND-ing it with 1 will still get us 0 (parity 0) which is the correct answer.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-16-bit-caching" class="outline-3">
+<h3 id="h-16-bit-caching"><span class="section-number-3">4.5.</span> 16-bit caching</h3>
+<div class="outline-text-3" id="text-h-16-bit-caching">
+<p>
+Because there are \(2^{64}\) possible values, we cannot use a hash table for 64-bit
+inputs directly. Instead we can use a 16-bit input (\(2^{16} = 65536\) values), and
+just do 4 16-bit word lookups (because there are 4 16-bit words in a 64-bit
+word). Then we just take the XOR of these lookups to get the overall parity.
+Because the keys for the lookups can just be the raw 16-bit words, we can use
+these keys as indices to a list, instead of using a dictionary.
+</p>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#Tests">caching</a></span><span class="lilac-caption-link-symbol"><a href="#__NREF__caching">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__caching">
+<span class="org-variable-name">PARITY</span> <span class="org-operator">=</span> [xor_fold(word) <span class="org-keyword">for</span> word <span class="org-keyword">in</span> <span class="org-builtin">range</span>(1 <span class="org-operator">&lt;&lt;</span> 16)]
+
+<span class="org-keyword">def</span> <span class="org-function-name">caching</span>(word):
+    <span class="org-variable-name">a</span> <span class="org-operator">=</span> PARITY[word <span class="org-operator">&gt;&gt;</span> 48]
+    <span class="org-variable-name">b</span> <span class="org-operator">=</span> PARITY[word <span class="org-operator">&gt;&gt;</span> 32 <span class="org-operator">&amp;</span> 0xffff]
+    <span class="org-variable-name">c</span> <span class="org-operator">=</span> PARITY[word <span class="org-operator">&gt;&gt;</span> 16 <span class="org-operator">&amp;</span> 0xffff]
+    <span class="org-variable-name">d</span> <span class="org-operator">=</span> PARITY[word       <span class="org-operator">&amp;</span> 0xffff]
+    <span class="org-keyword">return</span> a <span class="org-operator">^</span> b <span class="org-operator">^</span> c <span class="org-operator">^</span> d
+</pre></div></div><p>
+Note that we don't have to mask the lower 16 bits for calculating <code>a</code> above,
+because shifting down by 48 bits only leaves 16 bits of information (everything
+else is cleared to 0). For the others, we have to mask by <code>0xffff</code> (16 bits) to
+only grab the relevant 16-bit areas.
+</p>
+
+<p>
+The time complexity is just \(O(n/L)\), where \(L\) is the width of the cached
+results and \(n\) is the word size. This assumes that the shift operations take
+\(O(1)\) time. In our case, \(L\) is 16 and \(n\) is 64, so there are \(\frac{64}{16} = 4\)
+terms to look up.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-XOR-fold-with-caching" class="outline-3">
+<h3 id="h-XOR-fold-with-caching"><span class="section-number-3">4.6.</span> XOR-fold with caching</h3>
+<div class="outline-text-3" id="text-h-XOR-fold-with-caching">
+<p>
+This is an approach that combines XOR-folding with caching to achieve an even
+greater speedup.
+</p>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#Tests">xor_fold_caching</a></span><span class="lilac-caption-link-symbol"><a href="#__NREF__xor_fold_caching">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__xor_fold_caching"><span class="org-keyword">def</span> <span class="org-function-name">xor_fold_caching</span>(word):
+    <span class="org-variable-name">word</span> <span class="org-operator">^=</span> word <span class="org-operator">&gt;&gt;</span> 32
+    <span class="org-variable-name">word</span> <span class="org-operator">^=</span> word <span class="org-operator">&gt;&gt;</span> 16
+    <span class="org-keyword">return</span> PARITY[word <span class="org-operator">&amp;</span> 0xffff]
+</pre></div></div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-Tests" class="outline-2">
+<h2 id="h-Tests"><span class="section-number-2">5.</span> Tests</h2>
+<div class="outline-text-2" id="text-h-Tests">
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><label class="org-src-name">Tests</label><span class="lilac-caption-link-symbol"><a href="#Tests">&#x1f517;</a></span></div><pre class="src src-python" id="Tests"><span class="org-keyword">from</span> hypothesis <span class="org-keyword">import</span> given, strategies <span class="org-keyword">as</span> st
+<span class="org-keyword">import</span> unittest
+
+<span class="lilac-child-link-from-parent"><a href="#__NREF__brute_force">brute_force</a></span>
+
+<span class="lilac-child-link-from-parent"><a href="#__NREF__clear_lsb">clear_lsb</a></span>
+
+<span class="lilac-child-link-from-parent"><a href="#__NREF__xor_fold">xor_fold</a></span>
+
+<span class="lilac-child-link-from-parent"><a href="#__NREF__xor_fold_lookup">xor_fold_lookup</a></span>
+
+<span class="lilac-child-link-from-parent"><a href="#__NREF__caching">caching</a></span>
+
+<span class="lilac-child-link-from-parent"><a href="#__NREF__xor_fold_caching">xor_fold_caching</a></span>
+
+<span class="lilac-child-link-from-parent"><a href="#__NREF__xor_fold_nibbles">xor_fold_nibbles</a></span>
+
+<span class="org-keyword">class</span> <span class="org-type">TestParity</span>(unittest.TestCase):
+    <span class="org-variable-name">cases</span> <span class="org-operator">=</span> [
+        (0b0, 0),
+        (0b1, 1),
+        (0b1011, 1),
+        (0b1000010000, 0),
+        (0b11, 0),
+        (0b11111, 1),
+        (0b1000000000000000000000000000000000000000000000000000000000000000, 1),
+        (0b1000000000000000000000000000000000000000100000000000000000000000, 0),
+    ]
+
+    <span class="org-keyword">def</span> <span class="org-function-name">test_simple_cases</span>(<span class="org-keyword">self</span>):
+        <span class="org-keyword">for</span> word, parity_bit <span class="org-keyword">in</span> <span class="org-keyword">self</span>.cases:
+            <span class="org-keyword">self</span>.assertEqual(parity_bit, brute_force(word))
+            <span class="org-keyword">self</span>.assertEqual(parity_bit, clear_lsb(word))
+            <span class="org-keyword">self</span>.assertEqual(parity_bit, xor_fold(word))
+            <span class="org-keyword">self</span>.assertEqual(parity_bit, xor_fold_lookup(word))
+            <span class="org-keyword">self</span>.assertEqual(parity_bit, caching(word))
+            <span class="org-keyword">self</span>.assertEqual(parity_bit, xor_fold_caching(word))
+            <span class="org-keyword">self</span>.assertEqual(parity_bit, xor_fold_nibbles(word))
+
+    <span class="org-type">@given</span>(st.integers(min_value<span class="org-operator">=</span>0, max_value<span class="org-operator">=</span>((1<span class="org-operator">&lt;&lt;</span>64) <span class="org-operator">-</span> 1)))
+    <span class="org-keyword">def</span> <span class="org-function-name">test_random</span>(<span class="org-keyword">self</span>, word):
+        <span class="org-variable-name">parity_bit</span> <span class="org-operator">=</span> xor_fold_nibbles(word)
+        <span class="org-keyword">self</span>.assertEqual(parity_bit, brute_force(word))
+        <span class="org-keyword">self</span>.assertEqual(parity_bit, clear_lsb(word))
+        <span class="org-keyword">self</span>.assertEqual(parity_bit, xor_fold(word))
+        <span class="org-keyword">self</span>.assertEqual(parity_bit, xor_fold_lookup(word))
+        <span class="org-keyword">self</span>.assertEqual(parity_bit, caching(word))
+        <span class="org-keyword">self</span>.assertEqual(parity_bit, xor_fold_caching(word))
+        <span class="org-keyword">self</span>.assertEqual(parity_bit, xor_fold_nibbles(word))
+
+<span class="org-keyword">if</span> <span class="org-builtin">__name__</span> <span class="org-operator">==</span> <span class="org-string">"__main__"</span>:
+    unittest.main(<span class="org-constant">exit</span><span class="org-operator">=</span><span class="org-constant">False</span>)
+</pre></div></div>
+</div>
+</div>
+
+<div id="outline-container-h-References" class="outline-2">
+<h2 id="h-References"><span class="section-number-2">6.</span> References</h2>
+<div class="outline-text-2" id="text-h-References">
+<style>.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}</style><div class="csl-bib-body">
+  <div class="csl-entry" id="citeproc_bib_item_1">Aziz, A., Lee, T.-H., &#38; Prakash, A. (2018). <i>Elements of Programming Interviews in Python: The Insiders’ Guide</i>. CreateSpace Independent Publishing Platform (25 July. 2018).</div>
+  <div class="csl-entry" id="citeproc_bib_item_2">Warren, H. S. (2013). <i>Hacker’s Delight</i> (2nd ed). Addison-Wesley.</div>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

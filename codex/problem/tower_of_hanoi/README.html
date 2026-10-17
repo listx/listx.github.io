@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Tower of Hanoi</title>
+<meta name="author" content="Linus Arver" />
+<meta name="generator" content="Org Mode" />
+<style>
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { }
+</style>
+<link rel="preconnect" href="/vendor/source-fonts/source-fonts.css" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="/vendor/source-fonts/source-fonts.css">
+<script src="/vendor/jquery-3.6.4.min.js"></script>
+<script src="lilac.js"></script>
+<link rel="stylesheet" type="text/css" href="syntax-highlighting.css"/>
+<link rel="stylesheet" type="text/css" href="lilac.css" />
+<link rel="stylesheet" type="text/css" href="codex.css" />
+<link rel="stylesheet" href="/vendor/source-fonts/source-fonts.css">
+<script>
+// @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&amp;dn=gpl-3.0.txt GPL-v3-or-Later
+     function CodeHighlightOn(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.add("code-highlighted");
+         target.classList.add("code-highlighted");
+       }
+     }
+     function CodeHighlightOff(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.remove("code-highlighted");
+         target.classList.remove("code-highlighted");
+       }
+     }
+// @license-end
+</script>
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    loader: { paths: { "mathjax-newcm": "/vendor/mathjax-newcm-font" } },
+	output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="/vendor/mathjax/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<div id="content" class="content">
+<h1 class="title">Tower of Hanoi</h1>
+<div id="table-of-contents" role="doc-toc">
+
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#h-Problem-statement">1. Problem statement</a></li>
+<li><a href="#h-Insights">2. Insights</a>
+<ul>
+<li><a href="#h-Background">2.1. Background</a></li>
+<li><a href="#h-Recurrence">2.2. Recurrence</a></li>
+</ul>
+</li>
+<li><a href="#h-Solution">3. Solution</a>
+<ul>
+<li><a href="#h-Recursive">3.1. Recursive</a></li>
+<li><a href="#h-Iterative">3.2. Iterative</a></li>
+</ul>
+</li>
+<li><a href="#h-Tests">4. Tests</a>
+<ul>
+<li><a href="#h-Basic-tests">4.1. Basic tests</a></li>
+</ul>
+</li>
+<li><a href="#h-References">5. References</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h-Problem-statement" class="outline-2">
+<h2 id="h-Problem-statement"><span class="section-number-2">1.</span> Problem statement</h2>
+<div class="outline-text-2" id="text-h-Problem-statement">
+<p>
+Compute the sequence of steps, which each step as a 2-letter string in the
+format <code>&lt;disc_id&gt;&lt;from&gt;&lt;to&gt;</code>, that solve a given <a href="https://funloop.org/post/2017-05-13-tower-of-hanoi.html">Tower of Hanoi</a> problem of \(N\)
+discs on 3 rods (<a href="#citeproc_bib_item_1">Aziz et al., 2018, p. 233</a>).
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-Insights" class="outline-2">
+<h2 id="h-Insights"><span class="section-number-2">2.</span> Insights</h2>
+<div class="outline-text-2" id="text-h-Insights">
+</div>
+
+<div id="outline-container-h-Background" class="outline-3">
+<h3 id="h-Background"><span class="section-number-3">2.1.</span> Background</h3>
+<div class="outline-text-3" id="text-h-Background">
+<p>
+The goal is to step the tower of discs from rod 1 to rod 2 (it actually doesn't
+matter whether rod 2 or 3 is the final rod, because of symmetry), in the same
+top-down order (smallest disc on top, largest disc on the bottom), with the
+fewest number of steps. A larger disc may not be placed on top of a smaller one.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-Recurrence" class="outline-3">
+<h3 id="h-Recurrence"><span class="section-number-3">2.2.</span> Recurrence</h3>
+<div class="outline-text-3" id="text-h-Recurrence">
+<p>
+Note the following:
+</p>
+
+<ul class="org-ul">
+<li>If there are no discs, 0 steps can be made.</li>
+<li>If there is 1 disc, only 1 step is needed.</li>
+<li>If there are 2 discs, 3 steps are needed.</li>
+<li>If there are 3 discs, 7 steps are needed.</li>
+<li>For \(n\) discs, \(2^{n-1}\) steps are needed.</li>
+</ul>
+
+<p>
+Why is this so? Basically, the disc at the bottom (largest disc) needs only 1
+step because it <i>must</i> (by definition) only go onto a rod with no discs on it
+(because all other discs are smaller than this one). And all previous discs must
+be stepd before the largest disc can be stepd.
+</p>
+
+<p>
+Let's label the rods A, B, C. For the case of 2 discs (let's call them 1 and 2),
+it plays out (top to bottom) like this:
+</p>
+
+<pre class="example" id="org0000000">
+1
+2
+-   -   -    Step 0
+A   B   C
+
+--------------------------------------------------------
+
+
+
+2       1
+-   -   -    Step 1 = AC (Move subtower (disc 1) to other rod)
+A   B   C
+
+--------------------------------------------------------
+
+
+
+    2   1
+-   -   -    Step 2 = AB (Move largest disc into place)
+A   B   C
+
+--------------------------------------------------------
+
+
+    1
+    2
+-   -   -    Step 3 = CB (Move subtower (disc 1) to final rod)
+A   B   C
+</pre>
+
+<p>
+Here's the visual record of 3 discs:
+</p>
+
+<pre class="example" id="org0000001">
+1
+2
+3
+-   -   -     Step 0
+A   B   C
+
+--------------------------------------------------------
+
+
+2
+3   1
+-   -   -     Step 1 = AB (Move subtower 1+2 to other rod)
+A   B   C
+
+--------------------------------------------------------
+
+
+
+3   1   2
+-   -   -     Step 2 = AC (Move subtower 1+2 to other rod)
+A   B   C
+
+--------------------------------------------------------
+
+
+        1
+3       2
+-   -   -     Step 3 = BC (Move subtower 1+2 to other rod)
+A   B   C
+
+--------------------------------------------------------
+
+
+        1
+    3   2
+-   -   -     Step 4 = AB  (Move largest disc into place)
+A   B   C
+
+--------------------------------------------------------
+
+
+
+1   3   2
+-   -   -     Step 5 = CA (Move subtower 1+2 to final rod)
+A   B   C
+
+--------------------------------------------------------
+
+
+    2
+1   3
+-   -   -     Step 6 = CB (Move subtower 1+2 to final rod)
+A   B   C
+
+--------------------------------------------------------
+
+    1
+    2
+    3
+-   -   -     Step 7 = AB (Move subtower 1+2 to final rod)
+A   B   C
+</pre>
+
+<p>
+Notice that the first 3 steps for the case of 3 discs are the same 3 steps
+needed for the entire solution of the case of 2 discs. So the solution for 3
+discs is really just: "step tower of 2 discs to another rod" + "step the largest
+disc to its final position" + "step tower of 2 discs to the final rod", or
+</p>
+
+\begin{align*}
+S(n) &= S(n-1) + 1 + S(n-1) \\
+     &= 2*S(n-1) + 1
+\end{align*}
+
+<p>
+where \(S(n)\) means the number of steps needed. If we throw in the
+base case of \(S(0) = 0\), we arrive at the following recurrence:
+</p>
+
+\begin{equation}
+  S_n =
+  \begin{cases}
+    0                   & \text{if } n = 0 \\
+    2 * (S_{n - 1}) + 1 & \text{if } n > 0.
+  \end{cases}
+\end{equation}
+
+<p>
+In summary, if we want to move \(n\) discs, we must move the tower made up of
+\(n-1\) discs over to another rod, then again to the final rod. These smaller
+\(n-1\) discs are free to move (use any of the rods) as they are all smaller than
+the largest disc.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-Solution" class="outline-2">
+<h2 id="h-Solution"><span class="section-number-2">3.</span> Solution</h2>
+<div class="outline-text-2" id="text-h-Solution">
+</div>
+
+<div id="outline-container-h-Recursive" class="outline-3">
+<h3 id="h-Recursive"><span class="section-number-3">3.1.</span> Recursive</h3>
+<div class="outline-text-3" id="text-h-Recursive">
+<p>
+The key here is to encode the "move subtower to other rod", "move largest disc"
+and "move subtower to final rod" actions into a recursive function. The "move
+largest disc" is our base case where the recursion ends.
+</p>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#Tests">solution</a></span>(1/2) <span class="lilac-caption-link-symbol"><a href="#__NREF__solution-1">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__solution-1"><span class="org-keyword">def</span> <span class="org-function-name">recursive</span>(discs_to_move: <span class="org-builtin">int</span>):
+    <span class="org-variable-name">result</span> <span class="org-operator">=</span> []
+
+    <span class="org-keyword">def</span> <span class="org-function-name">record_steps</span>(discs: <span class="org-builtin">int</span>,
+                     rod_start: <span class="org-builtin">str</span>,
+                     rod_final: <span class="org-builtin">str</span>,
+                     rod_other: <span class="org-builtin">str</span>):
+
+        <span class="org-keyword">if</span> <span class="org-keyword">not</span> discs:
+            <span class="org-keyword">return</span>
+
+        <span class="org-comment-delimiter"># </span><span class="org-comment">Move subtower from the starting rod to the other rod. "First leg" of</span>
+        <span class="org-comment-delimiter"># </span><span class="org-comment">recursion.</span>
+        record_steps(discs <span class="org-operator">-</span> 1, rod_start, rod_other, rod_final)
+
+        <span class="org-comment-delimiter"># </span><span class="org-comment">Move largest disc to final rod, and record this step. We reuse "discs"</span>
+        <span class="org-comment-delimiter"># </span><span class="org-comment">as the disc "id". "Largest" here depends on context.</span>
+        result.append(<span class="org-builtin">str</span>(discs) <span class="org-operator">+</span> rod_start <span class="org-operator">+</span> rod_final)
+
+        <span class="org-comment-delimiter"># </span><span class="org-comment">Move subtower from the other rod to the final rod. "Second leg" of</span>
+        <span class="org-comment-delimiter"># </span><span class="org-comment">recursion.</span>
+        record_steps(discs <span class="org-operator">-</span> 1, rod_other, rod_final, rod_start)
+
+    <span class="org-comment-delimiter"># </span><span class="org-comment">Record the steps!</span>
+    record_steps(discs_to_move, <span class="org-string">'A'</span>, <span class="org-string">'B'</span>, <span class="org-string">'C'</span>)
+
+    <span class="org-keyword">return</span> result
+</pre></div></div><p>
+Another way to look at this is that we have a binary tree of recursive calls,
+where we can trace the execution of the calls by doing an in-order traversal.
+</p>
+
+
+<div id="org0000006" class="figure">
+<p><img src="./recursive_call_tree.svg" alt="recursive_call_tree.svg" class="org-svg" width="600px">
+</p>
+<p><span class="figure-number">Figure 1: </span>Recursive call tree of function arguments for <code>record_steps()</code>.</p>
+</div>
+
+
+<p>
+We can use a <a href="../binary_tree/README.html">binary tree</a> to model the trace,
+because we recurse twice, in the first and second legs. And our model uses
+in-order traversal because our code to do actual work (the "moving" of the disc,
+which we record into the <code>result</code> array), is done between the two recursive
+calls, just like how in-order traversal <i>visits</i> after the left subtree is
+visited first (but before right subtree).
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-Iterative" class="outline-3">
+<h3 id="h-Iterative"><span class="section-number-3">3.2.</span> Iterative</h3>
+<div class="outline-text-3" id="text-h-Iterative">
+<p>
+Here we simulate the recursive approach by emulating a function call stack. We
+very precisely trace the execution of the recursive function, but do it in
+iterative fashion by simulating the call stack with an explicit stack. When we
+need to recurse, we push into the stack a "RecursiveCall".
+</p>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#Tests">solution</a></span>(2/2) <span class="lilac-caption-link-symbol"><a href="#__NREF__solution-2">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__solution-2"><span class="org-keyword">def</span> <span class="org-function-name">iterative</span>(discs_to_move: <span class="org-builtin">int</span>):
+
+    <span class="org-variable-name">result</span> <span class="org-operator">=</span> []
+
+    <span class="org-keyword">def</span> <span class="org-function-name">record_steps</span>(discs: <span class="org-builtin">int</span>,
+                     rod_start: <span class="org-builtin">str</span>,
+                     rod_final: <span class="org-builtin">str</span>,
+                     rod_other: <span class="org-builtin">str</span>):
+
+        <span class="org-keyword">class</span> <span class="org-type">RecursiveCall</span>(NamedTuple):
+            discs: <span class="org-builtin">int</span>
+            rod_start: <span class="org-builtin">str</span>
+            rod_final: <span class="org-builtin">str</span>
+            rod_other: <span class="org-builtin">str</span>
+
+        <span class="org-variable-name">callstack</span>: List[RecursiveCall] <span class="org-operator">=</span> []
+
+        <span class="org-keyword">while</span> discs <span class="org-keyword">or</span> callstack:
+
+            <span class="org-comment-delimiter"># </span><span class="org-comment">Simulate a recursive call. Initially, this loop simulates the</span>
+            <span class="org-comment-delimiter"># </span><span class="org-comment">"first leg" of recursion. Later, it will simulate the second leg</span>
+            <span class="org-comment-delimiter"># </span><span class="org-comment">as well.</span>
+            <span class="org-keyword">while</span> discs:
+                <span class="org-variable-name">rc</span> <span class="org-operator">=</span> RecursiveCall(
+                    discs,
+                    rod_start,
+                    rod_final,
+                    rod_other,
+                )
+                callstack.append(rc)
+                <span class="org-variable-name">rod_final</span>, <span class="org-variable-name">rod_other</span> <span class="org-operator">=</span> rod_other, rod_final
+                <span class="org-variable-name">discs</span> <span class="org-operator">-=</span> 1
+
+            <span class="org-comment-delimiter"># </span><span class="org-comment">"Execute" the function call at the top of the stack. We don't</span>
+            <span class="org-comment-delimiter"># </span><span class="org-comment">really care how the function call got to the top --- we just</span>
+            <span class="org-comment-delimiter"># </span><span class="org-comment">execute it to make our "CPU" make progress.</span>
+            <span class="org-variable-name">exec_me</span> <span class="org-operator">=</span> callstack.pop()
+            result.append(<span class="org-builtin">str</span>(exec_me.discs) <span class="org-operator">+</span>
+                          exec_me.rod_start <span class="org-operator">+</span>
+                          exec_me.rod_final)
+
+            <span class="org-comment-delimiter"># </span><span class="org-comment">The combination of this stanza and the above while loop just above</span>
+            <span class="org-comment-delimiter"># </span><span class="org-comment">will simulate the second leg of recursion. Recurse</span>
+            <span class="org-keyword">if</span> exec_me.discs <span class="org-operator">&gt;</span> 0:
+                <span class="org-variable-name">discs</span> <span class="org-operator">=</span> exec_me.discs <span class="org-operator">-</span> 1
+                <span class="org-variable-name">rod_start</span> <span class="org-operator">=</span> exec_me.rod_other
+                <span class="org-variable-name">rod_final</span> <span class="org-operator">=</span> exec_me.rod_final
+                <span class="org-variable-name">rod_other</span> <span class="org-operator">=</span> exec_me.rod_start
+
+    record_steps(discs_to_move, <span class="org-string">'A'</span>, <span class="org-string">'B'</span>, <span class="org-string">'C'</span>)
+
+    <span class="org-keyword">return</span> result
+</pre></div></div><p>
+Consider the example where we call <code>iterative(3)</code>.  The first thing we do is
+simulate the recursion down to the leftmost node in the call tree (as
+illustrated earlier in Figure 1). The call stack at this point looks like this:
+</p>
+
+<pre class="example" id="org0000009">
+1,A,B,C
+2,A,C,B
+3,A,B,C
+</pre>
+
+<p>
+Then we pop the stack to process <code>1,A,B,C</code> and execute it.
+</p>
+
+<pre class="example" id="org000000a">
+2,A,C,B
+3,A,B,C
+</pre>
+
+<p>
+Now we are in the next iteration for the outer <code>while</code> loop. We pop the stack to process
+<code>2,A,C,B</code> and execute it. Our stack looks like
+</p>
+
+<pre class="example" id="org000000b">
+3,A,B,C
+</pre>
+
+<p>
+Now we are in the next iteration for the outer <code>while</code>
+loop again. But now we execute the inner <code>while</code> loop because our last execution
+set <code>discs</code> to \(2 - 1 = 1\), and so we create the next recursive call, <code>1,B,C,A</code>
+and add it to the stack. Now our stack looks like
+</p>
+
+<pre class="example" id="org000000c">
+1,B,C,A
+3,A,B,C
+</pre>
+
+<p>
+and we pop the stack and execute it. And so on and so forth.
+</p>
+
+<p>
+Overall it's a bit tricky, but the key ideas are:
+</p>
+
+<ul class="org-ul">
+<li>simulate a function call with an explicit stack,</li>
+<li>process the stack once in the outer loop's iteration to make progress,</li>
+<li>have another nested loop to build up the stack again to simulate further
+recursive calls, and</li>
+<li>modify the "base case detector" variable, in our case the <code>discs</code> variable, as
+needed to control the growth of recursion.</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-Tests" class="outline-2">
+<h2 id="h-Tests"><span class="section-number-2">4.</span> Tests</h2>
+<div class="outline-text-2" id="text-h-Tests">
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><label class="org-src-name">Tests</label><span class="lilac-caption-link-symbol"><a href="#Tests">&#x1f517;</a></span></div><pre class="src src-python" id="Tests"><span class="org-keyword">from</span> typing <span class="org-keyword">import</span> List, NamedTuple
+<span class="org-keyword">import</span> unittest
+
+<span class="lilac-child-link-from-parent"><a href="#__NREF__solution-1">solution</a></span>
+
+<span class="org-keyword">class</span> <span class="org-type">Test</span>(unittest.TestCase):
+    <span class="lilac-child-link-from-parent"><a href="#__NREF__test_cases">test_cases</a></span>
+
+<span class="org-keyword">if</span> <span class="org-builtin">__name__</span> <span class="org-operator">==</span> <span class="org-string">"__main__"</span>:
+    unittest.main(<span class="org-constant">exit</span><span class="org-operator">=</span><span class="org-constant">False</span>)
+</pre></div></div>
+</div>
+
+<div id="outline-container-h-Basic-tests" class="outline-3">
+<h3 id="h-Basic-tests"><span class="section-number-3">4.1.</span> Basic tests</h3>
+<div class="outline-text-3" id="text-h-Basic-tests">
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#Tests">test_cases</a></span>(1/1) <span class="lilac-caption-link-symbol"><a href="#__NREF__test_cases">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__test_cases"><span class="org-keyword">def</span> <span class="org-function-name">test_recursive</span>(<span class="org-keyword">self</span>):
+    <span class="org-keyword">self</span>.assertEqual(recursive(0), [])
+    <span class="org-keyword">self</span>.assertEqual(recursive(1), [<span class="org-string">"1AB"</span>])
+    <span class="org-keyword">self</span>.assertEqual(recursive(2), [<span class="org-string">"1AC"</span>, <span class="org-string">"2AB"</span>, <span class="org-string">"1CB"</span>])
+    <span class="org-keyword">self</span>.assertEqual(recursive(3), [<span class="org-string">"1AB"</span>, <span class="org-string">"2AC"</span>, <span class="org-string">"1BC"</span>,
+                                    <span class="org-string">"3AB"</span>,
+                                    <span class="org-string">"1CA"</span>, <span class="org-string">"2CB"</span>, <span class="org-string">"1AB"</span>])
+<span class="org-keyword">def</span> <span class="org-function-name">test_iterative</span>(<span class="org-keyword">self</span>):
+    <span class="org-keyword">self</span>.assertEqual(iterative(0), [])
+    <span class="org-keyword">self</span>.assertEqual(iterative(1), [<span class="org-string">"1AB"</span>])
+    <span class="org-keyword">self</span>.assertEqual(iterative(2), [<span class="org-string">"1AC"</span>, <span class="org-string">"2AB"</span>, <span class="org-string">"1CB"</span>])
+    <span class="org-keyword">self</span>.assertEqual(iterative(3), [<span class="org-string">"1AB"</span>, <span class="org-string">"2AC"</span>, <span class="org-string">"1BC"</span>,
+                                    <span class="org-string">"3AB"</span>,
+                                    <span class="org-string">"1CA"</span>, <span class="org-string">"2CB"</span>, <span class="org-string">"1AB"</span>])
+
+<span class="org-comment-delimiter"># </span><span class="org-comment">Do the recursive and iterative solutions agree with each other?</span>
+<span class="org-keyword">def</span> <span class="org-function-name">test_cross_check</span>(<span class="org-keyword">self</span>):
+    <span class="org-keyword">for</span> i <span class="org-keyword">in</span> <span class="org-builtin">range</span>(8):
+        <span class="org-keyword">self</span>.assertEqual(recursive(i), iterative(i))
+</pre></div></div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-References" class="outline-2">
+<h2 id="h-References"><span class="section-number-2">5.</span> References</h2>
+<div class="outline-text-2" id="text-h-References">
+<style>.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}</style><div class="csl-bib-body">
+  <div class="csl-entry" id="citeproc_bib_item_1">Aziz, A., Lee, T.-H., &#38; Prakash, A. (2018). <i>Elements of Programming Interviews in Python: The Insiders’ Guide</i>. CreateSpace Independent Publishing Platform (25 July. 2018).</div>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

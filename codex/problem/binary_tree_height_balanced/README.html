@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Height-balanced binary trees</title>
+<meta name="author" content="Linus Arver" />
+<meta name="generator" content="Org Mode" />
+<style>
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { }
+</style>
+<link rel="preconnect" href="/vendor/source-fonts/source-fonts.css" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="/vendor/source-fonts/source-fonts.css">
+<script src="/vendor/jquery-3.6.4.min.js"></script>
+<script src="lilac.js"></script>
+<link rel="stylesheet" type="text/css" href="syntax-highlighting.css"/>
+<link rel="stylesheet" type="text/css" href="lilac.css" />
+<link rel="stylesheet" type="text/css" href="codex.css" />
+<link rel="stylesheet" href="/vendor/source-fonts/source-fonts.css">
+<script>
+// @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&amp;dn=gpl-3.0.txt GPL-v3-or-Later
+     function CodeHighlightOn(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.add("code-highlighted");
+         target.classList.add("code-highlighted");
+       }
+     }
+     function CodeHighlightOff(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.remove("code-highlighted");
+         target.classList.remove("code-highlighted");
+       }
+     }
+// @license-end
+</script>
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    loader: { paths: { "mathjax-newcm": "/vendor/mathjax-newcm-font" } },
+	output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="/vendor/mathjax/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<div id="content" class="content">
+<h1 class="title">Height-balanced binary trees</h1>
+<div id="table-of-contents" role="doc-toc">
+
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#h-Problem-statement">1. Problem statement</a></li>
+<li><a href="#h-Insights">2. Insights</a>
+<ul>
+<li><a href="#h-Height-balaced">2.1. Height-balaced</a></li>
+</ul>
+</li>
+<li><a href="#h-Solution">3. Solution</a>
+<ul>
+<li><a href="#h-Brute-force">3.1. Brute force</a>
+<ul>
+<li><a href="#h-Other-traversals">3.1.1. Other traversals</a></li>
+</ul>
+</li>
+<li><a href="#h-Optimal">3.2. Optimal</a></li>
+</ul>
+</li>
+<li><a href="#h-Tests">4. Tests</a></li>
+<li><a href="#h-References">5. References</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h-Problem-statement" class="outline-2">
+<h2 id="h-Problem-statement"><span class="section-number-2">1.</span> Problem statement</h2>
+<div class="outline-text-2" id="text-h-Problem-statement">
+<p>
+Check if a binary tree is height-balanced (<a href="#citeproc_bib_item_1">Aziz et al., 2018, p. 124</a>).
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-Insights" class="outline-2">
+<h2 id="h-Insights"><span class="section-number-2">2.</span> Insights</h2>
+<div class="outline-text-2" id="text-h-Insights">
+</div>
+
+<div id="outline-container-h-Height-balaced" class="outline-3">
+<h3 id="h-Height-balaced"><span class="section-number-3">2.1.</span> Height-balaced</h3>
+<div class="outline-text-3" id="text-h-Height-balaced">
+<p>
+The height of a tree is simply how tall a tree is, or more precisely the deepest
+depth of any node in the tree. A tree is height-balanced if all nodes' child
+trees have a height difference of at most 1, such as in the example below.
+</p>
+
+
+<div id="org0000000" class="figure">
+<p><img src="./binary_tree_height_balanced.svg" alt="binary_tree_height_balanced.svg" class="org-svg" width="600px">
+</p>
+<p><span class="figure-number">Figure 1: </span>An elaborate, but still height-balanced binary tree.</p>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-Solution" class="outline-2">
+<h2 id="h-Solution"><span class="section-number-2">3.</span> Solution</h2>
+<div class="outline-text-2" id="text-h-Solution">
+</div>
+
+<div id="outline-container-h-Brute-force" class="outline-3">
+<h3 id="h-Brute-force"><span class="section-number-3">3.1.</span> Brute force</h3>
+<div class="outline-text-3" id="text-h-Brute-force">
+<p>
+We reuse the <a href="../binary_tree/README.html">binary tree library we created earlier</a>.
+</p>
+
+<p>
+Basically, we just compute height of trees rooted at every node. Then it's just
+a matter of traversing the entire tree and making sure that the two subtrees
+below us are balanced (height delta is less than or equal to 1).
+</p>
+
+<p>
+We can traverse through the tree so that we visit every single node exactly
+once. When visiting the node, we treat that node as the root of a new binary
+tree. Then all we have to do is get the height of the left and right subtrees,
+and see if the difference is greater than 1. The missing building block here is
+an algorithm to find the height of a tree (which we can apply to subtrees just
+as well).
+</p>
+
+<p>
+First let's figure out how to compute the height of a tree. We can solve this
+using recursion &#x2014; return -1 if a <code>Node</code> is <code>None</code> (base case), but otherwise
+recurse down to each child. When computing the height, get the maximum of each
+child and add 1. Adding 1 is required because it is what we add up at each
+level.
+</p>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#Tests">code</a></span>(1/6) <span class="lilac-caption-link-symbol"><a href="#__NREF__code-1">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__code-1"><span class="org-keyword">from</span> binary_tree.binary_tree <span class="org-keyword">import</span> BinaryTree, Node
+
+<span class="org-keyword">def</span> <span class="org-function-name">height</span>(x: Optional[Node]) <span class="org-operator">-&gt;</span> <span class="org-builtin">int</span>:
+    <span class="org-keyword">if</span> x <span class="org-keyword">is</span> <span class="org-constant">None</span>:
+        <span class="org-keyword">return</span> <span class="org-operator">-</span>1
+
+    <span class="org-variable-name">height_l</span> <span class="org-operator">=</span> height(x.left)
+    <span class="org-variable-name">height_r</span> <span class="org-operator">=</span> height(x.right)
+
+    <span class="org-keyword">return</span> <span class="org-builtin">max</span>(height_l, height_r) <span class="org-operator">+</span> 1
+</pre></div></div><p>
+Now that we can determine the height of a tree rooted at any particular node, we
+are ready to traverse through the tree and run the height computation for every
+single node. As soon as we determine that the tree is not balanced, we return
+<code>False</code>.
+</p>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#Tests">code</a></span>(2/6) <span class="lilac-caption-link-symbol"><a href="#__NREF__code-2">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__code-2"><span class="org-keyword">def</span> <span class="org-function-name">is_height_balanced__brute_force</span>(x: Optional[Node]) <span class="org-operator">-&gt;</span> <span class="org-builtin">bool</span>:
+    <span class="org-comment-delimiter"># </span><span class="org-comment">If there is no node, then just consider it height-balanced. This also</span>
+    <span class="org-comment-delimiter"># </span><span class="org-comment">matters when we recurse --- we are bound to run into a None object (when</span>
+    <span class="org-comment-delimiter"># </span><span class="org-comment">looking at the children of leaf nodes), and we don't want to abort the</span>
+    <span class="org-comment-delimiter"># </span><span class="org-comment">traversal as soon as we encounter them. So we are forced to return True.</span>
+    <span class="org-keyword">if</span> x <span class="org-keyword">is</span> <span class="org-constant">None</span>:
+        <span class="org-keyword">return</span> <span class="org-constant">True</span>
+
+    <span class="org-comment-delimiter"># </span><span class="org-comment">Traverse into the other nodes, making sure that we call the body of this</span>
+    <span class="org-comment-delimiter"># </span><span class="org-comment">function exactly once for every Node.</span>
+    <span class="org-keyword">if</span> <span class="org-keyword">not</span> is_height_balanced__brute_force(x.left):
+        <span class="org-keyword">return</span> <span class="org-constant">False</span>
+    <span class="org-keyword">if</span> <span class="org-keyword">not</span> is_height_balanced__brute_force(x.right):
+        <span class="org-keyword">return</span> <span class="org-constant">False</span>
+
+    <span class="org-comment-delimiter"># </span><span class="org-comment">"Visit" this node by doing the actual subtree height check for the left</span>
+    <span class="org-comment-delimiter"># </span><span class="org-comment">and right children.</span>
+    <span class="org-variable-name">height_l</span> <span class="org-operator">=</span> height(x.left)
+    <span class="org-variable-name">height_r</span> <span class="org-operator">=</span> height(x.right)
+
+    <span class="org-variable-name">big</span> <span class="org-operator">=</span> <span class="org-builtin">max</span>(height_l, height_r)
+    <span class="org-variable-name">small</span> <span class="org-operator">=</span> <span class="org-builtin">min</span>(height_l, height_r)
+    <span class="org-variable-name">delta</span> <span class="org-operator">=</span> big <span class="org-operator">-</span> small
+
+    <span class="org-keyword">return</span> delta <span class="org-operator">&lt;=</span> 1
+</pre></div></div><p>
+We do postorder traversal because the code looks aesthically simpler written
+this way (because the "visiting" bit comes at the end, after the "traversal"
+part at the top).
+</p>
+
+<p>
+Obviously this is wasteful because we recompute the same result multiple times
+(that is, we end up calling <code>height()</code> multiple times for the same node). The
+time complexity is \(O(n^2)\).
+</p>
+
+<p>
+For example, we have a degenerate tree that only has nodes in the left subtree,
+resembling a linked list. For each node, calling the <code>height()</code> function would
+require visiting \(d\) nodes, where \(d\) is the depth of the "tree" at the current
+node.
+</p>
+
+
+<div id="org0000007" class="figure">
+<p><img src="./binary_tree_degenerate.svg" alt="binary_tree_degenerate.svg" class="org-svg" width="200px">
+</p>
+<p><span class="figure-number">Figure 2: </span>A degenerate tree that looks like a linked list.</p>
+</div>
+
+<pre class="example" id="org0000008">
+A B C D E # determine height of tree at A
+  B C D E # determine height of tree at B
+    C D E # determine height of tree at C
+      D E # determine height of tree at D
+        E # determine height of tree at E
+</pre>
+
+<p>
+This is very similar to the trace of bubble sort, which must "traverse" each
+element in an array \(n\) times, where each time it starts the iteration with the
+next element in the array.
+</p>
+
+<pre class="example" id="org0000009">
+1 2 3 4 5 # iterate through all elements, 1 to 5
+  2 3 4 5 # iterate through all elements, 2 to 5
+    3 4 5 # iterate through all elements, 3 to 5
+      4 5 # iterate through all elements, 4 to 5
+        5 # iterate through all elements, 5 to 5
+</pre>
+
+<p>
+And so \(O(n^2)\) is the case for degenerate trees. What about other types of
+trees? Well, regardless of the structure of the tree, every time we increase the
+number of nodes \(n\) in the tree by 1, we need to traverse exactly more
+additional node. So the growth behavior doesn't change and we are still left
+with \(O(n^2)\) time complexity.
+</p>
+</div>
+
+<div id="outline-container-h-Other-traversals" class="outline-4">
+<h4 id="h-Other-traversals"><span class="section-number-4">3.1.1.</span> Other traversals</h4>
+<div class="outline-text-4" id="text-h-Other-traversals">
+<p>
+Does it matter if the brute force approach used a different type of traversal?
+No. The code is harder to read though because the traversal logic is intermixed
+with the "what to do with our current node" logic.
+</p>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#Tests">code</a></span>(3/6) <span class="lilac-caption-link-symbol"><a href="#__NREF__code-3">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__code-3"><span class="org-keyword">def</span> <span class="org-function-name">is_height_balanced__brute_force_preorder</span>(x: Optional[Node]) <span class="org-operator">-&gt;</span> <span class="org-builtin">bool</span>:
+    <span class="org-keyword">if</span> x <span class="org-keyword">is</span> <span class="org-constant">None</span>:
+        <span class="org-keyword">return</span> <span class="org-constant">True</span>
+
+    <span class="org-variable-name">height_l</span> <span class="org-operator">=</span> height(x.left)
+    <span class="org-variable-name">height_r</span> <span class="org-operator">=</span> height(x.right)
+
+    <span class="org-variable-name">big</span> <span class="org-operator">=</span> <span class="org-builtin">max</span>(height_l, height_r)
+    <span class="org-variable-name">small</span> <span class="org-operator">=</span> <span class="org-builtin">min</span>(height_l, height_r)
+    <span class="org-variable-name">delta</span> <span class="org-operator">=</span> big <span class="org-operator">-</span> small
+
+    <span class="org-keyword">if</span> delta <span class="org-operator">&gt;</span> 1:
+        <span class="org-keyword">return</span> <span class="org-constant">False</span>
+
+    <span class="org-keyword">if</span> <span class="org-keyword">not</span> is_height_balanced__brute_force(x.left):
+        <span class="org-keyword">return</span> <span class="org-constant">False</span>
+    <span class="org-keyword">if</span> <span class="org-keyword">not</span> is_height_balanced__brute_force(x.right):
+        <span class="org-keyword">return</span> <span class="org-constant">False</span>
+
+    <span class="org-keyword">return</span> <span class="org-constant">True</span>
+
+<span class="org-keyword">def</span> <span class="org-function-name">is_height_balanced__brute_force_inorder</span>(x: Optional[Node]) <span class="org-operator">-&gt;</span> <span class="org-builtin">bool</span>:
+    <span class="org-keyword">if</span> x <span class="org-keyword">is</span> <span class="org-constant">None</span>:
+        <span class="org-keyword">return</span> <span class="org-constant">True</span>
+
+    <span class="org-keyword">if</span> <span class="org-keyword">not</span> is_height_balanced__brute_force(x.left):
+        <span class="org-keyword">return</span> <span class="org-constant">False</span>
+
+    <span class="org-variable-name">height_l</span> <span class="org-operator">=</span> height(x.left)
+    <span class="org-variable-name">height_r</span> <span class="org-operator">=</span> height(x.right)
+
+    <span class="org-variable-name">big</span> <span class="org-operator">=</span> <span class="org-builtin">max</span>(height_l, height_r)
+    <span class="org-variable-name">small</span> <span class="org-operator">=</span> <span class="org-builtin">min</span>(height_l, height_r)
+    <span class="org-variable-name">delta</span> <span class="org-operator">=</span> big <span class="org-operator">-</span> small
+
+    <span class="org-keyword">if</span> delta <span class="org-operator">&gt;</span> 1:
+        <span class="org-keyword">return</span> <span class="org-constant">False</span>
+
+    <span class="org-keyword">if</span> <span class="org-keyword">not</span> is_height_balanced__brute_force(x.right):
+        <span class="org-keyword">return</span> <span class="org-constant">False</span>
+
+    <span class="org-keyword">return</span> <span class="org-constant">True</span>
+</pre></div></div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-Optimal" class="outline-3">
+<h3 id="h-Optimal"><span class="section-number-3">3.2.</span> Optimal</h3>
+<div class="outline-text-3" id="text-h-Optimal">
+<p>
+The optimal solution avoids using <code>height()</code>, and instead relies on the property
+of postorder traversals themselves. In postorder traversal, the leaf nodes of a
+subtree are always visited first, and the left subtree is fully visited before
+visiting the right subtree. And both the left and right subtrees are fully
+resolved (visited) before we visit the current node.
+</p>
+
+<p>
+Using this property, we can pass the computed height back down the call stack
+(back up the tree), so that we can compute it in constant time. At any time we
+determine that the subtree is not balanced, we return early. If both subtrees
+and the current subtree is balanced, we return <code>(True, &lt;height&gt;)</code> where
+<code>&lt;height&gt;</code> is the height of the current tree, determined by taking the maximum
+value of either subtree and adding 1.
+</p>
+
+<p>
+Let's use a named tuple for this to improve readability.
+</p>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#Tests">code</a></span>(4/6) <span class="lilac-caption-link-symbol"><a href="#__NREF__code-4">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__code-4"><span class="org-keyword">class</span> <span class="org-type">NodeInfo</span>(NamedTuple):
+    balanced: <span class="org-builtin">bool</span>
+    height: <span class="org-builtin">int</span>
+</pre></div></div><p>
+Now let's consider first writing a helper function. The reason is because we
+want to match the type signature of the brute force approach (we want to return
+just <code>True</code> or <code>False</code> as the output), but our recursive computation as
+described above requires us to return both the boolean <i>and</i> a height.
+</p>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#Tests">code</a></span>(5/6) <span class="lilac-caption-link-symbol"><a href="#__NREF__code-5">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__code-5"><span class="org-keyword">def</span> <span class="org-function-name">get_balanced_status</span>(x: Optional[Node]) <span class="org-operator">-&gt;</span> NodeInfo:
+    <span class="org-comment-delimiter"># </span><span class="org-comment">Base case for recursion, just like for the brute force approach.</span>
+    <span class="org-keyword">if</span> x <span class="org-keyword">is</span> <span class="org-constant">None</span>:
+        <span class="org-keyword">return</span> NodeInfo(<span class="org-constant">True</span>, <span class="org-operator">-</span>1)
+
+    <span class="org-comment-delimiter"># </span><span class="org-comment">Early return if either the left or right subtrees were not balanced.</span>
+    <span class="org-variable-name">ni_left</span> <span class="org-operator">=</span> get_balanced_status(x.left)
+    <span class="org-keyword">if</span> <span class="org-keyword">not</span> ni_left.balanced:
+        <span class="org-keyword">return</span> ni_left
+
+    <span class="org-variable-name">ni_right</span> <span class="org-operator">=</span> get_balanced_status(x.right)
+    <span class="org-keyword">if</span> <span class="org-keyword">not</span> ni_right.balanced:
+        <span class="org-keyword">return</span> ni_right
+
+    <span class="org-comment-delimiter"># </span><span class="org-comment">Both the left and right subtrees are balanced. But it could be that</span>
+    <span class="org-comment-delimiter"># </span><span class="org-comment">the tree rooted at the current node is not balanced.</span>
+    <span class="org-variable-name">big</span> <span class="org-operator">=</span> <span class="org-builtin">max</span>(ni_left.height, ni_right.height)
+    <span class="org-variable-name">small</span> <span class="org-operator">=</span> <span class="org-builtin">min</span>(ni_left.height, ni_right.height)
+    <span class="org-variable-name">delta</span> <span class="org-operator">=</span> big <span class="org-operator">-</span> small
+
+    <span class="org-keyword">if</span> delta <span class="org-operator">&gt;</span> 1:
+        <span class="org-keyword">return</span> NodeInfo(<span class="org-constant">False</span>, <span class="org-operator">-</span>1)
+
+    <span class="org-comment-delimiter"># </span><span class="org-comment">Current tree is balanced. The height of the tree is the maximum of the</span>
+    <span class="org-comment-delimiter"># </span><span class="org-comment">heights of either subtree, plus 1.</span>
+    <span class="org-keyword">return</span> NodeInfo(<span class="org-constant">True</span>, <span class="org-builtin">max</span>(ni_left.height, ni_right.height) <span class="org-operator">+</span> 1)
+</pre></div></div><p>
+With the heavy lifting out of the way, our entrypoint function can just return
+the first boolean ("balanced") field.
+</p>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#Tests">code</a></span>(6/6) <span class="lilac-caption-link-symbol"><a href="#__NREF__code-6">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__code-6"><span class="org-keyword">def</span> <span class="org-function-name">is_height_balanced__optimal</span>(x: Optional[Node]) <span class="org-operator">-&gt;</span> <span class="org-builtin">bool</span>:
+    <span class="org-keyword">return</span> get_balanced_status(x).balanced
+</pre></div></div><p>
+In summary, we basically do a single postorder traversal, and during this
+traversal, try to return early if we detect that at any point the height is not
+balanced.
+</p>
+
+<p>
+Time complexity is \(O(n)\) where \(n\) is the number of nodes in the tree. The
+"space" complexity is \(O(h)\) where \(h\) is the height of the tree; here "space"
+means the amount of space used by the function call stack as we undergo
+recursion. For memory usage, space complexity is \(O(1)\) because there are never
+more than three <code>NodeInfo</code> variables (<code>ni_left</code>, <code>ni_right</code>, and the <code>NodeInfo</code>
+object returned by <code>get_balanced_status</code>) needed for allocation at any given
+time, regardless of how many nodes are in the entire tree.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-Tests" class="outline-2">
+<h2 id="h-Tests"><span class="section-number-2">4.</span> Tests</h2>
+<div class="outline-text-2" id="text-h-Tests">
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><label class="org-src-name">Tests</label><span class="lilac-caption-link-symbol"><a href="#Tests">&#x1f517;</a></span></div><pre class="src src-python" id="Tests"><span class="org-keyword">from</span> __future__ <span class="org-keyword">import</span> annotations
+<span class="org-keyword">from</span> hypothesis <span class="org-keyword">import</span> given, strategies <span class="org-keyword">as</span> st
+<span class="org-keyword">from</span> typing <span class="org-keyword">import</span> Optional, NamedTuple
+<span class="org-keyword">import</span> unittest
+
+<span class="lilac-child-link-from-parent"><a href="#__NREF__code-1">code</a></span>
+
+<span class="org-keyword">class</span> <span class="org-type">Test</span>(unittest.TestCase):
+    <span class="org-keyword">def</span> <span class="org-function-name">test_height</span>(<span class="org-keyword">self</span>):
+        <span class="org-variable-name">t</span> <span class="org-operator">=</span> BinaryTree()
+        <span class="org-keyword">self</span>.assertEqual(height(t.root), <span class="org-operator">-</span>1)
+
+        <span class="org-variable-name">t</span> <span class="org-operator">=</span> BinaryTree()
+        t.insert(0, [])
+        <span class="org-keyword">self</span>.assertEqual(height(t.root), 0)
+
+        <span class="org-variable-name">t</span> <span class="org-operator">=</span> BinaryTree()
+        t.insert(0, [0, 0, 0])
+        <span class="org-keyword">self</span>.assertEqual(height(t.root), 3)
+        <span class="org-keyword">self</span>.assertEqual(height(t.root.left), 2)
+        <span class="org-keyword">self</span>.assertEqual(height(t.root.left.left), 1)
+        <span class="org-keyword">self</span>.assertEqual(height(t.root.left.left.left), 0)
+        <span class="org-keyword">self</span>.assertEqual(height(t.root.left.left.left.left), <span class="org-operator">-</span>1)
+
+        <span class="org-variable-name">t</span> <span class="org-operator">=</span> BinaryTree()
+        t.insert(0, [0, 0, 0])
+        t.insert(0, [1, 1, 1])
+        <span class="org-keyword">self</span>.assertEqual(height(t.root), 3)
+
+        <span class="org-variable-name">t</span> <span class="org-operator">=</span> BinaryTree()
+        t.insert(0, [0])
+        t.insert(0, [1, 1, 1])
+        <span class="org-keyword">self</span>.assertEqual(height(t.root), 3)
+
+    <span class="org-keyword">def</span> <span class="org-function-name">test_is_height_balanced</span>(<span class="org-keyword">self</span>):
+        <span class="org-variable-name">t</span> <span class="org-operator">=</span> BinaryTree()
+        <span class="org-keyword">self</span>.assertEqual(is_height_balanced__brute_force(t.root), <span class="org-constant">True</span>)
+        <span class="org-keyword">self</span>.assertEqual(is_height_balanced__brute_force_preorder(t.root), <span class="org-constant">True</span>)
+        <span class="org-keyword">self</span>.assertEqual(is_height_balanced__brute_force_inorder(t.root), <span class="org-constant">True</span>)
+        <span class="org-keyword">self</span>.assertEqual(is_height_balanced__optimal(t.root), <span class="org-constant">True</span>)
+
+        <span class="org-variable-name">t</span> <span class="org-operator">=</span> BinaryTree()
+        t.insert(0, [])
+        <span class="org-keyword">self</span>.assertEqual(is_height_balanced__brute_force(t.root), <span class="org-constant">True</span>)
+        <span class="org-keyword">self</span>.assertEqual(is_height_balanced__brute_force_preorder(t.root), <span class="org-constant">True</span>)
+        <span class="org-keyword">self</span>.assertEqual(is_height_balanced__brute_force_inorder(t.root), <span class="org-constant">True</span>)
+        <span class="org-keyword">self</span>.assertEqual(is_height_balanced__optimal(t.root), <span class="org-constant">True</span>)
+
+        <span class="org-variable-name">t</span> <span class="org-operator">=</span> BinaryTree()
+        t.insert(0, [])
+        t.insert(0, [0])
+        <span class="org-keyword">self</span>.assertEqual(is_height_balanced__brute_force(t.root), <span class="org-constant">True</span>)
+        <span class="org-keyword">self</span>.assertEqual(is_height_balanced__brute_force_preorder(t.root), <span class="org-constant">True</span>)
+        <span class="org-keyword">self</span>.assertEqual(is_height_balanced__brute_force_inorder(t.root), <span class="org-constant">True</span>)
+        <span class="org-keyword">self</span>.assertEqual(is_height_balanced__optimal(t.root), <span class="org-constant">True</span>)
+
+        <span class="org-variable-name">t</span> <span class="org-operator">=</span> BinaryTree()
+        t.insert(0, [])
+        t.insert(0, [0])
+        t.insert(0, [1])
+        <span class="org-keyword">self</span>.assertEqual(is_height_balanced__brute_force(t.root), <span class="org-constant">True</span>)
+        <span class="org-keyword">self</span>.assertEqual(is_height_balanced__brute_force_preorder(t.root), <span class="org-constant">True</span>)
+        <span class="org-keyword">self</span>.assertEqual(is_height_balanced__brute_force_inorder(t.root), <span class="org-constant">True</span>)
+        <span class="org-keyword">self</span>.assertEqual(is_height_balanced__optimal(t.root), <span class="org-constant">True</span>)
+
+        <span class="org-variable-name">t</span> <span class="org-operator">=</span> BinaryTree()
+        t.insert(0, [])
+        t.insert(0, [0, 0])
+        t.insert(0, [1])
+        <span class="org-keyword">self</span>.assertEqual(is_height_balanced__brute_force(t.root), <span class="org-constant">True</span>)
+        <span class="org-keyword">self</span>.assertEqual(is_height_balanced__brute_force_preorder(t.root), <span class="org-constant">True</span>)
+        <span class="org-keyword">self</span>.assertEqual(is_height_balanced__brute_force_inorder(t.root), <span class="org-constant">True</span>)
+        <span class="org-keyword">self</span>.assertEqual(is_height_balanced__optimal(t.root), <span class="org-constant">True</span>)
+
+        <span class="org-variable-name">t</span> <span class="org-operator">=</span> BinaryTree()
+        t.insert(0, [])
+        t.insert(0, [0, 0])
+        t.insert(0, [1, 1])
+        <span class="org-keyword">self</span>.assertEqual(is_height_balanced__brute_force(t.root), <span class="org-constant">True</span>)
+        <span class="org-keyword">self</span>.assertEqual(is_height_balanced__brute_force_preorder(t.root), <span class="org-constant">True</span>)
+        <span class="org-keyword">self</span>.assertEqual(is_height_balanced__brute_force_inorder(t.root), <span class="org-constant">True</span>)
+        <span class="org-keyword">self</span>.assertEqual(is_height_balanced__optimal(t.root), <span class="org-constant">True</span>)
+
+        <span class="org-comment-delimiter"># </span><span class="org-comment">Trivial unbalanced example.</span>
+        <span class="org-variable-name">t</span> <span class="org-operator">=</span> BinaryTree()
+        t.insert(0, [])
+        t.insert(0, [0, 0, 0])
+        t.insert(0, [1])
+        <span class="org-keyword">self</span>.assertEqual(is_height_balanced__brute_force(t.root), <span class="org-constant">False</span>)
+        <span class="org-keyword">self</span>.assertEqual(is_height_balanced__brute_force_preorder(t.root), <span class="org-constant">False</span>)
+        <span class="org-keyword">self</span>.assertEqual(is_height_balanced__brute_force_inorder(t.root), <span class="org-constant">False</span>)
+        <span class="org-keyword">self</span>.assertEqual(is_height_balanced__optimal(t.root), <span class="org-constant">False</span>)
+
+        <span class="org-comment-delimiter"># </span><span class="org-comment">Elaborate balanced example (same as in the diagram in Figure 1).</span>
+        <span class="org-variable-name">t</span> <span class="org-operator">=</span> BinaryTree()
+        t.insert(1, [])
+        t.insert(2, [0])
+        t.insert(3, [0, 0])
+        t.insert(8, [0, 1])
+        t.insert(9, [0, 1, 0])
+        t.insert(10, [0, 1, 1])
+        t.insert(4, [0, 0, 0])
+        t.insert(7, [0, 0, 1])
+        t.insert(5, [0, 0, 0, 0])
+        t.insert(6, [0, 0, 0, 1])
+        t.insert(11, [1])
+        t.insert(12, [1, 0])
+        t.insert(13, [1, 0, 0])
+        t.insert(14, [1, 0, 1])
+        t.insert(15, [1, 1])
+        <span class="org-keyword">self</span>.assertEqual(is_height_balanced__brute_force(t.root), <span class="org-constant">True</span>)
+        <span class="org-keyword">self</span>.assertEqual(is_height_balanced__brute_force_preorder(t.root), <span class="org-constant">True</span>)
+        <span class="org-keyword">self</span>.assertEqual(is_height_balanced__brute_force_inorder(t.root), <span class="org-constant">True</span>)
+        <span class="org-keyword">self</span>.assertEqual(is_height_balanced__optimal(t.root), <span class="org-constant">True</span>)
+
+    <span class="org-comment-delimiter"># </span><span class="org-comment">Populate a random binary tree. Check that the optimal solution agrees with</span>
+    <span class="org-comment-delimiter"># </span><span class="org-comment">the brute force approach.</span>
+    <span class="org-type">@given</span>(st.lists(st.lists(st.integers(min_value<span class="org-operator">=</span>0, max_value<span class="org-operator">=</span>1),
+                            min_size<span class="org-operator">=</span>0,
+                            max_size<span class="org-operator">=</span>32),
+                    min_size<span class="org-operator">=</span>0,
+                    max_size<span class="org-operator">=</span>32))
+    <span class="org-keyword">def</span> <span class="org-function-name">test_is_height_balanced__random</span>(<span class="org-keyword">self</span>, paths: <span class="org-builtin">list</span>[<span class="org-builtin">list</span>[<span class="org-builtin">int</span>]]):
+        <span class="org-variable-name">t</span> <span class="org-operator">=</span> BinaryTree()
+        <span class="org-keyword">for</span> path <span class="org-keyword">in</span> paths:
+            t.insert(0, path)
+
+        <span class="org-variable-name">bf</span> <span class="org-operator">=</span> is_height_balanced__brute_force(t.root)
+        <span class="org-variable-name">bf_pre</span> <span class="org-operator">=</span> is_height_balanced__brute_force_preorder(t.root)
+        <span class="org-variable-name">bf_in</span> <span class="org-operator">=</span> is_height_balanced__brute_force_inorder(t.root)
+        <span class="org-variable-name">o</span> <span class="org-operator">=</span> is_height_balanced__optimal(t.root)
+
+        <span class="org-keyword">self</span>.assertEqual(bf, bf_pre)
+        <span class="org-keyword">self</span>.assertEqual(bf, bf_in)
+        <span class="org-keyword">self</span>.assertEqual(bf, o)
+
+<span class="org-keyword">if</span> <span class="org-builtin">__name__</span> <span class="org-operator">==</span> <span class="org-string">"__main__"</span>:
+    unittest.main(<span class="org-constant">exit</span><span class="org-operator">=</span><span class="org-constant">False</span>)
+</pre></div></div>
+</div>
+</div>
+
+<div id="outline-container-h-References" class="outline-2">
+<h2 id="h-References"><span class="section-number-2">5.</span> References</h2>
+<div class="outline-text-2" id="text-h-References">
+<style>.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}</style><div class="csl-bib-body">
+  <div class="csl-entry" id="citeproc_bib_item_1">Aziz, A., Lee, T.-H., &#38; Prakash, A. (2018). <i>Elements of Programming Interviews in Python: The Insiders’ Guide</i>. CreateSpace Independent Publishing Platform (25 July. 2018).</div>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,17 @@
+h1.title {
+    font-family: "Bungee Shade", serif;
+    font-size: 100pt;
+}
+@media (any-pointer: coarse) {
+    h1.title {
+        font-family: "Bungee Shade", serif;
+        font-size: 60pt;
+    }
+}
+table.monospace-except-header {
+    font-family: monospace;
+}
+
+table.monospace-except-header thead {
+    font-family: var(--font-serif);
+}

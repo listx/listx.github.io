@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Python tricks</title>
+<meta name="author" content="Linus Arver" />
+<meta name="generator" content="Org Mode" />
+<style>
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { }
+</style>
+<link rel="preconnect" href="/vendor/source-fonts/source-fonts.css" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="/vendor/source-fonts/source-fonts.css">
+<script src="/vendor/jquery-3.6.4.min.js"></script>
+<script src="lilac.js"></script>
+<link rel="stylesheet" type="text/css" href="syntax-highlighting.css"/>
+<link rel="stylesheet" type="text/css" href="lilac.css" />
+<link rel="stylesheet" type="text/css" href="codex.css" />
+<link rel="stylesheet" href="/vendor/source-fonts/source-fonts.css">
+<script>
+// @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&amp;dn=gpl-3.0.txt GPL-v3-or-Later
+     function CodeHighlightOn(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.add("code-highlighted");
+         target.classList.add("code-highlighted");
+       }
+     }
+     function CodeHighlightOff(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.remove("code-highlighted");
+         target.classList.remove("code-highlighted");
+       }
+     }
+// @license-end
+</script>
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    loader: { paths: { "mathjax-newcm": "/vendor/mathjax-newcm-font" } },
+	output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="/vendor/mathjax/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<div id="content" class="content">
+<h1 class="title">Python tricks</h1>
+<div id="table-of-contents" role="doc-toc">
+
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#h-Introduction">1. Introduction</a></li>
+<li><a href="#h-Tricks">2. Tricks</a>
+<ul>
+<li><a href="#h-Python-built-ins">2.1. Python built-ins</a>
+<ul>
+<li><a href="#h-Numbers">2.1.1. Numbers</a>
+<ul>
+<li><a href="#h-abs--">2.1.1.1. <code>abs()</code></a></li>
+<li><a href="#h-bin--">2.1.1.2. <code>bin()</code></a></li>
+<li><a href="#h-divmod--">2.1.1.3. <code>divmod()</code></a></li>
+<li><a href="#h-pow--">2.1.1.4. <code>pow()</code></a></li>
+<li><a href="#h-round--">2.1.1.5. <code>round()</code></a></li>
+</ul>
+</li>
+<li><a href="#h-Strings">2.1.2. Strings</a>
+<ul>
+<li><a href="#h-chr--">2.1.2.1. <code>chr()</code></a></li>
+<li><a href="#h-ord--">2.1.2.2. <code>ord()</code></a></li>
+<li><a href="#h-repr--">2.1.2.3. <code>repr()</code></a></li>
+<li><a href="#h-str--">2.1.2.4. <code>str()</code></a></li>
+</ul>
+</li>
+<li><a href="#h-Iterables-and-sequences">2.1.3. Iterables and sequences</a>
+<ul>
+<li><a href="#h-all--">2.1.3.1. <code>all()</code></a></li>
+<li><a href="#h-any--">2.1.3.2. <code>any()</code></a></li>
+<li><a href="#h-enumerate--">2.1.3.3. <code>enumerate()</code></a></li>
+<li><a href="#h-filter--">2.1.3.4. <code>filter()</code></a></li>
+<li><a href="#h-len--">2.1.3.5. <code>len()</code></a></li>
+<li><a href="#h-map--">2.1.3.6. <code>map()</code></a></li>
+<li><a href="#h-max--">2.1.3.7. <code>max()</code></a></li>
+<li><a href="#h-min--">2.1.3.8. <code>min()</code></a></li>
+<li><a href="#h-next--">2.1.3.9. <code>next()</code></a></li>
+<li><a href="#h-range--">2.1.3.10. <code>range()</code></a></li>
+<li><a href="#h-reversed--">2.1.3.11. <code>reversed()</code></a></li>
+<li><a href="#h-set--">2.1.3.12. <code>set()</code></a></li>
+<li><a href="#h-sorted--">2.1.3.13. <code>sorted()</code></a>
+<ul>
+<li><a href="#h-Example">2.1.3.13.1. Example</a></li>
+</ul>
+</li>
+<li><a href="#h-sum--">2.1.3.14. <code>sum()</code></a></li>
+<li><a href="#h-zip--">2.1.3.15. <code>zip()</code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#h-Pythonisms">2.2. Pythonisms</a>
+<ul>
+<li><a href="#h-Indexing-strings--or-lists">2.2.1. Indexing strings (or lists)</a></li>
+<li><a href="#h-Slicing">2.2.2. Slicing</a></li>
+</ul>
+</li>
+<li><a href="#h-Array-traversal">2.3. Array traversal</a>
+<ul>
+<li><a href="#h-Burn-the-candle-at-both-ends">2.3.1. Burn the candle at both ends</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#h-Tests">3. Tests</a></li>
+<li><a href="#h-References">4. References</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-h-Introduction" class="outline-2">
+<h2 id="h-Introduction"><span class="section-number-2">1.</span> Introduction</h2>
+<div class="outline-text-2" id="text-h-Introduction">
+<p>
+This section lists useful Python tricks that may not be obvious to the average
+Python user.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-Tricks" class="outline-2">
+<h2 id="h-Tricks"><span class="section-number-2">2.</span> Tricks</h2>
+<div class="outline-text-2" id="text-h-Tricks">
+</div>
+
+<div id="outline-container-h-Python-built-ins" class="outline-3">
+<h3 id="h-Python-built-ins"><span class="section-number-3">2.1.</span> Python built-ins</h3>
+<div class="outline-text-3" id="text-h-Python-built-ins">
+<p>
+There are some Python builtin functions that are useful to know about.
+</p>
+</div>
+
+<div id="outline-container-h-Numbers" class="outline-4">
+<h4 id="h-Numbers"><span class="section-number-4">2.1.1.</span> Numbers</h4>
+<div class="outline-text-4" id="text-h-Numbers">
+</div>
+
+<div id="outline-container-h-abs--" class="outline-5">
+<h5 id="h-abs--"><span class="section-number-5">2.1.1.1.</span> <code>abs()</code></h5>
+<div class="outline-text-5" id="text-h-abs--">
+<p>
+<code>abs(x)</code>
+</p>
+
+<p>
+Returns absolute value of a number <code>x</code>.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-bin--" class="outline-5">
+<h5 id="h-bin--"><span class="section-number-5">2.1.1.2.</span> <code>bin()</code></h5>
+<div class="outline-text-5" id="text-h-bin--">
+<p>
+<code>bin(x)</code>
+</p>
+
+<p>
+Convert an integer number to its binary representation as a string, prefixed
+with <code>0b</code>.
+</p>
+
+<p>
+The table below has some examples, including equivalent methods using <code>format</code>
+and format strings.
+</p>
+
+<table class="monospace-except-header">
+
+
+<colgroup>
+<col  class="org-left">
+
+<col  class="org-left">
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Expression</th>
+<th scope="col" class="org-left">Result of evaluation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">bin(3)</td>
+<td class="org-left">'0b11'</td>
+</tr>
+
+<tr>
+<td class="org-left">bin(-5)</td>
+<td class="org-left">'-0b101'</td>
+</tr>
+
+<tr>
+<td class="org-left">format(14, '#b')</td>
+<td class="org-left">'0b1110'</td>
+</tr>
+
+<tr>
+<td class="org-left">format(14, 'b')</td>
+<td class="org-left">'1110'</td>
+</tr>
+
+<tr>
+<td class="org-left">f'{14:#b}'</td>
+<td class="org-left">'0b1110'</td>
+</tr>
+
+<tr>
+<td class="org-left">f'{14:b}'</td>
+<td class="org-left">'1110'</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+The <code>bin(x)</code>, <code>oct(x)</code>, and <code>hex(x)</code> functions all behave similarly but for the
+binary, octal, and hexadecimal bases, respectively.
+</p>
+
+<dl class="org-dl">
+<div class="lilac-description-list-entry"><dt><code>hex(x)</code></dt><dd>Convert integer into lower-case hex number with a leading <code>'0x'</code>
+prefix.</dd></div>
+<div class="lilac-description-list-entry"><dt><code>oct(x)</code></dt><dd>Convert integer into octal number with a leading <code>'0o'</code> prefix.</dd></div>
+</dl>
+</div>
+</div>
+
+<div id="outline-container-h-divmod--" class="outline-5">
+<h5 id="h-divmod--"><span class="section-number-5">2.1.1.3.</span> <code>divmod()</code></h5>
+<div class="outline-text-5" id="text-h-divmod--">
+<p>
+<code>divmod(x, y)</code>
+</p>
+
+<p>
+Returns a tuple of the reslult of integer division of <code>x</code> by <code>y</code> and remainder.
+Equivalent to <code>(x // y, x % y)</code>.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-pow--" class="outline-5">
+<h5 id="h-pow--"><span class="section-number-5">2.1.1.4.</span> <code>pow()</code></h5>
+<div class="outline-text-5" id="text-h-pow--">
+<p>
+<code>pow(base, exp, mod=None)</code>
+</p>
+
+<p>
+Raise a number <code>base</code> to the exponent <code>exp</code>. The form <code>3**4</code> is shorthand for
+<code>pow(3, 4)</code>.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-round--" class="outline-5">
+<h5 id="h-round--"><span class="section-number-5">2.1.1.5.</span> <code>round()</code></h5>
+<div class="outline-text-5" id="text-h-round--">
+<p>
+<code>round(number, ndigits=None)</code>
+</p>
+
+<p>
+From Python 3.11.3 docs: "Return number rounded to <code>ndigits</code> precision after the
+decimal point. If <code>ndigits</code> is omitted or is None, it returns the nearest integer
+to its input."
+</p>
+
+<p>
+This function doesn't see much use in programming problems because rounding
+itself is an imprecise operation resulting in the loss of data, and typically
+loss of data is never a good thing to do.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-Strings" class="outline-4">
+<h4 id="h-Strings"><span class="section-number-4">2.1.2.</span> Strings</h4>
+<div class="outline-text-4" id="text-h-Strings">
+</div>
+
+<div id="outline-container-h-chr--" class="outline-5">
+<h5 id="h-chr--"><span class="section-number-5">2.1.2.1.</span> <code>chr()</code></h5>
+<div class="outline-text-5" id="text-h-chr--">
+<p>
+<code>chr(i)</code>
+</p>
+
+<p>
+Inverse of <code>ord()</code>.
+</p>
+
+<table class="monospace-except-header">
+
+
+<colgroup>
+<col  class="org-left">
+
+<col  class="org-left">
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Expression</th>
+<th scope="col" class="org-left">Result of evaluation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">chr(97)</td>
+<td class="org-left">'a'</td>
+</tr>
+
+<tr>
+<td class="org-left">chr(8364)</td>
+<td class="org-left">'€'</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+<div id="outline-container-h-ord--" class="outline-5">
+<h5 id="h-ord--"><span class="section-number-5">2.1.2.2.</span> <code>ord()</code></h5>
+<div class="outline-text-5" id="text-h-ord--">
+<p>
+<code>ord(c)</code>
+</p>
+
+<p>
+Inverse of <code>chr()</code>.
+</p>
+
+<table class="monospace-except-header">
+
+
+<colgroup>
+<col  class="org-left">
+
+<col  class="org-right">
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Expression</th>
+<th scope="col" class="org-right">Result of evaluation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">ord('a')</td>
+<td class="org-right">97</td>
+</tr>
+
+<tr>
+<td class="org-left">ord('€')</td>
+<td class="org-right">8364</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+<div id="outline-container-h-repr--" class="outline-5">
+<h5 id="h-repr--"><span class="section-number-5">2.1.2.3.</span> <code>repr()</code></h5>
+<div class="outline-text-5" id="text-h-repr--">
+<p>
+<code>repr(x)</code>
+</p>
+
+<p>
+Return a <code>str</code> version of an object, where the goal is to make it so that
+entering this verbatim back into Python will result in the same (original)
+value.
+</p>
+
+<p>
+As a memory aid, think of <code>repr</code> as related to REPLs, because typing the result
+of <code>repr()</code> into Python's REPL (or passing it into <code>eval()</code>) should just work.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-str--" class="outline-5">
+<h5 id="h-str--"><span class="section-number-5">2.1.2.4.</span> <code>str()</code></h5>
+<div class="outline-text-5" id="text-h-str--">
+<p>
+<code>str(x)</code>
+</p>
+
+<p>
+Return a <code>str</code> version of an object, where the goal is to be human-readable
+(read: open to being machine-unfriendly).
+</p>
+
+<p>
+Not often used in practice because of format strings.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-Iterables-and-sequences" class="outline-4">
+<h4 id="h-Iterables-and-sequences"><span class="section-number-4">2.1.3.</span> Iterables and sequences</h4>
+<div class="outline-text-4" id="text-h-Iterables-and-sequences">
+</div>
+
+<div id="outline-container-h-all--" class="outline-5">
+<h5 id="h-all--"><span class="section-number-5">2.1.3.1.</span> <code>all()</code></h5>
+<div class="outline-text-5" id="text-h-all--">
+<p>
+<code>all(iterable)</code>
+</p>
+
+<p>
+Returns <code>True</code> if no element is <code>False</code> (returns <code>True</code> if no elements).
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-any--" class="outline-5">
+<h5 id="h-any--"><span class="section-number-5">2.1.3.2.</span> <code>any()</code></h5>
+<div class="outline-text-5" id="text-h-any--">
+<p>
+<code>any(iterable)</code>
+</p>
+
+<p>
+Returns <code>False</code> if no element is <code>True</code> (returns <code>False</code> if no elements).
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-enumerate--" class="outline-5">
+<h5 id="h-enumerate--"><span class="section-number-5">2.1.3.3.</span> <code>enumerate()</code></h5>
+<div class="outline-text-5" id="text-h-enumerate--">
+<p>
+<code>enumerate(iterable, start=0)</code>
+</p>
+
+<p>
+Returns an iterable of tuples, where the first element is the index (starting
+from 0) and the second element is the element in the <code>iterable</code>.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-filter--" class="outline-5">
+<h5 id="h-filter--"><span class="section-number-5">2.1.3.4.</span> <code>filter()</code></h5>
+<div class="outline-text-5" id="text-h-filter--">
+<p>
+<code>filter(function, iterable)</code>
+</p>
+
+<p>
+Removes elements in the given <code>iterable</code> with the given <code>function</code>, if those
+elements do not return <code>True</code> when passed into the <code>function</code>.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-len--" class="outline-5">
+<h5 id="h-len--"><span class="section-number-5">2.1.3.5.</span> <code>len()</code></h5>
+<div class="outline-text-5" id="text-h-len--">
+<p>
+<code>len(sequence)</code>
+</p>
+
+<p>
+Returns the length of the sequence.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-map--" class="outline-5">
+<h5 id="h-map--"><span class="section-number-5">2.1.3.6.</span> <code>map()</code></h5>
+<div class="outline-text-5" id="text-h-map--">
+<p>
+<code>map(function, iterable, *iterables)</code>
+</p>
+
+<p>
+From Python 3.11.3 docs: "Return an iterator that applies function to every item
+of iterable, yielding the results. If additional iterables arguments are passed,
+function must take that many arguments and is applied to the items from all
+iterables in parallel. With multiple iterables, the iterator stops when the
+shortest iterable is exhausted."
+</p>
+
+<p>
+This is somewhat similar to <code>zip</code> in Haskell, except that a function is
+involved.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-max--" class="outline-5">
+<h5 id="h-max--"><span class="section-number-5">2.1.3.7.</span> <code>max()</code></h5>
+<div class="outline-text-5" id="text-h-max--">
+<p>
+Return the largest element of the sequence, or the larger of 2 elements.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-min--" class="outline-5">
+<h5 id="h-min--"><span class="section-number-5">2.1.3.8.</span> <code>min()</code></h5>
+<div class="outline-text-5" id="text-h-min--">
+<p>
+Return the smallest element of the sequence, or the smaller of 2 elements.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-next--" class="outline-5">
+<h5 id="h-next--"><span class="section-number-5">2.1.3.9.</span> <code>next()</code></h5>
+<div class="outline-text-5" id="text-h-next--">
+<p>
+<code>next(iterator, default)</code>
+</p>
+
+<p>
+From Python 3.11.3 docs: "Retrieve the next item from the iterator by calling
+its _<sub>next</sub>_<sub>()</sub> method. If default is given, it is returned if the iterator is
+exhausted, otherwise StopIteration is raised."
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-range--" class="outline-5">
+<h5 id="h-range--"><span class="section-number-5">2.1.3.10.</span> <code>range()</code></h5>
+<div class="outline-text-5" id="text-h-range--">
+<p>
+<code>range(start, stop, step=1)</code>
+</p>
+
+<p>
+The Python docs say that <code>range()</code> is not a function, but an immutable sequence.
+While this is correct, for 99.99% of cases it is used as a function.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-reversed--" class="outline-5">
+<h5 id="h-reversed--"><span class="section-number-5">2.1.3.11.</span> <code>reversed()</code></h5>
+<div class="outline-text-5" id="text-h-reversed--">
+<p>
+<code>reversed(seq)</code>
+</p>
+
+<p>
+Return given sequence <code>seq</code> in opposite (reversed) order. The returned object is
+an iterator.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-set--" class="outline-5">
+<h5 id="h-set--"><span class="section-number-5">2.1.3.12.</span> <code>set()</code></h5>
+<div class="outline-text-5" id="text-h-set--">
+<p>
+<code>set(iterable)</code>
+</p>
+
+<p>
+Convert given <code>iterable</code> into a set.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-sorted--" class="outline-5">
+<h5 id="h-sorted--"><span class="section-number-5">2.1.3.13.</span> <code>sorted()</code></h5>
+<div class="outline-text-5" id="text-h-sorted--">
+<p>
+<code>sorted(iterable, /, *, key=None, reverse=False)</code>
+</p>
+
+<p>
+Return a new sorted list from the items in iterable.
+</p>
+</div>
+
+<div id="outline-container-h-Example" class="outline-6">
+<h6 id="h-Example"><span class="section-number-6">2.1.3.13.1.</span> Example</h6>
+<div class="outline-text-6" id="text-h-Example">
+<p>
+Sort tuples by the second element, not the first (default).
+</p>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#Tests">test_cases</a></span>(1/5) <span class="lilac-caption-link-symbol"><a href="#__NREF__test_cases-1">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__test_cases-1"><span class="org-keyword">def</span> <span class="org-function-name">test_sort</span>(<span class="org-keyword">self</span>):
+    <span class="org-variable-name">xs</span> <span class="org-operator">=</span> [(<span class="org-string">"a"</span>, 9), (<span class="org-string">"b"</span>, 5), (<span class="org-string">"c"</span>, 1)]
+    <span class="org-variable-name">result</span> <span class="org-operator">=</span> <span class="org-builtin">sorted</span>(xs, key<span class="org-operator">=</span><span class="org-keyword">lambda</span> x: x[1])
+    <span class="org-keyword">self</span>.assertEqual(result, [(<span class="org-string">"c"</span>, 1), (<span class="org-string">"b"</span>, 5), (<span class="org-string">"a"</span>, 9)])
+</pre></div></div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-sum--" class="outline-5">
+<h5 id="h-sum--"><span class="section-number-5">2.1.3.14.</span> <code>sum()</code></h5>
+<div class="outline-text-5" id="text-h-sum--">
+<p>
+<code>sum(iterable, /, start=0)</code>
+</p>
+
+<p>
+Return the total of all elements in the iterable.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-zip--" class="outline-5">
+<h5 id="h-zip--"><span class="section-number-5">2.1.3.15.</span> <code>zip()</code></h5>
+<div class="outline-text-5" id="text-h-zip--">
+<p>
+<code>zip(*iterables, strict=False)</code>
+</p>
+
+<p>
+From Python 3.11.3 docs: "Iterate over several iterables in parallel, producing
+tuples with an item from each one."
+</p>
+
+<p>
+If you want to write <code>zip(range(3), ['a', 'b', 'c'])</code>, instead write
+<code>enumerate(['a', 'b', 'c'])</code>.
+</p>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-Pythonisms" class="outline-3">
+<h3 id="h-Pythonisms"><span class="section-number-3">2.2.</span> Pythonisms</h3>
+<div class="outline-text-3" id="text-h-Pythonisms">
+</div>
+
+<div id="outline-container-h-Indexing-strings--or-lists" class="outline-4">
+<h4 id="h-Indexing-strings--or-lists"><span class="section-number-4">2.2.1.</span> Indexing strings (or lists)</h4>
+<div class="outline-text-4" id="text-h-Indexing-strings--or-lists">
+<p>
+Python uses 0-based indexing, and you can use this to select any particular
+element in a string or list.
+</p>
+
+<p>
+Negative indices are allowed.
+</p>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#Tests">test_cases</a></span>(2/5) <span class="lilac-caption-link-symbol"><a href="#__NREF__test_cases-2">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__test_cases-2"><span class="org-keyword">def</span> <span class="org-function-name">test_indices</span>(<span class="org-keyword">self</span>):
+  <span class="org-keyword">self</span>.assertEqual(<span class="org-string">'abcdefg'</span>[0], <span class="org-string">'a'</span>)
+  <span class="org-keyword">self</span>.assertEqual(<span class="org-string">'abcdefg'</span>[1], <span class="org-string">'b'</span>)
+  <span class="org-keyword">self</span>.assertEqual(<span class="org-string">'abcdefg'</span>[<span class="org-operator">-</span>1], <span class="org-string">'g'</span>)
+  <span class="org-keyword">self</span>.assertEqual(<span class="org-string">'abcdefg'</span>[<span class="org-operator">-</span>2], <span class="org-string">'f'</span>)
+  <span class="org-keyword">self</span>.assertEqual(<span class="org-string">'abcdefg'</span>[<span class="org-operator">-</span>7], <span class="org-string">'a'</span>)
+
+  <span class="org-comment-delimiter"># </span><span class="org-comment">Negative indices do not go on forever.</span>
+  <span class="org-keyword">with</span> <span class="org-keyword">self</span>.assertRaises(<span class="org-type">IndexError</span>):
+    <span class="org-string">'abcdefg'</span>[<span class="org-operator">-</span>8]
+</pre></div></div><p>
+See <a href="https://docs.python.org/3/tutorial/introduction.html#text">https://docs.python.org/3/tutorial/introduction.html#text</a>.
+</p>
+</div>
+</div>
+
+<div id="outline-container-h-Slicing" class="outline-4">
+<h4 id="h-Slicing"><span class="section-number-4">2.2.2.</span> Slicing</h4>
+<div class="outline-text-4" id="text-h-Slicing">
+<p>
+Whereas indexing returns a single element in a list-like structure, <i>slicing</i>
+returns a substring (a series of consecutive elements inside the list). The
+syntax is <code>&lt;start index (included)&gt;:&lt;final index (excluded)&gt;</code>.
+</p>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#Tests">test_cases</a></span>(3/5) <span class="lilac-caption-link-symbol"><a href="#__NREF__test_cases-3">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__test_cases-3"><span class="org-keyword">def</span> <span class="org-function-name">test_slices</span>(<span class="org-keyword">self</span>):
+  <span class="org-keyword">self</span>.assertEqual(<span class="org-string">'abcdefg'</span>[0:2], <span class="org-string">'ab'</span>)
+  <span class="org-keyword">self</span>.assertEqual(<span class="org-string">'abcdefg'</span>[2:5], <span class="org-string">'cde'</span>)
+</pre></div></div><p>
+If the start index is omitted, it defaults to <code>0</code>. If the final index is
+omitted, it defaults to the length of the string (so it's the same as grabbing
+all remaining elements).
+</p>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#Tests">test_cases</a></span>(4/5) <span class="lilac-caption-link-symbol"><a href="#__NREF__test_cases-4">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__test_cases-4">  <span class="org-keyword">self</span>.assertEqual(<span class="org-string">'abcdefg'</span>[:2], <span class="org-string">'ab'</span>)
+  <span class="org-keyword">self</span>.assertEqual(<span class="org-string">'abcdefg'</span>[2:], <span class="org-string">'cdefg'</span>)
+</pre></div></div><p>
+Slices indexes that are out of range are handled gracefully (they do not raise
+an error).
+</p>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#Tests">test_cases</a></span>(5/5) <span class="lilac-caption-link-symbol"><a href="#__NREF__test_cases-5">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__test_cases-5">  <span class="org-keyword">self</span>.assertEqual(<span class="org-string">'abcdefg'</span>[1000:], <span class="org-string">''</span>)
+  <span class="org-keyword">self</span>.assertEqual(<span class="org-string">'abcdefg'</span>[:1000], <span class="org-string">'abcdefg'</span>)
+</pre></div></div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-Array-traversal" class="outline-3">
+<h3 id="h-Array-traversal"><span class="section-number-3">2.3.</span> Array traversal</h3>
+<div class="outline-text-3" id="text-h-Array-traversal">
+</div>
+
+<div id="outline-container-h-Burn-the-candle-at-both-ends" class="outline-4">
+<h4 id="h-Burn-the-candle-at-both-ends"><span class="section-number-4">2.3.1.</span> Burn the candle at both ends</h4>
+<div class="outline-text-4" id="text-h-Burn-the-candle-at-both-ends">
+<p>
+When iterating through an array, you can use <code>~i</code> to get the value <code>-i - 1</code>.
+This is because <a href="../mathematics/README.html#h-Two-s-Complement">two's complement</a> states that <code>-i</code> is equal to <code>~i + 1</code>.
+</p>
+
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><span class="lilac-caption-parent-link"><a href="#Tests">tricks</a></span>(1/1) <span class="lilac-caption-link-symbol"><a href="#__NREF__tricks">&#x1f517;</a></span></div><pre class="src src-python" id="__NREF__tricks"><span class="org-keyword">def</span> <span class="org-function-name">is_palindrome</span>(s: <span class="org-builtin">str</span>) <span class="org-operator">-&gt;</span> <span class="org-builtin">bool</span>:
+  <span class="org-keyword">return</span> <span class="org-builtin">all</span>(s[i] <span class="org-operator">==</span> s[<span class="org-operator">~</span>i] <span class="org-keyword">for</span> i <span class="org-keyword">in</span> <span class="org-builtin">range</span>(<span class="org-builtin">len</span>(s) <span class="org-operator">//</span> 2))
+</pre></div></div><p>
+Time complexity is \(O(n)\) and space complexity is \(O(1)\).
+</p>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-h-Tests" class="outline-2">
+<h2 id="h-Tests"><span class="section-number-2">3.</span> Tests</h2>
+<div class="outline-text-2" id="text-h-Tests">
+<div class="org-src-container"><div class="lilac-pre-with-caption"><div class="lilac-caption"><label class="org-src-name">Tests</label><span class="lilac-caption-link-symbol"><a href="#Tests">&#x1f517;</a></span></div><pre class="src src-python" id="Tests"><span class="org-keyword">import</span> unittest
+
+<span class="lilac-child-link-from-parent"><a href="#__NREF__tricks">tricks</a></span>
+
+<span class="org-keyword">class</span> <span class="org-type">Test</span>(unittest.TestCase):
+  <span class="lilac-child-link-from-parent"><a href="#__NREF__test_cases-1">test_cases</a></span>
+
+<span class="org-keyword">if</span> <span class="org-builtin">__name__</span> <span class="org-operator">==</span> <span class="org-string">"__main__"</span>:
+  unittest.main(<span class="org-constant">exit</span><span class="org-operator">=</span><span class="org-constant">False</span>)
+</pre></div></div>
+</div>
+</div>
+
+<div id="outline-container-h-References" class="outline-2">
+<h2 id="h-References"><span class="section-number-2">4.</span> References</h2>
+<div class="outline-text-2" id="text-h-References">
+<style>.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}</style><div class="csl-bib-body">
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>
