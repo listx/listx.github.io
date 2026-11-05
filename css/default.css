@@ -124,6 +124,12 @@ div.navbar span.breadcrumb-separator
   color : #888888;
 }
 
+div.navbar a.repo-link svg
+{
+  width  : 0.75em;
+  height : 0.75em;
+}
+
 nav#tocs
 {
   grid-area           : tocs;
@@ -1372,7 +1378,7 @@ main ol {
 }
 
 html {
-  scroll-padding-top: calc(4rem + 1px + 0.625rem);
+  scroll-padding-top: calc(3rem + 1px + 0.625rem);
 }
 
 html {
@@ -1408,14 +1414,12 @@ html {
 }
 
 @media print {
-  @media print {
-    div.navbar {
-      position: static;
-      grid-area: auto;
-    }
-    main {
-      top: 0; /*  */
-    }
+  div.navbar {
+    position: static;
+    grid-area: auto;
+  }
+  main {
+    top: 0; /*  */
   }
 
   body {
